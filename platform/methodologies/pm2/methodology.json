@@ -1,0 +1,17 @@
+{
+  "id": "pm2",
+  "name": "PM2 (European Commission)",
+  "version": "0.1.0",
+  "default": true,
+  "phases": [
+    "Initiating",
+    "Planning",
+    "Executing",
+    "Closing"
+  ],
+  "artifacts_catalog": "rules/m8-management-documents.md",
+  "templates": "templates/",
+  "programme": "rules/m10-programme-management.md",
+  "plugin": "pm2-docs",
+  "status": "migrated-from-template"
+}

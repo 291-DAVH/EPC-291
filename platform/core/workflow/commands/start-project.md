@@ -1,0 +1,3 @@
+Lee `.claude/rules/m2-startup-questionnaire.md` y `.claude/rules/m3-interview-copy-baseline.md`. El usuario quiere iniciar un nuevo proyecto. Sigue el protocolo completo: verificar starting-data.md, hacer preguntas de arranque, analizar la entrada, generar el charter y, tras `aprobar charter`, generar toda la estructura.
+
+> **Regla invariable — skills:** durante el reset de la plantilla (M3, paso 12) y en cualquier otra operación de limpieza, las carpetas `.claude/skills/*/knowledge/`, `.claude/skills/*/learning/`, `.claude/skills/*/cache/` y `.claude/skills/*/memory/` **nunca se borran ni modifican**. Son datos de entrenamiento del usuario y son locales a esta instalación.

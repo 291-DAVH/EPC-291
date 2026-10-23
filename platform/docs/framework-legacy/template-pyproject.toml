@@ -1,0 +1,32 @@
+[project]
+name = "fw-pm-ingenieria"
+version = "1.4.0"
+description = "Scripts del framework de gestión de proyectos de ingeniería industrial multidisciplina"
+requires-python = ">=3.10"
+dependencies = []   # stdlib only — no pip packages required
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    ".claude/library/PLUGINS/CALCULATIONS",
+    ".claude/hooks",
+]
+python_files  = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+# --------------------------------------------------------------------------
+# Herramientas de sistema requeridas (no son paquetes pip; deben instalarse
+# antes de ejecutar los scripts de conversión y verificación de PDF)
+#
+#   pandoc          -- conversión Markdown → Word / HTML (DOCUMENT_RULES)
+#   libreoffice     -- soffice: conversión Office → PDF (input_converter.py)
+#   poppler-utils   -- pdftotext, pdftoppm: extracción de texto y páginas de PDF
+#                      (document_verifier.py, charter_exporter.py)
+# --------------------------------------------------------------------------

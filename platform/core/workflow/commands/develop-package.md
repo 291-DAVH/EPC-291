@@ -1,0 +1,1 @@
+﻿Lee `.claude/rules/m5-packages-development.md`. El usuario quiere desarrollar el siguiente paquete de ingeniería ($ARGUMENTS). Verifica la puerta de preparación, desarrolla el paquete indicado (o el siguiente en la LME), genera el autocontrol y entrega la hoja de revisión. Detente hasta la respuesta del usuario.

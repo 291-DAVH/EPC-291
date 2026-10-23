@@ -1,0 +1,49 @@
+{
+  "emisiones": [
+    "IFR",
+    "IFA",
+    "IFC",
+    "AS_BUILT"
+  ],
+  "estado_doc": {
+    "ENGINEERING": "DRAFT",
+    "FOR_AUDIT": "FOR_AUDIT",
+    "FOR_REVIEW": "FOR_REVIEW",
+    "RELEASED": "AUDITED"
+  },
+  "estados": [
+    "ENGINEERING",
+    "FOR_REVIEW",
+    "FOR_AUDIT",
+    "RELEASED"
+  ],
+  "resultados": [
+    "APPROVED",
+    "APPROVED_WITH_COMMENTS",
+    "REJECTED_WITH_COMMENTS",
+    "REJECTED"
+  ],
+  "transiciones": [
+    {
+      "a": "FOR_REVIEW",
+      "de": "ENGINEERING",
+      "script": "SEND_TO_REVIEW.py"
+    },
+    {
+      "a": "FOR_AUDIT",
+      "de": "FOR_REVIEW",
+      "script": "SEND_TO_AUDIT.py"
+    },
+    {
+      "a": "RELEASED",
+      "de": "FOR_AUDIT",
+      "script": "APPROVE_AUDIT.py"
+    },
+    {
+      "a": "ENGINEERING",
+      "de": "*",
+      "script": "RETURN_TO_ENGINEERING.py"
+    }
+  ],
+  "version": "1.1.0"
+}
