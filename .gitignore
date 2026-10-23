@@ -32,3 +32,6 @@ _out/
 *.bak
 *.tmp
 Thumbs.db
+
+# tools/build holds the build scripts, not build output
+!platform/tools/build/
