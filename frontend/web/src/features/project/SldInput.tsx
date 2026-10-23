@@ -73,7 +73,8 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
 
   const field = (label: Key, node: ReactNode) => <label className="field"><span>{t(label)}</span>{node}</label>;
   const text = (k: keyof SldData["board"] | keyof SldData["titleblock"], group: "board" | "titleblock", label: Key) =>
-    field(label, <input value={String((data[group] as unknown as Record<string, unknown>)[k] ?? "")} onChange={(e) => set(group, { [k]: e.target.value } as never)} />);
+    field(label, <input list={group === "titleblock" && ["drawn_by", "checked_by", "approved_by"].includes(k as string) ? "sld-people" : undefined}
+      value={String((data[group] as unknown as Record<string, unknown>)[k] ?? "")} onChange={(e) => set(group, { [k]: e.target.value } as never)} />);
   const numeric = (k: keyof SldData["board"], label: Key, step = "any") =>
     field(label, <input type="number" step={step} value={String(data.board[k])} onChange={(e) => set("board", { [k]: Number(e.target.value) } as never)} />);
   const sel = (value: string, items: string[], on: (v: string) => void) => <select value={value} onChange={(e) => on(e.target.value)}>{items.map((x) => <option key={x}>{x}</option>)}</select>;
@@ -101,6 +102,10 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
 
       <div className="card">
         <h2>{t("sld.titleblock")}</h2>
+        <datalist id="sld-people">{view.data.people.map((n) => <option key={n} value={n} />)}</datalist>
+        <p className="muted small" style={{ margin: "4px 0 0" }}>
+          {t("sld.fromData")} · {t("sld.logos")}: {view.data.logos.company ? "✓" : "—"} {t("sld.logoCompany")} · {view.data.logos.client ? "✓" : "—"} {t("sld.logoClient")}
+        </p>
         <div className="fgrid">
           {text("company", "titleblock", "sld.company")}{text("company_cuit", "titleblock", "sld.companyCuit")}
           {text("client", "titleblock", "sld.client")}{text("client_cuit", "titleblock", "sld.clientCuit")}

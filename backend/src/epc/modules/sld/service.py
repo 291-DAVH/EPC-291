@@ -6,6 +6,7 @@ from typing import Dict
 
 from epc.core.errors import Conflict, Invalid
 from epc.modules.engineering import public as engineering
+from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
 from epc.modules.sld import repository
 from epc.modules.sld.models import Board, Circuit, SldIn, Titleblock
@@ -99,9 +100,15 @@ def view(d: Path) -> dict:
         data.setdefault("titleblock", Titleblock().model_dump())
     else:
         volt = engineering.criterion_value(d, "nominal_voltage_v") or 380
+        org = masterdata.organization()
+        cl = masterdata.client(meta.get("client_code", "")) or {}
         data = {"board": Board(voltage_v=volt, project=meta.get("project_code", ""), name="").model_dump(), "circuits": [],
-                "titleblock": Titleblock(client=meta.get("client", ""), description=meta.get("project_name", "")).model_dump()}
-    return {"input": data, "saved": bool(saved), "options": OPTIONS, "status": status(d)}
+                "titleblock": Titleblock(company=org.get("legal_name", ""), company_cuit=org.get("tax_id", ""),
+                                         client=cl.get("name") or meta.get("client", ""), client_cuit=cl.get("tax_id", ""),
+                                         description=meta.get("project_name", "")).model_dump()}
+    return {"input": data, "saved": bool(saved), "options": OPTIONS, "status": status(d),
+            "people": [p["name"] for p in masterdata.people()],
+            "logos": {"company": masterdata.logo_path("organization") is not None, "client": masterdata.logo_path("client-" + meta.get("client_code", "-")) is not None}}
 
 
 def save(d: Path, body: SldIn) -> dict:
@@ -139,7 +146,9 @@ def _job(d: Path, data: dict, name: str) -> None:
             import shutil
             shutil.rmtree(out)
         repository.write_excel(work / "input_for_sld.xlsx", data)
-        repository.write_titleblock(work / "titleblock", {**data["titleblock"]})
+        code = projects.read_meta(d).get("client_code", "-")
+        logos = {k: p for k, p in (("provider", masterdata.logo_path("organization")), ("client", masterdata.logo_path("client-" + code))) if p}
+        repository.write_titleblock(work / "titleblock", {**data["titleblock"]}, logos)
         res = repository.run_generator(work / "input_for_sld.xlsx", out, name, work / "titleblock")
         log = [ln for ln in (res.stdout.splitlines() + res.stderr.splitlines()) if ln.startswith(("OK", "AVISO"))]
         if res.returncode != 0:

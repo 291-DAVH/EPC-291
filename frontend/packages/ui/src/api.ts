@@ -169,6 +169,11 @@ export interface SldTitleblock {
 export interface SldData { board: SldBoard; circuits: SldCircuit[]; titleblock: SldTitleblock }
 export interface SldStatus { state: "idle" | "running" | "done" | "failed"; name?: string; outputs: string[]; log: string[]; error?: string; started?: string; finished?: string }
 export interface SldView {
-  input: SldData; saved: boolean; status: SldStatus;
+  input: SldData; saved: boolean; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
   options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[] };
 }
+
+/* ---- master data ---- */
+export interface OrganizationData { legal_name: string; tax_id: string; email: string; website: string; address: string; phone: string; default_locale: string; has_logo: boolean }
+export interface ClientRecord { id: string; name: string; tax_id: string; email: string; website: string; address: string; has_logo: boolean }
+export interface PersonRecord { id: string; name: string; role: string; registration: string }

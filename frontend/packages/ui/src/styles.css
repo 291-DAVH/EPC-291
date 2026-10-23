@@ -192,3 +192,8 @@ table.crit input.note { width: 100%; min-width: 180px; }
 .sldtable input, .sldtable select { width: 100%; min-width: 64px; padding: 4px 6px; }
 .sldtable input.w-tag { width: 88px; } .sldtable input.w-desc { min-width: 170px; } .sldtable input.w-num { width: 70px; min-width: 60px; }
 .errlist { margin: 6px 0 0; padding-left: 18px; color: var(--bad); font-size: 13px; }
+
+/* ---- master data ---- */
+.logobox { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.logobox .thumb { width: 120px; height: 56px; background: #fff; border: 1px solid var(--line); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.logobox .thumb img { max-width: 100%; max-height: 100%; }

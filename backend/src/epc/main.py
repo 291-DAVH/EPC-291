@@ -19,6 +19,7 @@ from epc.modules.identity import public as identity
 from epc.modules.intake import api as intake_api
 from epc.modules.knowledge import api as knowledge_api
 from epc.modules.management import api as management_api
+from epc.modules.masterdata import api as masterdata_api
 from epc.modules.projects import api as projects_api
 from epc.modules.projects import public as projects
 from epc.modules.requirements import api as requirements_api
@@ -43,7 +44,7 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, engineering_api, sld_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, engineering_api, sld_api, masterdata_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     return app
 

@@ -23,6 +23,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -58,6 +59,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -95,6 +97,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -130,6 +133,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -167,6 +171,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -201,6 +206,7 @@ source_modules =
     epc.modules.identity
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -236,6 +242,7 @@ source_modules =
     epc.modules.identity
     epc.modules.intake
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -273,6 +280,7 @@ source_modules =
     epc.modules.identity
     epc.modules.intake
     epc.modules.knowledge
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -294,6 +302,44 @@ layers =
     epc.modules.management.service
     epc.modules.management.repository
 
+[importlinter:contract:masterdata-encapsulated]
+name = masterdata: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.masterdata.api
+    epc.modules.masterdata.service
+    epc.modules.masterdata.repository
+    epc.modules.masterdata.models
+
+[importlinter:contract:masterdata-layers]
+name = masterdata: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.masterdata.api
+    epc.modules.masterdata.service
+    epc.modules.masterdata.repository
+    epc.modules.masterdata.models
+
 [importlinter:contract:projects-encapsulated]
 name = projects: other modules use only its public interface
 type = forbidden
@@ -309,6 +355,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.quality
@@ -346,6 +393,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -381,6 +429,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -418,6 +467,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -455,6 +505,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
