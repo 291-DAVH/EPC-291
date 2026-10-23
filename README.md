@@ -6,7 +6,7 @@ Español: [README.es.md](README.es.md)
 
 ## Repository layout
 
-Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2, 3 and 4 done).
+Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 to 7 done).
 
 ```
 EPC-291/
@@ -16,6 +16,10 @@ EPC-291/
 ├─ engine/          engineering libraries, pure Python (phase 4 done)
 │   ├─ calc/ rules/ standards/ drawing/ documents/    one package each: pyproject.toml, src/, tests/
 │   └─ jurisdictions/                                 country packs: rules.json per standard
+├─ backend/         FastAPI modular monolith (phase 5): src/epc/{core,modules/*}, tests/, import-linter contracts
+├─ frontend/        npm workspace (phase 6): web/ (customer), console/ (admin), packages/ui
+├─ database/        Alembic migrations and baseline schema (phase 7)
+├─ infra/           Dockerfiles, compose (PostgreSQL), see .github/workflows/ci.yml
 ├─ claude/          AI layer (phase 3 done): plugins/ (packaging only), skills/, agents/, marketplace/, mcp/, prompts/, evals/
 ├─ platform/        Claude-side build tooling and legacy adapters (API in backend/, web in frontend/)
 │   ├─ apps/  core/  methodologies/  tests/  tools/

@@ -1,0 +1,66 @@
+name: ci
+
+on:
+  push:
+    branches: [main, dev, "feature/**", "fix/**", "chore/**"]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  gate:
+    name: test battery
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        run: |
+          pip install -r platform/requirements-dev.txt -r database/requirements.txt import-linter
+          pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e backend
+          cd frontend && npm ci
+      - name: Gate (the same battery as on a developer machine)
+        run: python tools/ci/run_gate.py
+
+  migrations-postgres:
+    name: migrations on PostgreSQL
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: epc
+          POSTGRES_PASSWORD: epc
+          POSTGRES_DB: epc
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U epc" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      EPC_DATABASE_URL: postgresql+psycopg://epc:epc@localhost:5432/epc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r database/requirements.txt
+      - name: upgrade, downgrade, upgrade
+        run: |
+          alembic -c database/alembic.ini upgrade head
+          alembic -c database/alembic.ini downgrade base
+          alembic -c database/alembic.ini upgrade head
+
+  images:
+    name: docker images
+    runs-on: ubuntu-latest
+    needs: gate
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f infra/docker/backend.Dockerfile -t epc-backend .
+      - run: docker build -f infra/docker/frontend.Dockerfile -t epc-frontend .
