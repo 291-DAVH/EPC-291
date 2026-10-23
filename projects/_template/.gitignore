@@ -1,0 +1,6 @@
+_out/
+*.bak
+*.dwl
+*.dwl2
+Thumbs.db
+# deliverables are immutable issued snapshots: track them via release tags or LFS, not edits

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "plugins": {
+    "aea-calc": {
+      "version": "1.6.0",
+      "hash": "df3510f5f7e9a8e4"
+    },
+    "doc-quality": {
+      "version": "0.1.0",
+      "hash": "974ffde254dc4389"
+    },
+    "equipment-catalog": {
+      "version": "0.1.0",
+      "hash": "d7400a5661aad756"
+    },
+    "iec-symbols": {
+      "version": "0.4.16",
+      "hash": "f670e59ac29c8725"
+    },
+    "iram-titleblock": {
+      "version": "0.5.1",
+      "hash": "f2152194fcd970a8"
+    },
+    "pm2-docs": {
+      "version": "0.1.0",
+      "hash": "22d026f227f581b9"
+    },
+    "procurement": {
+      "version": "0.1.0",
+      "hash": "280c158e661c70cd"
+    },
+    "sld": {
+      "version": "0.1.1",
+      "hash": "81494cd878a1e1a9"
+    },
+    "spec-writer": {
+      "version": "0.1.0",
+      "hash": "d705a0d975661c45"
+    }
+  }
+}

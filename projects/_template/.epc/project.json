@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "client": "",
+  "project_code": "",
+  "jurisdiction": "AR",
+  "locale": "es-AR",
+  "methodology": "pm2",
+  "disciplines": [
+    "electrical"
+  ],
+  "phase": "IC",
+  "engine_min_version": "0.1.0"
+}

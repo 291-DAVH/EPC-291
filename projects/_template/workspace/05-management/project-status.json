@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "state": "active",
+  "progress_pct": 0,
+  "health": "on_track",
+  "phase": "IC",
+  "manager": "",
+  "location": "",
+  "start": null,
+  "due": null,
+  "next_milestone": null,
+  "milestones": [],
+  "updated": null
+}
