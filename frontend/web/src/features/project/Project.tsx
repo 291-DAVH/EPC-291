@@ -5,7 +5,7 @@ import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
 
-const TABS = ["overview", "requirements", "plan", "engineering", "deliverables", "reports", "inputs"] as const;      // tab order; the first one (Resumen) is the default
+const TABS = ["inputs", "requirements", "plan", "engineering", "deliverables", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 type Tab = (typeof TABS)[number];
 
 export default function Project() {
