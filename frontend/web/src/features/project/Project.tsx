@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ApiError, DeliverableItem, Gantt, Me, PackagesView, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, useApi } from "@epc/ui";
+import { ApiError, AnalysisResult, AnalysisStatus, DeliverableItem, Gantt, Me, PackagesView, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, api, useApi } from "@epc/ui";
 import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
@@ -61,7 +61,7 @@ export default function Project() {
       {tab === "plan" && <Plan base={base} />}
       {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
-      {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} />}
+      {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
       {tab === "requirements" && <Requirements base={base} rev={rev} />}
       {tab === "reports" && <Reports base={base} go={go} />}
     </>
@@ -196,7 +196,7 @@ function Deliverables({ base }: { base: string }) {
 }
 
 /* ---------------- inputs ---------------- */
-function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number; onSent: () => void; initialKind: string }) {
+function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { base: string; rev: number; onSent: () => void; initialKind: string; engineer: boolean; client: string; code: string }) {
   const { t } = useI18n();
   const fmt = useFmt();
   const [r, setR] = useState(0);
@@ -234,6 +234,8 @@ function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number;
   };
   const tone = (s: string) => (s === "structured" ? "ok" : s === "analyzing" ? "warn" : "accent");
   return (
+    <>
+      {engineer && <AnalysisPanel client={client} code={code} onDone={onSent} />}
     <div className="cols2">
       <form className="card form" onSubmit={submit} noValidate>
         <h2>{t("u.i.title")}</h2>
@@ -277,6 +279,7 @@ function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number;
         </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -353,6 +356,44 @@ function Plan({ base }: { base: string }) {
     <div className="grid" style={{ gap: 14 }}>
       <Gantt schedule={sch.data} today={new Date().toISOString().slice(0, 10)} />
       <WbsTree wbs={wbs.data} />
+    </div>
+  );
+}
+
+/* ---------------- automatic analysis (admin/engineer only) ---------------- */
+function AnalysisPanel({ client, code, onDone }: { client: string; code: string; onDone: () => void }) {
+  const { t } = useI18n();
+  const path = `/projects/${client}/${code}/analysis`;
+  const [rev, setRev] = useState(0);
+  const st = useApi<AnalysisStatus>(`${path}?r=${rev}`);
+  const [busy, setBusy] = useState(false);
+  const [res, setRes] = useState<AnalysisResult | null>(null);
+  const [err, setErr] = useState("");
+  if (!st.data) return null;
+  const run = async () => {
+    if (!window.confirm(t("an.confirm"))) return;
+    setBusy(true); setErr(""); setRes(null);
+    try {
+      setRes(await api<AnalysisResult>(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ confirm: true }) }));
+      setRev((n) => n + 1); onDone();
+    } catch (x) {
+      setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error");
+    } finally { setBusy(false); }
+  };
+  const d = st.data;
+  return (
+    <div className="card" style={{ marginBottom: 14 }}>
+      <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
+        <div>
+          <b>{t("an.title")}</b> <span className="muted">· {d.pending} {t("an.pending")}</span>
+          <div className="muted small">{t("an.help")}</div>
+        </div>
+        <button className="primary" disabled={busy || !d.configured || d.pending === 0} onClick={run}>{busy ? t("an.running") : t("an.run")}</button>
+      </div>
+      {!d.configured && <div className="alert" style={{ marginTop: 8 }}>{t("an.notConfigured")}</div>}
+      {res && <div className="alert ok" style={{ marginTop: 8 }}><b>{t("an.done")}:</b> {res.created.length} {t("an.created")}, {res.merged.length} {t("an.merged")}, {res.open_questions} {t("an.questions")}</div>}
+      {err && <div className="alert bad" style={{ marginTop: 8 }}><b>{t("an.failed")}:</b> {err}</div>}
+      {d.usage.calls > 0 && <div className="muted small" style={{ marginTop: 6 }}>{t("an.usage")}: {d.usage.calls} {t("an.calls")} · {d.usage.input_tokens + d.usage.output_tokens} {t("an.tokens")} · {d.model}</div>}
     </div>
   );
 }

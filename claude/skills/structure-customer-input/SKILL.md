@@ -9,6 +9,9 @@ Owner plugin: `intake-analysis`. Script: `claude/plugins/intake-analysis/scripts
 
 The end user never sees this work. They see their item change from *Received* to *Under analysis* to *Turned into requirements*, and then the requirements. Do not mention tools, models, plugins or internal files in anything written for them.
 
+## Automatic path
+The backend runs this same analysis through the Claude API (`backend/src/epc/modules/intake/analyzer.py`): it sends the pending items (text only, amounts replaced by `[importe omitido]`, no attachments), forces a `submit_analysis` tool call in the format below, validates it with `intake.py` (`validate`) and stores it with `intake.py` (`apply`), so an automatic run and a manual run leave identical files. In the web app: project > Input data > *Analizar con Claude* (admin/engineer; the key `ANTHROPIC_API_KEY` is set on the server and the engineer confirms that the text leaves the server). Every call is recorded in `workspace/01-input/intake/analysis_usage.json`. The manual workflow below remains valid.
+
 ## Hard rules
 1. **No invented data.** Every figure, name or condition must come from the input. If something is missing, write it as an open question; never fill it in.
 2. **Confidential money.** Prices, budgets, fees, amounts and commercial conditions are not copied anywhere (requirement text, acceptance criteria, questions). Record only that economic information exists. The tool rejects amounts.
