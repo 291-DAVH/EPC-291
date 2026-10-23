@@ -47,7 +47,6 @@ AREAS = ("calc", "rules", "standards", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py", PLATFORM / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py", PLATFORM / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
-API_CWD = first(REPO / "backend", PLATFORM)
 WEB = first(REPO / "frontend" / "web", PLATFORM / "apps" / "web")
 RESULTS = []
 ENGINE_ENV = {"PYTHONPATH": os.pathsep.join([str(ENGINE / a / "src") for a in AREAS if (ENGINE / a / "src").is_dir()] + [os.environ.get("PYTHONPATH", "")])}
@@ -73,7 +72,11 @@ def main():
     run("skill-conflicts", [py, str(CONFLICTS), "--env", "production"], REPO)
     if BOARD:
         run("board", [py, str(BOARD), "--check"], REPO)
-    run("api", [py, "-m", "unittest", "apps.api.test_projects", "apps.api.test_app"], API_CWD, env=ENGINE_ENV)
+    backend = REPO / "backend"
+    benv = dict(ENGINE_ENV, PYTHONPATH=os.pathsep.join([str(backend / "src"), ENGINE_ENV["PYTHONPATH"]]))
+    run("importlinter-config", [py, str(REPO / "tools" / "ci" / "gen_importlinter.py"), "--check"], REPO)
+    run("backend-contracts", [py, "-c", "from importlinter.cli import lint_imports_command as m; m()", "--config", str(backend / ".importlinter")], backend, env=benv)
+    run("backend", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], backend, env=benv)
     for area in AREAS:
         d = ENGINE / area
         if (d / "tests").is_dir():

@@ -1,32 +1,26 @@
-"""Run from platform/:  python -m unittest apps.api.test_projects"""
+"""Project creation and options (projects module) through the HTTP API."""
 import json
-import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
-PLATFORM = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(PLATFORM))
+from fastapi.testclient import TestClient
 
-from fastapi.testclient import TestClient  # noqa: E402
-
-from apps.api import main  # noqa: E402
+from epc.core.config import settings
+from epc.main import create_app
 
 
 class TestCreateProject(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        self._old = main.PROJECTS
-        main.PROJECTS = self.root
-        self._role = main.ROLE
-        main.ROLE = "admin"
-        self.c = TestClient(main.app)
+        self._old = (settings.projects_dir, settings.role)
+        settings.projects_dir, settings.role = self.root, "admin"
+        self.c = TestClient(create_app())
 
     def tearDown(self):
-        main.PROJECTS = self._old
-        main.ROLE = self._role
+        settings.projects_dir, settings.role = self._old
         self.tmp.cleanup()
 
     body = {"client_name": "Ford Argentina", "client_code": "FORD", "project_code": "PRJ-001", "project_name": "Planta",
@@ -56,13 +50,11 @@ class TestCreateProject(unittest.TestCase):
         self.assertTrue((d / ".epc" / "ledger" / "0001_created.json").exists())
         self.assertEqual(r.json()["id"], "FORD/PRJ-001")
         self.assertGreater(r.json()["plugins_locked"], 0)
-        ids = [p["id"] for p in self.c.get("/api/projects").json()]
-        self.assertIn("FORD/PRJ-001", ids)
+        self.assertIn("FORD/PRJ-001", [p["id"] for p in self.c.get("/api/projects").json()])
 
     def test_duplicate_is_409(self):
         self.assertEqual(self.c.post("/api/projects", json=self.body).status_code, 201)
-        r = self.c.post("/api/projects", json=self.body)
-        self.assertEqual(r.status_code, 409)
+        self.assertEqual(self.c.post("/api/projects", json=self.body).status_code, 409)
 
     def test_validation(self):
         for patch, field in [({"client_code": "../evil"}, "client_code"), ({"project_code": "a b"}, "project_code"),
@@ -76,12 +68,8 @@ class TestCreateProject(unittest.TestCase):
         self.assertFalse((self.root / "evil").exists())
 
     def test_nothing_left_behind_on_failure(self):
-        orig = main._load_build
-        main._load_build = lambda: (_ for _ in ()).throw(RuntimeError("boom"))
-        try:
+        with mock.patch("epc.modules.projects.repository._load_build_tool", side_effect=RuntimeError("boom")):
             r = self.c.post("/api/projects", json=self.body)
-        finally:
-            main._load_build = orig
         self.assertEqual(r.status_code, 500)
         self.assertFalse((self.root / "FORD" / "PRJ-001").exists())
 

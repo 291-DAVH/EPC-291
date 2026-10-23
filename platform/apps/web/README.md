@@ -1,6 +1,6 @@
 # web
 
-React + TypeScript (Vite) front for the EPC platform. Reads from `apps/api`.
+React + TypeScript (Vite) front for the EPC platform. Reads from the `backend` API.
 
 Pages: Dashboard, Plugins, Skills, Rules (browser + detail), Checker (run rules against installation data), Projects (workspace vs deliverables tree).
 UI strings: `src/i18n.tsx` (es, en). Theme follows the system and can be toggled.
