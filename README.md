@@ -7,7 +7,7 @@
 **Automated EPC engineering, built from plugins.**
 Calculations, drawings, documents and standards-based rules for engineering projects, with a web app for customers and a technical console for engineers.
 
-[![Version](https://img.shields.io/badge/version-0.1.0%20draft-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.1.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Gate](https://img.shields.io/badge/test%20battery-20%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
@@ -148,7 +148,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test 
 
 ## 📜 Status and license
 
-Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+Release 0.1.0 (foundation). Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
 
 <div align="center">
 

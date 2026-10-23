@@ -7,7 +7,7 @@
 **Ingeniería EPC automatizada, armada con plugins.**
 Cálculos, planos, documentos y reglas basadas en normas para proyectos de ingeniería, con una aplicación web para clientes y una consola técnica para ingenieros.
 
-[![Versión](https://img.shields.io/badge/versi%C3%B3n-0.1.0%20borrador-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/versi%C3%B3n-0.1.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Batería](https://img.shields.io/badge/bater%C3%ADa%20de%20pruebas-20%20controles-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
@@ -148,7 +148,7 @@ Lee [CONTRIBUTING.md](CONTRIBUTING.md), abre una rama desde `dev`, corre la bate
 
 ## 📜 Estado y licencia
 
-Borrador 0.1.0. Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/calc/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
+Versión 0.1.0 (base). Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/calc/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
 
 <div align="center">
 
