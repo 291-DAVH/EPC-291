@@ -3,6 +3,9 @@
 All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.md` (releases are tagged on `main`).
 
 ## [Unreleased]
+### Changed
+- **Copyright:** the 177 engineering rules of `epc_calc` no longer carry the `cita` field (short literal quotations of AEA 90364); a rule keeps only the reference (standard, edition, clause, page) and its parameters, written in own words. The verification scripts (`build_rules.py`, `reglas_ocr.py`) that embedded those quotations were removed from the repository; both they and the original rules are kept privately in `local/dev-knowledge/extracted/`. New test `test_sin_texto_literal_de_la_norma`. The quotations remain in earlier git history. Concept documented in `docs/explanation/knowledge.md`; the `**/knowledge/` ignore rule was removed.
+
 
 ## [0.2.0] - 2026-10-23
 Second release: management, engineering workspace, SLD data entry, deliverable package and the fixes found by running Docker and a clean CI environment.

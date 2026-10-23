@@ -22,7 +22,7 @@ class TestReglas(unittest.TestCase):
             self.assertTrue(r["aplica_a"])
             f = r["fuente"]
             self.assertTrue(f["norma"].startswith("AEA 90364-"))
-            self.assertTrue(f["clausula"] and f["cita"].strip())
+            self.assertTrue(f["clausula"] and f["edicion"])
             if f["norma"].startswith("AEA 90364-7-"):          # Parte 7: texto digital, página como número
                 self.assertIsInstance(f["pagina_impresa"], int)
             else:                                              # Partes 4 y 5: OCR, "54-5" y página del PDF
@@ -43,11 +43,23 @@ class TestReglas(unittest.TestCase):
         self.assertEqual(R.valor("enterrados.profundidad_cables_directos", "profundidad_min_m"), 0.7)
         self.assertEqual(R.valor("banos.zona1_altura", "altura_cm"), 225)
 
-    def test_cita_contiene_el_valor_numerico(self):
-        # lo esencial: los umbrales numéricos de estas reglas aparecen escritos en su cita
-        for id_, texto in (("bandejas.reserva_20pct", "20 %"), ("canalizaciones.curvas_max_entre_cajas", "tres"),
-                           ("interruptores.pasillos_mayores_3m", "6 m"), ("tableros.altura_comandos", "0,40 m y 2 m")):
-            self.assertIn(texto, R.regla(id_)["fuente"]["cita"])
+    def test_sin_texto_literal_de_la_norma(self):
+        # la fuente es solo una referencia (norma, edición, cláusula, página): ninguna regla lleva citas textuales
+        prohibidos = {"cita", "citas", "texto", "texto_norma", "quote", "extracto"}
+        for r in R.reglas():
+            self.assertFalse(prohibidos & set(r), r["id"])
+            self.assertFalse(prohibidos & set(r["fuente"]), r["id"])
+            for k, v in r["fuente"].items():
+                if isinstance(v, str):
+                    self.assertLessEqual(len(v.split()), 6, f"{r['id']}.{k}: parece texto de la norma")
+
+    def test_los_valores_numericos_de_referencia_estan_en_parametros(self):
+        for id_, clave, valor in (("bandejas.reserva_20pct", "reserva_min_pct", 20), ("interruptores.pasillos_mayores_3m", None, None),
+                                  ("tableros.altura_comandos", None, None)):
+            if clave:
+                self.assertEqual(R.valor(id_, clave), valor)
+            else:
+                self.assertTrue(R.regla(id_)["parametros"], id_)
 
     def test_partes_4_y_5(self):
         self.assertEqual(R.valor("puesta_a_tierra.tt_ra_maxima", "ra_max_ohm"), 40)

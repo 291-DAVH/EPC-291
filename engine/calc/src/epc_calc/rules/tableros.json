@@ -23,10 +23,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "de por lo menos el 20 % de la capacidad total del tablero en módulos de 18 mm"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.reserva_770",
@@ -44,10 +43,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.16.4",
-    "pagina_impresa": 53,
-    "cita": "veinte por ciento (20 %) de la capacidad total del tablero en módulos de 18 mm"
+    "pagina_impresa": 53
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.altura_comandos",
@@ -70,10 +68,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "entre 0,40 m y 2 m"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.altura_borneras",
@@ -95,10 +92,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "deberán estar ubicadas a una altura mínima de 0,2 m, medida desde su parte inferior con respecto al nivel de piso terminado"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.gabinetes_en_zonas_de_vehiculos",
@@ -120,10 +116,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "con su borde inferior a no menos de 1,5 m de altura con relación a la superficie por donde transitan los vehículos"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.ip_minimo_viviendas_oficinas",
@@ -145,10 +140,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "el grado de protección será como mínimo IP41 o IP31D"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.ip_intemperie_principal",
@@ -170,10 +164,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.3.1",
-    "pagina_impresa": 147,
-    "cita": "el grado de protección no debe ser inferior a IP54"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.no_en_baños",
@@ -195,10 +188,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.3.1 y 771.20.3.2",
-    "pagina_impresa": 147,
-    "cita": "Los tableros principales no se instalarán en los cuartos de baño."
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.no_en_baños_701",
@@ -220,10 +212,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.512.4",
-    "pagina_impresa": 12,
-    "cita": "No está permitida la instalación de tableros eléctricos en los cuartos de baño."
+    "pagina_impresa": 12
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.verificacion_calentamiento",
@@ -243,10 +234,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "En todos los tableros se debe efectuar una verificación de los límites de calentamiento."
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tableros.montaje_componentes",
@@ -266,10 +256,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.20.4",
-    "pagina_impresa": 147,
-    "cita": "Los componentes eléctricos no podrán montarse directamente sobre las caras posteriores o laterales del tablero"
+    "pagina_impresa": 147
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

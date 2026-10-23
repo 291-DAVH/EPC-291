@@ -4,8 +4,8 @@ ESTADO: BORRADOR — pendiente de validación por el usuario.
 
 OBJETIVO
     Consultar las reglas de `rules/*.json`: una por requisito, con valor, tipo (obligatorio,
-    recomendado, prohibido), a qué inmuebles aplica y su fuente (norma, cláusula, página, cita
-    textual verificada contra el PDF). Sirve de base para verificar proyectos (alturas de
+    recomendado, prohibido), a qué inmuebles aplica y su referencia (norma, edición,
+    cláusula, página; sin texto de la norma). Sirve de base para verificar proyectos (alturas de
     tomacorrientes, reserva de bandejas, llenado de caños, etc.).
 
 FÓRMULAS
@@ -16,7 +16,7 @@ UNIDADES
     Cada regla declara la unidad en el nombre del parámetro (_m, _mm, _pct, _a, _cm, _va).
 
 LIMITACIONES
-    - Los valores numéricos de `parametros` son una lectura de la cita; la cita es la fuente.
+    - Los valores numéricos de `parametros` son una lectura de la norma; la fuente es la cláusula y página indicadas.
     - Cubre 771, 770, 701 y 722 y, por OCR, capítulos 41, 43, 51, 52 y 54 de las Partes 4 y 5; cada regla
       de esas partes indica en `fuente.verificacion` si se comprobó por OCR o sobre la imagen.
     - No incluye los capítulos 42 y 44, el 434, ni valores del factor c (están en AEA 90909-0, ausente).

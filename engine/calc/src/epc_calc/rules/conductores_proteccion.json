@@ -25,7 +25,6 @@
     "clausula": "Tabla 54.5",
     "pagina_impresa": "54-11",
     "pagina_pdf": 251,
-    "cita": "Secciones minimas de los conductores de puesta a tierra y de proteccion",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -85,10 +84,9 @@
     "clausula": "543.1.2",
     "pagina_impresa": "54-12",
     "pagina_pdf": 252,
-    "cita": "La seccion del conductor de proteccion no debera ser menor que el valor determinado por",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_seccion_normalizada_superior",
@@ -109,10 +107,9 @@
     "clausula": "543.1.2",
     "pagina_impresa": "54-12",
     "pagina_pdf": 252,
-    "cita": "se deben utilizar conductores de la seccion normalizada inmediatamente superior",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.k_pe_aislado_tabla_54_6",
@@ -135,7 +132,6 @@
     "clausula": "Tabla 54.6",
     "pagina_impresa": "54-12",
     "pagina_pdf": 252,
-    "cita": "Valores de k para conductores de proteccion aislados",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -222,7 +218,6 @@
     "clausula": "Tabla 54.7",
     "pagina_impresa": "54-13",
     "pagina_pdf": 253,
-    "cita": "Valores de k para conductores de proteccion desnudos",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -282,7 +277,6 @@
     "clausula": "Tabla 54.8",
     "pagina_impresa": "54-13",
     "pagina_pdf": 253,
-    "cita": "Valores de k para conductores de proteccion incorporados",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -367,7 +361,6 @@
     "clausula": "Tabla 54.9",
     "pagina_impresa": "54-13",
     "pagina_pdf": 253,
-    "cita": "Valores de k para conductores utilizados como cubierta metalica del cable",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -467,7 +460,6 @@
     "clausula": "Tabla 54.10",
     "pagina_impresa": "54-14",
     "pagina_pdf": 254,
-    "cita": "Valores de k para conductores desnudos donde no existe riesgo",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -544,10 +536,9 @@
     "clausula": "543.1.3",
     "pagina_impresa": "54-14",
     "pagina_pdf": 254,
-    "cita": "si poseen una proteccion mecanica",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_comun_varios_circuitos",
@@ -568,10 +559,9 @@
     "clausula": "543.1.4",
     "pagina_impresa": "54-14",
     "pagina_pdf": 254,
-    "cita": "Cuando un conductor de proteccion es comun a varios circuitos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_tipos_permitidos",
@@ -592,10 +582,9 @@
     "clausula": "543.2.1",
     "pagina_impresa": "54-14",
     "pagina_pdf": 254,
-    "cita": "Los conductores de proteccion pueden ser uno o mas de los siguientes",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.no_usar_como_pe",
@@ -616,10 +605,9 @@
     "clausula": "543.2.3",
     "pagina_impresa": "54-15",
     "pagina_pdf": 255,
-    "cita": "No se permite el empleo de los elementos y partes metalicas que se indican a continuacion",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_sin_dispositivo_de_corte",
@@ -640,10 +628,9 @@
     "clausula": "543.3.3",
     "pagina_impresa": "54-15",
     "pagina_pdf": 255,
-    "cita": "En el conductor de proteccion no debe insertarse ningun dispositivo de corte o maniobra",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_sin_guirnalda",
@@ -664,10 +651,9 @@
     "clausula": "543.3.5",
     "pagina_impresa": "54-15",
     "pagina_pdf": 255,
-    "cita": "no deberan ser empleadas formando parte de los conductores de proteccion de otros materiales",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pen_prohibido_en_inmuebles",
@@ -690,10 +676,9 @@
     "clausula": "543.4 Nota 1",
     "pagina_impresa": "54-15",
     "pagina_pdf": 255,
-    "cita": "estan prohibidos para instalaciones en inmuebles",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pen_seccion_minima",
@@ -717,10 +702,9 @@
     "clausula": "543.4.1",
     "pagina_impresa": "54-16",
     "pagina_pdf": 256,
-    "cita": "debera tener una seccion no menor que 10",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pen_separacion_n_pe",
@@ -741,10 +725,9 @@
     "clausula": "543.4.3",
     "pagina_impresa": "54-16",
     "pagina_pdf": 256,
-    "cita": "el conductor neutro se conecte a otra parte de la instalacion puesta a tierra",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_junto_a_activos_con_sobreintensidad",
@@ -770,10 +753,9 @@
     "clausula": "543.6",
     "pagina_impresa": "54-16",
     "pagina_pdf": 256,
-    "cita": "los conductores de proteccion deben instalarse en la misma canalizacion",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.pe_reforzado_fuga_10ma",
@@ -798,10 +780,9 @@
     "clausula": "543.7",
     "pagina_impresa": "54-16",
     "pagina_pdf": 256,
-    "cita": "los conductores de proteccion deberan ser reforzados",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.equipotencial_principal",
@@ -828,10 +809,9 @@
     "clausula": "544.1.1",
     "pagina_impresa": "54-17",
     "pagina_pdf": 257,
-    "cita": "Los conductores equipotenciales principales, deberan tener una seccion no menor que la mitad",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.equipotencial_suplementario_masa_masa",
@@ -852,10 +832,9 @@
     "clausula": "544.2.1",
     "pagina_impresa": "54-17",
     "pagina_pdf": 257,
-    "cita": "no sera menor que la mas pequena de las secciones",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores_proteccion.equipotencial_suplementario_masa_extrana",
@@ -878,10 +857,9 @@
     "clausula": "544.2.2",
     "pagina_impresa": "54-17",
     "pagina_pdf": 257,
-    "cita": "no sera menor que la mitad de la del conductor de proteccion conectado a esa masa",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }

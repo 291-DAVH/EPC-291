@@ -23,10 +23,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.1",
-    "pagina_impresa": 44,
-    "cita": "cuyo centro deberá estar ubicado entre 0,9 y 1,3 m del nivel del solado terminado, siendo recomendable la altura de 1,10 m"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "interruptores.distancia_al_marco",
@@ -48,10 +47,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.1",
-    "pagina_impresa": 44,
-    "cita": "a no más de 0,15 m del borde exterior del marco que aloja el cerradero"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "interruptores.pasillos_mayores_3m",
@@ -75,10 +73,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.1",
-    "pagina_impresa": 44,
-    "cita": "la distancia entre interruptores sucesivos no exceda los 6 m"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "interruptores.ascensores",
@@ -100,10 +97,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.1",
-    "pagina_impresa": 44,
-    "cita": "se deberá situar el dispositivo de comando de iluminación a menos de 2 m de toda puerta de ascensor"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "interruptores.no_compartir_caja_con_tomas_bajos",
@@ -125,10 +121,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 p)",
-    "pagina_impresa": 43,
-    "cita": "los interruptores de efecto para comando de tomacorrientes no podrán compartir la caja con interruptores de efecto del circuito de iluminación"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "interruptores.garajes_altura_minima",
@@ -146,10 +141,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.4",
-    "pagina_impresa": 37,
-    "cita": "deberán estar ubicados a una altura mínima de 1,5 m sobre el nivel de solado."
+    "pagina_impresa": 37
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

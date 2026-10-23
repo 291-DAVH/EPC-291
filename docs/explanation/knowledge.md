@@ -32,5 +32,5 @@ Each of these has tests in `engine/<area>/tests` (`engine/calc/tests`: 15 test f
 - Values (limits, coefficients, table cells) are data of the engine; keep the clause reference next to them.
 - Everything unverified is marked `draft` and is not used in production.
 
-## Open point
-Some early rules in `engine/calc/src/epc_calc/rules/*.json` still carry a `cita` field with a short literal quotation of the standard. The principle above (own words + clause reference) suggests replacing those quotations by the reference alone; this is a decision for the owner (see the pending list).
+## Literal quotations
+The early AEA rules in `engine/calc/src/epc_calc/rules/*.json` used to carry a `cita` field with a short literal quotation. It was removed (2026-10-23): a rule keeps only the reference (standard, edition, clause, page). The original rules with their quotations, and the scripts that verified them against the PDFs, are kept privately under `local/dev-knowledge/extracted/`. A test prevents literal text from coming back.

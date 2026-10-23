@@ -15,7 +15,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "f317907c42c4ad03"
+      "hash": "5e5ae9c1271f23e9"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -136,7 +136,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "5f206364fd2173e5"
+      "hash": "8a078ec9888df86b"
     },
     "spec-writer": {
       "version": "0.1.0",

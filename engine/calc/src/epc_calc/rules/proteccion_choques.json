@@ -22,10 +22,9 @@
     "clausula": "413.1.3",
     "pagina_impresa": "41-47",
     "pagina_pdf": 67,
-    "cita": "esta Reglamentacion adopta, como tension limite convencional de contacto",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.tt_solo_diferenciales",
@@ -46,10 +45,9 @@
     "clausula": "413.1.3",
     "pagina_impresa": "41-47",
     "pagina_pdf": 67,
-    "cita": "en el ECT TT, solo se podran utilizar para la proteccion contra los contactos indirectos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.tiempos_tabla_41_3",
@@ -72,7 +70,6 @@
     "clausula": "Tabla 41.3 y 413.1.3.1",
     "pagina_impresa": "41-48",
     "pagina_pdf": 68,
-    "cita": "Tiempos maximos de desconexion para la proteccion contra contacto indirecto",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -143,10 +140,9 @@
     "clausula": "413.1.3.2",
     "pagina_impresa": "41-49",
     "pagina_pdf": 69,
-    "cita": "se admiten tiempos de desconexion que no excedan a 2 s para circuitos sec- cionales",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.tt_tiempo_1s",
@@ -169,10 +165,9 @@
     "clausula": "413.1.3.3",
     "pagina_impresa": "41-49",
     "pagina_pdf": 69,
-    "cita": "se admiten tiempos de desconexion que no excedan de 1 s para circuitos seccio- nales",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.equipotencial_suplementaria_si_no_alcanza",
@@ -193,10 +188,9 @@
     "clausula": "413.1.3.5",
     "pagina_impresa": "41-49",
     "pagina_pdf": 69,
-    "cita": "se debe realizar una vinculacion equipotencial suplementaria",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.dd_30ma_proteccion_adicional",
@@ -219,10 +213,9 @@
     "clausula": "412.5.1 y 412.5.2",
     "pagina_impresa": "41-40",
     "pagina_pdf": 60,
-    "cita": "es reconocido como medida de proteccion complementaria o adicional contra los",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_choques.dd_30ma_circuitos_obligados",
@@ -252,10 +245,9 @@
     "clausula": "412.5.3",
     "pagina_impresa": "41-40",
     "pagina_pdf": 60,
-    "cita": "Los circuitos de tomacorrientes que empleen tomacorrientes de corriente nominal igual o inferior a",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }
