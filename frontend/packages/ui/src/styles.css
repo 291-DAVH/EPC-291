@@ -22,7 +22,7 @@ a { color: var(--accent); text-decoration: none; }
 h1 { font-size: 22px; margin: 0 0 4px; }
 h2 { font-size: 15px; margin: 0 0 10px; }
 .help { color: var(--muted); margin: 0 0 18px; max-width: 70ch; }
-.shell { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
+.shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 100vh; }
 .side { background: var(--panel); border-right: 1px solid var(--line); padding: 16px 12px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
 .brand { padding: 4px 10px 14px; }
 .brand b { display: block; font-size: 16px; }
@@ -32,7 +32,7 @@ h2 { font-size: 15px; margin: 0 0 10px; }
 .side a.nav.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .side .spacer { flex: 1; }
 .tools { display: flex; gap: 6px; padding: 8px 6px; }
-.main { padding: 24px 28px 48px; max-width: 1300px; width: 100%; margin-inline: auto; }
+.main { padding: 24px 28px 48px; max-width: 1300px; width: 100%; min-width: 0; margin-inline: auto; }
 button, select, input { font: inherit; color: var(--text); }
 button { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
 button:hover { background: var(--panel-2); }
@@ -84,7 +84,7 @@ pre { background: var(--panel-2); padding: 10px 12px; border-radius: 8px; overfl
   .scroll { max-height: 52vh; }
 }
 @media (max-width: 860px) {
-  .shell { grid-template-columns: 1fr; }
+  .shell { grid-template-columns: minmax(0, 1fr); }
   .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line); }
   .brand { width: 100%; padding-bottom: 6px; }
   .side .spacer { display: none; }
