@@ -75,7 +75,7 @@ Omitido: inferir por KIND y/o Ib (motor <= 32 A -> `dol`; motor > 32 A -> `dol_o
    - 2 rayas = F+N -> equipos 2P (L N).
    - Confirmar con la sección del cable de salida (p. ej. 3x16 sin N = 3F).
 4. **Mapear cada equipo SLD a su versión MLD** `<id SLD>_<n>p_mld` (ACB, MCCB, MCB, RCCB/RCBO solo 1P/2P/4P, NH00, FS, SPD, FU+SPD, contactor, térmico, seccionador). Polos según AEA 771.20.5.1: general de tablero trifásico 4P (corta el neutro), trifásico con neutro 4P, trifásico sin neutro (motor) 3P, monofásico 2P. Prohibidos los unipolares y los "1P+N" en circuitos terminales; un MCCB 3P con borne seccionable de neutro (como en planos EPLAN extranjeros) solo puede valer en un seccional y hay que avisarlo. Si el origen trae un neutro sin cortar, marcarlo como observación.
-5. **Generar la lámina** con `lamina_iram.py <FMT> [--mod]` y llenar el rótulo IRAM 4508.
+5. **Generar la lámina** con `python -m epc_drawing.titleblock.lamina_iram <FMT> [--mod]` y llenar el rótulo IRAM 4508.
 6. **Generar con un script Python** que inserta los símbolos (`<g transform="translate(x,y)">` + contenido del SVG sin `<metadata>`, `<title>`, `<desc>`, grupo `ports` ni atributos `id`; x, y en mm sobre la retícula de 2,5 mm, sin `scale`) y sustituye `{clave}` por los datos del origen.
 7. **Renderizar y revisar** el PNG (cairosvg), recortar zonas con PIL, corregir y repetir.
 8. **Entregar** SVG + PDF + PNG en la carpeta del usuario y resumir las interpretaciones hechas.

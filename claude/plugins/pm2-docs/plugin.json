@@ -46,5 +46,8 @@
   "legacy": {
     "source": "00-Template-Claude/.claude/library/plugins/calculations + skill create-pm2-document"
   },
-  "note": "charter_exporter imports document_verifier from doc-quality; hub path resolution is pending (see docs/MIGRATION_LOG.md)."
+  "note": "charter_exporter imports document_verifier from doc-quality; hub path resolution is pending (see docs/MIGRATION_LOG.md).",
+  "engine": [
+    "documents"
+  ]
 }

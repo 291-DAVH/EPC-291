@@ -20,3 +20,6 @@ Single-line diagram (SLD) of a board on IRAM sheets from a circuit Excel: SVG an
 - `.json`: internal
 
 See `plugin.json` for the full manifest. Legacy origin: `sld-generator`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

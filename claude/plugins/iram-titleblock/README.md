@@ -18,3 +18,6 @@ IRAM A0-A4 drawing sheets (frame, coordinates, IRAM 4504/4508 title block) with 
 - `.dxf`: internal+deliverable
 
 See `plugin.json` for the full manifest. Legacy origin: `291_G_IRAM_Custom_TitleBlocks_Generator`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

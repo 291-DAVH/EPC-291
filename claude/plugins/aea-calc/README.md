@@ -20,3 +20,6 @@ Low-voltage installation sizing (AEA 90364 / IEC 60364): design current, protect
 - `.md`: internal
 
 See `plugin.json` for the full manifest. Legacy origin: `elec-calc-generator`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/calc` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

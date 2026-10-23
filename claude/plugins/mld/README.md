@@ -19,3 +19,6 @@ Converts an SLD into a multi-line diagram (MLD) by expanding each line into its 
 - `.dxf`: internal+deliverable
 
 See `plugin.json` for the full manifest. Legacy origin: `mld-generator`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

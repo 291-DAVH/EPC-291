@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-drawing"
+version = "0.1.0"
+description = "EPC-291 drawing engine: IEC 60617 symbols, IRAM sheets, single-line and multi-line diagrams"
+requires-python = ">=3.10"
+dependencies = ["epc-calc", "openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely"]
+
+[project.optional-dependencies]
+previews = ["cairosvg", "pillow"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"epc_drawing.symbols" = ["library/**/*"]
+"epc_drawing.titleblock" = ["templates/**/*", "assets/*"]
+"epc_drawing.mld" = ["data/**/*", "templates/*"]

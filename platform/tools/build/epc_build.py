@@ -6,13 +6,15 @@
   python platform/tools/build/epc_build.py marketplace         build dist/marketplace/ (plugins in the official layout + marketplace.json)
   python platform/tools/build/epc_build.py lock <project_dir>  write <project>/.epc/plugins.lock from the registry
 
-Sources live in claude/: plugins/<id>/ (our plugin.json + code), skills/<id>/, agents/<name>.md, marketplace/.
-A built plugin follows Claude Code's layout: .claude-plugin/plugin.json, skills/, agents/, plus our code and data.
+Sources live in claude/: plugins/<id>/ (our plugin.json: packaging only), skills/<id>/, agents/<name>.md, marketplace/.
+The code lives in engine/<area>/src/<package>; a plugin lists the areas it wraps in `engine`.
+A built plugin follows Claude Code's layout: .claude-plugin/plugin.json, skills/, agents/, plus lib/ with the engine packages it needs.
 
 Rules enforced by `registry`:
   - every plugin.json has id, version (semver), kind and skills;
   - every skill a plugin lists exists in claude/skills/ (or inside the plugin: plugin copy governs);
   - every agent a plugin lists exists in claude/agents/;
+  - every engine area a plugin lists exists in engine/<area>/src;
   - every `requires` entry resolves to a plugin whose version satisfies the range;
   - a skill has exactly one owner plugin.
 """
@@ -30,6 +32,7 @@ PLATFORM = Path(__file__).resolve().parents[2]
 REPO = PLATFORM.parent
 CLAUDE = REPO / "claude"
 HUB, SKILLS, AGENTS, MARKET = CLAUDE / "plugins", CLAUDE / "skills", CLAUDE / "agents", CLAUDE / "marketplace"
+ENGINE = REPO / "engine"
 DIST = PLATFORM / "dist"
 SKIP_DIRS = {"__pycache__", ".git", "tests", "dist", "node_modules"}
 SKIP_SUFFIX = {".pyc", ".pdf"}
@@ -78,6 +81,15 @@ def tree_hash(d):
     return h.hexdigest()[:16]
 
 
+def plugin_hash(m):
+    """Hash of the plugin folder plus the engine sources it wraps (what a lock must pin)."""
+    h = hashlib.sha256(tree_hash(m["_dir"]).encode())
+    for a in m.get("engine", []):
+        if (ENGINE / a / "src").is_dir():
+            h.update(tree_hash(ENGINE / a / "src").encode())
+    return h.hexdigest()[:16]
+
+
 def validate(plugins):
     errors, owners = [], {}
     for pid, m in plugins.items():
@@ -98,6 +110,9 @@ def validate(plugins):
                 if sid in owners:
                     errors.append(f"skill '{sid}' has two owners: {owners[sid]} and {pid}")
                 owners[sid] = pid
+        for a in m.get("engine", []):
+            if not (ENGINE / a / "src").is_dir():
+                errors.append(f"{pid}: engine area '{a}' not found in engine/")
         for ag in m.get("agents", []):
             if not (AGENTS / f"{ag}.md").exists():
                 errors.append(f"{pid}: agent '{ag}' not found in claude/agents")
@@ -116,7 +131,7 @@ def cmd_registry():
     for pid, m in plugins.items():
         reg["plugins"][pid] = {"version": m["version"], "kind": m["kind"], "status": m.get("status", "active"),
                                "requires": m.get("requires", {}), "skills": [s["id"] for s in m.get("skills", [])],
-                               "hash": tree_hash(m["_dir"])}
+                               "engine": m.get("engine", []), "hash": plugin_hash(m)}
     (HUB / "registry.json").write_text(json.dumps(reg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     for e in errors:
         print("ERROR:", e)
@@ -152,6 +167,12 @@ def assemble(m, dest: Path):
                 t = dest / "skills" / s["id"] / f.relative_to(src)
                 t.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(f, t)
+    for a in m.get("engine", []):                       # engine packages travel with the plugin under lib/
+        for f in sorted((ENGINE / a / "src").rglob("*")):
+            rel = f.relative_to(ENGINE / a / "src")
+            if f.is_file() and not (set(rel.parts) & {"__pycache__"}) and f.suffix not in {".pyc", ".pdf"} and ".egg-info" not in str(rel):
+                (dest / "lib" / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(f, dest / "lib" / rel)
     for ag in m.get("agents", []):
         (dest / "agents").mkdir(exist_ok=True)
         shutil.copy2(AGENTS / f"{ag}.md", dest / "agents" / f"{ag}.md")

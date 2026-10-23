@@ -3,18 +3,21 @@
 
   python tools/ci/run_gate.py [--fast] [--no-web]
 
-Checks (paths are detected, so the same gate works before and after each migration phase):
-  registry         plugin registry + skill ownership
-  skill-conflicts  duplicate / orphan skills (production rules)
-  board            planning/BOARD.md is up to date
-  api              API tests (user surface, role guard, uploads, project creation)
-  aea-calc         205 calculation tests
-  intake           customer-input pipeline tests
-  standard-ingest  ingestion and promotion tests
-  rules-engine     rules engine tests
-  sld-smoke        single-line diagram generated from the example, no warnings
-  web              TypeScript type-check (and build unless --fast)
-Exit code 0 only when every check passes.
+Checks
+  registry          plugin registry (plugins, skills, agents, engine areas)
+  skill-conflicts   duplicate / orphan skills (production rules)
+  board             planning/BOARD.md is up to date
+  api               API tests (user surface, role guard, uploads, project creation)
+  engine-calc       LV calculation tests
+  engine-rules      rules engine tests
+  engine-standards  standards ingestion and promotion tests
+  engine-drawing    symbol library tests
+  engine-documents  document verifiers, CCPM, exporters (environment-dependent tests are skipped)
+  intake            customer-input pipeline tests
+  sld-smoke         single-line diagram generated from the example through the engine, no warnings
+  web               TypeScript type-check (and build unless --fast)
+  marketplace       plugins assembled in Claude Code's layout, validated with `claude plugin validate --strict`
+The engine packages are put on PYTHONPATH, so no installation is needed. Exit code 0 only when every check passes.
 """
 import argparse
 import os
@@ -38,24 +41,23 @@ def first(*paths):
 PLATFORM = first(REPO / "platform")
 PYTHON = first(REPO / "backend" / ".venv" / "Scripts" / "python.exe", PLATFORM / ".venv" / "Scripts" / "python.exe",
                REPO / ".venv" / "Scripts" / "python.exe", PLATFORM / ".venv" / "bin" / "python") or Path(sys.executable)
-PLUGINS = first(REPO / "claude" / "plugins", PLATFORM / "hub")
+PLUGINS = REPO / "claude" / "plugins"
+ENGINE = REPO / "engine"
+AREAS = ("calc", "rules", "standards", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py", PLATFORM / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py", PLATFORM / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
 API_CWD = first(REPO / "backend", PLATFORM)
-RULES_CWD = first(REPO / "engine" / "rules", PLATFORM / "core" / "rules")
 WEB = first(REPO / "frontend" / "web", PLATFORM / "apps" / "web")
 RESULTS = []
+ENGINE_ENV = {"PYTHONPATH": os.pathsep.join([str(ENGINE / a / "src") for a in AREAS if (ENGINE / a / "src").is_dir()] + [os.environ.get("PYTHONPATH", "")])}
 
 
-def run(name, cmd, cwd, expect_ok=True, must_not_contain=None, env=None):
+def run(name, cmd, cwd, must_not_contain=None, env=None):
     t0 = time.time()
-    e = dict(os.environ, **(env or {}))
-    p = subprocess.run(cmd, cwd=str(cwd), capture_output=True, text=True, env=e)
+    p = subprocess.run(cmd, cwd=str(cwd), capture_output=True, text=True, env=dict(os.environ, **(env or {})))
     out = (p.stdout or "") + (p.stderr or "")
-    ok = (p.returncode == 0) == expect_ok
-    if ok and must_not_contain and must_not_contain in out:
-        ok = False
+    ok = p.returncode == 0 and not (must_not_contain and must_not_contain in out)
     RESULTS.append((name, ok, round(time.time() - t0, 1), out.strip().splitlines()[-3:] if not ok else []))
     return ok
 
@@ -71,39 +73,34 @@ def main():
     run("skill-conflicts", [py, str(CONFLICTS), "--env", "production"], REPO)
     if BOARD:
         run("board", [py, str(BOARD), "--check"], REPO)
-    run("api", [py, "-m", "unittest", "apps.api.test_projects", "apps.api.test_app"], API_CWD)
-    for name, folder, args in [
-        ("aea-calc", "aea-calc/scripts", ["discover", "-s", ".", "-p", "test_*.py"]),
-        ("intake", "intake-analysis/scripts", ["test_intake"]),
-        ("standard-ingest", "standard-ingest/scripts", ["test_ingest"]),
-    ]:
-        d = PLUGINS / folder
-        if d.exists():
-            run(name, [py, "-m", "unittest", *args], d)
-    if RULES_CWD:
-        run("rules-engine", [py, "-m", "unittest", "discover", "-s", "tests"], RULES_CWD)
-    sld = PLUGINS / "sld"
-    if (sld / "scripts" / "sld_paginate.py").exists():
-        import shutil
-        out = tempfile.mkdtemp(prefix="gate_sld_")
-        tb = Path(out) / "titleblock"                      # the generator rewrites input-titleblocks.xlsx: work on a copy
-        shutil.copytree(sld / "examples" / "titleblock", tb)
-        run("sld-smoke", [py, "scripts/sld_paginate.py", "default", "examples/input_for_sld_V1.xlsx", str(Path(out) / "out"), "SLD_V1", "default", "default"],
-            sld, must_not_contain="AVISO", env={"SLD_ROTULO_DIR": str(tb)})
+    run("api", [py, "-m", "unittest", "apps.api.test_projects", "apps.api.test_app"], API_CWD, env=ENGINE_ENV)
+    for area in AREAS:
+        d = ENGINE / area
+        if (d / "tests").is_dir():
+            run(f"engine-{area}", [py, "-m", "unittest", "discover", "-s", "tests"], d, env=ENGINE_ENV)
+    intake = PLUGINS / "intake-analysis" / "scripts"
+    if intake.is_dir():
+        run("intake", [py, "-m", "unittest", "test_intake"], intake)
+
+    example = ENGINE / "drawing" / "examples" / "sld"
+    if example.is_dir():
+        out = Path(tempfile.mkdtemp(prefix="gate_sld_"))
+        shutil.copytree(example / "titleblock", out / "titleblock")          # the generator rewrites input-titleblocks.xlsx: use a copy
+        run("sld-smoke", [py, "-m", "epc_drawing.sld.sld_paginate", "default", str(example / "input_for_sld_V1.xlsx"), str(out / "out"), "SLD_V1", "default", "default"],
+            REPO, must_not_contain="AVISO", env=dict(ENGINE_ENV, SLD_ROTULO_DIR=str(out / "titleblock")))
+
     if WEB and not a.no_web and (WEB / "node_modules").exists():
         npx = "npx.cmd" if os.name == "nt" else "npx"
         run("web-types", [npx, "tsc", "--noEmit"], WEB)
         if not a.fast:
-            npm = "npm.cmd" if os.name == "nt" else "npm"
-            run("web-build", [npm, "run", "build"], WEB)
+            run("web-build", ["npm.cmd" if os.name == "nt" else "npm", "run", "build"], WEB)
 
     claude = shutil.which("claude")
     if claude and BUILD:
-        market = BUILD.parents[2] / "dist" / "marketplace" if BUILD.parent.name == "build" and BUILD.parents[1].name == "tools" and BUILD.parents[2].name == "platform" else REPO / "dist" / "marketplace"
+        market = PLATFORM / "dist" / "marketplace"
         if run("marketplace-build", [py, str(BUILD), "marketplace"], REPO) and market.exists():
             targets = [market] + sorted(p for p in (market / "plugins").iterdir() if p.is_dir())
-            bad = []
-            t0 = time.time()
+            bad, t0 = [], time.time()
             for tgt in targets:
                 p = subprocess.run([claude, "plugin", "validate", "--strict", str(tgt)], capture_output=True, text=True)
                 if p.returncode != 0 or "Validation passed" not in (p.stdout or ""):

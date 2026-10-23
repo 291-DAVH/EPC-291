@@ -32,5 +32,8 @@
   "skills": [],
   "legacy": {
     "source": "00-Template-Claude/.claude/library/plugins/calculations"
-  }
+  },
+  "engine": [
+    "documents"
+  ]
 }

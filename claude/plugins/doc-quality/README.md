@@ -16,3 +16,6 @@ Document and specification verifiers and Office-to-PDF input converter used by p
 - `.json`: internal
 
 See `plugin.json` for the full manifest. Legacy origin: `00-Template-Claude/.claude/library/plugins/calculations`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/documents` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

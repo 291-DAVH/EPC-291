@@ -138,3 +138,6 @@ Por símbolo, en `_catalog.json`: id, file, diagram_type, sld_equivalent/mld_equ
 - Mostrar UNA muestra antes de generar en lote y esperar OK.
 - Escribir en la carpeta correcta. Subir versión al cambiar o agregar un símbolo. No renombrar ids ya usados.
 - Responder en español: qué símbolos se agregaron, qué quedó fijo vs variable, incertidumbres.
+
+## Library location
+The symbol library lives in `epc_drawing.symbols` (`engine/drawing/src/epc_drawing/symbols/library/`); use `library_dir(kind)` from Python. Symbol build scripts are in `engine/drawing/tools/symbols/`.

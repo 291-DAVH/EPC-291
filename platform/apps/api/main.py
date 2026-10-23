@@ -27,7 +27,8 @@ SCHEMAS = WORKSPACE / "shared" / "schemas"
 ENV = os.environ.get("EPC_ENV", "dev")
 ROLE = os.environ.get("EPC_ROLE", "user")      # "admin" unlocks the technical console; end users never see internals
 
-sys.path.insert(0, str(PLATFORM / "core" / "rules"))
+ENGINE = WORKSPACE / "engine"
+sys.path.insert(0, str(ENGINE / "rules" / "src"))
 from epc_rules import RuleSet  # noqa: E402
 
 app = FastAPI(title="EPC Platform API", version="0.1.0")
@@ -246,7 +247,7 @@ def _load_build():
 
 def _options() -> dict:
     juris, methods = [], []
-    for d in sorted((PLATFORM / "jurisdictions").iterdir()):
+    for d in sorted((ENGINE / "jurisdictions").iterdir()):
         jf = d / "jurisdiction.json"
         if d.is_dir() and not d.name.startswith("_") and jf.exists():
             j = _json(jf)

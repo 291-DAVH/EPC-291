@@ -13,7 +13,7 @@ Calculations complete (`electrical-dimensioning`). If not, run it first.
 2. `<PROJECT>_MC.md`: Memoria de Calculo of the main feeder only.
 
 ## Command
-`python3 -B library/calculations/aea_pipeline.py src/input_for_sld_V1.xlsx` writes both files. Use `--alimentador TAG` to choose another feeder. By default it is the first circuit with no PARENT_TAG and KIND `mccb`. If there is none, the JSON is still written and a warning is reported.
+`python -m epc_calc.aea_pipeline src/input_for_sld_V1.xlsx` writes both files. Use `--alimentador TAG` to choose another feeder. By default it is the first circuit with no PARENT_TAG and KIND `mccb`. If there is none, the JSON is still written and a warning is reported.
 
 ## MC structure (aea90364-feeder-sizing, stages 1 to 6)
 1. Objective, scope and regulatory framework.
@@ -29,3 +29,6 @@ Calculations complete (`electrical-dimensioning`). If not, run it first.
 - Missing data is written as "Pendiente". No signatures.
 - Never recompute values in the MC. It reads them from the same calculation as the JSON.
 - Do not generate PDF or Word.
+
+## Runtime
+The code is a Python package from `engine/` (`epc_calc`). In a repository checkout set `PYTHONPATH=engine/calc/src` (use `;` as separator on Windows) or run `pip install -e engine/<area>`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`.

@@ -5,7 +5,7 @@ description: Genera láminas IRAM A0 a A4 en SVG con rótulo personalizado (empr
 
 # Láminas IRAM con rótulo personalizado
 
-Trabajar en la carpeta del proyecto del usuario (la que contiene `input-titleblocks.xlsx`). Los scripts viven en el plugin, en `${CLAUDE_PLUGIN_ROOT}/scripts/`; no copiarlos al proyecto.
+Trabajar en la carpeta del proyecto del usuario (la que contiene `input-titleblocks.xlsx`). El código es el paquete `epc_drawing.titleblock` (en un plugin instalado, `${CLAUDE_PLUGIN_ROOT}/lib`); no copiarlos al proyecto.
 
 ## Archivos del proyecto
 
@@ -20,7 +20,7 @@ Si no existe `input-titleblocks.xlsx`, copiar la plantilla `${CLAUDE_PLUGIN_ROOT
 
 1. Completar `input-titleblocks.xlsx`. Columnas: formato (HOJA), proyectado / verificado / validado (fecha y nombre), empresa y cliente (razón social, CUIT, email, web), proyecto, descripción, ubicación, tipo de plano, denominación (dos renglones), escala, código cliente (reemplaza a y reemplazado por), código interno (plano N°), página (n / m), estado, revisión, lista de modificaciones (SI/NO) y plano propio.
 2. Verificar que estén los logos. Si falta uno, su recuadro muestra la leyenda LOGO EMPRESA o LOGO CLIENTE.
-3. Desde la carpeta del proyecto, ejecutar: `python "${CLAUDE_PLUGIN_ROOT}/scripts/titleblocks-generator.py"`. Si el sistema pide permiso para borrar, pedirlo: la regeneración borra `svg/` antes de crear los archivos nuevos.
+3. Desde la carpeta del proyecto, ejecutar: `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib" python -m epc_drawing.titleblock.titleblocks_generator`. Si el sistema pide permiso para borrar, pedirlo: la regeneración borra `svg/` antes de crear los archivos nuevos.
 4. Verificar cada SVG: XML válido y sin `{clave}` sin reemplazar. Los archivos `block-rotulo_IRAM4508.svg` sí conservan llaves de plantilla; es normal.
 5. Para revisar el rótulo, recortar el viewBox a la zona del rótulo (A0: x 985 a 1170, y 760 a 821) y renderizar. Renderizar con ImageMagick solo para vistas previas.
 

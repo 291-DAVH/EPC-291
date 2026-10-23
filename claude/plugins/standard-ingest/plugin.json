@@ -2,20 +2,50 @@
   "id": "standard-ingest",
   "version": "0.1.0",
   "kind": "workflow",
-  "description": "Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Works with the rules engine in core/rules.",
-  "discipline": ["all"],
-  "jurisdiction": ["AR", "INTL"],
+  "description": "Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Code: engine/standards; works with the rules engine in engine/rules.",
+  "discipline": [
+    "all"
+  ],
+  "jurisdiction": [
+    "AR",
+    "INTL"
+  ],
   "requires": {},
-  "consumes": ["StandardPdf"],
-  "produces": ["Rules"],
+  "consumes": [
+    "StandardPdf"
+  ],
+  "produces": [
+    "Rules"
+  ],
   "outputs": [
-    { "format": "json", "channel": "internal" }
+    {
+      "format": "json",
+      "channel": "internal"
+    }
   ],
   "entitlement": "feature.rules.ingest",
-  "python": { "requires": ["pypdf", "pypdfium2", "pillow", "jsonschema"], "optional": ["jsonschema"] },
+  "python": {
+    "requires": [
+      "pypdf",
+      "pypdfium2",
+      "pillow",
+      "jsonschema"
+    ],
+    "optional": [
+      "jsonschema"
+    ]
+  },
   "skills": [
-    { "id": "analyze-standard", "role": "owner" }
+    {
+      "id": "analyze-standard",
+      "role": "owner"
+    }
   ],
-  "engine": "core/rules/epc_rules",
-  "legacy": { "source": "aea-calc/scripts/rules (177 rules imported by scripts/import_legacy_rules.py)" }
+  "engine": [
+    "standards",
+    "rules"
+  ],
+  "legacy": {
+    "source": "engine/calc/src/epc_calc/rules (177 rules imported by epc_standards.import_legacy_rules)"
+  }
 }

@@ -1,6 +1,17 @@
 # Target structure and migration plan
 
-Status: **proposed**. Nothing here has been moved yet.
+Status: **in progress**. Phases 1 to 4 are done; the rest are pending.
+
+| Phase | Content | State |
+|---|---|---|
+| 1 | Planning, docs, ADRs | done |
+| 2 | `local/` and `shared/` | done |
+| 3 | `claude/` layer and validated marketplace | done |
+| 4 | `engine/` packages (calc, rules, standards, drawing, documents) | done |
+| 5 | Backend modules | pending |
+| 6 | Frontend split | pending |
+| 7 | Database and infrastructure | pending |
+| 8 | Management module | pending |
 
 ## 1. Full tree
 

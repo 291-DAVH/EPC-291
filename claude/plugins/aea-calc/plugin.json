@@ -66,5 +66,8 @@
     "name": "aea90364-standard",
     "source": "elec-calc-generator",
     "status": "draft: norm tables pending validation (see docs/11-pendientes.md)"
-  }
+  },
+  "engine": [
+    "calc"
+  ]
 }

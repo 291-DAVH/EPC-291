@@ -30,3 +30,4 @@ _out/
 *.bak
 *.tmp
 Thumbs.db
+*.egg-info/
