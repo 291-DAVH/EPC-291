@@ -29,6 +29,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.admin.api
@@ -63,6 +64,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.backlog.api
@@ -99,6 +101,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.deliverables.api
@@ -133,6 +136,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.engineering.api
@@ -169,6 +173,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.identity.api
@@ -202,6 +207,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.intake.api
@@ -236,6 +242,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.knowledge.api
@@ -272,6 +279,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.management.api
@@ -306,6 +314,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.projects.api
@@ -342,6 +351,7 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.schedule
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.requirements.api
@@ -376,6 +386,7 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.sld
     epc.modules.wbs
 forbidden_modules =
     epc.modules.schedule.api
@@ -391,6 +402,43 @@ layers =
     epc.modules.schedule.service
     epc.modules.schedule.repository
     epc.modules.schedule.models
+
+[importlinter:contract:sld-encapsulated]
+name = sld: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.sld.api
+    epc.modules.sld.service
+    epc.modules.sld.repository
+    epc.modules.sld.models
+
+[importlinter:contract:sld-layers]
+name = sld: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.sld.api
+    epc.modules.sld.service
+    epc.modules.sld.repository
+    epc.modules.sld.models
 
 [importlinter:contract:wbs-encapsulated]
 name = wbs: other modules use only its public interface
@@ -413,6 +461,7 @@ source_modules =
     epc.modules.quality
     epc.modules.requirements
     epc.modules.schedule
+    epc.modules.sld
 forbidden_modules =
     epc.modules.wbs.api
     epc.modules.wbs.service

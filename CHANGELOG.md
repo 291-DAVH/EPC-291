@@ -4,6 +4,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 ### Added
+- **SLD data entry:** backend module `sld` and sub-tab *Datos del unifilar* in Engineering (admin/engineer): board, titleblock and circuit table (parent/child, topology, phase, device, cable type) with validation, "load the plugin example", save, and *Generate diagram* which runs the sld generator unchanged in the background and publishes SVG, DXF and calculation JSON into the engineering folders (visible in Files). Titleblock data typed in the form reaches the drawing; no logos are copied. The backend now depends on `epc-drawing`.
 - **Design criteria:** sub-tab *Criterios de diseño* inside Engineering (admin/engineer). Catalog of 15 base criteria for AR electrical (`engine/jurisdictions/AR/electrical/design-criteria.json`, not validated against the standards), per-project overrides with origin (client / standard / project), note and change history, reset to base value, and a design criteria report generated in the project language. API under `/api/projects/{id}/engineering/criteria`. The demo seed no longer writes a static criteria document. Calculation and drawing plugins do not read the criteria yet.
 
 ## [0.1.0] - 2026-10-23
