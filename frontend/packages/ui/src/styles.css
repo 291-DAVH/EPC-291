@@ -217,3 +217,7 @@ table.crit input.note { width: 100%; min-width: 180px; }
 .qbtn:hover .qhint { text-decoration: underline; }
 .answer { background: var(--panel-2); border-radius: 6px; padding: 6px 10px; margin: 4px 0; white-space: pre-wrap; }
 h4.okh { color: var(--ok); }
+
+/* ---- sending message of a transmittal ---- */
+.mailbox { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+.mailbox textarea { width: 100%; font-family: inherit; line-height: 1.45; }

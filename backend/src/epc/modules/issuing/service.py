@@ -1,14 +1,19 @@
+import csv
 import datetime as dt
+import io
 import re
 import shutil
+import tempfile
+import zipfile
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple
 
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.deliverables import public as deliverables
 from epc.modules.engineering import public as engineering
-from epc.modules.issuing import repository
+from epc.modules.issuing import repository, texts
+from epc.modules.masterdata import public as masterdata
 from epc.modules.issuing.models import IssueIn
 from epc.modules.projects import public as projects
 
@@ -106,7 +111,7 @@ def issue(d: Path, body: IssueIn) -> dict:
             name = (it.name or c["name"]).strip()[:200] or c["name"]
             new_items.append({"code": code, "name": name, "discipline": disc, "format": primary["format"], "revision": f"Rev {body.client_rev}", "status": "in_review",
                               "file": primary["rel"], "sha256": primary["sha256"], "source": it.source, "transmittal": tr_id, "emission": EMISSIONS[body.emission]})
-            tr_items.append({"code": code, "name": name, "source": it.source, "files": files})
+            tr_items.append({"code": code, "name": name, "discipline": disc, "source": it.source, "files": files})
     except Exception as exc:                                       # leave nothing half-issued
         for f in written:
             f.unlink(missing_ok=True)
@@ -141,3 +146,72 @@ def get(d: Path, tr_id: str) -> dict:
     if not tr:
         raise NotFound("transmittal not found")
     return tr
+
+
+# ---- delivery documents: package (ZIP), transmittal document (PDF) and the email message ----
+def _project_info(d: Path) -> dict:
+    meta = projects.read_meta(d)
+    return {"name": meta.get("project_name") or meta.get("project_code") or d.name, "code": meta.get("project_code") or d.name,
+            "client": meta.get("client", ""), "locale": meta.get("locale", "es")}
+
+
+def _issuer() -> str:
+    try:
+        return (masterdata.organization().get("legal_name") or "").strip()
+    except Exception:                                   # noqa: BLE001 - no master data yet: the generic wording is used
+        return ""
+
+
+def _lang(d: Path, lang: Optional[str]) -> str:
+    return lang if lang in texts.T else texts.lang_of(_project_info(d)["locale"])
+
+
+def package_name(d: Path, tr: dict) -> str:
+    return f"{_project_info(d)['code']}_{EMISSIONS[tr['emission']]}_{tr['id']}_Rev{tr['client_rev']}.zip"
+
+
+def message(d: Path, tr_id: str, lang: Optional[str] = None) -> dict:
+    tr = get(d, tr_id)
+    return texts.email(_lang(d, lang), tr, _project_info(d), package_name(d, tr), _issuer())
+
+
+def transmittal_pdf(d: Path, tr_id: str, lang: Optional[str] = None) -> Tuple[Path, str]:
+    tr = get(d, tr_id)
+    out = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    out.close()
+    try:
+        repository.render_transmittal_pdf(texts.document(_lang(d, lang), tr, _project_info(d), _issuer()), Path(out.name))
+    except Exception as exc:
+        Path(out.name).unlink(missing_ok=True)
+        raise Failure(str(exc))
+    return Path(out.name), f"TRANSMITTAL_{tr['id']}_Rev{tr['client_rev']}.pdf"
+
+
+def package(d: Path, tr_id: str, lang: Optional[str] = None) -> Tuple[Path, str]:
+    """ZIP to attach to the email: the files of the transmittal (folder structure kept), the transmittal document and INDICE.csv."""
+    tr = get(d, tr_id)
+    base = d / "deliverables"
+    pdf, pdf_name = transmittal_pdf(d, tr_id, lang)
+    index = io.StringIO()
+    w = csv.writer(index, delimiter=";")
+    w.writerow(["codigo", "nombre", "disciplina", "revision", "formato", "archivo", "sha256"])
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".zip")
+    tmp.close()
+    try:
+        with zipfile.ZipFile(tmp.name, "w", zipfile.ZIP_DEFLATED) as z:
+            z.write(pdf, pdf_name)
+            for it in tr["items"]:
+                for f in it["files"]:
+                    path = base / f["rel"]
+                    if not is_inside(base, f["rel"]):
+                        raise Failure(f"file missing from the transmittal: {f['rel']}")
+                    z.write(path, f["rel"])
+                    w.writerow([it["code"], it["name"], it.get("discipline") or it["source"].split("/")[0], f"Rev {tr['client_rev']}", f["format"], f["rel"], f["sha256"]])
+            z.writestr("INDICE.csv", "﻿" + index.getvalue())
+    except Exception:
+        Path(tmp.name).unlink(missing_ok=True)
+        raise
+    finally:
+        pdf.unlink(missing_ok=True)
+    return Path(tmp.name), package_name(d, tr)
+

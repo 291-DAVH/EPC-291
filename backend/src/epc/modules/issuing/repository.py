@@ -72,6 +72,17 @@ def stamp_dxf(src: Path, dst: Path, props: Dict[str, str]) -> None:
         raise RuntimeError(f"could not stamp {src.name}: {(res.stderr or res.stdout).strip()[-300:]}")
 
 
+def render_transmittal_pdf(data: dict, dst: Path) -> None:
+    """Transmittal document (A4 PDF) through the engine exporter."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "transmittal.json"
+        src.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        res = subprocess.run([sys.executable, "-m", "epc_drawing.export.transmittal_pdf", str(src), str(dst)], capture_output=True, text=True, timeout=120)
+    if res.returncode != 0:
+        raise RuntimeError(f"could not render the transmittal document: {(res.stderr or res.stdout).strip()[-300:]}")
+
+
 def render_pdf(dxf: Path, dst: Path) -> None:
     res = subprocess.run([sys.executable, "-m", "epc_drawing.export.pdf", str(dxf), str(dst)], capture_output=True, text=True, timeout=300)
     if res.returncode != 0:

@@ -105,6 +105,47 @@ class TestIssuing(unittest.TestCase):
         pk = self.c.get("/api/app/projects/ACME/P-1/deliverables/packages").json()
         self.assertEqual(pk["groups"][0]["id"], "ifa/TR-001_Rev00")
 
+    def test_package_message_and_transmittal_document(self):
+        self.c.post(self.base, json={"emission": "ifa", "client_rev": "00", "internal_rev": "00.0.2", "notes": "primer envío",
+                                     "items": [{"source": "electrical/PQ-01/drawing/SLD_TGBT-01", "name": "Diagrama unifilar"}, {"source": "electrical/PQ-01/calc/cargas.xlsx"}]})
+        # email text: formal, third person, lists what is delivered, no first person
+        m = self.c.get(f"{self.base}/TR-001/message").json()
+        self.assertEqual(m["subject"], "[P-1] Transmittal TR-001 – IFA Rev 00 – Planta")
+        body = m["body"]
+        self.assertTrue(body.startswith("Se remite a Acme SA el transmittal TR-001, correspondiente a la emisión IFA (Emitido para Aprobación), revisión Rev 00"))
+        self.assertIn("1. P-1-ELE-001 – Diagrama unifilar (DXF, PDF)", body)
+        self.assertIn("2. P-1-ELE-002 – cargas (XLSX)", body)
+        self.assertIn("Observaciones de la emisión: primer envío", body)
+        self.assertIn("P-1_IFA_TR-001_Rev00.zip", body)
+        for first_person in (" envío adjunto", "Adjunto", "Saludos", "Estimad", "Quedo", "le remito"):
+            self.assertNotIn(first_person, body)
+        self.assertIn("is hereby submitted", self.c.get(f"{self.base}/TR-001/message?lang=en").json()["body"])
+        # transmittal document: a real PDF
+        r = self.c.get(f"{self.base}/TR-001/document")
+        self.assertEqual((r.status_code, r.headers["content-type"]), (200, "application/pdf"))
+        self.assertTrue(r.content.startswith(b"%PDF"))
+        import pypdfium2 as pdfium
+        text = pdfium.PdfDocument(io.BytesIO(r.content))[0].get_textpage().get_text_range()
+        for s in ("TRANSMITTAL", "TR-001", "Acme SA", "P-1-ELE-001", "Diagrama unifilar", "00.0.2", "primer envío", "SHA-256"):
+            self.assertIn(s, text)
+        self.assertNotIn("Estimad", text)
+        # package: files of the transmittal + the transmittal document + index with hashes
+        r = self.c.get(f"{self.base}/TR-001/package")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("P-1_IFA_TR-001_Rev00.zip", r.headers["content-disposition"])
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        names = set(z.namelist())
+        self.assertEqual(names, {"TRANSMITTAL_TR-001_Rev00.pdf", "INDICE.csv", "ifa/TR-001_Rev00/electrical/P-1-ELE-001.dxf", "ifa/TR-001_Rev00/electrical/P-1-ELE-001.pdf",
+                                 "ifa/TR-001_Rev00/electrical/P-1-ELE-002.xlsx"})
+        self.assertTrue(z.read("TRANSMITTAL_TR-001_Rev00.pdf").startswith(b"%PDF"))
+        index = z.read("INDICE.csv").decode("utf-8-sig")
+        self.assertIn("P-1-ELE-001;Diagrama unifilar;electrical;Rev 00;dxf;", index)
+        self.assertEqual(self.c.get(f"{self.base}/TR-099/package").status_code, 404)
+        self.assertEqual(self.c.get(f"{self.base}/TR-099/message").status_code, 404)
+        settings.role = "user"                                                    # an engineer action: the customer never reaches it
+        for path in ("message", "document", "package"):
+            self.assertEqual(self.c.get(f"{self.base}/TR-001/{path}").status_code, 403)
+
     def test_second_issue_gets_the_next_transmittal_and_new_codes(self):
         src = [{"source": "electrical/PQ-01/drawing/layout"}]
         self.c.post(self.base, json={"items": src})
