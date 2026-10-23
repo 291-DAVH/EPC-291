@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0",
+  "plugins": {
+    "aea-calc": {
+      "version": "1.6.0",
+      "kind": "calc",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "size-feeder",
+        "dimension-installation",
+        "write-calculation-memo",
+        "write-memo-summary"
+      ],
+      "hash": "5945802bd076816b"
+    },
+    "doc-quality": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "hash": "9944c0640861313d"
+    },
+    "equipment-catalog": {
+      "version": "0.1.0",
+      "kind": "knowledge",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "hash": "63fea3d825ea32b3"
+    },
+    "iec-symbols": {
+      "version": "0.4.16",
+      "kind": "knowledge",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "generate-electrical-symbol"
+      ],
+      "hash": "a0d813444b8ff516"
+    },
+    "intake-analysis": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "structure-customer-input"
+      ],
+      "hash": "8c0a9b38b17c7e2b"
+    },
+    "iram-titleblock": {
+      "version": "0.5.1",
+      "kind": "generator",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "generate-titleblock-sheet",
+        "generate-iram-sheet"
+      ],
+      "hash": "92bedfb475dfe7c3"
+    },
+    "mld": {
+      "version": "0.1.0",
+      "kind": "generator",
+      "status": "pending",
+      "requires": {
+        "sld": "^0.1.0",
+        "iram-titleblock": "^0.5.1",
+        "iec-symbols": "^0.4.14"
+      },
+      "skills": [
+        "convert-sld-to-mld"
+      ],
+      "hash": "8633950a71bc60e4"
+    },
+    "pm2-docs": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {
+        "doc-quality": "^0.1.0"
+      },
+      "skills": [
+        "create-management-document"
+      ],
+      "hash": "c4bc069aa3984f57"
+    },
+    "procurement": {
+      "version": "0.1.0",
+      "kind": "connector",
+      "status": "active",
+      "requires": {
+        "equipment-catalog": "^0.1.0"
+      },
+      "skills": [
+        "request-quotation"
+      ],
+      "hash": "bb9be9175aca08a1"
+    },
+    "sld": {
+      "version": "0.1.1",
+      "kind": "generator",
+      "status": "active",
+      "requires": {
+        "aea-calc": "^1.6.0",
+        "iec-symbols": "^0.4.14",
+        "iram-titleblock": "^0.5.1"
+      },
+      "skills": [
+        "generate-sld"
+      ],
+      "hash": "236757fde66aa5ca"
+    },
+    "spec-writer": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "needs-neutral-templates",
+      "requires": {
+        "doc-quality": "^0.1.0"
+      },
+      "skills": [
+        "generate-specification"
+      ],
+      "hash": "d6d3fa924e743f00"
+    },
+    "standard-ingest": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "analyze-standard"
+      ],
+      "hash": "8fb6593a376963a3"
+    }
+  },
+  "skills": {
+    "analyze-standard": {
+      "owner": "standard-ingest"
+    },
+    "convert-sld-to-mld": {
+      "owner": "mld"
+    },
+    "create-management-document": {
+      "owner": "pm2-docs"
+    },
+    "dimension-installation": {
+      "owner": "aea-calc"
+    },
+    "generate-electrical-symbol": {
+      "owner": "iec-symbols"
+    },
+    "generate-iram-sheet": {
+      "owner": "iram-titleblock"
+    },
+    "generate-sld": {
+      "owner": "sld"
+    },
+    "generate-specification": {
+      "owner": "spec-writer"
+    },
+    "generate-titleblock-sheet": {
+      "owner": "iram-titleblock"
+    },
+    "request-quotation": {
+      "owner": "procurement"
+    },
+    "size-feeder": {
+      "owner": "aea-calc"
+    },
+    "structure-customer-input": {
+      "owner": "intake-analysis"
+    },
+    "write-calculation-memo": {
+      "owner": "aea-calc"
+    },
+    "write-memo-summary": {
+      "owner": "aea-calc"
+    }
+  }
+}
