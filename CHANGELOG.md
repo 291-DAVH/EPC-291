@@ -4,7 +4,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 ### Added
-- **Design criteria:** sub-tab *Criterios de diseño* inside Engineering (admin/engineer). Catalog of 14 base criteria for AR electrical (`engine/jurisdictions/AR/electrical/design-criteria.json`, not validated against the standards), per-project overrides with origin (client / standard / project), note and change history, reset to base value, and a design criteria report generated in the project language. API under `/api/projects/{id}/engineering/criteria`. The demo seed no longer writes a static criteria document. Calculation and drawing plugins do not read the criteria yet.
+- **Design criteria:** sub-tab *Criterios de diseño* inside Engineering (admin/engineer). Catalog of 15 base criteria for AR electrical (`engine/jurisdictions/AR/electrical/design-criteria.json`, not validated against the standards), per-project overrides with origin (client / standard / project), note and change history, reset to base value, and a design criteria report generated in the project language. API under `/api/projects/{id}/engineering/criteria`. The demo seed no longer writes a static criteria document. Calculation and drawing plugins do not read the criteria yet.
 
 ## [0.1.0] - 2026-10-23
 First release. It gathers the foundation (plugins, rules engine, portal) and the restructuring into backend, frontend, database, infra and management modules.
