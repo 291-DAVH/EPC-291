@@ -3,6 +3,10 @@
 All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.md` (releases are tagged on `main`).
 
 ## [Unreleased]
+
+## [0.2.0] - 2026-10-23
+Second release: management, engineering workspace, SLD data entry, deliverable package and the fixes found by running Docker and a clean CI environment.
+
 ### Fixed
 - **The `knowledge` backend module was never committed:** the `**/knowledge/` ignore rule (meant for study material) also matched `backend/src/epc/modules/knowledge`, so a clean checkout (and v0.1.0 as published) could not import the backend. The module is re-included, the empty `build/` folders of the project skeleton are kept, and a new gate check (`ignored-sources`) fails when a source file is hidden by an ignore rule. Found by running the CI steps in a clean Linux container.
 - **Docker:** creating a project failed inside the image (the non-root user cannot rewrite `claude/plugins/registry.json`); a read-only installation now uses the committed registry. Both images build and the compose stack (PostgreSQL 16, Alembic migration, backend, nginx front) runs; project creation and SLD generation with PDF were verified in the container, and the Alembic upgrade/downgrade/upgrade round trip on PostgreSQL passes.
