@@ -273,10 +273,6 @@ def engineering(pdir, ccode, code, discs, rnd):
     (el / "calc" / "cuadro-de-cargas.csv").write_text("\n".join(rows) + "\n", encoding="utf-8", newline="\n")
     (el / "calc" / "lista-de-cables.csv").write_text("cable;origen;destino;longitud_m\n" + "\n".join(
         f"CB-{k:02d};Tablero general;{n};{rnd.randint(8, 90)}" for k, (n, _) in enumerate(feeders, 1)) + "\n", encoding="utf-8", newline="\n")
-    (el / "docs" / "criterios-de-diseno.md").write_text(
-        f"# Criterios de diseño eléctrico - {code}\n\n- Norma de referencia: AEA 90364-7-771 (borrador de reglas, sin validar).\n"
-        "- Caída de tensión máxima: 3 % en circuitos terminales, 5 % total.\n- Conductores de cobre, aislación XLPE.\n"
-        "- Datos simulados para demostración.\n", encoding="utf-8", newline="\n")
     for d in discs:
         if d == "electrical":
             continue

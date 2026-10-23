@@ -138,6 +138,7 @@ forbidden_modules =
     epc.modules.engineering.api
     epc.modules.engineering.service
     epc.modules.engineering.repository
+    epc.modules.engineering.models
 
 [importlinter:contract:engineering-layers]
 name = engineering: api -> service -> repository -> models
@@ -146,6 +147,7 @@ layers =
     epc.modules.engineering.api
     epc.modules.engineering.service
     epc.modules.engineering.repository
+    epc.modules.engineering.models
 
 [importlinter:contract:identity-encapsulated]
 name = identity: other modules use only its public interface

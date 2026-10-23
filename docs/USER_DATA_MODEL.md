@@ -14,7 +14,9 @@ What the end user sees comes only from these files; everything else stays intern
 | `05-management/reports/index.json` | reports: id, title, type, date, summary, file | platform |
 
 ## Engineering workspace (engineer / admin only)
-`02-engineering/<discipline>/<package>/{drawings/svg, calc, docs}` is shown in the **Engineering** tab only to the admin/engineer role (`/api/projects/{id}/engineering`, never under `/api/app`): `.svg` diagrams are previewed as images (single-line `SLD-*`, multi-line `MLD-*`, other drawings) and lists/notes (`.csv`, `.xlsx`, `.md`, `.txt`, `.json`) are shown as text or tables. SVG stays internal: what the customer receives is under `deliverables/` (DXF stamped copies, PDF, XLSX).
+`02-engineering/<discipline>/<package>/{drawings/svg, calc, docs}` is shown in the **Engineering** tab only to the admin/engineer role (`/api/projects/{id}/engineering`, never under `/api/app`): `.svg` diagrams are previewed as images (single-line `SLD-*`, multi-line `MLD-*`, other drawings) and lists/notes (`.csv`, `.xlsx`, `.md`, `.txt`, `.json`) are shown as text or tables. **Design criteria** (sub-tab *Criterios de diseño*): the catalog of criteria per jurisdiction and discipline lives in `engine/jurisdictions/<country>/<discipline>/design-criteria.json` (base values, flagged `validated: false` until confirmed against the standards). A project overrides any of them in `workspace/00-setup/design-criteria.json` with an origin (client requirement, standard, project decision), a note and a change history; the *design criteria report* is generated from it (`/api/projects/{id}/engineering/criteria`). Calculation and drawing plugins will read this file (not wired yet).
+
+SVG stays internal: what the customer receives is under `deliverables/` (DXF stamped copies, PDF, XLSX).
 
 ## Intake -> data pipeline
 1. The user submits free text (voice of customer, user stories, meeting notes, documents) -> `INT-nnnn.json`, status `received`.

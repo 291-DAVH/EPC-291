@@ -142,3 +142,14 @@ export type EngText =
   | { name: string; format: "text"; text: string; truncated: boolean }
   | { name: string; format: "table"; rows: string[][]; truncated: boolean }
   | { name: string; format: "sheets"; sheets: Record<string, string[][]> };
+
+/* ---- design criteria ---- */
+export interface Criterion {
+  id: string; group: { en: string; es: string }; label: { en: string; es: string }; unit: string; type: "number" | "choice" | "text";
+  min?: number; max?: number; options?: (string | number)[]; default: string | number; value: string | number;
+  overridden: boolean; source: string; note: string; updated: string | null;
+}
+export interface CriteriaHistory { key: string; from: string | number; to: string | number; source: string; note: string; at: string }
+export interface CriteriaView {
+  discipline: string; jurisdiction: string; validated: boolean; notice: string; items: Criterion[]; changed: number; history: CriteriaHistory[];
+}
