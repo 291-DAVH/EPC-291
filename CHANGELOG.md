@@ -9,6 +9,8 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ### Changed
 - **Migration phase 2:** private folders moved under a single git-ignored `local/` (`dev-knowledge`, `legacy`, `projects-demo`, `projects`); `platform/schemas` and `platform/i18n` moved to `shared/`; the project skeleton moved to `management/templates/project-skeleton`; code, hook, ignore rules and docs updated.
+- **Migration phase 3:** `claude/` created. `platform/hub` -> `claude/plugins`, `platform/skills` -> `claude/skills`, `platform/agents` -> `claude/agents`; `claude/marketplace` template plus `epc_build.py marketplace`; plugins are assembled in Claude Code's official layout (with an install line and `dependencies`); agents referenced by plugins are validated and packaged.
+- The gate now builds the marketplace and runs `claude plugin validate --strict` on it and on every plugin (12 checks).
 - `tools/ci/run_gate.py`: the 10-check test battery run after every phase.
 - Repository organization: README, README.es, CHANGELOG, CONTRIBUTING, `.editorconfig`, `.gitattributes`, `.gitignore` and `.env.example` moved from `platform/` to the repository root; all documentation moved from `platform/docs/` to `docs/` (new `docs/README.md` index).
 - A single `.gitignore` for the whole repository.

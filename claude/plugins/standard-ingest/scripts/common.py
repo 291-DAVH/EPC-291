@@ -4,8 +4,9 @@ import re
 import unicodedata
 from pathlib import Path
 
-PLATFORM = Path(__file__).resolve().parents[3]            # .../platform
-WORKSPACE = PLATFORM.parent
+WORKSPACE = next((p for p in Path(__file__).resolve().parents if (p / "claude" / "plugins").is_dir()), Path(__file__).resolve().parents[4])   # repository root
+PLATFORM = WORKSPACE / "platform"
+PLUGINS = WORKSPACE / "claude" / "plugins"
 DEV_KNOWLEDGE = WORKSPACE / "local" / "dev-knowledge"
 SCHEMAS = WORKSPACE / "shared" / "schemas"
 SHINGLE = 12                                              # consecutive words that count as verbatim copying

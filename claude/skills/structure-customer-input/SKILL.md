@@ -5,7 +5,7 @@ description: "Analyzes information sent by the customer (voice of customer, user
 
 # structure-customer-input
 
-Owner plugin: `intake-analysis`. Script: `hub/intake-analysis/scripts/intake.py`.
+Owner plugin: `intake-analysis`. Script: `claude/plugins/intake-analysis/scripts/intake.py`.
 
 The end user never sees this work. They see their item change from *Received* to *Under analysis* to *Turned into requirements*, and then the requirements. Do not mention tools, models, plugins or internal files in anything written for them.
 

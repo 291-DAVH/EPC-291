@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "epc://schemas/plugin/2.0",
-  "title": "Plugin manifest (hub/<id>/plugin.json). The plugin GOVERNS its skills.",
+  "title": "Plugin manifest (claude/plugins/<id>/plugin.json). The plugin GOVERNS its skills.",
   "type": "object",
   "required": ["id", "version", "kind", "skills"],
   "properties": {
@@ -26,7 +26,7 @@
     "entitlement": { "type": "string" },
     "skills": {
       "type": "array",
-      "description": "Skills this plugin activates, resolved from platform/skills/. A skill not listed by any plugin is inactive.",
+      "description": "Skills this plugin activates, resolved from claude/skills/. A skill not listed by any plugin is inactive.",
       "items": {
         "type": "object",
         "required": ["id", "role"],

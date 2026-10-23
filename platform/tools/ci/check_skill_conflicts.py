@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Detect skills defined twice (central skills/ and inside a plugin) and warn.
 
-Rule: when the same skill exists in platform/skills/ and in a plugin
-(hub/<plugin>/skills/<id>/), the PLUGIN copy governs. That is a warning in
+Rule: when the same skill exists in claude/skills/ and in a plugin
+(plugins/<plugin>/skills/<id>/), the PLUGIN copy governs. That is a warning in
 development and a blocking error for production builds, so every duplicate
 gets resolved before release.
 
@@ -10,7 +10,7 @@ Also reports: skills inside two different plugins, skills not listed by any
 plugin (orphans), and plugin.json entries whose skill cannot be found.
 
 Usage:
-  python tools/ci/check_skill_conflicts.py [--root PLATFORM_DIR] [--env dev|production] [--json]
+  python tools/ci/check_skill_conflicts.py [--root CLAUDE_DIR] [--env dev|production] [--json]
 Exit code: 0 clean (or only warnings in dev), 1 blocking problems.
 """
 import argparse
@@ -38,7 +38,7 @@ def skill_dirs(base: Path):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[2]))
+    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[3] / "claude"), help="folder holding skills/ and plugins/")
     ap.add_argument("--env", choices=["dev", "production"], default="dev")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
@@ -46,7 +46,7 @@ def main() -> int:
     root = Path(a.root)
     central = skill_dirs(root / "skills")
     plugins = {}
-    for pdir in sorted((root / "hub").glob("*/")):
+    for pdir in sorted((root / "plugins").glob("*/")):
         if not pdir.is_dir():
             continue
         manifest = {}
@@ -71,7 +71,7 @@ def main() -> int:
                     f"Skill '{sid}' exists in skills/ and in plugin '{pname}'. "
                     f"The plugin copy GOVERNS. Content is {'identical' if same else 'DIFFERENT'}. "
                     f"Resolve before production: keep one location.",
-                    skill=sid, plugin=pname, identical=same, governs=f"hub/{pname}/skills/{sid}")
+                    skill=sid, plugin=pname, identical=same, governs=f"plugins/{pname}/skills/{sid}")
 
     # 2) same skill in two plugins
     seen = {}

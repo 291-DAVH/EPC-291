@@ -1,6 +1,6 @@
 """EPC Platform API (read-mostly). Run from platform/:  uvicorn apps.api.main:app --reload --port 8000
 
-Serves the hub registry, skills, the rules engine and the projects folder to the web app.
+Serves the plugin registry, skills, the rules engine and the projects folder to the web app.
 Environment: EPC_ENV (dev|production), EPC_DEV_KNOWLEDGE (drafts source, development only), EPC_PROJECTS.
 """
 import json
@@ -18,7 +18,7 @@ from pydantic import BaseModel
 
 PLATFORM = Path(__file__).resolve().parents[2]
 WORKSPACE = PLATFORM.parent
-HUB, SKILLS = PLATFORM / "hub", PLATFORM / "skills"
+HUB, SKILLS = WORKSPACE / "claude" / "plugins", WORKSPACE / "claude" / "skills"
 LOCAL = WORKSPACE / "local"                                  # git-ignored: dev-knowledge, projects, demo data
 PROJECTS = Path(os.environ.get("EPC_PROJECTS", LOCAL / "projects"))
 DEV_KNOWLEDGE = Path(os.environ.get("EPC_DEV_KNOWLEDGE", LOCAL / "dev-knowledge"))
@@ -329,7 +329,7 @@ def create_project(p: NewProject):
             st.update(phase=p.phase, start=datetime.date.today().isoformat(), updated=datetime.date.today().isoformat())
             st_file.write_text(json.dumps(st, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         build = _load_build()
-        build.cmd_registry()                 # refresh hub/registry.json so the lock matches the current hub
+        build.cmd_registry()                 # refresh claude/plugins/registry.json so the lock matches the current plugins
         build.cmd_lock(str(target))
         lock = json.loads((epc / "plugins.lock").read_text(encoding="utf-8"))
         (epc / "ledger").mkdir(exist_ok=True)

@@ -13,4 +13,4 @@
 | [MIGRATION_LOG.md](MIGRATION_LOG.md) | Record of every file moved or copied during the restructuring |
 | [framework-legacy/](framework-legacy/) | Documents of the original template framework (reference) |
 
-Per-module documentation stays next to the code: `platform/hub/<plugin>/README.md`, `platform/skills/README.md`, `platform/apps/*/README.md`.
+Per-module documentation stays next to the code: `claude/plugins/<plugin>/README.md`, `claude/skills/README.md`, `platform/apps/*/README.md`.

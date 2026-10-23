@@ -5,7 +5,7 @@ description: "Turns a standard (PDF stored in local/dev-knowledge) into a valida
 
 # analyze-standard
 
-Owner plugin: `standard-ingest`. All scripts live in `hub/standard-ingest/scripts/`; run them with the project venv.
+Owner plugin: `standard-ingest`. All scripts live in `claude/plugins/standard-ingest/scripts/`; run them with the project venv.
 
 ## Hard rules
 1. **Copyright.** The PDF and any verbatim quote stay in `local/dev-knowledge/` (never versioned). A rule in `rules.json` carries the clause number, the page, a **paraphrased** summary (max 240 characters) and machine-readable parameters. Never copy 12 or more consecutive words from the standard; the validator rejects it.
