@@ -101,8 +101,10 @@ export interface Portfolio {
 }
 export interface DeliverableItem {
   id: string; code: string; name: string; discipline: string; format: string; revision: string; status: string;
-  due?: string; delivered_on?: string; downloadable: boolean; overdue: boolean;
+  due?: string; delivered_on?: string; downloadable: boolean; overdue: boolean; formats: string[];
 }
+export interface PackageGroup { id: string; emission: string; transmittal: string; rev: string; count: number }
+export interface PackagesView { count: number; rev: string; groups: PackageGroup[] }
 export interface InputItem {
   id: string; kind: string; title: string; text: string; source: string; created: string; status: string; attachments: { name: string; size: number }[];
 }

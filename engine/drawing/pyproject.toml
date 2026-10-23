@@ -7,7 +7,7 @@ name = "epc-drawing"
 version = "0.1.0"
 description = "EPC-291 drawing engine: IEC 60617 symbols, IRAM sheets, single-line and multi-line diagrams"
 requires-python = ">=3.10"
-dependencies = ["epc-calc", "openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely"]
+dependencies = ["epc-calc", "openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely", "matplotlib"]
 
 [project.optional-dependencies]
 previews = ["cairosvg", "pillow"]

@@ -84,7 +84,7 @@ class TestSld(unittest.TestCase):
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         outs = st["outputs"]
-        self.assertTrue(any(o.endswith(".svg") for o in outs) and any(o.endswith(".dxf") for o in outs), outs)
+        self.assertTrue(all(any(o.endswith(ext) for o in outs) for ext in (".svg", ".dxf", ".pdf")), outs)
         for o in outs:
             self.assertTrue((self.pkg / o).exists(), o)
         ov = self.c.get("/api/projects/ACME/P-1/engineering").json()
