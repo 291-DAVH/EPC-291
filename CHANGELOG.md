@@ -3,6 +3,10 @@
 All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.md` (releases are tagged on `main`).
 
 ## [Unreleased] (dev)
+### Added
+- `planning/` area: vision, roadmap, 3 PRDs, 11 epics, 22 stories, sprints, risk register, release notes and templates; `tools/planning/board.py` generates `planning/BOARD.md`.
+- `docs/explanation/what-is-epc.md`, `docs/architecture/` (target architecture, structure, migration phases) and ADR-0001 to ADR-0006.
+
 ### Changed
 - Repository organization: README, README.es, CHANGELOG, CONTRIBUTING, `.editorconfig`, `.gitattributes`, `.gitignore` and `.env.example` moved from `platform/` to the repository root; all documentation moved from `platform/docs/` to `docs/` (new `docs/README.md` index).
 - A single `.gitignore` for the whole repository.
