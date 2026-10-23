@@ -109,3 +109,6 @@ Para t entre 0,1 s y 5 s: S >= I · √t / k. k (771.19.II): Al XLPE 94; Cu XLPE
 - Tablas de AEA 90364-7-771 Edición 2006. Otra edición requiere las tablas del usuario.
 - R20 provienen de IEC 60228; X es típico, no normativo.
 - No calcula Icc (AEA 90909) ni selectividad.
+
+## Runtime
+The code is a Python package from `engine/` (`epc_calc`). In a repository checkout set `PYTHONPATH=engine/calc/src` (use `;` as separator on Windows) or run `pip install -e engine/<area>`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`.

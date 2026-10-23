@@ -27,11 +27,11 @@ mld  -> sld, iram-titleblock, iec-symbols
 spec-writer -> doc-quality
 pm2-docs    -> doc-quality
 procurement -> equipment-catalog
-standard-ingest -> (core/rules engine, no plugin dependency)
+standard-ingest -> engine/standards, engine/rules (no plugin dependency)
 ```
 Versions are checked by `tools/build/epc_build.py registry` (semver ranges: `^`, `~`, exact).
 
 ## Known runtime notes
-- `sld` needs `iec-symbols >= 0.4.14` (symbol files are named `291_E_LV_SLD_IEC60617_<id>.svg`).
-- `pm2-docs` imports `document_verifier` from `doc-quality`; until hub path resolution exists, run with `PYTHONPATH=claude/plugins/doc-quality/scripts`.
-- Five `doc-quality` tests for `input_converter` fail on Windows (the fake soffice is a shell script); PDF stamping tests need poppler/pandoc.
+- `epc_drawing.sld` resolves symbols named `291_E_LV_SLD_IEC60617_<id>.svg` (library >= 0.4.14) and the old `<id>.svg`. Known data issue: the catalog lists `lv_acb_basic` but no file has that name.
+- The old cross-plugin import between `pm2-docs` and `doc-quality` is gone: both live in `epc_documents`.
+- Environment-dependent tests are skipped explicitly (5 `input_converter` tests on Windows, the PDF-stamp test without poppler and the Playwright chromium).

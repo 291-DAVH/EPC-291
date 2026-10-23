@@ -5,20 +5,20 @@ description: "Genera el diagrama unifilar (SLD) de un tablero en láminas IRAM (
 
 # sld-generator
 
-## Fuentes (carpeta del plugin `sld-generator`)
-- **Fórmulas:** `vendor/elec-calc-generator.plugin` -> `scripts/voltage_drop.py` (caída de tensión, ΔU). Cortocircuito y conductores todavía no están integrados.
-- **Símbolos:** `vendor/iec60617-symbol-generator.plugin` -> `src/sld-lv-symbol`.
-- **Rótulo:** `vendor/iram-titleblock-plugin.plugin` -> `scripts/titleblocks-generator.py` (y `sheet-generator.py` para la lámina A0–A4).
+## Fuentes (paquetes del engine)
+- **Fórmulas:** `epc_calc.voltage_drop` (caída de tensión, ΔU). Cortocircuito y conductores todavía no están integrados.
+- **Símbolos:** `epc_drawing.symbols` (biblioteca `sld-lv-symbol`, `library_dir()`).
+- **Rótulo:** `epc_drawing.titleblock.titleblocks_generator` (y `sheet_generator` para la lámina A0–A4).
 - **Entradas en `src/`:** `input_for_sld_V1.xlsx` (hojas TABLERO y CIRCUITOS) e `input-titleblocks.xlsx` (rótulo, una fila por hoja).
 - **Logos:** `src/provider-logo-*.svg` y `src/client-logo-*.svg`, junto al Excel de rótulos. Se copian a la carpeta de trabajo antes de generar.
 - **Dependencias Python:** `openpyxl`, `lxml`, `cairosvg`, `ezdxf`, `svgelements`, `shapely`.
-- Los `vendor/*.plugin` son de solo lectura: no se modifican desde este plugin.
+- No hay copias de otros plugins: todo viene de los paquetes `epc_calc` y `epc_drawing`.
 
 ## Reglas de cantidad
-- **Hojas:** la define la cantidad de circuitos. `sld_paginate.py` agrupa las salidas por circuito raíz hasta `maxl` hojas-hoja (18 por defecto; el tercer argumento opcional lo cambia). Un circuito raíz con muchas salidas no se parte: puede quedar sola en una hoja que supera `maxl`.
+- **Hojas:** la define la cantidad de circuitos. `epc_drawing.sld.sld_paginate` agrupa las salidas por circuito raíz hasta `maxl` hojas-hoja (18 por defecto; el tercer argumento opcional lo cambia). Un circuito raíz con muchas salidas no se parte: puede quedar sola en una hoja que supera `maxl`.
 - **Rótulos:** uno por hoja. Antes de generar, `input-titleblocks.xlsx` se reescribe con una fila por hoja (plano propio `<NAME>_H<i>`, página `i / N`, denominación y proyecto). Los datos comunes (empresa, cliente, personas) salen de la primera fila del formato pedido.
 - **Nombre en el rótulo:** sin sufijo de hoja (queda "TGBT-02 – TABLERO PLANTA BAJA"). El número de hoja va en "Página (n / m)". El sufijo "(hoja N de M)" solo aparece en el título del dibujo.
-- **Lista de modificaciones:** NO. `MOD_LISTA = False` en `sld_generator.py`; activarla solo con revisiones cargadas.
+- **Lista de modificaciones:** NO. `MOD_LISTA = False` en `epc_drawing.sld.sld_generator`; activarla solo con revisiones cargadas.
 
 ## Formato de lámina
 - **A1** (841 × 594, por defecto): diagrama a escala 1 en la zona útil, columna de referencias a la derecha del rótulo, tabla de circuitos bajo el diagrama.
@@ -31,19 +31,19 @@ description: "Genera el diagrama unifilar (SLD) de un tablero en láminas IRAM (
 
 ## Comando
 Desde la raíz del plugin:
-`python src/sld_paginate.py default src/input_for_sld_V1.xlsx <carpeta_salida> <NAME> default default [maxl]`
+`python -m epc_drawing.sld.sld_paginate default <input>.xlsx <carpeta_salida> <NAME> default default [maxl]`
 Para A3: anteponer `SLD_FORMATO=A3`.
 
 ## Salidas por hoja
 - `<NAME>_H<i>.svg`: lámina del plugin con el diagrama en la casilla `dibujo`.
-- `<NAME>_H<i>.dxf`: convertidor del plugin (`svg_to_dxf.convertir`) y después `src/capas_dxf.py`.
+- `<NAME>_H<i>.dxf`: convertidor `epc_drawing.titleblock.svg_to_dxf.convertir` y después `epc_drawing.sld.capas_dxf`.
 - `<NAME>_H<i>_calculo.json`: cálculos de la hoja.
 - `<NAME>_TABLA.svg` / `.dxf`: hoja propia con la **tabla de cálculo de circuitos** (todos los circuitos del tablero, en el mismo formato que el diagrama). Las hojas del diagrama no llevan la tabla. Su rótulo dice "TABLA DE CÁLCULO DE CIRCUITOS" y va numerada como la última.
 - No se generan PDF ni PNG.
 
 Las referencias, cálculos y verificación siguen en las hojas del diagrama.
 
-## Ajustes del DXF (`src/capas_dxf.py`)
+## Ajustes del DXF (`epc_drawing.sld.capas_dxf`)
 Se aplican sobre el DXF del plugin, sin modificarlo:
 - **Capas:** todas las hojas tienen la misma tabla de capas y estados: `291-E-DIAGRAMA` (color 5), `291-E-TEXTOS` (7), `291-G-ROTULO` (7), `291-A-LAMINA` (8). Todas encendidas, no congeladas, no bloqueadas, tipo Continuous. Las capas viejas (LINEAS, TEXTO, LOGOS) se eliminan. La asignación de capas usa coordenadas A1; en A3 no está ajustada.
 - **Color y grosor:** cada línea y texto toma el color y grosor de trazo del SVG (negro → color 7). El rótulo y el marco conservan el color de su capa.
@@ -86,8 +86,11 @@ Hoja **CIRCUITOS**:
 
 ## Pendientes conocidos
 - Separar símbolos de conductores en `291-E-SIMBOLOS` y `291-E-CONDUCTORES` (requiere etiquetar el SVG).
-- Capas del DXF en A3: `capas_dxf.py` asigna capas con coordenadas A1.
+- Capas del DXF en A3: `capas_dxf` asigna capas con coordenadas A1.
 - Nombres de tablero largos pueden salirse de la casilla del rótulo (el plugin no ajusta el texto).
 - Datos de empresa, cliente y códigos en el Excel del rótulo: completar antes de entregar.
 - Referencias, cálculos y notas en A3 quedan en texto de 2 mm y pueden no caber cuando hay muchos circuitos por hoja.
 - Archivo `.lay` de estados de capas de AutoCAD: no generado.
+
+## Runtime
+The code is the `epc_drawing` package (`engine/drawing`) and, for formulas, `epc_calc` (`engine/calc`). In a repository checkout set `PYTHONPATH=engine/calc/src;engine/drawing/src` (`;` is the Windows separator) or run `pip install -e engine/calc -e engine/drawing`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`. The generator rewrites `input-titleblocks.xlsx`; set `SLD_ROTULO_DIR` to a working copy.

@@ -51,5 +51,8 @@
   "legacy": {
     "name": "iram-titleblock-plugin",
     "source": "291_G_IRAM_Custom_TitleBlocks_Generator"
-  }
+  },
+  "engine": [
+    "drawing"
+  ]
 }

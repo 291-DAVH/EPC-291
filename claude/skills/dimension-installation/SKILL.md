@@ -15,7 +15,7 @@ The input is the Excel file of circuits in `src/` (e.g. `src/input_for_sld_V1.xl
 - CIRCUITOS: `TAG`, `DESCRIPCION`, `CARGA` + `UNIDAD_CARGA` (A, W, kW, MW, VA, kVA, MVA, HP/CV, any capitalization; `15 kW` text also accepted) — converted to Ib by `aea_pipeline.convertir_carga` / `corriente_proyecto` (W: P/(√3·U·fp); VA: S/(√3·U), no fp; HP: with η), `PARENT_TAG`, `TOPOLOGY`, `FASE`, `LONGITUD_m`, `FP`, `RENDIMIENTO`, `KIND`, `NOTAS`.
 
 One command does the whole circuit sizing and writes the JSON:
-`python3 -B library/calculations/aea_pipeline.py src/<input>.xlsx` → `src/<input>_calculo.json` (options `-o`, `--margen-iz`, `--eta-motores`, `--temp-c`, `--k-magnetico`; it also warns when the minimum short-circuit current at the end of a circuit is below the magnetic trip). Review the AVISO lines it prints, then continue with the stages below for anything the pipeline does not cover (earthing, short-circuit per busbar, panel thermal, MV).
+`python -m epc_calc.aea_pipeline src/<input>.xlsx` → `src/<input>_calculo.json` (options `-o`, `--margen-iz`, `--eta-motores`, `--temp-c`, `--k-magnetico`; it also warns when the minimum short-circuit current at the end of a circuit is below the magnetic trip). Review the AVISO lines it prints, then continue with the stages below for anything the pipeline does not cover (earthing, short-circuit per busbar, panel thermal, MV).
 
 ## Calculation Sequence (ROADMAP Order)
 
@@ -129,9 +129,9 @@ Minimum sections (AEA 771.13.I, Cu): main lines 4 mm²; seccionales 2.5; lightin
 ## Output: a single JSON (no PDF)
 
 **The ONLY deliverable is one JSON file, `<PROJECT>_calculo.json`, that feeds `sld-generator`. Never generate PDF, Word or Markdown reports.**
-Intermediate results are shown in the conversation as tables; the final calculation is exported with `library/calculations/aea_pipeline.py` (from the Excel in `src/`) or `aea_export.py`.
+Intermediate results are shown in the conversation as tables; the final calculation is exported with `epc_calc.aea_pipeline` (from the Excel in `src/`) or `aea_export.py`.
 
-Format (one key per circuit ID; see `library/calculations/example_calculo.json`):
+Format (one key per circuit ID; see `epc_calc/example_calculo.json`):
 
 ```json
 {
@@ -148,7 +148,7 @@ Format (one key per circuit ID; see `library/calculations/example_calculo.json`)
 | `dU` | accumulated voltage drop from the supply point | % |
 | `disp` | protection/switching chain, free text (e.g. `MCB > KM > OL (25 A)`) | — |
 
-Rules: no extra fields; `In ≥ Ib`; `In` must appear in `disp`; `S` from the standard series; `dU` within the AEA limits (Etapa 6). Build each record with `aea_export.circuito_json(...)` and write with `aea_export.export_calculation(datos, "<PROJECT>_calculo.json")`, which validates and refuses any non-`.json` path. Check an existing file with `python3 -B library/calculations/aea_export.py validar <file>`.
+Rules: no extra fields; `In ≥ Ib`; `In` must appear in `disp`; `S` from the standard series; `dU` within the AEA limits (Etapa 6). Build each record with `aea_export.circuito_json(...)` and write with `aea_export.export_calculation(datos, "<PROJECT>_calculo.json")`, which validates and refuses any non-`.json` path. Check an existing file with `python -m epc_calc.aea_export validar <file>`.
 
 Only after Etapas 0–13 are verified and the JSON validates:
 1. Hand the JSON to **sld-generator** (the SLD reflects the calculated values).
@@ -163,8 +163,8 @@ Never present a partial result as final. Always flag FAIL items before proceedin
 
 ## Formula Library (reusable scripts)
 
-All formulas live in `library/calculations/` (pure Python stdlib, no duplicates). **Look up before coding**:
-`python3 -B library/calculations/aea_catalog.py --buscar <word>` or read `FORMULAS_AEA.md` / `formulas_aea.json`.
+All formulas live in the `epc_calc` package (`engine/calc`) (pure Python stdlib, no duplicates). **Look up before coding**:
+`python -m epc_calc.aea_catalog --buscar <word>` or read `FORMULAS_AEA.md` / `formulas_aea.json`.
 
 | Module | Domain |
 |---|---|
@@ -180,3 +180,6 @@ All formulas live in `library/calculations/` (pure Python stdlib, no duplicates)
 | `aea_export` | Build, validate and write the calculation JSON (no PDF) |
 
 Pre-existing modules still own: `voltage_drop`, `short_circuit` (Z_Qt, Z_T, κ approx., K_T [65]), `cable_thermal`, `current_and_loads`, `conductor_selection`. Every function is a DRAFT marked `[VERIFICAR]` until the user validates it; AEA 770 (2017) supersedes 771 (2006) — state which edition each result follows.
+
+## Runtime
+The code is a Python package from `engine/` (`epc_calc`). In a repository checkout set `PYTHONPATH=engine/calc/src` (use `;` as separator on Windows) or run `pip install -e engine/<area>`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`.

@@ -1,6 +1,6 @@
 # standard-ingest
 
-Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Works with the rules engine in core/rules.
+Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Code: `engine/standards`; works with the rules engine in `engine/rules`.
 
 - Version: 0.1.0 (workflow)
 - Entitlement: `feature.rules.ingest`
@@ -15,4 +15,7 @@ Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json fil
 ## Outputs
 - `.json`: internal
 
-See `plugin.json` for the full manifest. Legacy origin: `aea-calc/scripts/rules (177 rules imported by scripts/import_legacy_rules.py)`.
+See `plugin.json` for the full manifest. Legacy origin: `engine/calc/src/epc_calc/rules (177 rules imported by epc_standards.import_legacy_rules)`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/standards`, `engine/rules` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

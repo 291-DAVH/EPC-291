@@ -18,3 +18,6 @@ Technical specification (PG/ET) writer for any engineering discipline, backed by
 - `.pdf`: internal+deliverable
 
 See `plugin.json` for the full manifest. Legacy origin: `00-Template-Claude/.claude/skills/generar-pliego`.
+
+## Engine
+This plugin is packaging only. The code lives in `engine/documents` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

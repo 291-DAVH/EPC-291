@@ -6,19 +6,20 @@ Español: [README.es.md](README.es.md)
 
 ## Repository layout
 
-Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 and 3 done).
+Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2, 3 and 4 done).
 
 ```
 EPC-291/
 ├─ README.md  README.es.md  CHANGELOG.md  CONTRIBUTING.md  .env.example  .editorconfig  .gitattributes  .gitignore
 ├─ docs/            architecture, ADRs, explanation, branching policy, dependencies, migration records
 ├─ planning/        software planning during development: vision, PRD, backlog, sprints, BOARD   (not shipped)
-├─ platform/        product source (moving to frontend/ backend/ engine/ claude/ in the next phases)
-│   ├─ core/  methodologies/  jurisdictions/  apps/  tests/  tools/
+├─ engine/          engineering libraries, pure Python (phase 4 done)
+│   ├─ calc/ rules/ standards/ drawing/ documents/    one package each: pyproject.toml, src/, tests/
+│   └─ jurisdictions/                                 country packs: rules.json per standard
+├─ claude/          AI layer (phase 3 done): plugins/ (packaging only), skills/, agents/, marketplace/, mcp/, prompts/, evals/
+├─ platform/        application code (moving to backend/ and frontend/ in the next phases)
+│   ├─ apps/  core/  methodologies/  tests/  tools/
 │   └─ pyproject.toml  requirements.txt  requirements-dev.txt
-├─ claude/          AI layer (phase 3 done)
-│   ├─ plugins/        one folder per plugin + registry.json
-│   ├─ skills/  agents/  marketplace/  mcp/  prompts/  evals/
 ├─ management/      project-management knowledge shipped with the product
 │   └─ templates/project-skeleton/   project skeleton: workspace (editable) + deliverables (client-facing)
 ├─ shared/          contracts used by several parts: schemas/ (JSON Schema), i18n/ (catalogs)
@@ -97,4 +98,4 @@ The source of truth is `claude/plugins/registry.json` (generated).
 | [CHANGELOG.md](CHANGELOG.md) · [CONTRIBUTING.md](CONTRIBUTING.md) | Changes and how to contribute |
 
 ## Status
-Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`claude/plugins/aea-calc/docs/11-pendientes.md`).
+Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`).

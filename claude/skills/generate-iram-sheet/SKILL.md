@@ -75,7 +75,7 @@ Los textos variables son `<text data-key="clave">{clave}</text>`. Reemplazá el 
 ## Script completo
 
 El script `lamina_iram.py` está disponible en:
-`E:\Proyectos\00-Template-Claude\.claude\library\plugins\laminas-iram\lamina_iram.py`
+el módulo `epc_drawing.titleblock.lamina_iram` (`python -m epc_drawing.titleblock.lamina_iram <A0|A1|A2|A3|A4> [salida.svg] [--mod]`)
 
 Copiarlo a la carpeta de trabajo del proyecto y ejecutarlo desde allí.
 

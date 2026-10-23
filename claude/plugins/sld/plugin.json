@@ -64,5 +64,9 @@
       "cairosvg optional",
       "titleblocks use sys.executable"
     ]
-  }
+  },
+  "engine": [
+    "calc",
+    "drawing"
+  ]
 }

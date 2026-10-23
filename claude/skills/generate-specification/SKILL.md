@@ -172,9 +172,9 @@ Antes de pasar a `FOR_REVIEW`, ejecutar el autocontrol del pliego (por capítulo
 7. ¿Capítulo de Responsabilidades es el último?
 8. ¿Formato Pandoc correcto (sin numeración manual en títulos, viñetas con `-`)?
 
-Si existe `specification_verifier.py`:
+Con el verificador `epc_documents.specification_verifier` (`engine/documents`, `PYTHONPATH=engine/documents/src`):
 ```bash
-python3 -B .claude/library/calculations/specification_verifier.py 02-engineering/TECHNICAL_SPECS
+python -m epc_documents.specification_verifier 02-engineering/TECHNICAL_SPECS
 ```
 
 Entregar la hoja de revisión del paquete y detenerse.

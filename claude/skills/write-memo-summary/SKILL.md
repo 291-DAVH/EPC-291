@@ -18,3 +18,6 @@ description: "Writes the Sintesis de Proyecto (PROJECT_SP.md) of the board's mai
 - Take every value from the calculation. Do not recompute.
 - Pending items are written as "Pendiente" and listed as observations.
 - No signatures. No PDF or Word.
+
+## Runtime
+The code is a Python package from `engine/` (`epc_calc`). In a repository checkout set `PYTHONPATH=engine/calc/src` (use `;` as separator on Windows) or run `pip install -e engine/<area>`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`.

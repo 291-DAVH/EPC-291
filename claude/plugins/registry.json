@@ -12,7 +12,10 @@
         "write-calculation-memo",
         "write-memo-summary"
       ],
-      "hash": "5945802bd076816b"
+      "engine": [
+        "calc"
+      ],
+      "hash": "f317907c42c4ad03"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -20,7 +23,10 @@
       "status": "active",
       "requires": {},
       "skills": [],
-      "hash": "9944c0640861313d"
+      "engine": [
+        "documents"
+      ],
+      "hash": "24797cae4e129a25"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -28,7 +34,8 @@
       "status": "active",
       "requires": {},
       "skills": [],
-      "hash": "63fea3d825ea32b3"
+      "engine": [],
+      "hash": "04503c87e8f48536"
     },
     "iec-symbols": {
       "version": "0.4.16",
@@ -38,7 +45,10 @@
       "skills": [
         "generate-electrical-symbol"
       ],
-      "hash": "a0d813444b8ff516"
+      "engine": [
+        "drawing"
+      ],
+      "hash": "c0b8210842ee60a8"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -48,7 +58,8 @@
       "skills": [
         "structure-customer-input"
       ],
-      "hash": "6e04096ae8341078"
+      "engine": [],
+      "hash": "2546ba51bd50723e"
     },
     "iram-titleblock": {
       "version": "0.5.1",
@@ -59,7 +70,10 @@
         "generate-titleblock-sheet",
         "generate-iram-sheet"
       ],
-      "hash": "92bedfb475dfe7c3"
+      "engine": [
+        "drawing"
+      ],
+      "hash": "df769a2f214b1b49"
     },
     "mld": {
       "version": "0.1.0",
@@ -73,7 +87,10 @@
       "skills": [
         "convert-sld-to-mld"
       ],
-      "hash": "8633950a71bc60e4"
+      "engine": [
+        "drawing"
+      ],
+      "hash": "aba5acb02307bb3a"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -85,7 +102,10 @@
       "skills": [
         "create-management-document"
       ],
-      "hash": "c4bc069aa3984f57"
+      "engine": [
+        "documents"
+      ],
+      "hash": "5fd0e319ba6c32f4"
     },
     "procurement": {
       "version": "0.1.0",
@@ -97,7 +117,8 @@
       "skills": [
         "request-quotation"
       ],
-      "hash": "bb9be9175aca08a1"
+      "engine": [],
+      "hash": "4deddfcbcd7e2001"
     },
     "sld": {
       "version": "0.1.1",
@@ -111,7 +132,11 @@
       "skills": [
         "generate-sld"
       ],
-      "hash": "236757fde66aa5ca"
+      "engine": [
+        "calc",
+        "drawing"
+      ],
+      "hash": "9c3bb59a9b886522"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -123,7 +148,10 @@
       "skills": [
         "generate-specification"
       ],
-      "hash": "a24b7a341e4356a3"
+      "engine": [
+        "documents"
+      ],
+      "hash": "670c21c316a859df"
     },
     "standard-ingest": {
       "version": "0.1.0",
@@ -133,7 +161,11 @@
       "skills": [
         "analyze-standard"
       ],
-      "hash": "eb6d0f8929a03237"
+      "engine": [
+        "standards",
+        "rules"
+      ],
+      "hash": "f86194b0332aeb16"
     }
   },
   "skills": {

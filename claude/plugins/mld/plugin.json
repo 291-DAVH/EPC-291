@@ -45,5 +45,8 @@
   "legacy": {
     "name": "mld-generator",
     "source": "mld-generator"
-  }
+  },
+  "engine": [
+    "drawing"
+  ]
 }
