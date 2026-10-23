@@ -1,6 +1,6 @@
 # ADR-0004: The client sees only deliverables and data
 
-Status: Accepted (implemented in `backend` and `platform/apps/web`). Date: 2026-10-23.
+Status: Accepted (implemented in `backend` and `frontend/{web,console}`). Date: 2026-10-23.
 
 ## Context
 The end user is an engineering office staff member who needs projects, deliverables, input data, requirements and reports. The machinery (plugins, skills, rules, workspace files, Claude analysis) must stay invisible.

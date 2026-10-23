@@ -15,7 +15,7 @@ Checks
   engine-documents  document verifiers, CCPM, exporters (environment-dependent tests are skipped)
   intake            customer-input pipeline tests
   sld-smoke         single-line diagram generated from the example through the engine, no warnings
-  web               TypeScript type-check (and build unless --fast)
+  frontend-boundaries, web-types, web-build   frontend rules, TypeScript type-check of web+console (and build unless --fast)
   marketplace       plugins assembled in Claude Code's layout, validated with `claude plugin validate --strict`
 The engine packages are put on PYTHONPATH, so no installation is needed. Exit code 0 only when every check passes.
 """
@@ -47,7 +47,7 @@ AREAS = ("calc", "rules", "standards", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py", PLATFORM / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py", PLATFORM / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
-WEB = first(REPO / "frontend" / "web", PLATFORM / "apps" / "web")
+WEB = first(REPO / "frontend")
 RESULTS = []
 ENGINE_ENV = {"PYTHONPATH": os.pathsep.join([str(ENGINE / a / "src") for a in AREAS if (ENGINE / a / "src").is_dir()] + [os.environ.get("PYTHONPATH", "")])}
 
@@ -93,10 +93,11 @@ def main():
             REPO, must_not_contain="AVISO", env=dict(ENGINE_ENV, SLD_ROTULO_DIR=str(out / "titleblock")))
 
     if WEB and not a.no_web and (WEB / "node_modules").exists():
-        npx = "npx.cmd" if os.name == "nt" else "npx"
-        run("web-types", [npx, "tsc", "--noEmit"], WEB)
+        npm = "npm.cmd" if os.name == "nt" else "npm"
+        run("frontend-boundaries", [py, str(REPO / "tools" / "ci" / "check_frontend_boundaries.py")], REPO)
+        run("web-types", [npm, "run", "typecheck"], WEB)
         if not a.fast:
-            run("web-build", ["npm.cmd" if os.name == "nt" else "npm", "run", "build"], WEB)
+            run("web-build", [npm, "run", "build"], WEB)
 
     claude = shutil.which("claude")
     if claude and BUILD:
