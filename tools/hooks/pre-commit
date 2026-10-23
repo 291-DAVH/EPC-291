@@ -1,8 +1,9 @@
 #!/bin/sh
 # Repository safety hook. Enable with:  git config core.hooksPath tools/hooks
 #  1. No direct commits on main or dev (merge from feature/* or fix/*). Override: ALLOW_PROTECTED=1
-#  2. No PDF/DWG (copyright / CAD binaries) and nothing from local/dev-knowledge/ or _legacy/
+#  2. No PDF/DWG (copyright / CAD binaries) and nothing from local/ (dev-knowledge, legacy, demo and client projects)
 #  3. No file larger than 5 MB
+#  4. No .env files (only .env.example) and no obvious secrets (private keys, GitHub/AWS tokens) in added lines
 
 branch=$(git symbolic-ref --short HEAD 2>/dev/null)
 if [ -z "$ALLOW_PROTECTED" ] && { [ "$branch" = "main" ] || [ "$branch" = "dev" ]; }; then
@@ -23,6 +24,19 @@ private=$(git diff --cached --name-only --diff-filter=AM | grep -E '^local/')
 if [ -n "$private" ]; then
   echo "COMMIT BLOCKED: private folders must never be committed:"
   echo "$private"
+  exit 1
+fi
+
+envs=$(git diff --cached --name-only --diff-filter=AM | grep -E '(^|/)\.env(\.[^/]*)?$' | grep -Ev '\.env\.example$')
+if [ -n "$envs" ]; then
+  echo "COMMIT BLOCKED: environment files can hold secrets (only .env.example is allowed):"
+  echo "$envs"
+  exit 1
+fi
+
+secrets=$(git diff --cached -U0 --diff-filter=AM | grep -E '^\+' | grep -E 'BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{40,}|AKIA[0-9A-Z]{16}' | head -3)
+if [ -n "$secrets" ]; then
+  echo "COMMIT BLOCKED: something that looks like a secret is being added (private key or access token)."
   exit 1
 fi
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate simulated projects for demos (default 20) into local/projects-demo/.
 
-  python tools/dev/seed_demo.py [--count 20] [--out DIR]
+  python tools/dev/seed_demo.py [--count 20] [--out DIR] [--reset]
 
 The folder is separate from projects/ so demo data never mixes with real projects. Everything here is
 fictitious. Requirements are written the way the analysis step produces them (see docs/USER_DATA_MODEL.md).
@@ -398,13 +398,21 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--count", type=int, default=20)
     ap.add_argument("--out", default=str(W / "local" / "projects-demo"))
+    ap.add_argument("--reset", action="store_true", help="regenerate everything; the current folder is first moved to projects-demo.bak-<timestamp> (last 2 kept)")
     a = ap.parse_args()
     out = Path(a.out)
-    if out.exists():
+    if out.exists() and any(out.iterdir()):
         if out.name != "projects-demo":
-            raise SystemExit("refusing to overwrite a folder that is not named projects-demo")
-        shutil.rmtree(out)
-    out.mkdir(parents=True)
+            raise SystemExit("refusing to touch a folder that is not named projects-demo")
+        if not a.reset:
+            raise SystemExit(f"{out} already exists and may hold manual changes: nothing was touched.\n"
+                             "Use --reset to regenerate it (your current data is kept in a projects-demo.bak-<timestamp> folder).")
+        backup = out.with_name(f"projects-demo.bak-{dt.datetime.now():%Y%m%d-%H%M%S}")
+        shutil.move(str(out), str(backup))
+        print(f"previous data kept in {backup}")
+        for old in sorted(out.parent.glob("projects-demo.bak-*"))[:-2]:       # keep the last two backups only
+            shutil.rmtree(old)
+    out.mkdir(parents=True, exist_ok=True)
     rnd = random.Random(2026)
     for i in range(min(a.count, len(CLIENTS))):
         print(build_project(i, out, rnd))

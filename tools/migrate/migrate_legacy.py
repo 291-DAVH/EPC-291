@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """One-off migration: legacy folders -> epc-workspace/{platform,dev-knowledge,projects}.
+HISTORICAL (2026-10-23): one-off migration script for the old `platform/` layout. Do not run it again; kept for traceability.
 
 Phase 1 (this script, `python migrate_legacy.py copy`):
   - MOVES the unique master PDFs to dev-knowledge/ (never versioned).

@@ -1,5 +1,12 @@
 # Plan: Framework EPC Automatizado "tipo Lego"
 
+> **Documento histórico (plan original).** Paths written as `platform/...` or `\platform\...` describe the layout during the migration. Where things live now:
+> `platform/hub` -> `claude/plugins` · `platform/skills` -> `claude/skills` · `platform/agents` -> `claude/agents` · `platform/core/rules` -> `engine/rules` ·
+> `platform/core/workflow` -> `management/workflow` · `platform/methodologies` -> `management/methodologies` · `platform/jurisdictions` -> `engine/jurisdictions` ·
+> `platform/schemas`, `platform/i18n` -> `shared/` · `platform/tools` -> `tools/` · `platform/apps/api` -> `backend/` · `platform/apps/web` -> `frontend/` ·
+> `dev-knowledge`, `_legacy`, `projects*` -> `local/`. The `platform/` folder no longer exists (see `docs/architecture/target-structure.md`).
+
+
 Base del análisis: las 6 carpetas de `E:\plugins\prueba` (PDFs de assets ignorados). Fecha: 2026-10-23.
 
 ---
