@@ -25,6 +25,9 @@ tests/
 | `intake` | customer inputs (voice of customer, stories, documents) |
 | `requirements` | structured requirements and their sources |
 | `management` | portfolio, project summary, reports |
+| `wbs` | work breakdown structure (EDT): dotted-number tree, weights, progress rolled up from the leaves |
+| `schedule` | activities with dates and finish-to-start dependencies; critical path, slack, conflicts, late work |
+| `backlog` | internal project backlog (tasks, changes, risks, questions, defects); never shown to the customer |
 | `knowledge` | rules search and checks (via `epc_rules`) |
 | `admin` | plugins, skills, overview (admin only) |
 | `quality`, `engineering`, `procurement`, `construction`, `billing`, `notifications` | planned (skeletons) |

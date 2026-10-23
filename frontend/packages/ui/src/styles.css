@@ -144,3 +144,18 @@ textarea { width: 100%; background: var(--panel); border: 1px solid var(--line);
 .reqs h4.warnh { color: var(--warn); }
 .reqs ul { margin: 2px 0; padding-left: 18px; }
 button.alert { border: 0; cursor: pointer; font: inherit; }
+
+/* ---- planning ---- */
+table.wbs td { padding: 5px 8px; border-bottom: 1px solid var(--line); }
+table.wbs .wbs-id { color: var(--muted); width: 64px; }
+table.wbs tr.wbs-group td { background: var(--panel-2); }
+.gantt { margin-top: 12px; display: grid; gap: 8px; }
+.glabel { font-size: 13px; margin-bottom: 3px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.gtrack { position: relative; height: 18px; background: var(--panel-2); border-radius: 4px; }
+.gbar { position: absolute; top: 3px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--accent) 35%, var(--panel)); overflow: hidden; }
+.gbar.crit { background: color-mix(in srgb, var(--bad) 30%, var(--panel)); }
+.gbar > i { display: block; height: 100%; background: var(--accent); }
+.gbar.crit > i { background: var(--bad); }
+.gmile { position: absolute; top: 3px; width: 12px; height: 12px; margin-left: -6px; background: var(--accent); transform: rotate(45deg); }
+.gmile.crit { background: var(--bad); }
+.gtoday { position: absolute; top: -2px; bottom: -2px; width: 0; border-left: 2px dashed var(--warn); z-index: 1; }

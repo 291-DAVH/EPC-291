@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from epc.core.config import settings
 from epc.core.errors import DomainError
 from epc.modules.admin import api as admin_api
+from epc.modules.backlog import api as backlog_api
 from epc.modules.deliverables import api as deliverables_api
 from epc.modules.identity import api as identity_api
 from epc.modules.identity import public as identity
@@ -20,6 +21,8 @@ from epc.modules.management import api as management_api
 from epc.modules.projects import api as projects_api
 from epc.modules.projects import public as projects
 from epc.modules.requirements import api as requirements_api
+from epc.modules.schedule import api as schedule_api
+from epc.modules.wbs import api as wbs_api
 
 PUBLIC_PREFIXES = ("/api/app/",)            # the end-user surface
 
@@ -38,7 +41,7 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     return app
 

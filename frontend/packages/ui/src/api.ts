@@ -111,3 +111,23 @@ export interface RequirementItem {
   source_titles: string[]; status: string;
 }
 export interface ReportItem { id: string; title: string; type: string; date: string; summary: string; downloadable: boolean }
+
+/* ---- planning (WBS, schedule, backlog) ---- */
+export interface WbsNode {
+  id: string; name: string; parent: string; level: number; leaf: boolean; discipline: string; owner: string;
+  weight: number; progress: number; status: "not_started" | "in_progress" | "done";
+}
+export interface WbsView { nodes: WbsNode[]; progress: number; counts: { nodes: number; leaves: number; done: number } }
+export interface Activity {
+  id: string; name: string; start: string; end: string; wbs_id: string; depends_on: string[]; milestone: boolean; progress: number;
+  duration_days: number; slack_days: number; critical: boolean; conflict: boolean; late: boolean;
+}
+export interface ScheduleView {
+  activities: Activity[]; start: string | null; end: string | null; span_days: number; critical_path: string[];
+  counts: { activities: number; late: number; conflicts: number };
+}
+export interface BacklogItem {
+  id: string; title: string; type: string; priority: string; status: string; estimate_h: number; wbs_id: string;
+  requirement_id: string; owner: string; created: string;
+}
+export interface BacklogView { items: BacklogItem[]; counts: Record<string, number>; estimate_open_h: number }

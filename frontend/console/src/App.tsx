@@ -6,6 +6,7 @@ import Skills from "./features/skills/Skills";
 import Rules from "./features/rules/Rules";
 import Checker from "./features/checker/Checker";
 import ProjectFiles from "./features/project-files/ProjectFiles";
+import Planning from "./features/planning/Planning";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },
@@ -13,6 +14,7 @@ const NAV: NavItem[] = [
   { to: "/skills", key: "nav.skills", icon: "✦" },
   { to: "/rules", key: "nav.rules", icon: "§" },
   { to: "/checker", key: "nav.checker", icon: "✓" },
+  { to: "/planning", key: "nav.planning", icon: "▥" },
   { to: "/files", key: "nav.projects", icon: "▤" },
 ];
 
@@ -34,6 +36,7 @@ export default function App() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/checker" element={<Checker />} />
+          <Route path="/planning" element={<Planning />} />
           <Route path="/files" element={<ProjectFiles />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -4,11 +4,11 @@ React + TypeScript (Vite) in an npm workspace. Two apps over one shared package;
 
 ```
 frontend/
-  packages/ui/        @epc/ui: API client and types, i18n (es, en), components, theme, Shell, shared form, styles
+  packages/ui/        @epc/ui: API client and types, i18n (es, en), components, theme, Shell, shared form, WbsTree, Gantt, styles
   web/                @epc/web: what the customer sees (port 5173)
-    src/features/     portfolio/  project/  new-project/
+    src/features/     portfolio/  project/ (incl. read-only Plan tab: Gantt + WBS)  new-project/
   console/            @epc/console: technical console, admin role only (port 5174)
-    src/features/     overview/  plugins/  skills/  rules/  checker/  project-files/
+    src/features/     overview/  plugins/  skills/  rules/  checker/  planning/ (backlog + WBS + schedule)  project-files/
 ```
 
 ## Rules

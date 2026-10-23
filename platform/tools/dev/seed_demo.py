@@ -177,6 +177,59 @@ def jdump(path, obj):
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+BACKLOG_POOL = [
+    ("Verificar niveles de cortocircuito con datos de la distribuidora", "task", "P1", 6), ("Consultar al cliente por el sistema de respaldo (UPS)", "question", "P2", 1),
+    ("Cambio de ubicación del tablero general solicitado en reunión", "change", "P1", 10), ("Riesgo: demora en la entrega de transformadores", "risk", "P1", 2),
+    ("Actualizar la planilla de cargas con las cargas nuevas", "task", "P2", 4), ("Revisar la selectividad de protecciones", "task", "P2", 8),
+    ("Observación del revisor: falta rótulo en el plano de bandejas", "defect", "P3", 1), ("Definir criterio de aceptación del ensayo de transferencia", "question", "P2", 2),
+    ("Preparar la lista de repuestos críticos", "task", "P3", 5), ("Coordinar interferencias con civil e incendio", "task", "P2", 6),
+]
+
+
+def planning(i, ws, discs, start, due, progress, rnd):
+    """WBS (progress spread in order of work), schedule and backlog, consistent with the project progress."""
+    kinds = [("Memorias de cálculo", 3), ("Planos y diagramas", 4), ("Listas y planillas", 2)]
+    nodes = [{"id": "1", "name": "Gestión del proyecto"}, {"id": "1.1", "name": "Plan de gestión y seguimiento", "weight": 1},
+             {"id": "1.2", "name": "Informes de avance", "weight": 1}, {"id": "2", "name": "Ingeniería"}]
+    for k, d in enumerate(discs, 1):
+        nodes.append({"id": f"2.{k}", "name": DISC_NAME[d], "discipline": d})
+        for m, (nm, w) in enumerate(kinds, 1):
+            nodes.append({"id": f"2.{k}.{m}", "name": f"{nm} - {DISC_NAME[d]}", "discipline": d, "weight": w})
+    nodes += [{"id": "3", "name": "Cierre"}, {"id": "3.1", "name": "Documentación final y conforme a obra", "weight": 2}]
+    leaves = [n for n in nodes if not any(o["id"].startswith(n["id"] + ".") for o in nodes)]
+    remaining = progress / 100.0 * sum(n["weight"] for n in leaves)
+    for n in leaves:
+        pr = max(0.0, min(1.0, remaining / n["weight"]))
+        n["progress"] = round(pr * 100, 1)
+        remaining -= pr * n["weight"]
+    for n in nodes:
+        n.setdefault("weight", 1)
+        n.setdefault("progress", 0)
+        n.setdefault("discipline", "")
+        n["deliverable_id"] = ""
+        n["owner"] = ""
+    jdump(ws / "05-management" / "wbs.json", {"schema_version": "1.0", "nodes": nodes})
+
+    span = max((due - start).days, 60)
+    plan = [("A1", "Arranque del proyecto", 0.0, 0.0, [], "1.1", True), ("A2", "Ingeniería básica", 0.0, 0.3, ["A1"], "2", False),
+            ("A3", "Ingeniería de detalle", 0.3, 0.65, ["A2"], "2", False), ("A4", "Revisión y emisión", 0.65, 0.9, ["A3"], "2", False),
+            ("A5", "Documentación final", 0.9, 0.99, ["A4"], "3", False), ("A6", "Entrega final", 1.0, 1.0, ["A5"], "3", True)]
+    acts = []
+    for aid, name, f0, f1, dep, wbs, ms in plan:
+        s = start + dt.timedelta(days=int(span * f0) + (0 if not dep else 1))
+        e = s if ms else start + dt.timedelta(days=int(span * f1))
+        e = max(e, s)
+        pr = 100 if ms and progress >= f0 * 100 else max(0, min(100, round((progress / 100 - f0) / (f1 - f0) * 100))) if f1 > f0 else 0
+        acts.append({"id": aid, "name": name, "start": s.isoformat(), "end": e.isoformat(), "wbs_id": wbs, "depends_on": dep, "milestone": ms, "progress": pr})
+    jdump(ws / "05-management" / "schedule.json", {"schema_version": "1.0", "activities": acts})
+
+    items = []
+    for q, (title, typ, prio, est) in enumerate(rnd.sample(BACKLOG_POOL, rnd.randint(3, 7)), 1):
+        items.append({"id": f"BL-{q:03d}", "title": title, "type": typ, "priority": prio, "status": rnd.choice(["backlog", "todo", "todo", "doing", "done"]),
+                      "estimate_h": est, "wbs_id": "", "requirement_id": "", "owner": "", "created": (TODAY - dt.timedelta(days=rnd.randint(1, 60))).isoformat()})
+    jdump(ws / "05-management" / "backlog.json", {"schema_version": "1.0", "items": items})
+
+
 def build_project(i, root, rnd):
     client, ccode = CLIENTS[i]
     pname = PROJECTS[i]
@@ -265,6 +318,8 @@ def build_project(i, root, rnd):
             reqs.append({"id": f"REQ-{nreq:03d}", "statement": statement, "type": rtype, "priority": prio, "discipline": disc,
                          "acceptance": acc, "open_questions": oq, "source_intake": [iid], "status": "abierto" if oq else "definido"})
     jdump(ws / "00-setup" / "requirements.json", reqs)
+
+    planning(i, ws, discs, start, due, progress, rnd)
 
     # reports
     reps = []

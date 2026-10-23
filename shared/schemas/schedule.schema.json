@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project schedule (workspace/05-management/schedule.json)",
+  "type": "object",
+  "required": ["schema_version", "activities"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "activities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "start", "end"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "start": {"type": "string", "format": "date"},
+          "end": {"type": "string", "format": "date"},
+          "wbs_id": {"type": "string"},
+          "depends_on": {"type": "array", "items": {"type": "string"}, "description": "Finish-to-start predecessors"},
+          "milestone": {"type": "boolean"},
+          "progress": {"type": "number", "minimum": 0, "maximum": 100}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
