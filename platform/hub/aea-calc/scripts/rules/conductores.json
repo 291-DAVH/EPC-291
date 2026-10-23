@@ -1,0 +1,332 @@
+{
+ "grupo": "conductores",
+ "reglas": [
+  {
+   "id": "conductores.secciones_minimas_tabla_52_24",
+   "grupo": "conductores",
+   "tema": "Sección mínima de conductores (por razones mecánicas)",
+   "regla": "Secciones mínimas en instalaciones fijas con conductores aislados: iluminación 1,5 mm² Cu; tomacorrientes 2,5 mm² Cu; otros de conexión fija 1,5 mm² Cu; aluminio 10 mm²; comando y señalización 1 mm² Cu.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "iluminacion_cu_mm2": 1.5,
+    "tomacorrientes_cu_mm2": 2.5,
+    "conexion_fija_otros_cu_mm2": 1.5,
+    "aluminio_mm2": 10,
+    "comando_senalizacion_cu_mm2": 1,
+    "comando_electronico_min_mm2": 0.1,
+    "pe_aislado_cu_mm2": 2.5,
+    "pat_desnudo_cu_mm2": 4,
+    "flexible_mbt_aplicaciones_especiales_cu_mm2": 0.75,
+    "flexible_otras_cu_mm2": 1.5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "Tabla 52.24",
+    "pagina_impresa": "52-62",
+    "pagina_pdf": 116,
+    "cita": "Sección mínima de conductores",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "seccion": "mm²"
+    },
+    "columnas": [
+     "tipo de canalización",
+     "utilización del circuito",
+     "material",
+     "sección mínima"
+    ],
+    "filas": [
+     [
+      "instalación fija, cables y conductores aislados",
+      "iluminación",
+      "cobre",
+      1.5
+     ],
+     [
+      "instalación fija, cables y conductores aislados",
+      "tomacorrientes",
+      "cobre",
+      2.5
+     ],
+     [
+      "instalación fija, cables y conductores aislados",
+      "conexión fija distinta de las anteriores",
+      "cobre",
+      1.5
+     ],
+     [
+      "instalación fija, cables y conductores aislados",
+      "cualquier tipo de circuito",
+      "aluminio",
+      "10 (nota 1)"
+     ],
+     [
+      "instalación fija, cables y conductores aislados",
+      "comando y señalización",
+      "cobre",
+      "1 (nota 2)"
+     ],
+     [
+      "instalación fija, conductores desnudos",
+      "conductor de puesta a tierra (electrodo a BPT)",
+      "cobre",
+      "4 (ver Cap. 54)"
+     ],
+     [
+      "instalación fija, conductores desnudos",
+      "conductor de protección",
+      "cobre",
+      "2,5 (ver Cap. 54)"
+     ],
+     [
+      "conexiones flexibles",
+      "para un equipo específico",
+      "cobre",
+      "según IRAM o IEC del producto"
+     ],
+     [
+      "conexiones flexibles",
+      "muy baja tensión para aplicaciones especiales",
+      "cobre",
+      0.75
+     ],
+     [
+      "conexiones flexibles",
+      "cualquier otra aplicación",
+      "cobre",
+      "1,5 (nota 3)"
+     ]
+    ],
+    "notas": [
+     "1. Los terminales para conexiones de aluminio se ensayan y aprueban para ese uso.",
+     "2. En señalización y comando de equipos electrónicos se permite 0,1 mm².",
+     "3. En cables flexibles multipolares de siete o más conductores se aplica la nota 2."
+    ]
+   }
+  },
+  {
+   "id": "conductores.neutro_igual_a_linea",
+   "grupo": "conductores",
+   "tema": "Neutro con la misma sección que los conductores de línea",
+   "regla": "El neutro tiene como mínimo la sección de línea en monofásicos de dos conductores, en monofásicos de tres conductores y polifásicos con línea ≤ 16 mm² Cu o 25 mm² Al, y con armónicas de 3.º orden entre 15 % y 33 %.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "linea_max_cu_mm2": 16,
+    "linea_max_al_mm2": 25,
+    "armonica_min_pct": 15,
+    "armonica_max_pct": 33
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "524.2.1",
+    "pagina_impresa": "52-62",
+    "pagina_pdf": 116,
+    "cita": "en sistemas monofasicos de dos conductores, cualquiera que sea la seccion de los conductores",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.neutro_reducido",
+   "grupo": "conductores",
+   "tema": "Neutro de sección reducida",
+   "regla": "Con línea mayor que 16 mm² Cu o 25 mm² Al el neutro puede ser menor si está protegido contra sobrecorrientes y tiene al menos 16 mm² Cu o 25 mm² Al (usualmente no menos del 50 % de la línea).",
+   "tipo": "recomendado",
+   "parametros": {
+    "min_cu_mm2": 16,
+    "min_al_mm2": 25,
+    "fraccion_usual_min": 0.5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "524.2.2",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "la seccion del conductor neutro debe ser por lo menos igual a 16",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.neutro_armonicas_145",
+   "grupo": "conductores",
+   "tema": "Neutro con armónicas mayores que 33 %",
+   "regla": "Con tasa de tercera armónica mayor que 33 % el neutro se dimensiona para 1,45 veces la corriente de empleo de los conductores de línea.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "armonica_umbral_pct": 33,
+    "factor_corriente_neutro": 1.45
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "524.2.3",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "igual a 1,45 veces la corriente prevista de utilizacion en los conductores de linea",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.neutro_no_comun",
+   "grupo": "conductores",
+   "tema": "Neutro común a varios circuitos",
+   "regla": "El neutro no puede ser común a varios circuitos.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "524.2.4",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "El conductor neutro no puede ser comun a varios circuitos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.caida_tension_iluminacion",
+   "grupo": "conductores",
+   "tema": "Caída de tensión máxima en iluminación",
+   "regla": "La caída de tensión entre el origen de la instalación y cualquier punto de utilización no supera 3 % en circuitos de iluminación (total o parcial).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "du_max_pct": 3
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "525 1)",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "Circuitos destinados total o parcialmente a la iluminacion: 3 %",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.caida_tension_motores",
+   "grupo": "conductores",
+   "tema": "Caída de tensión máxima en motores",
+   "regla": "Circuitos solo de motores: 5 % en régimen y 15 % durante el arranque.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "du_regimen_pct": 5,
+    "du_arranque_pct": 15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "525 2)",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "5 % en regimen y 15 % durante el arranque",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.caida_tension_otras_cargas",
+   "grupo": "conductores",
+   "tema": "Caída de tensión máxima en otras cargas",
+   "regla": "Circuitos solo de cargas distintas de iluminación y motores: 5 % en régimen.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "du_regimen_pct": 5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "525 3)",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "cargas electricas distintas de la iluminacion y los motores electricos: 5% en regimen",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores.caida_tension_seccionales_recomendado",
+   "grupo": "conductores",
+   "tema": "Caída de tensión en circuitos seccionales",
+   "regla": "Se recomienda que la caída en los circuitos seccionales no exceda 1 %, quedando 2 % para terminales que no alimentan motores.",
+   "tipo": "recomendado",
+   "parametros": {
+    "du_seccional_pct": 1,
+    "du_terminal_pct": 2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "525 Nota",
+    "pagina_impresa": "52-63",
+    "pagina_pdf": 117,
+    "cita": "se recomienda que la caida de tension en los circuitos seccionales no exceda del 1 %",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

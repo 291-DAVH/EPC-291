@@ -1,0 +1,2966 @@
+{
+ "meta": {
+  "descripcion": "Datos normativos del motor de cálculo AEA 90364 (capacidad de cables, factores de corrección y constantes).",
+  "norma": "AEA 90364-7-771 Ed. 2006 (tablas 771.16), con constantes de 771.13, 771.18, 771.19, 770 y Parte 4",
+  "origen": "Extraído de los PDF de assets/ (capa de texto; cada valor contrastado con el texto del PDF por el extractor).",
+  "estado": "BORRADOR — validar contra el ejemplar oficial antes de uso profesional.",
+  "unidades": {
+   "corriente": "A",
+   "seccion": "mm²",
+   "temperatura": "°C",
+   "resistividad_termica": "K·m/W"
+  },
+  "no_incluido": [
+   "Tabla 771.16.XII (texto ilegible en el PDF)",
+   "Tablas B52 apaisadas de IEC 60364-5-52 (OCR no fiable)",
+   "Tablas de Partes 4/5 por OCR (41.3, 43.1, 54.x): pendientes de verificación visual"
+  ]
+ },
+ "tablas_capacidad": {
+  "771.16.I": {
+   "titulo": "Intensidad de corriente admisible [A], temperatura ambiente de cálculo 40 °C",
+   "pagina_pdf": 105,
+   "unidad": "A",
+   "referencia": {
+    "temp_ambiente_c": 40,
+    "temp_conductor_c": 70
+   },
+   "bloques": [
+    {
+     "aislacion": "pvc",
+     "columnas": [
+      {
+       "clave": "2x",
+       "cargados": 2,
+       "metodo": "B1",
+       "origen": "B52-2 B1",
+       "descripcion": "2 conductores cargados + PE"
+      },
+      {
+       "clave": "3x",
+       "cargados": 3,
+       "metodo": "B1",
+       "origen": "B52-4 B1",
+       "descripcion": "3 conductores cargados + N + PE"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        15,
+        14
+       ],
+       "2.5": [
+        21,
+        18
+       ],
+       "4": [
+        28,
+        25
+       ],
+       "6": [
+        36,
+        32
+       ],
+       "10": [
+        50,
+        44
+       ],
+       "16": [
+        66,
+        59
+       ],
+       "25": [
+        88,
+        77
+       ],
+       "35": [
+        109,
+        96
+       ],
+       "50": [
+        131,
+        117
+       ],
+       "70": [
+        167,
+        149
+       ],
+       "95": [
+        202,
+        180
+       ],
+       "120": [
+        234,
+        208
+       ],
+       "150": [
+        261,
+        228
+       ],
+       "185": [
+        297,
+        258
+       ],
+       "240": [
+        348,
+        301
+       ],
+       "300": [
+        398,
+        343
+       ]
+      },
+      "al": {}
+     }
+    }
+   ],
+   "notas": [
+    "Método B1: conductores aislados en cañerías embutidas o a la vista, cablecanales.",
+    "Conductores IRAM NM 247-3 / IRAM 62267."
+   ]
+  },
+  "771.16.III": {
+   "titulo": "Intensidades de corriente admisibles [A], temperatura ambiente 40 °C (métodos B2, C, E, F, G)",
+   "pagina_pdf": 107,
+   "unidad": "A",
+   "referencia": {
+    "temp_ambiente_c": 40,
+    "temp_conductor_c": {
+     "pvc": 70,
+     "xlpe": 90
+    }
+   },
+   "bloques": [
+    {
+     "aislacion": "pvc",
+     "grupo_metodos": "B2CE",
+     "columnas": [
+      {
+       "clave": "B2_2x",
+       "metodo": "B2",
+       "cargados": 2,
+       "descripcion": "Caño embutido en pared / a la vista"
+      },
+      {
+       "clave": "B2_3x",
+       "metodo": "B2",
+       "cargados": 3,
+       "descripcion": "Caño embutido en pared / a la vista"
+      },
+      {
+       "clave": "C_2x",
+       "metodo": "C",
+       "cargados": 2,
+       "descripcion": "Bandeja no perforada o de fondo sólido: cable multipolar o unipolares en contacto (2x o 2x1x)"
+      },
+      {
+       "clave": "C_3x",
+       "metodo": "C",
+       "cargados": 3,
+       "descripcion": "Bandeja no perforada o de fondo sólido: cable multipolar o unipolares en contacto (3x o 3x1x)"
+      },
+      {
+       "clave": "E_2x",
+       "metodo": "E",
+       "cargados": 2,
+       "descripcion": "Bandeja perforada o tipo escalera: un cable multipolar"
+      },
+      {
+       "clave": "E_3x",
+       "metodo": "E",
+       "cargados": 3,
+       "descripcion": "Bandeja perforada o tipo escalera: un cable multipolar"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        14,
+        13,
+        17,
+        15,
+        19,
+        16
+       ],
+       "2.5": [
+        20,
+        17,
+        23,
+        21,
+        26,
+        22
+       ],
+       "4": [
+        26,
+        23,
+        31,
+        28,
+        35,
+        30
+       ],
+       "6": [
+        33,
+        30,
+        40,
+        36,
+        44,
+        37
+       ],
+       "10": [
+        45,
+        40,
+        55,
+        50,
+        61,
+        52
+       ],
+       "16": [
+        60,
+        54,
+        74,
+        66,
+        82,
+        70
+       ],
+       "25": [
+        78,
+        70,
+        97,
+        84,
+        104,
+        88
+       ],
+       "35": [
+        97,
+        86,
+        120,
+        104,
+        129,
+        110
+       ],
+       "50": [
+        116,
+        103,
+        146,
+        125,
+        157,
+        133
+       ],
+       "70": [
+        146,
+        130,
+        185,
+        160,
+        202,
+        171
+       ],
+       "95": [
+        175,
+        156,
+        224,
+        194,
+        245,
+        207
+       ],
+       "120": [
+        202,
+        179,
+        260,
+        225,
+        285,
+        240
+       ],
+       "150": [
+        224,
+        196,
+        299,
+        260,
+        330,
+        278
+       ],
+       "185": [
+        256,
+        222,
+        341,
+        297,
+        378,
+        317
+       ],
+       "240": [
+        299,
+        258,
+        401,
+        351,
+        447,
+        374
+       ],
+       "300": [
+        343,
+        295,
+        461,
+        404,
+        516,
+        432
+       ]
+      },
+      "al": {
+       "2.5": [
+        15,
+        13,
+        18,
+        16,
+        20,
+        17
+       ],
+       "4": [
+        21,
+        18,
+        24,
+        22,
+        27,
+        23
+       ],
+       "6": [
+        26,
+        23,
+        31,
+        28,
+        34,
+        29
+       ],
+       "10": [
+        36,
+        31,
+        43,
+        38,
+        47,
+        40
+       ],
+       "16": [
+        47,
+        42,
+        57,
+        51,
+        64,
+        53
+       ],
+       "25": [
+        62,
+        54,
+        72,
+        64,
+        77,
+        68
+       ],
+       "35": [
+        75,
+        67,
+        90,
+        78,
+        97,
+        84
+       ],
+       "50": [
+        90,
+        80,
+        109,
+        96,
+        117,
+        102
+       ],
+       "70": [
+        114,
+        101,
+        139,
+        122,
+        151,
+        131
+       ],
+       "95": [
+        137,
+        121,
+        170,
+        148,
+        183,
+        159
+       ],
+       "120": [
+        157,
+        139,
+        197,
+        171,
+        212,
+        184
+       ],
+       "150": [
+        175,
+        153,
+        227,
+        197,
+        245,
+        213
+       ],
+       "185": [
+        200,
+        173,
+        259,
+        225,
+        280,
+        244
+       ],
+       "240": [
+        234,
+        202,
+        306,
+        265,
+        331,
+        287
+       ],
+       "300": [
+        268,
+        231,
+        353,
+        305,
+        382,
+        331
+       ]
+      }
+     }
+    },
+    {
+     "aislacion": "xlpe",
+     "grupo_metodos": "B2CE",
+     "columnas": [
+      {
+       "clave": "B2_2x",
+       "metodo": "B2",
+       "cargados": 2,
+       "descripcion": "Caño embutido en pared / a la vista"
+      },
+      {
+       "clave": "B2_3x",
+       "metodo": "B2",
+       "cargados": 3,
+       "descripcion": "Caño embutido en pared / a la vista"
+      },
+      {
+       "clave": "C_2x",
+       "metodo": "C",
+       "cargados": 2,
+       "descripcion": "Bandeja no perforada o de fondo sólido: cable multipolar o unipolares en contacto (2x o 2x1x)"
+      },
+      {
+       "clave": "C_3x",
+       "metodo": "C",
+       "cargados": 3,
+       "descripcion": "Bandeja no perforada o de fondo sólido: cable multipolar o unipolares en contacto (3x o 3x1x)"
+      },
+      {
+       "clave": "E_2x",
+       "metodo": "E",
+       "cargados": 2,
+       "descripcion": "Bandeja perforada o tipo escalera: un cable multipolar"
+      },
+      {
+       "clave": "E_3x",
+       "metodo": "E",
+       "cargados": 3,
+       "descripcion": "Bandeja perforada o tipo escalera: un cable multipolar"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        20,
+        18,
+        22,
+        20,
+        24,
+        21
+       ],
+       "2.5": [
+        27,
+        24,
+        30,
+        27,
+        33,
+        29
+       ],
+       "4": [
+        36,
+        32,
+        41,
+        36,
+        45,
+        38
+       ],
+       "6": [
+        46,
+        40,
+        53,
+        47,
+        57,
+        49
+       ],
+       "10": [
+        63,
+        55,
+        73,
+        65,
+        78,
+        68
+       ],
+       "16": [
+        83,
+        73,
+        97,
+        87,
+        105,
+        91
+       ],
+       "25": [
+        108,
+        96,
+        126,
+        108,
+        136,
+        116
+       ],
+       "35": [
+        133,
+        116,
+        156,
+        134,
+        168,
+        144
+       ],
+       "50": [
+        159,
+        140,
+        190,
+        163,
+        205,
+        175
+       ],
+       "70": [
+        201,
+        177,
+        245,
+        208,
+        263,
+        224
+       ],
+       "95": [
+        241,
+        212,
+        298,
+        253,
+        320,
+        271
+       ],
+       "120": [
+        278,
+        244,
+        348,
+        293,
+        373,
+        315
+       ],
+       "150": [
+        304,
+        273,
+        401,
+        338,
+        430,
+        363
+       ],
+       "185": [
+        349,
+        309,
+        460,
+        386,
+        493,
+        415
+       ],
+       "240": [
+        418,
+        362,
+        545,
+        455,
+        583,
+        490
+       ],
+       "300": [
+        484,
+        414,
+        631,
+        524,
+        674,
+        565
+       ]
+      },
+      "al": {
+       "2.5": [
+        21,
+        19,
+        24,
+        22,
+        25,
+        22
+       ],
+       "4": [
+        28,
+        25,
+        32,
+        29,
+        35,
+        29
+       ],
+       "6": [
+        36,
+        32,
+        41,
+        37,
+        45,
+        38
+       ],
+       "10": [
+        49,
+        44,
+        56,
+        52,
+        61,
+        53
+       ],
+       "16": [
+        66,
+        58,
+        76,
+        69,
+        83,
+        70
+       ],
+       "25": [
+        86,
+        76,
+        92,
+        82,
+        98,
+        88
+       ],
+       "35": [
+        105,
+        94,
+        115,
+        102,
+        123,
+        109
+       ],
+       "50": [
+        126,
+        113,
+        140,
+        124,
+        149,
+        133
+       ],
+       "70": [
+        159,
+        142,
+        180,
+        158,
+        192,
+        170
+       ],
+       "95": [
+        191,
+        171,
+        219,
+        192,
+        234,
+        207
+       ],
+       "120": [
+        220,
+        197,
+        255,
+        223,
+        273,
+        239
+       ],
+       "150": [
+        238,
+        218,
+        295,
+        258,
+        315,
+        277
+       ],
+       "185": [
+        273,
+        248,
+        338,
+        294,
+        361,
+        316
+       ],
+       "240": [
+        326,
+        289,
+        399,
+        348,
+        428,
+        372
+       ],
+       "300": [
+        378,
+        331,
+        462,
+        400,
+        494,
+        429
+       ]
+      }
+     }
+    },
+    {
+     "aislacion": "pvc",
+     "grupo_metodos": "FG",
+     "columnas": [
+      {
+       "clave": "F_2x1x",
+       "metodo": "F",
+       "cargados": 2,
+       "descripcion": "Bandeja perforada/escalera, unipolares en contacto, 2x1x"
+      },
+      {
+       "clave": "F_3x1x_trebol",
+       "metodo": "F",
+       "cargados": 3,
+       "descripcion": "Unipolares en contacto, trébol"
+      },
+      {
+       "clave": "F_3x1x_plano",
+       "metodo": "F",
+       "cargados": 3,
+       "descripcion": "Unipolares en contacto, plano"
+      },
+      {
+       "clave": "G_3x1x_horizontal",
+       "metodo": "G",
+       "cargados": 3,
+       "descripcion": "Unipolares separados al menos un diámetro, horizontal"
+      },
+      {
+       "clave": "G_3x1x_vertical",
+       "metodo": "G",
+       "cargados": 3,
+       "descripcion": "Unipolares separados al menos un diámetro, vertical"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "25": [
+        114,
+        96,
+        99,
+        127,
+        113
+       ],
+       "35": [
+        141,
+        119,
+        124,
+        157,
+        141
+       ],
+       "50": [
+        171,
+        145,
+        151,
+        191,
+        171
+       ],
+       "70": [
+        218,
+        188,
+        196,
+        244,
+        221
+       ],
+       "95": [
+        264,
+        230,
+        239,
+        297,
+        271
+       ],
+       "120": [
+        306,
+        268,
+        279,
+        345,
+        315
+       ],
+       "150": [
+        353,
+        310,
+        324,
+        397,
+        365
+       ],
+       "185": [
+        403,
+        356,
+        371,
+        453,
+        418
+       ],
+       "240": [
+        475,
+        422,
+        441,
+        535,
+        495
+       ],
+       "300": [
+        547,
+        488,
+        511,
+        617,
+        573
+       ],
+       "400": [
+        656,
+        571,
+        599,
+        741,
+        692
+       ],
+       "500": [
+        755,
+        652,
+        686,
+        854,
+        800
+       ],
+       "630": [
+        874,
+        744,
+        787,
+        990,
+        931
+       ]
+      },
+      "al": {
+       "25": [
+        85,
+        73,
+        76,
+        97,
+        86
+       ],
+       "35": [
+        106,
+        91,
+        95,
+        121,
+        108
+       ],
+       "50": [
+        130,
+        111,
+        116,
+        147,
+        132
+       ],
+       "70": [
+        167,
+        144,
+        151,
+        189,
+        171
+       ],
+       "95": [
+        204,
+        177,
+        184,
+        231,
+        210
+       ],
+       "120": [
+        238,
+        206,
+        215,
+        268,
+        245
+       ],
+       "150": [
+        275,
+        238,
+        250,
+        310,
+        284
+       ],
+       "185": [
+        316,
+        274,
+        287,
+        354,
+        327
+       ],
+       "240": [
+        374,
+        326,
+        341,
+        419,
+        389
+       ],
+       "300": [
+        432,
+        378,
+        396,
+        485,
+        452
+       ],
+       "400": [
+        522,
+        458,
+        480,
+        584,
+        547
+       ],
+       "500": [
+        604,
+        531,
+        557,
+        674,
+        635
+       ],
+       "630": [
+        703,
+        619,
+        649,
+        783,
+        741
+       ]
+      }
+     }
+    },
+    {
+     "aislacion": "xlpe",
+     "grupo_metodos": "FG",
+     "columnas": [
+      {
+       "clave": "F_2x1x",
+       "metodo": "F",
+       "cargados": 2,
+       "descripcion": "Bandeja perforada/escalera, unipolares en contacto, 2x1x"
+      },
+      {
+       "clave": "F_3x1x_trebol",
+       "metodo": "F",
+       "cargados": 3,
+       "descripcion": "Unipolares en contacto, trébol"
+      },
+      {
+       "clave": "F_3x1x_plano",
+       "metodo": "F",
+       "cargados": 3,
+       "descripcion": "Unipolares en contacto, plano"
+      },
+      {
+       "clave": "G_3x1x_horizontal",
+       "metodo": "G",
+       "cargados": 3,
+       "descripcion": "Unipolares separados al menos un diámetro, horizontal"
+      },
+      {
+       "clave": "G_3x1x_vertical",
+       "metodo": "G",
+       "cargados": 3,
+       "descripcion": "Unipolares separados al menos un diámetro, vertical"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "25": [
+        147,
+        123,
+        128,
+        166,
+        147
+       ],
+       "35": [
+        182,
+        154,
+        160,
+        206,
+        183
+       ],
+       "50": [
+        220,
+        188,
+        197,
+        250,
+        224
+       ],
+       "70": [
+        282,
+        244,
+        254,
+        321,
+        289
+       ],
+       "95": [
+        343,
+        298,
+        311,
+        391,
+        354
+       ],
+       "120": [
+        398,
+        349,
+        364,
+        455,
+        413
+       ],
+       "150": [
+        459,
+        404,
+        422,
+        525,
+        480
+       ],
+       "185": [
+        523,
+        464,
+        485,
+        602,
+        551
+       ],
+       "240": [
+        618,
+        552,
+        577,
+        711,
+        654
+       ],
+       "300": [
+        713,
+        640,
+        670,
+        821,
+        758
+       ],
+       "400": [
+        855,
+        749,
+        790,
+        987,
+        917
+       ],
+       "500": [
+        986,
+        861,
+        908,
+        1140,
+        1064
+       ],
+       "630": [
+        1141,
+        990,
+        1047,
+        1323,
+        1239
+       ]
+      },
+      "al": {
+       "25": [
+        110,
+        94,
+        97,
+        126,
+        111
+       ],
+       "35": [
+        137,
+        117,
+        123,
+        157,
+        139
+       ],
+       "50": [
+        167,
+        145,
+        150,
+        191,
+        171
+       ],
+       "70": [
+        216,
+        187,
+        196,
+        247,
+        222
+       ],
+       "95": [
+        263,
+        230,
+        240,
+        302,
+        273
+       ],
+       "120": [
+        307,
+        269,
+        280,
+        352,
+        319
+       ],
+       "150": [
+        354,
+        312,
+        326,
+        408,
+        371
+       ],
+       "185": [
+        407,
+        359,
+        376,
+        469,
+        428
+       ],
+       "240": [
+        482,
+        429,
+        448,
+        556,
+        511
+       ],
+       "300": [
+        558,
+        498,
+        520,
+        644,
+        593
+       ],
+       "400": [
+        673,
+        603,
+        632,
+        779,
+        721
+       ],
+       "500": [
+        779,
+        701,
+        733,
+        902,
+        838
+       ],
+       "630": [
+        906,
+        818,
+        857,
+        1050,
+        980
+       ]
+      }
+     }
+    }
+   ],
+   "notas": [
+    "Calculadas para conductores clase 2; para clase 5 (flexibles) multiplicar por 0,95.",
+    "Cables IRAM 2178 / 62266."
+   ]
+  },
+  "771.16.V": {
+   "titulo": "Intensidad de corriente admisible [A], terreno 25 °C y 1 K·m/W (método D1, caño enterrado)",
+   "pagina_pdf": 113,
+   "unidad": "A",
+   "referencia": {
+    "temp_terreno_c": 25,
+    "resistividad_termica_kmw": 1.0,
+    "profundidad_m": 0.7,
+    "temp_conductor_c": {
+     "pvc": 70,
+     "xlpe": 90
+    }
+   },
+   "bloques": [
+    {
+     "aislacion": "pvc",
+     "columnas": [
+      {
+       "clave": "2x",
+       "metodo": "D1",
+       "cargados": 2,
+       "origen": "B52-2 D1"
+      },
+      {
+       "clave": "3x",
+       "metodo": "D1",
+       "cargados": 3,
+       "origen": "B52-4 D1"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        25,
+        20
+       ],
+       "2.5": [
+        33,
+        27
+       ],
+       "4": [
+        43,
+        35
+       ],
+       "6": [
+        53,
+        44
+       ],
+       "10": [
+        71,
+        58
+       ],
+       "16": [
+        91,
+        75
+       ],
+       "25": [
+        117,
+        96
+       ],
+       "35": [
+        140,
+        115
+       ],
+       "50": [
+        166,
+        137
+       ],
+       "70": [
+        205,
+        169
+       ],
+       "95": [
+        242,
+        201
+       ],
+       "120": [
+        276,
+        228
+       ],
+       "150": [
+        312,
+        258
+       ],
+       "185": [
+        350,
+        289
+       ],
+       "240": [
+        405,
+        333
+       ],
+       "300": [
+        457,
+        377
+       ]
+      },
+      "al": {
+       "2.5": [
+        null,
+        null
+       ],
+       "4": [
+        33,
+        27
+       ],
+       "6": [
+        40,
+        34
+       ],
+       "10": [
+        54,
+        45
+       ],
+       "16": [
+        70,
+        58
+       ],
+       "25": [
+        90,
+        74
+       ],
+       "35": [
+        106,
+        90
+       ],
+       "50": [
+        127,
+        105
+       ],
+       "70": [
+        157,
+        131
+       ],
+       "95": [
+        186,
+        155
+       ],
+       "120": [
+        212,
+        176
+       ],
+       "150": [
+        239,
+        200
+       ],
+       "185": [
+        269,
+        224
+       ],
+       "240": [
+        311,
+        258
+       ],
+       "300": [
+        351,
+        291
+       ]
+      }
+     }
+    },
+    {
+     "aislacion": "xlpe",
+     "columnas": [
+      {
+       "clave": "2x",
+       "metodo": "D1",
+       "cargados": 2,
+       "origen": "B52-3 D1"
+      },
+      {
+       "clave": "3x",
+       "metodo": "D1",
+       "cargados": 3,
+       "origen": "B52-5 D1"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        29,
+        25
+       ],
+       "2.5": [
+        39,
+        33
+       ],
+       "4": [
+        50,
+        42
+       ],
+       "6": [
+        63,
+        52
+       ],
+       "10": [
+        83,
+        69
+       ],
+       "16": [
+        106,
+        89
+       ],
+       "25": [
+        137,
+        114
+       ],
+       "35": [
+        165,
+        138
+       ],
+       "50": [
+        196,
+        163
+       ],
+       "70": [
+        241,
+        202
+       ],
+       "95": [
+        285,
+        239
+       ],
+       "120": [
+        325,
+        272
+       ],
+       "150": [
+        367,
+        307
+       ],
+       "185": [
+        411,
+        344
+       ],
+       "240": [
+        475,
+        398
+       ],
+       "300": [
+        537,
+        449
+       ]
+      },
+      "al": {
+       "2.5": [
+        null,
+        null
+       ],
+       "4": [
+        39,
+        33
+       ],
+       "6": [
+        46,
+        41
+       ],
+       "10": [
+        63,
+        53
+       ],
+       "16": [
+        83,
+        69
+       ],
+       "25": [
+        105,
+        88
+       ],
+       "35": [
+        127,
+        106
+       ],
+       "50": [
+        150,
+        127
+       ],
+       "70": [
+        185,
+        156
+       ],
+       "95": [
+        219,
+        186
+       ],
+       "120": [
+        249,
+        211
+       ],
+       "150": [
+        282,
+        238
+       ],
+       "185": [
+        316,
+        267
+       ],
+       "240": [
+        365,
+        308
+       ],
+       "300": [
+        412,
+        349
+       ]
+      }
+     }
+    }
+   ],
+   "notas": [
+    "Para cables tetrapolares valen los valores de cables tripolares.",
+    "Los cables bipolares se construyen generalmente hasta 2 x 35 mm²; los valores de 2 x 50 a 2 x 300 mm² corresponden a tripolares con el tercero sin usar o como PE.",
+    "Calculadas para clase 2; para clase 5 multiplicar por 0,95."
+   ]
+  },
+  "771.16.VI": {
+   "titulo": "Intensidad de corriente admisible [A], terreno 25 °C y 1 K·m/W (método D2, directamente enterrado)",
+   "pagina_pdf": 115,
+   "unidad": "A",
+   "referencia": {
+    "temp_terreno_c": 25,
+    "resistividad_termica_kmw": 1.0,
+    "profundidad_m": 0.7,
+    "temp_conductor_c": {
+     "pvc": 70,
+     "xlpe": 90
+    }
+   },
+   "bloques": [
+    {
+     "aislacion": "pvc",
+     "columnas": [
+      {
+       "clave": "c1_1x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "1x (columna 1 de la tabla)"
+      },
+      {
+       "clave": "c2_2x",
+       "metodo": "D2",
+       "cargados": 2,
+       "descripcion": "2x (columna 2; ver figura de la tabla)"
+      },
+      {
+       "clave": "c3_2x",
+       "metodo": "D2",
+       "cargados": 2,
+       "descripcion": "2x (columna 3; ver figura de la tabla)"
+      },
+      {
+       "clave": "c4_3x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "3x (columna 4; ver figura de la tabla)"
+      },
+      {
+       "clave": "c5_3x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "3x (columna 5; ver figura de la tabla)"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        30,
+        29,
+        25,
+        25,
+        20
+       ],
+       "2.5": [
+        39,
+        39,
+        33,
+        34,
+        27
+       ],
+       "4": [
+        50,
+        51,
+        43,
+        44,
+        35
+       ],
+       "6": [
+        63,
+        65,
+        53,
+        55,
+        44
+       ],
+       "10": [
+        84,
+        88,
+        71,
+        74,
+        58
+       ],
+       "16": [
+        108,
+        112,
+        91,
+        95,
+        75
+       ],
+       "25": [
+        140,
+        144,
+        117,
+        123,
+        96
+       ],
+       "35": [
+        168,
+        173,
+        140,
+        147,
+        115
+       ],
+       "50": [
+        198,
+        207,
+        166,
+        173,
+        137
+       ],
+       "70": [
+        243,
+        254,
+        205,
+        211,
+        169
+       ],
+       "95": [
+        291,
+        306,
+        242,
+        254,
+        201
+       ],
+       "120": [
+        331,
+        350,
+        276,
+        290,
+        228
+       ],
+       "150": [
+        372,
+        393,
+        312,
+        325,
+        258
+       ],
+       "185": [
+        420,
+        445,
+        350,
+        369,
+        289
+       ],
+       "240": [
+        487,
+        519,
+        405,
+        428,
+        333
+       ],
+       "300": [
+        552,
+        587,
+        457,
+        484,
+        377
+       ],
+       "400": [
+        631,
+        null,
+        null,
+        null,
+        null
+       ],
+       "500": [
+        726,
+        null,
+        null,
+        null,
+        null
+       ],
+       "630": [
+        823,
+        null,
+        null,
+        null,
+        null
+       ]
+      },
+      "al": {
+       "4": [
+        40,
+        40,
+        33,
+        34,
+        27
+       ],
+       "6": [
+        52,
+        53,
+        40,
+        45,
+        34
+       ],
+       "10": [
+        65,
+        67,
+        54,
+        57,
+        45
+       ],
+       "16": [
+        84,
+        86,
+        70,
+        73,
+        58
+       ],
+       "25": [
+        109,
+        112,
+        90,
+        94,
+        74
+       ],
+       "35": [
+        130,
+        134,
+        106,
+        113,
+        90
+       ],
+       "50": [
+        153,
+        161,
+        127,
+        135,
+        105
+       ],
+       "70": [
+        188,
+        198,
+        157,
+        168,
+        131
+       ],
+       "95": [
+        226,
+        237,
+        186,
+        202,
+        155
+       ],
+       "120": [
+        258,
+        272,
+        212,
+        231,
+        176
+       ],
+       "150": [
+        288,
+        305,
+        239,
+        260,
+        200
+       ],
+       "185": [
+        326,
+        346,
+        269,
+        294,
+        224
+       ],
+       "240": [
+        380,
+        403,
+        311,
+        341,
+        258
+       ],
+       "300": [
+        430,
+        457,
+        351,
+        386,
+        291
+       ],
+       "400": [
+        495,
+        null,
+        null,
+        null,
+        null
+       ],
+       "500": [
+        573,
+        null,
+        null,
+        null,
+        null
+       ],
+       "630": [
+        656,
+        null,
+        null,
+        null,
+        null
+       ]
+      }
+     }
+    },
+    {
+     "aislacion": "xlpe",
+     "columnas": [
+      {
+       "clave": "c1_1x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "1x (columna 1 de la tabla)"
+      },
+      {
+       "clave": "c2_2x",
+       "metodo": "D2",
+       "cargados": 2,
+       "descripcion": "2x (columna 2; ver figura de la tabla)"
+      },
+      {
+       "clave": "c3_2x",
+       "metodo": "D2",
+       "cargados": 2,
+       "descripcion": "2x (columna 3; ver figura de la tabla)"
+      },
+      {
+       "clave": "c4_3x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "3x (columna 4; ver figura de la tabla)"
+      },
+      {
+       "clave": "c5_3x",
+       "metodo": "D2",
+       "cargados": 3,
+       "descripcion": "3x (columna 5; ver figura de la tabla)"
+      }
+     ],
+     "filas": {
+      "cu": {
+       "1.5": [
+        34,
+        34,
+        29,
+        29,
+        25
+       ],
+       "2.5": [
+        45,
+        46,
+        39,
+        39,
+        33
+       ],
+       "4": [
+        56,
+        60,
+        50,
+        51,
+        42
+       ],
+       "6": [
+        70,
+        76,
+        63,
+        64,
+        52
+       ],
+       "10": [
+        94,
+        102,
+        83,
+        87,
+        69
+       ],
+       "16": [
+        121,
+        135,
+        106,
+        113,
+        89
+       ],
+       "25": [
+        157,
+        175,
+        137,
+        148,
+        114
+       ],
+       "35": [
+        189,
+        210,
+        165,
+        177,
+        138
+       ],
+       "50": [
+        231,
+        251,
+        196,
+        209,
+        163
+       ],
+       "70": [
+        280,
+        307,
+        241,
+        256,
+        202
+       ],
+       "95": [
+        327,
+        369,
+        285,
+        308,
+        239
+       ],
+       "120": [
+        379,
+        420,
+        325,
+        351,
+        272
+       ],
+       "150": [
+        424,
+        472,
+        367,
+        393,
+        307
+       ],
+       "185": [
+        473,
+        535,
+        411,
+        447,
+        344
+       ],
+       "240": [
+        555,
+        623,
+        475,
+        519,
+        398
+       ],
+       "300": [
+        624,
+        704,
+        537,
+        586,
+        449
+       ],
+       "400": [
+        710,
+        null,
+        null,
+        null,
+        null
+       ],
+       "500": [
+        825,
+        null,
+        null,
+        null,
+        null
+       ],
+       "630": [
+        941,
+        null,
+        null,
+        null,
+        null
+       ]
+      },
+      "al": {
+       "4": [
+        46,
+        47,
+        39,
+        40,
+        33
+       ],
+       "6": [
+        60,
+        62,
+        46,
+        52,
+        41
+       ],
+       "10": [
+        75,
+        79,
+        63,
+        67,
+        53
+       ],
+       "16": [
+        98,
+        104,
+        83,
+        88,
+        69
+       ],
+       "25": [
+        128,
+        136,
+        105,
+        115,
+        88
+       ],
+       "35": [
+        153,
+        163,
+        127,
+        137,
+        106
+       ],
+       "50": [
+        180,
+        194,
+        150,
+        162,
+        127
+       ],
+       "70": [
+        221,
+        239,
+        185,
+        198,
+        156
+       ],
+       "95": [
+        265,
+        286,
+        219,
+        239,
+        186
+       ],
+       "120": [
+        302,
+        326,
+        249,
+        272,
+        211
+       ],
+       "150": [
+        338,
+        366,
+        282,
+        305,
+        238
+       ],
+       "185": [
+        384,
+        415,
+        316,
+        347,
+        267
+       ],
+       "240": [
+        448,
+        484,
+        365,
+        403,
+        308
+       ],
+       "300": [
+        507,
+        547,
+        412,
+        456,
+        349
+       ],
+       "400": [
+        583,
+        null,
+        null,
+        null,
+        null
+       ],
+       "500": [
+        679,
+        null,
+        null,
+        null,
+        null
+       ],
+       "630": [
+        782,
+        null,
+        null,
+        null,
+        null
+       ]
+      }
+     }
+    }
+   ],
+   "notas": [
+    "Las columnas 2 y 3 (2x) y 4 y 5 (3x) se distinguen por las figuras de la tabla (disposición y protección de los cables); se conservan en el orden impreso.",
+    "feeder-sizing usa la primera columna 3x (c4_3x).",
+    "Unipolares separados un diámetro como mínimo: factor 1,07.",
+    "Calculadas con IEC 60287; clase 5: multiplicar por 0,95."
+   ]
+  },
+  "771.16.VIII": {
+   "titulo": "Intensidad de corriente admisible [A], cables preensamblados en líneas aéreas de baja tensión",
+   "pagina_pdf": 121,
+   "unidad": "A",
+   "referencia": {
+    "temp_ambiente_c": 40,
+    "condicion": "expuestos al sol y viento nulo",
+    "temp_conductor_c": 90
+   },
+   "bloques": [
+    {
+     "aislacion": "xlpe",
+     "columnas": [
+      {
+       "clave": "cu_bipolar"
+      },
+      {
+       "clave": "cu_tetrapolar"
+      },
+      {
+       "clave": "al_bipolar"
+      },
+      {
+       "clave": "al_tetrapolar"
+      }
+     ],
+     "filas": {
+      "mixto": {
+       "4": [
+        45,
+        35,
+        null,
+        null
+       ],
+       "6": [
+        55,
+        45,
+        null,
+        null
+       ],
+       "10": [
+        70,
+        55,
+        null,
+        null
+       ],
+       "16": [
+        null,
+        75,
+        75,
+        60
+       ],
+       "25": [
+        null,
+        null,
+        96,
+        76
+       ],
+       "35": [
+        null,
+        null,
+        117,
+        96
+       ],
+       "50": [
+        null,
+        null,
+        145,
+        117
+       ],
+       "70": [
+        null,
+        null,
+        null,
+        152
+       ],
+       "95": [
+        null,
+        null,
+        null,
+        200
+       ],
+       "120": [
+        null,
+        null,
+        null,
+        250
+       ],
+       "150": [
+        null,
+        null,
+        null,
+        305
+       ],
+       "185": [
+        null,
+        null,
+        null,
+        380
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "771.16.XI": {
+   "titulo": "Corrientes admisibles para cables flexibles (equipos móviles o portátiles)",
+   "pagina_pdf": 121,
+   "unidad": "A",
+   "filas": [
+    {
+     "conductores_x_seccion_mm2": "3x2,5",
+     "i_admisible_a": 16
+    },
+    {
+     "conductores_x_seccion_mm2": "4x2,5",
+     "i_admisible_a": 16
+    },
+    {
+     "conductores_x_seccion_mm2": "5x2,5",
+     "i_admisible_a": 16
+    },
+    {
+     "conductores_x_seccion_mm2": "3x4",
+     "i_admisible_a": 22
+    },
+    {
+     "conductores_x_seccion_mm2": "4x4",
+     "i_admisible_a": 22
+    },
+    {
+     "conductores_x_seccion_mm2": "5x4",
+     "i_admisible_a": 22
+    },
+    {
+     "conductores_x_seccion_mm2": "3x6",
+     "i_admisible_a": 30
+    },
+    {
+     "conductores_x_seccion_mm2": "4x6",
+     "i_admisible_a": 30
+    },
+    {
+     "conductores_x_seccion_mm2": "5x6",
+     "i_admisible_a": 30
+    },
+    {
+     "conductores_x_seccion_mm2": "3x10",
+     "i_admisible_a": 40
+    },
+    {
+     "conductores_x_seccion_mm2": "4x10",
+     "i_admisible_a": 40
+    },
+    {
+     "conductores_x_seccion_mm2": "5x10",
+     "i_admisible_a": 40
+    }
+   ]
+  }
+ },
+ "factores_correccion": {
+  "771.16.II.a": {
+   "titulo": "Factor de corrección por temperatura ambiente distinta de 40 °C",
+   "pagina_pdf": 106,
+   "referencia": "B52-14",
+   "temperaturas_c": {
+    "pvc": [
+     10,
+     15,
+     20,
+     25,
+     30,
+     35,
+     40,
+     45,
+     50,
+     55,
+     60
+    ],
+    "xlpe": [
+     10,
+     15,
+     20,
+     25,
+     30,
+     35,
+     40,
+     45,
+     50,
+     55,
+     60,
+     65,
+     70,
+     75,
+     80
+    ]
+   },
+   "factores": {
+    "pvc": [
+     1.4,
+     1.34,
+     1.29,
+     1.22,
+     1.15,
+     1.08,
+     1.0,
+     0.91,
+     0.82,
+     0.7,
+     0.57
+    ],
+    "xlpe": [
+     1.26,
+     1.23,
+     1.19,
+     1.14,
+     1.1,
+     1.05,
+     1.0,
+     0.96,
+     0.9,
+     0.84,
+     0.78,
+     0.71,
+     0.64,
+     0.55,
+     0.45
+    ]
+   },
+   "aplica_a": [
+    "771.16.I",
+    "771.16.III",
+    "771.16.V",
+    "771.16.VI",
+    "771.16.VIII"
+   ]
+  },
+  "771.16.II.b": {
+   "titulo": "Factor de corrección por agrupamiento de circuitos en un mismo caño",
+   "pagina_pdf": 106,
+   "filas": [
+    {
+     "circuitos": "2 monofásicos",
+     "conductores_cargados_max": 4,
+     "factor": 0.8,
+     "tabla_771.16.I_columna": "2x"
+    },
+    {
+     "circuitos": "3 monofásicos",
+     "conductores_cargados_max": 6,
+     "factor": 0.7,
+     "tabla_771.16.I_columna": "2x"
+    },
+    {
+     "circuitos": "2 trifásicos",
+     "conductores_cargados_max": 6,
+     "factor": 0.8,
+     "tabla_771.16.I_columna": "3x"
+    },
+    {
+     "circuitos": "3 trifásicos",
+     "conductores_cargados_max": 9,
+     "factor": 0.7,
+     "tabla_771.16.I_columna": "3x"
+    }
+   ],
+   "notas": [
+    "PE no se cuenta como cargado; el neutro no se cuenta si THD < 15 %."
+   ]
+  },
+  "771.16.IV": {
+   "titulo": "Factores de reducción por agrupamiento de más de un circuito o cable multipolar (en aire)",
+   "pagina_pdf": 110,
+   "filas": [
+    {
+     "item": "1",
+     "disposicion": "Agrupados en aire, sobre una superficie, embutidos o encerrados",
+     "numero_de_circuitos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      16,
+      20
+     ],
+     "factores": [
+      1.0,
+      0.8,
+      0.7,
+      0.65,
+      0.6,
+      0.57,
+      0.54,
+      0.52,
+      0.5,
+      0.45,
+      0.41,
+      0.38
+     ],
+     "metodos_de_referencia": [
+      "A1",
+      "A2",
+      "B1",
+      "B2",
+      "D1",
+      "D2"
+     ]
+    },
+    {
+     "item": "2",
+     "disposicion": "Una sola capa sobre pared, piso o bandeja no perforada",
+     "numero_de_circuitos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "factores": [
+      1.0,
+      0.85,
+      0.79,
+      0.75,
+      0.73,
+      0.72,
+      0.72,
+      0.71,
+      0.7
+     ],
+     "metodos_de_referencia": [
+      "C"
+     ]
+    },
+    {
+     "item": "3",
+     "disposicion": "Una sola capa fijada debajo de cielorraso",
+     "numero_de_circuitos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "factores": [
+      0.95,
+      0.81,
+      0.72,
+      0.68,
+      0.66,
+      0.64,
+      0.63,
+      0.62,
+      0.61
+     ],
+     "metodos_de_referencia": [
+      "C"
+     ]
+    },
+    {
+     "item": "4",
+     "disposicion": "Una sola capa sobre bandeja perforada horizontal o vertical",
+     "numero_de_circuitos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "factores": [
+      1.0,
+      0.88,
+      0.82,
+      0.77,
+      0.75,
+      0.73,
+      0.73,
+      0.72,
+      0.72
+     ],
+     "metodos_de_referencia": [
+      "E",
+      "F"
+     ]
+    },
+    {
+     "item": "5",
+     "disposicion": "Una sola capa sobre bandeja tipo escalera o engrapada",
+     "numero_de_circuitos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "factores": [
+      1.0,
+      0.87,
+      0.82,
+      0.8,
+      0.8,
+      0.79,
+      0.79,
+      0.78,
+      0.78
+     ],
+     "metodos_de_referencia": [
+      "E",
+      "F"
+     ]
+    }
+   ],
+   "notas": [
+    "Para más de nueve circuitos en los items 2 a 5 no se requiere mayor reducción.",
+    "Con separación entre cables mayor que dos diámetros no se aplica factor de reducción."
+   ]
+  },
+  "771.16.VII.a": {
+   "titulo": "Factor de corrección por temperatura del suelo distinta de 25 °C",
+   "pagina_pdf": 119,
+   "referencia": "B52-15",
+   "temperaturas_c": [
+    10,
+    20,
+    25,
+    30,
+    35,
+    40,
+    45,
+    50,
+    55,
+    60,
+    65,
+    70,
+    75,
+    80
+   ],
+   "factores": {
+    "pvc": [
+     1.16,
+     1.05,
+     1,
+     0.94,
+     0.88,
+     0.81,
+     0.75,
+     0.66,
+     0.58,
+     0.47,
+     null,
+     null,
+     null,
+     null
+    ],
+    "xlpe": [
+     1.11,
+     1.04,
+     1,
+     0.97,
+     0.93,
+     0.89,
+     0.83,
+     0.79,
+     0.74,
+     0.68,
+     0.63,
+     0.55,
+     0.48,
+     0.4
+    ]
+   }
+  },
+  "771.16.VII.b": {
+   "titulo": "Factor de corrección por resistividad térmica del terreno distinta de 1 K·m/W",
+   "pagina_pdf": 119,
+   "referencia": "B52-16",
+   "resistividad_termica_kmw": [
+    0.5,
+    0.8,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "factores": {
+    "cables_en_caños_o_conductos_enterrados_D1": [
+     1.08,
+     1.02,
+     1.0,
+     0.93,
+     0.89,
+     0.85,
+     0.81
+    ],
+    "cables_directamente_enterrados_D2": [
+     1.25,
+     1.08,
+     1.0,
+     0.85,
+     0.75,
+     0.67,
+     0.6
+    ]
+   },
+   "tipos_de_terreno": [
+    "tierra muy húmeda",
+    "tierra húmeda",
+    "tierra normal seca",
+    "tierra muy seca",
+    "70 % tierra 30 % arena, muy secas",
+    "70 % arena 30 % tierra, muy secas",
+    "arena muy seca"
+   ],
+   "notas": [
+    "Aplicables hasta 0,7 m de profundidad."
+   ]
+  },
+  "771.16.VII.c": {
+   "titulo": "Factores de reducción para más de un circuito, cables directamente enterrados",
+   "pagina_pdf": 120,
+   "referencia": "B52-18",
+   "separacion": [
+    "en contacto",
+    "1 diámetro",
+    "0,125 m",
+    "0,25 m",
+    "0,5 m"
+   ],
+   "numero_de_circuitos": {
+    "2": [
+     0.75,
+     0.8,
+     0.85,
+     0.9,
+     0.9
+    ],
+    "3": [
+     0.65,
+     0.7,
+     0.75,
+     0.8,
+     0.85
+    ],
+    "4": [
+     0.6,
+     0.6,
+     0.7,
+     0.75,
+     0.8
+    ],
+    "5": [
+     0.55,
+     0.55,
+     0.65,
+     0.7,
+     0.8
+    ],
+    "6": [
+     0.5,
+     0.55,
+     0.6,
+     0.7,
+     0.8
+    ]
+   }
+  },
+  "771.16.VII.d1": {
+   "titulo": "Factores de reducción para agrupamiento de caños enterrados, un cable multipolar por caño",
+   "pagina_pdf": 120,
+   "referencia": "B52-19",
+   "separacion": [
+    "en contacto",
+    "0,25 m",
+    "0,5 m",
+    "1,0 m"
+   ],
+   "numero_de_canos": {
+    "2": [
+     0.85,
+     0.9,
+     0.95,
+     0.95
+    ],
+    "3": [
+     0.75,
+     0.85,
+     0.9,
+     0.95
+    ],
+    "4": [
+     0.7,
+     0.8,
+     0.85,
+     0.9
+    ],
+    "5": [
+     0.65,
+     0.8,
+     0.85,
+     0.9
+    ],
+    "6": [
+     0.6,
+     0.8,
+     0.8,
+     0.9
+    ]
+   }
+  },
+  "771.16.VII.d2": {
+   "titulo": "Factores de reducción para agrupamiento de caños enterrados, un cable unipolar por caño no metálico",
+   "pagina_pdf": 120,
+   "referencia": "B52-19",
+   "separacion": [
+    "en contacto",
+    "0,25 m",
+    "0,5 m",
+    "1,0 m"
+   ],
+   "numero_de_circuitos_de_dos_o_tres_cables": {
+    "2": [
+     0.8,
+     0.9,
+     0.9,
+     0.95
+    ],
+    "3": [
+     0.7,
+     0.8,
+     0.85,
+     0.9
+    ],
+    "4": [
+     0.65,
+     0.75,
+     0.8,
+     0.9
+    ],
+    "5": [
+     0.6,
+     0.7,
+     0.8,
+     0.9
+    ],
+    "6": [
+     0.6,
+     0.7,
+     0.8,
+     0.9
+    ]
+   }
+  },
+  "771.16.IX": {
+   "titulo": "Factores de corrección para distintas temperaturas ambiente (cables preensamblados)",
+   "pagina_pdf": 121,
+   "temperaturas_c": [
+    20,
+    25,
+    30,
+    35,
+    40,
+    45,
+    50
+   ],
+   "factores": [
+    1.18,
+    1.14,
+    1.1,
+    1.05,
+    1.0,
+    0.95,
+    0.89
+   ]
+  },
+  "771.16.X": {
+   "titulo": "Factores de reducción por agrupamiento de cables preensamblados",
+   "pagina_pdf": 121,
+   "numero_de_cables": [
+    1,
+    2,
+    3
+   ],
+   "factores": [
+    1.0,
+    0.89,
+    0.8
+   ],
+   "notas": [
+    "Separados entre sí entre un cuarto de diámetro y un diámetro, en un mismo plano."
+   ]
+  }
+ },
+ "constantes": {
+  "771.13.I_secciones_minimas_mm2": {
+   "linea_principal": 4.0,
+   "seccional": 2.5,
+   "iluminacion_terminal": 1.5,
+   "tomacorrientes": 2.5,
+   "iluminacion_con_tomas": 2.5,
+   "uso_especial": 2.5,
+   "uso_especifico": 2.5,
+   "uso_especifico_mbtf": 1.5,
+   "efecto_retorno": 1.5,
+   "pe": 2.5
+  },
+  "771.13_pen_minima_mm2": {
+   "cu": 10.0,
+   "al": 16.0
+  },
+  "771.19.II_k_adiabatico": {
+   "pvc_hasta_300|cu": 115.0,
+   "pvc_hasta_300|al": 76.0,
+   "pvc_sobre_300|cu": 103.0,
+   "pvc_sobre_300|al": 68.0,
+   "epr_xlpe|cu": 143.0,
+   "epr_xlpe|al": 94.0,
+   "goma_60|cu": 141.0,
+   "goma_60|al": 93.0,
+   "mineral_pvc|cu": 115.0,
+   "mineral_desnudo|cu": 135.0,
+   "mineral_desnudo_expuesto|cu": 115.0,
+   "mineral_desnudo|al": 93.0,
+   "union_estanada|cu": 115.0
+  },
+  "771.19.IV_caida_unitaria_va_km": {
+   "1.5": 26.0,
+   "2.5": 15.0,
+   "4": 10.0,
+   "6": 6.5,
+   "10": 3.8,
+   "16": 2.4,
+   "25": 1.6,
+   "35": 1.2,
+   "50": 0.8,
+   "70": 0.6,
+   "95": 0.5,
+   "120": 0.4
+  },
+  "771.19_gdc_comun": {
+   "cu|1": 0.04,
+   "cu|3": 0.035,
+   "al|1": 0.063,
+   "al|3": 0.055
+  },
+  "771.19_gdc_arranque": {
+   "cu|1": [
+    0.016,
+    0.0205
+   ],
+   "al|1": [
+    0.025,
+    0.029
+   ],
+   "cu|3": [
+    0.0135,
+    0.0175
+   ],
+   "al|3": [
+    0.0215,
+    0.0255
+   ]
+  },
+  "771.19_limites_caida_pct": {
+   "iluminacion": 3.0,
+   "tomacorrientes": 3.0,
+   "motor_regimen": 5.0,
+   "motor_arranque": 15.0,
+   "seccional": 1.0
+  },
+  "771.18.III_tiempos_desconexion_s": {
+   "TN": [
+    [
+     120,
+     0.4,
+     null
+    ],
+    [
+     230,
+     0.2,
+     5.0
+    ],
+    [
+     400,
+     0.06,
+     0.2
+    ]
+   ],
+   "TT": [
+    [
+     120,
+     0.2,
+     null
+    ],
+    [
+     230,
+     0.06,
+     0.2
+    ],
+    [
+     400,
+     0.01,
+     0.02
+    ]
+   ]
+  },
+  "771.18_t_seccional_s": {
+   "TT": 1.0,
+   "TN": 5.0
+  },
+  "771.18_ra_max_ohm": 40.0,
+  "771.18_ul_v": {
+   "general": 24.0,
+   "col1": 50.0
+  },
+  "770_coef_grado_771": {
+   "minimo": 1.0,
+   "medio": 0.9,
+   "elevado": 0.8,
+   "superior": 0.7
+  },
+  "770_coef_circuitos": [
+   [
+    6,
+    0.6
+   ],
+   [
+    5,
+    0.7
+   ],
+   [
+    3,
+    0.8
+   ],
+   [
+    2,
+    1.0
+   ]
+  ]
+ }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "procurement",
+  "version": "0.1.0",
+  "kind": "connector",
+  "description": "Quote any bill of materials across real suppliers and return a comparison workbook (one supplier per column, verifiable links).",
+  "discipline": [
+    "all"
+  ],
+  "jurisdiction": [
+    "AR"
+  ],
+  "requires": {
+    "equipment-catalog": "^0.1.0"
+  },
+  "consumes": [
+    "BillOfMaterials"
+  ],
+  "produces": [
+    "Document:quotation"
+  ],
+  "outputs": [
+    {
+      "format": "xlsx",
+      "channel": "internal+deliverable"
+    }
+  ],
+  "entitlement": "feature.procurement",
+  "python": {
+    "requires": [
+      "openpyxl>=3.1"
+    ]
+  },
+  "skills": [
+    {
+      "id": "request-quotation",
+      "role": "owner"
+    }
+  ],
+  "legacy": {
+    "source": "00-Template-Claude/.claude/skills/get-cotizacion"
+  }
+}

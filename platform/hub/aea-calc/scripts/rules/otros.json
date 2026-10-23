@@ -1,0 +1,26 @@
+{
+ "grupo": "otros",
+ "reglas": [
+  {
+   "id": "otros.cercas_electrificadas_altura",
+   "grupo": "otros",
+   "tema": "Cercas electrificadas",
+   "regla": "Las cercas electrificadas cumplen IEC 60335-2-76 y se instalan a una altura mínima de 2,5 m sobre el solado terminado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 2.5
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.7.7",
+    "pagina_impresa": 17,
+    "cita": "deben estar instaladas a una altura"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

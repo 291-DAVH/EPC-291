@@ -1,0 +1,275 @@
+{
+ "grupo": "tableros",
+ "reglas": [
+  {
+   "id": "tableros.reserva_771",
+   "grupo": "tableros",
+   "tema": "Espacio de reserva en tableros (771)",
+   "regla": "Los tableros de hasta 250 A dejan al menos 20 % de la capacidad total en módulos de 18 mm libre para ampliaciones; con módulos de 27 mm o cajas moldeadas, 20 % de cada tipo y como mínimo un interruptor de cada tipo. Sobre 250 A, a criterio del proyectista.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "corriente_max_a": 250,
+    "reserva_min_pct": 20,
+    "reserva_minima_un_interruptor_por_tipo": true
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "de por lo menos el 20 % de la capacidad total del tablero en módulos de 18 mm"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.reserva_770",
+   "grupo": "tableros",
+   "tema": "Espacio de reserva en tableros de viviendas (770)",
+   "regla": "En viviendas, el tablero deja al menos 20 % de reserva sobre su capacidad total en módulos de 18 mm.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "reserva_min_pct": 20
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.16.4",
+    "pagina_impresa": 53,
+    "cita": "veinte por ciento (20 %) de la capacidad total del tablero en módulos de 18 mm"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.altura_comandos",
+   "grupo": "tableros",
+   "tema": "Altura de los elementos de comando",
+   "regla": "Las palancas o comandos de dispositivos de maniobra y protección quedan entre 0,40 m y 2 m del piso del local.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.4,
+    "altura_max_m": 2.0
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "entre 0,40 m y 2 m"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.altura_borneras",
+   "grupo": "tableros",
+   "tema": "Altura de borneras",
+   "regla": "Las borneras de conexión quedan a no menos de 0,2 m, medidos desde su parte inferior, del piso terminado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "deberán estar ubicadas a una altura mínima de 0,2 m, medida desde su parte inferior con respecto al nivel de piso terminado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.gabinetes_en_zonas_de_vehiculos",
+   "grupo": "tableros",
+   "tema": "Cajas y gabinetes en zonas de vehículos",
+   "regla": "En accesos y zonas de maniobra de vehículos, el borde inferior de cajas o gabinetes queda a no menos de 1,5 m de la superficie transitada; si no es posible, se protegen contra colisiones.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 1.5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "con su borde inferior a no menos de 1,5 m de altura con relación a la superficie por donde transitan los vehículos"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.ip_minimo_viviendas_oficinas",
+   "grupo": "tableros",
+   "tema": "Grado de protección de tableros",
+   "regla": "Tableros de viviendas, oficinas y locales sin personal BA4/BA5: IP41 o IP31D como mínimo, sin partes con tensión accesibles aun con la puerta abierta.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IP41 o IP31D"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "el grado de protección será como mínimo IP41 o IP31D"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.ip_intemperie_principal",
+   "grupo": "tableros",
+   "tema": "Tablero principal a la intemperie",
+   "regla": "A la intemperie, el grado de protección del tablero principal no es inferior a IP54.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IP54"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.3.1",
+    "pagina_impresa": 147,
+    "cita": "el grado de protección no debe ser inferior a IP54"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.no_en_baños",
+   "grupo": "tableros",
+   "tema": "Prohibición de tableros en cuartos de baño",
+   "regla": "Ni el tablero principal ni los seccionales se instalan en cuartos de baño.",
+   "tipo": "prohibido",
+   "parametros": {
+    "ubicacion_prohibida": "cuarto de baño"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.3.1 y 771.20.3.2",
+    "pagina_impresa": 147,
+    "cita": "Los tableros principales no se instalarán en los cuartos de baño."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.no_en_baños_701",
+   "grupo": "tableros",
+   "tema": "Prohibición de tableros en baños (701)",
+   "regla": "No se permite instalar tableros eléctricos en los cuartos de baño.",
+   "tipo": "prohibido",
+   "parametros": {
+    "ubicacion_prohibida": "cuarto de baño"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.512.4",
+    "pagina_impresa": 12,
+    "cita": "No está permitida la instalación de tableros eléctricos en los cuartos de baño."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.verificacion_calentamiento",
+   "grupo": "tableros",
+   "tema": "Verificación térmica de tableros",
+   "regla": "En todos los tableros se verifican los límites de calentamiento según IEC 60439-1, 60439-3, IEC TR 60890, 60670-24 o 62208.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "En todos los tableros se debe efectuar una verificación de los límites de calentamiento."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tableros.montaje_componentes",
+   "grupo": "tableros",
+   "tema": "Montaje de componentes",
+   "regla": "Los componentes no se montan directamente sobre las caras posteriores o laterales del tablero, sino en soportes o perfiles.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.20.4",
+    "pagina_impresa": 147,
+    "cita": "Los componentes eléctricos no podrán montarse directamente sobre las caras posteriores o laterales del tablero"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

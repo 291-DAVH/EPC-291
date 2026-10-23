@@ -1,0 +1,216 @@
+{
+ "grupo": "iluminacion",
+ "reglas": [
+  {
+   "id": "iluminacion.escaleras_una_boca_cada_5m",
+   "grupo": "iluminacion",
+   "tema": "Iluminación de escaleras y rampas",
+   "regla": "Escaleras y rampas llevan al menos una boca de iluminación de uso general cada 5 m de longitud o fracción, o en cada descanso.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_max_entre_bocas_m": 5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 g)",
+    "pagina_impresa": 42,
+    "cita": "como mínimo una boca de iluminación para uso general cada 5 m de longitud, o fracción, o bien en cada descanso"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.ventiladores_cuentan_como_boca",
+   "grupo": "iluminacion",
+   "tema": "Ventiladores de techo y extractores",
+   "regla": "Ventiladores de techo y extractores pueden conectarse a circuitos de iluminación y se computan como una boca de iluminación.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_computadas": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 c)",
+    "pagina_impresa": 42,
+    "cita": "cualquiera de ellos se computará como una boca de iluminación"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.mbts_comando_ambientes_mojados",
+   "grupo": "iluminacion",
+   "tema": "Comando en ambientes mojados",
+   "regla": "Los circuitos de comando en ambientes mojados (incluidos tanques cisterna y elevado) se alimentan en muy baja tensión sin puesta a tierra (MBTS).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "alimentacion": "MBTS"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 l)",
+    "pagina_impresa": 43,
+    "cita": "serán ali- mentados con muy baja tensión sin puesta a tierra (MBTS)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.escuelas_louver",
+   "grupo": "iluminacion",
+   "tema": "Luminarias de aulas",
+   "regla": "Las luminarias de aulas no llevan lámparas a la vista: cubierta traslúcida o rejilla protectora (louver).",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "establecimientos educativos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.4 i)",
+    "pagina_impresa": 41,
+    "cita": "Las luminarias de las aulas no deberán llevar las lámparas a la vista"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.luminarias_puertas_acceso_2_5m",
+   "grupo": "iluminacion",
+   "tema": "Acceso a equipos en luminarias y soportes",
+   "regla": "Las puertas de acceso a equipos eléctricos situadas a menos de 2,50 m de altura sobre el solado se cierran con llave especial o herramienta.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_umbral_m": 2.5
+   },
+   "aplica_a": [
+    "alumbrado exterior"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771-B.8.2.1",
+    "pagina_impresa": 177,
+    "cita": "situadas a menos de 2,50 m de altura por encima del solado, deben cerrarse con una llave especial o una herramienta"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.deposito_densidad_minimo",
+   "grupo": "iluminacion",
+   "tema": "Puntos de iluminación en depósitos (grado minimo)",
+   "regla": "Salón general de depósitos o industrias de sustancias no inflamables: una boca de uso general cada 15 m² con luminarias a 2,5-3,5 m, cada 25 m² a 3,5-5 m y cada 35 m² por encima de 5 m, con un mínimo de 2 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "m2_por_boca_altura_2_5_a_3_5": 15,
+    "m2_por_boca_altura_3_5_a_5": 25,
+    "m2_por_boca_altura_mayor_5": 35,
+    "bocas_minimas": 2
+   },
+   "aplica_a": [
+    "depósitos y elaboración de sustancias no inflamables"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.3.3.1",
+    "pagina_impresa": 36,
+    "cita": "(como mínimo dos bocas)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.deposito_densidad_medio",
+   "grupo": "iluminacion",
+   "tema": "Puntos de iluminación en depósitos (grado medio)",
+   "regla": "Salón general de depósitos o industrias de sustancias no inflamables: una boca de uso general cada 15 m² con luminarias a 2,5-3,5 m, cada 32 m² a 3,5-5 m y cada 55 m² por encima de 5 m, con un mínimo de 8 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "m2_por_boca_altura_2_5_a_3_5": 15,
+    "m2_por_boca_altura_3_5_a_5": 32,
+    "m2_por_boca_altura_mayor_5": 55,
+    "bocas_minimas": 8
+   },
+   "aplica_a": [
+    "depósitos y elaboración de sustancias no inflamables"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.3.3.2",
+    "pagina_impresa": 36,
+    "cita": "(como mínimo 8 bocas)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.deposito_densidad_elevado",
+   "grupo": "iluminacion",
+   "tema": "Puntos de iluminación en depósitos (grado elevado)",
+   "regla": "Salón general de depósitos o industrias de sustancias no inflamables: una boca de uso general cada 15 m² con luminarias a 2,5-3,5 m, cada 32 m² a 3,5-5 m y cada 55 m² por encima de 5 m, con un mínimo de 36 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "m2_por_boca_altura_2_5_a_3_5": 15,
+    "m2_por_boca_altura_3_5_a_5": 32,
+    "m2_por_boca_altura_mayor_5": 55,
+    "bocas_minimas": 36
+   },
+   "aplica_a": [
+    "depósitos y elaboración de sustancias no inflamables"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.3.3.3",
+    "pagina_impresa": 37,
+    "cita": "(como mínimo 36 bocas)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "iluminacion.deposito_densidad_superior",
+   "grupo": "iluminacion",
+   "tema": "Puntos de iluminación en depósitos (grado superior)",
+   "regla": "Salón general de depósitos o industrias de sustancias no inflamables: una boca de uso general cada 15 m² con luminarias a 2,5-3,5 m, cada 32 m² a 3,5-5 m y cada 55 m² por encima de 5 m, con un mínimo de 90 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "m2_por_boca_altura_2_5_a_3_5": 15,
+    "m2_por_boca_altura_3_5_a_5": 32,
+    "m2_por_boca_altura_mayor_5": 55,
+    "bocas_minimas": 90
+   },
+   "aplica_a": [
+    "depósitos y elaboración de sustancias no inflamables"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.3.3.4",
+    "pagina_impresa": 37,
+    "cita": "(como mínimo 90 bocas)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

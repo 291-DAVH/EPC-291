@@ -1,0 +1,49 @@
+{
+  "id": "mld",
+  "version": "0.1.0",
+  "kind": "generator",
+  "description": "Converts an SLD into a multi-line diagram (MLD) by expanding each line into its conductors. Pending.",
+  "status": "pending",
+  "discipline": [
+    "electrical"
+  ],
+  "requires": {
+    "sld": "^0.1.0",
+    "iram-titleblock": "^0.5.1",
+    "iec-symbols": "^0.4.14"
+  },
+  "consumes": [
+    "Drawing:SLD"
+  ],
+  "produces": [
+    "Drawing:MLD"
+  ],
+  "outputs": [
+    {
+      "format": "svg",
+      "channel": "internal"
+    },
+    {
+      "format": "dxf",
+      "channel": "internal+deliverable"
+    }
+  ],
+  "entitlement": "feature.drawing.mld",
+  "python": {
+    "requires": [
+      "openpyxl>=3.1",
+      "lxml",
+      "ezdxf"
+    ]
+  },
+  "skills": [
+    {
+      "id": "convert-sld-to-mld",
+      "role": "owner"
+    }
+  ],
+  "legacy": {
+    "name": "mld-generator",
+    "source": "mld-generator"
+  }
+}

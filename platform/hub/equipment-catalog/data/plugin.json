@@ -1,0 +1,11 @@
+{
+  "id": "EQUIPMENT",
+  "name": "Equipment Catalog & Datasheets",
+  "version": "1.1",
+  "provides": "equipment/catalog",
+  "catalog": "EQUIPMENT_CATALOG.md",
+  "datasheets": "DATASHEETS/",
+  "assets": "ASSETS/",
+  "invocation": "reference",
+  "downstream": ["CALCULATIONS", "SLD_LV", "SLD_MV", "MLD_LV"]
+}

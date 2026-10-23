@@ -1,0 +1,225 @@
+{
+ "grupo": "curvas_canerias",
+ "reglas": [
+  {
+   "id": "curvas_canerias.max_tres_curvas",
+   "grupo": "curvas_canerias",
+   "tema": "Curvas en cañerías",
+   "regla": "No se admiten más de tres curvas de la cañería entre dos cajas o gabinetes consecutivos; las curvas no terminan en ángulos interiores menores que 90°.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "curvas_max_entre_cajas": 3,
+    "angulo_interior_min_grados": 90
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "521.8.8",
+    "pagina_impresa": "52-24",
+    "pagina_pdf": 78,
+    "cita": "No se admitiran mas de tres curvas de la caneria entre cajas o gabinetes consecutivos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "curvas_canerias.distancia_entre_curvas",
+   "grupo": "curvas_canerias",
+   "tema": "Distancia entre curvas consecutivas",
+   "regla": "La distancia mínima entre dos curvas consecutivas es diez veces el diámetro exterior del caño.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_min_veces_diametro": 10
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "521.8.8",
+    "pagina_impresa": "52-24",
+    "pagina_pdf": 78,
+    "cita": "no sera menor que diez veces el diametro exterior del cano",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "curvas_canerias.radios_metalicos_tabla_52_11",
+   "grupo": "curvas_canerias",
+   "tema": "Radios de curvatura de caños metálicos rígidos",
+   "regla": "Radio de curvatura mínimo y máximo para caños metálicos rígidos tipo liviano o semipesado (CL/CR).",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "Tabla 52.11",
+    "pagina_impresa": "52-24",
+    "pagina_pdf": 78,
+    "cita": "Radios de curvatura para canos metalicos rigidos",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "radio": "mm"
+    },
+    "columnas": [
+     "diámetro nominal",
+     "designación IRAM",
+     "radio mínimo [mm]",
+     "radio máximo [mm]"
+    ],
+    "filas": [
+     [
+      "5/8\"",
+      "CL/CR 16",
+      35,
+      45
+     ],
+     [
+      "3/4\"",
+      "CL/CR 19",
+      42,
+      52
+     ],
+     [
+      "7/8\"",
+      "CL/CR 22",
+      50,
+      55
+     ],
+     [
+      "1\"",
+      "CL/CR 25",
+      59,
+      69
+     ],
+     [
+      "1 1/4\"",
+      "CL/CR 32",
+      74,
+      84
+     ],
+     [
+      "1 1/2\"",
+      "CL/CR 38",
+      90,
+      100
+     ],
+     [
+      "2\"",
+      "CL/CR 51",
+      120,
+      130
+     ]
+    ]
+   }
+  },
+  {
+   "id": "curvas_canerias.radios_sinteticos_tabla_52_12",
+   "grupo": "curvas_canerias",
+   "tema": "Radios mínimos de curvatura de caños sintéticos",
+   "regla": "Radio mínimo de curvatura de caños de material sintético, rígidos, curvables o curvables autorrecuperables; en curvables corrugados se usa un diámetro un escalón superior.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-52",
+    "edicion": "2006",
+    "clausula": "Tabla 52.12",
+    "pagina_impresa": "52-24",
+    "pagina_pdf": 78,
+    "cita": "Radios minimos de curvatura para canos de material sintetico",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "radio": "mm"
+    },
+    "columnas": [
+     "diámetro exterior [mm]",
+     "curvable corrugada o anillada",
+     "curvable lisa",
+     "rígida ARL",
+     "rígida MRL"
+    ],
+    "filas": [
+     [
+      16,
+      48,
+      96,
+      48,
+      96
+     ],
+     [
+      20,
+      60,
+      120,
+      60,
+      120
+     ],
+     [
+      25,
+      75,
+      150,
+      75,
+      150
+     ],
+     [
+      32,
+      96,
+      192,
+      null,
+      null
+     ],
+     [
+      40,
+      160,
+      300,
+      null,
+      null
+     ],
+     [
+      50,
+      200,
+      480,
+      null,
+      null
+     ],
+     [
+      63,
+      252,
+      600,
+      null,
+      null
+     ]
+    ],
+    "nota": "Rígidas (curvables con ayuda de equipos): solo 16, 20 y 25 mm."
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "library": "MLD_MV",
+  "category": "MV",
+  "diagram_type": "MLD",
+  "version": "0.0.0",
+  "generated": "2026-10-22",
+  "units": "mm (1 unidad = 1 mm; símbolos a escala 1, sin agrandar en el diagrama)",
+  "coordinate_system": "x=0 en el eje del primer polo; y=0 en el puerto superior; y crece hacia abajo",
+  "standards": "Forma IEC 60617; líneas IRAM 4502; letras IRAM 4503; puertos en retícula de 2,5 mm",
+  "status": "pendiente: sin símbolos MLD de media tensión todavía",
+  "symbols": []
+}

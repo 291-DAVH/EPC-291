@@ -1,0 +1,68 @@
+{
+  "id": "sld",
+  "version": "0.1.1",
+  "kind": "generator",
+  "description": "Single-line diagram (SLD) of a board on IRAM sheets from a circuit Excel: SVG and DXF per sheet plus a circuit calculation table sheet.",
+  "discipline": [
+    "electrical"
+  ],
+  "jurisdiction": [
+    "AR"
+  ],
+  "requires": {
+    "aea-calc": "^1.6.0",
+    "iec-symbols": "^0.4.14",
+    "iram-titleblock": "^0.5.1"
+  },
+  "consumes": [
+    "Board",
+    "Circuit",
+    "CircuitCalculation"
+  ],
+  "produces": [
+    "Drawing:SLD"
+  ],
+  "outputs": [
+    {
+      "format": "svg",
+      "channel": "internal"
+    },
+    {
+      "format": "dxf",
+      "channel": "internal+deliverable"
+    },
+    {
+      "format": "json",
+      "channel": "internal"
+    }
+  ],
+  "entitlement": "feature.drawing.sld",
+  "python": {
+    "requires": [
+      "openpyxl>=3.1",
+      "lxml",
+      "ezdxf",
+      "svgelements",
+      "shapely"
+    ],
+    "optional": [
+      "cairosvg"
+    ]
+  },
+  "skills": [
+    {
+      "id": "generate-sld",
+      "role": "owner"
+    }
+  ],
+  "legacy": {
+    "name": "sld-generator",
+    "source": "sld-generator",
+    "changes": [
+      "resolves sibling plugins from the hub instead of vendor/*.plugin",
+      "supports iec-symbols >= 0.4.14 file naming",
+      "cairosvg optional",
+      "titleblocks use sys.executable"
+    ]
+  }
+}
