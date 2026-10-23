@@ -16,7 +16,8 @@ Reviewed at every sprint planning. Dates are targets, not commitments.
 ## Later (2027)
 - Authentication, organizations, subscriptions, white-label.
 - Complete MLD generator; medium voltage; fire protection; HVAC; civil.
-- Procurement and construction modules; PMI methodology pack; desktop edition.
+- Procurement and construction modules; PMI methodology pack.
+- **Desktop edition (EP-012):** Rust (Tauri) shell for Windows, macOS and Linux, reusing the React UI, with the Python engine as a bundled sidecar and SQLite local state (ADR-0007). Starts with a spike (US-0023) after authentication is in place.
 - Second jurisdiction (another country).
 
 ## Milestones
@@ -27,3 +28,4 @@ Reviewed at every sprint planning. Dates are targets, not commitments.
 | M2 Verified LV rules | 2026-11-30 | LV standards verified by the engineer; checks used by the calc engine |
 | M3 Pilot | 2027-Q1 | Authentication, one organization, one real project end to end |
 | M4 Commercial | 2027-Q2 | Subscriptions, on-prem package, second country pack |
+| M5 Desktop | 2027-H2 | Signed installers for three platforms, offline licensing |

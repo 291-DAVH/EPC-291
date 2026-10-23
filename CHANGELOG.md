@@ -6,6 +6,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ### Added
 - `planning/` area: vision, roadmap, 3 PRDs, 11 epics, 22 stories, sprints, risk register, release notes and templates; `tools/planning/board.py` generates `planning/BOARD.md`.
 - `docs/explanation/what-is-epc.md`, `docs/architecture/` (target architecture, structure, migration phases) and ADR-0001 to ADR-0006.
+- Planning for the **desktop edition** (Rust/Tauri, cross-platform): ADR-0007 (proposed), EP-012, US-0023 to US-0027, roadmap milestone M5, risk R-009. UI reused from `frontend/`; Python engine kept as a bundled sidecar.
 - **Phase 8, management module:** backend modules `wbs` (EDT with weighted progress roll-up), `schedule` (dates, finish-to-start dependencies, critical path, slack, conflicts, late activities) and `backlog` (internal; BL-nnn items with type, priority, status, estimate, WBS link). JSON schemas `wbs`, `schedule`, `backlog` in `shared/schemas`; empty files in the project skeleton; demo seed generates a consistent plan for the 20 simulated projects (WBS progress equals project progress). Web: read-only **Plan** tab (Gantt with critical path and today marker, WBS tree). Console: **Planning** page (backlog add/move, Gantt, WBS). Customers can read WBS and schedule (`/api/app/...`); writes and the backlog are admin-only. US-0017 done.
 
 ### Changed

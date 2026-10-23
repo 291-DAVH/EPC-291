@@ -76,6 +76,7 @@ EPC-291/
 │  └─ sprints/ SPRINT-01/ plan.md review.md retro.md
 │
 ├─ docs/                         explanation/ how-to/ reference/ tutorials/ architecture/ (C4 + decisions/)
+├─ desktop/                      (planned, EP-012) Rust/Tauri shell: src-tauri/, sidecar/ build of the Python backend; reuses frontend/web
 ├─ infra/                        docker/ compose/ ci/ k8s-helm/ onprem/
 ├─ shared/                       schemas/ (plugin, rules, deliverable policy) · i18n/ · design-tokens/
 ├─ tools/                        registry, hooks, ci, seeding, one-off migrations
