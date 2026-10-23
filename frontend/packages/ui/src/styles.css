@@ -172,3 +172,13 @@ table.wbs tr.wbs-group td { background: var(--panel-2); }
 .eng-text { white-space: pre-wrap; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; padding: 12px; margin: 0; }
 table.eng-table { font-size: 13px; } table.eng-table td, table.eng-table th { padding: 4px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: left; }
 table.eng-table tr:first-child td { font-weight: 600; background: var(--panel-2); }
+
+/* ---- design criteria ---- */
+.subtabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.subtabs button { border-radius: 999px; padding: 4px 14px; }
+.subtabs button.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+table.crit td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.crit tr.mod td { background: var(--warn-soft); }
+table.crit input[type=number], table.crit select { width: 110px; }
+table.crit input.note { width: 100%; min-width: 180px; }
+.crit-group { font-size: 12px; text-transform: uppercase; color: var(--muted); padding-top: 14px !important; border-bottom: 0 !important; }

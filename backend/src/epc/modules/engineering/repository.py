@@ -62,3 +62,27 @@ def xlsx_sheets(path: Path) -> Dict[str, List[List[str]]]:
         return {ws.title: [["" if c is None else str(c) for c in row[:MAX_COLS]] for row in ws.iter_rows(max_row=MAX_ROWS, values_only=True)] for ws in wb.worksheets}
     finally:
         wb.close()
+
+
+# ---- design criteria: catalog (per jurisdiction and discipline) and per-project overrides ----
+def load_catalog(path: Path) -> Dict:
+    from epc.core.fsutil import read_json
+    return read_json(path, {}) or {}
+
+
+def criteria_file(d: Path) -> Path:
+    return d / "workspace" / "00-setup" / "design-criteria.json"
+
+
+def load_criteria(d: Path) -> Dict:
+    from epc.core.fsutil import read_json
+    data = read_json(criteria_file(d), {}) or {}
+    data.setdefault("schema_version", "1.0")
+    data.setdefault("overrides", {})
+    data.setdefault("history", [])
+    return data
+
+
+def save_criteria(d: Path, data: Dict) -> None:
+    from epc.core.fsutil import write_json
+    write_json(criteria_file(d), data)

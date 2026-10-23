@@ -1,8 +1,24 @@
 import { useState } from "react";
+import DesignCriteria from "./DesignCriteria";
 import { Badge, EngFile, EngOverview, EngText, Key, State, useApi, useI18n } from "@epc/ui";
 
 /** Engineering workspace of a project: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text. Engineer/admin only. */
 export default function Engineering({ client, code }: { client: string; code: string }) {
+  const { t } = useI18n();
+  const [sub, setSub] = useState<"files" | "criteria">("files");
+  return (
+    <>
+      <div className="subtabs" role="tablist">
+        {(["files", "criteria"] as const).map((x) => (
+          <button key={x} role="tab" aria-selected={sub === x} className={sub === x ? "on" : ""} onClick={() => setSub(x)}>{t(("eng.sub." + x) as Key)}</button>
+        ))}
+      </div>
+      {sub === "files" ? <Files client={client} code={code} /> : <DesignCriteria client={client} code={code} />}
+    </>
+  );
+}
+
+function Files({ client, code }: { client: string; code: string }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/engineering`;
   const ov = useApi<EngOverview>(base);
