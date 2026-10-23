@@ -1,4 +1,4 @@
-# ===== Private / never versioned =====
+# ===== Private / never versioned (anchored to the repository root) =====
 # dev-knowledge: standards, third-party reports, study material (copyright / confidential)
 /dev-knowledge/
 # _legacy: archived original folders and their old git repositories
@@ -8,19 +8,23 @@
 # real client projects live in their own repositories
 /projects/*
 !/projects/_template/
+_study/
 
 # ===== Copyrighted / CAD binaries =====
 *.pdf
 *.dwg
 *.dwl
 *.dwl2
-!platform/docs/**/*.pdf
+!docs/**/*.pdf
+**/knowledge/
 
 # ===== Local environment and build output =====
 .venv/
 node_modules/
 dist/
 build/
+# tools/build holds the build scripts, not build output
+!platform/tools/build/
 __pycache__/
 *.pyc
 *.plugin
@@ -32,6 +36,3 @@ _out/
 *.bak
 *.tmp
 Thumbs.db
-
-# tools/build holds the build scripts, not build output
-!platform/tools/build/
