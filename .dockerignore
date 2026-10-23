@@ -13,5 +13,4 @@ docs
 !**/.env.example
 *.pdf
 *.dwg
-platform/dist
-platform/apps
+dist

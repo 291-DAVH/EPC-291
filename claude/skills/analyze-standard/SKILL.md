@@ -19,7 +19,7 @@ Owner plugin: `standard-ingest`. The code is the `epc_standards` package (`engin
    - `text` or `mixed`: use `extracted/<pdf>/pages/pNNNN.txt`, `clauses.json`, `tables.json`.
    - `scanned` (no text layer): read the pages visually. Render with `python -m epc_standards.render_pages <pdf> 41-45` and open the PNGs, or read the PDF pages directly. Mark those rules `verification: "visual"` (or `"ocr"`).
 3. **Scope the pass.** List the chapters/clauses to cover with the user (for example, circuits, protection, conductors, earthing). Work chapter by chapter; do not draft a whole 300-page standard blindly.
-4. **Draft** `draft/rules.json` (schema `platform/schemas/rules.schema.json`, version 1.1):
+4. **Draft** `draft/rules.json` (schema `shared/schemas/rules.schema.json`, version 1.1):
    - one rule per requirement: `id` (stable, dotted), `clause`, `page` (printed and pdf), `topic`, `title`, `summary.<locale>`, `type` (`mandatory | recommended | prohibited`), `applies_to.installation_types`, `params` with the unit in the key suffix (`_m`, `_mm`, `_pct`, `_a`);
    - add `check` only when the requirement is a clean comparison on a named context field (for example `{"field": "tray_reserve_pct", "op": ">=", "value": 20}`); set `applies_to.when` for conditions such as room type;
    - put numeric tables in `tables[]` and reference them with `table_ref`; keep the table notes;

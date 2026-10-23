@@ -18,14 +18,15 @@ node_modules/
 dist/
 build/
 # tools/build holds the build scripts, not build output
-!platform/tools/build/
+!tools/build/
 __pycache__/
 *.pyc
 *.plugin
 .env
 .env.*
 !.env.example
-.claude/
+.claude/*
+!.claude/README.md
 _out/
 *.bak
 *.tmp

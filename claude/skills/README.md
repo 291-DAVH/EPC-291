@@ -18,4 +18,4 @@ If the same skill exists in `skills/` and inside a plugin (`claude/plugins/<plug
 It also reports a skill inside two plugins, orphan skills and skills a plugin lists but that do not exist.
 
 ## Build
-`platform/tools/build/epc_build.py` assembles each plugin in Claude Code's official layout (`.claude-plugin/plugin.json`, `skills/`, `agents/`) by copying the skills it lists from `claude/skills/`; `epc_build.py marketplace` builds the whole marketplace and CI validates it with `claude plugin validate --strict`. Never edit the copies inside a built package.
+`tools/build/epc_build.py` assembles each plugin in Claude Code's official layout (`.claude-plugin/plugin.json`, `skills/`, `agents/`) by copying the skills it lists from `claude/skills/`; `epc_build.py marketplace` builds the whole marketplace and CI validates it with `claude plugin validate --strict`. Never edit the copies inside a built package.

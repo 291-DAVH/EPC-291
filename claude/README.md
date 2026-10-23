@@ -1,6 +1,6 @@
 # claude
 
-The AI layer of EPC-291: everything that is packaged for Claude. Engineering code stays in `platform/` for now and moves to `engine/` in phase 4; plugins then become thin wrappers.
+The AI layer of EPC-291: everything that is packaged for Claude. Engineering code lives in `engine/`; plugins then become thin wrappers.
 
 | Folder | Content |
 |---|---|
@@ -14,9 +14,9 @@ The AI layer of EPC-291: everything that is packaged for Claude. Engineering cod
 
 ## Build and validate
 ```
-platform\.venv\Scripts\python platform\tools\build\epc_build.py registry      # plugins + skills + agents consistency
-platform\.venv\Scripts\python platform\tools\build\epc_build.py marketplace   # platform/dist/marketplace (git-ignored build output)
-claude plugin validate --strict platform\dist\marketplace
+.venv\Scripts\python tools\build\epc_build.py registry      # plugins + skills + agents consistency
+.venv\Scripts\python tools\build\epc_build.py marketplace   # dist/marketplace (git-ignored build output)
+claude plugin validate --strict dist\marketplace
 ```
 `python tools/ci/run_gate.py` runs all of it, including the official validator on the marketplace and on every plugin.
 

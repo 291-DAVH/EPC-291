@@ -11,8 +11,7 @@ COPY management ./management
 COPY claude ./claude
 COPY backend ./backend
 COPY database ./database
-COPY platform/tools ./platform/tools
-COPY platform/methodologies ./platform/methodologies
+COPY tools ./tools
 
 RUN pip install --no-cache-dir \
       -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents \
