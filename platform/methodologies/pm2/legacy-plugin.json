@@ -1,0 +1,49 @@
+{
+  "id": "MANAGEMENT",
+  "name": "Project Management Templates",
+  "version": "1.1",
+  "provides": "management/templates",
+  "invocation": "reference",
+  "templates": [
+    {
+      "id": "project_handbook",
+      "file": "PROJECT_HANDBOOK.md",
+      "domain": "governance"
+    },
+    {
+      "id": "acceptance_transition",
+      "file": "ACCEPTANCE_TRANSITION_PLAN.md",
+      "domain": "governance"
+    },
+    {
+      "id": "procurement_plan",
+      "file": "PROCUREMENT_PLAN.md",
+      "domain": "governance"
+    },
+    {
+      "id": "risk_plan",
+      "file": "RISK_PLAN.md",
+      "domain": "risk"
+    },
+    {
+      "id": "quality_hse_plan",
+      "file": "QUALITY_HSE_PLAN.md",
+      "domain": "quality"
+    },
+    {
+      "id": "ncr_log",
+      "file": "NCR_LOG.md",
+      "domain": "quality"
+    }
+  ],
+  "resources": [
+    {
+      "id": "report_templates",
+      "file": "../../../99_CORE/MANAGEMENT_TEMPLATES.md",
+      "description": "Plantillas de informes operativos D10-D28 y canvas PM2 (referenciadas por M8)"
+    }
+  ],
+  "downstream": [
+    "90_MANAGEMENT"
+  ]
+}
