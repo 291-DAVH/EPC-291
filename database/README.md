@@ -7,7 +7,7 @@ Platform state (ADR-0006): PostgreSQL in production, SQLite for the desktop edit
 |---|---|
 | organizations, users, memberships (roles), project index, deliverables index (revision, hash, state), audit ledger; later plans, subscriptions, jobs, notifications | calculations, drawings, documents, requirements, deliverables themselves, the per-project `.epc` ledger |
 
-The database indexes the files; the SHA-256 manifest in the ledger is the reconciliation point. The application is still file-based: no module reads or writes the database yet (the first one will be `identity`, US-0018).
+The database indexes the files; the SHA-256 manifest in the ledger is the reconciliation point. The application is still file-based except accounts: the `identity` module (US-0018, ADR-0009) reads and writes users, organizations, memberships, sessions and invitations (migration `0002`). A SQLite database (`local/epc.db`, or `EPC_DATABASE_URL`) is migrated automatically on first use; PostgreSQL must be migrated beforehand (the compose stack does it).
 
 ## Rules
 1. Every table except `organizations` and `users` carries `organization_id` (multi-tenancy); `tests/test_migrations.py` enforces it.

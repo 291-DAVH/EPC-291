@@ -13,3 +13,4 @@ class NewProject(BaseModel):
     locale: Optional[str] = None
     disciplines: List[str] = ["electrical"]
     phase: str = "IC"
+    org: str = ""                    # staff only: organization (slug) that owns the project; customers always create in their own

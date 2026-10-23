@@ -188,6 +188,8 @@ source_modules =
 forbidden_modules =
     epc.modules.identity.api
     epc.modules.identity.service
+    epc.modules.identity.repository
+    epc.modules.identity.models
     epc.modules.identity.guard
 
 [importlinter:contract:identity-layers]
@@ -196,6 +198,8 @@ type = layers
 layers =
     epc.modules.identity.api
     epc.modules.identity.service
+    epc.modules.identity.repository
+    epc.modules.identity.models
 
 [importlinter:contract:intake-encapsulated]
 name = intake: other modules use only its public interface

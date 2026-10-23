@@ -35,8 +35,16 @@ class TooLarge(DomainError):
         super().__init__({"errors": errors})
 
 
+class Unauthorized(DomainError):
+    status = 401
+
+
 class Forbidden(DomainError):
     status = 403
+
+
+class TooManyRequests(DomainError):
+    status = 429
 
 
 class Failure(DomainError):

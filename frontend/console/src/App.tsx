@@ -7,6 +7,7 @@ import Rules from "./features/rules/Rules";
 import Checker from "./features/checker/Checker";
 import ProjectFiles from "./features/project-files/ProjectFiles";
 import Planning from "./features/planning/Planning";
+import Identity from "./features/identity/Identity";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },
@@ -16,6 +17,7 @@ const NAV: NavItem[] = [
   { to: "/checker", key: "nav.checker", icon: "✓" },
   { to: "/planning", key: "nav.planning", icon: "▥" },
   { to: "/files", key: "nav.projects", icon: "▤" },
+  { to: "/identity", key: "nav.identity", icon: "☺" },
 ];
 
 /** Technical console: only the admin role sees it (the API refuses everything else with 403). */
@@ -38,6 +40,7 @@ export default function App() {
           <Route path="/checker" element={<Checker />} />
           <Route path="/planning" element={<Planning />} />
           <Route path="/files" element={<ProjectFiles />} />
+          <Route path="/identity" element={<Identity />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}

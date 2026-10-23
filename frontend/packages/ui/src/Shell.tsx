@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { Me } from "./api";
+import { signOut } from "./auth";
 import { Key, useI18n } from "./i18n";
 import { useTheme } from "./theme";
 
@@ -30,6 +31,7 @@ export function Shell({ nav, me, children }: { nav: NavItem[]; me?: Me | null; c
         ))}
         <div className="spacer" />
         {me?.name && <div className="who muted">{me.name}</div>}
+        {me?.auth === "required" && me.authenticated && <button onClick={signOut}>{t("auth.logout")}</button>}
         <div className="tools">
           <button onClick={() => setLang(lang === "es" ? "en" : "es")} aria-label="Language">{lang === "es" ? "EN" : "ES"}</button>
           <button onClick={theme.toggle} aria-label={t("theme.toggle")} title={t("theme.toggle")}>{theme.isDark ? "☀" : "☾"}</button>

@@ -1,0 +1,375 @@
+"""Accounts, sessions, organizations (individual and company subscriptions) and tenant isolation (US-0018) with EPC_AUTH=required."""
+import json
+import os
+import tempfile
+import unittest
+from pathlib import Path
+
+import sqlalchemy as sa
+from fastapi.testclient import TestClient
+
+from epc.core import db
+from epc.core.config import settings
+from epc.main import create_app
+from epc.modules.identity import cli, models, service
+
+PW = "correct-horse-1"
+PROJECT = {"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta", "jurisdiction": "AR",
+           "methodology": "pm2", "disciplines": ["electrical"]}
+
+
+class Base(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self._old = (settings.projects_dir, settings.role, settings.auth, settings.database_url, settings.signup, settings.data_dir)
+        settings.projects_dir, settings.role, settings.auth, settings.signup = self.root / "projects", "user", "required", "closed"
+        # EPC_TEST_DATABASE_URL runs the same tests on another engine (CI uses PostgreSQL); its account tables are emptied first
+        settings.database_url = os.environ.get("EPC_TEST_DATABASE_URL") or "sqlite:///" + (self.root / "epc.db").as_posix()
+        settings.data_dir = self.root / "data"
+        db.dispose()
+        if os.environ.get("EPC_TEST_DATABASE_URL"):
+            db._migrate(settings.database_url)                    # only SQLite is migrated automatically
+            with db.engine().begin() as cx:
+                for table in ("sessions", "invitations", "memberships", "users", "organizations"):
+                    cx.execute(sa.text(f"DELETE FROM {table}"))
+        service.reset_throttle()
+        self.app = create_app()
+        self.clients = []
+
+    def tearDown(self):
+        for c in self.clients:
+            c.close()
+        db.dispose()
+        settings.projects_dir, settings.role, settings.auth, settings.database_url, settings.signup, settings.data_dir = self._old
+        self.tmp.cleanup()
+
+    def client(self):
+        c = TestClient(self.app)
+        self.clients.append(c)
+        return c
+
+    def staff(self):
+        service.bootstrap_admin("staff@office.com", "Office Staff", PW)
+        c = self.client()
+        self.assertEqual(c.post("/api/auth/login", json={"email": "staff@office.com", "password": PW}).status_code, 200)
+        return c
+
+    def new_org(self, staff, name, kind="company", seats=3, owner="owner@x.com", owner_name="Owner"):
+        """Staff creates the organization; its owner accepts the invitation. Returns (client of the owner, slug)."""
+        r = staff.post("/api/identity/orgs", json={"name": name, "kind": kind, "seats": seats, "owner_email": owner})
+        self.assertEqual(r.status_code, 201, r.text)
+        c = self.client()
+        a = c.post("/api/auth/accept-invitation", json={"token": r.json()["invitation"]["token"], "name": owner_name, "password": PW})
+        self.assertEqual(a.status_code, 200, a.text)
+        return c, r.json()["org"]["slug"]
+
+
+class TestAccess(Base):
+    def test_anonymous_reaches_only_the_sign_in_surface(self):
+        c = self.client()
+        self.assertEqual(c.get("/api/health").status_code, 200)
+        me = c.get("/api/me").json()
+        self.assertEqual((me["auth"], me["authenticated"], me["role"]), ("required", False, "user"))
+        for path in ("/api/app/portfolio", "/api/projects/options", "/api/plugins", "/api/app/org"):
+            self.assertEqual(c.get(path).status_code, 401, path)
+        self.assertEqual(c.post("/api/projects", json=PROJECT).status_code, 401)
+        self.assertEqual(c.post("/api/auth/logout").status_code, 401)
+
+    def test_login_logout_and_bearer(self):
+        staff = self.staff()
+        me = staff.get("/api/me").json()
+        self.assertEqual((me["authenticated"], me["role"], me["email"]), (True, "admin", "staff@office.com"))
+        self.assertEqual(staff.get("/api/plugins").status_code, 200)
+        token = staff.cookies.get("epc_session")
+        self.assertTrue(token)
+        bare = self.client()
+        self.assertEqual(bare.get("/api/me", headers={"Authorization": f"Bearer {token}"}).json()["authenticated"], True)
+        self.assertEqual(staff.post("/api/auth/logout").status_code, 200)
+        self.assertEqual(bare.get("/api/me", headers={"Authorization": f"Bearer {token}"}).json()["authenticated"], False)     # revoked on the server
+        self.assertEqual(self.client().get("/api/plugins", headers={"Authorization": f"Bearer {token}"}).status_code, 401)
+
+    def test_wrong_credentials_and_throttle(self):
+        service.bootstrap_admin("staff@office.com", "S", PW)
+        c = self.client()
+        for _ in range(5):
+            r = c.post("/api/auth/login", json={"email": "staff@office.com", "password": "nope-nope-nope"})
+            self.assertEqual(r.status_code, 401)
+        self.assertEqual(c.post("/api/auth/login", json={"email": "staff@office.com", "password": PW}).status_code, 429)      # locked even with the right one
+        service.reset_throttle()
+        self.assertEqual(c.post("/api/auth/login", json={"email": "nobody@office.com", "password": PW}).status_code, 401)       # unknown = same answer
+        self.assertEqual(c.post("/api/auth/login", json={"email": "staff@office.com", "password": PW}).status_code, 200)
+
+    def test_passwords_are_hashed_and_sessions_stored_as_hashes(self):
+        c = self.staff()
+        token = c.cookies.get("epc_session")
+        with db.engine().connect() as cx:
+            ph = cx.execute(sa.select(models.users.c.password_hash)).scalar()
+            th = cx.execute(sa.select(models.sessions.c.token_hash)).scalar()
+        self.assertTrue(ph.startswith("scrypt$"))
+        self.assertNotIn(PW, ph)
+        self.assertNotEqual(th, token)
+        self.assertEqual(th, service.token_hash(token))
+
+    def test_expired_session_is_refused(self):
+        c = self.staff()
+        with db.engine().begin() as cx:
+            cx.execute(sa.update(models.sessions).values(expires_at=service.repo.now() - service.dt.timedelta(minutes=1)))
+        self.assertEqual(c.get("/api/me").json()["authenticated"], False)
+
+    def test_simulated_mode_is_unchanged(self):
+        settings.auth = "simulated"
+        c = self.client()
+        self.assertEqual(c.get("/api/me").json(), {**c.get("/api/me").json(), "auth": "simulated", "authenticated": True, "role": "user"})
+        self.assertEqual(c.get("/api/plugins").status_code, 403)
+        settings.role = "admin"
+        self.assertEqual(c.get("/api/plugins").status_code, 200)
+
+    def test_cli_creates_and_resets_a_staff_account(self):
+        import os
+        os.environ["EPC_TEST_PW"] = PW
+        try:
+            self.assertEqual(cli.main(["create-admin", "--email", "boss@office.com", "--name", "Boss", "--password-env", "EPC_TEST_PW"]), 0)
+            os.environ["EPC_TEST_PW"] = "short"
+            self.assertEqual(cli.main(["create-admin", "--email", "boss@office.com", "--password-env", "EPC_TEST_PW"]), 1)
+        finally:
+            os.environ.pop("EPC_TEST_PW", None)
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "boss@office.com", "password": PW}).status_code, 200)
+
+    def test_models_match_the_migrations(self):
+        db.engine()
+        insp = sa.inspect(db.engine())
+        for t in models.metadata.sorted_tables:
+            self.assertEqual({c["name"] for c in insp.get_columns(t.name)}, {c.name for c in t.columns}, t.name)
+
+
+class TestSignup(Base):
+    def test_closed_by_default(self):
+        r = self.client().post("/api/auth/signup", json={"kind": "individual", "name": "Ana", "email": "ana@x.com", "password": PW})
+        self.assertEqual(r.status_code, 403)
+
+    def test_individual_and_company_accounts(self):
+        settings.signup = "open"
+        self.assertTrue(self.client().get("/api/me").json()["signup"])
+        ana = self.client()
+        r = ana.post("/api/auth/signup", json={"kind": "individual", "name": "Ana Díaz", "email": "Ana@X.com", "password": PW})
+        self.assertEqual(r.status_code, 201, r.text)
+        me = ana.get("/api/me").json()
+        self.assertEqual((me["org_kind"], me["org_role"], me["org"], me["role"], me["email"]), ("individual", "owner", "Ana Díaz", "user", "ana@x.com"))
+        self.assertEqual(ana.get("/api/app/org").json()["seats"], 1)
+        self.assertEqual(ana.post("/api/app/org/invitations", json={"email": "b@x.com"}).status_code, 409)       # one seat: no group
+        corp = self.client()
+        r = corp.post("/api/auth/signup", json={"kind": "company", "org_name": "Metal SRL", "name": "Raúl", "email": "raul@metal.com", "password": PW})
+        self.assertEqual(r.status_code, 201, r.text)
+        self.assertEqual((corp.get("/api/me").json()["org_kind"], corp.get("/api/app/org").json()["seats"]), ("company", service.COMPANY_SEATS))
+
+    def test_validation(self):
+        settings.signup = "open"
+        c = self.client()
+        base = {"kind": "individual", "name": "Ana", "email": "ana@x.com", "password": PW}
+        for patch, field in (({"password": "short"}, "password"), ({"email": "nope"}, "email"), ({"kind": "group"}, "kind"), ({"name": " "}, "name"),
+                             ({"kind": "company", "org_name": ""}, "org_name")):
+            r = c.post("/api/auth/signup", json={**base, **patch})
+            self.assertEqual(r.status_code, 422, patch)
+            self.assertIn(field, r.json()["detail"]["errors"])
+        self.assertEqual(c.post("/api/auth/signup", json=base).status_code, 201)
+        self.assertEqual(self.client().post("/api/auth/signup", json=base).status_code, 409)                      # email already registered
+
+
+class TestOrganizations(Base):
+    def test_company_is_a_group_with_seats(self):
+        staff = self.staff()
+        owner, slug = self.new_org(staff, "Metal SRL", seats=2)
+        me = owner.get("/api/me").json()
+        self.assertEqual((me["org"], me["org_kind"], me["org_role"], me["role"]), ("Metal SRL", "company", "owner", "user"))
+        org = owner.get("/api/app/org").json()
+        self.assertEqual((org["seats"], org["seats_used"], [m["email"] for m in org["members"]]), (2, 1, ["owner@x.com"]))
+
+        inv = owner.post("/api/app/org/invitations", json={"email": "ana@x.com", "role": "member"})
+        self.assertEqual(inv.status_code, 201, inv.text)
+        self.assertEqual(owner.get("/api/app/org").json()["seats_pending"], 1)
+        self.assertEqual(owner.post("/api/app/org/invitations", json={"email": "bob@x.com"}).status_code, 409)       # the pending invitation holds the seat
+        self.assertEqual(owner.post("/api/app/org/invitations", json={"email": "bad"}).status_code, 422)
+
+        ana = self.client()
+        info = ana.post("/api/auth/invitation", json={"token": inv.json()["token"]}).json()
+        self.assertEqual((info["email"], info["org"], info["existing_account"]), ("ana@x.com", "Metal SRL", False))
+        r = ana.post("/api/auth/accept-invitation", json={"token": inv.json()["token"], "name": "Ana", "password": PW})
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertEqual(ana.get("/api/me").json()["org_role"], "member")
+        self.assertEqual(ana.get("/api/app/org").status_code, 403)                                               # members do not manage people
+        self.assertEqual(ana.post("/api/app/org/invitations", json={"email": "z@x.com"}).status_code, 403)
+        self.assertEqual(self.client().post("/api/auth/accept-invitation", json={"token": inv.json()["token"], "name": "Ana", "password": PW}).status_code, 404)   # single use
+
+    def test_a_group_shares_its_projects(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL", seats=2)
+        self.assertEqual(owner.post("/api/projects", json=PROJECT).status_code, 201)
+        inv = owner.post("/api/app/org/invitations", json={"email": "ana@x.com"}).json()
+        ana = self.client()
+        ana.post("/api/auth/accept-invitation", json={"token": inv["token"], "name": "Ana", "password": PW})
+        self.assertEqual([p["name"] for p in ana.get("/api/app/portfolio").json()["projects"]], ["Planta"])
+        self.assertEqual(ana.get("/api/app/projects/ACME/P-1").status_code, 200)
+
+    def test_manage_members(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL", seats=3)
+        tokens = [owner.post("/api/app/org/invitations", json={"email": e}).json()["token"] for e in ("a@x.com", "b@x.com")]
+        a, b = self.client(), self.client()
+        a.post("/api/auth/accept-invitation", json={"token": tokens[0], "name": "A", "password": PW})
+        b.post("/api/auth/accept-invitation", json={"token": tokens[1], "name": "B", "password": PW})
+        members = {m["email"]: m for m in owner.get("/api/app/org").json()["members"]}
+        self.assertEqual(len(members), 3)
+        # deactivating cuts the live session at once, and the seat is freed
+        self.assertEqual(owner.patch(f"/api/app/org/members/{members['a@x.com']['user_id']}", json={"active": False}).status_code, 200)
+        self.assertEqual(a.get("/api/me").json()["authenticated"], False)
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "a@x.com", "password": PW}).status_code, 403)
+        # promote b, then the first owner can step down; the last owner cannot
+        self.assertEqual(owner.patch(f"/api/app/org/members/{members['b@x.com']['user_id']}", json={"role": "owner"}).status_code, 200)
+        oid = members["owner@x.com"]["user_id"]
+        self.assertEqual(owner.patch(f"/api/app/org/members/{oid}", json={"role": "member"}).status_code, 200)
+        b.cookies.clear()
+        self.assertEqual(b.post("/api/auth/login", json={"email": "b@x.com", "password": PW}).status_code, 200)
+        self.assertEqual(b.patch(f"/api/app/org/members/{members['b@x.com']['user_id']}", json={"role": "member"}).status_code, 409)
+        self.assertEqual(b.delete(f"/api/app/org/members/{members['b@x.com']['user_id']}").status_code, 409)
+        self.assertEqual(b.delete(f"/api/app/org/members/{members['a@x.com']['user_id']}").status_code, 200)
+        self.assertEqual(b.patch("/api/app/org/members/00000000-0000-0000-0000-000000000000", json={"active": False}).status_code, 404)
+        self.assertEqual(len(b.get("/api/app/org").json()["members"]), 2)
+
+    def test_cancel_invitation_and_expiry(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL", seats=2)
+        inv = owner.post("/api/app/org/invitations", json={"email": "ana@x.com"}).json()
+        self.assertEqual(owner.delete(f"/api/app/org/invitations/{inv['id']}").status_code, 200)
+        self.assertEqual(self.client().post("/api/auth/invitation", json={"token": inv["token"]}).status_code, 404)
+        inv = owner.post("/api/app/org/invitations", json={"email": "ana@x.com"}).json()
+        with db.engine().begin() as cx:
+            cx.execute(sa.update(models.invitations).values(expires_at=service.repo.now() - service.dt.timedelta(days=1)))
+        self.assertEqual(self.client().post("/api/auth/accept-invitation", json={"token": inv["token"], "name": "A", "password": PW}).status_code, 404)
+
+    def test_existing_account_joins_a_second_organization(self):
+        staff = self.staff()
+        o1, _ = self.new_org(staff, "Alfa SRL", seats=2, owner="o1@x.com")
+        o2, _ = self.new_org(staff, "Beta SRL", seats=2, owner="o2@x.com")
+        inv = o2.post("/api/app/org/invitations", json={"email": "o1@x.com"}).json()
+        c = self.client()
+        self.assertEqual(c.post("/api/auth/invitation", json={"token": inv["token"]}).json()["existing_account"], True)
+        self.assertEqual(c.post("/api/auth/accept-invitation", json={"token": inv["token"], "password": "wrong-wrong-1"}).status_code, 401)
+        self.assertEqual(c.post("/api/auth/accept-invitation", json={"token": inv["token"], "password": PW}).status_code, 200)
+        self.assertEqual(c.get("/api/me").json()["org"], "Beta SRL")
+        other = self.client()
+        self.assertEqual(other.post("/api/auth/login", json={"email": "o1@x.com", "password": PW}).status_code, 200)
+        self.assertEqual(other.get("/api/me").json()["org"], "Alfa SRL")                                           # first membership by default
+        pick = self.client()
+        pick.post("/api/auth/login", json={"email": "o1@x.com", "password": PW, "org": "beta-srl"})
+        self.assertEqual(pick.get("/api/me").json()["org"], "Beta SRL")
+
+    def test_password_change_revokes_other_sessions(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL")
+        second = self.client()
+        second.post("/api/auth/login", json={"email": "owner@x.com", "password": PW})
+        self.assertEqual(owner.post("/api/auth/password", json={"current_password": "bad-bad-bad-1", "new_password": "another-pass-22"}).status_code, 422)
+        self.assertEqual(owner.post("/api/auth/password", json={"current_password": PW, "new_password": "short"}).status_code, 422)
+        self.assertEqual(owner.post("/api/auth/password", json={"current_password": PW, "new_password": "another-pass-22"}).status_code, 200)
+        self.assertTrue(owner.get("/api/me").json()["authenticated"])
+        self.assertFalse(second.get("/api/me").json()["authenticated"])
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": PW}).status_code, 401)
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": "another-pass-22"}).status_code, 200)
+
+
+class TestStaff(Base):
+    def test_customers_cannot_reach_staff_endpoints(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL")
+        for method, path in (("get", "/api/identity/orgs"), ("get", "/api/identity/users"), ("post", "/api/identity/orgs"), ("get", "/api/plugins"), ("get", "/api/projects")):
+            self.assertEqual(getattr(owner, method)(path).status_code, 403, path)
+        self.assertEqual(owner.put("/api/projects/ACME/P-1/org", json={"org": "metal-srl"}).status_code, 403)
+
+    def test_org_administration(self):
+        staff = self.staff()
+        owner, slug = self.new_org(staff, "Metal SRL", seats=3)
+        orgs = {o["slug"]: o for o in staff.get("/api/identity/orgs").json()}
+        self.assertEqual((orgs[slug]["members"], orgs[slug]["seats"], orgs[slug]["active"]), (1, 3, True))
+        self.assertEqual(staff.patch(f"/api/identity/orgs/{slug}", json={"seats": 10}).json()["seats"], 10)
+        self.assertEqual(staff.patch(f"/api/identity/orgs/{slug}", json={"kind": "individual"}).json()["seats"], 1)    # one person: allowed
+        self.assertEqual(staff.patch(f"/api/identity/orgs/{slug}", json={"kind": "company", "seats": 0}).status_code, 409)
+        self.assertEqual(staff.patch("/api/identity/orgs/nope", json={"seats": 2}).status_code, 404)
+        self.assertEqual(staff.post("/api/identity/orgs", json={"name": "X", "kind": "weird", "owner_email": "a@x.com"}).status_code, 422)
+        # suspend: live sessions die and nobody can log in
+        self.assertEqual(staff.patch(f"/api/identity/orgs/{slug}", json={"active": False}).json()["active"], False)
+        self.assertFalse(owner.get("/api/me").json()["authenticated"])
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": PW}).status_code, 403)
+        staff.patch(f"/api/identity/orgs/{slug}", json={"active": True})
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": PW}).status_code, 200)
+
+    def test_users_and_support_password(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL")
+        users = {u["email"]: u for u in staff.get("/api/identity/users").json()}
+        self.assertEqual(users["owner@x.com"]["organizations"], [{"slug": "metal-srl", "name": "Metal SRL", "role": "owner"}])
+        uid = users["owner@x.com"]["id"]
+        self.assertEqual(staff.put(f"/api/identity/users/{uid}/password", json={"password": "short"}).status_code, 422)
+        self.assertEqual(staff.put(f"/api/identity/users/{uid}/password", json={"password": "support-set-99"}).status_code, 200)
+        self.assertFalse(owner.get("/api/me").json()["authenticated"])
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": "support-set-99"}).status_code, 200)
+        self.assertEqual(staff.patch(f"/api/identity/users/{uid}", json={"active": False}).status_code, 200)
+        self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": "support-set-99"}).status_code, 401)
+        # the last staff account cannot be removed
+        sid = users["staff@office.com"]["id"]
+        self.assertEqual(staff.patch(f"/api/identity/users/{sid}", json={"active": False}).status_code, 409)
+        self.assertEqual(staff.patch(f"/api/identity/users/{sid}", json={"platform_role": "user"}).status_code, 409)
+        self.assertEqual(staff.patch(f"/api/identity/users/{sid}", json={"platform_role": "boss"}).status_code, 422)
+
+
+class TestTenantIsolation(Base):
+    def test_a_customer_sees_only_their_own_organization(self):
+        staff = self.staff()
+        a, slug_a = self.new_org(staff, "Alfa SRL", owner="a@x.com")
+        b, _ = self.new_org(staff, "Beta SRL", owner="b@x.com")
+        self.assertEqual(a.post("/api/projects", json=PROJECT).status_code, 201)
+        self.assertEqual(a.post("/api/app/projects/ACME/P-1/inputs", data={"kind": "document", "title": "t", "text": "x"}).status_code, 201)
+        # B cannot see, read, write or guess A's project
+        self.assertEqual(b.get("/api/app/portfolio").json()["projects"], [])
+        for method, path in (("get", "/api/app/projects/ACME/P-1"), ("get", "/api/app/projects/ACME/P-1/inputs"), ("get", "/api/app/projects/ACME/P-1/requirements"),
+                             ("get", "/api/app/projects/ACME/P-1/deliverables"), ("get", "/api/app/projects/ACME/P-1/reports"), ("get", "/api/app/projects/ACME/P-1/plan/wbs")):
+            self.assertEqual(getattr(b, method)(path).status_code, 404, path)
+        self.assertEqual(b.post("/api/app/projects/ACME/P-1/inputs", data={"kind": "document", "title": "t", "text": "x"}).status_code, 404)
+        # B creating the same code does not get A's project (and learns nothing but that the code is taken)
+        self.assertEqual(b.post("/api/projects", json=PROJECT).status_code, 409)
+        self.assertEqual(b.post("/api/projects", json={**PROJECT, "client_code": "OTRO"}).status_code, 201)
+        self.assertEqual([p["id"] for p in b.get("/api/app/portfolio").json()["projects"]], ["OTRO/P-1"])
+        self.assertEqual([p["id"] for p in a.get("/api/app/portfolio").json()["projects"]], ["ACME/P-1"])
+        # staff see both; the project carries its owner
+        ids = sorted(p["id"] for p in staff.get("/api/projects").json())
+        self.assertEqual(ids, ["ACME/P-1", "OTRO/P-1"])
+        meta = json.loads((settings.projects_dir / "ACME" / "P-1" / ".epc" / "project.json").read_text(encoding="utf-8"))
+        self.assertEqual(meta["org"], slug_a)
+        # a customer cannot choose another owner
+        self.assertEqual(json.loads((settings.projects_dir / "OTRO" / "P-1" / ".epc" / "project.json").read_text(encoding="utf-8"))["org"], "beta-srl")
+        c = b.post("/api/projects", json={**PROJECT, "client_code": "TRAMPA", "org": slug_a})
+        self.assertEqual(json.loads((settings.projects_dir / "TRAMPA" / "P-1" / ".epc" / "project.json").read_text(encoding="utf-8"))["org"], "beta-srl")
+        self.assertEqual(c.status_code, 201)
+
+    def test_projects_without_owner_are_staff_only_until_assigned(self):
+        staff = self.staff()
+        owner, slug = self.new_org(staff, "Metal SRL")
+        self.assertEqual(staff.post("/api/projects", json=PROJECT).status_code, 201)              # staff create with no owner (legacy / office project)
+        self.assertEqual(owner.get("/api/app/portfolio").json()["projects"], [])
+        self.assertEqual(owner.get("/api/app/projects/ACME/P-1").status_code, 404)
+        self.assertEqual(staff.put("/api/projects/ACME/P-1/org", json={"org": "does-not-exist"}).status_code, 422)
+        self.assertEqual(staff.put("/api/projects/ACME/P-1/org", json={"org": slug}).status_code, 200)
+        self.assertEqual(owner.get("/api/app/projects/ACME/P-1").status_code, 200)
+        self.assertEqual(staff.put("/api/projects/ACME/P-1/org", json={"org": ""}).status_code, 200)
+        self.assertEqual(owner.get("/api/app/projects/ACME/P-1").status_code, 404)
+
+    def test_staff_can_create_a_project_for_an_organization(self):
+        staff = self.staff()
+        owner, slug = self.new_org(staff, "Metal SRL")
+        self.assertEqual(staff.post("/api/projects", json={**PROJECT, "org": slug}).status_code, 201)
+        self.assertEqual(owner.get("/api/app/projects/ACME/P-1").status_code, 200)
+        self.assertEqual(staff.post("/api/projects", json={**PROJECT, "client_code": "B", "org": "nope"}).status_code, 422)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -197,3 +197,14 @@ table.crit input.note { width: 100%; min-width: 180px; }
 .logobox { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .logobox .thumb { width: 120px; height: 56px; background: #fff; border: 1px solid var(--line); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .logobox .thumb img { max-width: 100%; max-height: 100%; }
+
+/* ---- sign-in ---- */
+.authwrap { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); }
+.authbox { width: 100%; max-width: 420px; }
+.authbox h1 { font-size: 20px; margin: 0 0 4px; }
+.authbox form { display: grid; gap: 12px; margin-top: 14px; }
+.authbox .switch { margin-top: 12px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; text-decoration: underline; }
+.linkbox { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.linkbox input { flex: 1; min-width: 220px; font-family: ui-monospace, monospace; font-size: 12px; }
+
