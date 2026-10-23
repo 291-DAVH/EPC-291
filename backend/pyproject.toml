@@ -11,6 +11,7 @@ dependencies = ["fastapi", "uvicorn[standard]", "python-multipart", "pydantic>=2
 
 [project.optional-dependencies]
 dev = ["httpx2", "import-linter>=2"]
+analysis = ["anthropic>=0.40"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -36,5 +36,5 @@ SVG stays internal: what the customer receives is under `deliverables/` (DXF sta
 
 ## Intake -> data pipeline
 1. The user submits free text (voice of customer, user stories, meeting notes, documents) -> `INT-nnnn.json`, status `received`.
-2. Claude analyses the batch of `received` items (skill `structure-customer-input`): deduplicates, rewrites each need as one verifiable requirement in the user's language, classifies (type, priority, discipline), proposes acceptance criteria and lists open questions. Result -> `requirements.json`; the intake item moves to `structured` (or `analyzing` while questions are open).
+2. Claude analyses the batch of `received` items (skill `structure-customer-input`; automatic with the *Analizar con Claude* button, which sends the text without amounts or attachments to the Claude API after the engineer confirms): deduplicates, rewrites each need as one verifiable requirement in the user's language, classifies (type, priority, discipline), proposes acceptance criteria and lists open questions. Result -> `requirements.json`; the intake item moves to `structured` (or `analyzing` while questions are open).
 3. The user sees status changes and the resulting requirements, never how they were produced.

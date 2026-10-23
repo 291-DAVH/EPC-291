@@ -184,3 +184,7 @@ export interface TransmittalSummary { id: string; emission: string; client_rev: 
 export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; next_transmittal: string; transmittals: TransmittalSummary[] }
 export interface CalcRow { tag: string; description: string; In: number; Ib: number; icu: number; S: number; dU: number; disp: string; tipo?: string; limite_pct?: number; du_propia_pct?: number; iz_a?: number; cumple?: boolean }
 export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }
+
+/* ---- automatic analysis of customer input (admin/engineer) ---- */
+export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
+export interface AnalysisResult { analyzed: number; created: string[]; merged: string[]; open_questions: number; usage: { input_tokens: number; output_tokens: number }; model: string; attempts: number }

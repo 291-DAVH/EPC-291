@@ -15,7 +15,7 @@ COPY tools ./tools
 
 RUN pip install --no-cache-dir \
       -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents \
-      -e backend -r database/requirements.txt
+      -e "backend[analysis]" -r database/requirements.txt
 
 RUN useradd --create-home epc && mkdir -p /data/projects && chown -R epc /data
 USER epc

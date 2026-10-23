@@ -22,7 +22,7 @@ tests/
 | `identity` | current user/role and the role guard |
 | `projects` | create and list projects, options |
 | `deliverables` | deliverables list, downloads (several formats per drawing, e.g. DXF + PDF) and the ZIP delivery package |
-| `intake` | customer inputs (voice of customer, stories, documents) |
+| `intake` | customer inputs (voice of customer, stories, documents) and their automatic analysis with the Claude API (admin/engineer, explicit confirmation, amounts removed, validated by the plugin's own validator, usage recorded) |
 | `requirements` | structured requirements and their sources |
 | `management` | portfolio, project summary, reports |
 | `engineering` | read-only view of the engineering workspace for the engineer/admin: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text (CSV, XLSX, Markdown), and the editable design criteria of the project (catalog + overrides + history + generated report) |
