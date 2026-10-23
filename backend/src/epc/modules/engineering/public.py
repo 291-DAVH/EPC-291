@@ -2,7 +2,7 @@
 from pathlib import Path
 from typing import Any, Optional
 
-from epc.modules.engineering import service
+from epc.modules.engineering import repository, service
 
 
 def criterion_value(project_dir: Path, key: str, discipline: str = "electrical") -> Optional[Any]:
@@ -13,4 +13,11 @@ def criterion_value(project_dir: Path, key: str, discipline: str = "electrical")
         return None
 
 
-__all__ = ["criterion_value"]
+
+
+def issuable(project_dir: Path) -> list:
+    """Sources that can be issued: [{id, name, discipline, package, kind: drawing|document, files: {format: Path}}]."""
+    return repository.issuable(project_dir)
+
+
+__all__ = ["criterion_value", "issuable"]

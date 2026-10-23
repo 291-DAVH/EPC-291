@@ -177,3 +177,8 @@ export interface SldView {
 export interface OrganizationData { legal_name: string; tax_id: string; email: string; website: string; address: string; phone: string; default_locale: string; has_logo: boolean }
 export interface ClientRecord { id: string; name: string; tax_id: string; email: string; website: string; address: string; has_logo: boolean }
 export interface PersonRecord { id: string; name: string; role: string; registration: string }
+
+/* ---- issuing (engineering -> deliverables) ---- */
+export interface IssueCandidate { id: string; name: string; discipline: string; package: string; kind: "drawing" | "document"; formats: string[]; pdf_will_be_rendered: boolean; last_issue: string | null }
+export interface TransmittalSummary { id: string; emission: string; client_rev: string; internal_rev: string; status: "prepared" | "sent"; created: string; sent_on: string | null; items: number }
+export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; next_transmittal: string; transmittals: TransmittalSummary[] }

@@ -16,6 +16,14 @@ What the end user sees comes only from these files; everything else stays intern
 ## Master data (Datos)
 Information that does not change between projects is entered once under **Datos** (admin/engineer) and stored in `EPC_DATA` (default `local/data`, git-ignored): `organization.json` (legal name, tax id, contact), `clients.json` (code, name, tax id...), `people.json` (name, role, registration) and `logos/` (`organization.<svg|png>`, `client-<CODE>.<svg|png>`). New projects can pick a saved client; the SLD titleblock is prefilled from the company profile and the project's client, offers the saved people for *drawn / checked / approved by*, and places the logos in the sheet. Logos are SVG or PNG up to 1 MB; SVGs with scripts or event handlers are rejected.
 
+## Issuing (Engineering -> Deliverables)
+The *Issue* sub-tab (admin/engineer) lists what engineering produced that may leave the workspace (DXF drawings with their PDF, `.xlsx`/`.docx`/`.pdf` documents; never `.svg`/`.md`/`.json`, as the policy says). **Prepare issue** creates transmittal `TR-nnn`:
+- `deliverables/<emission>/TR-nnn_Rev<NN>/<discipline>/<code>.<ext>` (emission `ifa`, `ifc` or `as-built`; `NN` is the revision the client sees);
+- each DXF is a **stamped copy**: the master stays in the workspace and the delivered file records `EPC_CLIENT_REV`, `EPC_INTERNAL_REV`, `EPC_TRANSMITTAL`, `EPC_EMISSION`, `EPC_ISSUED_ON`, `EPC_SOURCE_SHA256`, `EPC_ENGINE_VERSION` and `EPC_PLUGINS` in its header; its PDF is the existing twin or is rendered from the stamped DXF;
+- `deliverables/transmittals/TR-nnn.json` (internal revision `00.R.C`, SHA-256 of every file, engine and plugin versions, notes) and a ledger event;
+- the items are registered as **in review**; the customer sees them as delivered, and they enter the ZIP package, only after **Confirm sent** (`/sent`).
+Simplification: the policy asks for the RELEASED state of the review workflow, which does not exist yet; for now the engineer's explicit action replaces it.
+
 ## Delivery package
 `GET /api/app/projects/{id}/deliverables/packages` lists what was delivered grouped by issue (`<emission>/<transmittal>_Rev<NN>`, e.g. `ifa/TR-001_Rev00`); `GET .../deliverables/package[?group=...]` returns the ZIP (folder structure kept, `INDICE.csv` with SHA-256). The name uses the revision the client sees (`Rev00`); the internal revision (`00.R.C`) is recorded in the transmittal, not in the file name. A deliverable also offers other policy-deliverable formats that sit next to it with the same name (the `.pdf` of a `.dxf`); `?format=pdf` downloads it.
 

@@ -59,7 +59,7 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
-      {tab === "engineering" && <Engineering client={client} code={code} />}
+      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} />}
       {tab === "requirements" && <Requirements base={base} rev={rev} />}
