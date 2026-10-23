@@ -3,6 +3,15 @@
 All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.md` (releases are tagged on `main`).
 
 ## [Unreleased]
+### Fixed
+- **The `knowledge` backend module was never committed:** the `**/knowledge/` ignore rule (meant for study material) also matched `backend/src/epc/modules/knowledge`, so a clean checkout (and v0.1.0 as published) could not import the backend. The module is re-included, the empty `build/` folders of the project skeleton are kept, and a new gate check (`ignored-sources`) fails when a source file is hidden by an ignore rule. Found by running the CI steps in a clean Linux container.
+- **Docker:** creating a project failed inside the image (the non-root user cannot rewrite `claude/plugins/registry.json`); a read-only installation now uses the committed registry. Both images build and the compose stack (PostgreSQL 16, Alembic migration, backend, nginx front) runs; project creation and SLD generation with PDF were verified in the container, and the Alembic upgrade/downgrade/upgrade round trip on PostgreSQL passes.
+
+### Changed
+- `tools/dev/seed_demo.py` no longer deletes existing demo data: without `--reset` it does nothing; with `--reset` the current folder is moved to `local/projects-demo.bak-<timestamp>` (last two kept) before regenerating, so manual changes are not lost.
+- Pre-commit hook: also blocks `.env` files (only `.env.example`) and added lines that look like private keys or GitHub/AWS tokens.
+- Historical documents and `tools/migrate` carry a note mapping the old `platform/` paths to the current layout.
+
 ### Added
 - **Deliverables: PDF and package.** A drawing delivered as DXF now offers its PDF too (same-name file next to it, only formats with `deliver: true` in the policy; SVG is never offered): buttons `.dxf` / `.pdf` per row and `?format=` on the download. New **Download package** button: a ZIP of everything delivered (folder structure kept, `INDICE.csv` with code, revision and SHA-256), named `<project>_Paquete_Rev00.zip`; with several transmittals, one ZIP per issue (`<project>_IFA_TR-001_Rev00.zip`). The revision shown is the one the client sees (`Rev 00`); the internal revision stays in the transmittal. Engine: `epc_drawing.export.pdf` renders a DXF to PDF (ezdxf + matplotlib, white background, page = drawing size); the SLD generation now also produces a PDF per sheet (`drawings/pdf`).
 - **SLD data entry:** backend module `sld` and sub-tab *Datos del unifilar* in Engineering (admin/engineer): board, titleblock and circuit table (parent/child, topology, phase, device, cable type) with validation, "load the plugin example", save, and *Generate diagram* which runs the sld generator unchanged in the background and publishes SVG, DXF and calculation JSON into the engineering folders (visible in Files). Titleblock data typed in the form reaches the drawing; no logos are copied. The backend now depends on `epc-drawing`.

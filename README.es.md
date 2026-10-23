@@ -74,7 +74,7 @@ Correr la aplicación con 20 proyectos simulados (dos terminales):
 
 ```bash
 # 1) datos de demo y API (copia .env.example a .env.demo y pon EPC_PROJECTS=<repo>/local/projects-demo)
-.venv\Scripts\python tools\dev\seed_demo.py
+.venv\Scripts\python tools\dev\seed_demo.py          # primera vez; después hace falta --reset (guarda una copia de tus cambios manuales)
 .venv\Scripts\python -m uvicorn epc.main:app --app-dir backend\src --port 8000 --env-file .env.demo
 
 # 2) aplicación web (clientes) en :5173, consola (admin) en :5174

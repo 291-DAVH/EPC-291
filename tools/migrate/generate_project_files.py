@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate READMEs, dependency docs and config files for the restructured platform (run from epc-workspace/)."""
+HISTORICAL (2026-10-23): one-off migration script for the old `platform/` layout. Do not run it again; kept for traceability.
 import json
 import pathlib
 

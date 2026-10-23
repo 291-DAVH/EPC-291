@@ -1,5 +1,7 @@
 # migrate
 
+> Historical: these scripts and this note refer to the `platform/` layout that existed during the migration; `platform/` was retired (see `docs/MIGRATION_LOG.md` for the mapping).
+
 One-off scripts used on 2026-10-23 to restructure the original folders into this repository. They are kept for traceability only: they contain absolute paths of the old machine layout (`E:\plugins\prueba\...`) and are not meant to be run again.
 
 - `migrate_legacy.py`: moved the master PDFs to `local/dev-knowledge/`, copied plugins/skills/rules into `platform/`, archived the originals in `_legacy/`.
