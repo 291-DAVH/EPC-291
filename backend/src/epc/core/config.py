@@ -1,7 +1,7 @@
 """Runtime configuration. One mutable `settings` object read at call time (tests replace its fields).
 
 Environment: EPC_ROLE (user|admin), EPC_ENV (dev|production), EPC_PROJECTS, EPC_DEV_KNOWLEDGE,
-EPC_USER, EPC_ORG, EPC_REPO (repository root when the package is not run from a checkout).
+EPC_DATA, EPC_USER, EPC_ORG, EPC_REPO (repository root when the package is not run from a checkout).
 """
 import os
 from dataclasses import dataclass
@@ -39,6 +39,7 @@ class Settings:
     skill_check_tool: Path
     projects_dir: Path
     dev_knowledge: Path
+    data_dir: Path              # master data: company profile, clients, people, logos (EPC_DATA)
     env: str = "dev"
     role: str = "user"          # "admin" unlocks the technical console; end users never see internals
     user: str = ""
@@ -60,6 +61,7 @@ class Settings:
             skill_check_tool=repo / "tools" / "ci" / "check_skill_conflicts.py",
             projects_dir=Path(os.environ.get("EPC_PROJECTS", local / "projects")),
             dev_knowledge=Path(os.environ.get("EPC_DEV_KNOWLEDGE", local / "dev-knowledge")),
+            data_dir=Path(os.environ.get("EPC_DATA", local / "data")),
             env=os.environ.get("EPC_ENV", "dev"),
             role=os.environ.get("EPC_ROLE", "user"),
             user=os.environ.get("EPC_USER", ""),

@@ -4,7 +4,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
@@ -69,8 +69,9 @@ def write_excel(path: Path, data: dict) -> None:
     wb.save(path)
 
 
-def write_titleblock(folder: Path, tb: dict) -> None:
-    """Copy the plugin's titleblock workbook and fill the common data of its first row (company, client, people...). No logos are copied."""
+def write_titleblock(folder: Path, tb: dict, logos: Optional[Dict[str, Path]] = None) -> None:
+    """Copy the plugin's titleblock workbook, fill the common data of its first row (company, client, people...) and place the logos
+    (`logos` = {"provider": file, "client": file}) next to it as <provider|client>-logo-<name>.<svg|png>, where the generator looks for them."""
     import openpyxl
     folder.mkdir(parents=True, exist_ok=True)
     target = folder / "input-titleblocks.xlsx"
@@ -84,6 +85,8 @@ def write_titleblock(folder: Path, tb: dict) -> None:
     for col in ("Proyectado: fecha", "Verificado: fecha", "Validado: fecha"):
         ws.cell(2, hdr[col]).value = dt.datetime(today.year, today.month, today.day)
     wb.save(target)
+    for prefix, src in (logos or {}).items():
+        shutil.copy(src, folder / f"{prefix}-logo-{prefix.upper()}{Path(src).suffix.lower()}")
 
 
 def run_generator(xlsx: Path, out: Path, name: str, rotulo_dir: Path):

@@ -13,6 +13,9 @@ What the end user sees comes only from these files; everything else stays intern
 | `05-management/backlog.json` | internal backlog: id BL-nnn, title, type, priority, status, estimate_h, wbs_id, requirement_id, owner | engineer (`/api/projects/{id}/backlog`); **never shown to the customer** |
 | `05-management/reports/index.json` | reports: id, title, type, date, summary, file | platform |
 
+## Master data (Datos)
+Information that does not change between projects is entered once under **Datos** (admin/engineer) and stored in `EPC_DATA` (default `local/data`, git-ignored): `organization.json` (legal name, tax id, contact), `clients.json` (code, name, tax id...), `people.json` (name, role, registration) and `logos/` (`organization.<svg|png>`, `client-<CODE>.<svg|png>`). New projects can pick a saved client; the SLD titleblock is prefilled from the company profile and the project's client, offers the saved people for *drawn / checked / approved by*, and places the logos in the sheet. Logos are SVG or PNG up to 1 MB; SVGs with scripts or event handlers are rejected.
+
 ## Delivery package
 `GET /api/app/projects/{id}/deliverables/packages` lists what was delivered grouped by issue (`<emission>/<transmittal>_Rev<NN>`, e.g. `ifa/TR-001_Rev00`); `GET .../deliverables/package[?group=...]` returns the ZIP (folder structure kept, `INDICE.csv` with SHA-256). The name uses the revision the client sees (`Rev00`); the internal revision (`00.R.C`) is recorded in the transmittal, not in the file name. A deliverable also offers other policy-deliverable formats that sit next to it with the same name (the `.pdf` of a `.dxf`); `?format=pdf` downloads it.
 

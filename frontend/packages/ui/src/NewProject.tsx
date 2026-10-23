@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { ApiError, NewProjectBody, Project, ProjectOptions, api, useApi } from "./api";
+import { ApiError, ClientRecord, NewProjectBody, Project, ProjectOptions, api, useApi } from "./api";
 import { Badge, State } from "./components";
 import { Key, useI18n } from "./i18n";
 
@@ -9,6 +9,7 @@ const slug = (s: string) =>
 export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Project & { plugins_locked?: number }) => void; onCancel: () => void }) {
   const { t } = useI18n();
   const opts = useApi<ProjectOptions>("/projects/options");
+  const saved = useApi<ClientRecord[]>("/data/clients");           // saved clients (master data); not available to end users: the list is just empty
   const [f, setF] = useState<NewProjectBody>({
     client_name: "", client_code: "", project_code: "", project_name: "", jurisdiction: "AR", methodology: "pm2",
     locale: "", disciplines: ["electrical"], phase: "IC",
@@ -57,6 +58,14 @@ export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Pro
       {opts.data && (
         <>
           <div className="fields">
+            {saved.data && saved.data.length > 0 && (
+              <Field label={t("np.savedClient")}>
+                <select value="" onChange={(e) => { const c = saved.data!.find((x) => x.id === e.target.value); if (c) { setCodeTouched(true); set({ client_name: c.name, client_code: c.id }); } }}>
+                  <option value="">{t("np.noSaved")}</option>
+                  {saved.data.map((c) => <option key={c.id} value={c.id}>{c.id} · {c.name}</option>)}
+                </select>
+              </Field>
+            )}
             <Field label={t("projects.clientName")} error={errors.client_name}>
               <input value={f.client_name} autoFocus onChange={(e) => set({ client_name: e.target.value, ...(codeTouched ? {} : { client_code: slug(e.target.value) }) })} />
             </Field>

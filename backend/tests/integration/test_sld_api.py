@@ -24,8 +24,8 @@ class TestSld(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        self._old = (settings.projects_dir, settings.role)
-        settings.projects_dir, settings.role = self.root, "admin"
+        self._old = (settings.projects_dir, settings.role, settings.data_dir)
+        settings.projects_dir, settings.role, settings.data_dir = self.root, "admin", self.root / "_data"
         self.c = TestClient(create_app())
         r = self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta",
                                                 "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
@@ -34,7 +34,7 @@ class TestSld(unittest.TestCase):
         self.pkg = self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "electrical" / "PQ-01"
 
     def tearDown(self):
-        settings.projects_dir, settings.role = self._old
+        settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
 
     def wait(self):
