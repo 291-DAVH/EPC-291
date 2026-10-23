@@ -10,9 +10,7 @@ _study/
 *.dwl
 *.dwl2
 !docs/**/*.pdf
-**/knowledge/
-# the backend module `knowledge` (rules API) is source code, not study material
-!backend/src/epc/modules/knowledge/
+# study material and standards live only in /local/ (see docs/explanation/knowledge.md); knowledge extracted by Claude ships with the engine
 
 # ===== Local environment and build output =====
 .venv/
