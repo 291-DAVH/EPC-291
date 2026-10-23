@@ -1,0 +1,11 @@
+{
+  "_note": "Paraphrases replacing legacy summaries that copied 12+ consecutive words of the standard.",
+  "es": {
+    "bandejas.altura_montaje": "Alturas mínimas de montaje según el entorno: 2,2 m dentro de edificios, 3,5 m a la intemperie y 4 m si hay tránsito de vehículos; para personal no calificado (BA1-BA3).",
+    "circuitos.equilibrio_trifasico": "En sistemas trifásicos conviene repartir las cargas entre las fases para que el conjunto quede lo más balanceado posible.",
+    "enterrados.profundidad_cables_directos": "Cable enterrado en forma directa: profundidad mínima de 0,7 m medida desde la superficie del terreno, con protección mecánica (ladrillos o cubierta).",
+    "interruptores.distancia_al_marco": "La caja del interruptor se ubica como máximo a 0,15 m del borde externo del marco de puerta donde está el cerradero.",
+    "tableros.montaje_componentes": "Los componentes del tablero se fijan a soportes o perfiles; no se atornillan directamente a las caras trasera o laterales.",
+    "tomacorrientes.ev_una_acometida": "Cada inmueble admite una única acometida con medición propia."
+  }
+}
