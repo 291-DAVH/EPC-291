@@ -6,7 +6,8 @@ from pathlib import Path
 
 PLATFORM = Path(__file__).resolve().parents[3]            # .../platform
 WORKSPACE = PLATFORM.parent
-DEV_KNOWLEDGE = WORKSPACE / "dev-knowledge"
+DEV_KNOWLEDGE = WORKSPACE / "local" / "dev-knowledge"
+SCHEMAS = WORKSPACE / "shared" / "schemas"
 SHINGLE = 12                                              # consecutive words that count as verbatim copying
 
 

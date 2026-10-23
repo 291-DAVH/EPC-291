@@ -25,9 +25,10 @@ feature/b                      o
    python tools/ci/check_skill_conflicts.py --env production
    python -m unittest apps.api.test_projects apps.api.test_app      # from platform/
    ```
+   or, in one step: `python tools/ci/run_gate.py` (the full battery).
 3. `dev` goes to `main` when the whole suite is green and the checklist is done: changelog updated, version bumped in the affected `plugin.json`, no draft rules promoted by mistake, no PDF/DWG/dev-knowledge content staged.
 4. Commit messages follow Conventional Commits: `feat(scope): ...`, `fix(scope): ...`, `docs: ...`, `chore: ...`.
-5. Never push `dev-knowledge/`, `_legacy/`, client projects or copyrighted files. They are listed in `.gitignore`; the hook adds a second barrier.
+5. Never push `local/dev-knowledge/`, `local/legacy/`, client projects or copyrighted files. They are listed in `.gitignore`; the hook adds a second barrier.
 
 ## Override (rare)
 `ALLOW_PROTECTED=1 git commit ...` is accepted by the hook for the initial baseline or an emergency `hotfix`.

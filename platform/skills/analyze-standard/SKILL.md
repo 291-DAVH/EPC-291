@@ -1,6 +1,6 @@
 ---
 name: "analyze-standard"
-description: "Turns a standard (PDF stored in dev-knowledge) into a validated rules.json for the rules engine: extract, read, draft rules with clause references, validate, hand to the human reviewer, promote."
+description: "Turns a standard (PDF stored in local/dev-knowledge) into a validated rules.json for the rules engine: extract, read, draft rules with clause references, validate, hand to the human reviewer, promote."
 ---
 
 # analyze-standard
@@ -8,13 +8,13 @@ description: "Turns a standard (PDF stored in dev-knowledge) into a validated ru
 Owner plugin: `standard-ingest`. All scripts live in `hub/standard-ingest/scripts/`; run them with the project venv.
 
 ## Hard rules
-1. **Copyright.** The PDF and any verbatim quote stay in `dev-knowledge/` (never versioned). A rule in `rules.json` carries the clause number, the page, a **paraphrased** summary (max 240 characters) and machine-readable parameters. Never copy 12 or more consecutive words from the standard; the validator rejects it.
+1. **Copyright.** The PDF and any verbatim quote stay in `local/dev-knowledge/` (never versioned). A rule in `rules.json` carries the clause number, the page, a **paraphrased** summary (max 240 characters) and machine-readable parameters. Never copy 12 or more consecutive words from the standard; the validator rejects it.
 2. **Never invent values.** Every number comes from the standard. If a value is unreadable or ambiguous, lower `confidence`, set `verification`, and list it as an open question for the reviewer.
 3. **Claude drafts, the human validates.** `source_status` stays `draft` until the human reviewer says they validated it. Only then run `promote_rules.py --mark-verified "<name>"`.
 4. Product content (ids, topics, parameter names, `title`) is English; `summary` is a locale object (`es` for Argentina). Explain progress to the user in Spanish.
 
 ## Workflow
-1. **Locate.** Standard folder: `dev-knowledge/standards/<CC>/<STANDARD-ID>/` with `source/*.pdf` and `standard.json`. If the PDF sits in `_inbox/`, move it there and create `standard.json` (id, country, body, edition, language, domain).
+1. **Locate.** Standard folder: `local/dev-knowledge/standards/<CC>/<STANDARD-ID>/` with `source/*.pdf` and `standard.json`. If the PDF sits in `_inbox/`, move it there and create `standard.json` (id, country, body, edition, language, domain).
 2. **Extract.** `extract_standard.py <CC>/<ID>`.
    - `text` or `mixed`: use `extracted/<pdf>/pages/pNNNN.txt`, `clauses.json`, `tables.json`.
    - `scanned` (no text layer): read the pages visually. Render with `render_pages.py <pdf> 41-45` and open the PNGs, or read the PDF pages directly. Mark those rules `verification: "visual"` (or `"ocr"`).

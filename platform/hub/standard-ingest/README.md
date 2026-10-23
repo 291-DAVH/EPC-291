@@ -1,6 +1,6 @@
 # standard-ingest
 
-Turns standards (PDFs kept in dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Works with the rules engine in core/rules.
+Turns standards (PDFs kept in local/dev-knowledge) into validated rules.json files per standard: text extraction, page rendering for scanned standards, validation (schema, verbatim-copy guard, clause check) and promotion to jurisdictions/. Works with the rules engine in core/rules.
 
 - Version: 0.1.0 (workflow)
 - Entitlement: `feature.rules.ingest`

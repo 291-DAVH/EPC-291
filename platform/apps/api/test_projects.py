@@ -18,7 +18,6 @@ class TestCreateProject(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        shutil.copytree(PLATFORM.parent / "projects" / "_template", self.root / "_template")
         self._old = main.PROJECTS
         main.PROJECTS = self.root
         self._role = main.ROLE

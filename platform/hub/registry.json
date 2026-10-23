@@ -48,7 +48,7 @@
       "skills": [
         "structure-customer-input"
       ],
-      "hash": "8c0a9b38b17c7e2b"
+      "hash": "6e04096ae8341078"
     },
     "iram-titleblock": {
       "version": "0.5.1",
@@ -123,7 +123,7 @@
       "skills": [
         "generate-specification"
       ],
-      "hash": "d6d3fa924e743f00"
+      "hash": "a24b7a341e4356a3"
     },
     "standard-ingest": {
       "version": "0.1.0",
@@ -133,7 +133,7 @@
       "skills": [
         "analyze-standard"
       ],
-      "hash": "8fb6593a376963a3"
+      "hash": "f5fa239f62d6dfb2"
     }
   },
   "skills": {

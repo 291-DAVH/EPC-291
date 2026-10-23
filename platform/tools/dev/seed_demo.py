@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate simulated projects for demos (default 20) into epc-workspace/projects-demo/.
+"""Generate simulated projects for demos (default 20) into local/projects-demo/.
 
   python tools/dev/seed_demo.py [--count 20] [--out DIR]
 
@@ -15,7 +15,7 @@ import shutil
 from pathlib import Path
 
 W = Path(__file__).resolve().parents[3]
-TEMPLATE = W / "projects" / "_template"
+TEMPLATE = W / "management" / "templates" / "project-skeleton"
 TODAY = dt.date(2026, 10, 23)
 
 CLIENTS = [
@@ -284,7 +284,7 @@ def build_project(i, root, rnd):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--count", type=int, default=20)
-    ap.add_argument("--out", default=str(W / "projects-demo"))
+    ap.add_argument("--out", default=str(W / "local" / "projects-demo"))
     a = ap.parse_args()
     out = Path(a.out)
     if out.exists():
@@ -292,7 +292,6 @@ def main():
             raise SystemExit("refusing to overwrite a folder that is not named projects-demo")
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    shutil.copytree(TEMPLATE, out / "_template", dirs_exist_ok=True)
     rnd = random.Random(2026)
     for i in range(min(a.count, len(CLIENTS))):
         print(build_project(i, out, rnd))

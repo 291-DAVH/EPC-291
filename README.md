@@ -6,24 +6,26 @@ Español: [README.es.md](README.es.md)
 
 ## Repository layout
 
+Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phase 2 done).
+
 ```
 EPC-291/
 ├─ README.md  README.es.md  CHANGELOG.md  CONTRIBUTING.md  .env.example  .editorconfig  .gitattributes  .gitignore
-├─ docs/            plan, architecture notes, branching policy, dependencies, migration records
-├─ platform/        product source                                                       versioned
-│   ├─ hub/            ALL plugins (one folder each) + registry.json
-│   ├─ skills/         ALL skills (plugins govern them; the plugin copy wins on duplicates)
-│   ├─ core/           rules engine (core/rules) and workflow seed (core/workflow)
-│   ├─ methodologies/  pm2 (default), pmi, custom
-│   ├─ jurisdictions/  country packs (AR active): rules.json per standard
-│   ├─ apps/           api (FastAPI) and web (React) running; cli, mcp, desktop planned
-│   ├─ agents/ schemas/ i18n/ tests/ tools/
+├─ docs/            architecture, ADRs, explanation, branching policy, dependencies, migration records
+├─ planning/        software planning during development: vision, PRD, backlog, sprints, BOARD   (not shipped)
+├─ platform/        product source (moving to frontend/ backend/ engine/ claude/ in the next phases)
+│   ├─ hub/            plugins (one folder each) + registry.json
+│   ├─ skills/  agents/  core/  methodologies/  jurisdictions/  apps/  tests/  tools/
 │   └─ pyproject.toml  requirements.txt  requirements-dev.txt
-├─ projects/_template/  project skeleton: workspace (editable) + deliverables (client-facing) versioned
-├─ dev-knowledge/   standards, third-party reports, study material                       PRIVATE, git-ignored
-├─ projects-demo/   20 simulated projects for demos                                      git-ignored
-├─ projects/<client>/  real projects (each in its own repository)                        git-ignored
-└─ _legacy/         archived original folders and old repositories                       git-ignored
+├─ management/      project-management knowledge shipped with the product
+│   └─ templates/project-skeleton/   project skeleton: workspace (editable) + deliverables (client-facing)
+├─ shared/          contracts used by several parts: schemas/ (JSON Schema), i18n/ (catalogs)
+├─ tools/           repository tooling: ci/run_gate.py (test battery), planning/board.py
+└─ local/           GIT-IGNORED, never versioned
+    ├─ dev-knowledge/   standards, third-party reports, study material
+    ├─ legacy/          archived original folders and old repositories
+    ├─ projects-demo/   20 simulated projects for demos
+    └─ projects/        real client projects (each in its own repository)
 ```
 
 ## Where to start
@@ -37,7 +39,10 @@ EPC-291/
 git config core.hooksPath platform/tools/hooks
 ```
 
-## Quick start (Windows, from `platform/`)
+## Quick start (Windows)
+Test battery for any change (from the repository root): `platform\.venv\Scripts\python tools\ci\run_gate.py`.
+
+Setup and tools (from `platform/`):
 ```
 cd platform
 python -m venv .venv
@@ -51,7 +56,7 @@ Run the app (two terminals, from `platform/`):
 .venv\Scripts\python -m uvicorn apps.api.main:app --port 8000 --env-file .env.demo
 cd apps\web && npm install && npm run dev                        # http://localhost:5173
 ```
-Demo data: `.venv\Scripts\python tools\dev\seed_demo.py` creates 20 simulated projects in `projects-demo/`. Copy `.env.example` to `platform/.env.demo` and set `EPC_PROJECTS` to that folder. `EPC_ROLE=admin` unlocks the technical console.
+Demo data: `.venv\Scripts\python tools\dev\seed_demo.py` creates 20 simulated projects in `local/projects-demo/`. Copy `.env.example` to `platform/.env.demo` and set `EPC_PROJECTS` to that folder. `EPC_ROLE=admin` unlocks the technical console.
 
 ## Plugins
 | Plugin | Version | Kind | Requires |
@@ -73,8 +78,8 @@ The source of truth is `platform/hub/registry.json` (generated).
 
 ## Rules of the house
 - Plugins govern skills. A skill defined twice: the plugin copy governs and a warning is raised (error in production builds).
-- `.svg` is internal only; `.dxf` is edited in the workspace and delivered as a stamped copy (`platform/schemas/deliverable-policy.json`).
-- Copyrighted PDFs and anything in `dev-knowledge/` never enter the repository (ignore rules + pre-commit hook).
+- `.svg` is internal only; `.dxf` is edited in the workspace and delivered as a stamped copy (`shared/schemas/deliverable-policy.json`).
+- Copyrighted PDFs and anything in `local/dev-knowledge/` never enter the repository (ignore rules + pre-commit hook).
 - Product content is English; Claude explains to the user in Spanish.
 - The end-user web app never shows plugins, skills, rules or internal files; those exist only for the admin role.
 

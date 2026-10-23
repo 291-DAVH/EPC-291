@@ -1,7 +1,7 @@
 #!/bin/sh
 # Repository safety hook. Enable with:  git config core.hooksPath platform/tools/hooks
 #  1. No direct commits on main or dev (merge from feature/* or fix/*). Override: ALLOW_PROTECTED=1
-#  2. No PDF/DWG (copyright / CAD binaries) and nothing from dev-knowledge/ or _legacy/
+#  2. No PDF/DWG (copyright / CAD binaries) and nothing from local/dev-knowledge/ or _legacy/
 #  3. No file larger than 5 MB
 
 branch=$(git symbolic-ref --short HEAD 2>/dev/null)
@@ -15,11 +15,11 @@ bad=$(git diff --cached --name-only --diff-filter=AM | grep -Ei '\.(pdf|dwg)$' |
 if [ -n "$bad" ]; then
   echo "COMMIT BLOCKED: PDF/DWG files are not allowed in the repository:"
   echo "$bad"
-  echo "Study material belongs in dev-knowledge/ (never versioned)."
+  echo "Study material belongs in local/dev-knowledge/ (never versioned)."
   exit 1
 fi
 
-private=$(git diff --cached --name-only --diff-filter=AM | grep -E '^(dev-knowledge|_legacy|projects-demo)/')
+private=$(git diff --cached --name-only --diff-filter=AM | grep -E '^local/')
 if [ -n "$private" ]; then
   echo "COMMIT BLOCKED: private folders must never be committed:"
   echo "$private"
