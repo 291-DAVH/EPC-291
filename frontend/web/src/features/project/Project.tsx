@@ -5,7 +5,7 @@ import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
 
-const TABS = ["overview", "plan", "engineering", "deliverables", "inputs", "requirements", "reports"] as const;
+const TABS = ["overview", "requirements", "plan", "engineering", "deliverables", "reports", "inputs"] as const;      // tab order; the first one (Resumen) is the default
 type Tab = (typeof TABS)[number];
 
 export default function Project() {
@@ -62,7 +62,7 @@ export default function Project() {
       {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
-      {tab === "requirements" && <Requirements base={base} rev={rev} />}
+      {tab === "requirements" && <Requirements base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
       {tab === "reports" && <Reports base={base} go={go} />}
     </>
   );
@@ -284,7 +284,41 @@ function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { ba
 }
 
 /* ---------------- requirements ---------------- */
-function Requirements({ base, rev }: { base: string; rev: number }) {
+/** An open question: click "Responder", write the answer; it is stored with who answered and when. */
+function OpenQuestion({ base, reqId, question, onAnswered }: { base: string; reqId: string; question: string; onAnswered: () => void }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    setBusy(true); setErr("");
+    try {
+      await api(`${base}/requirements/${reqId}/answer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, answer: text }) });
+      onAnswered();
+    } catch (x) { setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error"); } finally { setBusy(false); }
+  };
+  return (
+    <li>
+      {!open ? (
+        <button className="qbtn" onClick={() => setOpen(true)} title={t("u.r.answer")}>{question} <span className="qhint">{t("u.r.answer")} →</span></button>
+      ) : (
+        <form onSubmit={save}>
+          <div>{question}</div>
+          <textarea autoFocus rows={3} value={text} onChange={(e) => setText(e.target.value)} placeholder={t("u.r.answerPlaceholder")} required style={{ width: "100%", marginTop: 6 }} />
+          {err && <div className="small" style={{ color: "var(--bad)" }}>{err}</div>}
+          <div className="row" style={{ marginTop: 6 }}>
+            <button className="primary" type="submit" disabled={busy || !text.trim()}>{t("u.r.saveAnswer")}</button>
+            <button type="button" onClick={() => { setOpen(false); setText(""); }}>{t("common.close")}</button>
+          </div>
+        </form>
+      )}
+    </li>
+  );
+}
+
+function Requirements({ base, rev, onChange }: { base: string; rev: number; onChange: () => void }) {
   const { t } = useI18n();
   const { data, loading, error } = useApi<RequirementItem[]>(base + "/requirements?r=" + rev);
   return (
@@ -305,7 +339,26 @@ function Requirements({ base, rev }: { base: string; rev: number }) {
             <p style={{ margin: "8px 0", fontWeight: 600 }}>{r.statement}</p>
             <div className="row small"><Badge>{r.type}</Badge>{r.discipline !== "general" && <Badge>{t(("projects.disc." + r.discipline) as Key)}</Badge>}</div>
             {r.acceptance.length > 0 && (<><h4>{t("u.r.acceptance")}</h4><ul>{r.acceptance.map((a) => <li key={a}>{a}</li>)}</ul></>)}
-            {r.open_questions.length > 0 && (<><h4 className="warnh">{t("u.r.questions")}</h4><ul>{r.open_questions.map((a) => <li key={a}>{a}</li>)}</ul></>)}
+            {r.open_questions.length > 0 && (
+              <>
+                <h4 className="warnh">{t("u.r.questions")}</h4>
+                <ul className="qlist">{r.open_questions.map((q) => <OpenQuestion key={q} base={base} reqId={r.id} question={q} onAnswered={onChange} />)}</ul>
+              </>
+            )}
+            {(r.answered_questions ?? []).length > 0 && (
+              <>
+                <h4 className="okh">{t("u.r.answered")}</h4>
+                <ul className="qlist">
+                  {r.answered_questions!.map((a, i) => (
+                    <li key={i}>
+                      <div>{a.question}</div>
+                      <div className="answer">{a.answer}</div>
+                      <div className="muted small">{t("u.r.answeredBy")} {a.by} · {new Date(a.at).toLocaleString()}</div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
             <div className="muted small">{t("u.r.origin")}: {r.source_titles.join(", ")}</div>
           </div>
         ))}

@@ -32,7 +32,7 @@ h2 { font-size: 15px; margin: 0 0 10px; }
 .side a.nav.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .side .spacer { flex: 1; }
 .tools { display: flex; gap: 6px; padding: 8px 6px; }
-.main { padding: 24px 28px 48px; max-width: 1300px; width: 100%; }
+.main { padding: 24px 28px 48px; max-width: 1300px; width: 100%; margin-inline: auto; }
 button, select, input { font: inherit; color: var(--text); }
 button { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
 button:hover { background: var(--panel-2); }
@@ -208,3 +208,12 @@ table.crit input.note { width: 100%; min-width: 180px; }
 .linkbox { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .linkbox input { flex: 1; min-width: 220px; font-family: ui-monospace, monospace; font-size: 12px; }
 
+/* ---- open questions of a requirement ---- */
+.qlist { margin: 4px 0 8px; padding-left: 18px; }
+.qlist li { margin-bottom: 8px; }
+.qbtn { background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.qbtn:hover { background: none; }
+.qbtn .qhint { color: var(--accent); font-size: 12px; margin-left: 6px; white-space: nowrap; }
+.qbtn:hover .qhint { text-decoration: underline; }
+.answer { background: var(--panel-2); border-radius: 6px; padding: 6px 10px; margin: 4px 0; white-space: pre-wrap; }
+h4.okh { color: var(--ok); }

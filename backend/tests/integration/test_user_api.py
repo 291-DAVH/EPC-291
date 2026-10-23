@@ -98,6 +98,25 @@ class TestUserApi(unittest.TestCase):
         self.assertEqual(reqs[0]["source_titles"], ["Ruido"])
         self.assertEqual(self.c.get(f"/api/app/projects/{self.pid}").json()["requirements_count"], 1)
 
+    def test_open_questions_can_be_answered_with_author_and_time(self):
+        d = self.root / "ACME" / "P-1" / "workspace"
+        (d / "00-setup" / "requirements.json").write_text(json.dumps([{"id": "REQ-001", "statement": "s", "type": "funcional", "priority": "alta", "discipline": "general",
+                                                                      "acceptance": [], "open_questions": ["¿Peso máximo?", "¿Fecha?"], "source_intake": [], "status": "abierto"}]), encoding="utf-8")
+        base = f"/api/app/projects/{self.pid}/requirements/REQ-001/answer"
+        self.assertEqual(self.c.post(base, json={"question": "¿Peso máximo?", "answer": "  "}).status_code, 422)
+        self.assertEqual(self.c.post(base, json={"question": "otra", "answer": "x"}).status_code, 404)
+        self.assertEqual(self.c.post(base.replace("REQ-001", "REQ-999"), json={"question": "¿Fecha?", "answer": "x"}).status_code, 404)
+        r = self.c.post(base, json={"question": "¿Peso máximo?", "answer": "5 t"})
+        self.assertEqual(r.status_code, 200, r.text)
+        req = r.json()
+        self.assertEqual((req["open_questions"], req["status"]), (["¿Fecha?"], "abierto"))
+        a = req["answered_questions"][0]
+        self.assertEqual((a["question"], a["answer"]), ("¿Peso máximo?", "5 t"))
+        self.assertTrue(a["at"] and "T" in a["at"] and "by" in a)
+        self.assertEqual(self.c.post(base, json={"question": "¿Peso máximo?", "answer": "again"}).status_code, 404)      # already answered
+        self.assertEqual(self.c.post(base, json={"question": "¿Fecha?", "answer": "Marzo"}).json()["status"], "definido")  # none left
+        self.assertEqual(self.c.get(f"/api/app/projects/{self.pid}/requirements").json()[0]["answered_questions"][1]["answer"], "Marzo")
+
     def test_downloads_only_inside_deliverables(self):
         d = self.root / "ACME" / "P-1"
         (d / "deliverables" / "ifa").mkdir(parents=True, exist_ok=True)

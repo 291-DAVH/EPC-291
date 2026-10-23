@@ -115,6 +115,7 @@ export interface InputItem {
 export interface RequirementItem {
   id: string; statement: string; type: string; priority: string; discipline: string; acceptance: string[]; open_questions: string[];
   source_titles: string[]; status: string;
+  answered_questions?: { question: string; answer: string; by: string; by_email?: string; at: string }[];
 }
 export interface ReportItem { id: string; title: string; type: string; date: string; summary: string; downloadable: boolean }
 
