@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """EPC build tool (stdlib only).
 
-  python platform/tools/build/epc_build.py registry            validate plugins + skills, write claude/plugins/registry.json
-  python platform/tools/build/epc_build.py package <id|all>    build dist/<id>-<version>.plugin (official layout, zipped)
-  python platform/tools/build/epc_build.py marketplace         build dist/marketplace/ (plugins in the official layout + marketplace.json)
-  python platform/tools/build/epc_build.py lock <project_dir>  write <project>/.epc/plugins.lock from the registry
+  python tools/build/epc_build.py registry            validate plugins + skills, write claude/plugins/registry.json
+  python tools/build/epc_build.py package <id|all>    build dist/<id>-<version>.plugin (official layout, zipped)
+  python tools/build/epc_build.py marketplace         build dist/marketplace/ (plugins in the official layout + marketplace.json)
+  python tools/build/epc_build.py lock <project_dir>  write <project>/.epc/plugins.lock from the registry
 
 Sources live in claude/: plugins/<id>/ (our plugin.json: packaging only), skills/<id>/, agents/<name>.md, marketplace/.
 The code lives in engine/<area>/src/<package>; a plugin lists the areas it wraps in `engine`.
@@ -28,12 +28,11 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-PLATFORM = Path(__file__).resolve().parents[2]
-REPO = PLATFORM.parent
+REPO = Path(__file__).resolve().parents[2]
 CLAUDE = REPO / "claude"
 HUB, SKILLS, AGENTS, MARKET = CLAUDE / "plugins", CLAUDE / "skills", CLAUDE / "agents", CLAUDE / "marketplace"
 ENGINE = REPO / "engine"
-DIST = PLATFORM / "dist"
+DIST = REPO / "dist"
 SKIP_DIRS = {"__pycache__", ".git", "tests", "dist", "node_modules"}
 SKIP_SUFFIX = {".pyc", ".pdf"}
 INSTALL_REPO = "291-DAVH/EPC-291"                   # GitHub repository that will host the marketplace

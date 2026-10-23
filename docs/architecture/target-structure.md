@@ -104,6 +104,7 @@ EPC-291/
 | `platform/jurisdictions` | `engine/jurisdictions` |
 | `platform/schemas`, `platform/i18n` | `shared/schemas`, `shared/i18n` |
 | `platform/tools` | `tools/` |
+| `platform/{requirements*.txt}` | repository root (`platform/` retired in the cleanup after phase 8; `core/workflow` -> `management/workflow`, `apps/*` placeholders dropped) |
 | `projects/_template` | `management/templates/project-skeleton` |
 | `dev-knowledge`, `_legacy`, `projects-demo`, `projects/*` | `local/...` |
 | `docs/` | `docs/` (reorganized by Diataxis) |

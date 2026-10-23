@@ -23,7 +23,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install
         run: |
-          pip install -r platform/requirements-dev.txt -r database/requirements.txt import-linter
+          pip install -r requirements-dev.txt -r database/requirements.txt import-linter
           pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e backend
           cd frontend && npm ci
       - name: Gate (the same battery as on a developer machine)

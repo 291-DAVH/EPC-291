@@ -59,25 +59,23 @@ Argentina es la primera jurisdicción (AEA 90364, IRAM); otros países se suman 
 # Clonar y activar el hook de seguridad
 git clone https://github.com/291-DAVH/EPC-291.git
 cd EPC-291
-git config core.hooksPath platform/tools/hooks
+git config core.hooksPath tools/hooks
 
-# Entorno Python (desde platform/)
-cd platform
+# Python environment (desde la raíz del repositorio)
 python -m venv .venv
-.venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pip install -e ../engine/calc -e ../engine/rules -e ../engine/standards -e ../engine/drawing -e ../engine/documents -e "../backend[dev]"
-cd ..
+.venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
+.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
 
 # Batería de pruebas (20 controles, antes de integrar cualquier cambio)
-platform\.venv\Scripts\python tools\ci\run_gate.py
+.venv\Scripts\python tools\ci\run_gate.py
 ```
 
 Correr la aplicación con 20 proyectos simulados (dos terminales):
 
 ```bash
-# 1) datos de demo y API (desde platform/; copia .env.example a platform/.env.demo y pon EPC_PROJECTS=../local/projects-demo)
+# 1) datos de demo y API (copia .env.example a .env.demo y pon EPC_PROJECTS=<repo>/local/projects-demo)
 .venv\Scripts\python tools\dev\seed_demo.py
-.venv\Scripts\python -m uvicorn epc.main:app --app-dir ..\backend\src --port 8000 --env-file .env.demo
+.venv\Scripts\python -m uvicorn epc.main:app --app-dir backend\src --port 8000 --env-file .env.demo
 
 # 2) aplicación web (clientes) en :5173, consola (admin) en :5174
 cd frontend && npm install && npm run dev:web        # npm run dev:console para la consola
@@ -100,8 +98,8 @@ EPC-291/
 ├─ shared/        schemas/ (JSON Schema)   i18n/
 ├─ planning/      planificación del software durante el desarrollo
 ├─ docs/          arquitectura, ADR, explicaciones, política de ramas
-├─ platform/      herramientas de build del lado de Claude (registro, empaquetado) y semilla de demo
-├─ tools/         ci/run_gate.py, planning/board.py
+├─ tools/         ci/ (batería de pruebas), build/ (registro de plugins, empaquetado), dev/ (semilla de demo), hooks/, planning/
+├─ .claude/       configuración de Claude Code para desarrollar este repositorio
 └─ local/         IGNORADA POR GIT: dev-knowledge, legacy, proyectos demo y reales
 ```
 

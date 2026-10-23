@@ -38,7 +38,7 @@ def skill_dirs(base: Path):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[3] / "claude"), help="folder holding skills/ and plugins/")
+    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[2] / "claude"), help="folder holding skills/ and plugins/")
     ap.add_argument("--env", choices=["dev", "production"], default="dev")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()

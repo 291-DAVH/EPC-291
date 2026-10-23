@@ -59,25 +59,23 @@ Argentina is the first jurisdiction (AEA 90364, IRAM); other countries plug in a
 # Clone and enable the safety hook
 git clone https://github.com/291-DAVH/EPC-291.git
 cd EPC-291
-git config core.hooksPath platform/tools/hooks
+git config core.hooksPath tools/hooks
 
-# Python environment (from platform/)
-cd platform
+# Python environment (from the repository root)
 python -m venv .venv
-.venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pip install -e ../engine/calc -e ../engine/rules -e ../engine/standards -e ../engine/drawing -e ../engine/documents -e "../backend[dev]"
-cd ..
+.venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
+.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
 
 # Test battery (20 checks, run before merging anything)
-platform\.venv\Scripts\python tools\ci\run_gate.py
+.venv\Scripts\python tools\ci\run_gate.py
 ```
 
 Run the app with 20 simulated projects (two terminals):
 
 ```bash
-# 1) demo data and API (from platform/; copy .env.example to platform/.env.demo and set EPC_PROJECTS=../local/projects-demo)
+# 1) demo data and API (copy .env.example to .env.demo and set EPC_PROJECTS=<repo>/local/projects-demo)
 .venv\Scripts\python tools\dev\seed_demo.py
-.venv\Scripts\python -m uvicorn epc.main:app --app-dir ..\backend\src --port 8000 --env-file .env.demo
+.venv\Scripts\python -m uvicorn epc.main:app --app-dir backend\src --port 8000 --env-file .env.demo
 
 # 2) web app (customers) on :5173, console (admin) on :5174
 cd frontend && npm install && npm run dev:web        # npm run dev:console for the console
@@ -100,8 +98,8 @@ EPC-291/
 ├─ shared/        schemas/ (JSON Schema)   i18n/
 ├─ planning/      software planning during development
 ├─ docs/          architecture, ADRs, explanation, branching policy
-├─ platform/      Claude-side build tooling (registry, packaging) and demo seed
-├─ tools/         ci/run_gate.py, planning/board.py
+├─ tools/         ci/ (test battery), build/ (plugin registry, packaging), dev/ (demo seed), hooks/, planning/
+├─ .claude/       Claude Code settings for developing this repository
 └─ local/         GIT-IGNORED: dev-knowledge, legacy, demo and real projects
 ```
 

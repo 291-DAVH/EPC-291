@@ -38,14 +38,12 @@ def first(*paths):
     return None
 
 
-PLATFORM = first(REPO / "platform")
-PYTHON = first(REPO / "backend" / ".venv" / "Scripts" / "python.exe", PLATFORM / ".venv" / "Scripts" / "python.exe",
-               REPO / ".venv" / "Scripts" / "python.exe", PLATFORM / ".venv" / "bin" / "python") or Path(sys.executable)
+PYTHON = first(REPO / ".venv" / "Scripts" / "python.exe", REPO / ".venv" / "bin" / "python") or Path(sys.executable)
 PLUGINS = REPO / "claude" / "plugins"
 ENGINE = REPO / "engine"
 AREAS = ("calc", "rules", "standards", "drawing", "documents")
-BUILD = first(REPO / "tools" / "build" / "epc_build.py", PLATFORM / "tools" / "build" / "epc_build.py")
-CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py", PLATFORM / "tools" / "ci" / "check_skill_conflicts.py")
+BUILD = first(REPO / "tools" / "build" / "epc_build.py")
+CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
 WEB = first(REPO / "frontend")
 RESULTS = []
@@ -104,7 +102,7 @@ def main():
 
     claude = shutil.which("claude")
     if claude and BUILD:
-        market = PLATFORM / "dist" / "marketplace"
+        market = REPO / "dist" / "marketplace"
         if run("marketplace-build", [py, str(BUILD), "marketplace"], REPO) and market.exists():
             targets = [market] + sorted(p for p in (market / "plugins").iterdir() if p.is_dir())
             bad, t0 = [], time.time()

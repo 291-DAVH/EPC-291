@@ -5,7 +5,7 @@
 
 The folder is separate from projects/ so demo data never mixes with real projects. Everything here is
 fictitious. Requirements are written the way the analysis step produces them (see docs/USER_DATA_MODEL.md).
-Requires: openpyxl, ezdxf (already platform dependencies).
+Requires: openpyxl, ezdxf (already in requirements.txt).
 """
 import argparse
 import datetime as dt
@@ -14,7 +14,7 @@ import random
 import shutil
 from pathlib import Path
 
-W = Path(__file__).resolve().parents[3]
+W = Path(__file__).resolve().parents[2]
 TEMPLATE = W / "management" / "templates" / "project-skeleton"
 TODAY = dt.date(2026, 10, 23)
 
