@@ -25,3 +25,6 @@ _out/
 
 # keep the template
 !.env.example
+
+# tools/build holds the build scripts, not build output
+!tools/build/
