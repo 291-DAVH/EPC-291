@@ -131,3 +131,14 @@ export interface BacklogItem {
   requirement_id: string; owner: string; created: string;
 }
 export interface BacklogView { items: BacklogItem[]; counts: Record<string, number>; estimate_open_h: number }
+
+/* ---- engineering workspace (admin/engineer role) ---- */
+export interface EngFile {
+  path: string; discipline: string; package: string; area: string; name: string; ext: string; what: "diagram" | "document";
+  size: number; modified: string; kind: string;
+}
+export interface EngOverview { diagrams: EngFile[]; documents: EngFile[]; counts: { diagrams: number; documents: number; by_kind: Record<string, number> } }
+export type EngText =
+  | { name: string; format: "text"; text: string; truncated: boolean }
+  | { name: string; format: "table"; rows: string[][]; truncated: boolean }
+  | { name: string; format: "sheets"; sheets: Record<string, string[][]> };

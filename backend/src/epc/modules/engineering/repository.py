@@ -1,0 +1,64 @@
+"""Reads the engineering workspace of a project: workspace/02-engineering/<discipline>/<package>/{drawings/svg,calc,docs}."""
+import csv
+import datetime as dt
+from pathlib import Path
+from typing import Dict, List
+
+SVG_DIR = ("drawings", "svg")
+TEXT_AREAS = ("calc", "docs")
+TEXT_EXT = {".md", ".txt", ".csv", ".json", ".xlsx"}
+MAX_TEXT_BYTES = 1_000_000
+MAX_ROWS, MAX_COLS = 300, 30
+
+
+def base(d: Path) -> Path:
+    return d / "workspace" / "02-engineering"
+
+
+def scan(d: Path) -> List[Dict]:
+    root = base(d)
+    out: List[Dict] = []
+    if not root.is_dir():
+        return out
+    for f in sorted(root.rglob("*")):
+        if not f.is_file() or f.name.startswith(".") or "_discipline" in f.parts:
+            continue
+        rel = f.relative_to(root)
+        parts = rel.parts
+        if len(parts) < 4:                                  # <discipline>/<package>/<area>/<file>
+            continue
+        area = "/".join(parts[2:-1])
+        if f.suffix.lower() == ".svg" and tuple(parts[2:4]) == SVG_DIR:
+            what = "diagram"
+        elif parts[2] in TEXT_AREAS and f.suffix.lower() in TEXT_EXT:
+            what = "document"
+        else:
+            continue
+        st = f.stat()
+        out.append({"path": rel.as_posix(), "discipline": parts[0], "package": parts[1], "area": area, "name": f.stem, "ext": f.suffix.lower(),
+                    "what": what, "size": st.st_size, "modified": dt.datetime.fromtimestamp(st.st_mtime).date().isoformat()})
+    return out
+
+
+def read_text(path: Path) -> str:
+    with open(path, "rb") as fh:
+        raw = fh.read(MAX_TEXT_BYTES + 1)
+    return raw[:MAX_TEXT_BYTES].decode("utf-8-sig", errors="replace")
+
+
+def too_big(path: Path) -> bool:
+    return path.stat().st_size > MAX_TEXT_BYTES
+
+
+def csv_rows(text: str) -> List[List[str]]:
+    rows = list(csv.reader(text.splitlines(), delimiter=";" if text.split("\n", 1)[0].count(";") > text.split("\n", 1)[0].count(",") else ","))
+    return [r[:MAX_COLS] for r in rows[:MAX_ROWS]]
+
+
+def xlsx_sheets(path: Path) -> Dict[str, List[List[str]]]:
+    import openpyxl
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    try:
+        return {ws.title: [["" if c is None else str(c) for c in row[:MAX_COLS]] for row in ws.iter_rows(max_row=MAX_ROWS, values_only=True)] for ws in wb.worksheets}
+    finally:
+        wb.close()

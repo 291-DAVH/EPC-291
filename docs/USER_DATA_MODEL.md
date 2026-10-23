@@ -13,6 +13,9 @@ What the end user sees comes only from these files; everything else stays intern
 | `05-management/backlog.json` | internal backlog: id BL-nnn, title, type, priority, status, estimate_h, wbs_id, requirement_id, owner | engineer (`/api/projects/{id}/backlog`); **never shown to the customer** |
 | `05-management/reports/index.json` | reports: id, title, type, date, summary, file | platform |
 
+## Engineering workspace (engineer / admin only)
+`02-engineering/<discipline>/<package>/{drawings/svg, calc, docs}` is shown in the **Engineering** tab only to the admin/engineer role (`/api/projects/{id}/engineering`, never under `/api/app`): `.svg` diagrams are previewed as images (single-line `SLD-*`, multi-line `MLD-*`, other drawings) and lists/notes (`.csv`, `.xlsx`, `.md`, `.txt`, `.json`) are shown as text or tables. SVG stays internal: what the customer receives is under `deliverables/` (DXF stamped copies, PDF, XLSX).
+
 ## Intake -> data pipeline
 1. The user submits free text (voice of customer, user stories, meeting notes, documents) -> `INT-nnnn.json`, status `received`.
 2. Claude analyses the batch of `received` items (skill `structure-customer-input`): deduplicates, rewrites each need as one verifiable requirement in the user's language, classifies (type, priority, discipline), proposes acceptance criteria and lists open questions. Result -> `requirements.json`; the intake item moves to `structured` (or `analyzing` while questions are open).
