@@ -1,0 +1,111 @@
+{
+ "grupo": "colores",
+ "reglas": [
+  {
+   "id": "colores.neutro_pe",
+   "grupo": "colores",
+   "tema": "Colores del neutro y del conductor de protección",
+   "regla": "El neutro es azul claro o celeste; el PE es bicolor verde-amarillo.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "neutro": "azul claro o celeste",
+    "pe": "verde-amarillo"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-51",
+    "edicion": "2006",
+    "clausula": "514.3.1",
+    "pagina_impresa": "51-19",
+    "pagina_pdf": 45,
+    "cita": "Conductor Neutro: Color Azul claro o celeste",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
+  },
+  {
+   "id": "colores.lineas",
+   "grupo": "colores",
+   "tema": "Colores de los conductores de línea",
+   "regla": "L1 castaño (marrón), L2 negro, L3 rojo.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "L1": "castaño (marrón)",
+    "L2": "negro",
+    "L3": "rojo"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-51",
+    "edicion": "2006",
+    "clausula": "514.3.3",
+    "pagina_impresa": "51-19",
+    "pagina_pdf": 45,
+    "cita": "Línea 1 (L1) Color Castaño (Marrón)",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
+  },
+  {
+   "id": "colores.pen_marcado",
+   "grupo": "colores",
+   "tema": "Conductor PEN aislado",
+   "regla": "El PEN aislado es verde-amarillo en toda su longitud con marcas azul claro en los extremos (combinación adoptada en la República Argentina).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "color": "verde-amarillo",
+    "marcas_extremos": "azul claro"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-51",
+    "edicion": "2006",
+    "clausula": "514.3.2",
+    "pagina_impresa": "51-19",
+    "pagina_pdf": 45,
+    "cita": "verde-amarillo en toda su longitud y ademas con marcas azul claro en sus extremos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "colores.cubierta_verde_amarilla_no_activos",
+   "grupo": "colores",
+   "tema": "Cables con cubierta verde o amarilla",
+   "regla": "No se permiten cables con envoltura verde o amarilla como conductores activos; esos colores de envoltura solo para conductores de protección.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-51",
+    "edicion": "2006",
+    "clausula": "514.3.3",
+    "pagina_impresa": "51-19",
+    "pagina_pdf": 45,
+    "cita": "No se permite el empleo de cables multipolares o unipolares segun IRAM 2178 o 2268 o 62266",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

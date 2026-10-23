@@ -1,0 +1,1 @@
+﻿Lee `.claude/rules/m5-packages-development.md`. Identifica el siguiente paquete en el grafo de dependencias de la LME y propone desarrollarlo. Si hay paquetes pendientes de revisión, recuérdaselo al usuario primero.

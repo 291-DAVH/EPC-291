@@ -1,0 +1,28 @@
+{
+  "id": "equipment-catalog",
+  "version": "0.1.0",
+  "kind": "knowledge",
+  "description": "Equipment and materials catalog with guaranteed data, used to select equipment and build datasheets.",
+  "discipline": [
+    "all"
+  ],
+  "requires": {},
+  "consumes": [],
+  "produces": [
+    "Equipment"
+  ],
+  "outputs": [
+    {
+      "format": "md",
+      "channel": "internal"
+    }
+  ],
+  "entitlement": "feature.catalog",
+  "python": {
+    "requires": []
+  },
+  "skills": [],
+  "legacy": {
+    "source": "00-Template-Claude/.claude/library/plugins/equipment"
+  }
+}

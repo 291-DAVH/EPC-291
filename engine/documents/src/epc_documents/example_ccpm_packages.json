@@ -1,0 +1,112 @@
+{
+  "inicio": "2026-10-05",
+  "feriados": [
+    "2026-10-12",
+    "2026-11-23"
+  ],
+  "fecha_limite_contractual": "2026-12-18",
+  "metodo_buffer": "50pct",
+  "tareas": [
+    {
+      "id": "T01",
+      "nombre": "Elaborar criterios de diseño",
+      "recurso": "Claude",
+      "dur_segura": 3,
+      "predecesores": [],
+      "paquete": "EJ-PQ-01",
+      "fase_paquete": "elaborar",
+      "entregable": "EJ-ENT-001"
+    },
+    {
+      "id": "T02",
+      "nombre": "Revisión del usuario de EJ-PQ-01 (duración [VERIFICAR])",
+      "recurso": "Usuario",
+      "dur_segura": 2,
+      "predecesores": [
+        "T01"
+      ],
+      "paquete": "EJ-PQ-01",
+      "fase_paquete": "revisar"
+    },
+    {
+      "id": "T03",
+      "nombre": "Elaborar balance de cargas (memoria + síntesis)",
+      "recurso": "Claude",
+      "dur_segura": 4,
+      "predecesores": [
+        "T02"
+      ],
+      "paquete": "EJ-PQ-02",
+      "fase_paquete": "elaborar",
+      "entregable": "EJ-ENT-002"
+    },
+    {
+      "id": "T04",
+      "nombre": "Revisión del usuario de EJ-PQ-02 (duración [VERIFICAR])",
+      "recurso": "Usuario",
+      "dur_segura": 2,
+      "predecesores": [
+        "T03"
+      ],
+      "paquete": "EJ-PQ-02",
+      "fase_paquete": "revisar"
+    },
+    {
+      "id": "T05",
+      "nombre": "Elaborar dimensionamiento de cables de BT (memoria + síntesis)",
+      "recurso": "Claude",
+      "dur_segura": 4,
+      "predecesores": [
+        "T04"
+      ],
+      "paquete": "EJ-PQ-03",
+      "fase_paquete": "elaborar",
+      "entregable": "EJ-ENT-004"
+    },
+    {
+      "id": "T06",
+      "nombre": "Revisión del usuario de EJ-PQ-03 (duración [VERIFICAR])",
+      "recurso": "Usuario",
+      "dur_segura": 2,
+      "predecesores": [
+        "T05"
+      ],
+      "paquete": "EJ-PQ-03",
+      "fase_paquete": "revisar"
+    },
+    {
+      "id": "T07",
+      "nombre": "Procesar comentarios de EJ-PQ-03",
+      "recurso": "Claude",
+      "dur_segura": 1,
+      "predecesores": [
+        "T06"
+      ],
+      "paquete": "EJ-PQ-03",
+      "fase_paquete": "procesar"
+    },
+    {
+      "id": "T08",
+      "nombre": "Elaborar pliego, cap. 05 Requisitos de Diseño",
+      "recurso": "Claude",
+      "dur_segura": 4,
+      "predecesores": [
+        "T07"
+      ],
+      "paquete": "EJ-PQ-10",
+      "fase_paquete": "elaborar",
+      "entregable": "EJ-ENT-020"
+    },
+    {
+      "id": "T09",
+      "nombre": "Revisión del usuario de EJ-PQ-10 (duración [VERIFICAR])",
+      "recurso": "Usuario",
+      "dur_segura": 3,
+      "predecesores": [
+        "T08"
+      ],
+      "paquete": "EJ-PQ-10",
+      "fase_paquete": "revisar"
+    }
+  ]
+}

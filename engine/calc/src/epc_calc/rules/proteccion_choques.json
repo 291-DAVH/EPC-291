@@ -1,0 +1,261 @@
+{
+ "grupo": "proteccion_choques",
+ "reglas": [
+  {
+   "id": "proteccion_choques.tension_limite_24v",
+   "grupo": "proteccion_choques",
+   "tema": "Tensión límite convencional de contacto",
+   "regla": "La Reglamentación adopta UL = 24 V para la protección contra contactos indirectos por desconexión automática, en ambientes secos, húmedos y mojados.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ul_v": 24
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "413.1.3",
+    "pagina_impresa": "41-47",
+    "pagina_pdf": 67,
+    "cita": "esta Reglamentacion adopta, como tension limite convencional de contacto",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.tt_solo_diferenciales",
+   "grupo": "proteccion_choques",
+   "tema": "Protección contra contactos indirectos en TT",
+   "regla": "En el esquema TT solo se usan dispositivos de corriente diferencial; en TN-S también dispositivos de sobrecorriente.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "413.1.3",
+    "pagina_impresa": "41-47",
+    "pagina_pdf": 67,
+    "cita": "en el ECT TT, solo se podran utilizar para la proteccion contra los contactos indirectos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.tiempos_tabla_41_3",
+   "grupo": "proteccion_choques",
+   "tema": "Tiempos máximos de desconexión en circuitos terminales (UL = 24 V)",
+   "regla": "Tiempos máximos de desconexión en circuitos terminales de hasta 32 A según esquema y tensión Uo.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "alcance": "circuitos terminales hasta 32 A"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "Tabla 41.3 y 413.1.3.1",
+    "pagina_impresa": "41-48",
+    "pagina_pdf": 68,
+    "cita": "Tiempos maximos de desconexion para la proteccion contra contacto indirecto",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "tiempo": "s"
+    },
+    "columnas": [
+     "esquema",
+     "50<Uo≤120 V ca",
+     "50<Uo≤120 V cc",
+     "120<Uo≤230 V ca",
+     "120<Uo≤230 V cc",
+     "230<Uo≤400 V ca",
+     "230<Uo≤400 V cc"
+    ],
+    "filas": [
+     [
+      "TN",
+      0.4,
+      "a)",
+      0.2,
+      5,
+      0.06,
+      0.2
+     ],
+     [
+      "TT",
+      0.2,
+      "a)",
+      0.06,
+      0.2,
+      0.01,
+      0.02
+     ],
+     [
+      "IT",
+      "ver 413.1.5"
+     ]
+    ],
+    "notas": [
+     "Uo: tensión simple en ca o cc, o tensión entre línea y tierra.",
+     "a) La desconexión puede ser requerida por razones distintas a la protección contra choques.",
+     "b) Con protección diferencial no se considera el tiempo de apertura a IΔn sino a 5·IΔn.",
+     "Lectura sobre imagen a 120 dpi; confirmar con la norma impresa antes de usar los valores de 230 V."
+    ]
+   }
+  },
+  {
+   "id": "proteccion_choques.tn_s_tiempo_2s",
+   "grupo": "proteccion_choques",
+   "tema": "Tiempo de desconexión en TN-S (circuitos seccionales)",
+   "regla": "En TN-S los circuitos seccionales y los no cubiertos por 413.1.3.1 admiten tiempos de desconexión de hasta 2 s (hasta 5 s si la selectividad lo requiere).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "t_max_s": 2,
+    "t_max_selectividad_s": 5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "413.1.3.2",
+    "pagina_impresa": "41-49",
+    "pagina_pdf": 69,
+    "cita": "se admiten tiempos de desconexion que no excedan a 2 s para circuitos sec- cionales",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.tt_tiempo_1s",
+   "grupo": "proteccion_choques",
+   "tema": "Tiempo de desconexión en TT (circuitos seccionales)",
+   "regla": "En TT los circuitos seccionales y los no cubiertos por 413.1.3.1 admiten tiempos de desconexión de hasta 1 s.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "t_max_s": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "413.1.3.3",
+    "pagina_impresa": "41-49",
+    "pagina_pdf": 69,
+    "cita": "se admiten tiempos de desconexion que no excedan de 1 s para circuitos seccio- nales",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.equipotencial_suplementaria_si_no_alcanza",
+   "grupo": "proteccion_choques",
+   "tema": "Falla de desconexión en el tiempo",
+   "regla": "Si la desconexión automática no alcanza los tiempos requeridos se realiza una vinculación equipotencial suplementaria de protección (413.1.7).",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "413.1.3.5",
+    "pagina_impresa": "41-49",
+    "pagina_pdf": 69,
+    "cita": "se debe realizar una vinculacion equipotencial suplementaria",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.dd_30ma_proteccion_adicional",
+   "grupo": "proteccion_choques",
+   "tema": "Protección complementaria con diferencial de 30 mA",
+   "regla": "El uso de dispositivos diferenciales con IΔn ≤ 30 mA se reconoce como medida complementaria contra contactos directos, y no exime de las demás medidas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "idn_max_ma": 30
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "412.5.1 y 412.5.2",
+    "pagina_impresa": "41-40",
+    "pagina_pdf": 60,
+    "cita": "es reconocido como medida de proteccion complementaria o adicional contra los",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_choques.dd_30ma_circuitos_obligados",
+   "grupo": "proteccion_choques",
+   "tema": "Circuitos que exigen diferencial de 30 mA",
+   "regla": "En TT, TN-S y TN-C-S exigen protección complementaria con diferencial IΔn ≤ 30 mA: tomacorrientes de hasta 32 A sin enclavamiento, iluminación con ficha y tomacorriente de hasta 32 A, e iluminación fija con luminarias a 3 m o menos o dentro del volumen de accesibilidad, o a más de 3 m sin mantenimiento BA4/BA5.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "idn_max_ma": 30,
+    "tomacorrientes_hasta_a": 32,
+    "altura_luminaria_m": 3,
+    "esquemas": [
+     "TT",
+     "TN-S",
+     "TN-C-S"
+    ]
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-41",
+    "edicion": "2006",
+    "clausula": "412.5.3",
+    "pagina_impresa": "41-40",
+    "pagina_pdf": 60,
+    "cita": "Los circuitos de tomacorrientes que empleen tomacorrientes de corriente nominal igual o inferior a",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

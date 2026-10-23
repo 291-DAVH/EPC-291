@@ -1,0 +1,159 @@
+{
+ "grupo": "bandejas",
+ "reglas": [
+  {
+   "id": "bandejas.reserva_20pct",
+   "grupo": "bandejas",
+   "tema": "Reserva en bandejas portacables",
+   "regla": "El ancho de la bandeja suma los diámetros de todos los cables, sus separaciones y una reserva no inferior al 20 %.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "reserva_min_pct": 20
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.2",
+    "pagina_impresa": 67,
+    "cita": "más un espacio de reserva no inferior al 20 %"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "bandejas.una_capa",
+   "grupo": "bandejas",
+   "tema": "Capas de cables en bandejas",
+   "regla": "Se admite una sola capa de cables; los unipolares en formación trébol o cuadrada se consideran una capa.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "capas_max": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.2",
+    "pagina_impresa": 67,
+    "cita": "no permitiéndose más que una capa de cables"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "bandejas.solo_control_40pct",
+   "grupo": "bandejas",
+   "tema": "Bandejas solo con cables de comando, control y señalización",
+   "regla": "La sección transversal ocupada llega hasta el 40 % de la sección útil, para bandejas de lateral no superior a 100 mm.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ocupacion_max_pct": 40,
+    "altura_lateral_max_mm": 100
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.2",
+    "pagina_impresa": 67,
+    "cita": "ocupada hasta un 40 % de la sección transversal útil"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "bandejas.separacion_entre_bandejas",
+   "grupo": "bandejas",
+   "tema": "Separación entre líneas de bandejas",
+   "regla": "Si hace falta más de una bandeja en planos distintos, la separación mínima es de 0,3 m, reducible hasta 0,2 m aplicando los factores de corrección.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "separacion_min_m": 0.3,
+    "separacion_min_con_factores_m": 0.2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.2",
+    "pagina_impresa": 67,
+    "cita": "con una separación mínima de 0,3 m entre cada una"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "bandejas.altura_montaje",
+   "grupo": "bandejas",
+   "tema": "Altura mínima de montaje de bandejas",
+   "regla": "Para personal no calificado (BA1-BA3): 2,2 m en interiores, 3,5 m en exteriores y 4 m con circulación vehicular.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "interior_min_m": 2.2,
+    "exterior_min_m": 3.5,
+    "con_vehiculos_min_m": 4
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.3",
+    "pagina_impresa": 69,
+    "cita": "las alturas mínimas de montaje serán: 2,2 m en interiores, 3,5 m en exteriores y 4 m donde exista circulación"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "bandejas.tapas_hasta_2_2m",
+   "grupo": "bandejas",
+   "tema": "Tapas de protección en bandejas",
+   "regla": "Las bandejas más altas llevan tapas hasta una altura de 2,2 m del piso terminado; las que están por debajo de 2,2 m se tapan igual.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_tapa_m": 2.2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.9.3",
+    "pagina_impresa": 69,
+    "cita": "altura de 2,2 m, medida desde el nivel de piso terminado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

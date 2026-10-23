@@ -1,0 +1,39 @@
+{
+  "id": "doc-quality",
+  "version": "0.1.0",
+  "kind": "workflow",
+  "description": "Document and specification verifiers and Office-to-PDF input converter used by package self-checks and audits.",
+  "discipline": [
+    "general"
+  ],
+  "requires": {},
+  "consumes": [
+    "Document"
+  ],
+  "produces": [
+    "Finding"
+  ],
+  "outputs": [
+    {
+      "format": "json",
+      "channel": "internal"
+    }
+  ],
+  "entitlement": "feature.quality",
+  "python": {
+    "requires": []
+  },
+  "system": {
+    "optional": [
+      "libreoffice",
+      "poppler-utils"
+    ]
+  },
+  "skills": [],
+  "legacy": {
+    "source": "00-Template-Claude/.claude/library/plugins/calculations"
+  },
+  "engine": [
+    "documents"
+  ]
+}

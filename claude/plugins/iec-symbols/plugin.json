@@ -1,0 +1,49 @@
+{
+  "id": "iec-symbols",
+  "version": "0.4.16",
+  "kind": "knowledge",
+  "description": "IEC 60617 symbol library for single-line (SLD) and multi-line (MLD) diagrams, LV and MV, in SVG and DXF blocks, with catalogs.",
+  "discipline": [
+    "electrical"
+  ],
+  "standards": [
+    "IEC 60617"
+  ],
+  "requires": {},
+  "consumes": [],
+  "produces": [
+    "SymbolLibrary"
+  ],
+  "outputs": [
+    {
+      "format": "svg",
+      "channel": "internal"
+    },
+    {
+      "format": "dxf",
+      "channel": "internal"
+    }
+  ],
+  "entitlement": "feature.drawing.electrical",
+  "python": {
+    "requires": [
+      "cairosvg",
+      "pillow"
+    ],
+    "optional": true,
+    "note": "only for the tools/ build scripts"
+  },
+  "skills": [
+    {
+      "id": "generate-electrical-symbol",
+      "role": "owner"
+    }
+  ],
+  "legacy": {
+    "name": "iec60617-symbol-generator",
+    "source": "291_E_IEC60617_Symbols_Generator"
+  },
+  "engine": [
+    "drawing"
+  ]
+}

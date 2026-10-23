@@ -1,0 +1,16 @@
+.git
+.github
+local
+planning
+docs
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/*.egg-info
+**/.env
+**/.env.*
+!**/.env.example
+*.pdf
+*.dwg
+dist

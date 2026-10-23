@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-documents"
+version = "0.1.0"
+description = "EPC-291 documents engine: verifiers, input converter, CCPM scheduling, PM2 exporters"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+epc_documents = ["*.json", "templates/*.md"]

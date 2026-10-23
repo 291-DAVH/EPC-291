@@ -1,0 +1,73 @@
+{
+  "id": "aea-calc",
+  "version": "1.6.0",
+  "kind": "calc",
+  "description": "Low-voltage installation sizing (AEA 90364 / IEC 60364): design current, protection, cable section, voltage drop, short-circuit. Outputs a calculation JSON plus Calculation Memo and Project Synthesis.",
+  "discipline": [
+    "electrical"
+  ],
+  "jurisdiction": [
+    "AR"
+  ],
+  "standards": [
+    "AEA 90364-7-771",
+    "AEA 90364-7-770",
+    "AEA 90364-7-701",
+    "AEA 90364-7-722",
+    "AEA IT 90909-1",
+    "IEC 60364",
+    "IRAM 2183"
+  ],
+  "requires": {},
+  "consumes": [
+    "Board",
+    "Circuit"
+  ],
+  "produces": [
+    "CircuitCalculation",
+    "Document:MC",
+    "Document:SP"
+  ],
+  "outputs": [
+    {
+      "format": "json",
+      "channel": "internal"
+    },
+    {
+      "format": "md",
+      "channel": "internal"
+    }
+  ],
+  "entitlement": "feature.calc.electrical",
+  "python": {
+    "requires": [
+      "openpyxl>=3.1"
+    ]
+  },
+  "skills": [
+    {
+      "id": "size-feeder",
+      "role": "owner"
+    },
+    {
+      "id": "dimension-installation",
+      "role": "owner"
+    },
+    {
+      "id": "write-calculation-memo",
+      "role": "owner"
+    },
+    {
+      "id": "write-memo-summary",
+      "role": "owner"
+    }
+  ],
+  "legacy": {
+    "name": "aea90364-standard",
+    "source": "elec-calc-generator",
+    "status": "draft: norm tables pending validation (see docs/11-pendientes.md)"
+  },
+  "engine": [
+    "calc"
+  ]
+}

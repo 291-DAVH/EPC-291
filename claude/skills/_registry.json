@@ -1,0 +1,82 @@
+{
+  "size-feeder": {
+    "owner": "aea-calc",
+    "legacy_id": "feeder-sizing",
+    "status": "active"
+  },
+  "dimension-installation": {
+    "owner": "aea-calc",
+    "legacy_id": "electrical-dimensioning",
+    "status": "active"
+  },
+  "write-calculation-memo": {
+    "owner": "aea-calc",
+    "legacy_id": "calculation-memo",
+    "status": "active"
+  },
+  "write-memo-summary": {
+    "owner": "aea-calc",
+    "legacy_id": "memo-summary",
+    "status": "active"
+  },
+  "generate-sld": {
+    "owner": "sld",
+    "legacy_id": "sld-generator",
+    "status": "active"
+  },
+  "convert-sld-to-mld": {
+    "owner": "mld",
+    "legacy_id": "convert-sld-to-mld",
+    "status": "active"
+  },
+  "generate-titleblock-sheet": {
+    "owner": "iram-titleblock",
+    "legacy_id": "iram-titleblock-custom-generator",
+    "status": "active"
+  },
+  "generate-iram-sheet": {
+    "owner": "iram-titleblock",
+    "legacy_id": "generate-laminas-iram",
+    "status": "active"
+  },
+  "generate-electrical-symbol": {
+    "owner": "iec-symbols",
+    "legacy_id": "generate-electrical-symbol",
+    "status": "active"
+  },
+  "create-management-document": {
+    "owner": "pm2-docs",
+    "legacy_id": "create-pm2-document",
+    "status": "active"
+  },
+  "generate-specification": {
+    "owner": "spec-writer",
+    "legacy_id": "generar-pliego",
+    "status": "active"
+  },
+  "request-quotation": {
+    "owner": "procurement",
+    "legacy_id": "get-cotizacion",
+    "status": "active"
+  },
+  "create-electrical-line-diagram": {
+    "owner": null,
+    "status": "superseded",
+    "note": "kept only in _legacy"
+  },
+  "electrical-dimensioning (template copy)": {
+    "owner": null,
+    "status": "superseded",
+    "note": "kept only in _legacy"
+  },
+  "memoria-calculos": {
+    "owner": null,
+    "status": "superseded",
+    "note": "kept only in _legacy"
+  },
+  "sintesis-memoria": {
+    "owner": null,
+    "status": "superseded",
+    "note": "kept only in _legacy"
+  }
+}

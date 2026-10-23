@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project backlog (workspace/05-management/backlog.json); internal, never shown to the customer",
+  "type": "object",
+  "required": ["schema_version", "items"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "type", "priority", "status"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^BL-[0-9]{3,}$"},
+          "title": {"type": "string", "minLength": 1},
+          "type": {"enum": ["task", "change", "risk", "question", "defect"]},
+          "priority": {"enum": ["P1", "P2", "P3"]},
+          "status": {"enum": ["backlog", "todo", "doing", "done"]},
+          "estimate_h": {"type": "number", "minimum": 0},
+          "wbs_id": {"type": "string"},
+          "requirement_id": {"type": "string"},
+          "owner": {"type": "string"},
+          "created": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

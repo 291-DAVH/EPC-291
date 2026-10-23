@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0",
+  "plugins": {
+    "aea-calc": {
+      "version": "1.6.0",
+      "kind": "calc",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "size-feeder",
+        "dimension-installation",
+        "write-calculation-memo",
+        "write-memo-summary"
+      ],
+      "engine": [
+        "calc"
+      ],
+      "hash": "f317907c42c4ad03"
+    },
+    "doc-quality": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "engine": [
+        "documents"
+      ],
+      "hash": "24797cae4e129a25"
+    },
+    "equipment-catalog": {
+      "version": "0.1.0",
+      "kind": "knowledge",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "engine": [],
+      "hash": "04503c87e8f48536"
+    },
+    "iec-symbols": {
+      "version": "0.4.16",
+      "kind": "knowledge",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "generate-electrical-symbol"
+      ],
+      "engine": [
+        "drawing"
+      ],
+      "hash": "c0b8210842ee60a8"
+    },
+    "intake-analysis": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "structure-customer-input"
+      ],
+      "engine": [],
+      "hash": "2546ba51bd50723e"
+    },
+    "iram-titleblock": {
+      "version": "0.5.1",
+      "kind": "generator",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "generate-titleblock-sheet",
+        "generate-iram-sheet"
+      ],
+      "engine": [
+        "drawing"
+      ],
+      "hash": "df769a2f214b1b49"
+    },
+    "mld": {
+      "version": "0.1.0",
+      "kind": "generator",
+      "status": "pending",
+      "requires": {
+        "sld": "^0.1.0",
+        "iram-titleblock": "^0.5.1",
+        "iec-symbols": "^0.4.14"
+      },
+      "skills": [
+        "convert-sld-to-mld"
+      ],
+      "engine": [
+        "drawing"
+      ],
+      "hash": "aba5acb02307bb3a"
+    },
+    "pm2-docs": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {
+        "doc-quality": "^0.1.0"
+      },
+      "skills": [
+        "create-management-document"
+      ],
+      "engine": [
+        "documents"
+      ],
+      "hash": "5fd0e319ba6c32f4"
+    },
+    "procurement": {
+      "version": "0.1.0",
+      "kind": "connector",
+      "status": "active",
+      "requires": {
+        "equipment-catalog": "^0.1.0"
+      },
+      "skills": [
+        "request-quotation"
+      ],
+      "engine": [],
+      "hash": "4deddfcbcd7e2001"
+    },
+    "sld": {
+      "version": "0.1.1",
+      "kind": "generator",
+      "status": "active",
+      "requires": {
+        "aea-calc": "^1.6.0",
+        "iec-symbols": "^0.4.14",
+        "iram-titleblock": "^0.5.1"
+      },
+      "skills": [
+        "generate-sld"
+      ],
+      "engine": [
+        "calc",
+        "drawing"
+      ],
+      "hash": "9c3bb59a9b886522"
+    },
+    "spec-writer": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "needs-neutral-templates",
+      "requires": {
+        "doc-quality": "^0.1.0"
+      },
+      "skills": [
+        "generate-specification"
+      ],
+      "engine": [
+        "documents"
+      ],
+      "hash": "670c21c316a859df"
+    },
+    "standard-ingest": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {},
+      "skills": [
+        "analyze-standard"
+      ],
+      "engine": [
+        "standards",
+        "rules"
+      ],
+      "hash": "f86194b0332aeb16"
+    }
+  },
+  "skills": {
+    "analyze-standard": {
+      "owner": "standard-ingest"
+    },
+    "convert-sld-to-mld": {
+      "owner": "mld"
+    },
+    "create-management-document": {
+      "owner": "pm2-docs"
+    },
+    "dimension-installation": {
+      "owner": "aea-calc"
+    },
+    "generate-electrical-symbol": {
+      "owner": "iec-symbols"
+    },
+    "generate-iram-sheet": {
+      "owner": "iram-titleblock"
+    },
+    "generate-sld": {
+      "owner": "sld"
+    },
+    "generate-specification": {
+      "owner": "spec-writer"
+    },
+    "generate-titleblock-sheet": {
+      "owner": "iram-titleblock"
+    },
+    "request-quotation": {
+      "owner": "procurement"
+    },
+    "size-feeder": {
+      "owner": "aea-calc"
+    },
+    "structure-customer-input": {
+      "owner": "intake-analysis"
+    },
+    "write-calculation-memo": {
+      "owner": "aea-calc"
+    },
+    "write-memo-summary": {
+      "owner": "aea-calc"
+    }
+  }
+}

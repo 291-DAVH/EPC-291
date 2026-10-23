@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-backend"
+version = "0.1.0"
+description = "EPC-291 backend: FastAPI modular monolith"
+requires-python = ">=3.10"
+dependencies = ["fastapi", "uvicorn[standard]", "python-multipart", "pydantic>=2", "epc-rules", "openpyxl>=3.1"]
+
+[project.optional-dependencies]
+dev = ["httpx2", "import-linter>=2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

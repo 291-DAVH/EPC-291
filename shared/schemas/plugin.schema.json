@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "epc://schemas/plugin/2.0",
+  "title": "Plugin manifest (claude/plugins/<id>/plugin.json). The plugin GOVERNS its skills.",
+  "type": "object",
+  "required": ["id", "version", "kind", "skills"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "kind": { "enum": ["calc", "generator", "knowledge", "workflow", "connector"] },
+    "description": { "type": "string" },
+    "requires": { "type": "object", "additionalProperties": { "type": "string" }, "description": "plugin-id -> semver range" },
+    "consumes": { "type": "array", "items": { "type": "string" } },
+    "produces": { "type": "array", "items": { "type": "string" } },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["format", "channel"],
+        "properties": {
+          "format": { "type": "string" },
+          "channel": { "enum": ["internal", "internal+deliverable"] }
+        }
+      }
+    },
+    "entitlement": { "type": "string" },
+    "skills": {
+      "type": "array",
+      "description": "Skills this plugin activates, resolved from claude/skills/. A skill not listed by any plugin is inactive.",
+      "items": {
+        "type": "object",
+        "required": ["id", "role"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "version": { "type": "string", "description": "semver range, e.g. ^1.2" },
+          "role": { "enum": ["owner", "consumer"], "description": "owner = this plugin is the single owner of the skill; consumer = uses a skill owned by another plugin" },
+          "overrides": {
+            "type": "object",
+            "description": "Plugin-level settings that win over the skill's own defaults",
+            "properties": {
+              "inputs": { "type": "object" },
+              "outputs": { "type": "array", "items": { "type": "string" } },
+              "gates": { "type": "array", "items": { "type": "string" } },
+              "language": { "type": "string" },
+              "jurisdiction": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

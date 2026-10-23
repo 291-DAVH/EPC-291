@@ -1,0 +1,2870 @@
+{
+  "library": "SLD_MV",
+  "category": "MV",
+  "diagram_type": "SLD",
+  "version": "2.4.0",
+  "generated": "2026-10-12",
+  "units": "mm (1 unidad = 1 mm; símbolos a escala 1, sin agrandar en el diagrama)",
+  "coordinate_system": "x=0 en el eje del conductor; y=0 en el puerto superior; y crece hacia abajo",
+  "style": {
+    "stroke_default": "#0000ff",
+    "stroke_width": 0.25,
+    "line_weights_mm": {
+      "simbolo_y_conductor": 0.25,
+      "barra": 0.5,
+      "borde_de_rellenos": 0.18
+    },
+    "dash_mm": {
+      "E_trazos": [
+        3,
+        1
+      ],
+      "F_trazo_largo_y_corto": [
+        10,
+        1,
+        2,
+        1
+      ]
+    },
+    "lettering_mm": {
+      "h_texto": 2.5,
+      "h_titulo": 3.5,
+      "h_minimo": 1.8,
+      "font_size_por_h": "font-size = h / 0.72"
+    },
+    "grid_mm": 2.5,
+    "cable_external": "#ff0000",
+    "earth": "#139b48",
+    "cell_outline": "#dcdcdc",
+    "font": "osifont (ISO 3098), ISOCPEUR, DejaVu Sans"
+  },
+  "symbols": [
+    {
+      "id": "mv_autotransformer",
+      "file": "291_E_MV_SLD_IEC60617_autotransformer.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Autotransformador MV",
+      "name_en": "MV autotransformer",
+      "description": "Autotransformador de un solo devanado con derivación según IEC 60617 S00328. Se usa para arranque de motores y regulación de tensión MV.",
+      "tags": [
+        "autotransformador",
+        "autotransformer",
+        "AT",
+        "MV"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00328",
+      "notes": null,
+      "iec_60617": [
+        "S00328"
+      ],
+      "size": {
+        "w": 18.3,
+        "h": 15.0
+      },
+      "viewBox": {
+        "x": -21.46,
+        "y": -1.6,
+        "w": 30.56,
+        "h": 29.71
+      },
+      "ports": [
+        {
+          "id": "tap",
+          "x": 7.5,
+          "y": 7.5,
+          "dir": "right"
+        },
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "AT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 17.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ratio",
+          "placeholder": "{ratio}",
+          "example": "20 kV / 0–20 kV",
+          "x": -6.5,
+          "y": 21.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "5 MVA",
+          "x": -6.5,
+          "y": 25.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_busbar_coupler",
+      "file": "291_E_MV_SLD_IEC60617_busbar_coupler.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Seccionador de acoplamiento de barras MT",
+      "name_en": "MV busbar coupler (bus section switch)",
+      "description": "Seccionador de acoplamiento de barras de media tensión según IEC 60617. Une o desacopla dos secciones de barras en la celda de MT.",
+      "tags": [
+        "acoplamiento",
+        "barras",
+        "bus coupler",
+        "MT",
+        "sección",
+        "seccionador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 (seccionador de acoplamiento MT)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 30.8,
+        "h": 17.74
+      },
+      "viewBox": {
+        "x": -32.78,
+        "y": -1.6,
+        "w": 46.88,
+        "h": 21.12
+      },
+      "ports": [
+        {
+          "id": "bus_A",
+          "x": -12.5,
+          "y": 0.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_B",
+          "x": 12.5,
+          "y": 0.0,
+          "dir": "right"
+        },
+        {
+          "id": "bus_C",
+          "x": -12.5,
+          "y": 17.745,
+          "dir": "left"
+        },
+        {
+          "id": "bus_D",
+          "x": 12.5,
+          "y": 17.745,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "BC"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q7",
+          "x": -14.0,
+          "y": 8.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "20 kV",
+          "x": -14.0,
+          "y": 12.82,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "1250 A",
+          "x": -14.0,
+          "y": 17.23,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_cable_termination_down",
+      "file": "291_E_MV_SLD_IEC60617_cable_termination_down.svg",
+      "name_es": "Terminal de cable (hacia abajo)",
+      "name_en": "Cable termination (down)",
+      "description": "Triángulo relleno que marca el terminal de cable de salida.",
+      "tags": [
+        "cable",
+        "terminal"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": null,
+      "size": {
+        "w": 8.82,
+        "h": 12.5
+      },
+      "viewBox": {
+        "x": -17.78,
+        "y": -1.0,
+        "w": 23.2,
+        "h": 15.1
+      },
+      "ports": [
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        },
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 2.5,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 7.427,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_cable_termination_up",
+      "file": "291_E_MV_SLD_IEC60617_cable_termination_up.svg",
+      "name_es": "Terminal de cable (hacia arriba)",
+      "name_en": "Cable termination (up)",
+      "description": "Triángulo relleno invertido (terminal de cable de remonte).",
+      "tags": [
+        "cable",
+        "terminal"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": null,
+      "size": {
+        "w": 8.82,
+        "h": 12.5
+      },
+      "viewBox": {
+        "x": -17.78,
+        "y": -1.0,
+        "w": 23.2,
+        "h": 15.1
+      },
+      "ports": [
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        },
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 2.5,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 7.5,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_capacitor_bank",
+      "file": "291_E_MV_SLD_IEC60617_capacitor_bank.svg",
+      "name_es": "Banco de capacitores MT",
+      "name_en": "MV capacitor bank",
+      "description": "Dos placas con derivación.",
+      "tags": [
+        "capacitor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 18.28,
+        "h": 12.5
+      },
+      "viewBox": {
+        "x": -17.78,
+        "y": -1.6,
+        "w": 23.2,
+        "h": 15.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CAP"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 7.108,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_cell_cm_medicion_tension",
+      "file": "291_E_MV_SLD_IEC60617_cell_cm_medicion_tension.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Celda CM (transformadores de tensión)",
+      "name_en": "CM cell (voltage transformers)",
+      "description": "Celda SM AirSET CM: seccionador, fusibles, seccionador de puesta a tierra y transformadores de tensión para medida/protección.",
+      "tags": [
+        "celda",
+        "CM",
+        "TT",
+        "medición",
+        "MT"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00288 / S00362 / S00878",
+      "notes": "Celda de fabricante: armada con símbolos IEC y el mismo estilo que mv_cell_im_interruptor.",
+      "iec_60617": [
+        "S00288",
+        "S00362",
+        "S00878"
+      ],
+      "size": {
+        "w": 70.02,
+        "h": 217.41
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 73.2,
+        "h": 290.02
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 35.0,
+          "y": 5.0,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": 0.0,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "CM",
+          "x": 0.0,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "MEDICION_TT",
+          "x": 0.0,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": 0.0,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "vt_ratio",
+          "placeholder": "{vt_ratio}",
+          "example": "13.2/√3 : 0.11/√3 kV",
+          "x": 0.0,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": 0.0,
+          "y": -28.593,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": 0.0,
+          "y": -22.505,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQ0000",
+          "x": 0.0,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_cell_dmva_proteccion",
+      "file": "291_E_MV_SLD_IEC60617_cell_dmva_proteccion.svg",
+      "name_es": "Celda DMVL-A (interruptor automático / protección de trafo)",
+      "name_en": "DMVL-A circuit-breaker cell",
+      "description": "Celda SM AirSET DMVL-A: seccionador, interruptor, toroidal, relé disparador, seccionador de tierra e indicador de tensión.",
+      "tags": [
+        "celda",
+        "DMVL",
+        "proteccion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": "Incluye el contorno gris discontinuo de la celda y el tramo de barra que la cruza. Las flechas de terminal de cable fueron redibujadas como triángulos rellenos (el original usa sombreado).",
+      "size": {
+        "w": 142.51,
+        "h": 217.07
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 145.7,
+        "h": 289.67
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 107.5,
+          "y": 5.0,
+          "dir": "right"
+        },
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 212.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": 36.147,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "DMVL - A",
+          "x": 36.137,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "SALIDA_01",
+          "x": 36.147,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": 36.142,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "protection",
+          "placeholder": "{protection}",
+          "example": "P3U",
+          "x": 36.152,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": 36.137,
+          "y": -28.578,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": 36.152,
+          "y": -22.475,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQDMVLA0178",
+          "x": 36.152,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_cell_gam2_remonte",
+      "file": "291_E_MV_SLD_IEC60617_cell_gam2_remonte.svg",
+      "name_es": "Celda GAM2 (remonte de cable)",
+      "name_en": "GAM2 cable riser cell",
+      "description": "Celda SM AirSET GAM2: remonte de cable con barra, indicador capacitivo de tensión y terminal de cable.",
+      "tags": [
+        "celda",
+        "GAM2",
+        "remonte"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": "Incluye el contorno gris discontinuo de la celda y el tramo de barra que la cruza. Las flechas de terminal de cable fueron redibujadas como triángulos rellenos (el original usa sombreado).",
+      "size": {
+        "w": 70.02,
+        "h": 217.07
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 73.2,
+        "h": 289.67
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 35.0,
+          "y": 5.0,
+          "dir": "right"
+        },
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 212.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": -0.005,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "GAM2",
+          "x": 0.0,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "REMONTE",
+          "x": 0.0,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": -0.009,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "protection",
+          "placeholder": "{protection}",
+          "example": "N/A",
+          "x": -0.009,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": -0.014,
+          "y": -28.578,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": 0.0,
+          "y": -22.475,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQGAM20184",
+          "x": 0.0,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_cell_gbc_medida",
+      "file": "291_E_MV_SLD_IEC60617_cell_gbc_medida.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Celda GBC (medida de tensión e intensidad)",
+      "name_en": "GBC cell (current and voltage metering)",
+      "description": "Celda SM AirSET GBC: conexión barra-barra con transformadores de corriente en serie y transformadores de tensión con fusibles.",
+      "tags": [
+        "celda",
+        "GBC",
+        "TI",
+        "TT",
+        "medición",
+        "MT"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00850 / S00878 / S00362",
+      "notes": "Celda de fabricante: armada con símbolos IEC y el mismo estilo que mv_cell_im_interruptor. La barra queda cortada: entra por la izquierda y sale por la derecha.",
+      "iec_60617": [
+        "S00850",
+        "S00878",
+        "S00362"
+      ],
+      "size": {
+        "w": 70.02,
+        "h": 217.41
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 73.2,
+        "h": 290.02
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 35.0,
+          "y": 5.0,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": 0.0,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "GBC-A",
+          "x": 0.0,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "MEDIDA",
+          "x": 0.0,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": 0.0,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "50/5 A",
+          "x": 0.0,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "vt_ratio",
+          "placeholder": "{vt_ratio}",
+          "example": "13.2/√3 : 0.11/√3 kV",
+          "x": 0.0,
+          "y": -28.593,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": 0.0,
+          "y": -22.505,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": 0.0,
+          "y": -16.417,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQ0000",
+          "x": 0.0,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_cell_im_interruptor",
+      "file": "291_E_MV_SLD_IEC60617_cell_im_interruptor.svg",
+      "name_es": "Celda IM (interruptor-seccionador)",
+      "name_en": "IM switch-disconnector cell",
+      "description": "Celda SM AirSET IM: interruptor-seccionador con contacto auxiliar, indicador capacitivo y terminal de cable.",
+      "tags": [
+        "celda",
+        "IM",
+        "seccionador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": "Incluye el contorno gris discontinuo de la celda y el tramo de barra que la cruza. Las flechas de terminal de cable fueron redibujadas como triángulos rellenos (el original usa sombreado).",
+      "size": {
+        "w": 70.02,
+        "h": 217.36
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 73.2,
+        "h": 289.97
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 35.0,
+          "y": 5.0,
+          "dir": "right"
+        },
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 212.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": -0.005,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "IM",
+          "x": -0.01,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "SALIDA_02",
+          "x": -0.005,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": -0.024,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": -0.015,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": -0.015,
+          "y": -28.578,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQIM0189",
+          "x": -0.005,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_cell_qm_fusibles",
+      "file": "291_E_MV_SLD_IEC60617_cell_qm_fusibles.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Celda QM (interruptor-seccionador + fusibles)",
+      "name_en": "QM cell (switch-fuse combination)",
+      "description": "Celda SM AirSET QM: interruptor-seccionador con fusibles de percutor, seccionador de puesta a tierra, indicador capacitivo y terminal de cable.",
+      "tags": [
+        "celda",
+        "QM",
+        "fusible",
+        "MT"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00290 / S00364 / S00367",
+      "notes": "Celda de fabricante: armada con símbolos IEC y el mismo estilo que mv_cell_im_interruptor.",
+      "iec_60617": [
+        "S00290",
+        "S00364",
+        "S00367"
+      ],
+      "size": {
+        "w": 70.02,
+        "h": 217.36
+      },
+      "viewBox": {
+        "x": -36.6,
+        "y": -71.61,
+        "w": 73.2,
+        "h": 289.97
+      },
+      "ports": [
+        {
+          "id": "bus_l",
+          "x": -35.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "bus_r",
+          "x": 35.0,
+          "y": 5.0,
+          "dir": "right"
+        },
+        {
+          "id": "cable",
+          "x": 0.0,
+          "y": 212.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "series",
+          "placeholder": "{series}",
+          "example": "SM AirSET",
+          "x": 0.0,
+          "y": -66.961,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "QM",
+          "x": 0.0,
+          "y": -57.931,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "TRAFO_01",
+          "x": 0.0,
+          "y": -49.696,
+          "anchor": "middle",
+          "size": 4.86
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630A",
+          "x": 0.0,
+          "y": -40.77,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "fuse_rating",
+          "placeholder": "{fuse_rating}",
+          "example": "40A",
+          "x": 0.0,
+          "y": -34.681,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "short_circuit_current",
+          "placeholder": "{short_circuit_current}",
+          "example": "12kA",
+          "x": 0.0,
+          "y": -28.593,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Schneider Electric",
+          "x": 0.0,
+          "y": -22.505,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "serial",
+          "placeholder": "{serial}",
+          "example": "SR7DQ0000",
+          "x": 0.0,
+          "y": -3.299,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_circuit_breaker",
+      "file": "291_E_MV_SLD_IEC60617_circuit_breaker.svg",
+      "name_es": "Interruptor automático MT",
+      "name_en": "MV circuit breaker",
+      "description": "Cuchilla con marca x de contacto de ruptura.",
+      "tags": [
+        "interruptor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 15.78,
+        "h": 22.5
+      },
+      "viewBox": {
+        "x": -20.23,
+        "y": -1.6,
+        "w": 23.2,
+        "h": 25.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -8.824,
+          "y": 12.206,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_ct",
+      "file": "291_E_MV_SLD_IEC60617_ct.svg",
+      "name_es": "Transformador de corriente MT",
+      "name_en": "MV current transformer",
+      "description": "Círculo sobre el conductor.",
+      "tags": [
+        "TI"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 15.78,
+        "h": 17.5
+      },
+      "viewBox": {
+        "x": -17.78,
+        "y": -1.6,
+        "w": 23.2,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 10.294,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_ct_toroidal",
+      "file": "291_E_MV_SLD_IEC60617_ct_toroidal.svg",
+      "name_es": "Transformador de corriente toroidal",
+      "name_en": "Toroidal current transformer",
+      "description": "Círculo sobre el conductor (toroidal de celda DMVL).",
+      "tags": [
+        "TI",
+        "medicion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": null,
+      "size": {
+        "w": 25.01,
+        "h": 22.5
+      },
+      "viewBox": {
+        "x": -22.29,
+        "y": -1.6,
+        "w": 32.42,
+        "h": 25.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -10.882,
+          "y": 13.186,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_differential_relay",
+      "file": "291_E_MV_SLD_IEC60617_differential_relay.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Relé diferencial MT (ANSI 87)",
+      "name_en": "MV differential protection relay (ANSI 87)",
+      "description": "Relé de protección diferencial de media tensión, función ANSI 87. Se usa para protección de transformadores, motores y generadores contra fallas internas. Según IEC 60255 / IEEE C37.90.",
+      "tags": [
+        "relé",
+        "diferencial",
+        "ANSI 87",
+        "87T",
+        "protección",
+        "MT",
+        "IEC 60255"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60255 / IEEE C37.90 (ANSI función 87)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 20.98,
+        "h": 19.61
+      },
+      "viewBox": {
+        "x": -24.53,
+        "y": -1.6,
+        "w": 32.99,
+        "h": 29.87
+      },
+      "ports": [
+        {
+          "id": "in",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "out",
+          "x": 0.0,
+          "y": 19.608,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "87",
+        "DIFF",
+        "87T"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "87T-01",
+          "x": -7.663,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "pickup",
+          "placeholder": "{pickup}",
+          "example": "0.2 Pu",
+          "x": -7.663,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "time",
+          "placeholder": "{time}",
+          "example": "0 ms",
+          "x": -7.663,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_disconnector",
+      "file": "291_E_MV_SLD_IEC60617_disconnector.svg",
+      "name_es": "Seccionador con contacto superior",
+      "name_en": "Disconnector with upper contact",
+      "description": "Contacto fijo (círculo) y cuchilla abierta sobre el conductor de salida de la celda IM.",
+      "tags": [
+        "seccionador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": null,
+      "size": {
+        "w": 19.99,
+        "h": 22.5
+      },
+      "viewBox": {
+        "x": -24.6,
+        "y": -1.6,
+        "w": 27.4,
+        "h": 25.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "DS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -13.186,
+          "y": 13.186,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_distance_relay",
+      "file": "291_E_MV_SLD_IEC60617_distance_relay.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Relé de distancia MT (ANSI 21)",
+      "name_en": "MV distance protection relay (ANSI 21)",
+      "description": "Relé de protección de distancia de media tensión, función ANSI 21. Protege líneas y transformadores contra cortocircuitos por medición de impedancia. Según IEC 60255 / IEEE C37.90.",
+      "tags": [
+        "relé",
+        "distancia",
+        "ANSI 21",
+        "protección",
+        "MT",
+        "IEC 60255",
+        "impedancia"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60255 / IEEE C37.90 (ANSI función 21)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 18.83,
+        "h": 19.61
+      },
+      "viewBox": {
+        "x": -22.62,
+        "y": -1.6,
+        "w": 31.09,
+        "h": 29.87
+      },
+      "ports": [
+        {
+          "id": "in",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "out",
+          "x": 0.0,
+          "y": 19.608,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "21",
+        "DIST",
+        "21"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "21-01",
+          "x": -7.663,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "zone1",
+          "placeholder": "{zone1}",
+          "example": "0.5 Ω",
+          "x": -7.663,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "zone2",
+          "placeholder": "{zone2}",
+          "example": "1.0 Ω",
+          "x": -7.663,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_earthing_switch",
+      "file": "291_E_MV_SLD_IEC60617_earthing_switch.svg",
+      "name_es": "Seccionador de puesta a tierra",
+      "name_en": "Earthing switch",
+      "description": "Cuchilla lateral hacia símbolo de tierra.",
+      "tags": [
+        "tierra"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 16.27,
+        "h": 18.14
+      },
+      "viewBox": {
+        "x": -16.8,
+        "y": -1.6,
+        "w": 23.68,
+        "h": 20.74
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "ES"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -5.392,
+          "y": 10.539,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_energy_meter",
+      "file": "291_E_MV_SLD_IEC60617_energy_meter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Medidor de energía (kWh) MT",
+      "name_en": "Watt-hour meter (MV)",
+      "description": "Contador de energía activa según IEC 60617 S00933: rectángulo con franja superior y rótulo kWh.",
+      "tags": [
+        "medidor",
+        "energía",
+        "kWh"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00933",
+      "notes": null,
+      "iec_60617": [
+        "S00933"
+      ],
+      "size": {
+        "w": 19.46,
+        "h": 15.44
+      },
+      "viewBox": {
+        "x": -41.27,
+        "y": -1.6,
+        "w": 47.27,
+        "h": 26.87
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "kWh",
+        "kWh"
+      ],
+      "label_slots": [
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "ION8650",
+          "x": -6.961,
+          "y": 9.922,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "accuracy_class",
+          "placeholder": "{accuracy_class}",
+          "example": "Cl. 0.5S",
+          "x": -6.961,
+          "y": 14.451,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "50/5 A",
+          "x": -6.961,
+          "y": 18.98,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.961,
+          "y": 23.51,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_fuse",
+      "file": "291_E_MV_SLD_IEC60617_fuse.svg",
+      "name_es": "Fusible MT",
+      "name_en": "MV fuse",
+      "description": "Rectángulo con línea central.",
+      "tags": [
+        "fusible"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 15.38,
+        "h": 17.5
+      },
+      "viewBox": {
+        "x": -15.09,
+        "y": -1.6,
+        "w": 17.8,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "FUSE"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -3.676,
+          "y": 9.804,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_generator",
+      "file": "291_E_MV_SLD_IEC60617_generator.svg",
+      "name_es": "Generador MT",
+      "name_en": "MV generator",
+      "description": "Círculo con G y 3~.",
+      "tags": [
+        "generador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 20.24,
+        "h": 14.98
+      },
+      "viewBox": {
+        "x": -18.76,
+        "y": -1.6,
+        "w": 25.15,
+        "h": 17.58
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "G",
+        "3~",
+        "GEN"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.353,
+          "y": 8.922,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_grounding_transformer",
+      "file": "291_E_MV_SLD_IEC60617_grounding_transformer.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Transformador de puesta a tierra (Zig-Zag)",
+      "name_en": "Grounding transformer (Zig-Zag / earthing transformer)",
+      "description": "Transformador de puesta a tierra de neutro con devanado zigzag según IEC 60617 S00325. Se usa en redes MV sin neutro (triángulo) para crear un neutro artificial puesta a tierra.",
+      "tags": [
+        "transformador",
+        "zigzag",
+        "zig-zag",
+        "neutro",
+        "puesta a tierra",
+        "MV",
+        "triángulo"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00325",
+      "notes": null,
+      "iec_60617": [
+        "S00325"
+      ],
+      "size": {
+        "w": 15.8,
+        "h": 18.0
+      },
+      "viewBox": {
+        "x": -25.28,
+        "y": -1.6,
+        "w": 31.88,
+        "h": 33.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "ZN"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 16.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "20 kV",
+          "x": -6.5,
+          "y": 20.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "150 kVA",
+          "x": -6.5,
+          "y": 25.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "vector",
+          "placeholder": "{vector}",
+          "example": "ZNy11",
+          "x": -6.5,
+          "y": 29.73,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_load_break_switch",
+      "file": "291_E_MV_SLD_IEC60617_load_break_switch.svg",
+      "name_es": "Interruptor-seccionador MT",
+      "name_en": "MV load-break switch",
+      "description": "Contacto fijo, cuchilla y semicírculo de corte en carga.",
+      "tags": [
+        "seccionador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 17.3,
+        "h": 20.0
+      },
+      "viewBox": {
+        "x": -19.25,
+        "y": -1.6,
+        "w": 22.21,
+        "h": 23.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 20.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "LBS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.843,
+          "y": 11.765,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_motor_3ph",
+      "file": "291_E_MV_SLD_IEC60617_motor_3ph.svg",
+      "name_es": "Motor MT",
+      "name_en": "MV motor",
+      "description": "Círculo con M y 3~.",
+      "tags": [
+        "motor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 25.24,
+        "h": 14.98
+      },
+      "viewBox": {
+        "x": -20.84,
+        "y": -1.6,
+        "w": 27.24,
+        "h": 17.58
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "M",
+        "3~",
+        "MOTOR"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.353,
+          "y": 8.922,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_neutral_earthing_resistor",
+      "file": "291_E_MV_SLD_IEC60617_neutral_earthing_resistor.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Resistencia de puesta a tierra del neutro (NER)",
+      "name_en": "Neutral earthing resistor (NER/NGR)",
+      "description": "Resistencia de puesta a tierra del neutro según IEC 60617 S00337. Limita la corriente de falta monofásica en sistemas MV puestos a tierra a través de resistencia.",
+      "tags": [
+        "NER",
+        "NGR",
+        "resistencia",
+        "neutro",
+        "puesta a tierra",
+        "MV"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00337",
+      "notes": null,
+      "iec_60617": [
+        "S00337"
+      ],
+      "size": {
+        "w": 13.95,
+        "h": 15.5
+      },
+      "viewBox": {
+        "x": -28.5,
+        "y": -1.6,
+        "w": 33.6,
+        "h": 29.12
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "R",
+        "NER"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-R1",
+          "x": -4.0,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "resistance",
+          "placeholder": "{resistance}",
+          "example": "40 Ω",
+          "x": -4.0,
+          "y": 16.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "100 A",
+          "x": -4.0,
+          "y": 20.82,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "time",
+          "placeholder": "{time}",
+          "example": "10 s",
+          "x": -4.0,
+          "y": 25.23,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_petersen_coil",
+      "file": "291_E_MV_SLD_IEC60617_petersen_coil.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Bobina de Petersen (bobina de extinción de arco)",
+      "name_en": "Petersen coil (arc suppression coil)",
+      "description": "Bobina de Petersen o reactor de extinción de arco según IEC 60617 S00310. Se usa en redes MV con neutro compensado (sistemas resonantes) para extinguir faltas monofásicas a tierra.",
+      "tags": [
+        "Petersen",
+        "bobina resonante",
+        "neutro compensado",
+        "reactor",
+        "MV",
+        "extinción de arco"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00310",
+      "notes": null,
+      "iec_60617": [
+        "S00310"
+      ],
+      "size": {
+        "w": 12.15,
+        "h": 24.0
+      },
+      "viewBox": {
+        "x": -38.14,
+        "y": -1.6,
+        "w": 43.74,
+        "h": 37.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "L"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-L1",
+          "x": -6.0,
+          "y": 20.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tuning_voltage",
+          "placeholder": "{tuning_voltage}",
+          "example": "20 kV",
+          "x": -6.0,
+          "y": 24.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "inductance",
+          "placeholder": "{inductance}",
+          "example": "12.5 H",
+          "x": -6.0,
+          "y": 29.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "100 A",
+          "x": -6.0,
+          "y": 33.73,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_protection_relay",
+      "file": "291_E_MV_SLD_IEC60617_protection_relay.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Relé de protección MT",
+      "name_en": "Protection relay (MV)",
+      "description": "Relé de medida (IEC 60617 S00327): caja con las funciones ANSI como dato variable. Entrada desde TI/TT arriba, salida de disparo a la derecha.",
+      "tags": [
+        "relé",
+        "protección",
+        "ANSI"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00327 / S00342",
+      "notes": null,
+      "iec_60617": [
+        "S00327",
+        "S00342"
+      ],
+      "size": {
+        "w": 45.68,
+        "h": 15.88
+      },
+      "viewBox": {
+        "x": -45.83,
+        "y": -1.6,
+        "w": 64.93,
+        "h": 23.52
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "trip",
+          "x": 17.5,
+          "y": 10.0,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "RELAY"
+      ],
+      "label_slots": [
+        {
+          "key": "ansi_functions",
+          "placeholder": "{ansi_functions}",
+          "example": "50/51 50N/51N",
+          "x": 0.0,
+          "y": 11.225,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "Sepam S20",
+          "x": -15.686,
+          "y": 11.098,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -15.686,
+          "y": 15.627,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-F11",
+          "x": -15.686,
+          "y": 20.157,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_reactor",
+      "file": "291_E_MV_SLD_IEC60617_reactor.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Reactor MV",
+      "name_en": "MV reactor",
+      "description": "Reactor o bobina de inductancia en red MV según IEC 60617 S00310. Se usa como reactor limitador de cortocircuito o como reactor de compensación.",
+      "tags": [
+        "reactor",
+        "bobina",
+        "inductancia",
+        "limitador",
+        "MV"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00310",
+      "notes": null,
+      "iec_60617": [
+        "S00310"
+      ],
+      "size": {
+        "w": 11.65,
+        "h": 21.0
+      },
+      "viewBox": {
+        "x": -28.09,
+        "y": -1.6,
+        "w": 33.69,
+        "h": 35.71
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 21.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "L"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-L1",
+          "x": -5.5,
+          "y": 23.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "impedance",
+          "placeholder": "{impedance}",
+          "example": "6%",
+          "x": -5.5,
+          "y": 27.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "1 MVA",
+          "x": -5.5,
+          "y": 31.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_recloser",
+      "file": "291_E_MV_SLD_IEC60617_recloser.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Reconectador automático",
+      "name_en": "Automatic recloser",
+      "description": "Reconectador automático según IEC 60617 S00095. Interruptor automático con reconexión automática temporizada para faltas transitorias en redes de distribución aérea.",
+      "tags": [
+        "reconectador",
+        "recloser",
+        "automático",
+        "distribución",
+        "MV",
+        "aéreo",
+        "auto-reclosure"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00095",
+      "notes": null,
+      "iec_60617": [
+        "S00095"
+      ],
+      "size": {
+        "w": 15.8,
+        "h": 17.5
+      },
+      "viewBox": {
+        "x": -25.28,
+        "y": -1.6,
+        "w": 31.88,
+        "h": 27.87
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "AR"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.5,
+          "y": 10.75,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "20 kV",
+          "x": -6.5,
+          "y": 15.16,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "400 A",
+          "x": -6.5,
+          "y": 19.57,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "shots",
+          "placeholder": "{shots}",
+          "example": "3 re-shots",
+          "x": -6.5,
+          "y": 23.98,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_ring_main_unit",
+      "file": "291_E_MV_SLD_IEC60617_ring_main_unit.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Celda compacta RMU (Ring Main Unit) MT",
+      "name_en": "MV ring main unit (RMU)",
+      "description": "Celda compacta de media tensión tipo RMU de 3 vías: dos entradas de anillo con seccionadores y un feeder con interruptor automático. IEC 62271-200.",
+      "tags": [
+        "RMU",
+        "ring main unit",
+        "celda compacta",
+        "MT",
+        "anillo",
+        "media tensión",
+        "feeder"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 62271-200 / IEC 60947 (celda compacta MT)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 39.42,
+        "h": 30.52
+      },
+      "viewBox": {
+        "x": -35.26,
+        "y": -4.62,
+        "w": 53.34,
+        "h": 33.73
+      },
+      "ports": [
+        {
+          "id": "ring_in",
+          "x": -12.5,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "ring_out",
+          "x": 12.5,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "feeder_out",
+          "x": 0.0,
+          "y": 27.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "R1",
+        "R2",
+        "RMU"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "RMU-01",
+          "x": -16.486,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "20 kV",
+          "x": -16.486,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "630 A",
+          "x": -16.486,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_surge_arrester",
+      "file": "291_E_MV_SLD_IEC60617_surge_arrester.svg",
+      "name_es": "Pararrayos / descargador MT",
+      "name_en": "MV surge arrester",
+      "description": "Caja con varistor y tierra.",
+      "tags": [
+        "descargador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 13.82,
+        "h": 21.08
+      },
+      "viewBox": {
+        "x": -16.8,
+        "y": -1.6,
+        "w": 21.23,
+        "h": 23.68
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "SA"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -5.392,
+          "y": 12.01,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_switch_fuse_combination",
+      "file": "291_E_MV_SLD_IEC60617_switch_fuse_combination.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Interruptor-seccionador con fusibles combinados (percutor)",
+      "name_en": "Switch-fuse combination with striker fuses",
+      "description": "Interruptor-seccionador MT (como mv_load_break_switch) con fusible de percutor en serie; el percutor dispara el interruptor por enlace mecánico (IEC 60617 S00364 / S00367).",
+      "tags": [
+        "MT",
+        "fusible",
+        "percutor",
+        "interruptor-seccionador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00290 / S00364 / S00367",
+      "notes": null,
+      "iec_60617": [
+        "S00290",
+        "S00364",
+        "S00367"
+      ],
+      "size": {
+        "w": 24.26,
+        "h": 35.0
+      },
+      "viewBox": {
+        "x": -42.03,
+        "y": -1.6,
+        "w": 44.99,
+        "h": 38.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "LBS+F"
+      ],
+      "label_slots": [
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630 A",
+          "x": -9.804,
+          "y": 12.569,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "fuse_rating",
+          "placeholder": "{fuse_rating}",
+          "example": "40 A",
+          "x": -9.804,
+          "y": 17.098,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -9.804,
+          "y": 21.627,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_transformer_2w",
+      "file": "291_E_MV_SLD_IEC60617_transformer_2w.svg",
+      "name_es": "Transformador de potencia (2 arrollamientos)",
+      "name_en": "Two-winding power transformer",
+      "description": "Dos círculos solapados con conductores de entrada y salida (T1 / T2 de 1000 kVA).",
+      "tags": [
+        "transformador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": null,
+      "size": {
+        "w": 19.37,
+        "h": 47.5
+      },
+      "viewBox": {
+        "x": -54.41,
+        "y": -1.6,
+        "w": 65.09,
+        "h": 50.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 47.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "designation",
+          "placeholder": "{designation}",
+          "example": "-T1",
+          "x": -15.505,
+          "y": 27.309,
+          "anchor": "end",
+          "size": 4.86
+        },
+        {
+          "key": "rated_power",
+          "placeholder": "{rated_power}",
+          "example": "1000kVA",
+          "x": -15.52,
+          "y": 33.735,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_transformer_3w",
+      "file": "291_E_MV_SLD_IEC60617_transformer_3w.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Transformador de tres devanados",
+      "name_en": "Three-winding transformer",
+      "description": "Transformador de tres devanados según IEC 60617 S00322. Bobinas primaria, secundaria y terciaria.",
+      "tags": [
+        "transformador",
+        "3 devanados",
+        "three-winding",
+        "TR"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00322",
+      "notes": null,
+      "iec_60617": [
+        "S00322"
+      ],
+      "size": {
+        "w": 22.0,
+        "h": 27.5
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 43.6,
+        "h": 44.12
+      },
+      "ports": [
+        {
+          "id": "bottom_secondary",
+          "x": -6.0,
+          "y": 27.5,
+          "dir": "down"
+        },
+        {
+          "id": "bottom_tertiary",
+          "x": 6.0,
+          "y": 27.5,
+          "dir": "down"
+        },
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "T"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 27.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "1600 kVA",
+          "x": -6.5,
+          "y": 31.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ratio_prim",
+          "placeholder": "{ratio_prim}",
+          "example": "20/6.6/0.4 kV",
+          "x": -6.5,
+          "y": 35.82,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "vector",
+          "placeholder": "{vector}",
+          "example": "YNd11",
+          "x": -6.5,
+          "y": 40.23,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_voltage_regulator",
+      "file": "291_E_MV_SLD_IEC60617_voltage_regulator.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Regulador de tensión automático (AVR)",
+      "name_en": "Automatic voltage regulator (AVR / OLTC)",
+      "description": "Regulador de tensión automático en columna según IEC 60617. Transformador serie con toma variable en carga (OLTC) para regulación de tensión en redes de distribución MV.",
+      "tags": [
+        "regulador",
+        "AVR",
+        "OLTC",
+        "toma en carga",
+        "tensión",
+        "distribución",
+        "MV"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 (adaptación AVR MV)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 19.45,
+        "h": 25.0
+      },
+      "viewBox": {
+        "x": -25.28,
+        "y": -1.6,
+        "w": 33.38,
+        "h": 41.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "AVR"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 24.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "20 kV ±10%",
+          "x": -6.5,
+          "y": 28.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "1600 kVA",
+          "x": -6.5,
+          "y": 33.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "steps",
+          "placeholder": "{steps}",
+          "example": "±9 × 1.5%",
+          "x": -6.5,
+          "y": 37.73,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "mv_vpis",
+      "file": "291_E_MV_SLD_IEC60617_vpis.svg",
+      "name_es": "Indicador capacitivo de presencia de tensión",
+      "name_en": "Capacitive voltage presence indicator (VPIS)",
+      "description": "Derivación capacitiva con borne indicador (semicírculo). Aparece en cada celda.",
+      "tags": [
+        "indicador",
+        "tension"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 1 (108-2026-SOXXXXXX-E-DU-001)",
+      "notes": "Identificación por forma; el original no lo rotula.",
+      "size": {
+        "w": 43.47,
+        "h": 14.56
+      },
+      "viewBox": {
+        "x": -44.89,
+        "y": -1.0,
+        "w": 46.49,
+        "h": 16.56
+      },
+      "ports": [
+        {
+          "id": "conn",
+          "x": 0.0,
+          "y": 7.5,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "VPIS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -33.48,
+          "y": 8.676,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "mv_vt",
+      "file": "291_E_MV_SLD_IEC60617_vt.svg",
+      "name_es": "Transformador de tensión MT",
+      "name_en": "MV voltage transformer",
+      "description": "Dos círculos solapados con derivación.",
+      "tags": [
+        "TT"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 13.82,
+        "h": 17.5
+      },
+      "viewBox": {
+        "x": -16.8,
+        "y": -1.6,
+        "w": 21.23,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "VT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -5.392,
+          "y": 10.784,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    }
+  ],
+  "standards": "Forma IEC 60617; líneas IRAM 4502; letras IRAM 4503; puertos en retícula de 2,5 mm"
+}

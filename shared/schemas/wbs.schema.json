@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project WBS (workspace/05-management/wbs.json)",
+  "type": "object",
+  "required": ["schema_version", "nodes"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "weight", "progress"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[0-9]+([.][0-9]+){0,5}$", "description": "Dotted number; the parent is the id without its last part"},
+          "name": {"type": "string", "minLength": 1},
+          "discipline": {"type": "string"},
+          "deliverable_id": {"type": "string"},
+          "owner": {"type": "string"},
+          "weight": {"type": "number", "minimum": 0},
+          "progress": {"type": "number", "minimum": 0, "maximum": 100}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

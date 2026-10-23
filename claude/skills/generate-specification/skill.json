@@ -1,0 +1,31 @@
+{
+  "name": "generate-specification",
+  "description": "Genera pliegos técnicos (PG) y especificaciones técnicas (ET) para cualquier disciplina de ingeniería, usando el agente document-writer y el conocimiento aprendido de pliegos del usuario.",
+  "version": "1.0.0",
+  "supports_learning": true,
+  "learnable_content": [
+    "pdf",
+    "examples",
+    "templates",
+    "standards",
+    "references"
+  ],
+  "knowledge_types": {
+    "pdf": "Pliegos aprobados de proyectos anteriores (cualquier disciplina), normas de redacción del cliente",
+    "examples": "Capítulos modelo aprobados por el cliente, ejemplos de requisitos bien redactados",
+    "templates": "Plantillas de capítulos, estructuras de pliego propias del cliente o del estudio",
+    "standards": "Estándares de redacción internos, guías de estilo, listas de normas por disciplina",
+    "references": "Documentos de referencia adicionales: pliegos públicos, normas de organismos"
+  },
+  "capabilities": [
+    "generate_specification_chapter",
+    "generate_full_specification",
+    "review_specification",
+    "autocontrol_pliego"
+  ],
+  "agent": "document-writer",
+  "invocation": "explicit",
+  "context_requires": [
+    "02_ENGINEERING"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "inicio": "2026-10-05",
+  "feriados": [
+    "2026-10-12",
+    "2026-11-23"
+  ],
+  "dias_laborables": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fecha_limite_contractual": "2026-12-18",
+  "metodo_buffer": "50pct",
+  "hitos": [
+    {
+      "nombre": "Diseño aprobado",
+      "fecha": "2026-11-06",
+      "tarea": "T3"
+    },
+    {
+      "nombre": "Entrega al cliente",
+      "fecha": "2026-12-18",
+      "tarea": "T8"
+    }
+  ],
+  "tareas": [
+    {
+      "id": "T1",
+      "nombre": "Relevamiento",
+      "recurso": "Ana",
+      "dur_segura": 6,
+      "predecesores": [],
+      "estado": "pendiente"
+    },
+    {
+      "id": "T2",
+      "nombre": "Información del cliente (planos y requisitos)",
+      "recurso": "Cliente",
+      "tipo_recurso": "externo",
+      "dur_segura": 6,
+      "predecesores": [],
+      "fecha_no_antes_de": "2026-10-08"
+    },
+    {
+      "id": "T3",
+      "nombre": "Diseño",
+      "recurso": "Ana",
+      "dur_segura": 8,
+      "predecesores": [
+        "T1",
+        "T2"
+      ],
+      "entregable": "ENT-001"
+    },
+    {
+      "id": "T4",
+      "nombre": "Compra de materiales",
+      "recurso": "Luis",
+      "dur_segura": 4,
+      "predecesores": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T5",
+      "nombre": "Fabricación",
+      "recurso": "Luis",
+      "dur_segura": 10,
+      "dur_agresiva": 6,
+      "predecesores": [
+        "T3",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "nombre": "Documentación",
+      "recurso": "Ana",
+      "dur_segura": 6,
+      "predecesores": [
+        "T3"
+      ],
+      "entregable": "ENT-002"
+    },
+    {
+      "id": "T7",
+      "nombre": "Pruebas",
+      "recurso": "Marta",
+      "dur_segura": 6,
+      "predecesores": [
+        "T5"
+      ]
+    },
+    {
+      "id": "T8",
+      "nombre": "Entrega y cierre",
+      "recurso": "Marta",
+      "dur_segura": 2,
+      "predecesores": [
+        "T7",
+        "T6"
+      ]
+    }
+  ]
+}

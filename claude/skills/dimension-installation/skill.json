@@ -1,0 +1,10 @@
+{
+  "name": "dimension-installation",
+  "description": "Flujo completo de dimensionado de baja tensión según AEA 90364-7 y AEA 90909-1: Excel a JSON, MC y SP.",
+  "version": "1.3.0",
+  "capabilities": [
+    "xlsx_to_json_pipeline"
+  ],
+  "invocation": "explicit",
+  "context_requires": []
+}

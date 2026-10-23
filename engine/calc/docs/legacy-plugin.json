@@ -1,0 +1,134 @@
+{
+  "id": "CALCULATIONS",
+  "name": "Engineering Calculation Scripts",
+  "version": "1.2",
+  "runtime": "python3",
+  "provides": "calculations",
+  "index": "calc-library.md",
+  "assets": "assets/",
+  "invocation": "explicit",
+  "context_requires": [
+    "02_ENGINEERING"
+  ],
+  "context_excludes": [
+    "90_MANAGEMENT",
+    "01_INPUT"
+  ],
+  "modules": [
+    {
+      "id": "cable_thermal",
+      "file": "cable_thermal.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "conductor_selection",
+      "file": "conductor_selection.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "current_and_loads",
+      "file": "current_and_loads.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "voltage_drop",
+      "file": "voltage_drop.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "short_circuit",
+      "file": "short_circuit.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "lighting",
+      "file": "lighting.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "hvac_airflow",
+      "file": "hvac_airflow.py",
+      "domain": "hvac"
+    },
+    {
+      "id": "hazen_williams",
+      "file": "hazen_williams.py",
+      "domain": "hydraulic"
+    },
+    {
+      "id": "aea_demand",
+      "file": "aea_demand.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_voltage_drop",
+      "file": "aea_voltage_drop.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_earthing",
+      "file": "aea_earthing.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_conductors",
+      "file": "aea_conductors.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_panel_thermal",
+      "file": "aea_panel_thermal.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_icc_factors",
+      "file": "aea_icc_factors.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_icc_decay",
+      "file": "aea_icc_decay.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_special_locations",
+      "file": "aea_special_locations.py",
+      "domain": "electrical"
+    },
+    {
+      "id": "aea_catalog",
+      "file": "aea_catalog.py",
+      "domain": "utility"
+    },
+    {
+      "id": "aea_export",
+      "file": "aea_export.py",
+      "domain": "utility"
+    },
+    {
+      "id": "aea_pipeline",
+      "file": "aea_pipeline.py",
+      "domain": "electrical"
+    }
+  ],
+  "upstream": [
+    "STANDARDS",
+    "EQUIPMENT"
+  ],
+  "standards": [
+    "AEA 90364-7-771",
+    "AEA 90364-7-770",
+    "AEA 90364-7-701",
+    "AEA 90364-7-722",
+    "AEA IT 90909-1",
+    "AEA 90909-0",
+    "IEC 60364",
+    "IRAM 2183"
+  ],
+  "formula_catalog": [
+    "FORMULAS_AEA.md",
+    "formulas_aea.json"
+  ],
+  "calculation_output": "<proyecto>_calculo.json",
+  "calculation_input": "src/*.xlsx (hojas TABLERO y CIRCUITOS)"
+}

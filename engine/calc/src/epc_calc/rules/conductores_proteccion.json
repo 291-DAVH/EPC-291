@@ -1,0 +1,887 @@
+{
+ "grupo": "conductores_proteccion",
+ "reglas": [
+  {
+   "id": "conductores_proteccion.pe_tabla_54_5",
+   "grupo": "conductores_proteccion",
+   "tema": "Sección mínima del conductor de protección PE",
+   "regla": "Para S ≤ 16 mm² el PE tiene sección S; para 16 < S ≤ 35, 16 mm²; para S > 35, S/2 (mismo material). Con otro material se multiplica por k1/k2.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "s_le_16": "S",
+    "s_16_a_35_mm2": 16,
+    "s_gt_35": "S/2",
+    "otro_material": "k1/k2"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.5",
+    "pagina_impresa": "54-11",
+    "pagina_pdf": 251,
+    "cita": "Secciones minimas de los conductores de puesta a tierra y de proteccion",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "S": "mm²"
+    },
+    "columnas": [
+     "S de línea",
+     "S_PE mismo material",
+     "S_PE otro material"
+    ],
+    "filas": [
+     [
+      "S ≤ 16",
+      "S",
+      "(k1/k2)·S"
+     ],
+     [
+      "16 < S ≤ 35",
+      "16",
+      "(k1/k2)·16"
+     ],
+     [
+      "S > 35",
+      "S/2",
+      "(k1/k2)·S/2"
+     ]
+    ],
+    "notas": [
+     "k1: valor de k del conductor de línea (Tabla 54.8 o Tabla 43.1); k2: valor de k del PE (Tablas 54.6 a 54.10).",
+     "Para el PEN la reducción de sección solo se permite según las reglas de dimensionamiento del neutro (Cap. 52)."
+    ]
+   }
+  },
+  {
+   "id": "conductores_proteccion.pe_formula_adiabatica",
+   "grupo": "conductores_proteccion",
+   "tema": "Sección del PE por el calor de la falla",
+   "regla": "El PE se dimensiona con S = √(I²·t)/k, solo para tiempos de desconexión 0,1 s < t ≤ 5 s; con limitadores o t < 0,1 s se verifica k²S² ≥ I²t del dispositivo.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "formula": "S = sqrt(I^2 * t) / k",
+    "t_min_s": 0.1,
+    "t_max_s": 5,
+    "verificacion_limitadores": "k^2 * S^2 >= I^2 * t"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.1.2",
+    "pagina_impresa": "54-12",
+    "pagina_pdf": 252,
+    "cita": "La seccion del conductor de proteccion no debera ser menor que el valor determinado por",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_seccion_normalizada_superior",
+   "grupo": "conductores_proteccion",
+   "tema": "Sección no normalizada del PE",
+   "regla": "Si el cálculo da una sección no normalizada se adopta la sección normalizada inmediata superior.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.1.2",
+    "pagina_impresa": "54-12",
+    "pagina_pdf": 252,
+    "cita": "se deben utilizar conductores de la seccion normalizada inmediatamente superior",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.k_pe_aislado_tabla_54_6",
+   "grupo": "conductores_proteccion",
+   "tema": "Factor k: PE aislado, no incorporado al cable ni agrupado",
+   "regla": "Valores de k del PE aislado (temperatura inicial 40 °C); el menor valor se aplica a PVC de más de 300 mm².",
+   "tipo": "obligatorio",
+   "parametros": {
+    "temperatura_inicial_c": 40
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.6",
+    "pagina_impresa": "54-12",
+    "pagina_pdf": 252,
+    "cita": "Valores de k para conductores de proteccion aislados",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "columnas": [
+     "aislación",
+     "T_inicial_C",
+     "T_final_C",
+     "k_cobre",
+     "k_aluminio",
+     "k_acero"
+    ],
+    "filas": [
+     [
+      "PVC 70 °C",
+      40,
+      "160/140",
+      "136/126",
+      "90/83",
+      "50/46"
+     ],
+     [
+      "PVC 90 °C",
+      40,
+      "160/140",
+      "136/126",
+      "90/83",
+      "50/46"
+     ],
+     [
+      "EPR o XLPE 90 °C",
+      40,
+      250,
+      170,
+      113,
+      62
+     ],
+     [
+      "Goma 60 °C",
+      40,
+      200,
+      153,
+      101,
+      56
+     ],
+     [
+      "Goma 85 °C",
+      40,
+      220,
+      160,
+      106,
+      58
+     ],
+     [
+      "Caucho siliconado",
+      40,
+      350,
+      196,
+      130,
+      71
+     ]
+    ],
+    "nota": "Con dos valores, el menor corresponde a PVC de sección mayor que 300 mm²."
+   }
+  },
+  {
+   "id": "conductores_proteccion.k_pe_desnudo_tabla_54_7",
+   "grupo": "conductores_proteccion",
+   "tema": "Factor k: PE desnudo en contacto con la cubierta del cable",
+   "regla": "Valores de k del PE desnudo en contacto con la cubierta del cable y no agrupado con otros cables.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "temperatura_inicial_c": 40
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.7",
+    "pagina_impresa": "54-13",
+    "pagina_pdf": 253,
+    "cita": "Valores de k para conductores de proteccion desnudos",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "columnas": [
+     "cubierta",
+     "T_inicial_C",
+     "T_final_C",
+     "k_cobre",
+     "k_aluminio",
+     "k_acero"
+    ],
+    "filas": [
+     [
+      "PVC",
+      40,
+      200,
+      153,
+      101,
+      56
+     ],
+     [
+      "Polietileno",
+      40,
+      150,
+      131,
+      87,
+      48
+     ],
+     [
+      "Polietileno cloro-sulfonado",
+      40,
+      220,
+      160,
+      106,
+      58
+     ]
+    ]
+   }
+  },
+  {
+   "id": "conductores_proteccion.k_pe_en_cable_tabla_54_8",
+   "grupo": "conductores_proteccion",
+   "tema": "Factor k: PE incorporado al cable o agrupado con otros cables",
+   "regla": "Valores de k del PE incorporado como armadura, o agrupado con otros cables o conductores aislados.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.8",
+    "pagina_impresa": "54-13",
+    "pagina_pdf": 253,
+    "cita": "Valores de k para conductores de proteccion incorporados",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "columnas": [
+     "aislación",
+     "T_inicial_C",
+     "T_final_C",
+     "k_cobre",
+     "k_aluminio",
+     "k_acero"
+    ],
+    "filas": [
+     [
+      "PVC 70 °C",
+      70,
+      "160/140",
+      "115/103",
+      "76/68",
+      "42/37"
+     ],
+     [
+      "PVC 90 °C",
+      90,
+      "160/140",
+      "100/86",
+      "66/57",
+      "36/31"
+     ],
+     [
+      "EPR o XLPE 90 °C",
+      90,
+      250,
+      143,
+      94,
+      52
+     ],
+     [
+      "Goma 60 °C",
+      60,
+      200,
+      141,
+      93,
+      51
+     ],
+     [
+      "Goma 85 °C",
+      85,
+      220,
+      134,
+      89,
+      48
+     ],
+     [
+      "Caucho siliconado",
+      180,
+      350,
+      132,
+      87,
+      47
+     ]
+    ],
+    "nota": "Con dos valores, el menor corresponde a PVC de sección mayor que 300 mm²."
+   }
+  },
+  {
+   "id": "conductores_proteccion.k_cubierta_metalica_tabla_54_9",
+   "grupo": "conductores_proteccion",
+   "tema": "Factor k: cubierta metálica del cable como PE",
+   "regla": "Valores de k de armadura, malla o conductor concéntrico usados como conductor de protección.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.9",
+    "pagina_impresa": "54-13",
+    "pagina_pdf": 253,
+    "cita": "Valores de k para conductores utilizados como cubierta metalica del cable",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "columnas": [
+     "aislación",
+     "T_inicial_C",
+     "T_final_C",
+     "k_cobre",
+     "k_aluminio",
+     "k_plomo",
+     "k_acero"
+    ],
+    "filas": [
+     [
+      "PVC 70 °C",
+      60,
+      200,
+      141,
+      93,
+      26,
+      51
+     ],
+     [
+      "PVC 90 °C",
+      80,
+      200,
+      128,
+      85,
+      23,
+      46
+     ],
+     [
+      "EPR o XLPE 90 °C",
+      80,
+      200,
+      128,
+      85,
+      23,
+      46
+     ],
+     [
+      "Goma 60 °C",
+      55,
+      200,
+      144,
+      95,
+      26,
+      52
+     ],
+     [
+      "Goma 85 °C",
+      75,
+      220,
+      140,
+      93,
+      26,
+      51
+     ],
+     [
+      "Mineral con cubierta de PVC",
+      70,
+      200,
+      135,
+      null,
+      null,
+      null
+     ],
+     [
+      "Mineral desnudo",
+      105,
+      250,
+      135,
+      null,
+      null,
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "id": "conductores_proteccion.k_desnudos_tabla_54_10",
+   "grupo": "conductores_proteccion",
+   "tema": "Factor k: conductores desnudos sin riesgo para materiales vecinos",
+   "regla": "Valores de k de conductores desnudos según condiciones (temperatura inicial 40 °C).",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.10",
+    "pagina_impresa": "54-14",
+    "pagina_pdf": 254,
+    "cita": "Valores de k para conductores desnudos donde no existe riesgo",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "columnas": [
+     "condiciones",
+     "T_inicial_C",
+     "k_cobre",
+     "T_max_cobre_C",
+     "k_aluminio",
+     "T_max_aluminio_C",
+     "k_acero",
+     "T_max_acero_C"
+    ],
+    "filas": [
+     [
+      "visible y en área restringida",
+      40,
+      224,
+      500,
+      122,
+      300,
+      81,
+      500
+     ],
+     [
+      "condiciones normales",
+      40,
+      153,
+      200,
+      101,
+      200,
+      56,
+      200
+     ],
+     [
+      "con riesgo de fuego",
+      40,
+      131,
+      150,
+      87,
+      150,
+      48,
+      150
+     ]
+    ]
+   }
+  },
+  {
+   "id": "conductores_proteccion.pe_minimo_independiente",
+   "grupo": "conductores_proteccion",
+   "tema": "Sección mínima del PE que no forma parte del cable",
+   "regla": "El PE que no forma parte del cable de alimentación ni comparte envoltura con los conductores de línea tiene como mínimo 2,5 mm² Cu o 16 mm² Al con protección mecánica; 4 mm² Cu o 16 mm² Al sin ella.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "con_proteccion_mecanica": {
+     "cu_mm2": 2.5,
+     "al_mm2": 16
+    },
+    "sin_proteccion_mecanica": {
+     "cu_mm2": 4,
+     "al_mm2": 16
+    }
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.1.3",
+    "pagina_impresa": "54-14",
+    "pagina_pdf": 254,
+    "cita": "si poseen una proteccion mecanica",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_comun_varios_circuitos",
+   "grupo": "conductores_proteccion",
+   "tema": "PE común a varios circuitos",
+   "regla": "Si el PE es común a varios circuitos se calcula para la condición más desfavorable de corriente de falla y tiempo, o se elige por la Tabla 54.3 con el conductor de línea de mayor sección.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.1.4",
+    "pagina_impresa": "54-14",
+    "pagina_pdf": 254,
+    "cita": "Cuando un conductor de proteccion es comun a varios circuitos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_tipos_permitidos",
+   "grupo": "conductores_proteccion",
+   "tema": "Tipos de conductor de protección",
+   "regla": "El PE puede ser un conductor de cable multipolar, un conductor aislado bajo envolvente común con los activos, un conductor aislado en perfiles o bandejas, o un conductor desnudo en bandejas.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.2.1",
+    "pagina_impresa": "54-14",
+    "pagina_pdf": 254,
+    "cita": "Los conductores de proteccion pueden ser uno o mas de los siguientes",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.no_usar_como_pe",
+   "grupo": "conductores_proteccion",
+   "tema": "Partes metálicas que no pueden ser PE ni equipotencial",
+   "regla": "No se usan como conductor de protección ni equipotencial: cañerías de agua o de gases/líquidos inflamables, partes de la construcción sometidas a esfuerzos, caños flexibles o doblables a mano, cable portante, vainas y armaduras de ciertos cables, envolturas de canalizaciones y bandejas; sí se equipotencializan.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.2.3",
+    "pagina_impresa": "54-15",
+    "pagina_pdf": 255,
+    "cita": "No se permite el empleo de los elementos y partes metalicas que se indican a continuacion",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_sin_dispositivo_de_corte",
+   "grupo": "conductores_proteccion",
+   "tema": "Dispositivos de corte en el PE",
+   "regla": "No se inserta ningún dispositivo de corte o maniobra en el conductor de protección; solo uniones desmontables con herramienta para mediciones.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.3.3",
+    "pagina_impresa": "54-15",
+    "pagina_pdf": 255,
+    "cita": "En el conductor de proteccion no debe insertarse ningun dispositivo de corte o maniobra",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_sin_guirnalda",
+   "grupo": "conductores_proteccion",
+   "tema": "Masas como parte del circuito de protección",
+   "regla": "Las masas de equipos no se usan como parte del conductor de protección de otros equipos ni se conectan en serie (guirnalda).",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.3.5",
+    "pagina_impresa": "54-15",
+    "pagina_pdf": 255,
+    "cita": "no deberan ser empleadas formando parte de los conductores de proteccion de otros materiales",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pen_prohibido_en_inmuebles",
+   "grupo": "conductores_proteccion",
+   "tema": "Conductor PEN (esquema TN-C)",
+   "regla": "El conductor PEN (TN-C) está prohibido en instalaciones en inmuebles; solo se permite en distribución pública y desde un transformador propio hasta el tablero principal de BT.",
+   "tipo": "prohibido",
+   "parametros": {
+    "esquema": "TN-C"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.4 Nota 1",
+    "pagina_impresa": "54-15",
+    "pagina_pdf": 255,
+    "cita": "estan prohibidos para instalaciones en inmuebles",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pen_seccion_minima",
+   "grupo": "conductores_proteccion",
+   "tema": "Sección mínima del conductor PEN",
+   "regla": "El PEN solo se usa en instalaciones fijas y tiene como mínimo 10 mm² Cu o 16 mm² Al; debe estar aislado para la tensión más elevada.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "cu_mm2": 10,
+    "al_mm2": 16
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.4.1",
+    "pagina_impresa": "54-16",
+    "pagina_pdf": 256,
+    "cita": "debera tener una seccion no menor que 10",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pen_separacion_n_pe",
+   "grupo": "conductores_proteccion",
+   "tema": "Separación de N y PE desde el PEN",
+   "regla": "Desde el punto en que N y PE se derivan del PEN, aguas abajo el neutro no se conecta a ninguna parte puesta a tierra ni al PE.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.4.3",
+    "pagina_impresa": "54-16",
+    "pagina_pdf": 256,
+    "cita": "el conductor neutro se conecte a otra parte de la instalacion puesta a tierra",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_junto_a_activos_con_sobreintensidad",
+   "grupo": "conductores_proteccion",
+   "tema": "PE con protección por sobreintensidad",
+   "regla": "Si se usan protecciones de sobreintensidad contra choques eléctricos, el PE va en la misma canalización que los activos (solo TN-S o IT con masas colectivas).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "esquemas": [
+     "TN-S",
+     "IT masas colectivas"
+    ]
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.6",
+    "pagina_impresa": "54-16",
+    "pagina_pdf": 256,
+    "cita": "los conductores de proteccion deben instalarse en la misma canalizacion",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.pe_reforzado_fuga_10ma",
+   "grupo": "conductores_proteccion",
+   "tema": "PE reforzado con corriente de fuga mayor que 10 mA",
+   "regla": "Con corriente en el PE mayor que 10 mA (equipos fijos) el PE tiene como mínimo 10 mm² Cu o 16 mm² Al en todo su recorrido, o se instala un segundo PE.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "corriente_fuga_umbral_ma": 10,
+    "cu_mm2": 10,
+    "al_mm2": 16
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "543.7",
+    "pagina_impresa": "54-16",
+    "pagina_pdf": 256,
+    "cita": "los conductores de proteccion deberan ser reforzados",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.equipotencial_principal",
+   "grupo": "conductores_proteccion",
+   "tema": "Conductor equipotencial principal",
+   "regla": "Sección no menor que la mitad del PE de mayor sección de la instalación, con mínimo 6 mm² Cu, 16 mm² Al o 50 mm² acero; puede limitarse a 25 mm² Cu.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "fraccion_del_pe_mayor": 0.5,
+    "min_cu_mm2": 6,
+    "min_al_mm2": 16,
+    "min_acero_mm2": 50,
+    "max_cu_mm2": 25
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "544.1.1",
+    "pagina_impresa": "54-17",
+    "pagina_pdf": 257,
+    "cita": "Los conductores equipotenciales principales, deberan tener una seccion no menor que la mitad",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.equipotencial_suplementario_masa_masa",
+   "grupo": "conductores_proteccion",
+   "tema": "Equipotencial suplementario entre masas",
+   "regla": "Entre dos masas, la sección no es menor que la más pequeña de los conductores de protección conectados a ellas.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "544.2.1",
+    "pagina_impresa": "54-17",
+    "pagina_pdf": 257,
+    "cita": "no sera menor que la mas pequena de las secciones",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "conductores_proteccion.equipotencial_suplementario_masa_extrana",
+   "grupo": "conductores_proteccion",
+   "tema": "Equipotencial suplementario a masa extraña",
+   "regla": "Entre una masa y una masa extraña, la sección equivalente no es menor que la mitad de la del PE conectado a esa masa.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "fraccion_del_pe": 0.5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "544.2.2",
+    "pagina_impresa": "54-17",
+    "pagina_pdf": 257,
+    "cita": "no sera menor que la mitad de la del conductor de proteccion conectado a esa masa",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

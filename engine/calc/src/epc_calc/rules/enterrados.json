@@ -1,0 +1,202 @@
+{
+ "grupo": "enterrados",
+ "reglas": [
+  {
+   "id": "enterrados.profundidad_cables_directos",
+   "grupo": "enterrados",
+   "tema": "Cables directamente enterrados",
+   "regla": "Los cables directamente enterrados van a una profundidad mínima de 0,7 m respecto de la superficie del terreno, con protección mecánica de ladrillos o cubiertas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "profundidad_min_m": 0.7
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.1",
+    "pagina_impresa": 86,
+    "cita": "a una profundidad mínima de 0,7 m respecto de la superficie del terreno"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "enterrados.recubrimiento_conductos",
+   "grupo": "enterrados",
+   "tema": "Conductos enterrados",
+   "regla": "Los conductos tienen un recubrimiento mínimo de 0,7 m de tierra de relleno y pendiente mínima de 1 % hacia las cámaras de inspección.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "recubrimiento_min_m": 0.7,
+    "pendiente_min_pct": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.2",
+    "pagina_impresa": 86,
+    "cita": "recubrimiento mínimo de 0,7 m de tierra de relleno por sobre el conducto"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "enterrados.pendiente_conductos",
+   "grupo": "enterrados",
+   "tema": "Pendiente de conductos enterrados",
+   "regla": "La pendiente mínima de los conductos enterrados es 1 % hacia las cámaras de inspección.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "pendiente_min_pct": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.2",
+    "pagina_impresa": 86,
+    "cita": "con pendiente mínima del 1 % hacia las cámaras de inspección"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "enterrados.diametro_conductos_tabla",
+   "grupo": "enterrados",
+   "tema": "Diámetro mínimo de conductos enterrados",
+   "regla": "Un cable por caño: 50 mm si d ≤ 25 mm, 100 mm si 25 < d ≤ 66 mm, 1,5·d si d > 66 mm. Dos cables: 3·d (mín. 50) / 2,5·d (mín. 100) / 2,5·d. Tres cables: 3·d (mín. 50) / 3·d (mín. 100) / 3·d.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "d_es": "diámetro exterior del cable en mm"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "Tabla 771.12.XIV",
+    "pagina_impresa": 86,
+    "cita": "Tabla 771.12.XIV - Diámetro mínimo de conductos enterrados"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario",
+   "tabla": [
+    {
+     "d_mm": "d <= 25",
+     "un_cable_mm": 50,
+     "dos_cables": "3 d con un mínimo de 50",
+     "tres_cables": "3 d con un mínimo de 50"
+    },
+    {
+     "d_mm": "25 < d <= 66",
+     "un_cable_mm": 100,
+     "dos_cables": "2,5 d con un mínimo de 100",
+     "tres_cables": "3 d con un mínimo de 100"
+    },
+    {
+     "d_mm": "d > 66",
+     "un_cable_mm": "1,5 d",
+     "dos_cables": "2,5 d",
+     "tres_cables": "3 d"
+    }
+   ]
+  },
+  {
+   "id": "enterrados.bajo_construcciones",
+   "grupo": "enterrados",
+   "tema": "Cables subterráneos bajo construcciones",
+   "regla": "Van dentro de un conducto que se extiende al menos 0,30 m más allá del perímetro de la construcción.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "extension_min_m": 0.3
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.3",
+    "pagina_impresa": 87,
+    "cita": "se extienda, como mínimo, 0,30 m más allá del perímetro de la construcción"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "enterrados.cruces_caño_de_reserva",
+   "grupo": "enterrados",
+   "tema": "Cruces de calles internas",
+   "regla": "Los cables que cruzan calles internas van en caños protegidos por hormigón y se deja previsto al menos un caño de reserva.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "canos_de_reserva_min": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.3",
+    "pagina_impresa": 87,
+    "cita": "se dejará previsto como mínimo un caño de reserva"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "enterrados.proteccion_hormigon_pobre",
+   "grupo": "enterrados",
+   "tema": "Protección de caños de PVC enterrados",
+   "regla": "Los caños de PVC (IRAM 13350) se recubren en todas sus caras con hormigón pobre 1:5 de espesor mínimo 5 cm.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "dosificacion": "1:5",
+    "espesor_min_cm": 5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.4.2.2",
+    "pagina_impresa": 86,
+    "cita": "espesor mínimo de 5 cm"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

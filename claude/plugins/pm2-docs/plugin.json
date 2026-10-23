@@ -1,0 +1,53 @@
+{
+  "id": "pm2-docs",
+  "version": "0.1.0",
+  "kind": "workflow",
+  "description": "PM2 management artifacts: CCPM scheduling, charter/canvas exporters, phase canvases. Implements the pm2 methodology pack.",
+  "discipline": [
+    "management"
+  ],
+  "requires": {
+    "doc-quality": "^0.1.0"
+  },
+  "consumes": [
+    "Project"
+  ],
+  "produces": [
+    "Document:management"
+  ],
+  "outputs": [
+    {
+      "format": "md",
+      "channel": "internal"
+    },
+    {
+      "format": "pdf",
+      "channel": "internal+deliverable"
+    }
+  ],
+  "entitlement": "feature.management.pm2",
+  "python": {
+    "requires": []
+  },
+  "system": {
+    "optional": [
+      "pandoc",
+      "libreoffice",
+      "poppler-utils"
+    ]
+  },
+  "skills": [
+    {
+      "id": "create-management-document",
+      "role": "owner"
+    }
+  ],
+  "methodology": "pm2",
+  "legacy": {
+    "source": "00-Template-Claude/.claude/library/plugins/calculations + skill create-pm2-document"
+  },
+  "note": "charter_exporter imports document_verifier from doc-quality; hub path resolution is pending (see docs/MIGRATION_LOG.md).",
+  "engine": [
+    "documents"
+  ]
+}

@@ -1,0 +1,1 @@
+﻿Ejecuta `python3 -B .claude/hooks/dashboard.py` y presenta el resumen ejecutivo del estado del proyecto: paquetes por estado, avance general, bloqueos activos y próximo paso recomendado con la frase fija correspondiente.

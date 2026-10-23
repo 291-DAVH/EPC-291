@@ -1,0 +1,250 @@
+{
+ "grupo": "proteccion_sobrecorrientes",
+ "reglas": [
+  {
+   "id": "proteccion_sobrecorrientes.coordinacion_ib_in_iz",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Coordinación entre conductor y protección contra sobrecargas",
+   "regla": "El dispositivo de protección cumple IB ≤ In ≤ IZ e I2 ≤ 1,45·IZ.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "condicion_1a": "IB <= In",
+    "condicion_1b": "In <= IZ",
+    "condicion_2": "I2 <= 1,45 * IZ"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "433.1",
+    "pagina_impresa": "43-10",
+    "pagina_pdf": 158,
+    "cita": "Las condiciones 1) y 2) dadas mas arriba, se pueden interpretar como tres condiciones",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.i2_definicion",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Corriente I2 de operación convencional",
+   "regla": "I2 es la corriente de operación en el tiempo convencional para interruptores automáticos, y la corriente máxima de fusión en el tiempo convencional para fusibles gG.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "433.1",
+    "pagina_impresa": "43-10",
+    "pagina_pdf": 158,
+    "cita": "la corriente maxima de fusion en los tiempos convencionales, para los fusibles gG",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.temperaturas_tabla_43_1",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Temperaturas características de los conductores",
+   "regla": "Temperatura máxima en servicio continuo, límite de sobrecarga y límite de cortocircuito según el tipo de aislación.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "Tabla 43.1",
+    "pagina_impresa": "43-6",
+    "pagina_pdf": 154,
+    "cita": "Temperatura caracteristica de los conductores",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "temperatura": "°C"
+    },
+    "columnas": [
+     "aislación",
+     "T servicio continuo",
+     "T límite sobrecarga",
+     "T límite cortocircuito"
+    ],
+    "filas": [
+     [
+      "PVC hasta 300 mm²",
+      70,
+      100,
+      160
+     ],
+     [
+      "PVC mayor de 300 mm²",
+      70,
+      100,
+      140
+     ],
+     [
+      "PVC hasta 300 mm² (90 °C)",
+      90,
+      100,
+      160
+     ],
+     [
+      "PVC mayor de 300 mm² (90 °C)",
+      90,
+      100,
+      140
+     ],
+     [
+      "Goma etilén propilénica (EPR)",
+      90,
+      130,
+      250
+     ],
+     [
+      "Polietileno reticulado (XLPE)",
+      90,
+      130,
+      250
+     ]
+    ]
+   }
+  },
+  {
+   "id": "proteccion_sobrecorrientes.neutro_proteccion_igual_seccion",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Protección del neutro (TT y TN)",
+   "regla": "Con neutro de sección igual o mayor que la de línea no hace falta detección de sobreintensidad ni corte en el neutro; con neutro menor sí, aunque sin necesidad de cortarlo.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "431.2.1",
+    "pagina_impresa": "43-7",
+    "pagina_pdf": 155,
+    "cita": "no es necesario prever una deteccion de sobreintensidad ni un dispositivo de desconexion sobre el conductor neutro",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.neutro_it_no_distribuir",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Neutro en esquema IT",
+   "regla": "En esquemas IT es altamente recomendable no distribuir el neutro.",
+   "tipo": "recomendado",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "431.2.2",
+    "pagina_impresa": "43-7",
+    "pagina_pdf": 155,
+    "cita": "es altamente recomendable no distribuir el conductor neutro",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.neutro_secuencia_maniobra",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Maniobra del neutro",
+   "regla": "El neutro no se desconecta antes que los conductores de línea y se conecta al mismo tiempo o antes.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "431.3",
+    "pagina_impresa": "43-8",
+    "pagina_pdf": 156,
+    "cita": "el conductor neutro no sea desconectado antes que los conductores de linea",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.poder_de_corte",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Poder de corte del dispositivo de protección",
+   "regla": "La capacidad de ruptura del dispositivo es igual o superior a la corriente presunta de cortocircuito en el lugar de instalación (salvo protección de acompañamiento, 434.5.1).",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "432.1 Nota 2",
+    "pagina_impresa": "43-8",
+    "pagina_pdf": 156,
+    "cita": "La capacidad de ruptura de un dispositivo de proteccion debera ser igual o superior al valor de la corriente presunta",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "proteccion_sobrecorrientes.aM_no_sobrecarga",
+   "grupo": "proteccion_sobrecorrientes",
+   "tema": "Fusibles aM",
+   "regla": "Los fusibles aM no protegen contra sobrecargas; solo se usan contra cortocircuitos de aparatos de maniobra.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-4-43",
+    "edicion": "2006",
+    "clausula": "432.3 Nota 1",
+    "pagina_impresa": "43-9",
+    "pagina_pdf": 157,
+    "cita": "estos fusibles no deben ser empleados para la proteccion contra sobrecargas",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

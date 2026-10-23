@@ -1,0 +1,464 @@
+{
+ "grupo": "circuitos",
+ "reglas": [
+  {
+   "id": "circuitos.iug_corriente_unitaria",
+   "grupo": "circuitos",
+   "tema": "Circuito de iluminación de uso general (IUG)",
+   "regla": "Cada boca de un IUG admite cargas unitarias de hasta 10 A de funcionamiento permanente.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "corriente_unitaria_max_a": 10
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) I",
+    "pagina_impresa": 22,
+    "cita": "cuya corriente de funcionamiento permanente no sea mayor que 10 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.iug_proteccion_max",
+   "grupo": "circuitos",
+   "tema": "Circuito de iluminación de uso general (IUG)",
+   "regla": "La protección del IUG es bipolar para una corriente no mayor de 16 A.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "proteccion_max_a": 16,
+    "polos_protegidos": "ambos"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) I",
+    "pagina_impresa": 22,
+    "cita": "Estos circuitos contarán con protecciones en ambos polos para una corriente no mayor de 16 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.iug_bocas_max",
+   "grupo": "circuitos",
+   "tema": "Circuito de iluminación de uso general (IUG)",
+   "regla": "Un IUG tiene como máximo 15 bocas de salida.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max": 15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) I",
+    "pagina_impresa": 22,
+    "cita": "no mayor de 16 A y el número máximo de bocas de salida será de quince (15)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.tug_corriente_unitaria",
+   "grupo": "circuitos",
+   "tema": "Circuito de tomacorrientes de uso general (TUG)",
+   "regla": "Cada boca de un TUG admite cargas unitarias de no más de 10 A con tomacorrientes 2P+T de 10 A (IRAM 2071), o 16 A con IRAM-IEC 60309.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "corriente_unitaria_max_a": 10,
+    "corriente_unitaria_max_iec60309_a": 16
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) II",
+    "pagina_impresa": 22,
+    "cita": "podrán co- nectarse cargas unitarias de no más de 10 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.tug_proteccion_max",
+   "grupo": "circuitos",
+   "tema": "Circuito de tomacorrientes de uso general (TUG)",
+   "regla": "La protección del TUG es bipolar para una corriente no mayor de 20 A.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "proteccion_max_a": 20,
+    "polos_protegidos": "ambos"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) II",
+    "pagina_impresa": 22,
+    "cita": "protecciones en ambos polos para una corriente no mayor de 20 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.tug_bocas_max",
+   "grupo": "circuitos",
+   "tema": "Circuito de tomacorrientes de uso general (TUG)",
+   "regla": "Un TUG tiene como máximo 15 bocas de salida.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max": 15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 a) II",
+    "pagina_impresa": 22,
+    "cita": "no mayor de 20 A y el número máximo de bocas de salida será de quince (15)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.uso_especial_proteccion_y_bocas",
+   "grupo": "circuitos",
+   "tema": "Circuitos de uso especial (IUE y TUE)",
+   "regla": "Los circuitos de uso especial tienen protección bipolar de hasta 32 A y un máximo de 12 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "proteccion_max_a": 32,
+    "bocas_max": 12
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 b)",
+    "pagina_impresa": 23,
+    "cita": "protecciones en ambos polos para una corriente no mayor de 32 A y el número máximo de bocas de salida es de doce (12)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.tue_corriente_unitaria",
+   "grupo": "circuitos",
+   "tema": "Circuito de tomacorrientes de uso especial (TUE)",
+   "regla": "Cada boca de un TUE admite cargas unitarias de hasta 20 A con tomacorrientes 2P+T de 20 A (IRAM 2071), o hasta 16 A con IRAM-IEC 60309.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "corriente_unitaria_max_a": 20,
+    "corriente_unitaria_max_iec60309_a": 16
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 b) II",
+    "pagina_impresa": 23,
+    "cita": "pueden conec- tarse cargas unitarias, de hasta 20 A por medio de tomacorrientes tipo 2P+T de 20 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.iue_a_la_intemperie",
+   "grupo": "circuitos",
+   "tema": "Circuito de iluminación de uso especial (IUE)",
+   "regla": "La iluminación de lugares a la intemperie se hace con IUE; se recomienda que esos circuitos sean independientes.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "obligatorio_a_la_intemperie": true
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 b) I",
+    "pagina_impresa": 23,
+    "cita": "Este tipo de circuitos debe ser empleado para la iluminación de lugares a la intemperie"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.iluminacion_mayor_10a",
+   "grupo": "circuitos",
+   "tema": "Carga de iluminación mayor de 10 A",
+   "regla": "Si la carga de iluminación supera 10 A se usa un IUE (hasta 20 A); por encima, un circuito de carga única (ACU) u otro específico (OCE).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "umbral_iug_a": 10,
+    "iue_max_a": 20
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 b)",
+    "pagina_impresa": 42,
+    "cita": "Si la carga fuese superior a los 10 A, podrá optarse por un circuito de iluminación de uso especial (IUE) hasta un consumo de 20 A."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.apm",
+   "grupo": "circuitos",
+   "tema": "Circuito de pequeños motores monofásicos (APM)",
+   "regla": "El APM tiene máximo 15 bocas, 10 A por boca y protección no mayor que 25 A.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max": 15,
+    "corriente_por_boca_max_a": 10,
+    "proteccion_max_a": 25
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 c2) I",
+    "pagina_impresa": 24,
+    "cita": "El número máximo de bocas será de 15, la carga máxima por boca de 10 A y la protección del circuito no puede ser mayor que 25 A."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.mbtf",
+   "grupo": "circuitos",
+   "tema": "Circuito de fuentes de muy baja tensión funcional (MBTF)",
+   "regla": "El MBTF tiene máximo 15 bocas (en 220 V), 10 A por boca y protección no mayor que 20 A.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max": 15,
+    "corriente_por_boca_max_a": 10,
+    "proteccion_max_a": 20
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 c2) III",
+    "pagina_impresa": 24,
+    "cita": "El número máximo de bocas (en 220 V) será de 15, la carga máxima por boca de 10 A y la protección del circuito no puede ser mayor que 20 A."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.ate_bocas_max",
+   "grupo": "circuitos",
+   "tema": "Circuito de tensión estabilizada (ATE)",
+   "regla": "El ATE tiene como máximo 15 bocas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max": 15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 c1) II",
+    "pagina_impresa": 24,
+    "cita": "Los circuitos ATE deberán tener como máximo quince (15) bocas"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.ite",
+   "grupo": "circuitos",
+   "tema": "Circuito de iluminación trifásica específica (ITE)",
+   "regla": "El ITE tiene máximo 12 bocas por fase o línea y 10 A por boca, con protección omnipolar.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "bocas_max_por_fase": 12,
+    "corriente_por_boca_max_a": 10,
+    "proteccion": "omnipolar"
+   },
+   "aplica_a": [
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 c2) IV",
+    "pagina_impresa": 25,
+    "cita": "El número máximo de bocas por fase o línea será de 12, la carga máxima por boca de 10 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.fuentes_comunicaciones_2200va",
+   "grupo": "circuitos",
+   "tema": "Circuito específico de fuentes de comunicación, portería o timbres",
+   "regla": "Un mismo circuito de uso específico puede alimentar todas esas fuentes si la suma de sus potencias nominales no supera 2200 VA.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "potencia_total_max_va": 2200
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 j)",
+    "pagina_impresa": 42,
+    "cita": "la suma de sus potencias nominales no sea mayor que 2200 VA."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.tomas_por_boca",
+   "grupo": "circuitos",
+   "tema": "Cantidad de tomacorrientes por boca",
+   "regla": "Una boca admite como máximo dos tomacorrientes en caja rectangular (50 x 100 mm) y cuatro en caja cuadrada (100 x 100 mm); nunca más de cuatro.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "tomas_max_caja_50x100": 2,
+    "tomas_max_caja_100x100": 4,
+    "tomas_max_por_boca": 4
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 a)",
+    "pagina_impresa": 42,
+    "cita": "pero el número máximo de tomacorrientes por boca es de cuatro (4)"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.caja_de_paso_como_boca",
+   "grupo": "circuitos",
+   "tema": "Caja de paso con más de un circuito",
+   "regla": "Una caja de paso o derivación con más de un circuito puede ser boca solo si está a una altura no inferior a 1,80 m.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 1.8
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 Nota 1",
+    "pagina_impresa": 21,
+    "cita": "si están ubicadas a una altura no inferior a 1,80 m."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "circuitos.equilibrio_trifasico",
+   "grupo": "circuitos",
+   "tema": "Equilibrio de cargas en instalaciones trifásicas",
+   "regla": "En instalaciones trifásicas se procura mantener el sistema lo más equilibrado posible mediante una adecuada distribución de las cargas.",
+   "tipo": "recomendado",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 q)",
+    "pagina_impresa": 43,
+    "cita": "se procurará mantener el sistema lo más equilibrado posible"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

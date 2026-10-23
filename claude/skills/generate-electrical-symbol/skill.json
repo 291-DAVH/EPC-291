@@ -1,0 +1,29 @@
+{
+  "name": "generate-electrical-symbol",
+  "description": "Genera símbolos eléctricos SVG (SLD/MLD × MV/LV) con el estándar de la biblioteca: colores, trazo, medidas, puertos, texto fijo/variable y catálogo.",
+  "version": "2.0.0",
+  "supports_learning": true,
+  "learnable_content": [
+    "svg",
+    "pdf",
+    "standards",
+    "examples",
+    "references"
+  ],
+  "knowledge_types": {
+    "svg": "Símbolos SVG de referencia, plantillas corporativas, símbolos de proyectos anteriores",
+    "pdf": "Normas IEC 60617, IRAM 4502/4503, catálogos de fabricantes con simbología",
+    "standards": "Archivos de normas y criterios de representación propios del cliente",
+    "examples": "Ejemplos de bibliotecas de símbolos aprobadas por el cliente o proyectos previos",
+    "references": "Documentos de referencia adicionales (manuales, notas técnicas)"
+  },
+  "capabilities": [
+    "generate_svg",
+    "generate_catalog_entry",
+    "update_library_sprite"
+  ],
+  "invocation": "explicit",
+  "context_requires": [
+    "02_ENGINEERING"
+  ]
+}

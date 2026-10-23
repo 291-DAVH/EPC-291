@@ -1,0 +1,1 @@
+﻿Lee `.claude/rules/m6-states-quality.md`. El usuario quiere enviar el paquete $ARGUMENTS a revisión. Verifica las precondiciones, ejecuta `python3 -B .claude/hooks/send-to-review.py $ARGUMENTS` y actualiza project-status.md.

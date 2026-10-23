@@ -1,0 +1,464 @@
+{
+ "grupo": "tomacorrientes",
+ "reglas": [
+  {
+   "id": "tomacorrientes.altura_arista_inferior_771",
+   "grupo": "tomacorrientes",
+   "tema": "Altura de cajas de tomacorrientes",
+   "regla": "En la Sección 771, la arista inferior de la caja de un tomacorriente sobre zócalo queda a no menos de 0,15 m del solado terminado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.15,
+    "referencia": "arista inferior de la caja"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.2",
+    "pagina_impresa": 44,
+    "cita": "la arista inferior quede a no menos de 0,15 m del nivel del solado terminado."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.altura_arista_inferior_770",
+   "grupo": "tomacorrientes",
+   "tema": "Altura de cajas de tomacorrientes en viviendas (770)",
+   "regla": "En la Sección 770 la arista inferior queda entre 0,2 y 0,3 m del solado terminado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.2,
+    "altura_max_m": 0.3,
+    "referencia": "arista inferior de la caja"
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.7.2",
+    "pagina_impresa": 13,
+    "cita": "quede entre 0,2 y 0,3 m del nivel del solado (piso) terminado."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.mesadas_771",
+   "grupo": "tomacorrientes",
+   "tema": "Tomacorrientes sobre mesadas",
+   "regla": "Sobre mesadas de baños, cocinas y lavaderos la arista inferior de la caja queda a no menos de 0,10 m de la mesada, además de respetar las distancias a fuentes de agua (701).",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_sobre_mesada_m": 0.1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.2",
+    "pagina_impresa": 44,
+    "cita": "a no menos de 0,10 m del nivel de mesada"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.mesadas_770",
+   "grupo": "tomacorrientes",
+   "tema": "Tomacorrientes sobre mesadas (770)",
+   "regla": "Idéntica exigencia en la Sección 770: 0,10 m sobre la mesada.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_sobre_mesada_m": 0.1
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.7.2",
+    "pagina_impresa": 13,
+    "cita": "a no menos de 0,10 m del nivel de mesada"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ninos_bajos_2x10t_771",
+   "grupo": "tomacorrientes",
+   "tema": "Tomacorrientes accesibles a niños",
+   "regla": "En viviendas, los tomacorrientes a nivel de zócalo o hasta 0,9 m del solado son 2x10+T (IRAM 2071) con pantalla contra inserción de cuerpos extraños.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_umbral_m": 0.9,
+    "tipo": "2x10+T IRAM 2071 con pantalla"
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.2",
+    "pagina_impresa": 44,
+    "cita": "hasta una altura de 0,9 m del nivel del solado terminado deberán ser de 2x10+T construidos según Norma IRAM 2071"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.baldeado_771",
+   "grupo": "tomacorrientes",
+   "tema": "Ambientes con limpieza por baldeado",
+   "regla": "Donde se baldea, la arista inferior de la caja queda a no menos de 0,20 m del solado (IP20 mínimo); por debajo de ese nivel el conjunto es IP54.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.2,
+    "ip_sobre_altura": "IP20",
+    "ip_bajo_altura": "IP54"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.2",
+    "pagina_impresa": 44,
+    "cita": "a no menos de 0,20 m del nivel del solado ter- minado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.baldeado_770",
+   "grupo": "tomacorrientes",
+   "tema": "Ambientes con limpieza por baldeado (770)",
+   "regla": "En la Sección 770 la altura mínima de la arista inferior es 0,30 m del solado terminado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.3
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.7.2",
+    "pagina_impresa": 13,
+    "cita": "a no menos de 0,30 m del nivel del solado terminado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.orificios_hacia_arriba",
+   "grupo": "tomacorrientes",
+   "tema": "Orientación de los tomacorrientes",
+   "regla": "Se recomienda no instalar tomacorrientes sobre planos horizontales con los orificios verticales hacia arriba.",
+   "tipo": "recomendado",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.2",
+    "pagina_impresa": 44,
+    "cita": "Se recomienda no instalar los tomacorrientes sobre planos horizontales"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.mixtas_bajo_090",
+   "grupo": "tomacorrientes",
+   "tema": "Bocas mixtas y tomas bajo 0,90 m",
+   "regla": "No se admiten tomacorrientes conectados al circuito de iluminación a menos de 0,90 m del solado terminado.",
+   "tipo": "prohibido",
+   "parametros": {
+    "altura_umbral_m": 0.9
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 p)",
+    "pagina_impresa": 43,
+    "cita": "No se permite la instalación de bocas de tomacorrientes conectadas al circuito de iluminación, situadas a menos de 0,90 m del nivel del solado terminado."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.toilette_toma_en_iluminacion",
+   "grupo": "tomacorrientes",
+   "tema": "Toilette",
+   "regla": "En un toilette (baño sin bañera ni ducha) el tomacorriente requerido puede cargarse al circuito de iluminación.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 n)",
+    "pagina_impresa": 43,
+    "cita": "el tomacorriente requerido en los puntos mínimos de utilización podrá cargarse al circuito de iluminación"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ate_color_rojo",
+   "grupo": "tomacorrientes",
+   "tema": "Tomacorrientes de circuitos ATE",
+   "regla": "Los tomacorrientes IRAM 2071 de circuitos de tensión estabilizada (ATE) son de color rojo.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "color": "rojo"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.7.6 c1) II",
+    "pagina_impresa": 24,
+    "cita": "se instalarán tomacorrientes de color rojo"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.escuelas_aulas_pizarron",
+   "grupo": "tomacorrientes",
+   "tema": "Aulas: tomacorrientes junto al pizarrón",
+   "regla": "Cada aula lleva dos bocas 2x10+T sobre la pared del pizarrón, una entre 0,2 y 0,4 m del solado y la otra a 2,3 m.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_boca_baja_min_m": 0.2,
+    "altura_boca_baja_max_m": 0.4,
+    "altura_boca_alta_m": 2.3,
+    "bocas": 2
+   },
+   "aplica_a": [
+    "establecimientos educativos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.4 j)",
+    "pagina_impresa": 41,
+    "cita": "Una de estas bocas deberá ubicarse entre 0,2 y 0,4 m del nivel del solado terminado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.escuelas_inicial_1_7m",
+   "grupo": "tomacorrientes",
+   "tema": "Jardines maternales e infantes",
+   "regla": "En aulas de Jardines Maternales, de Infantes (Ciclo Inicial) o Ciclo Básico no se instalan tomacorrientes a menos de 1,7 m del solado.",
+   "tipo": "prohibido",
+   "parametros": {
+    "altura_min_m": 1.7
+   },
+   "aplica_a": [
+    "establecimientos educativos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.4 j)",
+    "pagina_impresa": 41,
+    "cita": "no se instalarán bocas de tomacorrientes a alturas infe- riores a los 1,7 m"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.deposito_perimetro",
+   "grupo": "tomacorrientes",
+   "tema": "Tomacorrientes en depósitos (salón general)",
+   "regla": "Una boca de tomacorrientes de uso general cada 9 m de perímetro, con un mínimo de dos; en grados medio, elevado y superior se agrega una de uso especial cada 18 m, con un mínimo de una.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "perimetro_por_boca_uso_general_m": 9,
+    "bocas_minimas_uso_general": 2,
+    "perimetro_por_boca_uso_especial_m": 18,
+    "bocas_minimas_uso_especial": 1
+   },
+   "aplica_a": [
+    "depósitos y elaboración de sustancias no inflamables"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.3.3.1 a 771.8.3.3.3.4",
+    "pagina_impresa": 36,
+    "cita": "una boca para tomacorrientes de uso general por cada 9 m, o fracción, de perímetro"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_modo_0_2_interior",
+   "grupo": "tomacorrientes",
+   "tema": "Carga de vehículos eléctricos (Modos 0 y 2, interior)",
+   "regla": "Para carga en Modo 0 y Modo 2 en interiores las bocas del circuito de carga son IRAM 2071 de 10 A.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "tipo": "IRAM 2071",
+    "corriente_a": 10
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.4.1",
+    "pagina_impresa": 13,
+    "cita": "deben ser de tipo IRAM 2071 de 10 A"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_un_vehiculo_por_modulo",
+   "grupo": "tomacorrientes",
+   "tema": "Carga de vehículos eléctricos",
+   "regla": "No se carga más de un vehículo eléctrico en simultáneo por módulo de tomacorriente.",
+   "tipo": "prohibido",
+   "parametros": {
+    "vehiculos_max_por_modulo": 1
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.1",
+    "pagina_impresa": 12,
+    "cita": "No se permite cargar en simultáneo más de un VE por módulo de tomacorriente."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_diferencial_30ma_clase_a",
+   "grupo": "tomacorrientes",
+   "tema": "Protección diferencial de carga de vehículos eléctricos",
+   "regla": "Los circuitos de carga del VE se protegen con interruptor diferencial clase A de corriente residual nominal máxima 30 mA.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "i_dn_max_ma": 30,
+    "clase": "A"
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.2",
+    "pagina_impresa": 12,
+    "cita": "deben estar protegidos por un interruptor diferencial clase A de corriente"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_modo_3_4_acu",
+   "grupo": "tomacorrientes",
+   "tema": "Estaciones de carga Modos 3 y 4",
+   "regla": "En Modo 3 y Modo 4 es obligatoria una estación de carga con circuito dedicado de uso específico ACU.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "circuito": "ACU"
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.4.2 y 3.5.2",
+    "pagina_impresa": 13,
+    "cita": "es obligatoria la instalación de una estación de carga, con un circuito eléctrico dedicado"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_ip_intemperie",
+   "grupo": "tomacorrientes",
+   "tema": "Grado IP de carga de vehículos eléctricos a la intemperie",
+   "regla": "A la intemperie sin chorro de agua: IP44 o superior; con chorros de agua: IP55 o superior.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_sin_chorro": "IP44",
+    "ip_con_chorro": "IP55"
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.5.1 y 3.5.2",
+    "pagina_impresa": 13,
+    "cita": "IP mínimo debe ser IP55 o superior"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "tomacorrientes.ev_una_acometida",
+   "grupo": "tomacorrientes",
+   "tema": "Acometida para carga de vehículos eléctricos",
+   "regla": "No se admite más de una acometida con medición independiente por inmueble.",
+   "tipo": "prohibido",
+   "parametros": {
+    "acometidas_max": 1
+   },
+   "aplica_a": [
+    "vehículos eléctricos"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-722",
+    "edicion": "2018",
+    "clausula": "722, apartado 3.6",
+    "pagina_impresa": 13,
+    "cita": "No se admite más de una acometida con medición independiente por inmueble."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

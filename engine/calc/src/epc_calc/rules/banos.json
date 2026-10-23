@@ -1,0 +1,310 @@
+{
+ "grupo": "banos",
+ "reglas": [
+  {
+   "id": "banos.zona0_ducha_sin_receptaculo",
+   "grupo": "banos",
+   "tema": "Zona 0 de duchas sin receptáculo",
+   "regla": "La altura de la zona 0 es de 10 cm y su extensión es la misma de la zona 1.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_zona0_cm": 10
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.30.2",
+    "pagina_impresa": 6,
+    "cita": "la altura de la zona 0 es 10 cm"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.zona1_altura",
+   "grupo": "banos",
+   "tema": "Zona 1: altura",
+   "regla": "La zona 1 llega al plano horizontal a 225 cm del punto más alto del piso de la bañera o receptáculo, o al punto de salida de agua más alto, el mayor de los dos.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_cm": 225
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.30.3",
+    "pagina_impresa": 7,
+    "cita": "el plano horizontal que queda a 225 cm por sobre el punto más alto del piso de la bañera o"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.zona1_duchador_movil",
+   "grupo": "banos",
+   "tema": "Zona 1: duchador móvil",
+   "regla": "Con duchador móvil, la superficie vertical de la zona 1 es la circunscripta a 120 cm del punto de conexión a la salida de agua del conducto flexible.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_cm": 120
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.30.3",
+    "pagina_impresa": 7,
+    "cita": "a una distancia de 120 cm desde el punto de conexión a la salida de agua del conducto"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.zona1_ducha_sin_receptaculo_fija",
+   "grupo": "banos",
+   "tema": "Zona 1: ducha fija sin receptáculo",
+   "regla": "Sin receptáculo y con duchador fijo, la zona 1 se extiende 60 cm horizontales desde la flor de la ducha.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_horizontal_cm": 60
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.30.3",
+    "pagina_impresa": 7,
+    "cita": "a una distancia horizontal de 60 cm desde la flor de la ducha"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.zona2_ancho",
+   "grupo": "banos",
+   "tema": "Zona 2",
+   "regla": "La zona 2 se extiende 60 cm por fuera del límite exterior de la zona 1, entre el piso y el cielorraso.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ancho_cm": 60
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.30.4",
+    "pagina_impresa": 7,
+    "cita": "situada a 60 cm por afuera de la zona 1"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.ip_zona_0",
+   "grupo": "banos",
+   "tema": "Grado de protección en zona 0",
+   "regla": "Los materiales y equipos eléctricos en la zona 0 tienen como mínimo IPX7.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IPX7",
+    "ip_min_con_chorros": "IPX7"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.512.2",
+    "pagina_impresa": 10,
+    "cita": "en la zona 0: IPX7"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.ip_zona_1",
+   "grupo": "banos",
+   "tema": "Grado de protección en zona 1",
+   "regla": "Los materiales y equipos eléctricos en la zona 1 tienen como mínimo IPX5.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IPX5",
+    "ip_min_con_chorros": "IPX5"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.512.2",
+    "pagina_impresa": 10,
+    "cita": "en la zona 1: IPX5"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.ip_zona_2",
+   "grupo": "banos",
+   "tema": "Grado de protección en zona 2",
+   "regla": "Los materiales y equipos eléctricos en la zona 2 tienen como mínimo IPX4; IPX5 en baños públicos o donde se usen chorros de agua.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IPX4",
+    "ip_min_con_chorros": "IPX5"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.512.2",
+    "pagina_impresa": 10,
+    "cita": "en la zona 2: IPX4"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.ip_zona_3",
+   "grupo": "banos",
+   "tema": "Grado de protección en zona 3",
+   "regla": "Los materiales y equipos eléctricos en la zona 3 tienen como mínimo IPX1; IPX5 en baños públicos o donde se usen chorros de agua.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ip_min": "IPX1",
+    "ip_min_con_chorros": "IPX5"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.512.2",
+    "pagina_impresa": 10,
+    "cita": "en la zona 3: IPX1"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.diferencial_30ma",
+   "grupo": "banos",
+   "tema": "Protección diferencial de circuitos de baño",
+   "regla": "Todos los circuitos terminales de los locales de baño se protegen complementariamente con interruptores diferenciales de IΔn ≤ 30 mA.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "i_dn_max_ma": 30
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.412.5",
+    "pagina_impresa": 8,
+    "cita": "deberán ser protegidos complementariamente contra los contactos directos por medio de interruptores diferenciales de IΔn ≤ 30 mA"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.separacion_electrica",
+   "grupo": "banos",
+   "tema": "Separación eléctrica en baños",
+   "regla": "La protección por separación eléctrica se admite solo para circuitos que alimentan un solo aparato utilizador o un solo tomacorriente.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "cargas_max": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-701",
+    "edicion": "2012",
+    "clausula": "701.413.5",
+    "pagina_impresa": 10,
+    "cita": "Para los circuitos que alimenten un solo tomacorriente."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "banos.hidromasaje_alimentacion",
+   "grupo": "banos",
+   "tema": "Bañeras de hidromasaje",
+   "regla": "Se alimentan en forma fija y permanente desde un diferencial de IΔn ≤ 30 mA exclusivo, con protección termomagnética asociada; el volumen bajo la bañera es zona 1.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "i_dn_max_ma": 30,
+    "diferencial_exclusivo": true
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 s)",
+    "pagina_impresa": 43,
+    "cita": "La alimentación a dichas bañeras deberá realizarse en forma fija y permanente desde un interruptor diferencial de IΔn ≤ 30 mA"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}
