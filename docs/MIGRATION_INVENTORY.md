@@ -1,5 +1,11 @@
 # Migration inventory (read-only analysis, nothing moved)
 
+> **Historical record.** Paths written as `platform/...` or `\platform\...` describe the layout during the migration. Where things live now:
+> `platform/hub` -> `claude/plugins` · `platform/skills` -> `claude/skills` · `platform/agents` -> `claude/agents` · `platform/core/rules` -> `engine/rules` ·
+> `platform/core/workflow` -> `management/workflow` · `platform/methodologies` -> `management/methodologies` · `platform/jurisdictions` -> `engine/jurisdictions` ·
+> `platform/schemas`, `platform/i18n` -> `shared/` · `platform/tools` -> `tools/` · `platform/apps/api` -> `backend/` · `platform/apps/web` -> `frontend/` ·
+> `dev-knowledge`, `_legacy`, `projects*` -> `local/`. The `platform/` folder no longer exists (see `docs/architecture/target-structure.md`).
+
 Scan date: 2026-10-23. Method: MD5 per file + `plugin.json` versions + dates. Every "keep" below is a proposal pending user confirmation.
 
 ## A. Plugins → `platform/hub/`

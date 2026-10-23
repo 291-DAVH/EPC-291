@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate simulated projects for demos (default 20) into local/projects-demo/.
 
-  python tools/dev/seed_demo.py [--count 20] [--out DIR]
+  python tools/dev/seed_demo.py [--count 20] [--out DIR] [--reset]
 
 The folder is separate from projects/ so demo data never mixes with real projects. Everything here is
 fictitious. Requirements are written the way the analysis step produces them (see docs/USER_DATA_MODEL.md).
@@ -169,6 +169,12 @@ def write_file(path: Path, fmt: str, title: str, client: str, code: str):
         msp.add_text(title, dxfattribs={"height": 8}).set_placement((20, 270))
         msp.add_text(f"{client} - {code} - Rev 00", dxfattribs={"height": 5}).set_placement((20, 255))
         doc.saveas(path)
+        # PDF twin of every drawing (the client receives DXF and PDF); rendered from the DXF with the engine exporter
+        try:
+            from epc_drawing.export.pdf import dxf_to_pdf
+            dxf_to_pdf(path, path.with_suffix(".pdf"))
+        except Exception:                                    # matplotlib not installed: simple text PDF
+            path.with_suffix(".pdf").write_bytes(pdf_bytes(title, [f"Cliente: {client}", f"Proyecto: {code}", "Revisión: Rev 00", "Plano de demostración (datos simulados)."]))
 
 
 def jdump(path, obj):
@@ -273,10 +279,6 @@ def engineering(pdir, ccode, code, discs, rnd):
     (el / "calc" / "cuadro-de-cargas.csv").write_text("\n".join(rows) + "\n", encoding="utf-8", newline="\n")
     (el / "calc" / "lista-de-cables.csv").write_text("cable;origen;destino;longitud_m\n" + "\n".join(
         f"CB-{k:02d};Tablero general;{n};{rnd.randint(8, 90)}" for k, (n, _) in enumerate(feeders, 1)) + "\n", encoding="utf-8", newline="\n")
-    (el / "docs" / "criterios-de-diseno.md").write_text(
-        f"# Criterios de diseño eléctrico - {code}\n\n- Norma de referencia: AEA 90364-7-771 (borrador de reglas, sin validar).\n"
-        "- Caída de tensión máxima: 3 % en circuitos terminales, 5 % total.\n- Conductores de cobre, aislación XLPE.\n"
-        "- Datos simulados para demostración.\n", encoding="utf-8", newline="\n")
     for d in discs:
         if d == "electrical":
             continue
@@ -396,13 +398,21 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--count", type=int, default=20)
     ap.add_argument("--out", default=str(W / "local" / "projects-demo"))
+    ap.add_argument("--reset", action="store_true", help="regenerate everything; the current folder is first moved to projects-demo.bak-<timestamp> (last 2 kept)")
     a = ap.parse_args()
     out = Path(a.out)
-    if out.exists():
+    if out.exists() and any(out.iterdir()):
         if out.name != "projects-demo":
-            raise SystemExit("refusing to overwrite a folder that is not named projects-demo")
-        shutil.rmtree(out)
-    out.mkdir(parents=True)
+            raise SystemExit("refusing to touch a folder that is not named projects-demo")
+        if not a.reset:
+            raise SystemExit(f"{out} already exists and may hold manual changes: nothing was touched.\n"
+                             "Use --reset to regenerate it (your current data is kept in a projects-demo.bak-<timestamp> folder).")
+        backup = out.with_name(f"projects-demo.bak-{dt.datetime.now():%Y%m%d-%H%M%S}")
+        shutil.move(str(out), str(backup))
+        print(f"previous data kept in {backup}")
+        for old in sorted(out.parent.glob("projects-demo.bak-*"))[:-2]:       # keep the last two backups only
+            shutil.rmtree(old)
+    out.mkdir(parents=True, exist_ok=True)
     rnd = random.Random(2026)
     for i in range(min(a.count, len(CLIENTS))):
         print(build_project(i, out, rnd))

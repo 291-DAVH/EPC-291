@@ -101,8 +101,10 @@ export interface Portfolio {
 }
 export interface DeliverableItem {
   id: string; code: string; name: string; discipline: string; format: string; revision: string; status: string;
-  due?: string; delivered_on?: string; downloadable: boolean; overdue: boolean;
+  due?: string; delivered_on?: string; downloadable: boolean; overdue: boolean; formats: string[];
 }
+export interface PackageGroup { id: string; emission: string; transmittal: string; rev: string; count: number }
+export interface PackagesView { count: number; rev: string; groups: PackageGroup[] }
 export interface InputItem {
   id: string; kind: string; title: string; text: string; source: string; created: string; status: string; attachments: { name: string; size: number }[];
 }
@@ -142,3 +144,31 @@ export type EngText =
   | { name: string; format: "text"; text: string; truncated: boolean }
   | { name: string; format: "table"; rows: string[][]; truncated: boolean }
   | { name: string; format: "sheets"; sheets: Record<string, string[][]> };
+
+/* ---- design criteria ---- */
+export interface Criterion {
+  id: string; group: { en: string; es: string }; label: { en: string; es: string }; unit: string; type: "number" | "choice" | "text";
+  min?: number; max?: number; options?: (string | number)[]; default: string | number; value: string | number;
+  overridden: boolean; source: string; note: string; updated: string | null;
+}
+export interface CriteriaHistory { key: string; from: string | number; to: string | number; source: string; note: string; at: string }
+export interface CriteriaView {
+  discipline: string; jurisdiction: string; validated: boolean; notice: string; items: Criterion[]; changed: number; history: CriteriaHistory[];
+}
+
+/* ---- single-line diagram input ---- */
+export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number }
+export interface SldCircuit {
+  tag: string; description: string; load: number | null; unit: string; destination: string; parent_tag: string; topology: string; phase: string;
+  length_m: number; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string;
+}
+export interface SldTitleblock {
+  company: string; company_cuit: string; client: string; client_cuit: string; drawn_by: string; checked_by: string; approved_by: string;
+  description: string; location: string; scale: string; revision: string; status: string;
+}
+export interface SldData { board: SldBoard; circuits: SldCircuit[]; titleblock: SldTitleblock }
+export interface SldStatus { state: "idle" | "running" | "done" | "failed"; name?: string; outputs: string[]; log: string[]; error?: string; started?: string; finished?: string }
+export interface SldView {
+  input: SldData; saved: boolean; status: SldStatus;
+  options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[] };
+}

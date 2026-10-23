@@ -7,8 +7,8 @@
 **Automated EPC engineering, built from plugins.**
 Calculations, drawings, documents and standards-based rules for engineering projects, with a web app for customers and a technical console for engineers.
 
-[![Version](https://img.shields.io/badge/version-0.1.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
-[![Gate](https://img.shields.io/badge/test%20battery-20%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
+[![Version](https://img.shields.io/badge/version-0.2.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Gate](https://img.shields.io/badge/test%20battery-21%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
 [![React](https://img.shields.io/badge/web-React%20%2B%20TypeScript-0ea5e9?style=for-the-badge)](frontend/)
@@ -66,7 +66,7 @@ python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
 .venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
 
-# Test battery (20 checks, run before merging anything)
+# Test battery (21 checks, run before merging anything)
 .venv\Scripts\python tools\ci\run_gate.py
 ```
 
@@ -74,7 +74,7 @@ Run the app with 20 simulated projects (two terminals):
 
 ```bash
 # 1) demo data and API (copy .env.example to .env.demo and set EPC_PROJECTS=<repo>/local/projects-demo)
-.venv\Scripts\python tools\dev\seed_demo.py
+.venv\Scripts\python tools\dev\seed_demo.py          # first time; later runs need --reset (keeps a backup of your manual changes)
 .venv\Scripts\python -m uvicorn epc.main:app --app-dir backend\src --port 8000 --env-file .env.demo
 
 # 2) web app (customers) on :5173, console (admin) on :5174
@@ -148,7 +148,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test 
 
 ## 📜 Status and license
 
-Release 0.1.0 (foundation). Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+Release 0.2.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
 
 <div align="center">
 

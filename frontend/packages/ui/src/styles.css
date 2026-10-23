@@ -172,3 +172,23 @@ table.wbs tr.wbs-group td { background: var(--panel-2); }
 .eng-text { white-space: pre-wrap; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; padding: 12px; margin: 0; }
 table.eng-table { font-size: 13px; } table.eng-table td, table.eng-table th { padding: 4px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: left; }
 table.eng-table tr:first-child td { font-weight: 600; background: var(--panel-2); }
+
+/* ---- design criteria ---- */
+.subtabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.subtabs button { border-radius: 999px; padding: 4px 14px; }
+.subtabs button.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+table.crit td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.crit tr.mod td { background: var(--warn-soft); }
+table.crit input[type=number], table.crit select { width: 110px; }
+table.crit input.note { width: 100%; min-width: 180px; }
+.crit-group { font-size: 12px; text-transform: uppercase; color: var(--muted); padding-top: 14px !important; border-bottom: 0 !important; }
+
+/* ---- SLD input ---- */
+.fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 14px; margin-top: 10px; }
+.fgrid .field input, .fgrid .field select { width: 100%; }
+.sldtable { width: max-content; min-width: 100%; font-size: 13px; }
+.sldtable th { text-align: left; font-size: 11px; text-transform: uppercase; color: var(--muted); padding: 4px 4px; white-space: nowrap; }
+.sldtable td { padding: 2px 3px; }
+.sldtable input, .sldtable select { width: 100%; min-width: 64px; padding: 4px 6px; }
+.sldtable input.w-tag { width: 88px; } .sldtable input.w-desc { min-width: 170px; } .sldtable input.w-num { width: 70px; min-width: 60px; }
+.errlist { margin: 6px 0 0; padding-left: 18px; color: var(--bad); font-size: 13px; }

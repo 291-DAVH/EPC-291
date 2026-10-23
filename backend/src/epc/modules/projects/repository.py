@@ -87,7 +87,10 @@ def _load_build_tool():
 def refresh_lock(target: Path) -> int:
     """Refresh the plugin registry and write <project>/.epc/plugins.lock. Returns the number of locked plugins."""
     build = _load_build_tool()
-    build.cmd_registry()
+    try:
+        build.cmd_registry()
+    except OSError:                          # read-only installation (container): the committed registry.json is used as is
+        pass
     build.cmd_lock(str(target))
     return len(read_json(target / ".epc" / "plugins.lock", {}).get("plugins", {}))
 
