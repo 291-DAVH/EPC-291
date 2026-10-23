@@ -86,3 +86,31 @@ def load_criteria(d: Path) -> Dict:
 def save_criteria(d: Path, data: Dict) -> None:
     from epc.core.fsutil import write_json
     write_json(criteria_file(d), data)
+
+
+# ---- sources that can be issued to the client ----
+DELIVERABLE_DOC_EXT = (".xlsx", ".docx", ".pdf")
+
+
+def issuable(d: Path) -> List[Dict]:
+    """Drawings (DXF master + its PDF) and documents of the engineering workspace that may become deliverables."""
+    root = base(d)
+    out: List[Dict] = []
+    if not root.is_dir():
+        return out
+    for pkg in sorted(root.glob("*/*")):
+        if not pkg.is_dir() or "_discipline" in pkg.parts or pkg.name.startswith("_"):
+            continue
+        disc = pkg.parent.name
+        for dxf in sorted((pkg / "drawings" / "dxf").glob("*.dxf")):
+            files = {"dxf": dxf}
+            pdf = pkg / "drawings" / "pdf" / (dxf.stem + ".pdf")
+            if pdf.is_file():
+                files["pdf"] = pdf
+            out.append({"id": f"{disc}/{pkg.name}/drawing/{dxf.stem}", "name": dxf.stem, "discipline": disc, "package": pkg.name, "kind": "drawing", "files": files})
+        for area in ("calc", "docs"):
+            for f in sorted((pkg / area).glob("*")):
+                if f.is_file() and f.suffix.lower() in DELIVERABLE_DOC_EXT:
+                    out.append({"id": f"{disc}/{pkg.name}/{area}/{f.stem}{f.suffix.lower()}", "name": f.stem, "discipline": disc, "package": pkg.name,
+                                "kind": "document", "files": {f.suffix.lstrip(".").lower(): f}})
+    return out

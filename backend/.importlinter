@@ -21,6 +21,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -57,6 +58,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -95,6 +97,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -131,6 +134,7 @@ source_modules =
     epc.modules.deliverables
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -169,6 +173,7 @@ source_modules =
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -204,6 +209,7 @@ source_modules =
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -228,6 +234,45 @@ layers =
     epc.modules.intake.service
     epc.modules.intake.repository
 
+[importlinter:contract:issuing-encapsulated]
+name = issuing: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.issuing.api
+    epc.modules.issuing.service
+    epc.modules.issuing.repository
+    epc.modules.issuing.models
+
+[importlinter:contract:issuing-layers]
+name = issuing: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.issuing.api
+    epc.modules.issuing.service
+    epc.modules.issuing.repository
+    epc.modules.issuing.models
+
 [importlinter:contract:knowledge-encapsulated]
 name = knowledge: other modules use only its public interface
 type = forbidden
@@ -241,6 +286,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.management
     epc.modules.masterdata
     epc.modules.notifications
@@ -279,6 +325,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.masterdata
     epc.modules.notifications
@@ -315,6 +362,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.notifications
@@ -353,6 +401,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -391,6 +440,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -427,6 +477,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -465,6 +516,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
@@ -503,6 +555,7 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata

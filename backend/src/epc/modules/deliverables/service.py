@@ -139,3 +139,30 @@ def package_zip(d: Path, group: Optional[str] = None) -> Tuple[Path, str]:
                         it.get("delivered_on", ""), f["rel"], hashlib.sha256(f["path"].read_bytes()).hexdigest()])
         z.writestr("INDICE.csv", "\ufeff" + index.getvalue())
     return Path(tmp.name), name
+
+
+# ---- registering issued deliverables (used by the issuing module through public.py) ----
+def add_items(d: Path, new: List[dict]) -> List[dict]:
+    """Append deliverables (ids ENT-nnn are assigned here) and return them."""
+    items = repository.read_items(d)
+    n = max((int(x["id"].split("-")[1]) for x in items if str(x.get("id", "")).startswith("ENT-")), default=0)
+    out = []
+    for it in new:
+        n += 1
+        out.append({"id": f"ENT-{n:03d}", **it})
+    repository.write_items(d, items + out)
+    return out
+
+
+def next_code_number(d: Path, prefix: str) -> int:
+    """Next number for deliverable codes that start with `prefix` (e.g. 'P-1-ELE-')."""
+    nums = [int(m.group(1)) for x in repository.read_items(d) if (m := re.match(re.escape(prefix) + r"(\d+)$", str(x.get("code", ""))))]
+    return max(nums, default=0) + 1
+
+
+def set_delivered(d: Path, item_ids: List[str], date_iso: str) -> None:
+    items = repository.read_items(d)
+    for x in items:
+        if x.get("id") in item_ids:
+            x["status"], x["delivered_on"] = "delivered", date_iso
+    repository.write_items(d, items)
