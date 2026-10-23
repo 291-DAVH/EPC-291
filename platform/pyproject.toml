@@ -1,0 +1,22 @@
+[project]
+name = "epc-platform"
+version = "0.1.0"
+description = "Plugin-based automated EPC engineering framework"
+requires-python = ">=3.10"
+dependencies = []   # core is stdlib only
+
+[project.optional-dependencies]
+# Per-plugin extras (the plugin.json "python.requires" field is the source of truth)
+calc     = ["openpyxl>=3.1"]
+drawing  = ["openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely"]
+rules    = ["pypdf", "pypdfium2", "pillow", "jsonschema"]   # standard-ingest; the rules engine itself is stdlib only
+previews = ["cairosvg", "pillow"]          # needs the Cairo library on Windows; optional
+api      = ["fastapi", "uvicorn[standard]"]
+dev      = ["pytest>=7.4", "pytest-cov>=4.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["hub", "tools"]
+python_files = "test_*.py"
+
+# System tools (not pip packages), optional: pandoc (md -> docx), libreoffice/soffice (Office -> PDF),
+# poppler-utils (pdftotext, pdftoppm).

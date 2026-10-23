@@ -1,0 +1,15 @@
+# Drawing + calculation plugins
+openpyxl>=3.1
+lxml
+ezdxf
+svgelements
+shapely
+# Standards ingestion (standard-ingest)
+pypdf
+pypdfium2
+pillow
+jsonschema
+# API
+fastapi
+uvicorn[standard]
+python-multipart

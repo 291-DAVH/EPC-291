@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "epc://schemas/rules/1.1",
+  "title": "Standard rules file (rules.json): one file per standard",
+  "type": "object",
+  "required": ["schema_version", "standard", "source_status", "rules"],
+  "properties": {
+    "schema_version": { "const": "1.1" },
+    "standard": {
+      "type": "object",
+      "required": ["id", "country", "body", "edition", "domain"],
+      "properties": {
+        "id": { "type": "string", "description": "Matches the dev-knowledge folder, e.g. AEA-90364-7-771" },
+        "country": { "type": "string", "pattern": "^([A-Z]{2}|INTL)$", "description": "ISO 3166 alpha-2, or INTL for IEC/ISO/PM2" },
+        "body": { "type": "string" },
+        "edition": { "type": "string" },
+        "domain": { "type": "string" },
+        "title": { "type": "string" },
+        "extends": { "type": "string", "description": "Optional base standard id. Rules of the base apply unless a rule here sets 'overrides'." }
+      }
+    },
+    "source_status": { "enum": ["draft", "pending-validation", "verified"] },
+    "validated_by": { "type": "string" },
+    "validated_on": { "type": "string" },
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "clause", "columns", "rows"],
+        "properties": {
+          "id": { "type": "string" },
+          "clause": { "type": "string" },
+          "title": { "type": "string" },
+          "columns": { "type": "array", "items": { "type": "string" } },
+          "rows": { "type": "array", "items": { "type": "array" } },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "clause", "topic", "type", "summary"],
+        "properties": {
+          "id": { "type": "string" },
+          "legacy_id": { "type": "string" },
+          "overrides": { "type": "string", "description": "Rule id of the base standard this rule replaces" },
+          "clause": { "type": "string", "description": "Clause reference only, e.g. 771.12.3.9.2. Never the clause text." },
+          "part": { "type": "string", "description": "Sub-part inside a multi-part PDF, e.g. 5-54" },
+          "page": { "type": "object", "properties": { "printed": { "type": ["integer", "string"] }, "pdf": { "type": "integer" } } },
+          "topic": { "type": "string", "description": "Dotted group, e.g. trays or bathrooms" },
+          "title": { "type": "string" },
+          "summary": { "type": "object", "description": "Paraphrase by locale, max 240 chars each. Not a transcription.", "additionalProperties": { "type": "string", "maxLength": 240 } },
+          "type": { "enum": ["mandatory", "recommended", "prohibited"] },
+          "applies_to": {
+            "type": "object",
+            "properties": {
+              "installation_types": { "type": "array", "items": { "type": "string" } },
+              "when": { "type": "object", "description": "Conditions on the evaluation context: scalar = equals, list = in, or {lt,le,gt,ge,ne,in,not_in}" }
+            }
+          },
+          "params": { "type": "object", "description": "Machine-readable values, units in the key suffix (_m, _mm, _pct, _a...)" },
+          "check": {
+            "type": "object",
+            "required": ["field", "op", "value"],
+            "properties": {
+              "field": { "type": "string" },
+              "op": { "enum": ["==", "!=", "<", "<=", ">", ">=", "in", "not_in"] },
+              "value": {},
+              "derived": { "type": "boolean", "description": "true when inferred mechanically from a *_min/*_max parameter name; needs human confirmation" }
+            }
+          },
+          "table_ref": { "type": "string" },
+          "evidence_ref": { "type": "string", "description": "Key into dev-knowledge/.../analysis/evidence.json (verbatim quote stays private)" },
+          "verification": { "enum": ["text", "ocr", "visual", "unverified"] },
+          "confidence": { "enum": ["low", "medium", "high"] },
+          "i18n_pending": { "type": "boolean", "description": "ids/params still carry legacy Spanish names" }
+        }
+      }
+    }
+  }
+}

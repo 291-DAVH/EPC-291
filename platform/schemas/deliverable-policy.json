@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "description": "What may leave the workspace. Anything not listed is internal-only.",
+  "formats": {
+    "svg":  { "role": "internal-source", "deliver": false, "versioned_in_git": true,  "note": "Working render. Never a deliverable." },
+    "dxf":  { "role": "editable-deliverable", "deliver": true, "versioned_in_git": true, "note": "Master lives in workspace; a stamped copy is delivered as-is." },
+    "dwg":  { "role": "editable-deliverable", "deliver": true, "versioned_in_git": false, "note": "Produced by the user's CAD; stored with LFS or outside git." },
+    "xlsx": { "role": "editable-deliverable", "deliver": true, "versioned_in_git": true },
+    "docx": { "role": "editable-deliverable", "deliver": true, "versioned_in_git": false, "note": "Rendered from md." },
+    "md":   { "role": "internal-source", "deliver": false, "versioned_in_git": true,  "note": "Source of documents; delivered as pdf/docx." },
+    "json": { "role": "internal-data", "deliver": false, "versioned_in_git": true },
+    "pdf":  { "role": "final-deliverable", "deliver": true, "versioned_in_git": false, "note": "Rendered at publish time." },
+    "log":  { "role": "internal-temp", "deliver": false, "versioned_in_git": false }
+  },
+  "publish": {
+    "direction": "workspace -> deliverables (one-way copy)",
+    "target_pattern": "deliverables/{emission}/{transmittal}_Rev{client_rev}/{discipline}/{file}",
+    "stamp": ["client_rev", "internal_rev", "sha256", "engine_version", "plugin_versions"],
+    "deliverables_are_read_only": true,
+    "requires_state": "RELEASED"
+  }
+}

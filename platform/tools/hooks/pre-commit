@@ -1,0 +1,33 @@
+#!/bin/sh
+# Repository safety hook. Enable with:  git config core.hooksPath platform/tools/hooks
+#  1. No direct commits on main or dev (merge from feature/* or fix/*). Override: ALLOW_PROTECTED=1
+#  2. No PDF/DWG (copyright / CAD binaries) and nothing from dev-knowledge/ or _legacy/
+#  3. No file larger than 5 MB
+
+branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+if [ -z "$ALLOW_PROTECTED" ] && { [ "$branch" = "main" ] || [ "$branch" = "dev" ]; }; then
+  echo "COMMIT BLOCKED: do not commit directly on '$branch'. Create a branch: git switch -c feature/<topic>"
+  echo "(see docs/BRANCHING.md; override only for the baseline or a hotfix with ALLOW_PROTECTED=1)"
+  exit 1
+fi
+
+bad=$(git diff --cached --name-only --diff-filter=AM | grep -Ei '\.(pdf|dwg)$' | grep -Ev '^platform/docs/')
+if [ -n "$bad" ]; then
+  echo "COMMIT BLOCKED: PDF/DWG files are not allowed in the repository:"
+  echo "$bad"
+  echo "Study material belongs in dev-knowledge/ (never versioned)."
+  exit 1
+fi
+
+private=$(git diff --cached --name-only --diff-filter=AM | grep -E '^(dev-knowledge|_legacy|projects-demo)/')
+if [ -n "$private" ]; then
+  echo "COMMIT BLOCKED: private folders must never be committed:"
+  echo "$private"
+  exit 1
+fi
+
+big=$(git diff --cached --name-only --diff-filter=AM | while read f; do [ -f "$f" ] && [ "$(wc -c < "$f")" -gt 5000000 ] && echo "$f"; done)
+if [ -n "$big" ]; then
+  echo "COMMIT BLOCKED: files larger than 5 MB:"; echo "$big"; exit 1
+fi
+exit 0

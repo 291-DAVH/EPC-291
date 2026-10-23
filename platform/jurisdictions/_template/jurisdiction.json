@@ -1,0 +1,17 @@
+{
+  "id": "XX",
+  "name": "",
+  "default_locale": "",
+  "currency": "",
+  "frequency_hz": 50,
+  "standards_bodies": [],
+  "voltages_lv": [
+    230,
+    400
+  ],
+  "status": "template",
+  "packs": {
+    "electrical": "electrical/"
+  },
+  "legacy_index": "_legacy/standards-index.md"
+}

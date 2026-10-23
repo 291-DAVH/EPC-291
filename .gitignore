@@ -1,0 +1,34 @@
+# ===== Private / never versioned =====
+# dev-knowledge: standards, third-party reports, study material (copyright / confidential)
+dev-knowledge/
+# _legacy: archived original folders and their old git repositories
+_legacy/
+# projects-demo: simulated demo data (regenerate with platform/tools/dev/seed_demo.py)
+projects-demo/
+# real client projects live in their own repositories
+projects/*
+!projects/_template/
+
+# ===== Copyrighted / CAD binaries =====
+*.pdf
+*.dwg
+*.dwl
+*.dwl2
+!platform/docs/**/*.pdf
+
+# ===== Local environment and build output =====
+.venv/
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+*.plugin
+.env
+.env.*
+!.env.example
+.claude/
+_out/
+*.bak
+*.tmp
+Thumbs.db

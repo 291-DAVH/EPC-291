@@ -1,0 +1,20 @@
+{
+  "id": "AR",
+  "name": "Argentina",
+  "default_locale": "es-AR",
+  "currency": "ARS",
+  "frequency_hz": 50,
+  "standards_bodies": [
+    "AEA",
+    "IRAM"
+  ],
+  "voltages_lv": [
+    230,
+    400
+  ],
+  "status": "active",
+  "packs": {
+    "electrical": "electrical/"
+  },
+  "legacy_index": "_legacy/standards-index.md"
+}
