@@ -94,6 +94,16 @@ def run_generator(xlsx: Path, out: Path, name: str, rotulo_dir: Path):
                           env=env, capture_output=True, text=True, timeout=600)
 
 
+def render_pdfs(out: Path, name: str) -> List[str]:
+    """PDF of every DXF produced (the deliverable rendering of the drawing), through the engine's exporter. Returns warnings, never raises."""
+    warnings: List[str] = []
+    for dxf in sorted(out.glob(f"{name}*.dxf")):
+        res = subprocess.run([sys.executable, "-m", "epc_drawing.export.pdf", str(dxf), str(dxf.with_suffix(".pdf"))], capture_output=True, text=True, timeout=300)
+        if res.returncode != 0:
+            warnings.append(f"AVISO no se pudo generar el PDF de {dxf.name}: {(res.stderr or res.stdout).strip()[-200:]}")
+    return warnings
+
+
 def publish(d: Path, out: Path, name: str, previous: List[str]) -> List[str]:
     """Copy outputs into the engineering folders (SVG -> drawings/svg, DXF -> drawings/dxf, calculation JSON -> calc) and drop the previous run's files."""
     base = pkg(d)
@@ -101,7 +111,7 @@ def publish(d: Path, out: Path, name: str, previous: List[str]) -> List[str]:
         (base / rel).unlink(missing_ok=True)
     placed: List[str] = []
     for f in sorted(out.glob(f"{name}*")):
-        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".json": "calc"}.get(f.suffix.lower())
+        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".pdf": "drawings/pdf", ".json": "calc"}.get(f.suffix.lower())
         if not sub:
             continue
         dest = base / sub / f.name

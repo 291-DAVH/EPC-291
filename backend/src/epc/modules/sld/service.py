@@ -145,6 +145,7 @@ def _job(d: Path, data: dict, name: str) -> None:
         if res.returncode != 0:
             st.update(state="failed", log=log, error=(res.stderr or res.stdout).strip()[-600:])
         else:
+            log += repository.render_pdfs(out, name)
             st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous))
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status
         st.update(state="failed", error=str(exc)[:600])

@@ -169,6 +169,12 @@ def write_file(path: Path, fmt: str, title: str, client: str, code: str):
         msp.add_text(title, dxfattribs={"height": 8}).set_placement((20, 270))
         msp.add_text(f"{client} - {code} - Rev 00", dxfattribs={"height": 5}).set_placement((20, 255))
         doc.saveas(path)
+        # PDF twin of every drawing (the client receives DXF and PDF); rendered from the DXF with the engine exporter
+        try:
+            from epc_drawing.export.pdf import dxf_to_pdf
+            dxf_to_pdf(path, path.with_suffix(".pdf"))
+        except Exception:                                    # matplotlib not installed: simple text PDF
+            path.with_suffix(".pdf").write_bytes(pdf_bytes(title, [f"Cliente: {client}", f"Proyecto: {code}", "Revisión: Rev 00", "Plano de demostración (datos simulados)."]))
 
 
 def jdump(path, obj):

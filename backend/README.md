@@ -21,7 +21,7 @@ tests/
 |---|---|
 | `identity` | current user/role and the role guard |
 | `projects` | create and list projects, options |
-| `deliverables` | deliverables list and downloads |
+| `deliverables` | deliverables list, downloads (several formats per drawing, e.g. DXF + PDF) and the ZIP delivery package |
 | `intake` | customer inputs (voice of customer, stories, documents) |
 | `requirements` | structured requirements and their sources |
 | `management` | portfolio, project summary, reports |
