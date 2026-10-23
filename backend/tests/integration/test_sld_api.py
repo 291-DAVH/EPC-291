@@ -100,6 +100,56 @@ class TestSld(unittest.TestCase):
         self.assertTrue(all("OTRO-02" in o for o in st2["outputs"]))
         self.assertFalse(any((self.pkg / o).exists() for o in outs))
 
+    def test_design_criteria_govern_the_calculation_that_feeds_the_diagram(self):
+        feeder = [{"tag": "C-01", "description": "ALIMENTADOR TD-1", "load": 100, "unit": "A", "destination": "TD-1", "topology": "single", "phase": "3F",
+                   "length_m": 60, "kind": "mccb"}]
+        self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": feeder, "titleblock": TB}).status_code, 200)
+        self.c.post(self.base + "/generate")
+        self.assertEqual(self.wait()["state"], "done")
+        r1 = self.c.get(self.base + "/calculation").json()
+        row1 = r1["rows"][0]
+        self.assertEqual((row1["tipo"], row1["limite_pct"]), ("seccional", 1.0))
+        self.assertTrue(row1["cumple"])
+        self.assertEqual(r1["criteria"]["limits_pct"], {"seccional": 1.0, "terminal": 3.0, "motor": 5.0})
+        # a tighter feeder limit in the project's design criteria needs more copper, and the drawing says so
+        self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": 0.5, "source": "client", "note": "pedido del cliente"})
+        self.c.post(self.base + "/generate")
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        row2 = self.c.get(self.base + "/calculation").json()["rows"][0]
+        self.assertEqual(row2["limite_pct"], 0.5)
+        self.assertGreater(row2["S"], row1["S"])
+        self.assertLessEqual(row2["du_propia_pct"], 0.5)
+        svg = (self.pkg / next(o for o in st["outputs"] if o.endswith(".svg") and "TABLA" not in o)).read_text(encoding="utf-8")
+        self.assertIn("seccionales 0.5 %", svg)
+        self.assertTrue(any(o.endswith("_criterios.json") for o in st["outputs"]))
+        self.assertTrue(any(o.endswith("_dimensionado.json") for o in st["outputs"]))
+
+    def test_multi_line_diagram_from_the_same_calculation(self):
+        self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "bogus"}).status_code, 422)
+        self.c.post(self.base + "/generate")
+        sld = self.wait()
+        self.assertEqual(sld["state"], "done", sld)
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "mld"}).status_code, 202)
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        outs = st["outputs"]
+        self.assertTrue(any("/SLD_" in o and o.endswith(".dxf") for o in outs), outs)                     # the SLD of the earlier run is kept
+        for ext in (".svg", ".dxf", ".pdf"):
+            self.assertTrue(any("/MLD_" in o and o.endswith(ext) for o in outs), (ext, outs))
+        for o in outs:
+            self.assertTrue((self.pkg / o).exists(), o)
+        ov = self.c.get("/api/projects/ACME/P-1/engineering").json()
+        kinds = {d["name"]: d["kind"] for d in ov["diagrams"]}
+        self.assertTrue(any(k == "multi_line" for k in kinds.values()) and any(k == "single_line" for k in kinds.values()), kinds)
+        mld = next(o for o in outs if "/MLD_" in o and o.endswith(".svg"))
+        svg = (self.pkg / mld).read_text(encoding="utf-8")
+        self.assertIn("multifilar", svg)
+        self.assertIn("Oficina de Ingeniería SA", svg)                                                    # same titleblock as the SLD
+        for tag in ("C-01", "M-01", "G-01-A"):
+            self.assertIn(tag, svg)
+
     def test_users_cannot_use_it(self):
         settings.role = "user"
         self.assertEqual(self.c.get(self.base).status_code, 403)

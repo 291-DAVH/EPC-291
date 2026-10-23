@@ -1,0 +1,27 @@
+# board-design
+
+Designs a low-voltage board end to end. The project's **design criteria** (voltage-drop limits, minimum sections, conductor material and insulation, RCD sensitivity) govern the circuit calculation (`epc_calc.aea_pipeline`), and **that calculation** is what the single-line (SLD) and multi-line (MLD) diagrams are drawn from, on IRAM sheets with the company and client data of the titleblock.
+
+- Version: 0.1.0 (workflow)
+- Entitlement: `feature.design.board`
+- Python: openpyxl>=3.1, lxml, ezdxf, svgelements, shapely, matplotlib
+
+## Requires
+- `aea-calc` ^1.6.0, `sld` ^0.1.2, `mld` ^0.2.0, `iec-symbols` ^0.4.14, `iram-titleblock` ^0.5.1
+
+## Skills
+- [`design-board`](../../skills/design-board/SKILL.md) (owner)
+
+## Outputs
+- `.json`: internal (calculation contract, per-circuit detail, criteria applied)
+- `.svg`: internal (never a deliverable)
+- `.dxf`, `.pdf`: internal+deliverable
+
+## Run
+```
+python -m epc_drawing.board_design --project <project folder> --out <work folder> --name TGBT-01 --diagrams sld,mld
+```
+or with explicit files: `--input board.json --criteria criteria.json`. The web app runs the same module (*Datos del unifilar* tab).
+
+## Engine
+This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

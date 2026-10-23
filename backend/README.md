@@ -26,7 +26,7 @@ tests/
 | `requirements` | structured requirements and their sources |
 | `management` | portfolio, project summary, reports |
 | `engineering` | read-only view of the engineering workspace for the engineer/admin: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text (CSV, XLSX, Markdown), and the editable design criteria of the project (catalog + overrides + history + generated report) |
-| `sld` | data entry for the single-line diagram (board, titleblock, circuits), validation, and execution of the sld plugin generator (`epc_drawing.sld`) unchanged; outputs are published into the engineering folders |
+| `sld` | data entry for the board (board, titleblock, circuits), validation, and execution of the `board-design` pipeline (`epc_drawing.board_design`): the project's design criteria govern the calculation (`epc_calc.aea_pipeline`) and that calculation feeds the single-line (SLD) and multi-line (MLD) diagrams; outputs are published into the engineering folders |
 | `masterdata` | information entered once and reused: company profile (legal name, tax id...), saved clients, people (who draws, checks, approves) and logos (SVG/PNG); files in `EPC_DATA` (default `local/data`) |
 | `issuing` | turns engineering outputs into client deliverables: stamped DXF + PDF + workbooks under `deliverables/<emission>/<TR>_Rev<NN>/`, transmittal, ledger, then *confirm sent* |
 | `wbs` | work breakdown structure (EDT): dotted-number tree, weights, progress rolled up from the leaves |

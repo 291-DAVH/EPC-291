@@ -44,7 +44,7 @@ class TestCreateProject(unittest.TestCase):
         self.assertEqual(meta["disciplines"], ["electrical", "hvac"])
         lock = json.loads((d / ".epc" / "plugins.lock").read_text(encoding="utf-8"))
         self.assertIn("aea-calc", lock["plugins"])
-        self.assertNotIn("mld", lock["plugins"])            # pending plugins are not locked
+        self.assertTrue({"mld", "sld", "board-design"} <= set(lock["plugins"]))      # the design pipeline is locked with its parts
         self.assertTrue((d / "workspace" / "00-setup" / "goals.md").exists())
         self.assertTrue((d / "deliverables").is_dir())
         self.assertTrue((d / ".epc" / "ledger" / "0001_created.json").exists())
