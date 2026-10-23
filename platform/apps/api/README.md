@@ -1,6 +1,6 @@
 # api
 
-FastAPI service over the hub registry, skills, rules engine and projects folder (read-only for now).
+FastAPI service over the plugin registry, skills, rules engine and projects folder (read-only for now).
 
 ```
 # from platform/

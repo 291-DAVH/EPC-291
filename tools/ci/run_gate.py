@@ -18,6 +18,7 @@ Exit code 0 only when every check passes.
 """
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -95,6 +96,21 @@ def main():
         if not a.fast:
             npm = "npm.cmd" if os.name == "nt" else "npm"
             run("web-build", [npm, "run", "build"], WEB)
+
+    claude = shutil.which("claude")
+    if claude and BUILD:
+        market = BUILD.parents[2] / "dist" / "marketplace" if BUILD.parent.name == "build" and BUILD.parents[1].name == "tools" and BUILD.parents[2].name == "platform" else REPO / "dist" / "marketplace"
+        if run("marketplace-build", [py, str(BUILD), "marketplace"], REPO) and market.exists():
+            targets = [market] + sorted(p for p in (market / "plugins").iterdir() if p.is_dir())
+            bad = []
+            t0 = time.time()
+            for tgt in targets:
+                p = subprocess.run([claude, "plugin", "validate", "--strict", str(tgt)], capture_output=True, text=True)
+                if p.returncode != 0 or "Validation passed" not in (p.stdout or ""):
+                    bad.append(tgt.name + ": " + ((p.stdout or "") + (p.stderr or "")).strip().splitlines()[-1][:120])
+            RESULTS.append(("claude-validate", not bad, round(time.time() - t0, 1), bad[:3]))
+    else:
+        print("note: claude CLI not found, skipping official plugin validation")
 
     width = max(len(r[0]) for r in RESULTS)
     for name, ok, secs, tail in RESULTS:

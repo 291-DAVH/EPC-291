@@ -33,5 +33,5 @@ Versions are checked by `tools/build/epc_build.py registry` (semver ranges: `^`,
 
 ## Known runtime notes
 - `sld` needs `iec-symbols >= 0.4.14` (symbol files are named `291_E_LV_SLD_IEC60617_<id>.svg`).
-- `pm2-docs` imports `document_verifier` from `doc-quality`; until hub path resolution exists, run with `PYTHONPATH=hub/doc-quality/scripts`.
+- `pm2-docs` imports `document_verifier` from `doc-quality`; until hub path resolution exists, run with `PYTHONPATH=claude/plugins/doc-quality/scripts`.
 - Five `doc-quality` tests for `input_converter` fail on Windows (the fake soffice is a shell script); PDF stamping tests need poppler/pandoc.

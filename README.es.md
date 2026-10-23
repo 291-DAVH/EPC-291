@@ -2,7 +2,7 @@
 
 Framework de ingeniería EPC automatizada, armado con plugins (como Lego). Hoy corre dentro de Claude Code; el mismo motor pasará a web (Python + React) y a escritorio. La descripción completa, en inglés, está en [README.md](README.md).
 
-- `platform/hub/` contiene todos los plugins y `platform/skills/` todas las skills. Los plugins gobiernan: si una skill está duplicada, vale la del plugin y se te avisa antes de producción.
+- `claude/plugins/` contiene todos los plugins, `claude/skills/` todas las skills y `claude/agents/` los agentes. Los plugins gobiernan: si una skill está duplicada, vale la del plugin y se te avisa antes de producción.
 - `local/` (ignorada por git) reúne `dev-knowledge/`, `legacy/`, `projects-demo/` y `projects/`. `local/dev-knowledge/` guarda normas, informes de terceros y material de estudio: nunca se versiona ni se sube.
 - `local/projects/<cliente>/<proyecto>/` (carpeta ignorada por git) separa `workspace/` (editable, interno) de `deliverables/` (lo que recibe el cliente).
 - `.svg` nunca se entrega; `.dxf` se edita en el workspace y se entrega una copia sellada.

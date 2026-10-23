@@ -6,7 +6,7 @@ Español: [README.es.md](README.es.md)
 
 ## Repository layout
 
-Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phase 2 done).
+Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 and 3 done).
 
 ```
 EPC-291/
@@ -14,9 +14,11 @@ EPC-291/
 ├─ docs/            architecture, ADRs, explanation, branching policy, dependencies, migration records
 ├─ planning/        software planning during development: vision, PRD, backlog, sprints, BOARD   (not shipped)
 ├─ platform/        product source (moving to frontend/ backend/ engine/ claude/ in the next phases)
-│   ├─ hub/            plugins (one folder each) + registry.json
-│   ├─ skills/  agents/  core/  methodologies/  jurisdictions/  apps/  tests/  tools/
+│   ├─ core/  methodologies/  jurisdictions/  apps/  tests/  tools/
 │   └─ pyproject.toml  requirements.txt  requirements-dev.txt
+├─ claude/          AI layer (phase 3 done)
+│   ├─ plugins/        one folder per plugin + registry.json
+│   ├─ skills/  agents/  marketplace/  mcp/  prompts/  evals/
 ├─ management/      project-management knowledge shipped with the product
 │   └─ templates/project-skeleton/   project skeleton: workspace (editable) + deliverables (client-facing)
 ├─ shared/          contracts used by several parts: schemas/ (JSON Schema), i18n/ (catalogs)
@@ -50,6 +52,7 @@ python -m venv .venv
 .venv\Scripts\python tools\build\epc_build.py registry         # validate hub + skills, write hub/registry.json
 .venv\Scripts\python tools\ci\check_skill_conflicts.py          # duplicate / orphan skills
 .venv\Scripts\python tools\build\epc_build.py package all       # dist\<id>-<ver>.plugin for Claude Code
+.venv\Scripts\python tools\build\epc_build.py marketplace       # dist\marketplace (official layout + marketplace.json)
 ```
 Run the app (two terminals, from `platform/`):
 ```
@@ -74,7 +77,7 @@ Demo data: `.venv\Scripts\python tools\dev\seed_demo.py` creates 20 simulated pr
 | `procurement` | 0.1.0 | connector | equipment-catalog |
 | `equipment-catalog` | 0.1.0 | knowledge | - |
 
-The source of truth is `platform/hub/registry.json` (generated).
+The source of truth is `claude/plugins/registry.json` (generated).
 
 ## Rules of the house
 - Plugins govern skills. A skill defined twice: the plugin copy governs and a warning is raised (error in production builds).
@@ -94,4 +97,4 @@ The source of truth is `platform/hub/registry.json` (generated).
 | [CHANGELOG.md](CHANGELOG.md) · [CONTRIBUTING.md](CONTRIBUTING.md) | Changes and how to contribute |
 
 ## Status
-Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`platform/hub/aea-calc/docs/11-pendientes.md`).
+Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`claude/plugins/aea-calc/docs/11-pendientes.md`).

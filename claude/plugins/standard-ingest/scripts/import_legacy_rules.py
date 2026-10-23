@@ -15,7 +15,7 @@ import re
 import sys
 from pathlib import Path
 
-from common import DEV_KNOWLEDGE, PLATFORM, read_json, write_json
+from common import DEV_KNOWLEDGE, PLUGINS, read_json, write_json
 
 STD = {  # legacy "norma" -> (standard id, part)
     "AEA 90364-7-771": ("AEA-90364-7-771", None), "AEA 90364-7-770": ("AEA-90364-7-770", None),
@@ -57,7 +57,7 @@ def derive_check(rtype, params):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--rules-dir", default=str(PLATFORM / "hub" / "aea-calc" / "scripts" / "rules"))
+    ap.add_argument("--rules-dir", default=str(PLUGINS / "aea-calc" / "scripts" / "rules"))
     ap.add_argument("--dev-knowledge", default=str(DEV_KNOWLEDGE))
     ap.add_argument("--force", action="store_true", help="overwrite existing drafts (they may contain human edits)")
     a = ap.parse_args()

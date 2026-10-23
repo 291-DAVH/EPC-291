@@ -1,0 +1,9 @@
+{
+  "name": "epc-291",
+  "owner": {
+    "name": "EPC-291"
+  },
+  "metadata": {
+    "description": "Plugins for automated EPC engineering: LV calculation, single-line diagrams, standards ingestion, customer-input analysis and project documents."
+  }
+}
