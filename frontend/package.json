@@ -1,0 +1,19 @@
+{
+  "name": "epc-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["packages/*", "web", "console"],
+  "scripts": {
+    "dev:web": "npm run dev -w @epc/web",
+    "dev:console": "npm run dev -w @epc/console",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build -w @epc/web -w @epc/console"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
