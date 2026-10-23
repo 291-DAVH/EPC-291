@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-from common import PLATFORM, SHINGLE, norm_words, read_json, shingles, source_text_words
+from common import SCHEMAS, SHINGLE, norm_words, read_json, shingles, source_text_words
 
 CLAUSE_TOKEN = re.compile(r"\d{1,3}(?:\.\d+)+")
 OPS = {"==", "!=", "<", "<=", ">", ">=", "in", "not_in"}
@@ -25,7 +25,7 @@ OPS = {"==", "!=", "<", "<=", ">", ">=", "in", "not_in"}
 def validate(path, standard_dir=None):
     errs, warns = [], []
     doc = read_json(path)
-    schema = read_json(PLATFORM / "schemas" / "rules.schema.json")
+    schema = read_json(SCHEMAS / "rules.schema.json")
     try:
         import jsonschema
         for e in sorted(jsonschema.Draft202012Validator(schema).iter_errors(doc), key=lambda e: list(e.path)):

@@ -1,9 +1,9 @@
 # Contributing
 
 1. **Branches.** Never commit on `main` or `dev`. Branch from `dev`: `feature/<topic>`, `fix/<topic>` or `chore/<topic>`; merge back with `--no-ff`. Details: [docs/BRANCHING.md](docs/BRANCHING.md).
-2. **Hook.** Enable it once per clone: `git config core.hooksPath platform/tools/hooks`. It refuses direct commits on `main`/`dev`, PDF/DWG files, files over 5 MB and anything from `dev-knowledge/`, `_legacy/` or `projects-demo/`.
+2. **Hook.** Enable it once per clone: `git config core.hooksPath platform/tools/hooks`. It refuses direct commits on `main`/`dev`, PDF/DWG files, files over 5 MB and anything from `local/dev-knowledge/`, `_legacy/` or `local/projects-demo/`.
 3. **Where things live.** Plugins only in `platform/hub/<id>/`; skills only in `platform/skills/<id>/`. Plugins govern their skills.
-4. **After replacing a plugin or skill**, from `platform/`:
+4. **Before merging anything**: `python tools/ci/run_gate.py` (full test battery). After replacing a plugin or skill, from `platform/`:
    ```
    python tools/ci/check_skill_conflicts.py --env production
    python tools/build/epc_build.py registry

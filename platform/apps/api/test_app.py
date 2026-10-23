@@ -19,7 +19,6 @@ class TestUserApi(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        shutil.copytree(PLATFORM.parent / "projects" / "_template", self.root / "_template")
         self._old, self._role = main.PROJECTS, main.ROLE
         main.PROJECTS, main.ROLE = self.root, "user"
         self.c = TestClient(main.app)

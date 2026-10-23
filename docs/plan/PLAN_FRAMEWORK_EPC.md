@@ -447,7 +447,7 @@ epc-workspace/
 │   ├─ methodologies/{pm2,pmi,custom}
 │   ├─ apps/{cli,mcp,api,web,desktop}
 │   └─ tools/{hooks,ci,build}
-├─ dev-knowledge/   ← NUNCA versionado ni subido (ni siquiera git init)
+├─ local/dev-knowledge/   ← NUNCA versionado ni subido (ni siquiera git init)
 │   ├─ _inbox/                         zona de descarga: lo nuevo, sin clasificar
 │   ├─ standards/<PAÍS>/<ID-NORMA>/{source,extracted,analysis,draft}/ + standard.json
 │   ├─ third-party-reports/            informes de otras empresas
@@ -459,10 +459,10 @@ epc-workspace/
 
 ### 19.2 Carga de normas por país → `rules.json` por norma
 
-Flujo (documentado también en `dev-knowledge/README.md`):
+Flujo (documentado también en `local/dev-knowledge/README.md`):
 
 ```
-dev-knowledge/standards/AR/AEA-90364-7-771/
+local/dev-knowledge/standards/AR/AEA-90364-7-771/
    source/      PDF original               (copyright; se queda aquí)
    extracted/   texto y tablas extraídos   (generado)
    analysis/    índice de cláusulas y notas de Claude, en español  (generado)
@@ -532,11 +532,11 @@ Cada plugin declara en su `plugin.json` qué salidas produce y su canal: `intern
 - los entregables son inmutables: un cambio genera nueva emisión, nunca se edita en `deliverables/`.
 
 ### 19.5 Protecciones para que lo privado no se suba
-- `platform/.gitignore` bloquea `*.pdf`, `*.dwg`, `dev-knowledge/`, `_study/`, `**/knowledge/`.
+- `platform/.gitignore` bloquea `*.pdf`, `*.dwg`, `local/dev-knowledge/`, `_study/`, `**/knowledge/`.
 - Hook `platform/tools/hooks/pre-commit` (activar con `git config core.hooksPath tools/hooks`): rechaza PDF/DWG y archivos de más de 5 MB.
-- `dev-knowledge/` está fuera del repo; no se le hace `git init`.
+- `local/dev-knowledge/` está fuera del repo; no se le hace `git init`.
 - CI repetirá las mismas comprobaciones (Ola 0/1).
-- Los plugins actuales que traen PDF (`assets/*.pdf`, `knowledge/pdf/`) se moverán a `dev-knowledge/` al migrar (no borro nada sin tu confirmación).
+- Los plugins actuales que traen PDF (`assets/*.pdf`, `knowledge/pdf/`) se moverán a `local/dev-knowledge/` al migrar (no borro nada sin tu confirmación).
 
 ---
 
@@ -607,11 +607,11 @@ Implementado en `platform/tools/ci/check_skill_conflicts.py` (probado con un cas
 ## 21. Motor de reglas (implementado, 2026-10-23)
 
 Piezas:
-- **`core/rules/epc_rules`** (stdlib): `RuleSet.load(jurisdiction, domain, env)`, `query(topic, standard, clause_prefix, installation_type)`, `check(context)`, `lookup(tabla, ...)`. En `env=production` solo ve normas `verified`; en `dev` puede leer borradores de `dev-knowledge`. `check` devuelve PASS / FAIL / SKIP; nunca adivina un dato faltante (lo informa como SKIP).
+- **`core/rules/epc_rules`** (stdlib): `RuleSet.load(jurisdiction, domain, env)`, `query(topic, standard, clause_prefix, installation_type)`, `check(context)`, `lookup(tabla, ...)`. En `env=production` solo ve normas `verified`; en `dev` puede leer borradores de `local/dev-knowledge`. `check` devuelve PASS / FAIL / SKIP; nunca adivina un dato faltante (lo informa como SKIP).
 - **`hub/standard-ingest`** + skill **`analyze-standard`**: `extract_standard.py` (texto y índice de cláusulas), `render_pages.py` (PNG de páginas para normas escaneadas), `validate_rules.py` (schema, id duplicados, tablas, cláusula presente en el texto, **rechazo de copia textual de 12+ palabras**), `promote_rules.py` (compuerta a `jurisdictions/`), `import_legacy_rules.py`.
-- **`schemas/rules.schema.json` 1.1**: regla = id, cláusula, página, tema, resumen parafraseado por idioma (≤240), tipo (mandatory/recommended/prohibited), aplica a (tipos de inmueble + condiciones), parámetros, `check` ejecutable, tablas, `evidence_ref`. La cita textual queda privada en `dev-knowledge/.../analysis/evidence.json`.
+- **`schemas/rules.schema.json` 1.1**: regla = id, cláusula, página, tema, resumen parafraseado por idioma (≤240), tipo (mandatory/recommended/prohibited), aplica a (tipos de inmueble + condiciones), parámetros, `check` ejecutable, tablas, `evidence_ref`. La cita textual queda privada en `local/dev-knowledge/.../analysis/evidence.json`.
 
-Flujo: `PDF en dev-knowledge → extract → Claude redacta draft/rules.json → validate → tú validas → promote → jurisdictions/AR/<dominio>/<norma>/rules.json → los plugins de cálculo consultan el motor`.
+Flujo: `PDF en local/dev-knowledge → extract → Claude redacta draft/rules.json → validate → tú validas → promote → jurisdictions/AR/<dominio>/<norma>/rules.json → los plugins de cálculo consultan el motor`.
 
 Estado de los datos: las 177 reglas que ya tenías en `aea-calc/scripts/rules` quedaron importadas como **borradores** de 6 normas (7-771: 82, 5: 55, 4: 16, 7-701: 12, 7-770: 6, 7-722: 6) con 16 tablas. 49 reglas tienen un `check` derivado del nombre del parámetro (`*_min`/`*_max`) que debes confirmar. Seis resúmenes que copiaban la norma se reescribieron. Las normas 90364-2, -4, -4-42, -5 y 90909-1 son escaneadas (sin texto): se leen visualmente.
 

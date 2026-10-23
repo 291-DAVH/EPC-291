@@ -55,7 +55,7 @@ def write_atomic(p, obj):
 
 
 def projects_root(arg):
-    return Path(arg or os.environ.get("EPC_PROJECTS") or WORKSPACE / "projects")
+    return Path(arg or os.environ.get("EPC_PROJECTS") or WORKSPACE / "local" / "projects")
 
 
 def project_dir(root, ref):

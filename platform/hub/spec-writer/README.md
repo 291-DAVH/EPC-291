@@ -1,6 +1,6 @@
 # spec-writer
 
-Technical specification (PG/ET) writer for any engineering discipline, backed by the Document Writer agent. Reference material lives in dev-knowledge, never in this repo.
+Technical specification (PG/ET) writer for any engineering discipline, backed by the Document Writer agent. Reference material lives in local/dev-knowledge, never in this repo.
 
 - Version: 0.1.0 (workflow) - **needs-neutral-templates**
 - Entitlement: `feature.specs`

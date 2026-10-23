@@ -100,7 +100,7 @@ class TestRuleSet(unittest.TestCase):
 
 class TestLegacyDrafts(unittest.TestCase):
     """Runs against the imported AEA drafts when dev-knowledge is present."""
-    DK = Path(__file__).resolve().parents[4] / "dev-knowledge"
+    DK = Path(__file__).resolve().parents[4] / "local" / "dev-knowledge"
 
     @unittest.skipUnless((DK / "standards/AR/AEA-90364-7-771/draft/rules.json").exists(), "drafts not available")
     def test_aea_drafts_load_and_check(self):

@@ -2,7 +2,7 @@
   "id": "spec-writer",
   "version": "0.1.0",
   "kind": "workflow",
-  "description": "Technical specification (PG/ET) writer for any engineering discipline, backed by the Document Writer agent. Reference material lives in dev-knowledge, never in this repo.",
+  "description": "Technical specification (PG/ET) writer for any engineering discipline, backed by the Document Writer agent. Reference material lives in local/dev-knowledge, never in this repo.",
   "discipline": [
     "all"
   ],
@@ -45,7 +45,7 @@
     "document-writer"
   ],
   "status": "needs-neutral-templates",
-  "note": "Discipline block templates were learned from client documents and are kept in dev-knowledge/skill-knowledge/generate-specification until rewritten neutrally.",
+  "note": "Discipline block templates were learned from client documents and are kept in local/dev-knowledge/skill-knowledge/generate-specification until rewritten neutrally.",
   "legacy": {
     "source": "00-Template-Claude/.claude/skills/generar-pliego"
   }

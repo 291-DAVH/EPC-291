@@ -83,9 +83,12 @@ def main():
         run("rules-engine", [py, "-m", "unittest", "discover", "-s", "tests"], RULES_CWD)
     sld = PLUGINS / "sld"
     if (sld / "scripts" / "sld_paginate.py").exists():
+        import shutil
         out = tempfile.mkdtemp(prefix="gate_sld_")
-        run("sld-smoke", [py, "scripts/sld_paginate.py", "default", "examples/input_for_sld_V1.xlsx", out, "SLD_V1", "default", "default"],
-            sld, must_not_contain="AVISO")
+        tb = Path(out) / "titleblock"                      # the generator rewrites input-titleblocks.xlsx: work on a copy
+        shutil.copytree(sld / "examples" / "titleblock", tb)
+        run("sld-smoke", [py, "scripts/sld_paginate.py", "default", "examples/input_for_sld_V1.xlsx", str(Path(out) / "out"), "SLD_V1", "default", "default"],
+            sld, must_not_contain="AVISO", env={"SLD_ROTULO_DIR": str(tb)})
     if WEB and not a.no_web and (WEB / "node_modules").exists():
         npx = "npx.cmd" if os.name == "nt" else "npx"
         run("web-types", [npx, "tsc", "--noEmit"], WEB)

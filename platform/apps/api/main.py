@@ -19,8 +19,11 @@ from pydantic import BaseModel
 PLATFORM = Path(__file__).resolve().parents[2]
 WORKSPACE = PLATFORM.parent
 HUB, SKILLS = PLATFORM / "hub", PLATFORM / "skills"
-PROJECTS = Path(os.environ.get("EPC_PROJECTS", WORKSPACE / "projects"))
-DEV_KNOWLEDGE = Path(os.environ.get("EPC_DEV_KNOWLEDGE", WORKSPACE / "dev-knowledge"))
+LOCAL = WORKSPACE / "local"                                  # git-ignored: dev-knowledge, projects, demo data
+PROJECTS = Path(os.environ.get("EPC_PROJECTS", LOCAL / "projects"))
+DEV_KNOWLEDGE = Path(os.environ.get("EPC_DEV_KNOWLEDGE", LOCAL / "dev-knowledge"))
+TEMPLATE = WORKSPACE / "management" / "templates" / "project-skeleton"
+SCHEMAS = WORKSPACE / "shared" / "schemas"
 ENV = os.environ.get("EPC_ENV", "dev")
 ROLE = os.environ.get("EPC_ROLE", "user")      # "admin" unlocks the technical console; end users never see internals
 
@@ -304,10 +307,10 @@ def create_project(p: NewProject):
     if errors:
         raise HTTPException(422, {"errors": errors})
 
-    template = PROJECTS / "_template"
+    template = TEMPLATE
     target = PROJECTS / p.client_code / p.project_code
     if not template.is_dir():
-        raise HTTPException(500, "projects/_template not found")
+        raise HTTPException(500, "project skeleton not found (management/templates/project-skeleton)")
     if target.exists():
         raise HTTPException(409, {"errors": {"project_code": "a project with this client and code already exists"}})
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -341,7 +344,7 @@ def create_project(p: NewProject):
 
 @app.get("/api/policy")
 def policy():
-    return _json(PLATFORM / "schemas" / "deliverable-policy.json")
+    return _json(SCHEMAS / "deliverable-policy.json")
 
 
 @app.get("/api/projects/{project_id:path}/tree")
@@ -352,7 +355,7 @@ def project_tree(project_id: str, area: str = "workspace", depth: int = 3):
     base = root / area
     if area not in ("workspace", "deliverables") or not base.exists():
         raise HTTPException(404, "area not found")
-    fmt = _json(PLATFORM / "schemas" / "deliverable-policy.json")["formats"]
+    fmt = _json(SCHEMAS / "deliverable-policy.json")["formats"]
 
     def walk(d: Path, level: int):
         items = []

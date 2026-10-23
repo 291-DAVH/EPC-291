@@ -8,6 +8,8 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 - `docs/explanation/what-is-epc.md`, `docs/architecture/` (target architecture, structure, migration phases) and ADR-0001 to ADR-0006.
 
 ### Changed
+- **Migration phase 2:** private folders moved under a single git-ignored `local/` (`dev-knowledge`, `legacy`, `projects-demo`, `projects`); `platform/schemas` and `platform/i18n` moved to `shared/`; the project skeleton moved to `management/templates/project-skeleton`; code, hook, ignore rules and docs updated.
+- `tools/ci/run_gate.py`: the 10-check test battery run after every phase.
 - Repository organization: README, README.es, CHANGELOG, CONTRIBUTING, `.editorconfig`, `.gitattributes`, `.gitignore` and `.env.example` moved from `platform/` to the repository root; all documentation moved from `platform/docs/` to `docs/` (new `docs/README.md` index).
 - A single `.gitignore` for the whole repository.
 
