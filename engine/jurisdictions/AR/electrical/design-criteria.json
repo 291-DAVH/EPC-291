@@ -12,8 +12,9 @@
     {"id": "switch_height_m", "group": {"en": "Mounting heights", "es": "Alturas de montaje"}, "label": {"en": "Light switches height", "es": "Altura de llaves de luz"}, "unit": "m", "type": "number", "min": 0.5, "max": 1.6, "default": 1.1},
     {"id": "board_height_m", "group": {"en": "Mounting heights", "es": "Alturas de montaje"}, "label": {"en": "Board operating height (top)", "es": "Altura de operación de tableros (máxima)"}, "unit": "m", "type": "number", "min": 1.0, "max": 2.2, "default": 1.8},
 
-    {"id": "vd_branch_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in branch circuits", "es": "Caída máxima en circuitos terminales"}, "unit": "%", "type": "number", "min": 0.5, "max": 10, "default": 3},
-    {"id": "vd_total_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum total drop (feeder + branch)", "es": "Caída máxima total (alimentador + terminal)"}, "unit": "%", "type": "number", "min": 1, "max": 15, "default": 5},
+    {"id": "vd_sectional_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in sectional lines (feeders)", "es": "Caída máxima en líneas seccionales"}, "unit": "%", "type": "number", "min": 0.1, "max": 10, "default": 1},
+    {"id": "vd_lighting_sockets_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in lighting and socket circuits", "es": "Caída máxima en circuitos de iluminación y tomacorrientes"}, "unit": "%", "type": "number", "min": 0.5, "max": 10, "default": 3},
+    {"id": "vd_motors_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in motor circuits", "es": "Caída máxima en circuitos de motores"}, "unit": "%", "type": "number", "min": 0.5, "max": 15, "default": 5},
 
     {"id": "conductor_material", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Conductor material", "es": "Material del conductor"}, "unit": "", "type": "choice", "options": ["cobre", "aluminio"], "default": "cobre"},
     {"id": "insulation", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Insulation", "es": "Aislación"}, "unit": "", "type": "choice", "options": ["XLPE", "PVC"], "default": "XLPE"},
