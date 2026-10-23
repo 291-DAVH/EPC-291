@@ -1,6 +1,6 @@
 # ADR-0007: Desktop edition with Rust (Tauri), engine stays in Python
 
-Status: Proposed. Date: 2026-10-23.
+Status: Deferred by the owner (2026-10-23): Rust and the desktop edition are set aside for now; the plan below is kept for later. See ADR-0008.
 
 ## Context
 The product must also run as a cross-platform desktop application (Windows, macOS, Linux): offline work, no server to install, data on the user's machine. The owner wants the desktop version built with Rust. The engineering engine (`engine/`) is mathematics-heavy and already written and tested in Python (NumPy-style calculations, rules, drawing, documents); rewriting it would cost time and risk new numerical errors in a domain where results are checked against standards.

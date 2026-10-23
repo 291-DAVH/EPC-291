@@ -48,7 +48,7 @@ The customer sees only projects, deliverables, input data, requirements, reports
 | Project management | `management/` | project skeleton, methodologies | ✅ |
 | Software planning | `planning/` | vision, PRDs, backlog, sprints, board (not shipped) | ✅ |
 | Authentication, organizations, billing | — | planned (US-0018) | 🚧 |
-| Desktop edition (Rust/Tauri, Windows · macOS · Linux) | `desktop/` | planned (EP-012, ADR-0007) | 🚧 |
+| Desktop edition (Rust/Tauri) | `desktop/` | deferred (ADR-0007) | ⏸️ |
 | Medium voltage, HVAC, fire, civil | — | after low voltage | 🚧 |
 
 Argentina is the first jurisdiction (AEA 90364, IRAM); other countries plug in as country packs with their own `rules.json` per standard.
