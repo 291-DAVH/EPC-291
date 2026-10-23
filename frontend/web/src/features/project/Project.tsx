@@ -1,10 +1,10 @@
 import { FormEvent, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ApiError, DeliverableItem, InputItem, PortfolioProject, ReportItem, RequirementItem, useApi } from "@epc/ui";
+import { ApiError, DeliverableItem, Gantt, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, useApi } from "@epc/ui";
 import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 
-const TABS = ["overview", "deliverables", "inputs", "requirements", "reports"] as const;
+const TABS = ["overview", "plan", "deliverables", "inputs", "requirements", "reports"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Project() {
@@ -54,6 +54,7 @@ export default function Project() {
       </div>
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
+      {tab === "plan" && <Plan base={base} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} />}
       {tab === "requirements" && <Requirements base={base} rev={rev} />}
@@ -304,6 +305,21 @@ function Reports({ base, go }: { base: string; go: (t: Tab, x?: Record<string, s
         <p className="muted">{t("u.rp.reportHelp")}</p>
         <button className="primary" onClick={() => go("inputs", { kind: "report" })}>{t("u.rp.report")}</button>
       </div>
+    </div>
+  );
+}
+
+/* ---------------- plan (read-only view of the WBS and the schedule) ---------------- */
+function Plan({ base }: { base: string }) {
+  const { t } = useI18n();
+  const wbs = useApi<WbsView>(base + "/wbs");
+  const sch = useApi<ScheduleView>(base + "/schedule");
+  if (!wbs.data || !sch.data) return <State loading={wbs.loading || sch.loading} error={wbs.error || sch.error} />;
+  if (wbs.data.nodes.length === 0 && sch.data.activities.length === 0) return <div className="state">{t("plan.empty")}</div>;
+  return (
+    <div className="grid" style={{ gap: 14 }}>
+      <Gantt schedule={sch.data} today={new Date().toISOString().slice(0, 10)} />
+      <WbsTree wbs={wbs.data} />
     </div>
   );
 }

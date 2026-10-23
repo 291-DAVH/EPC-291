@@ -6,7 +6,7 @@ Español: [README.es.md](README.es.md)
 
 ## Repository layout
 
-Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 to 7 done).
+Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 to 8 done).
 
 ```
 EPC-291/

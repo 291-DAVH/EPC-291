@@ -8,6 +8,9 @@ What the end user sees comes only from these files; everything else stays intern
 | `05-management/deliverables.json` | list of deliverables: id, code, name, discipline, format, status (planned/in_progress/in_review/delivered), revision, due, delivered_on, file (path under `deliverables/`) | platform (publish step) |
 | `01-input/intake/INT-nnnn.json` | one record per piece of information sent by the user or client: kind (voice_of_customer, user_story, document, meeting_note, report), title, text, source, author, created, status (received, analyzing, structured), attachments[] | user (web form) |
 | `00-setup/requirements.json` | structured requirements derived from intake: id, statement, type, priority, discipline, acceptance[], open_questions[], source_intake[], status | Claude analysis (hidden from the user) |
+| `05-management/wbs.json` | WBS (EDT): nodes with dotted id (the parent is the id without its last part), name, weight, progress (leaves only; parents are rolled up), discipline, owner | engineer / Claude (API `PUT /api/projects/{id}/wbs`); customers read it |
+| `05-management/schedule.json` | activities: id, name, start, end, wbs_id, depends_on[] (finish-to-start), milestone, progress; critical path and slack are computed | engineer / Claude (`PUT .../schedule`); customers read it |
+| `05-management/backlog.json` | internal backlog: id BL-nnn, title, type, priority, status, estimate_h, wbs_id, requirement_id, owner | engineer (`/api/projects/{id}/backlog`); **never shown to the customer** |
 | `05-management/reports/index.json` | reports: id, title, type, date, summary, file | platform |
 
 ## Intake -> data pipeline

@@ -14,6 +14,7 @@ name = admin: other modules use only its public interface
 type = forbidden
 allow_indirect_imports = True
 source_modules =
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -27,6 +28,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.admin.api
     epc.modules.admin.service
@@ -40,12 +43,49 @@ layers =
     epc.modules.admin.service
     epc.modules.admin.repository
 
+[importlinter:contract:backlog-encapsulated]
+name = backlog: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.backlog.api
+    epc.modules.backlog.service
+    epc.modules.backlog.repository
+    epc.modules.backlog.models
+
+[importlinter:contract:backlog-layers]
+name = backlog: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.backlog.api
+    epc.modules.backlog.service
+    epc.modules.backlog.repository
+    epc.modules.backlog.models
+
 [importlinter:contract:deliverables-encapsulated]
 name = deliverables: other modules use only its public interface
 type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.engineering
@@ -58,6 +98,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.deliverables.api
     epc.modules.deliverables.service
@@ -77,6 +119,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -89,6 +132,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.identity.api
     epc.modules.identity.service
@@ -107,6 +152,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -119,6 +165,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.intake.api
     epc.modules.intake.service
@@ -138,6 +186,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -150,6 +199,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.knowledge.api
     epc.modules.knowledge.service
@@ -171,6 +222,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -183,6 +235,8 @@ source_modules =
     epc.modules.projects
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.management.api
     epc.modules.management.service
@@ -202,6 +256,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -214,6 +269,8 @@ source_modules =
     epc.modules.procurement
     epc.modules.quality
     epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.projects.api
     epc.modules.projects.service
@@ -235,6 +292,7 @@ type = forbidden
 allow_indirect_imports = True
 source_modules =
     epc.modules.admin
+    epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
     epc.modules.deliverables
@@ -247,6 +305,8 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.schedule
+    epc.modules.wbs
 forbidden_modules =
     epc.modules.requirements.api
     epc.modules.requirements.service
@@ -259,6 +319,78 @@ layers =
     epc.modules.requirements.api
     epc.modules.requirements.service
     epc.modules.requirements.repository
+
+[importlinter:contract:schedule-encapsulated]
+name = schedule: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.schedule.api
+    epc.modules.schedule.service
+    epc.modules.schedule.repository
+    epc.modules.schedule.models
+
+[importlinter:contract:schedule-layers]
+name = schedule: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.schedule.api
+    epc.modules.schedule.service
+    epc.modules.schedule.repository
+    epc.modules.schedule.models
+
+[importlinter:contract:wbs-encapsulated]
+name = wbs: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+forbidden_modules =
+    epc.modules.wbs.api
+    epc.modules.wbs.service
+    epc.modules.wbs.repository
+    epc.modules.wbs.models
+
+[importlinter:contract:wbs-layers]
+name = wbs: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.wbs.api
+    epc.modules.wbs.service
+    epc.modules.wbs.repository
+    epc.modules.wbs.models
 
 [importlinter:contract:modules-not-main]
 name = modules never import the composition root
