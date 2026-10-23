@@ -7,7 +7,7 @@
    ```
    python tools/ci/check_skill_conflicts.py --env production
    python tools/build/epc_build.py registry
-   python -m unittest apps.api.test_projects apps.api.test_app
+   (cd backend && python -m unittest discover -s tests -t . && lint-imports)
    ```
 5. **Versions.** Bump `version` in the plugin's `plugin.json` and add a line to [CHANGELOG.md](CHANGELOG.md) for every behavior change.
 6. **Language.** Product content (code, schemas, ids, templates, prompts) is English. Claude explains to the user in Spanish.

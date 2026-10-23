@@ -23,7 +23,7 @@ feature/b                      o
    ```
    python tools/build/epc_build.py registry
    python tools/ci/check_skill_conflicts.py --env production
-   python -m unittest apps.api.test_projects apps.api.test_app      # from platform/
+   python -m unittest discover -s tests -t .      # from backend/ (+ lint-imports)
    ```
    or, in one step: `python tools/ci/run_gate.py` (the full battery).
 3. `dev` goes to `main` when the whole suite is green and the checklist is done: changelog updated, version bumped in the affected `plugin.json`, no draft rules promoted by mistake, no PDF/DWG/dev-knowledge content staged.

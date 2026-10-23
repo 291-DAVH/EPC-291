@@ -50,6 +50,7 @@ Setup and tools (from `platform/`):
 cd platform
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt
+.venv\Scripts\python -m pip install -e ..\engine\calc -e ..\engineules -e ..\engine\standards -e ..\engine\drawing -e ..\engine\documents -e ..ackend[dev]
 .venv\Scripts\python tools\build\epc_build.py registry         # validate hub + skills, write hub/registry.json
 .venv\Scripts\python tools\ci\check_skill_conflicts.py          # duplicate / orphan skills
 .venv\Scripts\python tools\build\epc_build.py package all       # dist\<id>-<ver>.plugin for Claude Code
@@ -57,7 +58,7 @@ python -m venv .venv
 ```
 Run the app (two terminals, from `platform/`):
 ```
-.venv\Scripts\python -m uvicorn apps.api.main:app --port 8000 --env-file .env.demo
+.venv\Scripts\python -m uvicorn epc.main:app --app-dir ..\backend\src --port 8000 --env-file .env.demo
 cd apps\web && npm install && npm run dev                        # http://localhost:5173
 ```
 Demo data: `.venv\Scripts\python tools\dev\seed_demo.py` creates 20 simulated projects in `local/projects-demo/`. Copy `.env.example` to `platform/.env.demo` and set `EPC_PROJECTS` to that folder. `EPC_ROLE=admin` unlocks the technical console.
