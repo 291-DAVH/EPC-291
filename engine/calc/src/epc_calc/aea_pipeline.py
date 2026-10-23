@@ -31,6 +31,14 @@ MÉTODO
     Límites : seccionales 1 %; iluminación y tomacorrientes 3 %; motores 5 %.
     disp    : cadena de protección según TOPOLOGY (p. ej. `MCB > KM > OL (25 A)`, `RCCB 4P 63 A 30 mA`).
 
+CRITERIOS DE DISEÑO (parámetro `criterios`)
+    Un diccionario con los criterios del proyecto manda sobre los valores base: `vd_sectional_pct` (seccionales),
+    `vd_lighting_sockets_pct` (iluminación y tomacorrientes), `vd_motors_pct` (motores en régimen),
+    `min_section_lighting_mm2`, `min_section_sockets_mm2`, `conductor_material` (cobre|aluminio), `insulation` (XLPE|PVC)
+    y `rcd_sensitivity_ma`. Las columnas MATERIAL / AISLACION / METODO de una fila siguen mandando sobre los criterios.
+    Con XLPE y sin METODO se usa B2 (Tabla 771.16.III), porque B1 solo existe para PVC. `detalle` (dict) recibe, por TAG, el
+    tipo de circuito, el límite aplicado y la caída propia y acumulada.
+
 LIMITACIONES
     - icu = Icc en barras; Icc mínima al final de cada circuito solo como AVISO (disparo magnético, curva C por defecto);
       sin verificación I²t del cable (requiere la energía pasante del interruptor), selectividad, agrupamiento ni temperatura.
@@ -258,7 +266,7 @@ _LIMITE = {"seccional": "seccional", "motor": "motor_regimen",
            "iluminacion": "iluminacion", "tomacorrientes": "tomacorrientes"}
 
 
-def _dispositivo(c, in_a, fases):
+def _dispositivo(c, in_a, fases, sens_ma=30):
     top = str(c.get("TOPOLOGY") or "single").strip().lower()
     kind = str(c.get("KIND") or "auto").strip().lower()
     notas = str(c.get("NOTAS") or "").lower()
@@ -266,7 +274,7 @@ def _dispositivo(c, in_a, fases):
         cad = CADENAS[top][0 if in_a <= IN_MAX_MCB_A else 1]
         return f"{cad} ({in_a} A)"
     if kind == "rccb":
-        return f"RCCB {4 if fases == 3 else 2}P {in_a} A 30 mA"
+        return f"RCCB {4 if fases == 3 else 2}P {in_a} A {sens_ma:g} mA"
     if kind == "auto":
         kind = "mcb" if in_a <= IN_MAX_MCB_A else "mccb"
     nombre = {"mcb": "MCB", "mccb": "MCCB", "rcbo": "RCBO"}.get(kind, kind.upper())
@@ -276,8 +284,36 @@ def _dispositivo(c, in_a, fases):
     return base
 
 
-def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C):
+_MATERIAL = {"cobre": "cu", "cu": "cu", "aluminio": "al", "al": "al"}
+
+
+def resolver_criterios(criterios=None):
+    """Criterios de diseño -> (límites ΔU [%] por tipo, secciones mínimas [mm²] por tipo, material, aislación, sensibilidad RCD [mA]).
+
+    Sin criterios (o con claves ausentes) valen los de las tablas: 1 % seccionales, 3 % iluminación y tomacorrientes, 5 % motores."""
+    cr = criterios or {}
+    lim = {k: VD.limite_caida_pct(v) for k, v in _LIMITE.items()}          # claves: seccional, motor, iluminacion, tomacorrientes
+    if cr.get("vd_sectional_pct") is not None:
+        lim["seccional"] = float(cr["vd_sectional_pct"])
+    if cr.get("vd_lighting_sockets_pct") is not None:
+        lim["iluminacion"] = lim["tomacorrientes"] = float(cr["vd_lighting_sockets_pct"])
+    if cr.get("vd_motors_pct") is not None:
+        lim["motor"] = float(cr["vd_motors_pct"])
+    smin = {k: CO.section_min_circuit(v) for k, v in _SECCION_MIN.items()}
+    if cr.get("min_section_lighting_mm2") is not None:
+        smin["iluminacion"] = float(cr["min_section_lighting_mm2"])
+    if cr.get("min_section_sockets_mm2") is not None:
+        smin["tomacorrientes"] = float(cr["min_section_sockets_mm2"])
+    material = _MATERIAL.get(str(cr.get("conductor_material", "cobre")).strip().lower(), "cu")
+    aislacion = str(cr.get("insulation", "PVC")).strip().lower()
+    if aislacion not in AMP.AISLACIONES:
+        raise ValueError(f"insulation {aislacion!r} inválida: {AMP.AISLACIONES}")
+    return lim, smin, material, aislacion, float(cr.get("rcd_sensitivity_ma", 30))
+
+
+def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C, criterios=None, detalle=None):
     """Dimensiona todos los circuitos. Devuelve (datos_json, avisos) con `datos_json` listo para `aea_export`."""
+    limites, smin_tab, mat_def, ais_def, sens_rcd = resolver_criterios(criterios)
     u = float(tablero.get("TENSION_V", 380))
     icc = float(tablero.get("ICC_KA", 10))
     fp_def = float(tablero.get("FP_DEFAULT", 0.85))
@@ -333,11 +369,18 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
         fp = _num_opt(c.get("FP"), fp_def)
         i_du = VD.corriente_extremo(i_b, "iluminacion") if tipo == "iluminacion" else i_b
         un_du = u if fases == 3 else u / math.sqrt(3)
-        limite = VD.limite_caida_pct(_LIMITE[tipo])
-        smin = CO.section_min_circuit(_SECCION_MIN[tipo])
-        par = AMP.parametros(c)
+        limite = limites[tipo]
+        smin = smin_tab[tipo]
+        cc = dict(c)
+        if not cc.get("MATERIAL"):
+            cc["MATERIAL"] = mat_def
+        if not cc.get("AISLACION"):
+            cc["AISLACION"] = ais_def
+        if not cc.get("METODO") and cc["AISLACION"] == "xlpe":
+            cc["METODO"] = "B2"                       # B1 solo tiene tabla para PVC
+        par = AMP.parametros(cc)
         t_cond = AMP.temp_conductor(par, temp_c)
-        elegida, du_prop, ultimo_error = None, 0.0, None
+        elegida, du_prop, ultimo_error, iz_ok = None, 0.0, None, None
         for s in SERIE_S_MM2:
             if s < smin:
                 continue
@@ -353,7 +396,7 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             du_prop = 0.0 if largo == 0 else VDG.caida_tension(
                 fases, i_du, largo, AMP.resistencia_ohm_km(s, par["material"], t_cond), CO.X_CABLE_OHM_KM, fp, un_du)["delta_u_pct"]
             if du_prop <= limite and base + du_prop <= DU_ACUM_MAX_PCT:
-                elegida = s
+                elegida, iz_ok = s, iz_s
                 break
         if elegida is None:
             elegida = SERIE_S_MM2[-1]
@@ -369,7 +412,11 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             if i_min < k_magnetico * in_a:
                 avisos.append(f"{tag}: Icc mín al final {i_min:.0f} A < {k_magnetico}·In ({k_magnetico * in_a:.0f} A): "
                               "verificar disparo magnético (curva) o acortar/ensanchar el cable")
-        resultado[tag] = EX.circuito_json(in_a, i_b, icu, elegida, du_acum[tag], _dispositivo(c, in_a, fases))
+        resultado[tag] = EX.circuito_json(in_a, i_b, icu, elegida, du_acum[tag], _dispositivo(c, in_a, fases, sens_rcd))
+        if detalle is not None:
+            detalle[tag] = {"tipo": tipo, "limite_pct": limite, "du_propia_pct": round(du_prop, 3), "du_acum_pct": round(du_acum[tag], 3),
+                            "iz_a": iz_ok, "seccion_min_mm2": smin, "material": par["material"], "aislacion": par["aislacion"], "metodo": par["metodo"],
+                            "cumple": bool(elegida is not None and iz_ok is not None and du_prop <= limite and du_acum[tag] <= DU_ACUM_MAX_PCT)}
         for h in hijos[tag]:
             _procesar(h)
 

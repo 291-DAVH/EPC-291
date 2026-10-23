@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { ApiError, Badge, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, Badge, CalcView, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
@@ -17,6 +17,7 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
   const [dirty, setDirty] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<SldStatus | null>(null);
+  const calc = useApi<CalcView>(`${base}/calculation?s=${status?.finished ?? ""}`);
   const [msg, setMsg] = useState("");
   const timer = useRef<number | undefined>(undefined);
 
@@ -55,10 +56,10 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
       if (st.state === "running") poll();
     }, 1500);
   };
-  const generate = async () => {
+  const generate = async (diagrams: "sld" | "mld" = "sld") => {
     if (dirty && !(await save())) return;
     try {
-      const st = await api<SldStatus>(`${base}/generate`, { method: "POST" });
+      const st = await api<SldStatus>(`${base}/generate?diagrams=${diagrams}`, { method: "POST" });
       setStatus(st);
       setErrors({});
       poll();
@@ -84,7 +85,7 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
   return (
     <div className="grid" style={{ gap: 14 }}>
       <p className="muted small" style={{ margin: 0 }}>{t("sld.help")}</p>
-      <div className="alert">{t("sld.notCriteria")}</div>
+      <div className="alert ok">{t("sld.notCriteria2")}</div>
 
       <div className="card">
         <h2>{t("sld.board")}</h2>
@@ -155,9 +156,41 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
       </div>
 
       <div className="card">
+        <h2>{t("sld.calc")}</h2>
+        <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("sld.calcHelp")}</p>
+        {!calc.data || calc.data.rows.length === 0 ? <div className="state">{t("sld.calcNone")}</div> : (
+          <>
+            {calc.data.criteria && (
+              <p className="small" style={{ margin: "0 0 8px" }}>
+                <b>{t("sld.calcLimits")}:</b> {t("sld.calcSectional")} {calc.data.criteria.limits_pct.seccional} % · {t("sld.calcTerminal")} {calc.data.criteria.limits_pct.terminal} % · {t("sld.calcMotor")} {calc.data.criteria.limits_pct.motor} %
+                {" · "}<b>{t("sld.calcConductor")}:</b> {calc.data.criteria.conductor.material === "cu" ? "Cu" : "Al"} {calc.data.criteria.conductor.aislacion.toUpperCase()}
+              </p>
+            )}
+            <div style={{ overflowX: "auto" }}>
+              <table className="sldtable">
+                <thead><tr><th>{t("sld.tag")}</th><th>{t("sld.desc")}</th><th>{t("sld.col.type")}</th><th>{t("sld.col.ib")}</th><th>{t("sld.col.in")}</th><th>{t("sld.col.icu")}</th><th>{t("sld.col.s")}</th><th>{t("sld.col.du")}</th><th>{t("sld.col.limit")}</th><th>{t("sld.col.device")}</th><th>{t("sld.col.ok")}</th></tr></thead>
+                <tbody>
+                  {calc.data.rows.map((r) => (
+                    <tr key={r.tag}>
+                      <td className="mono">{r.tag}</td><td>{r.description}</td>
+                      <td>{r.tipo ? t(("sld.type." + r.tipo) as Key) : ""}</td>
+                      <td className="mono">{r.Ib}</td><td className="mono">{r.In}</td><td className="mono">{r.icu}</td><td className="mono">{r.S}</td>
+                      <td className="mono">{r.dU}</td><td className="mono">{r.limite_pct ?? ""}</td><td>{r.disp}</td>
+                      <td>{r.cumple === undefined ? "" : r.cumple ? <Badge tone="ok">✓</Badge> : <Badge tone="bad">✗</Badge>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="card">
         <div className="row" style={{ flexWrap: "wrap" }}>
           <button onClick={save} disabled={!dirty || running}>{t("sld.save")}</button>
-          <button className="primary" onClick={generate} disabled={running || data.circuits.length === 0}>{t("sld.generate")}</button>
+          <button className="primary" onClick={() => generate("sld")} disabled={running || data.circuits.length === 0}>{t("sld.generate")}</button>
+          <button onClick={() => generate("mld")} disabled={running || data.circuits.length === 0}>{t("sld.generateMld")}</button>
           {dirty && <span className="muted small">{t("sld.unsaved")}</span>}
           {!dirty && msg && <span className="muted small">{msg}</span>}
         </div>

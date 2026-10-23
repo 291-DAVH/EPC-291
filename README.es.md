@@ -13,7 +13,7 @@ Cálculos, planos, documentos y reglas basadas en normas para proyectos de ingen
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
 [![React](https://img.shields.io/badge/web-React%20%2B%20TypeScript-0ea5e9?style=for-the-badge)](frontend/)
 [![PostgreSQL](https://img.shields.io/badge/base%20de%20datos-PostgreSQL-336791?style=for-the-badge)](database/)
-[![Plugins](https://img.shields.io/badge/plugins-12-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
+[![Plugins](https://img.shields.io/badge/plugins-13-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
 [![Argentina](https://img.shields.io/badge/jurisdicci%C3%B3n-AR-64748b?style=for-the-badge)](engine/jurisdictions/)
 
 [Contribuir](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Arquitectura](docs/architecture/README.md) · [Tablero de planificación](planning/BOARD.md) · [Documentación](docs/README.md)
@@ -40,7 +40,7 @@ El cliente ve solo proyectos, entregables, datos de entrada, requisitos, informe
 | Área | Carpeta | Contenido | Estado |
 |---|---|---|---|
 | Motor de ingeniería | `engine/` | calc, rules, standards, drawing, documents + paquetes por país | ✅ |
-| Capa de Claude | `claude/` | 12 plugins, 14 skills, agentes, marketplace | ✅ |
+| Capa de Claude | `claude/` | 13 plugins, 15 skills, agentes, marketplace | ✅ |
 | Backend | `backend/` | 11 módulos con límites verificados (import-linter) | ✅ |
 | Frontend | `frontend/` | `web` (cliente), `console` (admin), `packages/ui` | ✅ |
 | Base de datos | `database/` | Base de Alembic: organizaciones, usuarios, proyectos, entregables, registro | ✅ |
@@ -110,8 +110,9 @@ EPC-291/
 | `aea-calc` | 1.6.0 | cálculo | — |
 | `iec-symbols` | 0.4.16 | conocimiento | — |
 | `iram-titleblock` | 0.5.1 | generador | — |
-| `sld` | 0.1.1 | generador | aea-calc, iec-symbols, iram-titleblock |
-| `mld` | 0.1.0 (pendiente) | generador | sld, iram-titleblock, iec-symbols |
+| `sld` | 0.1.2 | generador | aea-calc, iec-symbols, iram-titleblock |
+| `mld` | 0.2.0 | generador | aea-calc, sld, iram-titleblock, iec-symbols |
+| `board-design` | 0.1.0 | flujo | aea-calc, sld, mld, iec-symbols, iram-titleblock |
 | `standard-ingest` | 0.1.0 | flujo | — |
 | `intake-analysis` | 0.1.0 | flujo | — |
 | `pm2-docs` | 0.1.0 | flujo | doc-quality |

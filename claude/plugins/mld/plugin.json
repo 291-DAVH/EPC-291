@@ -1,19 +1,21 @@
 {
   "id": "mld",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "generator",
-  "description": "Converts an SLD into a multi-line diagram (MLD) by expanding each line into its conductors. Pending.",
-  "status": "pending",
+  "description": "Multi-line diagram (MLD) of a board from the same data and calculation as the single-line: each line is expanded into its conductors (L1 L2 L3 N) with the MLD_LV symbols, on IRAM sheets (SVG and DXF; the PDF is rendered by the exporter).",
   "discipline": [
     "electrical"
   ],
   "requires": {
-    "sld": "^0.1.0",
+    "aea-calc": "^1.6.0",
+    "sld": "^0.1.2",
     "iram-titleblock": "^0.5.1",
     "iec-symbols": "^0.4.14"
   },
   "consumes": [
-    "Drawing:SLD"
+    "CircuitCalculation",
+    "Board",
+    "Circuit"
   ],
   "produces": [
     "Drawing:MLD"
@@ -33,7 +35,10 @@
     "requires": [
       "openpyxl>=3.1",
       "lxml",
-      "ezdxf"
+      "ezdxf",
+      "svgelements",
+      "shapely",
+      "matplotlib"
     ]
   },
   "skills": [
@@ -47,6 +52,7 @@
     "source": "mld-generator"
   },
   "engine": [
+    "calc",
     "drawing"
   ]
 }

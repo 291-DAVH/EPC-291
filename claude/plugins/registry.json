@@ -15,7 +15,27 @@
       "engine": [
         "calc"
       ],
-      "hash": "5e5ae9c1271f23e9"
+      "hash": "78c5da8a93ace571"
+    },
+    "board-design": {
+      "version": "0.1.0",
+      "kind": "workflow",
+      "status": "active",
+      "requires": {
+        "aea-calc": "^1.6.0",
+        "sld": "^0.1.2",
+        "mld": "^0.2.0",
+        "iec-symbols": "^0.4.14",
+        "iram-titleblock": "^0.5.1"
+      },
+      "skills": [
+        "design-board"
+      ],
+      "engine": [
+        "calc",
+        "drawing"
+      ],
+      "hash": "10cd441ba2d67361"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -48,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "3a60925239641b1a"
+      "hash": "e8b1813eef6753bf"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -73,14 +93,15 @@
       "engine": [
         "drawing"
       ],
-      "hash": "212ae8f8c5c2189a"
+      "hash": "7a127452131d8283"
     },
     "mld": {
-      "version": "0.1.0",
+      "version": "0.2.0",
       "kind": "generator",
-      "status": "pending",
+      "status": "active",
       "requires": {
-        "sld": "^0.1.0",
+        "aea-calc": "^1.6.0",
+        "sld": "^0.1.2",
         "iram-titleblock": "^0.5.1",
         "iec-symbols": "^0.4.14"
       },
@@ -88,9 +109,10 @@
         "convert-sld-to-mld"
       ],
       "engine": [
+        "calc",
         "drawing"
       ],
-      "hash": "b40e7cb3c36d4477"
+      "hash": "e79630379b49a3b6"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -121,7 +143,7 @@
       "hash": "4deddfcbcd7e2001"
     },
     "sld": {
-      "version": "0.1.1",
+      "version": "0.1.2",
       "kind": "generator",
       "status": "active",
       "requires": {
@@ -136,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "40badaee3709c019"
+      "hash": "6e259ef54cde6cbb"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -177,6 +199,9 @@
     },
     "create-management-document": {
       "owner": "pm2-docs"
+    },
+    "design-board": {
+      "owner": "board-design"
     },
     "dimension-installation": {
       "owner": "aea-calc"

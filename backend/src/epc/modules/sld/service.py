@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict
 
 from epc.core.errors import Conflict, Invalid
+from epc.core.fsutil import read_json
 from epc.modules.engineering import public as engineering
 from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
@@ -89,7 +90,8 @@ def validate(data: dict) -> Dict[str, str]:
 
 
 def _name(board_name: str) -> str:
-    return "SLD_" + (re.sub(r"[^A-Za-z0-9]+", "-", board_name).strip("-")[:30] or "TABLERO")
+    """Base name of the outputs: SLD_<base>.*, MLD_<base>.* and <base>_dimensionado*.json."""
+    return re.sub(r"[^A-Za-z0-9]+", "-", board_name).strip("-")[:30] or "TABLERO"
 
 
 def view(d: Path) -> dict:
@@ -131,12 +133,29 @@ def status(d: Path) -> dict:
     return repository.load_status(d)
 
 
+def calculation(d: Path) -> dict:
+    """Result of the last calculation: one row per circuit (what the diagram was drawn from) and the criteria that governed it."""
+    st = status(d)
+    name = st.get("name")
+    base = repository.pkg(d) / "calc"
+    calc = read_json(base / f"{name}_dimensionado.json", None) if name else None
+    if not calc:
+        return {"rows": [], "criteria": None}
+    detail = read_json(base / f"{name}_dimensionado_detalle.json", {}) or {}
+    crit = read_json(base / f"{name}_criterios.json", {}) or {}
+    saved = repository.load_input(d) or {"circuits": []}
+    desc = {c["tag"]: c.get("description", "") for c in saved.get("circuits", [])}
+    rows = [{"tag": t, "description": desc.get(t, ""), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}} for t, v in calc.items()]
+    return {"rows": rows, "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
+
+
 def _lock(d: Path) -> threading.Lock:
     return _LOCKS.setdefault(str(d.resolve()), threading.Lock())
 
 
-def _job(d: Path, data: dict, name: str) -> None:
-    previous = repository.load_status(d).get("outputs", [])
+def _job(d: Path, data: dict, name: str, diagrams: str = "sld") -> None:
+    prior = repository.load_status(d)
+    previous, previous_name = prior.get("outputs", []), prior.get("name")
     st = {"state": "running", "name": name, "started": dt.datetime.now().replace(microsecond=0).isoformat(), "outputs": previous, "log": []}
     repository.save_status(d, st)
     try:
@@ -145,24 +164,28 @@ def _job(d: Path, data: dict, name: str) -> None:
         if out.exists():
             import shutil
             shutil.rmtree(out)
-        repository.write_excel(work / "input_for_sld.xlsx", data)
         code = projects.read_meta(d).get("client_code", "-")
         logos = {k: p for k, p in (("provider", masterdata.logo_path("organization")), ("client", masterdata.logo_path("client-" + code))) if p}
-        repository.write_titleblock(work / "titleblock", {**data["titleblock"]}, logos)
-        res = repository.run_generator(work / "input_for_sld.xlsx", out, name, work / "titleblock")
-        log = [ln for ln in (res.stdout.splitlines() + res.stderr.splitlines()) if ln.startswith(("OK", "AVISO"))]
-        if res.returncode != 0:
-            st.update(state="failed", log=log, error=(res.stderr or res.stdout).strip()[-600:])
+        criteria = engineering.criteria_values(d)
+        res = repository.run_design(work, name, data, criteria, logos, diagrams)
+        summary = repository.read_summary(work)
+        log = list(summary.get("log", [])) + [f"AVISO {a}" for a in summary.get("avisos", [])]
+        if res.returncode != 0 or not summary.get("ok"):
+            st.update(state="failed", log=log, error=(summary.get("error") or res.stderr or res.stdout).strip()[-600:])
         else:
-            log += repository.render_pdfs(out, name)
-            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous))
+            log += repository.render_pdfs(out, "SLD_" + name) if "sld" in diagrams else []
+            log += repository.render_pdfs(out, "MLD_" + name) if "mld" in diagrams else []
+            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name), name=name,
+                      calculation={"limits_pct": summary.get("limites_pct"), "conductor": summary.get("conductor"), "non_compliant": summary.get("non_compliant", [])})
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status
         st.update(state="failed", error=str(exc)[:600])
     st["finished"] = dt.datetime.now().replace(microsecond=0).isoformat()
     repository.save_status(d, st)
 
 
-def generate(d: Path, wait: bool = False) -> dict:
+def generate(d: Path, wait: bool = False, diagrams: str = "sld") -> dict:
+    if diagrams not in ("sld", "mld", "sld,mld"):
+        raise Invalid({"diagrams": "sld, mld or sld,mld"})
     saved = repository.load_input(d)
     if not saved:
         raise Invalid({"input": "save the SLD data first"})
@@ -175,7 +198,7 @@ def generate(d: Path, wait: bool = False) -> dict:
 
     def run():
         try:
-            _job(d, saved, _name(saved["board"]["name"]))
+            _job(d, saved, _name(saved["board"]["name"]), diagrams)
         finally:
             lock.release()
 

@@ -182,3 +182,5 @@ export interface PersonRecord { id: string; name: string; role: string; registra
 export interface IssueCandidate { id: string; name: string; discipline: string; package: string; kind: "drawing" | "document"; formats: string[]; pdf_will_be_rendered: boolean; last_issue: string | null }
 export interface TransmittalSummary { id: string; emission: string; client_rev: string; internal_rev: string; status: "prepared" | "sent"; created: string; sent_on: string | null; items: number }
 export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; next_transmittal: string; transmittals: TransmittalSummary[] }
+export interface CalcRow { tag: string; description: string; In: number; Ib: number; icu: number; S: number; dU: number; disp: string; tipo?: string; limite_pct?: number; du_propia_pct?: number; iz_a?: number; cumple?: boolean }
+export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }

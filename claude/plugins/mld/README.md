@@ -1,15 +1,13 @@
 # mld
 
-Converts an SLD into a multi-line diagram (MLD) by expanding each line into its conductors. Pending.
+Multi-line diagram (MLD) of a board from the same data and calculation as the single-line: each line is expanded into its conductors (L1 L2 L3 N) with the MLD_LV symbols (`<id>_<n>p_mld`, 10 mm pole pitch, not scaled), on IRAM sheets (SVG and DXF; the PDF is rendered by the exporter).
 
-- Version: 0.1.0 (generator) - **pending**
+- Version: 0.2.0 (generator)
 - Entitlement: `feature.drawing.mld`
-- Python: openpyxl>=3.1, lxml, ezdxf
+- Python: openpyxl>=3.1, lxml, ezdxf, svgelements, shapely, matplotlib
 
 ## Requires
-- `sld` ^0.1.0
-- `iram-titleblock` ^0.5.1
-- `iec-symbols` ^0.4.14
+- `aea-calc` ^1.6.0, `sld` ^0.1.2, `iram-titleblock` ^0.5.1, `iec-symbols` ^0.4.14
 
 ## Skills
 - [`convert-sld-to-mld`](../../skills/convert-sld-to-mld/SKILL.md) (owner)
@@ -18,7 +16,8 @@ Converts an SLD into a multi-line diagram (MLD) by expanding each line into its 
 - `.svg`: internal
 - `.dxf`: internal+deliverable
 
-See `plugin.json` for the full manifest. Legacy origin: `mld-generator`.
+## Run
+`python -m epc_drawing.mld.mld_generator --input board.json --calc <TABLERO>_dimensionado.json --out <folder> --name MLD_<TABLERO>`, or, with the calculation done from the project's design criteria, through the `board-design` plugin (`--diagrams sld,mld`).
 
 ## Engine
-This plugin is packaging only. The code lives in `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).
+This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing` and is copied into the built plugin under `lib/` (set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`).

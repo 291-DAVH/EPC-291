@@ -5,6 +5,13 @@ description: "Convierte un diagrama unifilar (SLD) de tablero en multifilar (MLD
 
 # convert-sld-to-mld
 
+## Camino automático (preferido)
+El generador `epc_drawing.mld.mld_generator` dibuja el multifilar a partir de los mismos datos y del mismo cálculo que el unifilar (`epc_calc.aea_pipeline`, con los criterios de diseño del proyecto): cada línea se despliega en L1 L2 L3 N, con los símbolos `<id>_<n>p_mld` a paso de 10 mm, cargas monofásicas repartidas entre fases, grupos con RCCB como sub-barras, PE y cable externo.
+- Con el plugin `board-design`: `python -m epc_drawing.board_design --project <carpeta> --out <trabajo> --name <TABLERO> --diagrams sld,mld`.
+- Solo el multifilar, con un cálculo ya hecho: `python -m epc_drawing.mld.mld_generator --input board.json --calc <TABLERO>_dimensionado.json --out <carpeta> --name MLD_<TABLERO>`.
+- En la aplicación web: pestaña *Datos del unifilar* → *Generar multifilar*.
+El procedimiento manual de más abajo queda como respaldo para casos que el generador no cubre (símbolos especiales, orígenes en PDF o imagen).
+
 ## Contexto de ejecución
 - **Invocación:** pipeline — ejecutar solo cuando el usuario solicite explícitamente la conversión a MLD Y exista un SLD de origen (generado por `create-electrical-line-diagram` o entregado directamente por el usuario como SVG, PDF o Excel).
 - **Contexto requerido:** directorio `03_ENGINEERING`. No ejecutar en `90_MANAGEMENT`, `01_INPUT`, `02_PROJECT` ni `04_REVIEW`.
