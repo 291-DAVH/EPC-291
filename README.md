@@ -1,107 +1,158 @@
+<div align="center">
+
+<img src="assets/logo.png" alt="EPC-291" width="360"/>
+
 # EPC-291
 
-Automated EPC engineering framework built from plugins ("Lego"): calculations, drawings, documents, rules extracted from standards, and a web app for end users. Runs today inside Claude Code; the same engine is meant for web and desktop.
+**Automated EPC engineering, built from plugins.**
+Calculations, drawings, documents and standards-based rules for engineering projects, with a web app for customers and a technical console for engineers.
+
+[![Version](https://img.shields.io/badge/version-0.1.0%20draft-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Gate](https://img.shields.io/badge/test%20battery-20%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
+[![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
+[![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
+[![React](https://img.shields.io/badge/web-React%20%2B%20TypeScript-0ea5e9?style=for-the-badge)](frontend/)
+[![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-336791?style=for-the-badge)](database/)
+[![Plugins](https://img.shields.io/badge/plugins-12-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
+[![Argentina](https://img.shields.io/badge/jurisdiction-AR-64748b?style=for-the-badge)](engine/jurisdictions/)
+
+[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Architecture](docs/architecture/README.md) · [Planning board](planning/BOARD.md) · [Documentation](docs/README.md)
 
 Español: [README.es.md](README.es.md)
 
-## Repository layout
+</div>
 
-Migration to the [target architecture](docs/architecture/target-structure.md) is in progress; this is the current state (phases 2 to 8 done).
+---
 
-```
-EPC-291/
-├─ README.md  README.es.md  CHANGELOG.md  CONTRIBUTING.md  .env.example  .editorconfig  .gitattributes  .gitignore
-├─ docs/            architecture, ADRs, explanation, branching policy, dependencies, migration records
-├─ planning/        software planning during development: vision, PRD, backlog, sprints, BOARD   (not shipped)
-├─ engine/          engineering libraries, pure Python (phase 4 done)
-│   ├─ calc/ rules/ standards/ drawing/ documents/    one package each: pyproject.toml, src/, tests/
-│   └─ jurisdictions/                                 country packs: rules.json per standard
-├─ backend/         FastAPI modular monolith (phase 5): src/epc/{core,modules/*}, tests/, import-linter contracts
-├─ frontend/        npm workspace (phase 6): web/ (customer), console/ (admin), packages/ui
-├─ database/        Alembic migrations and baseline schema (phase 7)
-├─ infra/           Dockerfiles, compose (PostgreSQL), see .github/workflows/ci.yml
-├─ claude/          AI layer (phase 3 done): plugins/ (packaging only), skills/, agents/, marketplace/, mcp/, prompts/, evals/
-├─ platform/        Claude-side build tooling and legacy adapters (API in backend/, web in frontend/)
-│   ├─ apps/  core/  methodologies/  tests/  tools/
-│   └─ pyproject.toml  requirements.txt  requirements-dev.txt
-├─ management/      project-management knowledge shipped with the product
-│   └─ templates/project-skeleton/   project skeleton: workspace (editable) + deliverables (client-facing)
-├─ shared/          contracts used by several parts: schemas/ (JSON Schema), i18n/ (catalogs)
-├─ tools/           repository tooling: ci/run_gate.py (test battery), planning/board.py
-└─ local/           GIT-IGNORED, never versioned
-    ├─ dev-knowledge/   standards, third-party reports, study material
-    ├─ legacy/          archived original folders and old repositories
-    ├─ projects-demo/   20 simulated projects for demos
-    └─ projects/        real client projects (each in its own repository)
-```
+## ✨ What it is
 
-## Where to start
-- **What an EPC is and why the structure looks like this:** [docs/explanation/what-is-epc.md](docs/explanation/what-is-epc.md), [docs/architecture/README.md](docs/architecture/README.md).
-- **What we are building and in which order:** [planning/README.md](planning/README.md) (vision, PRDs, backlog, sprints, [BOARD](planning/BOARD.md)).
+An EPC (Engineering, Procurement, Construction) platform made like Lego: small plugins that Claude Code can run today, over one engineering engine that will also serve a web app and a desktop app.
 
-## Branches
-`main` (stable) <- `dev` (integration) <- `feature/*`, `fix/*`, `chore/*`. See [docs/BRANCHING.md](docs/BRANCHING.md). Enable the safety hook after cloning:
+- **Engineering engine** — pure Python packages for calculation, drawing, documents, rules and standards, with no web or Claude dependency.
+- **Claude layer** — plugins (packaging only), skills and agents that wrap the engine. Plugins govern their skills.
+- **Product** — a modular FastAPI backend, a React app for customers and a separate console for administrators.
+- **Management** — projects follow PM² by default (PMI or custom selectable), with WBS, schedule with critical path, and an internal backlog.
 
-```
+The customer sees only projects, deliverables, input data, requirements, reports and the project plan. Plugins, skills, rules and internal files exist only for the admin role.
+
+## 🧭 What it includes
+
+| Area | Folder | Content | State |
+|---|---|---|---|
+| Engineering engine | `engine/` | calc, rules, standards, drawing, documents + country packs | ✅ |
+| Claude layer | `claude/` | 12 plugins, 14 skills, agents, marketplace | ✅ |
+| Backend | `backend/` | 11 modules with enforced boundaries (import-linter) | ✅ |
+| Frontend | `frontend/` | `web` (customer), `console` (admin), `packages/ui` | ✅ |
+| Database | `database/` | Alembic baseline: organizations, users, projects, deliverables, ledger | ✅ |
+| Infrastructure | `infra/` | Docker, compose with PostgreSQL, CI workflow | ✅ |
+| Project management | `management/` | project skeleton, methodologies | ✅ |
+| Software planning | `planning/` | vision, PRDs, backlog, sprints, board (not shipped) | ✅ |
+| Authentication, organizations, billing | — | planned (US-0018) | 🚧 |
+| Medium voltage, HVAC, fire, civil | — | after low voltage | 🚧 |
+
+Argentina is the first jurisdiction (AEA 90364, IRAM); other countries plug in as country packs with their own `rules.json` per standard.
+
+## 🚀 Quick start (Windows)
+
+```bash
+# Clone and enable the safety hook
+git clone https://github.com/291-DAVH/EPC-291.git
+cd EPC-291
 git config core.hooksPath platform/tools/hooks
-```
 
-## Quick start (Windows)
-Test battery for any change (from the repository root): `platform\.venv\Scripts\python tools\ci\run_gate.py`.
-
-Setup and tools (from `platform/`):
-```
+# Python environment (from platform/)
 cd platform
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python -m pip install -e ..\engine\calc -e ..\engine
-ules -e ..\engine\standards -e ..\engine\drawing -e ..\engine\documents -e ..ackend[dev]
-.venv\Scripts\python tools\build\epc_build.py registry         # validate hub + skills, write hub/registry.json
-.venv\Scripts\python tools\ci\check_skill_conflicts.py          # duplicate / orphan skills
-.venv\Scripts\python tools\build\epc_build.py package all       # dist\<id>-<ver>.plugin for Claude Code
-.venv\Scripts\python tools\build\epc_build.py marketplace       # dist\marketplace (official layout + marketplace.json)
-```
-Run the app (two terminals, from `platform/`):
-```
-.venv\Scripts\python -m uvicorn epc.main:app --app-dir ..\backend\src --port 8000 --env-file .env.demo
-cd ../frontend && npm install && npm run dev:web                # http://localhost:5173 (customer app); npm run dev:console -> :5174 (admin)
-```
-Demo data: `.venv\Scripts\python tools\dev\seed_demo.py` creates 20 simulated projects in `local/projects-demo/`. Copy `.env.example` to `platform/.env.demo` and set `EPC_PROJECTS` to that folder. `EPC_ROLE=admin` unlocks the technical console.
+.venv\Scripts\python -m pip install -e ../engine/calc -e ../engine/rules -e ../engine/standards -e ../engine/drawing -e ../engine/documents -e "../backend[dev]"
+cd ..
 
-## Plugins
+# Test battery (20 checks, run before merging anything)
+platform\.venv\Scripts\python tools\ci\run_gate.py
+```
+
+Run the app with 20 simulated projects (two terminals):
+
+```bash
+# 1) demo data and API (from platform/; copy .env.example to platform/.env.demo and set EPC_PROJECTS=../local/projects-demo)
+.venv\Scripts\python tools\dev\seed_demo.py
+.venv\Scripts\python -m uvicorn epc.main:app --app-dir ..\backend\src --port 8000 --env-file .env.demo
+
+# 2) web app (customers) on :5173, console (admin) on :5174
+cd frontend && npm install && npm run dev:web        # npm run dev:console for the console
+```
+
+`EPC_ROLE=admin` unlocks the technical API and the console. Full stack with PostgreSQL: see [infra/README.md](infra/README.md).
+
+## 🗂️ Structure
+
+```
+EPC-291/
+├─ assets/        logo
+├─ engine/        calc/ rules/ standards/ drawing/ documents/ jurisdictions/   (pure Python)
+├─ claude/        plugins/ skills/ agents/ marketplace/                        (Claude Code layer)
+├─ backend/       src/epc/{core, modules/*}   tests/   .importlinter           (FastAPI)
+├─ frontend/      web/ console/ packages/ui                                    (React workspace)
+├─ database/      migrations/ (Alembic)   tests/
+├─ infra/         docker/ compose/        (+ .github/workflows/ci.yml)
+├─ management/    templates/project-skeleton: workspace (editable) + deliverables (client-facing)
+├─ shared/        schemas/ (JSON Schema)   i18n/
+├─ planning/      software planning during development
+├─ docs/          architecture, ADRs, explanation, branching policy
+├─ platform/      Claude-side build tooling (registry, packaging) and demo seed
+├─ tools/         ci/run_gate.py, planning/board.py
+└─ local/         GIT-IGNORED: dev-knowledge, legacy, demo and real projects
+```
+
+## 🔌 Plugins
+
 | Plugin | Version | Kind | Requires |
 |---|---|---|---|
-| `aea-calc` | 1.6.0 | calc | - |
-| `iec-symbols` | 0.4.16 | knowledge | - |
-| `iram-titleblock` | 0.5.1 | generator | - |
+| `aea-calc` | 1.6.0 | calc | — |
+| `iec-symbols` | 0.4.16 | knowledge | — |
+| `iram-titleblock` | 0.5.1 | generator | — |
 | `sld` | 0.1.1 | generator | aea-calc, iec-symbols, iram-titleblock |
 | `mld` | 0.1.0 (pending) | generator | sld, iram-titleblock, iec-symbols |
-| `standard-ingest` | 0.1.0 | workflow | - |
-| `intake-analysis` | 0.1.0 | workflow | - |
+| `standard-ingest` | 0.1.0 | workflow | — |
+| `intake-analysis` | 0.1.0 | workflow | — |
 | `pm2-docs` | 0.1.0 | workflow | doc-quality |
-| `doc-quality` | 0.1.0 | workflow | - |
+| `doc-quality` | 0.1.0 | workflow | — |
 | `spec-writer` | 0.1.0 | workflow | doc-quality |
 | `procurement` | 0.1.0 | connector | equipment-catalog |
-| `equipment-catalog` | 0.1.0 | knowledge | - |
+| `equipment-catalog` | 0.1.0 | knowledge | — |
 
 The source of truth is `claude/plugins/registry.json` (generated).
 
-## Rules of the house
-- Plugins govern skills. A skill defined twice: the plugin copy governs and a warning is raised (error in production builds).
-- `.svg` is internal only; `.dxf` is edited in the workspace and delivered as a stamped copy (`shared/schemas/deliverable-policy.json`).
-- Copyrighted PDFs and anything in `local/dev-knowledge/` never enter the repository (ignore rules + pre-commit hook).
-- Product content is English; Claude explains to the user in Spanish.
-- The end-user web app never shows plugins, skills, rules or internal files; those exist only for the admin role.
+## 🛠️ How we work
 
-## Documentation
+1. `main` is stable, `dev` integrates, work happens on `feature/*`, `fix/*` and `chore/*`, merged with `--no-ff` ([docs/BRANCHING.md](docs/BRANCHING.md)).
+2. The test battery must be green before any merge.
+3. Plugins govern skills: a skill defined twice resolves to the plugin copy and raises a warning (an error in production builds).
+4. `.svg` is internal only; `.dxf` is edited in the workspace and delivered as a stamped copy.
+5. Copyrighted PDFs and anything in `local/dev-knowledge/` never enter the repository (ignore rules and pre-commit hook).
+6. Product content is English; Claude explains to the user in Spanish.
+
+## 📚 Documentation
+
 | Document | Content |
 |---|---|
-| [docs/README.md](docs/README.md) | Index of all documents |
-| [docs/BRANCHING.md](docs/BRANCHING.md) | Branching policy |
+| [docs/explanation/what-is-epc.md](docs/explanation/what-is-epc.md) | What an EPC is and why the structure looks like this |
+| [docs/architecture/](docs/architecture/README.md) | Target architecture, ADRs, migration phases |
+| [planning/README.md](planning/README.md) | Vision, PRDs, backlog, sprints, [board](planning/BOARD.md) |
+| [docs/USER_DATA_MODEL.md](docs/USER_DATA_MODEL.md) | What the customer sees and how input becomes requirements |
 | [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md) | Python, system tools and plugin graph |
-| [docs/USER_DATA_MODEL.md](docs/USER_DATA_MODEL.md) | What the end user sees and how customer input becomes requirements |
-| [docs/plan/PLAN_FRAMEWORK_EPC.md](docs/plan/PLAN_FRAMEWORK_EPC.md) | Architecture and roadmap |
 | [CHANGELOG.md](CHANGELOG.md) · [CONTRIBUTING.md](CONTRIBUTING.md) | Changes and how to contribute |
 
-## Status
-Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`).
+## 🤝 Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test battery and send a pull request with the [template](.github/pull_request_template.md).
+
+## 📜 Status and license
+
+Draft 0.1.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+
+<div align="center">
+
+<sub>Built with ⚡ for engineers who design installations.</sub>
+
+</div>
