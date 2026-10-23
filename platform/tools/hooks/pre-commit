@@ -11,7 +11,7 @@ if [ -z "$ALLOW_PROTECTED" ] && { [ "$branch" = "main" ] || [ "$branch" = "dev" 
   exit 1
 fi
 
-bad=$(git diff --cached --name-only --diff-filter=AM | grep -Ei '\.(pdf|dwg)$' | grep -Ev '^platform/docs/')
+bad=$(git diff --cached --name-only --diff-filter=AM | grep -Ei '\.(pdf|dwg)$' | grep -Ev '^docs/')
 if [ -n "$bad" ]; then
   echo "COMMIT BLOCKED: PDF/DWG files are not allowed in the repository:"
   echo "$bad"

@@ -1,7 +1,0 @@
-* text=auto eol=lf
-*.dxf text eol=lf
-*.svg text eol=lf
-*.xlsx binary
-*.docx binary
-*.png binary
-*.plugin binary
