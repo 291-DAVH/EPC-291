@@ -29,12 +29,13 @@ from epc.modules.schedule import api as schedule_api
 from epc.modules.sld import api as sld_api
 from epc.modules.wbs import api as wbs_api
 
-PUBLIC_PREFIXES = ("/api/app/",)            # the end-user surface
+PUBLIC_PREFIXES = ("/api/app/", "/api/auth/")            # the end-user surface (plus sign-in and account endpoints)
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="EPC-291 API", version="0.2.0")
-    app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"], allow_methods=["*"], allow_headers=["*"])
+    app = FastAPI(title="EPC-291 API", version="0.3.0")
+    app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"],
+                       allow_methods=["*"], allow_headers=["*"], allow_credentials=True)
     identity.install_role_guard(app, public_paths=identity.PUBLIC_PATHS | projects.PUBLIC_PATHS,
                                 public_prefixes=PUBLIC_PREFIXES, public_post_paths=projects.PUBLIC_POST_PATHS)
 

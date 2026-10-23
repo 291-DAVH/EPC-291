@@ -81,7 +81,7 @@ Run the app with 20 simulated projects (two terminals):
 cd frontend && npm install && npm run dev:web        # npm run dev:console for the console
 ```
 
-`EPC_ROLE=admin` unlocks the technical API and the console. Full stack with PostgreSQL: see [infra/README.md](infra/README.md).
+In development the role is simulated: `EPC_ROLE=admin` unlocks the technical API and the console. With `EPC_AUTH=required` (the default in production and in the compose stack) there are real accounts: individual and corporate subscriptions, owners who manage their people, and the staff console; create the first staff account with `python -m epc.modules.identity.cli create-admin` (ADR-0009). Full stack with PostgreSQL: see [infra/README.md](infra/README.md).
 
 ## 🗂️ Structure
 

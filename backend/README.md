@@ -19,7 +19,7 @@ tests/
 
 | Module | Purpose |
 |---|---|
-| `identity` | current user/role and the role guard |
+| `identity` | accounts and sessions (US-0018, ADR-0009): sign-in, individual and corporate organizations with seats, invitations, owner/member roles, platform staff, the request guard (401/403) and the tenant filter used by `projects`; `EPC_AUTH=simulated` keeps the role-from-environment mode for development |
 | `projects` | create and list projects, options |
 | `deliverables` | deliverables list, downloads (several formats per drawing, e.g. DXF + PDF) and the ZIP delivery package |
 | `intake` | customer inputs (voice of customer, stories, documents) and their automatic analysis with the Claude API (admin/engineer, explicit confirmation, amounts removed, validated by the plugin's own validator, usage recorded) |
@@ -48,4 +48,9 @@ tests/
 uvicorn epc.main:app --app-dir backend/src --port 8000
 cd backend && python -m unittest discover -s tests -t . && lint-imports
 ```
-Configuration comes from environment variables (`EPC_PROJECTS`, `EPC_ROLE`, `EPC_USER`, `EPC_ORG`, `EPC_ENV`), see `.env.example`.
+Configuration comes from environment variables (`EPC_PROJECTS`, `EPC_ROLE`, `EPC_USER`, `EPC_ORG`, `EPC_ENV`, and for accounts `EPC_AUTH`, `EPC_SIGNUP`, `EPC_DATABASE_URL`, `EPC_SESSION_HOURS`, `EPC_COOKIE_SECURE`, `EPC_PUBLIC_URL`), see `.env.example`.
+
+With `EPC_AUTH=required` (the default when `EPC_ENV=production`) create the first staff account on the server and sign in from the web:
+```
+python -m epc.modules.identity.cli create-admin --email you@office.com --name "Your Name"
+```

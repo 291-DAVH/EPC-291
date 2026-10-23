@@ -1,10 +1,489 @@
-"""Who is calling and what they may see. Real authentication (users, organizations, SSO) will live here."""
+"""Who is calling and what they may see (US-0018).
+
+Two modes (`EPC_AUTH`):
+* `simulated` (development default): nobody logs in; the role comes from EPC_ROLE, exactly as before. No database is touched.
+* `required` (production default): every request carries a session (cookie `epc_session` or `Authorization: Bearer`). Accounts live in the database.
+
+Accounts: a *user* belongs to one or more *organizations*. An organization is an individual subscription (one seat) or a company
+subscription (a group of people, `seats`). Inside an organization a member is `owner` (manages the people) or `member`. The platform staff
+(the engineering office) are users with platform role `admin`; they see every organization. A customer sees only the projects of the active
+organization of the session. Code running outside a request (background jobs) is trusted and is not filtered.
+"""
+import base64
+import contextvars
+import datetime as dt
+import hashlib
+import hmac
+import os
+import re
+import secrets
+import threading
+import time
+from typing import Dict, List, Optional, Tuple
+
 from epc.core.config import settings
+from epc.core.errors import Conflict, Forbidden, Invalid, NotFound, TooManyRequests, Unauthorized
+from epc.modules.identity import repository as repo
+from epc.modules.identity.models import ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
+
+COOKIE = "epc_session"
+EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+MIN_PASSWORD = 10
+INVITATION_DAYS = 7
+COMPANY_SEATS = 5
+NOBODY = "\0nobody"                      # visible_org() for an unauthenticated caller: matches no project
+
+_ctx: contextvars.ContextVar = contextvars.ContextVar("epc_principal", default=None)
+_fails: Dict[str, List[float]] = {}
+_fails_lock = threading.Lock()
+_DUMMY_HASH = None
+
+
+# ---------------------------------------------------------------- passwords and tokens
+def hash_password(password: str) -> str:
+    salt = os.urandom(16)
+    h = hashlib.scrypt(password.encode("utf-8"), salt=salt, n=2 ** 14, r=8, p=1, dklen=32)
+    return "scrypt$16384$8$1$" + base64.b64encode(salt).decode() + "$" + base64.b64encode(h).decode()
+
+
+def verify_password(password: str, stored: Optional[str]) -> bool:
+    global _DUMMY_HASH
+    if not stored:                                   # same work as a real check: no timing difference between unknown and wrong
+        _DUMMY_HASH = _DUMMY_HASH or hash_password("x")
+        verify_password(password, _DUMMY_HASH)
+        return False
+    try:
+        _, n, r, p, salt, want = stored.split("$")
+        got = hashlib.scrypt(password.encode("utf-8"), salt=base64.b64decode(salt), n=int(n), r=int(r), p=int(p), dklen=32)
+        return hmac.compare_digest(got, base64.b64decode(want))
+    except (ValueError, TypeError):
+        return False
+
+
+def token_hash(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def _check_password(password: str, email: str = "") -> None:
+    if len(password or "") < MIN_PASSWORD:
+        raise Invalid({"password": f"at least {MIN_PASSWORD} characters"})
+    if email and password.lower() == email.lower():
+        raise Invalid({"password": "must not be the email"})
+
+
+def _check_email(email: str) -> str:
+    email = (email or "").strip().lower()
+    if not EMAIL.match(email) or len(email) > 254:
+        raise Invalid({"email": "not a valid email address"})
+    return email
+
+
+def _invite_url(token: str) -> str:
+    return f"{settings.public_url}/?invite={token}"
+
+
+def _slug(name: str) -> str:
+    base = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:40] or "org"
+    slug, n = base, 1
+    while repo.org_by_slug(slug):
+        n += 1
+        slug = f"{base}-{n}"
+    return slug
+
+
+# ---------------------------------------------------------------- the principal of a request
+def simulated_principal() -> Principal:
+    return Principal(authenticated=True, role="admin" if settings.role == "admin" else "user", name=settings.user, org_name=settings.org, simulated=True)
+
+
+def activate(p: Optional[Principal]):
+    return _ctx.set(p)
+
+
+def deactivate(handle) -> None:
+    _ctx.reset(handle)
+
+
+def current() -> Principal:
+    p = _ctx.get()
+    return p if p is not None else simulated_principal()
 
 
 def is_admin() -> bool:
-    return settings.role == "admin"
+    return current().role == "admin"
+
+
+def visible_org() -> Optional[str]:
+    """Slug of the only organization whose projects the caller may see; None = no restriction (staff, simulated mode, trusted code)."""
+    if settings.auth != "required":
+        return None
+    p = _ctx.get()
+    if p is None or p.role == "admin":
+        return None
+    return p.org_slug if p.authenticated and p.org_slug else NOBODY
+
+
+def org_for_new_project(requested: str = "") -> str:
+    """Organization that owns a project being created: the caller's own, or (staff only) the one they name."""
+    if settings.auth != "required":
+        return ""
+    p = current()
+    if p.role == "admin":
+        if requested and not repo.org_by_slug(requested):
+            raise Invalid({"org": "unknown organization"})
+        return requested
+    return p.org_slug
+
+
+def org_exists(slug: str) -> bool:
+    return repo.org_by_slug(slug) is not None
+
+
+def _from_session(token: str) -> Optional[Principal]:
+    row = repo.session_by_hash(token_hash(token))
+    if not row:
+        return None
+    if repo.as_utc(row["expires_at"]) <= repo.now():
+        repo.delete_session(token_hash(token))
+        return None
+    user = repo.user_by_id(row["user_id"])
+    if not user or not user["active"]:
+        return None
+    base = dict(authenticated=True, name=user["display_name"], email=user["email"], user_id=str(user["id"]))
+    if user["platform_role"] == "admin":
+        return Principal(role="admin", **base)
+    org = repo.org_by_id(row["organization_id"]) if row["organization_id"] else None
+    mem = repo.membership(org["id"], user["id"]) if org else None
+    if not org or not org["active"] or not mem or not mem["active"]:
+        return None
+    return Principal(role="user", org_id=str(org["id"]), org_slug=org["slug"], org_name=org["name"], org_kind=org["kind"], org_role=mem["role"], **base)
+
+
+def principal_for_request(cookie: Optional[str], authorization: Optional[str]) -> Principal:
+    if settings.auth != "required":
+        return simulated_principal()
+    token = cookie
+    if not token and authorization and authorization.lower().startswith("bearer "):
+        token = authorization[7:].strip()
+    return (_from_session(token) if token else None) or Principal()
+
+
+def me(p: Principal) -> dict:
+    return {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "name": p.name, "email": p.email, "org": p.org_name,
+            "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open"}
 
 
 def current_user() -> dict:
-    return {"role": settings.role, "name": settings.user, "org": settings.org}
+    return me(current())
+
+
+def require_owner(p: Principal) -> Principal:
+    if not p.authenticated or p.simulated or p.role == "admin" or p.org_role != "owner" or not p.org_id:
+        raise Forbidden("only the owner of the organization can do this")
+    return p
+
+
+# ---------------------------------------------------------------- sessions
+def _throttle(key: str, limit: int, add: bool = False) -> None:
+    now = time.time()
+    with _fails_lock:
+        hits = [t for t in _fails.get(key, []) if now - t < 900]
+        if add:
+            hits.append(now)
+        _fails[key] = hits
+        if len(hits) >= limit and not add:
+            raise TooManyRequests({"errors": {"login": "too many attempts, try again in a few minutes"}})
+
+
+def reset_throttle() -> None:
+    with _fails_lock:
+        _fails.clear()
+
+
+def _open_session(user: dict, org: Optional[dict]) -> Tuple[str, Principal]:
+    token = secrets.token_urlsafe(32)
+    repo.insert_session(user["id"], org["id"] if org else None, token_hash(token), repo.now() + dt.timedelta(hours=settings.session_hours))
+    repo.update_user(user["id"], last_login_at=repo.now())
+    repo.purge_expired_sessions()
+    p = _from_session(token)
+    if p is None:
+        raise Forbidden("this account has no active organization")
+    return token, p
+
+
+def login(email: str, password: str, org_slug: str = "", ip: str = "") -> Tuple[str, Principal]:
+    email = (email or "").strip().lower()
+    _throttle(f"e:{email}", 5)
+    _throttle(f"i:{ip}", 30)
+    user = repo.user_by_email(email)
+    ok = verify_password(password or "", user["password_hash"] if user else None)
+    if not user or not ok or not user["active"]:
+        _throttle(f"e:{email}", 5, add=True)
+        _throttle(f"i:{ip}", 30, add=True)
+        raise Unauthorized({"errors": {"login": "wrong email or password"}})
+    org = None
+    if user["platform_role"] != "admin":
+        orgs = [o for o in repo.memberships_of_user(user["id"]) if o["member_active"] and o["active"] and (not org_slug or o["slug"] == org_slug)]
+        if not orgs:
+            raise Forbidden("this account has no active organization")
+        org = orgs[0]
+    return _open_session(user, org)
+
+
+def logout(token: Optional[str]) -> None:
+    if token:
+        repo.delete_session(token_hash(token))
+
+
+def change_password(p: Principal, current_password: str, new_password: str, keep_token: Optional[str]) -> None:
+    if not p.authenticated or p.simulated or not p.user_id:
+        raise Forbidden("not available without an account")
+    user = repo.user_by_id(p.user_id)
+    if not user or not verify_password(current_password or "", user["password_hash"]):
+        raise Invalid({"current_password": "wrong password"})
+    _check_password(new_password, user["email"])
+    repo.update_user(user["id"], password_hash=hash_password(new_password))
+    repo.delete_user_sessions(user["id"], keep_hash=token_hash(keep_token) if keep_token else None)       # other devices must log in again
+
+
+# ---------------------------------------------------------------- creating accounts
+def signup(kind: str, org_name: str, name: str, email: str, password: str) -> Tuple[str, Principal]:
+    if settings.signup != "open":
+        raise Forbidden("self-registration is closed: ask for an invitation")
+    email = _check_email(email)
+    errors = {}
+    if kind not in ORG_KINDS:
+        errors["kind"] = "individual or company"
+    if not (name or "").strip():
+        errors["name"] = "required"
+    if kind == "company" and not (org_name or "").strip():
+        errors["org_name"] = "required"
+    if errors:
+        raise Invalid(errors)
+    _check_password(password, email)
+    if repo.user_by_email(email):
+        raise Conflict({"email": "this email is already registered"})
+    label = name.strip() if kind == "individual" else org_name.strip()
+    org = repo.insert_org(_slug(label), label, kind, 1 if kind == "individual" else COMPANY_SEATS)
+    user = repo.insert_user(email, name.strip(), hash_password(password))
+    repo.insert_membership(org["id"], user["id"], "owner")
+    return _open_session(user, org)
+
+
+def bootstrap_admin(email: str, name: str, password: str) -> dict:
+    """First staff account (command line). Updates the password when the account already exists."""
+    email = _check_email(email)
+    _check_password(password, email)
+    user = repo.user_by_email(email)
+    if user:
+        repo.update_user(user["id"], password_hash=hash_password(password), platform_role="admin", active=True)
+        return repo.user_by_id(user["id"])
+    return repo.insert_user(email, name.strip() or email, hash_password(password), platform_role="admin")
+
+
+# ---------------------------------------------------------------- invitations
+def _seats_left(org: dict) -> int:
+    return org["seats"] - repo.count_members(org["id"]) - len(repo.pending_invitations(org["id"]))
+
+
+def _new_invitation(org: dict, email: str, role: str, invited_by) -> dict:
+    email = _check_email(email)
+    if role not in ORG_ROLES:
+        raise Invalid({"role": "owner or member"})
+    if org["kind"] == "individual":
+        raise Conflict({"seats": "an individual subscription has one seat: it cannot invite people"})
+    if _seats_left(org) < 1:
+        raise Conflict({"seats": "no seats left: remove a person or ask for more seats"})
+    user = repo.user_by_email(email)
+    if user and repo.membership(org["id"], user["id"]):
+        raise Conflict({"email": "this person already belongs to the organization"})
+    if any(i["email"] == email for i in repo.pending_invitations(org["id"])):
+        raise Conflict({"email": "this person already has a pending invitation"})
+    token = secrets.token_urlsafe(32)
+    inv = repo.insert_invitation(org["id"], email, role, token_hash(token), invited_by, repo.now() + dt.timedelta(days=INVITATION_DAYS))
+    return {"id": str(inv["id"]), "email": email, "role": role, "expires_at": inv["expires_at"].isoformat(), "token": token, "url": _invite_url(token)}
+
+
+def invite(p: Principal, email: str, role: str) -> dict:
+    require_owner(p)
+    return _new_invitation(repo.org_by_id(p.org_id), email, role, p.user_id)
+
+
+def cancel_invitation(p: Principal, inv_id: str) -> None:
+    require_owner(p)
+    inv = repo.invitation_by_id(p.org_id, inv_id)
+    if not inv:
+        raise NotFound("invitation not found")
+    repo.delete_invitation(inv["id"])
+
+
+def _open_invitation(token: str) -> dict:
+    inv = repo.invitation_by_hash(token_hash(token or ""))
+    if not inv or inv["accepted_at"] or repo.as_utc(inv["expires_at"]) <= repo.now():
+        raise NotFound("this invitation is not valid or has expired")
+    org = repo.org_by_id(inv["organization_id"])
+    if not org or not org["active"]:
+        raise NotFound("this invitation is not valid or has expired")
+    return {**inv, "org": org}
+
+
+def invitation_info(token: str) -> dict:
+    inv = _open_invitation(token)
+    return {"email": inv["email"], "role": inv["role"], "org": inv["org"]["name"], "kind": inv["org"]["kind"], "existing_account": repo.user_by_email(inv["email"]) is not None}
+
+
+def accept_invitation(token: str, name: str, password: str) -> Tuple[str, Principal]:
+    inv = _open_invitation(token)
+    org = inv["org"]
+    user = repo.user_by_email(inv["email"])
+    if user:
+        if not verify_password(password or "", user["password_hash"]) or not user["active"]:
+            raise Unauthorized({"errors": {"login": "wrong email or password"}})
+    else:
+        if not (name or "").strip():
+            raise Invalid({"name": "required"})
+        _check_password(password, inv["email"])
+    taken = repo.count_members(org["id"])
+    if taken >= org["seats"]:
+        raise Conflict({"seats": "the organization has no seats left: ask its owner"})
+    if not user:
+        user = repo.insert_user(inv["email"], name.strip(), hash_password(password))
+    if not repo.membership(org["id"], user["id"]):
+        repo.insert_membership(org["id"], user["id"], inv["role"])
+    repo.accept_invitation(inv["id"])
+    return _open_session(user, org)
+
+
+# ---------------------------------------------------------------- organization management (owner)
+def _member_view(m: dict, me_id: Optional[str]) -> dict:
+    return {"user_id": str(m["user_id"]), "email": m["email"], "name": m["display_name"], "role": m["role"], "active": bool(m["active"]),
+            "last_login_at": repo.as_utc(m["last_login_at"]).isoformat() if m["last_login_at"] else None, "me": str(m["user_id"]) == me_id}
+
+
+def organization(p: Principal) -> dict:
+    require_owner(p)
+    org = repo.org_by_id(p.org_id)
+    pending = repo.pending_invitations(org["id"])
+    return {"slug": org["slug"], "name": org["name"], "kind": org["kind"], "seats": org["seats"], "seats_used": repo.count_members(org["id"]),
+            "seats_pending": len(pending), "members": [_member_view(m, p.user_id) for m in repo.members(org["id"])],
+            "invitations": [{"id": str(i["id"]), "email": i["email"], "role": i["role"], "expires_at": repo.as_utc(i["expires_at"]).isoformat()} for i in pending]}
+
+
+def _last_owner(org_id, user_id) -> bool:
+    mem = repo.membership(org_id, user_id)
+    return bool(mem and mem["role"] == "owner" and mem["active"] and repo.count_members(org_id, role="owner") <= 1)
+
+
+def update_member(p: Principal, user_id: str, role: Optional[str] = None, active: Optional[bool] = None) -> None:
+    require_owner(p)
+    mem = repo.membership(p.org_id, user_id)
+    if not mem:
+        raise NotFound("person not found")
+    if role is not None and role not in ORG_ROLES:
+        raise Invalid({"role": "owner or member"})
+    if (role == "member" or active is False) and _last_owner(p.org_id, user_id):
+        raise Conflict({"role": "the organization needs at least one owner"})
+    if active is True and not mem["active"] and repo.count_members(p.org_id) >= repo.org_by_id(p.org_id)["seats"]:
+        raise Conflict({"seats": "no seats left"})
+    values = {k: v for k, v in (("role", role), ("active", active)) if v is not None}
+    if values:
+        repo.update_membership(p.org_id, user_id, **values)
+    if active is False or role == "member":
+        repo.delete_org_user_sessions(p.org_id, user_id)          # the new permissions apply at the next login
+
+
+def remove_member(p: Principal, user_id: str) -> None:
+    require_owner(p)
+    if not repo.membership(p.org_id, user_id):
+        raise NotFound("person not found")
+    if _last_owner(p.org_id, user_id):
+        raise Conflict({"role": "the organization needs at least one owner"})
+    repo.delete_org_user_sessions(p.org_id, user_id)
+    repo.delete_membership(p.org_id, user_id)
+
+
+# ---------------------------------------------------------------- platform staff
+def _org_view(o: dict) -> dict:
+    return {"slug": o["slug"], "name": o["name"], "kind": o["kind"], "seats": o["seats"], "active": bool(o["active"]), "members": o.get("members", 0),
+            "created_at": repo.as_utc(o["created_at"]).isoformat()}
+
+
+def staff_orgs() -> List[dict]:
+    return [_org_view(o) for o in repo.list_orgs()]
+
+
+def staff_create_org(name: str, kind: str, seats: Optional[int], owner_email: str) -> dict:
+    if kind not in ORG_KINDS:
+        raise Invalid({"kind": "individual or company"})
+    if not (name or "").strip():
+        raise Invalid({"name": "required"})
+    seats = 1 if kind == "individual" else int(seats or COMPANY_SEATS)
+    if seats < 1:
+        raise Invalid({"seats": "at least 1"})
+    email = _check_email(owner_email)
+    org = repo.insert_org(_slug(name.strip()), name.strip(), kind, seats)
+    token = secrets.token_urlsafe(32)
+    repo.insert_invitation(org["id"], email, "owner", token_hash(token), None, repo.now() + dt.timedelta(days=INVITATION_DAYS))
+    return {"org": _org_view({**org, "members": 0}), "invitation": {"email": email, "role": "owner", "token": token, "url": _invite_url(token)}}
+
+
+def staff_update_org(slug: str, name: Optional[str] = None, seats: Optional[int] = None, active: Optional[bool] = None, kind: Optional[str] = None) -> dict:
+    org = repo.org_by_slug(slug)
+    if not org:
+        raise NotFound("organization not found")
+    values: dict = {}
+    if name is not None:
+        if not name.strip():
+            raise Invalid({"name": "required"})
+        values["name"] = name.strip()
+    new_kind = kind if kind is not None else org["kind"]
+    if new_kind not in ORG_KINDS:
+        raise Invalid({"kind": "individual or company"})
+    new_seats = 1 if new_kind == "individual" else (seats if seats is not None else org["seats"])
+    if new_seats < max(1, repo.count_members(org["id"])):
+        raise Conflict({"seats": "fewer seats than people in the organization"})
+    if new_kind != org["kind"]:
+        values["kind"] = new_kind
+    if new_seats != org["seats"]:
+        values["seats"] = new_seats
+    if active is not None:
+        values["active"] = active
+    if values:
+        repo.update_org(org["id"], **values)
+        if active is False:
+            repo.delete_org_sessions(org["id"])
+    return _org_view({**repo.org_by_slug(slug), "members": repo.count_members(org["id"])})
+
+
+def staff_users() -> List[dict]:
+    out = []
+    for u in repo.list_users():
+        orgs = [{"slug": o["slug"], "name": o["name"], "role": o["role"]} for o in repo.memberships_of_user(u["id"])]
+        out.append({"id": str(u["id"]), "email": u["email"], "name": u["display_name"], "active": bool(u["active"]), "platform_role": u["platform_role"],
+                    "last_login_at": repo.as_utc(u["last_login_at"]).isoformat() if u["last_login_at"] else None, "organizations": orgs})
+    return out
+
+
+def staff_update_user(p: Principal, user_id: str, active: Optional[bool] = None, platform_role: Optional[str] = None) -> None:
+    user = repo.user_by_id(user_id)
+    if not user:
+        raise NotFound("user not found")
+    if platform_role is not None and platform_role not in PLATFORM_ROLES:
+        raise Invalid({"platform_role": "user or admin"})
+    losing_staff = user["platform_role"] == "admin" and (active is False or platform_role == "user")
+    if losing_staff and (str(user["id"]) == p.user_id or repo.count_staff() <= 1):
+        raise Conflict({"platform_role": "you cannot remove the last staff account or your own"})
+    values = {k: v for k, v in (("active", active), ("platform_role", platform_role)) if v is not None}
+    if values:
+        repo.update_user(user["id"], **values)
+    if active is False or platform_role is not None:
+        repo.delete_user_sessions(user["id"])
+
+
+def staff_set_password(user_id: str, password: str) -> None:
+    user = repo.user_by_id(user_id)
+    if not user:
+        raise NotFound("user not found")
+    _check_password(password, user["email"])
+    repo.update_user(user["id"], password_hash=hash_password(password))
+    repo.delete_user_sessions(user["id"])

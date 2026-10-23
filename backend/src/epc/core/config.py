@@ -1,7 +1,9 @@
 """Runtime configuration. One mutable `settings` object read at call time (tests replace its fields).
 
 Environment: EPC_ROLE (user|admin), EPC_ENV (dev|production), EPC_PROJECTS, EPC_DEV_KNOWLEDGE,
-EPC_DATA, EPC_USER, EPC_ORG, EPC_REPO (repository root when the package is not run from a checkout).
+EPC_DATA, EPC_USER, EPC_ORG, EPC_REPO (repository root when the package is not run from a checkout),
+EPC_DATABASE_URL, EPC_AUTH (simulated|required; production defaults to required), EPC_SIGNUP (closed|open),
+EPC_SESSION_HOURS, EPC_COOKIE_SECURE (1 behind HTTPS), EPC_PUBLIC_URL (customer app address, for invitation links).
 """
 import os
 from dataclasses import dataclass
@@ -40,15 +42,22 @@ class Settings:
     projects_dir: Path
     dev_knowledge: Path
     data_dir: Path              # master data: company profile, clients, people, logos (EPC_DATA)
+    database_url: str = ""      # identity and platform state (EPC_DATABASE_URL); empty = SQLite file in local/
     env: str = "dev"
     role: str = "user"          # "admin" unlocks the technical console; end users never see internals
     user: str = ""
     org: str = ""
+    auth: str = "simulated"     # "simulated": role comes from EPC_ROLE (no login); "required": real accounts and sessions
+    signup: str = "closed"      # "open": anyone may create an individual or company account; "closed": accounts by staff or invitation
+    session_hours: int = 12
+    cookie_secure: bool = False
+    public_url: str = "http://localhost:5173"      # address of the customer app, used in invitation links (EPC_PUBLIC_URL)
 
     @classmethod
     def from_env(cls, repo: Optional[Path] = None) -> "Settings":
         repo = repo or _find_repo()
         local = repo / "local"
+        env = os.environ.get("EPC_ENV", "dev")
         return cls(
             repo=repo,
             engine=repo / "engine",
@@ -62,10 +71,16 @@ class Settings:
             projects_dir=Path(os.environ.get("EPC_PROJECTS", local / "projects")),
             dev_knowledge=Path(os.environ.get("EPC_DEV_KNOWLEDGE", local / "dev-knowledge")),
             data_dir=Path(os.environ.get("EPC_DATA", local / "data")),
-            env=os.environ.get("EPC_ENV", "dev"),
+            database_url=os.environ.get("EPC_DATABASE_URL", ""),
+            env=env,
             role=os.environ.get("EPC_ROLE", "user"),
             user=os.environ.get("EPC_USER", ""),
             org=os.environ.get("EPC_ORG", ""),
+            auth=os.environ.get("EPC_AUTH") or ("required" if env == "production" else "simulated"),
+            signup=os.environ.get("EPC_SIGNUP", "closed"),
+            session_hours=int(os.environ.get("EPC_SESSION_HOURS", "12")),
+            cookie_secure=os.environ.get("EPC_COOKIE_SECURE", "") == "1",
+            public_url=os.environ.get("EPC_PUBLIC_URL", "http://localhost:5173").rstrip("/"),
         )
 
 

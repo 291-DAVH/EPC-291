@@ -12,3 +12,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0006](ADR-0006-database-strategy.md) | PostgreSQL for platform state, files for engineering artifacts | Accepted |
 | [0007](ADR-0007-desktop-edition-rust.md) | Desktop edition with Rust (Tauri), engine stays in Python | Deferred |
 | [0008](ADR-0008-cad-strategy-2d-first.md) | CAD strategy: 2D first with ezdxf and shapely | Accepted |
+| [0009](ADR-0009-identity-and-subscriptions.md) | Accounts, organizations (individual and corporate) and tenant isolation | Accepted |

@@ -10,7 +10,8 @@ export class ApiError extends Error {
 }
 
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const r = await fetch("/api" + path, init);
+  const r = await fetch("/api" + path, { credentials: "same-origin", ...init });
+  if (r.status === 401 && !path.startsWith("/auth/")) window.dispatchEvent(new Event("epc-unauthorized"));      // the session ended: show the sign-in again
   if (!r.ok) {
     let body: unknown = null;
     try {
@@ -70,7 +71,7 @@ export interface Finding {
 }
 export interface Project {
   id: string; name: string; client: string; project_code: string; jurisdiction: string; locale: string; methodology: string;
-  disciplines: string[]; phase: string; workspace_files: number; deliverable_files: number; is_template: boolean;
+  disciplines: string[]; phase: string; workspace_files: number; deliverable_files: number; is_template: boolean; org?: string;
 }
 export interface TreeNode {
   name: string; type: "dir" | "file"; files?: number; children?: TreeNode[]; ext?: string; size?: number; deliver?: boolean; role?: string;
@@ -86,7 +87,10 @@ export interface NewProjectBody {
   methodology: string; locale: string; disciplines: string[]; phase: string;
 }
 
-export interface Me { role: string; name: string; org: string }
+export interface Me {
+  role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
+  org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "member" | ""; signup?: boolean;
+}
 export interface PortfolioProject {
   id: string; name: string; client: string; code: string; disciplines: string[]; state: string; phase: string; progress: number;
   health: "on_track" | "at_risk" | "delayed"; manager: string; location: string; start?: string; due?: string;
@@ -188,3 +192,17 @@ export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional
 /* ---- automatic analysis of customer input (admin/engineer) ---- */
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
 export interface AnalysisResult { analyzed: number; created: string[]; merged: string[]; open_questions: number; usage: { input_tokens: number; output_tokens: number }; model: string; attempts: number }
+
+/* ---- accounts and organizations ---- */
+export interface OrgMember { user_id: string; email: string; name: string; role: "owner" | "member"; active: boolean; last_login_at: string | null; me: boolean }
+export interface OrgInvitation { id: string; email: string; role: "owner" | "member"; expires_at: string }
+export interface OrgView {
+  slug: string; name: string; kind: "individual" | "company"; seats: number; seats_used: number; seats_pending: number;
+  members: OrgMember[]; invitations: OrgInvitation[];
+}
+export interface InvitationCreated { id: string; email: string; role: string; expires_at: string; token: string; url: string }
+export interface StaffOrg { slug: string; name: string; kind: "individual" | "company"; seats: number; active: boolean; members: number; created_at: string }
+export interface StaffUser {
+  id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin"; last_login_at: string | null;
+  organizations: { slug: string; name: string; role: string }[];
+}

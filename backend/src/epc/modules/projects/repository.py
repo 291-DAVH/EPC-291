@@ -6,13 +6,20 @@ from typing import List, Optional
 
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
+from epc.modules.identity import public as identity
+
+
+def _visible(d: Path) -> bool:
+    """Tenant isolation: a customer sees only the projects of their organization; staff and simulated mode see all."""
+    org = identity.visible_org()
+    return org is None or read_json(d / ".epc" / "project.json", {}).get("org") == org
 
 
 def project_dirs() -> List[Path]:
     root = settings.projects_dir
     if not root.exists():
         return []
-    return [pj.parent.parent for pj in sorted(root.glob("*/*/.epc/project.json")) if not pj.parent.parent.parent.name.startswith("_")]
+    return [d for d in (pj.parent.parent for pj in sorted(root.glob("*/*/.epc/project.json")) if not pj.parent.parent.parent.name.startswith("_")) if _visible(d)]
 
 
 def project_id(d: Path) -> str:
@@ -21,7 +28,7 @@ def project_id(d: Path) -> str:
 
 def find(client: str, code: str) -> Optional[Path]:
     d = settings.projects_dir / client / code
-    return d if (d / ".epc" / "project.json").exists() else None
+    return d if (d / ".epc" / "project.json").exists() and _visible(d) else None
 
 
 def read_meta(d: Path) -> dict:
