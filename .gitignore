@@ -11,6 +11,8 @@ _study/
 *.dwl2
 !docs/**/*.pdf
 **/knowledge/
+# the backend module `knowledge` (rules API) is source code, not study material
+!backend/src/epc/modules/knowledge/
 
 # ===== Local environment and build output =====
 .venv/
@@ -19,6 +21,8 @@ dist/
 build/
 # tools/build holds the build scripts, not build output
 !tools/build/
+# the project skeleton keeps its (empty) build folders
+!management/templates/**/build/
 __pycache__/
 *.pyc
 *.plugin

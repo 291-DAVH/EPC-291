@@ -72,6 +72,7 @@ def main():
         run("board", [py, str(BOARD), "--check"], REPO)
     backend = REPO / "backend"
     benv = dict(ENGINE_ENV, PYTHONPATH=os.pathsep.join([str(backend / "src"), ENGINE_ENV["PYTHONPATH"]]))
+    run("ignored-sources", [py, str(REPO / "tools" / "ci" / "check_ignored_sources.py")], REPO)
     run("importlinter-config", [py, str(REPO / "tools" / "ci" / "gen_importlinter.py"), "--check"], REPO)
     run("backend-contracts", [py, "-c", "from importlinter.cli import lint_imports_command as m; m()", "--config", str(backend / ".importlinter")], backend, env=benv)
     run("backend", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], backend, env=benv)
