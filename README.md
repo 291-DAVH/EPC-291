@@ -26,6 +26,10 @@ EPC-291/
 └─ _legacy/         archived original folders and old repositories                       git-ignored
 ```
 
+## Where to start
+- **What an EPC is and why the structure looks like this:** [docs/explanation/what-is-epc.md](docs/explanation/what-is-epc.md), [docs/architecture/README.md](docs/architecture/README.md).
+- **What we are building and in which order:** [planning/README.md](planning/README.md) (vision, PRDs, backlog, sprints, [BOARD](planning/BOARD.md)).
+
 ## Branches
 `main` (stable) <- `dev` (integration) <- `feature/*`, `fix/*`, `chore/*`. See [docs/BRANCHING.md](docs/BRANCHING.md). Enable the safety hook after cloning:
 
