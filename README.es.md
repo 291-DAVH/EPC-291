@@ -48,6 +48,7 @@ El cliente ve solo proyectos, entregables, datos de entrada, requisitos, informe
 | Gestión de proyectos | `management/` | esqueleto de proyecto, metodologías | ✅ |
 | Planificación del software | `planning/` | visión, PRD, backlog, sprints, tablero (no se distribuye) | ✅ |
 | Autenticación, organizaciones, facturación | — | planificado (US-0018) | 🚧 |
+| Versión de escritorio (Rust/Tauri, Windows · macOS · Linux) | `desktop/` | planificado (EP-012, ADR-0007) | 🚧 |
 | Media tensión, HVAC, incendio, civil | — | después de baja tensión | 🚧 |
 
 Argentina es la primera jurisdicción (AEA 90364, IRAM); otros países se suman como paquetes por país con su propio `rules.json` por norma.

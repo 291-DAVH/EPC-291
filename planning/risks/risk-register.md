@@ -19,3 +19,4 @@ Scale: probability and impact 1 (low) to 5 (high); score = probability x impact 
 | R-006 | Claude API cost per analysis grows with volume | 3 | 3 | 9 | Record cost per job, batch analysis, caching | owner | open |
 | R-007 | Plugin layout drifts from Claude Code's official format | 2 | 3 | 6 | `claude plugin validate --strict` in CI | owner | open |
 | R-008 | Single-person bus factor | 4 | 4 | 16 | Docs-as-code, ADRs, planning in repo, clear modules | owner | open |
+| R-009 | Desktop packaging (Python sidecar, signing on three platforms) is heavier than expected | 3 | 3 | 9 | Spike first (US-0023/0024), CI matrix, keep Rust code small | owner | open |
