@@ -67,6 +67,20 @@ class TestCreateProject(unittest.TestCase):
             self.assertIn(field, r.json()["detail"]["errors"])
         self.assertFalse((self.root / "evil").exists())
 
+    def test_read_only_installation_uses_the_committed_registry(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("epc_build_ro", settings.build_tool)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+
+        def read_only():
+            raise PermissionError(13, "Permission denied", "registry.json")
+        mod.cmd_registry = read_only
+        with mock.patch("epc.modules.projects.repository._load_build_tool", return_value=mod):
+            r = self.c.post("/api/projects", json=self.body)
+        self.assertEqual(r.status_code, 201, r.text)
+        self.assertGreater(r.json()["plugins_locked"], 0)
+
     def test_nothing_left_behind_on_failure(self):
         with mock.patch("epc.modules.projects.repository._load_build_tool", side_effect=RuntimeError("boom")):
             r = self.c.post("/api/projects", json=self.body)
