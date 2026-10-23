@@ -1,0 +1,81 @@
+{
+ "descripcion": "Reglas de ingeniería extraídas de las normas AEA en assets/, una por requisito, con cláusula, página y cita textual.",
+ "esquema": {
+  "id": "grupo.nombre",
+  "tipo": "obligatorio | recomendado | prohibido",
+  "parametros": "valores numéricos o textuales de la regla",
+  "aplica_a": "tipos de inmueble o instalación",
+  "fuente": "norma, edición, cláusula, página impresa y cita textual verificada"
+ },
+ "grupos": {
+  "circuitos": {
+   "archivo": "circuitos.json",
+   "cantidad": 18
+  },
+  "iluminacion": {
+   "archivo": "iluminacion.json",
+   "cantidad": 9
+  },
+  "interruptores": {
+   "archivo": "interruptores.json",
+   "cantidad": 6
+  },
+  "tomacorrientes": {
+   "archivo": "tomacorrientes.json",
+   "cantidad": 20
+  },
+  "canalizaciones": {
+   "archivo": "canalizaciones.json",
+   "cantidad": 16
+  },
+  "bandejas": {
+   "archivo": "bandejas.json",
+   "cantidad": 6
+  },
+  "enterrados": {
+   "archivo": "enterrados.json",
+   "cantidad": 7
+  },
+  "tableros": {
+   "archivo": "tableros.json",
+   "cantidad": 11
+  },
+  "banos": {
+   "archivo": "banos.json",
+   "cantidad": 12
+  },
+  "otros": {
+   "archivo": "otros.json",
+   "cantidad": 1
+  },
+  "puesta_a_tierra": {
+   "archivo": "puesta_a_tierra.json",
+   "cantidad": 16
+  },
+  "conductores_proteccion": {
+   "archivo": "conductores_proteccion.json",
+   "cantidad": 22
+  },
+  "colores": {
+   "archivo": "colores.json",
+   "cantidad": 4
+  },
+  "conductores": {
+   "archivo": "conductores.json",
+   "cantidad": 9
+  },
+  "curvas_canerias": {
+   "archivo": "curvas_canerias.json",
+   "cantidad": 4
+  },
+  "proteccion_sobrecorrientes": {
+   "archivo": "proteccion_sobrecorrientes.json",
+   "cantidad": 8
+  },
+  "proteccion_choques": {
+   "archivo": "proteccion_choques.json",
+   "cantidad": 8
+  }
+ },
+ "total_reglas": 177
+}

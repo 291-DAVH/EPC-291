@@ -1,0 +1,1306 @@
+{
+  "version": "0.1.0",
+  "formulas": [
+    {
+      "id": "aea_demand.coef_simultaneidad_conjunto",
+      "modulo": "aea_demand",
+      "funcion": "coef_simultaneidad_conjunto",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Tabla 771.9.III para conjuntos de viviendas/locales: columna Mín/Medio o Elev/Sup.",
+      "firma": "coef_simultaneidad_conjunto(n_unidades, grado)"
+    },
+    {
+      "id": "aea_demand.coef_simultaneity_770",
+      "modulo": "aea_demand",
+      "funcion": "coef_simultaneity_770",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Tabla 770.8.II por cantidad mínima de circuitos: 2→1; 3→0,8; 5→0,7; 6→0,6 (1 circuito: 1,0).",
+      "firma": "coef_simultaneity_770(n_circuitos)"
+    },
+    {
+      "id": "aea_demand.coef_simultaneity_771",
+      "modulo": "aea_demand",
+      "funcion": "coef_simultaneity_771",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Tabla 771.9.II: Mínimo 1; Medio 0,9; Elevado 0,8; Superior 0,7.",
+      "firma": "coef_simultaneity_771(grado)"
+    },
+    {
+      "id": "aea_demand.corriente_alimentador_motores",
+      "modulo": "aea_demand",
+      "funcion": "corriente_alimentador_motores",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "I ≥ 1,25·In(mayor) + Σ In(resto)·fs.",
+      "firma": "corriente_alimentador_motores(in_motores_a, fs_resto=1.0)"
+    },
+    {
+      "id": "aea_demand.current_msd",
+      "modulo": "aea_demand",
+      "funcion": "current_msd",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "I_B = DPMS/220 (mono) o DPMS/(√3·380) (tri).",
+      "firma": "current_msd(dpms_va, fases)"
+    },
+    {
+      "id": "aea_demand.dpms_total",
+      "modulo": "aea_demand",
+      "funcion": "dpms_total",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "DPMS = Σ(uso general)·coef + Σ(cargas específicas).",
+      "firma": "dpms_total(p_generales_va, coef, p_especificas_va=0.0)"
+    },
+    {
+      "id": "aea_demand.factor_parallel",
+      "modulo": "aea_demand",
+      "funcion": "factor_parallel",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "fs = 1 con 2 o 4 cables/fase (unipolares), 0,8 en otros casos y en multipolares; ×0,85 con radiación solar.",
+      "firma": "factor_parallel(cables_por_fase, multipolar=False, radiacion_solar=False)"
+    },
+    {
+      "id": "aea_demand.grade_electrification_770",
+      "modulo": "aea_demand",
+      "funcion": "grade_electrification_770",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Grado según 770 (Tabla 770.7.I): superficie = cubierta + 50 % de semicubierta; ≤60, ≤130, ≤200, >200 m².",
+      "firma": "grade_electrification_770(superficie_cubierta_m2, superficie_semicubierta_m2=0.0)"
+    },
+    {
+      "id": "aea_demand.grade_electrification_771",
+      "modulo": "aea_demand",
+      "funcion": "grade_electrification_771",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Grado según 771 (Tablas 771.8.I viviendas, 771.8.IV oficinas y locales, 771.8.IX otros locales). tipo: 'vivienda' | 'oficina' | 'local'.",
+      "firma": "grade_electrification_771(tipo, superficie_m2)"
+    },
+    {
+      "id": "aea_demand.imbalance_phases",
+      "modulo": "aea_demand",
+      "funcion": "imbalance_phases",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "(Imax − Imin)/Imax en %; cumple si ≤ 30 % (770.8.3.4).",
+      "firma": "imbalance_phases(currents_to)"
+    },
+    {
+      "id": "aea_demand.msd_circuits",
+      "modulo": "aea_demand",
+      "funcion": "msd_circuits",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Σ VA de circuitos: TUG y alumbrado con tomas derivadas 2200 VA c/u; TUE 3300 VA c/u.",
+      "firma": "msd_circuits(n_tug=0, n_tue=0, n_ilum_con_tomas=0)"
+    },
+    {
+      "id": "aea_demand.msd_lighting_general",
+      "modulo": "aea_demand",
+      "funcion": "msd_lighting_general",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "771: 66 % de n·150 VA (vivienda) o 100 % (oficina/local); 770: 2/3 de n·60 VA.",
+      "firma": "msd_lighting_general(n_bocas, norma='771', tipo='vivienda')"
+    },
+    {
+      "id": "aea_demand.requiere_trifasico",
+      "modulo": "aea_demand",
+      "funcion": "requiere_trifasico",
+      "dominio": "Demanda y corrientes de proyecto",
+      "norma": "AEA 771 §9, 770 §8",
+      "resumen": "Trifásico recomendado si DPMS > 7 kVA o I > 32 A.",
+      "firma": "requiere_trifasico(dpms_va, i_a=None)"
+    },
+    {
+      "id": "aea_voltage_drop.caida_disponible_terminal_pct",
+      "modulo": "aea_voltage_drop",
+      "funcion": "caida_disponible_terminal_pct",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "Margen del circuito terminal = límite total − caída ya consumida aguas arriba (≥ 0).",
+      "firma": "caida_disponible_terminal_pct(limite_total_pct, caida_seccional_pct)"
+    },
+    {
+      "id": "aea_voltage_drop.caida_gdc",
+      "modulo": "aea_voltage_drop",
+      "funcion": "caida_gdc",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "ΔU = GDC·I·L/S. un_v por defecto 220 (mono) o 380 (tri).",
+      "firma": "caida_gdc(i_a, longitud_m, seccion_mm2, material='cu', fases=1, un_v=None, arranque=False)"
+    },
+    {
+      "id": "aea_voltage_drop.coeficiente_gdc",
+      "modulo": "aea_voltage_drop",
+      "funcion": "coeficiente_gdc",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "GDC [V·mm²/(A·m)]. En arranque (cosφ 0,3) requiere seccion_mm2 (≤70).",
+      "firma": "coeficiente_gdc(material, fases, arranque=False, seccion_mm2=None)"
+    },
+    {
+      "id": "aea_voltage_drop.corriente_extremo",
+      "modulo": "aea_voltage_drop",
+      "funcion": "corriente_extremo",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "Corriente equivalente concentrada en el extremo: iluminación 66 % (771) o 2/3 (770); tomas 100 %.",
+      "firma": "corriente_extremo(i_total_a, tipo, norma='771')"
+    },
+    {
+      "id": "aea_voltage_drop.drop_by_table",
+      "modulo": "aea_voltage_drop",
+      "funcion": "drop_by_table",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "ΔU = (V/A·km)·I·L[km]. Devuelve {'delta_u_v','delta_u_pct'}.",
+      "firma": "drop_by_table(i_a, longitud_m, seccion_mm2, un_v=220.0)"
+    },
+    {
+      "id": "aea_voltage_drop.drop_unit_table",
+      "modulo": "aea_voltage_drop",
+      "funcion": "drop_unit_table",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "V/(A·km) de la Tabla 771.19.IV (monofásico, cosφ 0,8).",
+      "firma": "drop_unit_table(seccion_mm2)"
+    },
+    {
+      "id": "aea_voltage_drop.limite_caida_pct",
+      "modulo": "aea_voltage_drop",
+      "funcion": "limite_caida_pct",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "Límite [%] por tipo: iluminacion, tomacorrientes, motor_regimen, motor_arranque, seccional.",
+      "firma": "limite_caida_pct(tipo)"
+    },
+    {
+      "id": "aea_voltage_drop.longitud_maxima_gdc",
+      "modulo": "aea_voltage_drop",
+      "funcion": "longitud_maxima_gdc",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "L = ΔU_adm·S/(GDC·I) [m].",
+      "firma": "longitud_maxima_gdc(i_a, seccion_mm2, du_adm_pct, material='cu', fases=1, un_v=None, arranque=False)"
+    },
+    {
+      "id": "aea_voltage_drop.seccion_minima_gdc",
+      "modulo": "aea_voltage_drop",
+      "funcion": "seccion_minima_gdc",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "S = GDC·I·L/ΔU_adm [mm²] (régimen, cosφ 0,8).",
+      "firma": "seccion_minima_gdc(i_a, longitud_m, du_adm_pct, material='cu', fases=1, un_v=None)"
+    },
+    {
+      "id": "aea_voltage_drop.verify_drop",
+      "modulo": "aea_voltage_drop",
+      "funcion": "verify_drop",
+      "dominio": "Caída de tensión (tablas, GDC, límites)",
+      "norma": "AEA 771 §19.7, 770 §15.6",
+      "resumen": "True si la caída no supera el límite del tipo.",
+      "firma": "verify_drop(caida_pct, tipo)"
+    },
+    {
+      "id": "aea_earthing.ra_maxima",
+      "modulo": "aea_earthing",
+      "funcion": "ra_maxima",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "Tabla 771.3.I: {'col1_50v','col2_24v','adoptada'} [Ω].",
+      "firma": "ra_maxima(i_dn_a)"
+    },
+    {
+      "id": "aea_earthing.resistance_conductor_horizontal",
+      "modulo": "aea_earthing",
+      "funcion": "resistance_conductor_horizontal",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "R de un conductor desnudo enterrado horizontalmente [Ω].",
+      "firma": "resistance_conductor_horizontal(rho, largo_m, diametro_m, prof_m, simplificada=False)"
+    },
+    {
+      "id": "aea_earthing.resistance_parallel",
+      "modulo": "aea_earthing",
+      "funcion": "resistance_parallel",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "Electrodos suficientemente separados: 1/R = Σ 1/Ri.",
+      "firma": "resistance_parallel(resistencias_ohm)"
+    },
+    {
+      "id": "aea_earthing.resistance_rod",
+      "modulo": "aea_earthing",
+      "funcion": "resistance_rod",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "R de una jabalina vertical [Ω]. Simplificada: 0,75/1,0/1,2 ·ρ/L según L/d.",
+      "firma": "resistance_rod(rho, largo_m, diametro_m, simplificada=False)"
+    },
+    {
+      "id": "aea_earthing.resistencia_placa_circular",
+      "modulo": "aea_earthing",
+      "funcion": "resistencia_placa_circular",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "R de una placa circular de diámetro D a profundidad h [Ω].",
+      "firma": "resistencia_placa_circular(rho, diametro_m, prof_m)"
+    },
+    {
+      "id": "aea_earthing.seccion_pe_mm2",
+      "modulo": "aea_earthing",
+      "funcion": "seccion_pe_mm2",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "Tabla 771-C.II; con material distinto multiplicar por k_fase/k_pe.",
+      "firma": "seccion_pe_mm2(s_fase_mm2, k_fase=1.0, k_pe=1.0)"
+    },
+    {
+      "id": "aea_earthing.tiempo_desconexion_max_s",
+      "modulo": "aea_earthing",
+      "funcion": "tiempo_desconexion_max_s",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "Tabla 771.18.I. esquema 'TN'|'TT'; un_v entre 50 y 400; corriente 'ca'|'cc'.",
+      "firma": "tiempo_desconexion_max_s(esquema, un_v, corriente='ca')"
+    },
+    {
+      "id": "aea_earthing.tiempo_seccional_max_s",
+      "modulo": "aea_earthing",
+      "funcion": "tiempo_seccional_max_s",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "Circuitos seccionales: TT ≤ 1 s, TN ≤ 5 s.",
+      "firma": "tiempo_seccional_max_s(esquema)"
+    },
+    {
+      "id": "aea_earthing.verifica_ra",
+      "modulo": "aea_earthing",
+      "funcion": "verifica_ra",
+      "dominio": "Puesta a tierra, diferenciales y electrodos",
+      "norma": "AEA 771 §3, §18, Anexo C",
+      "resumen": "True si Ra ≤ valor adoptado.",
+      "firma": "verifica_ra(ra_ohm, i_dn_a)"
+    },
+    {
+      "id": "aea_conductors.current_corrected",
+      "modulo": "aea_conductors",
+      "funcion": "current_corrected",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "I' = I/factor (corriente a considerar para elegir el cable).",
+      "firma": "current_corrected(i_a, factor)"
+    },
+    {
+      "id": "aea_conductors.current_neutral_harmonics",
+      "modulo": "aea_conductors",
+      "funcion": "current_neutral_harmonics",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "I_N = 3·I_f·h3/100.",
+      "firma": "current_neutral_harmonics(i_fase_a, h3_pct)"
+    },
+    {
+      "id": "aea_conductors.current_phase_three_phase",
+      "modulo": "aea_conductors",
+      "funcion": "current_phase_three_phase",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "I_f = P/(√3·U·cosφ).",
+      "firma": "current_phase_three_phase(p_w, u_v, cos_fi)"
+    },
+    {
+      "id": "aea_conductors.d_desde_thd",
+      "modulo": "aea_conductors",
+      "funcion": "d_desde_thd",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "D² = THD²/(1−THD²) (p.u.).",
+      "firma": "d_desde_thd(thd_pu)"
+    },
+    {
+      "id": "aea_conductors.distorsion_d_pct",
+      "modulo": "aea_conductors",
+      "funcion": "distorsion_d_pct",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "D [%] respecto de la fundamental.",
+      "firma": "distorsion_d_pct(armonicos)"
+    },
+    {
+      "id": "aea_conductors.factor_harmonics",
+      "modulo": "aea_conductors",
+      "funcion": "factor_harmonics",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "Tabla 771.16.XIII: devuelve {'factor','aplicado_a'} según el THD (3.º armónica) [%].",
+      "firma": "factor_harmonics(thd3_pct)"
+    },
+    {
+      "id": "aea_conductors.iz_admisible",
+      "modulo": "aea_conductors",
+      "funcion": "iz_admisible",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "Tabla 771.16.I [A]: Cu/PVC, 40 °C, método B1. cargados = 2 (monofásico) o 3 (trifásico).",
+      "firma": "iz_admisible(seccion_mm2, cargados=3)"
+    },
+    {
+      "id": "aea_conductors.k_adiabatico_771",
+      "modulo": "aea_conductors",
+      "funcion": "k_adiabatico_771",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "Tabla 771.19.II.",
+      "firma": "k_adiabatico_771(aislacion, material)"
+    },
+    {
+      "id": "aea_conductors.resistencia_cu_ohm_km",
+      "modulo": "aea_conductors",
+      "funcion": "resistencia_cu_ohm_km",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "R(θ) = R20·(1 + 0,00393·(θ − 20)) [Ω/km]; 70 °C = temperatura máxima del PVC en servicio.",
+      "firma": "resistencia_cu_ohm_km(seccion_mm2, temp_c=70.0)"
+    },
+    {
+      "id": "aea_conductors.seccion_pen_minima_mm2",
+      "modulo": "aea_conductors",
+      "funcion": "seccion_pen_minima_mm2",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "PEN ≥ 10 mm² Cu / 16 mm² Al.",
+      "firma": "seccion_pen_minima_mm2(material)"
+    },
+    {
+      "id": "aea_conductors.section_min_circuit",
+      "modulo": "aea_conductors",
+      "funcion": "section_min_circuit",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "Tabla 771.13.I [mm²].",
+      "firma": "section_min_circuit(tipo)"
+    },
+    {
+      "id": "aea_conductors.thd_desde_d",
+      "modulo": "aea_conductors",
+      "funcion": "thd_desde_d",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "THD² = D²/(1+D²) (p.u.).",
+      "firma": "thd_desde_d(d_pu)"
+    },
+    {
+      "id": "aea_conductors.thd_pct",
+      "modulo": "aea_conductors",
+      "funcion": "thd_pct",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "THD [%] respecto del valor eficaz. armonicos = {n: h_n} (n=1 fundamental, cualquier unidad común).",
+      "firma": "thd_pct(armonicos)"
+    },
+    {
+      "id": "aea_conductors.verifica_poder_corte",
+      "modulo": "aea_conductors",
+      "funcion": "verifica_poder_corte",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "PdC ≥ I''k.",
+      "firma": "verifica_poder_corte(pdc_a, i_k_a)"
+    },
+    {
+      "id": "aea_conductors.verify_overload",
+      "modulo": "aea_conductors",
+      "funcion": "verify_overload",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "I_B ≤ I_n ≤ I_Z y, si se da I_2, I_2 ≤ 1,45·I_Z. Devuelve dict de comprobaciones.",
+      "firma": "verify_overload(i_b_a, i_n_a, i_z_a, i_2_a=None)"
+    },
+    {
+      "id": "aea_conductors.volumen_combustible_dm3_m",
+      "modulo": "aea_conductors",
+      "funcion": "volumen_combustible_dm3_m",
+      "dominio": "Conductores: secciones, sobrecarga, armónicos",
+      "norma": "AEA 771 §13, §16, §19; 770 §11",
+      "resumen": "V = π·De²/4000 − ΣS/1000 [dm³/m].",
+      "firma": "volumen_combustible_dm3_m(diametro_ext_mm, secciones_conductores_mm2)"
+    },
+    {
+      "id": "aea_panel_thermal.current_nominal_equivalent",
+      "modulo": "aea_panel_thermal",
+      "funcion": "current_nominal_equivalent",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "I_nq = I_ne·K_e.",
+      "firma": "current_nominal_equivalent(i_ne_a, ke=0.85)"
+    },
+    {
+      "id": "aea_panel_thermal.factor_k_circuitos",
+      "modulo": "aea_panel_thermal",
+      "funcion": "factor_k_circuitos",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "Tabla 770-B.XII.",
+      "firma": "factor_k_circuitos(n_circuitos)"
+    },
+    {
+      "id": "aea_panel_thermal.factor_k_nivel",
+      "modulo": "aea_panel_thermal",
+      "funcion": "factor_k_nivel",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "K_nivel = I_nu_cabecera·K_padre/ΣI_nu_hijos.",
+      "firma": "factor_k_nivel(i_nu_cabecera_a, k_padre, i_nu_hijos_a)"
+    },
+    {
+      "id": "aea_panel_thermal.poder_corte_minimo_diferencial_a",
+      "modulo": "aea_panel_thermal",
+      "funcion": "poder_corte_minimo_diferencial_a",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "Tabla 770-B.X (2P y 4P): 25/40 A→500; 63 A→630; 80 A→800; 100 A→1000.",
+      "firma": "poder_corte_minimo_diferencial_a(i_n_a)"
+    },
+    {
+      "id": "aea_panel_thermal.potencia_disipada_aparato_w",
+      "modulo": "aea_panel_thermal",
+      "funcion": "potencia_disipada_aparato_w",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "P_d = K²·(W/polo)·polos.",
+      "firma": "potencia_disipada_aparato_w(i_n_a, polos, k=1.0)"
+    },
+    {
+      "id": "aea_panel_thermal.potencia_disipada_polo_w",
+      "modulo": "aea_panel_thermal",
+      "funcion": "potencia_disipada_polo_w",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "Tabla 770-B.XI [W/polo].",
+      "firma": "potencia_disipada_polo_w(i_n_a)"
+    },
+    {
+      "id": "aea_panel_thermal.potencia_tablero_w",
+      "modulo": "aea_panel_thermal",
+      "funcion": "potencia_tablero_w",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "P_tot = P_dp + 0,2·P_dp + P_au.",
+      "firma": "potencia_tablero_w(p_dp_w, p_aparatos_aux_w=0.0)"
+    },
+    {
+      "id": "aea_panel_thermal.verify_panel",
+      "modulo": "aea_panel_thermal",
+      "funcion": "verify_panel",
+      "dominio": "Verificación térmica de tableros",
+      "norma": "AEA 770 Anexo B; 771 Anexo H",
+      "resumen": "P_tot ≤ P_de.",
+      "firma": "verify_panel(p_tot_w, p_admisible_w)"
+    },
+    {
+      "id": "aea_icc_factors.c_max_desde_tension",
+      "modulo": "aea_icc_factors",
+      "funcion": "c_max_desde_tension",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[15] c_max ≈ U_Qmax/Un.",
+      "firma": "c_max_desde_tension(u_q_max, un)"
+    },
+    {
+      "id": "aea_icc_factors.defecto_tierra_rigido",
+      "modulo": "aea_icc_factors",
+      "funcion": "defecto_tierra_rigido",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "True si U_L,E/U_Y,E ≤ 1,4 (red puesta rígidamente a tierra).",
+      "firma": "defecto_tierra_rigido(u_le, u_ye)"
+    },
+    {
+      "id": "aea_icc_factors.delta_i_kmax",
+      "modulo": "aea_icc_factors",
+      "funcion": "delta_i_kmax",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[12] Δi''kmax = 1/(1+Δu_max) − 1 (Δu en p.u.).",
+      "firma": "delta_i_kmax(delta_u_max)"
+    },
+    {
+      "id": "aea_icc_factors.ik_generador",
+      "modulo": "aea_icc_factors",
+      "funcion": "ik_generador",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[19] I''kG [A] con Z_G complejo (R_G + jX''d).",
+      "firma": "ik_generador(c, un, k_gen, z_g)"
+    },
+    {
+      "id": "aea_icc_factors.ik_grupo_conmutador",
+      "modulo": "aea_icc_factors",
+      "funcion": "ik_grupo_conmutador",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[32] I''kS [A]; z_g y z_thv complejos (Ω) referidos a AT (Z_THV = t_r²·Z_TLV).",
+      "firma": "ik_grupo_conmutador(c, un_q, t_r, z_g, z_thv, k_sgrp)"
+    },
+    {
+      "id": "aea_icc_factors.ik_trafo_con_red",
+      "modulo": "aea_icc_factors",
+      "funcion": "ik_trafo_con_red",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[59] I''kT = c·Un/(√3·|Z_T·K_T + Z_Qt|) [A]; Z complejos.",
+      "firma": "ik_trafo_con_red(c, un, z_t, k_t, z_qt)"
+    },
+    {
+      "id": "aea_icc_factors.k_g",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_g",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[22] K_G.",
+      "firma": "k_g(un, u_rg, c_max, x_d2_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_icc_factors.k_gs",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_gs",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[38]/[45a] K_G,S.",
+      "firma": "k_gs(c_max, x_d2_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_icc_factors.k_gso",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_gso",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[52] K_G,SO.",
+      "firma": "k_gso(p_g, c_max, x_d2_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_icc_factors.k_s",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_s",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[31] K_S (grupo con conmutador bajo carga).",
+      "firma": "k_s(un_q, u_rg, u_rtlv, u_rthv, c_max, x_d2_pu, x_t_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_icc_factors.k_so",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_so",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[49a] (p_t=0) / [49b] (con (1 − p_T), el caso de mayor corriente).",
+      "firma": "k_so(un_q, u_rg, p_g, u_rtlv, u_rthv, c_max, x_d2_pu, sen_fi_rg, p_t=0.0)"
+    },
+    {
+      "id": "aea_icc_factors.k_t_general",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_t_general",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[62]/[63] K_T = Un/U^b·c_max/(1 + x_T·(I^b_T/I_rT)·senφ^b_T).",
+      "firma": "k_t_general(un, u_b, c_max, x_t_pu, i_tb_sobre_irt, sen_fi_tb)"
+    },
+    {
+      "id": "aea_icc_factors.k_ts",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_ts",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[43] con x_d (reactancia síncrona) o [45b] con senφ_rG: K_T,S.",
+      "firma": "k_ts(c_max, x_t_pu, x_d_pu=None, sen_fi_rg=None)"
+    },
+    {
+      "id": "aea_icc_factors.k_tso",
+      "modulo": "aea_icc_factors",
+      "funcion": "k_tso",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[54] K_T,SO = c_max·U_rTHV/U_nQ.",
+      "firma": "k_tso(c_max, u_rthv, un_q)"
+    },
+    {
+      "id": "aea_icc_factors.motores_baja_tension_despreciables",
+      "modulo": "aea_icc_factors",
+      "funcion": "motores_baja_tension_despreciables",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[110] ΣI_rM ≤ 0,01·I''kQ (con I_LR/I_rM = 5).",
+      "firma": "motores_baja_tension_despreciables(suma_irm_a, ik_red_a)"
+    },
+    {
+      "id": "aea_icc_factors.motors_contribution_negligible",
+      "modulo": "aea_icc_factors",
+      "funcion": "motors_contribution_negligible",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[108] I''kM ≤ 0,05·I''kQ.",
+      "firma": "motors_contribution_negligible(ik_motores_a, ik_red_a)"
+    },
+    {
+      "id": "aea_icc_factors.reactancia_red_lv_ohm",
+      "modulo": "aea_icc_factors",
+      "funcion": "reactancia_red_lv_ohm",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[61] X_Qt = c_Q·U_nQ/(√3·I''kQ)·U²_rTLV/U²_rTHV.",
+      "firma": "reactancia_red_lv_ohm(c_q, un_q, ik_q, u_rtlv, u_rthv)"
+    },
+    {
+      "id": "aea_icc_factors.reactancia_trafo_ohm",
+      "modulo": "aea_icc_factors",
+      "funcion": "reactancia_trafo_ohm",
+      "dominio": "Factores K de impedancia (Icc)",
+      "norma": "AEA IT 90909-1 §2.1–2.2, §2.3, §2.9",
+      "resumen": "[60] X_T = u_Xr/100·U²_rTLV/S_rT (U [V], S [VA]).",
+      "firma": "reactancia_trafo_ohm(u_xr_pct, u_rtlv, s_rt)"
+    },
+    {
+      "id": "aea_icc_decay.constante_aperiodica_s",
+      "modulo": "aea_icc_decay",
+      "funcion": "constante_aperiodica_s",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[96c] T_aN ≈ −1/(2f·ln(κ−1)), válido con 1 < κ < 2.",
+      "firma": "constante_aperiodica_s(kappa, f_hz)"
+    },
+    {
+      "id": "aea_icc_decay.constante_tiempo_mu_q",
+      "modulo": "aea_icc_decay",
+      "funcion": "constante_tiempo_mu_q",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "T_μq = −t_min/ln(μ·q) [s] (requiere 0 < μ·q < 1).",
+      "firma": "constante_tiempo_mu_q(t_min, mu, q)"
+    },
+    {
+      "id": "aea_icc_decay.constantes_tiempo",
+      "modulo": "aea_icc_decay",
+      "funcion": "constantes_tiempo",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[80] (T''N, T'N) [s] a partir de T''0 y T'0 de circuito abierto equivalentes.",
+      "firma": "constantes_tiempo(t2_0, t1_0, x_d2, x_d1, x_d, x_n=0.0)"
+    },
+    {
+      "id": "aea_icc_decay.corriente_alterna_t",
+      "modulo": "aea_icc_decay",
+      "funcion": "corriente_alterna_t",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[78] I_k,ac(t).",
+      "firma": "corriente_alterna_t(t, ik2, ik1, ik, t2_n, t1_n)"
+    },
+    {
+      "id": "aea_icc_decay.corrientes_generador",
+      "modulo": "aea_icc_decay",
+      "funcion": "corrientes_generador",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[79] (I''k, I'k, Ik). E en V de fase; X en Ω.",
+      "firma": "corrientes_generador(e2, e1, e, x_d2, x_d1, x_d, x_n=0.0)"
+    },
+    {
+      "id": "aea_icc_decay.current_peak_to",
+      "modulo": "aea_icc_decay",
+      "funcion": "current_peak_to",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[67] i_p = κ·√2·I''k.",
+      "firma": "current_peak_to(kappa, ik_a)"
+    },
+    {
+      "id": "aea_icc_decay.current_steady_to",
+      "modulo": "aea_icc_decay",
+      "funcion": "current_steady_to",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[83]/[84] I_k = λ·I_rG.",
+      "firma": "current_steady_to(lambda_f, i_rg_a)"
+    },
+    {
+      "id": "aea_icc_decay.current_thermal_equivalent_to",
+      "modulo": "aea_icc_decay",
+      "funcion": "current_thermal_equivalent_to",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[93] I_th = I''k·√(m+n).",
+      "firma": "current_thermal_equivalent_to(ik2_a, m, n)"
+    },
+    {
+      "id": "aea_icc_decay.factor_m",
+      "modulo": "aea_icc_decay",
+      "funcion": "factor_m",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[100] m = [e^(4f·T_k·ln(κ−1)) − 1]/(2f·T_k·ln(κ−1)); 1 < κ < 2.",
+      "firma": "factor_m(kappa, f_hz, t_k_s)"
+    },
+    {
+      "id": "aea_icc_decay.factor_n_generico",
+      "modulo": "aea_icc_decay",
+      "funcion": "factor_n_generico",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[102a] con T_SN: 1/T_SN = 1/T''dN + 1/T'dN.",
+      "firma": "factor_n_generico(ik2, ik1, ik, t_k, t2_dn, t1_dn)"
+    },
+    {
+      "id": "aea_icc_decay.factor_n_simplificado",
+      "modulo": "aea_icc_decay",
+      "funcion": "factor_n_simplificado",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[102b] con T''dN ≈ 0,1·T'dN.",
+      "firma": "factor_n_simplificado(ik2, ik1, ik, t_k, t1_dn)"
+    },
+    {
+      "id": "aea_icc_decay.factor_q",
+      "modulo": "aea_icc_decay",
+      "funcion": "factor_q",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[91] q = I_bM/(μ·I''kM).",
+      "firma": "factor_q(ib_motor_a, mu, ik_motor_a)"
+    },
+    {
+      "id": "aea_icc_decay.kappa_exacto",
+      "modulo": "aea_icc_decay",
+      "funcion": "kappa_exacto",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[72] κ = máx sobre ωt∈(0, 2π) de sen(ωt−γ) + e^(−(R/X)ωt)·senγ.",
+      "firma": "kappa_exacto(r_ohm, x_ohm, pasos=20000)"
+    },
+    {
+      "id": "aea_icc_decay.mu_generador",
+      "modulo": "aea_icc_decay",
+      "funcion": "mu_generador",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[81] μ ≈ [1 − (X''d+XN)/(X'd+XN)]·e^(−t_min/T''N) + (X''d+XN)/(X'd+XN).",
+      "firma": "mu_generador(t_min, t2_n, x_d2, x_d1, x_n=0.0)"
+    },
+    {
+      "id": "aea_icc_decay.voltage_internal_rated",
+      "modulo": "aea_icc_decay",
+      "funcion": "voltage_internal_rated",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[90] E_r = U_rG/√3·√(1 + x²_dsat + 2·x_dsat·senφ_rG).",
+      "firma": "voltage_internal_rated(u_rg, x_dsat_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_icc_decay.voltage_internal_subtransient",
+      "modulo": "aea_icc_decay",
+      "funcion": "voltage_internal_subtransient",
+      "dominio": "κ, μ, λ, q, m, n (Icc)",
+      "norma": "AEA IT 90909-1 §2.4–2.8",
+      "resumen": "[89] E'' = U_rG/√3·(1 + x''d·senφ_rG).",
+      "firma": "voltage_internal_subtransient(u_rg, x_d2_pu, sen_fi_rg)"
+    },
+    {
+      "id": "aea_special_locations.factor_demand",
+      "modulo": "aea_special_locations",
+      "funcion": "factor_demand",
+      "dominio": "Baños (701) y vehículos eléctricos (722)",
+      "norma": "AEA 701, 722",
+      "resumen": "722: factor de demanda = demanda máxima/carga instalada (mismas unidades).",
+      "firma": "factor_demand(demanda_max, carga_instalada)"
+    },
+    {
+      "id": "aea_special_locations.induccion_admisible",
+      "modulo": "aea_special_locations",
+      "funcion": "induccion_admisible",
+      "dominio": "Baños (701) y vehículos eléctricos (722)",
+      "norma": "AEA 701, 722",
+      "resumen": "True si B ≤ 2,5·10⁻⁵ T.",
+      "firma": "induccion_admisible(i_a, distancia_m)"
+    },
+    {
+      "id": "aea_special_locations.induccion_conductor_t",
+      "modulo": "aea_special_locations",
+      "funcion": "induccion_conductor_t",
+      "dominio": "Baños (701) y vehículos eléctricos (722)",
+      "norma": "AEA 701, 722",
+      "resumen": "B = μ0·i/(2π·R) [T] a la distancia R del conductor (701).",
+      "firma": "induccion_conductor_t(i_a, distancia_m)"
+    },
+    {
+      "id": "aea_special_locations.load_multiple_complies",
+      "modulo": "aea_special_locations",
+      "funcion": "load_multiple_complies",
+      "dominio": "Baños (701) y vehículos eléctricos (722)",
+      "norma": "AEA 701, 722",
+      "resumen": "722: ≤ 8 tomas; circuito ≥ ½·(bocas·I_máx) y ≥ 10 A. Devuelve dict.",
+      "firma": "load_multiple_complies(n_tomas, n_bocas, i_circuito_a, i_max_boca_a)"
+    },
+    {
+      "id": "aea_special_locations.radio_zona2_con_tabique_m",
+      "modulo": "aea_special_locations",
+      "funcion": "radio_zona2_con_tabique_m",
+      "dominio": "Baños (701) y vehículos eléctricos (722)",
+      "norma": "AEA 701, 722",
+      "resumen": "Radio de la zona 2 [m] = 0,60 − a (701).",
+      "firma": "radio_zona2_con_tabique_m(ancho_tabique_m)"
+    },
+    {
+      "id": "aea_pipeline.calcular_desde_xlsx",
+      "modulo": "aea_pipeline",
+      "funcion": "calcular_desde_xlsx",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Lee el Excel, calcula, valida, escribe el JSON y la MC/SP del alimentador principal.",
+      "firma": "calcular_desde_xlsx(ruta_xlsx, ruta_json=None, alimentador=None, **opc)"
+    },
+    {
+      "id": "aea_pipeline.calculate",
+      "modulo": "aea_pipeline",
+      "funcion": "calculate",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Dimensiona todos los circuitos. Devuelve (datos_json, avisos) con `datos_json` listo para `aea_export`.",
+      "firma": "calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=10)"
+    },
+    {
+      "id": "aea_pipeline.convert_load",
+      "modulo": "aea_pipeline",
+      "funcion": "convert_load",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Normaliza la carga a (valor en la unidad base, base) con base 'a' (A), 'w' (W), 'va' (VA) o 'hp' (W mecánicos).",
+      "firma": "convert_load(carga, unidad=None)"
+    },
+    {
+      "id": "aea_pipeline.corriente_proyecto",
+      "modulo": "aea_pipeline",
+      "funcion": "corriente_proyecto",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Ib [A] del circuito desde CARGA/UNIDAD_CARGA (A, W, kW, MW, VA, kVA, MVA, HP); None si no tiene carga (padre).",
+      "firma": "corriente_proyecto(c, u_linea, fp_def, eta_motores=False)"
+    },
+    {
+      "id": "aea_pipeline.current_sc_min",
+      "modulo": "aea_pipeline",
+      "funcion": "current_sc_min",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Icc mínima [A] al final de un circuito, con R a temperatura de servicio.",
+      "firma": "current_sc_min(u_linea, sc_busbar_ka, r_ohm, x_ohm, fases, c_max=1.05, c_min=0.95)"
+    },
+    {
+      "id": "aea_pipeline.leer_xlsx",
+      "modulo": "aea_pipeline",
+      "funcion": "leer_xlsx",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Devuelve {nombre_hoja: [[valores de la fila], ...]} (texto o número; None si vacío).",
+      "firma": "leer_xlsx(ruta)"
+    },
+    {
+      "id": "aea_pipeline.load_input",
+      "modulo": "aea_pipeline",
+      "funcion": "load_input",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "Lee TABLERO y CIRCUITOS. Devuelve (tablero: dict, circuitos: lista de dict con claves en mayúsculas).",
+      "firma": "load_input(ruta)"
+    },
+    {
+      "id": "aea_pipeline.type_circuit",
+      "modulo": "aea_pipeline",
+      "funcion": "type_circuit",
+      "dominio": "Excel de circuitos → dimensionado → JSON",
+      "norma": "AEA 771 §13, §16, §19.7",
+      "resumen": "'seccional' | 'motor' | 'iluminacion' | 'tomacorrientes' (para límites y sección mínima).",
+      "firma": "type_circuit(c, tiene_hijos)"
+    },
+    {
+      "id": "aea_tables.cargar",
+      "modulo": "aea_tables",
+      "funcion": "cargar",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Devuelve el contenido de `aea_tables.json` (con caché por ruta).",
+      "firma": "cargar(ruta=None)"
+    },
+    {
+      "id": "aea_tables.constante",
+      "modulo": "aea_tables",
+      "funcion": "constante",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Devuelve una constante del motor (clave de `constantes`, p. ej. '771.19.II_k_adiabatico').",
+      "firma": "constante(nombre)"
+    },
+    {
+      "id": "aea_tables.factor_agrupamiento_aire",
+      "modulo": "aea_tables",
+      "funcion": "factor_agrupamiento_aire",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tabla 771.16.IV: item '1'..'5'; para n mayor que el último valor, se usa el último.",
+      "firma": "factor_agrupamiento_aire(item, n_circuitos)"
+    },
+    {
+      "id": "aea_tables.factor_agrupamiento_canos",
+      "modulo": "aea_tables",
+      "funcion": "factor_agrupamiento_canos",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tabla 771.16.II.b: 2 o 3 circuitos en un mismo caño (monofásicos u trifásicos).",
+      "firma": "factor_agrupamiento_canos(circuitos, trifasicos=True)"
+    },
+    {
+      "id": "aea_tables.factor_agrupamiento_enterrado",
+      "modulo": "aea_tables",
+      "funcion": "factor_agrupamiento_enterrado",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tablas 771.16.VII.c / d1 / d2: `tabla` en {'c','d1','d2'}; `separacion_idx` 0.. según columnas.",
+      "firma": "factor_agrupamiento_enterrado(tabla, n_circuitos, separacion_idx)"
+    },
+    {
+      "id": "aea_tables.factor_resistividad",
+      "modulo": "aea_tables",
+      "funcion": "factor_resistividad",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tabla 771.16.VII.b: método 'D1' (caños enterrados) o 'D2' (directamente enterrado).",
+      "firma": "factor_resistividad(metodo, rho_kmw)"
+    },
+    {
+      "id": "aea_tables.factor_temperatura_aire",
+      "modulo": "aea_tables",
+      "funcion": "factor_temperatura_aire",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tabla 771.16.II.a: factor por temperatura ambiente distinta de 40 °C.",
+      "firma": "factor_temperatura_aire(aislacion, temp_c)"
+    },
+    {
+      "id": "aea_tables.factor_temperatura_suelo",
+      "modulo": "aea_tables",
+      "funcion": "factor_temperatura_suelo",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Tabla 771.16.VII.a: factor por temperatura del suelo distinta de 25 °C.",
+      "firma": "factor_temperatura_suelo(aislacion, temp_c)"
+    },
+    {
+      "id": "aea_tables.iz_corregida",
+      "modulo": "aea_tables",
+      "funcion": "iz_corregida",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "I_z = N · I_z0 · f_clase · f_temp · f_agrup · f_suelo   [A].",
+      "firma": "iz_corregida(iz_base_a, ternas=1, clase5=False, f_temp=1.0, f_agrup=1.0, f_suelo=1.0)"
+    },
+    {
+      "id": "aea_tables.iz_tabla",
+      "modulo": "aea_tables",
+      "funcion": "iz_tabla",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Intensidad admisible base [A] de una tabla 771.16, para `columna` (clave impresa).",
+      "firma": "iz_tabla(tabla, aislacion, material, seccion_mm2, columna, grupo=None)"
+    },
+    {
+      "id": "aea_tables.secciones",
+      "modulo": "aea_tables",
+      "funcion": "secciones",
+      "dominio": "Tablas de capacidad de cables y factores de corrección",
+      "norma": "AEA 771 §16 (771.16.I a XI)",
+      "resumen": "Secciones [mm²] disponibles para (tabla, aislación, material), de menor a mayor.",
+      "firma": "secciones(tabla, aislacion, material)"
+    },
+    {
+      "id": "aea_ampacity.factores",
+      "modulo": "aea_ampacity",
+      "funcion": "factores",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "Dict con f_clase, f_temp, f_agrup y f_suelo.",
+      "firma": "factores(p, trifasico=True)"
+    },
+    {
+      "id": "aea_ampacity.iz",
+      "modulo": "aea_ampacity",
+      "funcion": "iz",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "I_z total [A] del circuito con sección s. ValueError si la combinación no está tabulada.",
+      "firma": "iz(p, s, fases)"
+    },
+    {
+      "id": "aea_ampacity.iz_base",
+      "modulo": "aea_ampacity",
+      "funcion": "iz_base",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "I_z0 por terna [A]: IZ_A si se informó, si no la tabla 771.16 correspondiente.",
+      "firma": "iz_base(p, s, cargados)"
+    },
+    {
+      "id": "aea_ampacity.parametros",
+      "modulo": "aea_ampacity",
+      "funcion": "parametros",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "Lee las columnas de instalación de una fila de CIRCUITOS y aplica los valores por defecto.",
+      "firma": "parametros(c)"
+    },
+    {
+      "id": "aea_ampacity.resistencia_ohm_km",
+      "modulo": "aea_ampacity",
+      "funcion": "resistencia_ohm_km",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "R(θ) del conductor [Ω/km].",
+      "firma": "resistencia_ohm_km(s, material, temp_c)"
+    },
+    {
+      "id": "aea_ampacity.seccion_valida",
+      "modulo": "aea_ampacity",
+      "funcion": "seccion_valida",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "El aluminio exige S ≥ 16 mm² y R20 tabulada.",
+      "firma": "seccion_valida(p, s)"
+    },
+    {
+      "id": "aea_ampacity.temp_conductor",
+      "modulo": "aea_ampacity",
+      "funcion": "temp_conductor",
+      "dominio": "Capacidad de conducción por aislación, material y método",
+      "norma": "AEA 771 §16, §13; IEC 60228",
+      "resumen": "Temperatura de servicio: la dada, o 90 °C si es XLPE y no se fijó otra.",
+      "firma": "temp_conductor(p, temp_c_defecto=70.0)"
+    },
+    {
+      "id": "aea_rules.buscar",
+      "modulo": "aea_rules",
+      "funcion": "buscar",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Filtra reglas por texto (tema, regla, id), grupo, tipo de inmueble, tipo de regla y norma (p. ej. '771').",
+      "firma": "buscar(texto=None, grupo=None, aplica_a=None, tipo=None, norma=None)"
+    },
+    {
+      "id": "aea_rules.grupos",
+      "modulo": "aea_rules",
+      "funcion": "grupos",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Nombres de los grupos de reglas.",
+      "firma": "grupos()"
+    },
+    {
+      "id": "aea_rules.indice",
+      "modulo": "aea_rules",
+      "funcion": "indice",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Índice de grupos con su archivo y cantidad de reglas.",
+      "firma": "indice()"
+    },
+    {
+      "id": "aea_rules.regla",
+      "modulo": "aea_rules",
+      "funcion": "regla",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Regla por id ('grupo.nombre').",
+      "firma": "regla(id_)"
+    },
+    {
+      "id": "aea_rules.reglas",
+      "modulo": "aea_rules",
+      "funcion": "reglas",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Lista de reglas de un grupo, o de todos si `grupo` es None.",
+      "firma": "reglas(grupo=None)"
+    },
+    {
+      "id": "aea_rules.valor",
+      "modulo": "aea_rules",
+      "funcion": "valor",
+      "dominio": "Reglas de ingeniería (alturas, reservas, llenado, circuitos)",
+      "norma": "AEA 771, 770, 701, 722",
+      "resumen": "Valor de un parámetro de una regla, p. ej. valor('bandejas.reserva_20pct', 'reserva_min_pct') = 20.",
+      "firma": "valor(id_, parametro)"
+    },
+    {
+      "id": "aea_protection.corriente_falla_tt",
+      "modulo": "aea_protection",
+      "funcion": "corriente_falla_tt",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "TT: corriente de primera falla If = U0/(Ra + Rb) [A].",
+      "firma": "corriente_falla_tt(u0_v, ra_ohm, rb_ohm)"
+    },
+    {
+      "id": "aea_protection.i2_convencional",
+      "modulo": "aea_protection",
+      "funcion": "i2_convencional",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "Corriente convencional de funcionamiento I2 = k2·In [A].",
+      "firma": "i2_convencional(in_a, tipo='mcb')"
+    },
+    {
+      "id": "aea_protection.in_max_por_iz",
+      "modulo": "aea_protection",
+      "funcion": "in_max_por_iz",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "In máxima que cumple In ≤ Iz e I2 ≤ 1,45·Iz [A].",
+      "firma": "in_max_por_iz(iz_a, tipo='mcb')"
+    },
+    {
+      "id": "aea_protection.ra_maxima_tt",
+      "modulo": "aea_protection",
+      "funcion": "ra_maxima_tt",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "TT: resistencia de puesta a tierra máxima Ra = UL/Ia [Ω].",
+      "firma": "ra_maxima_tt(ia_a, ul_v=50.0)"
+    },
+    {
+      "id": "aea_protection.verifica_it_segunda_falla",
+      "modulo": "aea_protection",
+      "funcion": "verifica_it_segunda_falla",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "IT, segunda falla: 2·Ia·Zs ≤ U (sin neutro) o ≤ U0 (con neutro distribuido).",
+      "firma": "verifica_it_segunda_falla(zs_ohm, ia_a, u_v=400.0, u0_v=230.0, neutro_distribuido=False)"
+    },
+    {
+      "id": "aea_protection.verifica_tn",
+      "modulo": "aea_protection",
+      "funcion": "verifica_tn",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "TN: Zs·Ia ≤ U0. Devuelve dict con producto, límite, margen y cumple.",
+      "firma": "verifica_tn(zs_ohm, ia_a, u0_v=230.0)"
+    },
+    {
+      "id": "aea_protection.verifica_tt",
+      "modulo": "aea_protection",
+      "funcion": "verifica_tt",
+      "dominio": "Protección contra contactos indirectos (TN/TT/IT) e I2",
+      "norma": "AEA 4-41, 4-43, 771.18",
+      "resumen": "TT: Ra·Ia ≤ UL.",
+      "firma": "verifica_tt(ra_ohm, ia_a, ul_v=50.0)"
+    },
+    {
+      "id": "aea_feeder_report.alimentador_principal",
+      "modulo": "aea_feeder_report",
+      "funcion": "alimentador_principal",
+      "dominio": "Memoria de cálculo y síntesis del alimentador principal",
+      "norma": "AEA 771 §13, §16, §19.7, §18",
+      "resumen": "Alimentador principal: el TAG indicado, o el primer circuito sin PARENT_TAG y con KIND 'mccb'.",
+      "firma": "alimentador_principal(circuitos, tag=None)"
+    },
+    {
+      "id": "aea_feeder_report.generar_documentos",
+      "modulo": "aea_feeder_report",
+      "funcion": "generar_documentos",
+      "dominio": "Memoria de cálculo y síntesis del alimentador principal",
+      "norma": "AEA 771 §13, §16, §19.7, §18",
+      "resumen": "Escribe <base>_MC.md y <base>_SP.md del alimentador principal. Devuelve las rutas.",
+      "firma": "generar_documentos(base, tablero, circuitos, datos, tag=None, temp_c=70.0, k_magnetico=10)"
+    },
+    {
+      "id": "aea_feeder_report.memoria_calculo",
+      "modulo": "aea_feeder_report",
+      "funcion": "memoria_calculo",
+      "dominio": "Memoria de cálculo y síntesis del alimentador principal",
+      "norma": "AEA 771 §13, §16, §19.7, §18",
+      "resumen": "Memoria de Cálculo (MC) en Markdown: objeto, marco, etapas 1 a 6.",
+      "firma": "memoria_calculo(tablero, c, v, proyecto)"
+    },
+    {
+      "id": "aea_feeder_report.sintesis_proyecto",
+      "modulo": "aea_feeder_report",
+      "funcion": "sintesis_proyecto",
+      "dominio": "Memoria de cálculo y síntesis del alimentador principal",
+      "norma": "AEA 771 §13, §16, §19.7, §18",
+      "resumen": "Síntesis de Proyecto (SP): una página, requisito normativo | dato técnico, máximo tres observaciones.",
+      "firma": "sintesis_proyecto(c, v, proyecto)"
+    },
+    {
+      "id": "aea_feeder_report.verificaciones",
+      "modulo": "aea_feeder_report",
+      "funcion": "verificaciones",
+      "dominio": "Memoria de cálculo y síntesis del alimentador principal",
+      "norma": "AEA 771 §13, §16, §19.7, §18",
+      "resumen": "Magnitudes intermedias del alimentador, con las mismas reglas que aea_pipeline.",
+      "firma": "verificaciones(tablero, c, reg, temp_c=70.0, k_magnetico=10)"
+    },
+    {
+      "id": "aea_export.circuito_json",
+      "modulo": "aea_export",
+      "funcion": "circuito_json",
+      "dominio": "Exportación del cálculo a JSON (sin PDF)",
+      "norma": "Contrato con sld-generator",
+      "resumen": "Arma el registro de un circuito (redondea Ib, S y dU).",
+      "firma": "circuito_json(i_n_a, i_b_a, icu_ka, s_mm2, du_pct, disp, decimales=2)"
+    },
+    {
+      "id": "aea_export.export_calculation",
+      "modulo": "aea_export",
+      "funcion": "export_calculation",
+      "dominio": "Exportación del cálculo a JSON (sin PDF)",
+      "norma": "Contrato con sld-generator",
+      "resumen": "Valida y escribe el JSON (UTF-8, sin BOM, sangría 1). Rechaza rutas .pdf/.docx/.md.",
+      "firma": "export_calculation(datos, ruta)"
+    },
+    {
+      "id": "aea_export.load_calculation",
+      "modulo": "aea_export",
+      "funcion": "load_calculation",
+      "dominio": "Exportación del cálculo a JSON (sin PDF)",
+      "norma": "Contrato con sld-generator",
+      "resumen": "Lee el JSON (acepta BOM) y lo devuelve validado; lanza ValueError si hay errores.",
+      "firma": "load_calculation(ruta)"
+    },
+    {
+      "id": "aea_export.validate_calculation",
+      "modulo": "aea_export",
+      "funcion": "validate_calculation",
+      "dominio": "Exportación del cálculo a JSON (sin PDF)",
+      "norma": "Contrato con sld-generator",
+      "resumen": "Devuelve {'errores': [...], 'avisos': [...]} (listas de str).",
+      "firma": "validate_calculation(datos)"
+    }
+  ],
+  "previos": {
+    "voltage_drop.caida_tension": "ΔU = k·I·L·(R cosφ + X senφ)",
+    "short_circuit.factor_c": "factor c",
+    "short_circuit.impedancia_red": "Z_Qt",
+    "short_circuit.impedancia_transformador": "Z_T, R_T, X_T",
+    "short_circuit.factor_kt": "K_T [65]",
+    "short_circuit.factor_kappa": "κ [68]",
+    "short_circuit.corriente_pico": "i_p [67]",
+    "short_circuit.aporte_motor": "I''kM [109]",
+    "cable_thermal.seccion_minima_mm2": "S ≥ I√t/k",
+    "cable_thermal.verificar_i2t": "k²S² ≥ I²t",
+    "current_and_loads.corriente_monofasica": "I monofásica",
+    "current_and_loads.corriente_trifasica": "I trifásica"
+  }
+}

@@ -1,0 +1,155 @@
+{
+ "grupo": "interruptores",
+ "reglas": [
+  {
+   "id": "interruptores.altura_centro",
+   "grupo": "interruptores",
+   "tema": "Altura de interruptores de efecto",
+   "regla": "El centro de la caja del interruptor de efecto se ubica entre 0,9 y 1,3 m del solado terminado; se recomienda 1,10 m y una única altura en todo el inmueble.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 0.9,
+    "altura_max_m": 1.3,
+    "altura_recomendada_m": 1.1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.1",
+    "pagina_impresa": 44,
+    "cita": "cuyo centro deberá estar ubicado entre 0,9 y 1,3 m del nivel del solado terminado, siendo recomendable la altura de 1,10 m"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "interruptores.distancia_al_marco",
+   "grupo": "interruptores",
+   "tema": "Ubicación junto a puertas",
+   "regla": "La arista de la caja más cercana al marco de la puerta queda a no más de 0,15 m del borde exterior del marco que aloja el cerradero.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_max_al_marco_m": 0.15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.1",
+    "pagina_impresa": 44,
+    "cita": "a no más de 0,15 m del borde exterior del marco que aloja el cerradero"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "interruptores.pasillos_mayores_3m",
+   "grupo": "interruptores",
+   "tema": "Pasillos de más de 3 m",
+   "regla": "En pasillos interiores de más de 3 m se prevén interruptores combinados en cada extremo y en cada acceso intermedio, con no más de 6 m entre interruptores sucesivos.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "longitud_umbral_m": 3,
+    "distancia_max_entre_interruptores_m": 6,
+    "distancia_max_al_acceso_m": 0.15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.1",
+    "pagina_impresa": 44,
+    "cita": "la distancia entre interruptores sucesivos no exceda los 6 m"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "interruptores.ascensores",
+   "grupo": "interruptores",
+   "tema": "Interruptores cerca de ascensores",
+   "regla": "Con ascensores en el inmueble, el comando de iluminación se sitúa a menos de 2 m de toda puerta de ascensor y es visible desde el umbral.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_max_a_puerta_ascensor_m": 2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.6.1",
+    "pagina_impresa": 44,
+    "cita": "se deberá situar el dispositivo de comando de iluminación a menos de 2 m de toda puerta de ascensor"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "interruptores.no_compartir_caja_con_tomas_bajos",
+   "grupo": "interruptores",
+   "tema": "Interruptores de tomacorrientes comandados",
+   "regla": "Los interruptores que comandan tomacorrientes por debajo de 0,90 m pertenecen al circuito de tomacorrientes y no comparten caja con interruptores de iluminación.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_umbral_m": 0.9
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 p)",
+    "pagina_impresa": 43,
+    "cita": "los interruptores de efecto para comando de tomacorrientes no podrán compartir la caja con interruptores de efecto del circuito de iluminación"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "interruptores.garajes_altura_minima",
+   "grupo": "interruptores",
+   "tema": "Garajes con solado a nivel de calle o superior",
+   "regla": "En garajes, las bocas de tomacorrientes y los elementos de maniobra y protección se ubican a una altura mínima de 1,5 m sobre el solado; las instalaciones a la vista son metálicas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "altura_min_m": 1.5
+   },
+   "aplica_a": [
+    "garajes"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.3.4",
+    "pagina_impresa": 37,
+    "cita": "deberán estar ubicados a una altura mínima de 1,5 m sobre el nivel de solado."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  }
+ ]
+}

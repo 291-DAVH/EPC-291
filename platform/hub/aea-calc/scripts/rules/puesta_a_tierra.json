@@ -1,0 +1,667 @@
+{
+ "grupo": "puesta_a_tierra",
+ "reglas": [
+  {
+   "id": "puesta_a_tierra.tt_ra_maxima",
+   "grupo": "puesta_a_tierra",
+   "tema": "Resistencia de puesta a tierra de protección (esquema TT)",
+   "regla": "El valor máximo permanente de la resistencia de puesta a tierra de protección es 40 Ω.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ra_max_ohm": 40,
+    "tension_limite_v": 24
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "541.3",
+    "pagina_impresa": "54-4",
+    "pagina_pdf": 244,
+    "cita": "debe ser menor o igual a 40 ohm",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.tt_ra_tabla_54_1",
+   "grupo": "puesta_a_tierra",
+   "tema": "Resistencia máxima de la toma de tierra de las masas (esquema TT)",
+   "regla": "La Ra máxima depende de la corriente diferencial asignada IΔn; para IΔn ≤ 30 mA y 100–300 mA el valor de la columna 3 es 40 Ω.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "columna_adoptada": 3,
+    "ra_max_general_ohm": 40
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.1",
+    "pagina_impresa": "54-5",
+    "pagina_pdf": 245,
+    "cita": "Valores máximos de resistencia de puesta a tierra de protección para un esquema TT",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "IΔn": "A",
+     "Ra": "Ω"
+    },
+    "columnas": [
+     "IΔn [A]",
+     "col1 Ra para UL=50 V [Ω]",
+     "col2 Ra para UL=24 V [Ω]",
+     "col3 Ra máximo permitido [Ω]"
+    ],
+    "filas": [
+     [
+      20,
+      2.5,
+      1.2,
+      0.6
+     ],
+     [
+      10,
+      5,
+      2.4,
+      1.2
+     ],
+     [
+      5,
+      10,
+      4.8,
+      2.4
+     ],
+     [
+      3,
+      17,
+      8,
+      4
+     ],
+     [
+      1,
+      50,
+      24,
+      12
+     ],
+     [
+      0.5,
+      100,
+      48,
+      24
+     ],
+     [
+      0.3,
+      167,
+      80,
+      40
+     ],
+     [
+      0.1,
+      500,
+      240,
+      40
+     ],
+     [
+      0.03,
+      1666,
+      800,
+      40
+     ]
+    ],
+    "nota": "Sensibilidad baja: 3 A a 20 A; media: 100 mA a 1 A; alta: hasta 30 mA inclusive. La columna 3 es la adoptada por la norma."
+   }
+  },
+  {
+   "id": "puesta_a_tierra.electrodos_materiales_resistencia",
+   "grupo": "puesta_a_tierra",
+   "tema": "Materiales de los electrodos de tierra",
+   "regla": "Los materiales y dimensiones de los electrodos se eligen para resistir la corrosión y tener resistencia mecánica adecuada.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.1",
+    "pagina_impresa": "54-5",
+    "pagina_pdf": 245,
+    "cita": "deberán ser seleccionados para resistir la corrosión y tener adecuada resistencia mecánica",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.electrodos_dimensiones_tabla_54_2",
+   "grupo": "puesta_a_tierra",
+   "tema": "Dimensiones mínimas de los electrodos enterrados",
+   "regla": "Dimensiones mínimas de los electrodos enterrados según material, forma y revestimiento.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.2",
+    "pagina_impresa": "54-6",
+    "pagina_pdf": 246,
+    "cita": "Dimensiones mínimas que deben cumplir los electrodos de puesta a tierra enterrados en el suelo",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "diametro": "mm",
+     "seccion": "mm²",
+     "espesor": "mm",
+     "recubrimiento": "µm"
+    },
+    "columnas": [
+     "material",
+     "superficie",
+     "forma",
+     "diametro_mm",
+     "seccion_mm2",
+     "espesor_mm",
+     "recubrimiento_individual_um",
+     "recubrimiento_medio_um"
+    ],
+    "filas": [
+     [
+      "acero",
+      "galvanizado por inmersión en caliente o inoxidable",
+      "fleje o pletina",
+      null,
+      100,
+      3,
+      70,
+      70
+     ],
+     [
+      "acero",
+      "galvanizado por inmersión en caliente o inoxidable",
+      "perfiles",
+      null,
+      100,
+      3,
+      70,
+      70
+     ],
+     [
+      "acero",
+      "galvanizado por inmersión en caliente o inoxidable",
+      "jabalina redonda para electrodo profundo",
+      12.6,
+      124,
+      null,
+      70,
+      70
+     ],
+     [
+      "acero",
+      "galvanizado por inmersión en caliente o inoxidable",
+      "barra redonda para electrodo de superficie",
+      10,
+      null,
+      null,
+      null,
+      50
+     ],
+     [
+      "acero",
+      "galvanizado por inmersión en caliente o inoxidable",
+      "caño",
+      25,
+      145,
+      2,
+      47,
+      55
+     ],
+     [
+      "acero",
+      "recubierto de cobre",
+      "jabalina redonda para electrodo profundo",
+      15,
+      null,
+      null,
+      2000,
+      null
+     ],
+     [
+      "acero",
+      "cobre depositado por electrólisis",
+      "jabalina redonda para electrodo profundo",
+      14,
+      null,
+      null,
+      "según IRAM 2309",
+      "según IRAM 2309"
+     ],
+     [
+      "cobre",
+      "desnudo",
+      "fleje o pletina",
+      null,
+      50,
+      2,
+      null,
+      null
+     ],
+     [
+      "cobre",
+      "desnudo",
+      "barra redonda para electrodo de superficie",
+      null,
+      25,
+      null,
+      null,
+      null
+     ],
+     [
+      "cobre",
+      "desnudo",
+      "cable (1,8 mm por cada hilo)",
+      1.8,
+      35,
+      null,
+      null,
+      null
+     ],
+     [
+      "cobre",
+      "desnudo",
+      "caño",
+      20,
+      null,
+      2,
+      null,
+      null
+     ],
+     [
+      "cobre",
+      "estañado",
+      "cable (1,8 mm por cada hilo)",
+      1.8,
+      25,
+      null,
+      1,
+      5
+     ],
+     [
+      "cobre",
+      "cincado",
+      "fleje o pletina",
+      null,
+      50,
+      2,
+      20,
+      40
+     ]
+    ],
+    "notas": [
+     "Cobre desnudo, barra redonda de superficie: 16 mm² si el riesgo de corrosión y daño mecánico es extremadamente bajo.",
+     "Un electrodo es 'de superficie' si se instala a una profundidad que no excede 0,5 m."
+    ]
+   }
+  },
+  {
+   "id": "puesta_a_tierra.jabalina_minima",
+   "grupo": "puesta_a_tierra",
+   "tema": "Jabalina de acero galvanizado",
+   "regla": "Como mínimo se emplea una jabalina JA o JL de 16 x 1500 mm.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "diametro_mm": 16,
+    "largo_mm": 1500,
+    "jabalina_acero_cobre_min": "JL o JA 14 x 1500 mm"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.3",
+    "pagina_impresa": "54-8",
+    "pagina_pdf": 248,
+    "cita": "Como minimo se debe emplear una jabalina JA o JL 16 x 1500 mm",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.armaduras_no_electrodo",
+   "grupo": "puesta_a_tierra",
+   "tema": "Armaduras de hormigón armado",
+   "regla": "No se permiten las armaduras de hormigón armado como electrodo específico de puesta a tierra, aunque sí se equipotencializan.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.3",
+    "pagina_impresa": "54-8",
+    "pagina_pdf": 248,
+    "cita": "No se permite el empleo de las armaduras de hormigon armado como electrodo especifico de puesta a tierra",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.anillo_cimientos_dos_hincados",
+   "grupo": "puesta_a_tierra",
+   "tema": "Electrodo de anillo en cimientos (obras nuevas)",
+   "regla": "Si se usa un conductor desnudo en el fondo de las zanjas de cimientos como electrodo, se incorporan como mínimo dos electrodos hincados en extremos opuestos del anillo, con cámara de inspección y barra de medición.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "electrodos_hincados_min": 2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.3",
+    "pagina_impresa": "54-8",
+    "pagina_pdf": 248,
+    "cita": "se deberan incorporar como minimo dos electrodos hincados en extremos opuestos del anillo",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.canerias_no_electrodo",
+   "grupo": "puesta_a_tierra",
+   "tema": "Cañerías metálicas de servicios",
+   "regla": "Las cañerías de agua, líquidos o gases inflamables, calefacción central, vainas de plomo y otras envolturas de cables no se emplean como electrodos de puesta a tierra.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.6",
+    "pagina_impresa": "54-8",
+    "pagina_pdf": 248,
+    "cita": "no se deberan emplear como electrodos de puesta a tierra",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.electrodo_camara_inspeccion",
+   "grupo": "puesta_a_tierra",
+   "tema": "Cámara de inspección de cada electrodo",
+   "regla": "Cada electrodo finaliza en una cámara de inspección para poder desconectar el conductor que lo vincula al sistema de puesta a tierra.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.6 Nota 2",
+    "pagina_impresa": "54-8",
+    "pagina_pdf": 248,
+    "cita": "Cada electrodo debe finalizar en una camara de inspeccion",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.jabalinas_separacion",
+   "grupo": "puesta_a_tierra",
+   "tema": "Electrodos en paralelo",
+   "regla": "Si se conectan varias jabalinas en paralelo se recomienda una separación igual o mayor que 2 veces el largo de la jabalina de mayor longitud.",
+   "tipo": "recomendado",
+   "parametros": {
+    "separacion_min_veces_largo": 2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.2 Nota",
+    "pagina_impresa": "54-7",
+    "pagina_pdf": 247,
+    "cita": "sea igual o mayor que 2 veces el largo de la jabalina de mayor longitud del conjunto",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.verificar_por_medicion",
+   "grupo": "puesta_a_tierra",
+   "tema": "Verificación de la puesta a tierra",
+   "regla": "El valor de la resistencia de puesta a tierra se verifica por medición al final de la ejecución de los trabajos y periódicamente según AEA 90364-6-61.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.2.2",
+    "pagina_impresa": "54-7",
+    "pagina_pdf": 247,
+    "cita": "debera ser verificada por medicion al final de la ejecucion de los trabajos",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.conductor_enterrado_tabla_54_3",
+   "grupo": "puesta_a_tierra",
+   "tema": "Sección mínima de los conductores de puesta a tierra enterrados",
+   "regla": "Los conductores de puesta a tierra enterrados cumplen 543.1 y las secciones mínimas de la Tabla 54.3.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "cu_mm2": {
+     "protegido_corrosion_y_mecanica": 4,
+     "protegido_corrosion_sin_mecanica": 16,
+     "sin_proteccion_corrosion": 25
+    },
+    "fe_mm2": {
+     "protegido_corrosion_y_mecanica": 10,
+     "protegido_corrosion_sin_mecanica": 16,
+     "sin_proteccion_corrosion": 50
+    }
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "Tabla 54.3",
+    "pagina_impresa": "54-9",
+    "pagina_pdf": 249,
+    "cita": "Secciones minimas de los conductores de puesta a tierra enterrados",
+    "verificacion": "visual"
+   },
+   "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
+   "tabla": {
+    "unidades": {
+     "seccion": "mm²"
+    },
+    "columnas": [
+     "protección contra la corrosión",
+     "protegido mecánicamente",
+     "no protegido mecánicamente"
+    ],
+    "filas": [
+     [
+      "protegido contra la corrosión",
+      "4 Cu / 10 Fe",
+      "16 Cu / 16 Fe"
+     ],
+     [
+      "no protegido contra la corrosión",
+      "25 Cu / 50 Fe",
+      "25 Cu / 50 Fe"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "puesta_a_tierra.barra_medicion_dimensiones",
+   "grupo": "puesta_a_tierra",
+   "tema": "Barra de medición local",
+   "regla": "La barra de medición de la cámara de inspección mide como mínimo 30 mm x 3 mm x 100 mm, con al menos 5 perforaciones.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ancho_mm": 30,
+    "espesor_mm": 3,
+    "largo_mm": 100,
+    "perforaciones_min": 5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.4",
+    "pagina_impresa": "54-9",
+    "pagina_pdf": 249,
+    "cita": "30 mm x 3 mm x 100 mm, con por lo menos 5 perforaciones",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.bep_obligatoria",
+   "grupo": "puesta_a_tierra",
+   "tema": "Barra equipotencial principal (BEP)",
+   "regla": "Toda instalación prevé una barra equipotencial principal (o barra principal de puesta a tierra) con puntos de conexión individuales para cada conductor.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.4.1",
+    "pagina_impresa": "54-9",
+    "pagina_pdf": 249,
+    "cita": "con puntos de conexion individuales para cada conductor",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.bep_desconexion_individual",
+   "grupo": "puesta_a_tierra",
+   "tema": "Desconexión de los conductores de la BEP",
+   "regla": "Cada conductor conectado a la BEP o a la barra principal de puesta a tierra debe poder desconectarse individualmente, y el desmontaje requiere herramienta.",
+   "tipo": "obligatorio",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.4.2",
+    "pagina_impresa": "54-10",
+    "pagina_pdf": 250,
+    "cita": "debera poderse desco- nectar individualmente",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  },
+  {
+   "id": "puesta_a_tierra.conductor_FE_color",
+   "grupo": "puesta_a_tierra",
+   "tema": "Conductor de puesta a tierra funcional (FE)",
+   "regla": "El conductor FE no puede ser verde, amarillo ni bicolor verde-amarillo; se marca con la sigla FE y se recomienda aislación blanca.",
+   "tipo": "recomendado",
+   "parametros": {
+    "marca": "FE",
+    "color_recomendado": "blanco"
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "industrias"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-5-54",
+    "edicion": "2006",
+    "clausula": "542.4.1 Nota 2",
+    "pagina_impresa": "54-10",
+    "pagina_pdf": 250,
+    "cita": "el conductor debera ser marcado con la sigla FE",
+    "verificacion": "ocr"
+   },
+   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+  }
+ ]
+}

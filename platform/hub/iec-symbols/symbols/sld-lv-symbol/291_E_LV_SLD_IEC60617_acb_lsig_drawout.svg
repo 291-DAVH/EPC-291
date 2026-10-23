@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="-38.525 -1.6 50.5 43.85"
+   width="50.5mm"
+   height="43.85mm"
+   role="img"
+   aria-label="Interruptor de aire ACB (símbolo de leyenda)"
+   version="1.1"
+   id="svg18"
+   sodipodi:docname="291_E_LV_SLD_IEC60617_acb_drawout.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:c2pa="http://c2pa.org/manifest">
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     id="namedview18"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="6.8862286"
+     inkscape:cx="111.01868"
+     inkscape:cy="47.849123"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg18" />
+  <metadata
+     id="metadata1">
+    <c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo3ZTRiMTZkOS05ZDNiLTQ0OGItODdkNi1jMTFkZWE4YWJkNTIAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaECrPv+E9nrvBgjmD81r0G4AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDoyZGYzOWRhMy03ZTA3LTQxNmQtOThjNC1jYmYwYjI2ZGVjNjlscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNooSFq9y1hPYrjD1WjlcmC7gAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg9nzxvS1Yg4QFl9emNmqsvjw3W3ggD1s/o/cBiOEu4iGkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaJ2VIFCu//TfBum9wgr8NM8AAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIJ2cL+Sn1ltsLJT3fWon7RHNrEPJpB52E3tv1bGkwnYgZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQEXZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjdlNGIxNmQ5LTlkM2ItNDQ4Yi04N2Q2LWMxMWRlYThhYmQ1Mi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmY5MGU2ZTA1LTJiZTctNDE1My04ZGRlLWQ3OTZiY2Q1OTU0ZHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCD2fPG9LViDhAWX16Y2aqy+PDdbeCAPWz+j9wGI4S7iIaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggEqlV7r1BWVpPNxzr4XG9mF7GFF6qU+jnYuM+XasFP3GiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggQwslkWximTLHO6LeK9XqG3oVZ033nL5y0STnNa57xk10Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQG36+U42S35gr7nF8J/+mjZT87AI7Px0gTEG7oGdNbm5z5um4HRjbokLFGrSzl7c3FDsEOse9ChDe5AItFslpOU=</c2pa:manifest>
+  </metadata>
+  <title
+     id="title1">Interruptor de aire ACB (símbolo de leyenda)</title>
+  <desc
+     id="desc1">Versión simplificada del ACB según la leyenda del plano. | Origen: Lámina 2 (108-2026-SOXXXXXX-E-DU-002)</desc>
+  <!-- Sistema de coordenadas: x=0 es el eje del conductor (o del primer polo); y=0 es el puerto superior. Unidad = 1 mm. Retícula de puertos 2,5 mm. Normas: IRAM 4502 / 4503, símbolos IEC 60617. -->
+  <g
+     id="lv_acb_basic"
+     fill="none"
+     stroke-linecap="butt"
+     stroke-linejoin="round"
+     font-family="Arial, sans-serif">
+    <line
+       x1="-0.025"
+       y1="10.657"
+       x2="-3.23"
+       y2="5.204"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line1" />
+    <rect
+       x="-11.907"
+       y="6.464"
+       width="3.75"
+       height="3.529"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="rect1" />
+    <rect
+       x="-5.025"
+       y="15.294"
+       width="10"
+       height="4.706"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="rect2" />
+    <rect
+       x="-5.025"
+       y="10.588"
+       width="10"
+       height="4.706"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="rect3" />
+    <path
+       d="M-0.77 3.769 C-1.078 3.991 -1.26 4.332 -1.26 4.701 C-1.26 5.066 -1.078 5.407 -0.77 5.629"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path3" />
+    <path
+       d="M0.735 5.629 C1.044 5.407 1.225 5.066 1.225 4.701 C1.225 4.332 1.044 3.991 0.735 3.769"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path4" />
+    <path
+       d="M-2.525 2.353 L0 0 L2.475 2.353"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path5" />
+    <path
+       d="M-2.525 3.529 L-0.025 1.176 L2.475 3.529"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path6" />
+    <path
+       d="M-2.525 33.75 L-0.025 36.25 L2.475 33.75"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path7" />
+    <path
+       d="M-2.525 32.5 L0 35 L2.475 32.5"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="path8" />
+    <line
+       x1="-10.049"
+       y1="5.882"
+       x2="-10.049"
+       y2="10.588"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line8" />
+    <line
+       x1="-10.025"
+       y1="12.923"
+       x2="-8.775"
+       y2="12.923"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line9" />
+    <line
+       x1="-7.525"
+       y1="12.923"
+       x2="-5.025"
+       y2="12.923"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line10" />
+    <line
+       x1="-10.025"
+       y1="17.629"
+       x2="-8.775"
+       y2="17.629"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line11" />
+    <line
+       x1="-7.525"
+       y1="17.629"
+       x2="-5.025"
+       y2="17.629"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line12" />
+    <line
+       x1="0"
+       y1="1.2727319"
+       x2="0"
+       y2="3.779"
+       stroke="#0000ff"
+       stroke-width="0.203594"
+       id="line13" />
+    <line
+       x1="0"
+       y1="29.412"
+       x2="0"
+       y2="35"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line14" />
+    <line
+       x1="-12.525"
+       y1="8.217"
+       x2="-7.525"
+       y2="8.217"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line15" />
+    <line
+       x1="-0.775"
+       y1="3.788"
+       x2="0.725"
+       y2="3.788"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="line16" />
+    <text
+       x="-0.025"
+       y="18.247"
+       font-size="1.7"
+       fill="#0000ff"
+       id="text16" style="stroke-width:1.4687" text-anchor="middle">I&gt;&gt;</text>
+    <text
+       x="-0.025"
+       y="13.541"
+       font-size="1.7"
+       fill="#0000ff"
+       id="text17" text-anchor="middle">I&gt;</text>
+    <line
+       x1="-10.025"
+       y1="11.765"
+       x2="-10.025"
+       y2="17.647"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       stroke-dasharray="3 1"
+       id="line17" />
+    <line
+       x1="-6.275"
+       y1="8.217"
+       x2="9.975"
+       y2="8.217"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       stroke-dasharray="3 1"
+       id="line18" />
+  <rect
+       x="-5.025"
+       y="20"
+       width="10"
+       height="4.706"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="rect2" />
+  <rect
+       x="-5.025"
+       y="24.706"
+       width="10"
+       height="4.706"
+       fill="none"
+       stroke="#0000ff"
+       stroke-width="0.25"
+       id="rect2" />
+  <text x="-0.025" y="22.953" font-size="1.7" fill="#0000ff" text-anchor="middle">I&gt;&gt;&gt;</text>
+  <text x="-0.025" y="27.659" font-size="1.7" fill="#0000ff" text-anchor="middle">I&gt;&gt;</text>
+  </g>
+  
+  
+  
+  
+  <text font-family="Arial, sans-serif" x="-14.525" y="6" font-size="1.7" font-weight="bold" text-anchor="end" fill="#0000ff">ACB</text>
+  <g
+     id="ports"
+     display="none"
+     fill="#ff00ff"
+     stroke="none">
+    <circle
+       id="port_top"
+       cx="0"
+       cy="0"
+       r="0.6"
+       data-dir="up" />
+    <circle
+       id="port_bottom"
+       cx="0"
+       cy="35"
+       r="0.6"
+       data-dir="down" />
+  </g>
+  <g
+     id="label_slots"
+     fill="#008800"
+     font-family="Arial, sans-serif">
+    <text id="slot_tag" data-key="tag" data-example="-Q1" x="-14.525" y="2.2" font-size="2.5" text-anchor="end" fill="#0000ff">{tag}</text>
+    <text id="slot_rated_current" data-key="rated_current" data-example="63 A" x="-14.525" y="9" font-size="1.7" text-anchor="end" fill="#000000">{rated_current}</text>
+    <text id="slot_breaking_capacity" data-key="breaking_capacity" data-example="10 kA" x="-14.525" y="12" font-size="1.7" text-anchor="end" fill="#000000">{breaking_capacity}</text>
+    <text id="slot_trip_unit" data-key="trip_unit" data-example="TM/ETU" x="-14.525" y="15" font-size="1.7" text-anchor="end" fill="#000000">{trip_unit}</text>
+    <text id="slot_manufacturer" data-key="manufacturer" data-example="Fabricante" x="-14.525" y="18" font-size="1.7" text-anchor="end" fill="#000000">{manufacturer}</text>
+  </g>
+</svg>

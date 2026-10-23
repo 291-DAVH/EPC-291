@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYToyNDQzYWUyYi1mNDNkLTQyMmEtYjMyZC0xZmIzZDlmNDMxNWYAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaB7BKGBXnZRYlqvywKta/VEAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpjMGFkZDg3MC1hNzgwLTRkMzQtYTJmYS03MTc0YTRiOWZmNzlscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoqIkzc2zeR3l7bsQfyzWmwQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggfsd+Hx9eoPyj9jvxdvjFwD7uy3RD/LwBxjti2Q4LgCGkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaEstggGVBvRkcgRNxg0TCVcAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCCYJdW6JLnIalz40MPqWl9jckDMUeGMG7ZgHBB1r0zf9mRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBi9Zmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjI0NDNhZTJiLWY0M2QtNDIyYS1iMzJkLTFmYjNkOWY0MzE1Zi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjZiZjY1MGZiLThkMTktNDQ4Zi04Y2VhLTNkY2Q0ODFlZmMyM3JjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCB+x34fH16g/KP2O/F2+MXAPu7LdEP8vAHGO2LZDguAIaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggODMBmWJp3Fqbi6pxhtVJwNGPleCqp0+ErB9MQn0fjmKiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggpgRW1jcnVwJA12a1QYxGN/iaPhwMxtZxLxtEWgE/dA10Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQB/uWD7bHyrDikulWx6bGg12e4lJrb1G25PxMO9Gbas62pxxTE4FPdF4vXFFJJlgmNLnIhQJOV6z0BsnOzn6HlI=</c2pa:manifest></metadata>
+  <!-- Biblioteca SLD_MV: cada <symbol> usa viewBox con origen = eje del conductor / puerto superior. Unidad = 1 mm (IRAM). -->
+  <!-- Uso: <use href="#ID" x="X+viewBox.x" y="Y+viewBox.y" width="viewBox.w" height="viewBox.h"/>  (ver _catalog.json) -->
+  <defs>
+    <symbol id="mv_cell_gam2_remonte" viewBox="-36.6 -71.61 73.2 289.67" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M-30.446 181.809 C-28.681 181.809 -27.25 180.377 -27.25 178.613 C-27.25 176.847 -28.681 175.419 -30.446 175.419" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M35.02 6.13 L35.02 0.011 L29.431 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-29.397 0.011 L-34.985 0.011 L-34.985 6.13" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.985 211.397 L-34.985 217.029 L-29.397 217.029" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="0" y1="212.5" x2="0" y2="217.069" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="30.505" y1="5" x2="35" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="0" y1="5.015" x2="0" y2="204.676" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.456" y1="5" x2="30.505" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-27.265" y1="178.637" x2="-16.897" y2="178.637" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.382" y1="178.637" x2="0" y2="178.637" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="174.098" x2="-16.912" y2="183.132" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.402" y1="174.098" x2="-12.402" y2="183.132" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="35" y1="11.662" x2="35" y2="217.029" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-23.838" y1="0" x2="-18.279" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-12.721" y1="0" x2="-7.615" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-2.538" y1="0" x2="2.779" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="8.338" y1="0" x2="13.897" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="19.456" y1="0" x2="25.015" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-35" y1="11.662" x2="-35" y2="205.838" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-23.838" y1="217.02" x2="-18.279" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-12.721" y1="217.02" x2="-7.615" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-2.538" y1="217.02" x2="2.779" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="8.338" y1="217.02" x2="13.897" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="19.456" y1="217.02" x2="25.015" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="29.431" y1="217.02" x2="35.02" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-4.029 212.167 L4.412 212.167 L0 203.343 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  <line x1="-35" y1="5" x2="-30.456" y2="5" stroke="#ff0000" stroke-width="0.25" /></g>
+    </symbol>
+    <symbol id="mv_cell_dmva_proteccion" viewBox="-36.6 -71.61 145.7 289.67" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="-10.324" y1="32.132" x2="-0.01" y2="45.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.324" y1="142.593" x2="-23.686" y2="153.765" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.324" y1="70.544" x2="-0.01" y2="84.103" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.065" y1="66.015" x2="2.255" y2="70.544" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.065" y1="70.544" x2="2.255" y2="66.015" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M107.515 6.132 L107.515 0.011 L104.691 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-32.157 0.011 L-34.98 0.011 L-34.98 6.132" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.98 211.397 L-34.98 217.029 L-32.157 217.029" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-21.422 90.882 L-21.422 99.912 L-12.392 95.397 L-21.422 90.882" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M9.034 113.466 C9.034 108.471 4.99 104.426 -0.005 104.426 C-4.563 104.426 -8.256 108.471 -8.256 113.466 C-8.256 118.456 -4.563 122.5 -0.005 122.5 C4.99 122.5 9.034 118.456 9.034 113.466" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-30.461 181.809 C-28.691 181.809 -27.26 180.377 -27.26 178.613 C-27.26 176.843 -28.691 175.412 -30.461 175.412" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="212.5" x2="0" y2="217.069" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="-35" y1="5" x2="-30.466" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="103" y1="5" x2="107.5" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="0" y1="5.015" x2="0" y2="29.618" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="45.691" x2="0" y2="68.015" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="84.103" x2="0" y2="203.471" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.466" y1="5" x2="103" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-27.26" y1="178.637" x2="-16.907" y2="178.637" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.392" y1="178.637" x2="-0.01" y2="178.637" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-35" y1="11.676" x2="-35" y2="217.029" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-26.598" y1="0" x2="100.064" y2="0" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="217.02" x2="-34.98" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-26.598" y1="217.02" x2="-21.039" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-15.48" y1="217.02" x2="-10.136" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-5.059" y1="217.02" x2="0.02" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="5.578" y1="217.02" x2="11.137" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="16.696" y1="217.02" x2="22.255" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="27.814" y1="217.02" x2="33.373" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="38.931" y1="217.02" x2="44.49" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="50.034" y1="217.02" x2="55.593" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="61.152" y1="217.02" x2="66.711" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="72.27" y1="217.02" x2="77.828" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="83.387" y1="217.02" x2="88.946" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="94.505" y1="217.02" x2="100.064" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="104.691" y1="217.02" x2="107.515" y2="217.02" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="107.5" y1="11.676" x2="107.5" y2="217.029" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-2.132" y1="29.608" x2="2.314" y2="29.608" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.877" y1="38.922" x2="-19.157" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.907" y1="38.922" x2="-13.466" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-8.296" y1="38.922" x2="-5.167" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="34.265" x2="-25.882" y2="43.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="149.159" x2="-25.882" y2="158.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="35.426" x2="-28.186" y2="42.397" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="150.307" x2="-28.186" y2="157.25" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="36.588" x2="-30.539" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="151.455" x2="-30.539" y2="156.088" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.216" y1="36.588" x2="-19.216" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.073" y1="151.455" x2="-10.073" y2="156.074" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.877" y1="153.784" x2="-23.686" y2="153.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.082" y1="153.784" x2="-0.01" y2="153.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="38.912" x2="-16.912" y2="46.574" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="52.132" x2="-16.912" y2="57.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="63.235" x2="-16.912" y2="68.794" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="74.353" x2="-16.912" y2="79.912" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="85.471" x2="-16.912" y2="93.132" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="97.647" x2="-16.912" y2="103.618" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="109.176" x2="-16.912" y2="114.735" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="120.294" x2="-16.912" y2="125.812" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="131.304" x2="-16.912" y2="136.796" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="142.288" x2="-16.912" y2="148.172" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="174.088" x2="-16.912" y2="183.132" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.402" y1="174.088" x2="-12.402" y2="183.132" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.03 203.343 L4.412 203.343 L0 212.167 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  </g>
+    </symbol>
+    <symbol id="mv_cell_im_interruptor" viewBox="-36.6 -71.61 73.2 289.97" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="-10.328" y1="32.132" x2="-0.015" y2="45.691" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M35.02 6.132 L35.02 0.011 L29.431 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-29.397 0.011 L-34.985 0.011 L-34.985 6.132" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.985 211.73 L-34.985 217.363 L-29.397 217.363" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M1.706 31.289 C1.706 30.348 0.946 29.588 0.01 29.588 C-0.852 29.588 -1.546 30.348 -1.546 31.289 C-1.546 32.225 -0.852 32.985 0.01 32.985 C0.946 32.985 1.706 32.225 1.706 31.289" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-30.466 182.142 C-28.696 182.142 -27.265 180.711 -27.265 178.946 C-27.265 177.177 -28.696 175.746 -30.466 175.746" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-35" y1="5" x2="-30.471" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="30.49" y1="5" x2="35" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="-30.471" y1="5" x2="30.49" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-27.265" y1="178.971" x2="-16.912" y2="178.971" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.382" y1="178.971" x2="-0.015" y2="178.971" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-23.838" y1="0" x2="-18.279" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-12.721" y1="0" x2="-7.615" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-2.553" y1="0" x2="2.765" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="8.324" y1="0" x2="13.882" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="19.441" y1="0" x2="25" y2="0" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-35" y1="217.353" x2="-34.985" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-23.838" y1="217.353" x2="-18.279" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-12.721" y1="217.353" x2="-7.615" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-2.553" y1="217.353" x2="2.765" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="8.324" y1="217.353" x2="13.882" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="19.441" y1="217.353" x2="25" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="29.431" y1="217.353" x2="35.02" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="0" y1="5.015" x2="0" y2="29.618" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="45.691" x2="0" y2="205.01" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="35" y1="11.676" x2="35" y2="217.363" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="11.676" x2="-35" y2="217.363" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-2.136" y1="29.608" x2="2.309" y2="29.608" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="34.265" x2="-25.882" y2="43.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="35.426" x2="-28.186" y2="42.397" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="36.588" x2="-30.539" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="38.922" x2="-19.162" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.216" y1="36.588" x2="-19.216" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="174.423" x2="-16.912" y2="183.466" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.402" y1="174.423" x2="-12.402" y2="183.466" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.03 203.676 L4.412 203.676 L0 212.5 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  </g>
+    </symbol>
+    <symbol id="mv_transformer_2w" viewBox="-54.41 -1.6 65.09 50.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M9.681 17.466 C9.681 12.113 5.348 7.779 -0.005 7.779 C-5.353 7.779 -9.686 12.113 -9.686 17.466 C-9.686 22.814 -5.353 27.147 -0.005 27.147 C5.348 27.147 9.681 22.814 9.681 17.466" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M9.681 31.02 C9.681 25.672 5.348 21.338 -0.005 21.338 C-5.353 21.338 -9.686 25.672 -9.686 31.02 C-9.686 36.373 -5.353 40.706 -0.005 40.706 C5.348 40.706 9.681 36.373 9.681 31.02" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="7.779" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="40.721" x2="0" y2="47.5" stroke="#0000ff" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="mv_vpis" viewBox="-44.89 -1 46.49 16.56" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M-31.544 10.672 C-29.775 10.672 -28.343 9.24 -28.343 7.476 C-28.343 5.74 -29.775 4.337 -31.544 4.337" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.343" y1="7.5" x2="-17.99" y2="7.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.461" y1="7.5" x2="0" y2="7.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="14.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-17.99" y1="3.038" x2="-17.99" y2="11.995" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.48" y1="3.038" x2="-13.48" y2="11.995" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-33.48" y="4.327" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">VPIS</text>
+  </g>
+    </symbol>
+    <symbol id="mv_disconnector" viewBox="-24.6 -1.6 27.4 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="-11.211" y1="6.789" x2="0.083" y2="20.348" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M1.804 5.946 C1.804 5.005 1.044 4.245 0.108 4.245 C-0.833 4.245 -1.593 5.005 -1.593 5.946 C-1.593 6.882 -0.833 7.642 0.108 7.642 C1.044 7.642 1.804 6.882 1.804 5.946" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="4.275" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="20.348" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.24" y1="4.265" x2="1.52" y2="4.265" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-13.186" y="8.775" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">DS</text>
+  </g>
+    </symbol>
+    <symbol id="mv_ct_toroidal" viewBox="-22.29 -1.6 32.42 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M9.132 12.142 C9.132 7.147 5.088 3.103 0.093 3.103 C-4.897 3.103 -8.941 7.147 -8.941 12.142 C-8.941 17.132 -4.897 21.176 0.093 21.176 C5.088 21.176 9.132 17.132 9.132 12.142" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-10.882" y="8.775" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CT</text>
+  </g>
+    </symbol>
+    <symbol id="mv_cable_termination_down" viewBox="-17.78 -1 23.2 15.1" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.412 2.373 L4.412 2.373 L0 12.5 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  </g>
+    </symbol>
+    <symbol id="mv_cable_termination_up" viewBox="-17.78 -1 23.2 15.1" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.011" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.412 12.5 L4.412 12.5 L0 2.5 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  </g>
+    </symbol>
+    <symbol id="mv_circuit_breaker" viewBox="-20.23 -1.6 23.2 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="5.833" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.961" y1="3.873" x2="1.961" y2="7.794" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.961" y1="7.794" x2="1.961" y2="3.873" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.578" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.578" x2="-6.863" y2="7.794" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-8.824" y="7.794" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CB</text>
+  </g>
+    </symbol>
+    <symbol id="mv_load_break_switch" viewBox="-19.25 -1.6 22.21 23.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="16.667" x2="0" y2="20" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="16.667" x2="-5.882" y2="5.882" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.922 10.539 C-4.51 8.824 -2.549 8.039 -1.765 9.314" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-7.843" y="7.353" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">LBS</text>
+  </g>
+    </symbol>
+    <symbol id="mv_earthing_switch" viewBox="-16.8 -1.6 23.68 20.74" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="10.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="10.784" x2="5.882" y2="5.882" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="10.784" x2="0" y2="14.706" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-3.431" y1="14.706" x2="3.431" y2="14.706" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.206" y1="16.422" x2="2.206" y2="16.422" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-0.98" y1="18.137" x2="0.98" y2="18.137" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-5.392" y="6.127" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">ES</text>
+  </g>
+    </symbol>
+    <symbol id="mv_fuse" viewBox="-15.09 -1.6 17.8 20.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.716" y="2.941" width="3.431" height="10.784" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="13.725" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-3.676" y="5.392" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">FUSE</text>
+  </g>
+    </symbol>
+    <symbol id="mv_surge_arrester" viewBox="-16.8 -1.6 21.23 23.68" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.961" y="3.922" width="3.922" height="10.784" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.451 12.745 L0 8.824 L2.451 4.902" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="14.706" x2="0" y2="17.647" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-3.431" y1="17.647" x2="3.431" y2="17.647" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.206" y1="19.363" x2="2.206" y2="19.363" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-0.98" y1="21.078" x2="0.98" y2="21.078" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-5.392" y="7.598" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">SA</text>
+  </g>
+    </symbol>
+    <symbol id="mv_ct" viewBox="-17.78 -1.6 23.2 20.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.412 8.824 C4.412 11.26 2.436 13.235 0 13.235 C-2.436 13.235 -4.412 11.26 -4.412 8.824 C-4.412 6.387 -2.436 4.412 0 4.412 C2.436 4.412 4.412 6.387 4.412 8.824" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.373" y="5.882" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CT</text>
+  </g>
+    </symbol>
+    <symbol id="mv_vt" viewBox="-16.8 -1.6 21.23 20.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M3.431 7.353 C3.431 9.25 1.897 10.784 0 10.784 C-1.897 10.784 -3.431 9.25 -3.431 7.353 C-3.431 5.456 -1.897 3.922 0 3.922 C1.897 3.922 3.431 5.456 3.431 7.353" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M3.431 11.765 C3.431 13.662 1.897 15.196 0 15.196 C-1.897 15.196 -3.431 13.662 -3.431 11.765 C-3.431 9.868 -1.897 8.333 0 8.333 C1.897 8.333 3.431 9.868 3.431 11.765" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="15.196" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-5.392" y="6.373" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">VT</text>
+  </g>
+    </symbol>
+    <symbol id="mv_motor_3ph" viewBox="-20.84 -1.6 27.24 17.58" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M5.392 9.314 C5.392 12.294 2.98 14.706 0 14.706 C-2.98 14.706 -5.392 12.294 -5.392 9.314 C-5.392 6.333 -2.98 3.922 0 3.922 C2.98 3.922 5.392 6.333 5.392 9.314" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="10.784" font-size="5.392" font-weight="bold" text-anchor="middle" fill="#0000ff">M</text>
+    <text x="0" y="14.216" font-size="3.47" text-anchor="middle" fill="#0000ff">3~</text>
+    <text x="-7.353" y="4.51" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">MOTOR</text>
+  </g>
+    </symbol>
+    <symbol id="mv_generator" viewBox="-18.76 -1.6 25.15 17.58" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M5.392 9.314 C5.392 12.294 2.98 14.706 0 14.706 C-2.98 14.706 -5.392 12.294 -5.392 9.314 C-5.392 6.333 -2.98 3.922 0 3.922 C2.98 3.922 5.392 6.333 5.392 9.314" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="10.784" font-size="5.392" font-weight="bold" text-anchor="middle" fill="#0000ff">G</text>
+    <text x="0" y="14.216" font-size="3.47" text-anchor="middle" fill="#0000ff">3~</text>
+    <text x="-7.353" y="4.51" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">GEN</text>
+  </g>
+    </symbol>
+    <symbol id="mv_capacitor_bank" viewBox="-17.78 -1.6 23.2 15.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.412" y1="4.412" x2="4.412" y2="4.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.412" y1="6.863" x2="4.412" y2="6.863" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="6.863" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.373" y="2.696" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CAP</text>
+  </g>
+    </symbol>
+    <symbol id="mv_cell_qm_fusibles" viewBox="-36.6 -71.61 73.2 289.97" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M35.02 6.132 L35.02 0.011 L29.431 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-29.397 0.011 L-34.985 0.011 L-34.985 6.132" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.985 211.73 L-34.985 217.363 L-29.397 217.363" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M29.431 217.363 L35.02 217.363 L35.02 211.73" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-23.838" y1="0" x2="25" y2="0" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-23.838" y1="217.353" x2="25" y2="217.353" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="35" y1="11.676" x2="35" y2="211.716" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="11.676" x2="-35" y2="211.716" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="5" x2="-30.471" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="30.49" y1="5" x2="35" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="-30.471" y1="5" x2="30.49" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="5.015" x2="0" y2="29.618" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.136" y1="29.608" x2="2.309" y2="29.608" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M1.706 31.289 C1.706 32.225 0.946 32.985 0.01 32.985 C-0.847 32.985 -1.541 32.225 -1.541 31.289 C-1.541 30.353 -0.847 29.593 0.01 29.593 C0.946 29.593 1.706 30.353 1.706 31.289 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.328" y1="32.132" x2="-0.015" y2="45.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="34.265" x2="-25.882" y2="43.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="35.426" x2="-28.186" y2="42.397" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="36.588" x2="-30.539" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="38.922" x2="-19.162" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.216" y1="36.588" x2="-19.216" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="45.691" x2="0" y2="69.118" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-2.463" y="69.118" width="5.159" height="16.667" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="85.784" x2="0" y2="203.676" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.463" y1="77.451" x2="-16.912" y2="77.451" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-16.912" y1="38.912" x2="-16.912" y2="148.44" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-16.907" y1="38.922" x2="-5.167" y2="38.922" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-10.323" y1="142.797" x2="-23.686" y2="154.098" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="149.44" x2="-25.882" y2="158.745" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="150.601" x2="-28.186" y2="157.583" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="151.761" x2="-30.539" y2="156.422" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.073" y1="151.761" x2="-10.073" y2="156.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.877" y1="154.118" x2="-23.686" y2="154.118" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.082" y1="154.118" x2="-0.01" y2="154.118" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-30.466 182.142 C-28.696 182.142 -27.265 180.711 -27.265 178.946 C-27.265 177.176 -28.696 175.745 -30.466 175.745" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-27.265" y1="178.971" x2="-16.912" y2="178.971" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.382" y1="178.971" x2="-0.015" y2="178.971" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.912" y1="174.422" x2="-16.912" y2="183.466" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.402" y1="174.422" x2="-12.402" y2="183.466" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.03 203.676 L4.412 203.676 L0 212.5 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+  </g>
+    </symbol>
+    <symbol id="mv_cell_cm_medicion_tension" viewBox="-36.6 -71.61 73.2 290.02" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M35.02 6.132 L35.02 0.011 L29.431 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-29.397 0.011 L-34.985 0.011 L-34.985 6.132" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.985 211.779 L-34.985 217.412 L-29.397 217.412" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M29.431 217.412 L35.02 217.412 L35.02 211.779" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-23.838" y1="0" x2="25" y2="0" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-23.838" y1="217.402" x2="25" y2="217.402" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="35" y1="11.676" x2="35" y2="211.765" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="11.676" x2="-35" y2="211.765" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="5" x2="-30.471" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="30.49" y1="5" x2="35" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="-30.471" y1="5" x2="30.49" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="5.015" x2="0" y2="29.618" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.09" y1="29.608" x2="2.309" y2="29.608" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M1.706 31.289 C1.706 32.225 0.946 32.985 0.01 32.985 C-0.829 32.985 -1.507 32.225 -1.507 31.289 C-1.507 30.353 -0.829 29.593 0.01 29.593 C0.946 29.593 1.706 30.353 1.706 31.289 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.132" y1="32.132" x2="-0.014" y2="45.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="34.265" x2="-25.882" y2="43.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="35.426" x2="-28.186" y2="42.397" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="36.588" x2="-30.539" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="38.922" x2="-19.162" y2="38.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.216" y1="36.588" x2="-19.216" y2="41.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="45.691" x2="0" y2="69.118" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-2.409" y="69.118" width="5.105" height="16.667" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="85.784" x2="0" y2="123.039" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.127" y1="98.721" x2="-23.686" y2="110.029" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.882" y1="105.368" x2="-25.882" y2="114.676" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-28.186" y1="106.529" x2="-28.186" y2="113.515" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-30.539" y1="107.691" x2="-30.539" y2="112.353" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.853" y1="107.691" x2="-9.853" y2="112.338" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-25.877" y1="110.049" x2="-23.686" y2="110.049" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.863" y1="110.049" x2="-0.01" y2="110.049" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M6.863 129.902 C6.863 133.691 3.789 136.765 0 136.765 C-3.386 136.765 -6.131 133.691 -6.131 129.902 C-6.131 126.113 -3.386 123.039 0 123.039 C3.789 123.039 6.863 126.113 6.863 129.902 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M6.863 138.824 C6.863 142.613 3.789 145.686 0 145.686 C-3.386 145.686 -6.131 142.613 -6.131 138.824 C-6.131 135.034 -3.386 131.961 0 131.961 C3.789 131.961 6.863 135.034 6.863 138.824 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="mv_cell_gbc_medida" viewBox="-36.6 -71.61 73.2 290.02" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><path d="M35.02 6.132 L35.02 0.011 L29.431 0.011" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-29.397 0.011 L-34.985 0.011 L-34.985 6.132" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M-34.985 211.779 L-34.985 217.412 L-29.397 217.412" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <path d="M29.431 217.412 L35.02 217.412 L35.02 211.779" fill="none" stroke="#dcdcdc" stroke-width="0.25" />
+    <line x1="-25.015" y1="0" x2="23.873" y2="0" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-25.015" y1="217.402" x2="23.873" y2="217.402" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="35" y1="11.676" x2="35" y2="211.765" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="11.676" x2="-35" y2="211.765" stroke="#dcdcdc" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-35" y1="5" x2="-30.471" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="30.49" y1="5" x2="35" y2="5" stroke="#ff0000" stroke-width="0.25" />
+    <line x1="-30.471" y1="5" x2="-14.706" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="14.706" y1="5" x2="30.49" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-14.706" y1="5" x2="-14.706" y2="196.569" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="14.706" y1="5" x2="14.706" y2="196.569" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-14.706" y1="196.569" x2="14.706" y2="196.569" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-7.843 74.02 C-7.843 77.809 -10.917 80.882 -14.706 80.882 C-18.495 80.882 -21.569 77.809 -21.569 74.02 C-21.569 70.23 -18.495 67.157 -14.706 67.157 C-10.917 67.157 -7.843 70.23 -7.843 74.02 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="14.706" y1="59.314" x2="23.382" y2="59.314" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="23.382" y1="59.314" x2="23.382" y2="66.667" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="20.686" y="66.667" width="5.392" height="16.667" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="23.382" y1="83.333" x2="23.382" y2="88.725" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M28.284 93.627 C28.284 96.333 26.088 98.529 23.382 98.529 C20.678 98.529 18.83 96.333 18.83 93.627 C18.83 90.922 20.678 88.725 23.382 88.725 C26.088 88.725 28.284 90.922 28.284 93.627 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M28.284 100 C28.284 102.706 26.088 104.902 23.382 104.902 C20.678 104.902 18.83 102.706 18.83 100 C18.83 97.294 20.678 95.098 23.382 95.098 C26.088 95.098 28.284 97.294 28.284 100 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="mv_protection_relay" viewBox="-45.83 -1.6 64.93 23.52" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.118" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-13.725" y="4.118" width="27.337" height="11.765" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="13.611" y1="10" x2="17.5" y2="10" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-15.686" y="6.569" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">RELAY</text>
+  </g>
+    </symbol>
+    <symbol id="mv_energy_meter" viewBox="-41.27 -1.6 47.27 26.87" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5" y="2.941" width="10" height="12.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-5" y1="6.069" x2="5" y2="6.069" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="12.255" font-size="3.676" fill="#0000ff" text-anchor="middle">kWh</text>
+    <text x="-6.961" y="5.392" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">kWh</text>
+  </g>
+    </symbol>
+    <symbol id="mv_switch_fuse_combination" viewBox="-42.03 -1.6 44.99 38.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.608" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.961" y1="4.608" x2="1.961" y2="4.608" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="17.353" x2="-5.882" y2="6.569" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.922 11.225 C-4.51 9.51 -2.549 8.725 -1.765 10" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="17.353" x2="0" y2="21.275" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.716" y="21.275" width="3.431" height="10.784" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="32.059" x2="0" y2="35" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.716" y1="26.667" x2="-7.843" y2="26.667" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-7.843" y1="26.667" x2="-7.843" y2="11.961" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="-7.843" y1="11.961" x2="-2.941" y2="11.961" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-9.804" y="8.039" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">LBS+F</text>
+  </g>
+    </symbol>
+    <symbol id="mv_neutral_earthing_resistor" viewBox="-28.5 -1.6 33.6 29.12" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-2.5" y="2.5" width="5" height="7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="7" font-size="3.47" fill="#0000ff" text-anchor="middle">R</text>
+      <line x1="0" y1="10" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-3.5" y1="12.5" x2="3.5" y2="12.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.5" y1="14" x2="2.5" y2="14" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.5" y1="15.5" x2="1.5" y2="15.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-4" y="5.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">NER</text>
+    </g>
+  </symbol>
+  <symbol id="mv_reactor" viewBox="-28.09 -1.6 33.69 35.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0 2.5 Q4 4.5 0 6.5 Q4 8.5 0 10.5 Q4 12.5 0 14.5 Q4 16.5 0 18.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="18.5" x2="0" y2="21" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-5.5" y="10.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">L</text>
+    </g>
+  </symbol>
+  <symbol id="mv_transformer_3w" viewBox="-31.0 -1.6 43.6 44.12" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 7.5 C5 10.261 2.761 12.5 0 12.5 C-2.761 12.5 -5 10.261 -5 7.5 C-5 4.739 -2.761 2.5 0 2.5 C2.761 2.5 5 4.739 5 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="13.25" x2="5" y2="13.25" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="14.25" x2="5" y2="14.25" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1 20 C-1 22.761 -3.239 25 -6 25 C-8.761 25 -11 22.761 -11 20 C-11 17.239 -8.761 15 -6 15 C-3.239 15 -1 17.239 -1 20" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-6" y1="25" x2="-6" y2="27.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M11 20 C11 22.761 8.761 25 6 25 C3.239 25 1 22.761 1 20 C1 17.239 3.239 15 6 15 C8.761 15 11 17.239 11 20" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="6" y1="25" x2="6" y2="27.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="7.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">T</text>
+    </g>
+  </symbol>
+  <symbol id="mv_autotransformer" viewBox="-21.46 -1.6 30.56 29.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 7.5 C5 10.261 2.761 12.5 0 12.5 C-2.761 12.5 -5 10.261 -5 7.5 C-5 4.739 -2.761 2.5 0 2.5 C2.761 2.5 5 4.739 5 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0.8 3.7 C0.8 4.142 0.442 4.5 0 4.5 C-0.442 4.5 -0.8 4.142 -0.8 3.7 C-0.8 3.258 -0.442 2.9 0 2.9 C0.442 2.9 0.8 3.258 0.8 3.7" fill="#0000ff" stroke="#0000ff" stroke-width="0.18"/>
+      <line x1="5" y1="7.5" x2="7.5" y2="7.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.5" x2="0" y2="15" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="6" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">AT</text>
+    </g>
+  </symbol>
+  <symbol id="mv_petersen_coil" viewBox="-38.14 -1.6 43.74 37.62" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="osifont, ISOCPEUR, 'DejaVu Sans', Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0 2.5 Q4 4.5 0 6.5 Q4 8.5 0 10.5 Q4 12.5 0 14.5 Q4 16.5 0 18.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="18.5" x2="0" y2="21" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-3.5" y1="21" x2="3.5" y2="21" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.5" y1="22.5" x2="2.5" y2="22.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.5" y1="24" x2="1.5" y2="24" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6" y="10.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">L</text>
+    </g>
+  </symbol>
+</defs>
+</svg>

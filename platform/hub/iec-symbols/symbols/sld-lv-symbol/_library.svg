@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo5ODJkZGIwZS1iNzk4LTQ5ZmQtOWYzOS1lYjAxZjA5MjA2NjAAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaArkOBPONcj03zLaWwHvnf0AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDozZGU1ZDk1Yy01ZjM2LTQyY2QtOWUxNC1jYTAzZWE0MjRhMjBscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoA7ej9GuG8GTSLmfkA6rJjQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggi9w25PaWnUgE4SwkOdcoIA8HPEWYD7OLGFs9+OuWbWSkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaB3jwQw/WXMo96g9M0w9ZfQAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCCs1rBl9GzpbkvVcIlY7FQNUPvcc5xjWskncjwP8UWMMGRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBi9Zmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjk4MmRkYjBlLWI3OTgtNDlmZC05ZjM5LWViMDFmMDkyMDY2MC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjNlZDBiNmJjLTUyMTItNGIwNy05ZDJiLTZiODFiMGJlOTcwNHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCCL3Dbk9padSAThLCQ51yggDwc8RZgPs4sYWz3465ZtZKJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggS5DliNgJd0QFu1MmlLIUodeMN8GcRkIoyo6N+Ap8IwmiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggQ5OgUkyZR26JLI9+HMYkgqE2Tj/ahKAVImLjwA5tNK50Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQBmLdzdj8/R9OSqu5//6fnq5sOVna2us6G90yEBZ/BAyW3yD5w0mHhuDKNQkYpzNWo/+EpcnYfnuh6aqdiB5Ih0=</c2pa:manifest></metadata>
+  <!-- Biblioteca SLD_LV: cada <symbol> usa viewBox con origen = eje del conductor / puerto superior. Unidad = 1 mm (IRAM). -->
+  <!-- Uso: <use href="#ID" x="X+viewBox.x" y="Y+viewBox.y" width="viewBox.w" height="viewBox.h"/>  (ver _catalog.json) -->
+  <defs>
+    <symbol id="lv_acb_motorized" viewBox="-68.08 -1.6 77.56 38.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-0.015" y1="14.779" x2="-4.206" y2="7.221" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-15.515" y="8.971" width="4.897" height="4.897" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.544" y="21.221" width="13.059" height="6.515" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.544" y="14.691" width="13.059" height="6.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-13.074 16.324 L-13.074 17.956 L-13.074 18.765" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-0.98 5.24 C-1.382 5.544 -1.618 6.02 -1.618 6.525 C-1.618 7.025 -1.382 7.5 -0.98 7.804" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M0.966 7.804 C1.368 7.5 1.603 7.025 1.603 6.525 C1.603 6.02 1.368 5.544 0.966 5.24" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.279 3.265 L0 0 L3.25 3.265" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.279 4.897 L-0.015 1.632 L3.25 4.897" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-19.588 31.058 C-19.588 29.677 -20.686 28.552 -22.034 28.552 C-23.387 28.552 -24.485 29.677 -24.485 31.058 C-24.485 32.444 -23.387 33.569 -22.034 33.569 C-20.686 33.569 -19.588 32.444 -19.588 31.058" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.088" y1="8.162" x2="-13.088" y2="14.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.088" y1="20.397" x2="-13.088" y2="22.029" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.088" y1="23.662" x2="-13.088" y2="25.294" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.088" y1="26.926" x2="-13.088" y2="28.567" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.088" y1="30.24" x2="-13.088" y2="31.068" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.074" y1="17.975" x2="-11.441" y2="17.975" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.809" y1="17.975" x2="-6.544" y2="17.975" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.074" y1="24.495" x2="-11.441" y2="24.495" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.809" y1="24.495" x2="-6.544" y2="24.495" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="1.632" x2="0" y2="5.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="27.735" x2="0" y2="35" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.338" y1="11.407" x2="-9.809" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-8.176" y1="11.407" x2="-6.544" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.912" y1="11.407" x2="-3.279" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.647" y1="11.407" x2="-0.015" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="1.618" y1="11.407" x2="3.25" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="4.882" y1="11.407" x2="6.515" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="8.147" y1="11.407" x2="8.48" y2="11.407" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1" y1="5.23" x2="0.971" y2="5.23" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.603" y1="31.083" x2="-16.338" y2="31.083" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-14.706" y1="31.083" x2="-13.074" y2="31.083" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-3.721" y="26.25" font-size="4.069" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-2.25" y="19.721" font-size="4.069" fill="#0000ff">I&gt;</text>
+    <text x="-23.603" y="32.59" font-size="4.069" fill="#0000ff">M</text>
+    <text x="-19.598" y="18.574" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">ACB</text>
+  </g>
+    </symbol>
+    <symbol id="lv_mccb_motorized" viewBox="-68.03 -1.6 78.44 50.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0.034" y1="14.779" x2="-4.172" y2="7.221" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="1.652" y1="8.162" x2="-1.613" y2="4.897" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.613" y1="8.162" x2="1.652" y2="4.897" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-15.48" y="8.971" width="4.897" height="4.897" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.51" y="21.206" width="13.059" height="6.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.51" y="27.735" width="13.059" height="6.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.51" y="14.676" width="13.059" height="6.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-6.51" y="34.265" width="13.059" height="6.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-13.025 30.191 L-13.025 31 L-13.025 31.824" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-13.025 16.309 L-13.025 17.941 L-13.025 18.765" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.245 3.265 L0 0 L3.284 3.265" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.245 4.897 L0.02 1.632 L3.284 4.897" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.245 44.235 L0 47.5 L3.284 44.235" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.245 42.603 L0.02 45.868 L3.284 42.603" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-19.554 44.23 C-19.554 42.877 -20.652 41.69 -22.005 41.69 C-23.353 41.69 -24.451 42.877 -24.451 44.23 C-24.451 45.578 -23.353 46.676 -22.005 46.676 C-20.652 46.676 -19.554 45.578 -19.554 44.23" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="8.162" x2="-13.039" y2="14.676" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="20.397" x2="-13.039" y2="22.029" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="23.662" x2="-13.039" y2="25.294" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="26.926" x2="-13.039" y2="28.559" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="33.456" x2="-13.039" y2="35.074" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="36.706" x2="-13.039" y2="38.338" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="39.971" x2="-13.039" y2="41.69" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.039" y1="43.412" x2="-13.039" y2="44.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.025" y1="17.931" x2="-11.392" y2="17.931" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.76" y1="17.931" x2="-6.51" y2="17.931" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.025" y1="24.451" x2="-11.392" y2="24.451" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.76" y1="24.451" x2="-6.51" y2="24.451" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.025" y1="31.02" x2="-11.392" y2="31.02" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.76" y1="31.02" x2="-6.51" y2="31.02" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-13.025" y1="37.539" x2="-11.392" y2="37.539" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.76" y1="37.539" x2="-6.51" y2="37.539" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="1.632" x2="0" y2="6.529" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="40.794" x2="0" y2="45.868" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-16.289" y1="11.412" x2="-9.76" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-8.127" y1="11.412" x2="-6.51" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.877" y1="11.412" x2="-3.245" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.613" y1="11.412" x2="0.02" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="1.652" y1="11.412" x2="3.284" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="4.917" y1="11.412" x2="6.549" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="8.181" y1="11.412" x2="9.412" y2="11.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="2.887" y1="37.931" x2="5.328" y2="37.931" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="3.284" y1="38.765" x2="4.917" y2="38.765" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="3.696" y1="39.598" x2="4.52" y2="39.598" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="4.118" y1="35.485" x2="4.118" y2="37.941" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.554" y1="44.235" x2="-16.289" y2="44.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-14.657" y1="44.235" x2="-13.025" y2="44.235" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-3.686" y="26.235" font-size="4.069" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-5.157" y="32.765" font-size="4.069" fill="#0000ff">I&gt;&gt;&gt;</text>
+    <text x="-2.201" y="19.721" font-size="4.069" fill="#0000ff">I&gt;</text>
+    <text x="-5.319" y="39.294" font-size="4.069" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-23.569" y="45.706" font-size="4.069" fill="#0000ff">M</text>
+    <text x="-19.559" y="18.574" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">MCCB</text>
+  </g>
+    </symbol>
+    <symbol id="lv_acb_basic" viewBox="-25.87 -1.6 36.85 38.85" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-0.025" y1="10.657" x2="-3.23" y2="5.204" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-11.907" y="6.464" width="3.75" height="3.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="15.294" width="10" height="4.706" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="10.588" width="10" height="4.706" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-0.77 3.769 C-1.078 3.991 -1.26 4.332 -1.26 4.701 C-1.26 5.066 -1.078 5.407 -0.77 5.629" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M0.735 5.629 C1.044 5.407 1.225 5.066 1.225 4.701 C1.225 4.332 1.044 3.991 0.735 3.769" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 2.353 L0 0 L2.475 2.353" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 3.529 L-0.025 1.176 L2.475 3.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 33.75 L-0.025 36.25 L2.475 33.75" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 32.5 L0 35 L2.475 32.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.049" y1="5.882" x2="-10.049" y2="10.588" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="12.923" x2="-8.775" y2="12.923" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="12.923" x2="-5.025" y2="12.923" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="17.629" x2="-8.775" y2="17.629" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="17.629" x2="-5.025" y2="17.629" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="3.779" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="20" x2="0" y2="35" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.525" y1="8.217" x2="-7.525" y2="8.217" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-0.775" y1="3.788" x2="0.725" y2="3.788" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-2.863" y="18.92" font-size="3.47" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-1.73" y="14.215" font-size="3.47" fill="#0000ff">I&gt;</text>
+    <text x="-14.461" y="14.302" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">ACB</text>
+  <line x1="-10.025" y1="11.765" x2="-10.025" y2="17.647" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /><line x1="-6.275" y1="8.217" x2="9.975" y2="8.217" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /></g>
+    </symbol>
+    <symbol id="lv_mccb_basic" viewBox="-25.87 -1.6 36.85 38.85" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-0.025" y1="10.871" x2="-3.23" y2="5.308" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="1.225" y1="6" x2="-1.275" y2="3.6" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.275" y1="6" x2="1.225" y2="3.6" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-11.907" y="6.607" width="3.75" height="3.6" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="15.6" width="10" height="4.8" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="20.4" width="10" height="4.8" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="10.8" width="10" height="4.8" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.025" y="25.2" width="10" height="4.8" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 2.4 L0 0 L2.475 2.4" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 3.6 L-0.025 1.2 L2.475 3.6" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 33.75 L-0.025 36.25 L2.475 33.75" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.525 32.5 L0 35 L2.475 32.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.049" y1="6" x2="-10.049" y2="10.8" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="4.8" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="30" x2="0" y2="35" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="13.219" x2="-8.775" y2="13.219" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="13.219" x2="-5.025" y2="13.219" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="18.019" x2="-8.775" y2="18.019" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="18.019" x2="-5.025" y2="18.019" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="22.819" x2="-8.775" y2="22.819" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="22.819" x2="-5.025" y2="22.819" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.025" y1="27.619" x2="-8.775" y2="27.619" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-7.525" y1="27.619" x2="-5.025" y2="27.619" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-12.525" y1="8.419" x2="-7.525" y2="8.419" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="2.167" y1="27.901" x2="4.034" y2="27.901" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="2.475" y1="28.513" x2="3.725" y2="28.513" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="2.784" y1="29.125" x2="3.417" y2="29.125" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="3.088" y1="26.104" x2="3.088" y2="27.911" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-2.863" y="19.299" font-size="3.47" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-3.995" y="24.099" font-size="3.088" fill="#0000ff">I&gt;&gt;&gt;</text>
+    <text x="-1.73" y="14.499" font-size="3.47" fill="#0000ff">I&gt;</text>
+    <text x="-4.113" y="28.899" font-size="3.47" fill="#0000ff">I&gt;&gt;</text>
+    <text x="-14.461" y="14.588" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">MCCB</text>
+  <line x1="-10.025" y1="12" x2="-10.025" y2="27.6" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /><line x1="-6.275" y1="8.419" x2="9.975" y2="8.419" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /></g>
+    </symbol>
+    <symbol id="lv_fuse_disconnector_nh00" viewBox="-63.76 -1.6 66.4 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><rect x="-1.632" y="7.451" width="3.265" height="10.217" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="4.045" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="5.748" x2="0" y2="19.37" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="21.073" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.632" y1="4.04" x2="1.632" y2="4.04" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.632" y1="21.068" x2="1.632" y2="21.068" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-15.279" y="9.153" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">NH00</text>
+  </g>
+    </symbol>
+    <symbol id="lv_spd_varistor" viewBox="-58.77 -1.6 63.21 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><rect x="-2.074" y="3.446" width="4.147" height="16.618" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.426 17.784 L-3.426 16.034 L3.441 7.358 L3.441 5.52" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="3.446" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="20.064" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-15.289" y="6.064" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">SPD</text>
+  </g>
+    </symbol>
+    <symbol id="lv_earth_pe" viewBox="-20.38 -1.6 28.29 20.48" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="6.912" y1="10.912" x2="6.897" y2="10.559" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.838" y1="9.941" x2="6.824" y2="9.882" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.735" y1="9.397" x2="6.721" y2="9.338" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.588" y1="8.868" x2="6.574" y2="8.809" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.412" y1="8.338" x2="6.382" y2="8.279" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.353" y1="8.221" x2="6.221" y2="7.897" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.191" y1="7.838" x2="6.162" y2="7.779" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.118" y1="7.721" x2="5.956" y2="7.412" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.926" y1="7.353" x2="5.897" y2="7.294" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.853" y1="7.235" x2="5.662" y2="6.956" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.618" y1="6.897" x2="5.588" y2="6.838" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.279" y1="6.456" x2="5.235" y2="6.397" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.912" y1="6.044" x2="4.868" y2="6" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.515" y1="5.662" x2="4.456" y2="5.618" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.074" y1="5.324" x2="4.029" y2="5.279" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.618" y1="5" x2="3.559" y2="4.971" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.5" y1="4.941" x2="3.206" y2="4.765" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.147" y1="4.735" x2="3.074" y2="4.706" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.015" y1="4.676" x2="2.706" y2="4.529" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2.647" y1="4.5" x2="2.574" y2="4.471" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2.515" y1="4.441" x2="2.191" y2="4.338" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2.118" y1="4.309" x2="2.059" y2="4.279" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="1.985" y1="4.265" x2="1.662" y2="4.176" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="1.588" y1="4.162" x2="1.529" y2="4.147" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.735" y1="4" x2="-1.088" y2="4.029" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.162" y1="4.044" x2="-1.221" y2="4.059" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.294" y1="4.074" x2="-1.632" y2="4.147" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.691" y1="4.162" x2="-1.765" y2="4.176" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.824" y1="4.191" x2="-2.162" y2="4.294" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-2.221" y1="4.309" x2="-2.294" y2="4.324" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-2.75" y1="4.5" x2="-2.809" y2="4.529" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.25" y1="4.735" x2="-3.309" y2="4.779" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.721" y1="5.015" x2="-3.779" y2="5.044" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.176" y1="5.324" x2="-4.235" y2="5.368" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.294" y1="5.412" x2="-4.559" y2="5.618" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.618" y1="5.662" x2="-4.662" y2="5.721" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.721" y1="5.765" x2="-4.971" y2="6" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.118" y1="6.147" x2="-5.338" y2="6.412" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.382" y1="6.456" x2="-5.441" y2="6.515" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.471" y1="6.559" x2="-5.676" y2="6.838" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.721" y1="6.897" x2="-5.765" y2="6.956" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.029" y1="7.368" x2="-6.059" y2="7.426" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.279" y1="7.853" x2="-6.309" y2="7.912" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.515" y1="8.353" x2="-6.529" y2="8.412" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.691" y1="8.868" x2="-6.706" y2="8.941" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.735" y1="9.015" x2="-6.824" y2="9.338" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.838" y1="9.412" x2="-6.853" y2="9.471" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.868" y1="9.544" x2="-6.926" y2="9.882" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.956" y1="10.088" x2="-6.985" y2="10.441" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.985" y1="10.5" x2="-7" y2="10.574" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.882" y1="12.162" x2="-6.868" y2="12.221" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.765" y1="12.691" x2="-6.75" y2="12.765" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.603" y1="13.221" x2="-6.574" y2="13.294" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.559" y1="13.353" x2="-6.426" y2="13.676" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.397" y1="13.735" x2="-6.368" y2="13.794" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.338" y1="13.868" x2="-6.191" y2="14.176" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.088" y1="14.353" x2="-5.912" y2="14.647" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.868" y1="14.706" x2="-5.838" y2="14.765" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.794" y1="14.824" x2="-5.588" y2="15.103" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.544" y1="15.162" x2="-5.515" y2="15.206" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.191" y1="15.574" x2="-5.147" y2="15.632" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.809" y1="15.971" x2="-4.75" y2="16.015" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-4.382" y1="16.338" x2="-4.338" y2="16.382" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.941" y1="16.662" x2="-3.882" y2="16.706" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.824" y1="16.735" x2="-3.544" y2="16.926" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.471" y1="16.956" x2="-3.412" y2="16.985" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.353" y1="17.029" x2="-3.044" y2="17.176" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-2.853" y1="17.265" x2="-2.544" y2="17.397" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-2.471" y1="17.426" x2="-2.412" y2="17.456" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-2.338" y1="17.471" x2="-2.015" y2="17.574" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.941" y1="17.588" x2="-1.882" y2="17.618" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.412" y1="17.721" x2="-1.338" y2="17.735" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.868" y1="17.809" x2="-0.794" y2="17.824" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.382" y1="17.838" x2="0.721" y2="17.824" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.926" y1="17.794" x2="1.265" y2="17.735" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="1.471" y1="17.691" x2="1.809" y2="17.603" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="1.868" y1="17.588" x2="1.941" y2="17.574" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2" y1="17.559" x2="2.338" y2="17.441" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2.397" y1="17.412" x2="2.456" y2="17.397" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="2.912" y1="17.206" x2="2.971" y2="17.176" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.397" y1="16.941" x2="3.456" y2="16.912" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="3.868" y1="16.647" x2="3.926" y2="16.618" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.309" y1="16.324" x2="4.368" y2="16.279" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.412" y1="16.235" x2="4.676" y2="16.015" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.735" y1="15.956" x2="4.779" y2="15.912" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="4.824" y1="15.868" x2="5.074" y2="15.618" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.206" y1="15.456" x2="5.426" y2="15.191" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.471" y1="15.147" x2="5.515" y2="15.088" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.559" y1="15.029" x2="5.75" y2="14.75" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="5.779" y1="14.691" x2="5.824" y2="14.632" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.059" y1="14.206" x2="6.103" y2="14.147" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.309" y1="13.721" x2="6.338" y2="13.647" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.515" y1="13.206" x2="6.529" y2="13.132" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.676" y1="12.676" x2="6.691" y2="12.603" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.706" y1="12.544" x2="6.779" y2="12.206" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.794" y1="12.132" x2="6.809" y2="12.059" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.809" y1="12" x2="6.868" y2="11.647" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.015" y1="3.868" x2="-0.029" y2="4.206" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.029" y1="6.647" x2="-0.044" y2="6.985" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.044" y1="9.426" x2="-0.059" y2="9.765" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.809 9.809 L6.794 9.647 L6.75 9.471" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.706 9.265 L6.647 9.029 L6.618 8.926" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.544 8.735 L6.456 8.426 L6.441 8.412" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M5.544 6.779 L5.544 6.765 L5.324 6.515" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M5.191 6.353 L5.147 6.279 L4.956 6.088" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M4.809 5.941 L4.706 5.824 L4.559 5.706" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M4.397 5.574 L4.221 5.412 L4.132 5.353" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M3.971 5.235 L3.706 5.044 L3.676 5.044" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M1.456 4.118 L1.368 4.103 L1.118 4.059" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M0.912 4.029 L0.735 4 L0.574 3.985" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M0.368 3.971 L0.103 3.956 L0.015 3.956" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-2.353 4.353 L-2.382 4.353 L-2.676 4.485" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-2.868 4.559 L-2.971 4.603 L-3.176 4.706" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-3.368 4.809 L-3.529 4.882 L-3.662 4.971" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-3.838 5.088 L-4.059 5.235 L-4.132 5.279" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-5.015 6.044 L-5.029 6.044 L-5.059 6.103" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-5.809 7.015 L-5.824 7.029 L-5.985 7.309" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.088 7.485 L-6.147 7.574 L-6.25 7.779" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.353 7.971 L-6.426 8.132 L-6.485 8.294" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.559 8.485 L-6.647 8.735 L-6.676 8.809" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.941 9.956 L-6.941 9.971 L-6.941 10.015" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-7 11.191 L-7 11.221 L-6.971 11.544" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.956 11.75 L-6.941 11.853 L-6.897 12.088" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.853 12.294 L-6.824 12.485 L-6.779 12.632" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.721 12.824 L-6.647 13.088 L-6.632 13.162" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-6.162 14.235 L-6.147 14.25 L-6.118 14.294" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-5.471 15.265 L-5.441 15.294 L-5.235 15.529" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-5.103 15.676 L-5.029 15.779 L-4.853 15.926" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-4.706 16.074 L-4.559 16.206 L-4.441 16.294" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-4.279 16.426 L-4.059 16.588 L-4 16.632" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-2.985 17.221 L-2.971 17.221 L-2.926 17.235" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-1.809 17.632 L-1.779 17.647 L-1.485 17.706" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-1.279 17.75 L-1.147 17.779 L-0.926 17.809" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-0.721 17.824 L-0.529 17.853 L-0.382 17.853" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M-0.176 17.853 L0.103 17.868 L0.176 17.853" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M1.338 17.721 L1.368 17.721 L1.397 17.706" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M2.529 17.368 L2.574 17.353 L2.838 17.235" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M3.029 17.147 L3.147 17.088 L3.338 16.985" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M3.515 16.882 L3.706 16.765 L3.809 16.691" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M3.985 16.574 L4.221 16.397 L4.265 16.368" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M5.118 15.574 L5.147 15.544 L5.162 15.515" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M5.868 14.574 L5.897 14.529 L6.029 14.279" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.132 14.088 L6.191 13.971 L6.279 13.779" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.368 13.588 L6.456 13.382 L6.485 13.265" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.559 13.074 L6.647 12.794 L6.662 12.735" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <path d="M6.868 11.588 L6.882 11.544 L6.882 11.515" fill="none" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-5.426" y1="11.505" x2="4.882" y2="11.505" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-3.265" y1="13.319" x2="2.971" y2="13.319" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-1.353" y1="15.083" x2="1.25" y2="15.083" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.863" y1="10.426" x2="6.863" y2="10.5" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.985" y1="4.054" x2="1.044" y2="4.054" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.676" y1="4.005" x2="-0.603" y2="4.005" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.426" y1="4.005" x2="0.5" y2="4.005" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.529" y1="3.956" x2="-0.059" y2="3.956" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-7.01" y1="10.647" x2="-7.01" y2="11.132" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-6.961" y1="11.603" x2="-6.961" y2="11.676" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.309" y1="17.877" x2="-0.25" y2="17.877" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.235" y1="17.877" x2="0.309" y2="17.877" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0.794" y1="17.828" x2="0.853" y2="17.828" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="6.912" y1="10.971" x2="6.912" y2="11.029" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="3.794" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.049" y1="4.279" x2="-0.049" y2="6.574" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.049" y1="7.059" x2="-0.049" y2="9.353" stroke="#00b82e" stroke-width="0.25" />
+    <line x1="-0.049" y1="9.838" x2="-0.049" y2="11.397" stroke="#00b82e" stroke-width="0.25" />
+    <text x="-8.971" y="5.98" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">PE</text>
+  <line x1="6.889" y1="10.015" x2="6.889" y2="11.441" stroke="#00b82e" stroke-width="0.25" stroke-dasharray="3 1" /></g>
+    </symbol>
+    <symbol id="lv_fuse_switch_fs" viewBox="-18.37 -1.6 20.67 40.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-4.466" y1="7.309" x2="0.005" y2="16.25" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-1.672 15.691 L0.564 14.574 L-2.789 7.868 L-5.025 8.985 L-1.672 15.691" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.275" y1="6.098" x2="1.299" y2="6.098" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="6.118" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="16.25" x2="0" y2="37.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.961" y="15.196" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">FS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_fuse_spd_fu" viewBox="-20.6 -1.6 24.25 43.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-2.647" y1="32.338" x2="2.632" y2="25.676" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.603" y="22.691" width="3.176" height="12.721" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.265" y="5.794" width="2.5" height="7.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="3.294" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="4.544" x2="0" y2="14.544" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="15.794" x2="0" y2="22.691" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="35.412" x2="0" y2="40" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.647" y1="32.338" x2="-2.647" y2="33.662" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="2.647" y1="24.279" x2="2.647" y2="25.676" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.265" y1="3.27" x2="1.235" y2="3.27" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.265" y1="15.819" x2="1.235" y2="15.819" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-4.608" y="16.912" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">FU+SPD</text>
+  </g>
+    </symbol>
+    <symbol id="lv_three_phase_marker" viewBox="-16.75 -1 20.64 13.27" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-3.377" y1="6.265" x2="1.623" y2="3.765" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-3.377" y1="3.765" x2="0.505" y2="1.824" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-3.377" y1="8.765" x2="1.623" y2="6.265" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-3.377" y1="11.265" x2="1.623" y2="8.765" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M2.887 1.26 C2.887 0.564 2.324 0 1.627 0 C0.936 0 0.373 0.564 0.373 1.26 C0.373 1.951 0.936 2.515 1.627 2.515 C2.324 2.515 2.887 1.951 2.887 1.26" fill="none" stroke="#0000ff" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="lv_ct" viewBox="-16.51 -1.6 28.11 18.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><path d="M3.137 7.491 C3.137 5.84 1.74 4.503 0.01 4.503 C-1.716 4.503 -3.113 5.84 -3.113 7.491 C-3.113 9.221 -1.716 10.618 0.01 10.618 C1.74 10.618 3.137 9.221 3.137 7.491" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="3.137" y1="7.5" x2="10" y2="7.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="15" stroke="#ff0000" stroke-width="0.25" />
+    <text x="-5.098" y="4.128" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CT</text>
+  </g>
+    </symbol>
+    <symbol id="lv_vt" viewBox="-23.37 -3.45 32.47 10.04" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-5.99" y1="1.747" x2="-4.776" y2="2.799" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.133" y1="1.747" x2="0.083" y2="2.799" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M3.216 2.473 C3.216 1.106 1.819 0 0.088 0 C-1.59 0 -2.948 1.106 -2.948 2.473 C-2.948 4.196 -1.59 5.593 0.088 5.593 C1.819 5.593 3.216 4.196 3.216 2.473" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.562 1.747 L-4.776 2.799 L-4.776 4.358" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M1.333 1.747 L0.083 2.799 L0.083 4.358" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-1.733 2.473 C-1.733 1.106 -3.09 0 -4.771 0 C-6.448 0 -7.805 1.106 -7.805 2.473 C-7.805 4.196 -6.448 5.593 -4.771 5.593 C-3.09 5.593 -1.733 4.196 -1.733 2.473" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="3.216" y1="2.5" x2="7.5" y2="2.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10" y1="2.5" x2="-7.805" y2="2.5" stroke="#ff0000" stroke-width="0.25" />
+    <text x="-11.961" y="0.155" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">VT</text>
+  </g>
+    </symbol>
+    <symbol id="lv_network_analyzer_ar" viewBox="-18.52 -1 24.38 14.5" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><rect x="-5.142" y="0" width="10" height="12.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-3.48" y="8.618" font-size="5.441" fill="#0000ff">AR</text>
+    <text x="-7.108" y="3.333" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">AR</text>
+  </g>
+    </symbol>
+    <symbol id="lv_rccb" viewBox="-49.78 -1.6 63.28 35.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="10.191" x2="0" y2="32.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0.039" y1="10.25" x2="-2.873" y2="5.015" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="5.701" y="5.662" width="4.529" height="4.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.554 14.721 L4.539 14.603 L4.451 14.471 L4.304 14.353 L4.113 14.235 L3.863 14.118 L3.569 14.015 L3.23 13.926 L2.863 13.838 L2.436 13.765 L1.995 13.706 L1.525 13.662 L1.039 13.618 L0.539 13.603 L0.025 13.588 L-0.475 13.603 L-0.975 13.618 L-1.461 13.662 L-1.931 13.706 L-2.373 13.765 L-2.799 13.838 L-3.167 13.926 L-3.505 14.015 L-3.799 14.118 L-4.049 14.235 L-4.24 14.353 L-4.387 14.471 L-4.475 14.603 L-4.505 14.721 L-4.475 14.853 L-4.387 14.985 L-4.24 15.103 L-4.049 15.221 L-3.799 15.324 L-3.505 15.426 L-3.167 15.529 L-2.799 15.618 L-2.373 15.691 L-1.931 15.75 L-1.461 15.794 L-0.975 15.824 L-0.475 15.853 L0.025 15.853 L0.539 15.853 L1.039 15.824 L1.525 15.794 L1.995 15.75 L2.436 15.691 L2.863 15.618 L3.23 15.529 L3.569 15.426 L3.863 15.324 L4.113 15.221 L4.304 15.103 L4.451 14.985 L4.539 14.853 L4.554 14.721" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="10.23" y1="7.936" x2="12.495" y2="7.936" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="12.5" y1="6.794" x2="12.5" y2="9.059" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="7.941" y1="4.529" x2="7.941" y2="5.662" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="5.662" stroke="#0000ff" stroke-width="0.25" />
+    <text x="8.23" y="9.088" font-size="2.5" fill="#0000ff">Δ</text>
+    <text x="6.466" y="9.088" font-size="3.529" fill="#0000ff">I</text>
+    <text x="-11.304" y="3.794" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">RCCB</text>
+  <line x1="-1.108" y1="7.936" x2="4.554" y2="7.936" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /><line x1="7.941" y1="11.324" x2="7.941" y2="14.721" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /><line x1="4.554" y1="14.701" x2="7.966" y2="14.701" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /></g>
+    </symbol>
+    <symbol id="lv_mcb" viewBox="-59.78 -1.6 61.38 35.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-5.642" y1="6.265" x2="-4.525" y2="8.309" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.069" y1="8.132" x2="-5.833" y2="10.735" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.804" y1="6.824" x2="-4.525" y2="8.309" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0.02" y1="10.103" x2="-2.892" y2="4.853" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-8.613 10.544 L-6.569 9.426 L-7.686 7.382 L-5.642 6.265" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-7.877 11.853 L-6.113 10.221 L-5.554 11.25 L-7.877 11.853" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-6.113 10.221 L-5.554 11.25 L-7.216 11.25 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <path d="M-5.554 11.25 L-7.216 11.25 L-7.877 11.853 ZZ" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <line x1="0" y1="0" x2="0" y2="5.441" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="10.029" x2="0" y2="32.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-11.319" y="3.632" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">MCB</text>
+  </g>
+    </symbol>
+    <symbol id="lv_bypass_ups" viewBox="-52.27 -1 86.5 23.75" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-32.706" y1="12.103" x2="-30.368" y2="17" stroke="#000000" stroke-width="0.25" />
+    <line x1="-32.485" y1="11.912" x2="-27.956" y2="15.162" stroke="#000000" stroke-width="0.25" />
+    <line x1="26.941" y1="19.176" x2="26.926" y2="11.515" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="25.985" y1="20.074" x2="-17.368" y2="20.132" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="30.309" y1="19.176" x2="33.221" y2="11.574" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-17.368" y1="19.176" x2="-14.515" y2="11.574" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-22.897" y1="5.75" x2="-18.368" y2="3.485" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-22.897" y1="3.485" x2="-19.382" y2="1.721" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="24.662" y1="5.691" x2="29.191" y2="3.426" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="24.662" y1="3.426" x2="28.191" y2="1.662" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-27.75 14.127 C-27.75 12.529 -29.044 11.235 -30.642 11.235 C-32.235 11.235 -33.529 12.529 -33.529 14.127 C-33.529 15.721 -32.235 17.015 -30.642 17.015 C-29.044 17.015 -27.75 15.721 -27.75 14.127" fill="none" stroke="#000000" stroke-width="0.25" />
+    <path d="M-28.853 16.299 C-28.853 16.191 -28.941 16.103 -29.054 16.103 C-29.162 16.103 -29.25 16.191 -29.25 16.299 C-29.25 16.412 -29.162 16.5 -29.054 16.5 C-28.941 16.5 -28.853 16.412 -28.853 16.299" fill="none" stroke="#000000" stroke-width="0.25" />
+    <path d="M-34.324 9.456 L-34.103 9.221 L-34.103 10.588" fill="none" stroke="#000000" stroke-width="0.25" />
+    <path d="M-28.618 9.456 L-28.397 9.221 L-27.941 9.221 L-27.721 9.456 L-27.721 9.676 L-27.941 9.912 L-28.397 9.912 L-28.618 10.132 L-28.618 10.588 L-27.721 10.588" fill="none" stroke="#000000" stroke-width="0.25" />
+    <path d="M26 20.069 C25.99 20.642 26.289 21.172 26.784 21.461 C27.275 21.75 27.887 21.75 28.377 21.461 C28.873 21.172 29.172 20.642 29.162 20.074" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-17.221 1.216 C-17.221 0.583 -17.73 0.074 -18.363 0.074 C-18.99 0.074 -19.5 0.583 -19.5 1.216 C-19.5 1.843 -18.99 2.353 -18.363 2.353 C-17.73 2.353 -17.221 1.843 -17.221 1.216" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M30.338 1.142 C30.338 0.51 29.828 0 29.201 0 C28.569 0 28.059 0.51 28.059 1.142 C28.059 1.77 28.569 2.279 29.201 2.279 C29.828 2.279 30.338 1.77 30.338 1.142" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-34.324" y1="10.574" x2="-33.868" y2="10.574" stroke="#000000" stroke-width="0.25" />
+    <line x1="-20.637" y1="11.574" x2="-20.637" y2="19.235" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-17.353" y1="19.176" x2="-17.353" y2="20.074" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="29.162" y1="20.083" x2="30.309" y2="20.083" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="30.294" y1="19.176" x2="30.294" y2="20.074" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-29.059" y1="16.309" x2="33.235" y2="16.309" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-36.275" y="7.794" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">BYPASS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_switch_3way" viewBox="-34.69 -1.6 36.29 15.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-10.333" y1="6.456" x2="-9.76" y2="5.324" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-9.392" y1="4.574" x2="-8.76" y2="3.309" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-3.73 1.632 L0 9.162 L0 12.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-21.304 7.485 L-19.627 7.485 L-19.627 4.132 L-17.951 4.132" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-17.113 5.809 L-15.863 5.809 L-15.025 7.059 L-14.186 5.809 L-12.51 5.809" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-13.775 3.294 L-11.26 8.324 L-10.701 7.191" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="0" x2="0" y2="2.471" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-19.627" y1="5.784" x2="-18.377" y2="5.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10.01" y1="5.784" x2="-7.495" y2="5.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-5.819" y1="5.784" x2="-3.73" y2="5.784" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.069" y1="5.784" x2="-1.48" y2="5.784" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-23.284" y="2.843" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">SW</text>
+  <line x1="-11.275" y1="3.294" x2="-11.275" y2="8.324" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" /></g>
+    </symbol>
+    <symbol id="lv_cable_arrow_in" viewBox="-14.64 -1 16.89 7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><path d="M-1.25 1.559 L1.25 1.559 L0 5 ZZ" fill="#ff0000" stroke="#ff0000" stroke-width="0.18" />
+    <line x1="0" y1="0" x2="0" y2="1.559" stroke="#ff0000" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="lv_cable_arrow_out" viewBox="-14.6 -1 16.86 7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><path d="M1.265 0 L0.015 3.441 L-1.235 0 L1.265 0" fill="none" stroke="#ff0000" stroke-width="0.25" />
+    <path d="M-1.235 0 L1.265 0 L0.015 3.441 ZZ" fill="#ff0000" stroke="#ff0000" stroke-width="0.18" />
+    <line x1="0" y1="3.441" x2="0" y2="5" stroke="#ff0000" stroke-width="0.25" />
+  </g>
+    </symbol>
+    <symbol id="lv_contactor" viewBox="-29.86 -1.6 31.46 18.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="11.765" x2="0" y2="15" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="11.765" x2="-4.412" y2="4.902" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-1.667 8.284 C-1.078 7.157 -0.196 7.304 0.098 8.137" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.373" y="4.902" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">KM</text>
+  </g>
+    </symbol>
+    <symbol id="lv_thermal_overload" viewBox="-15.82 -1.6 19.27 15.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-2.451" y="2.941" width="4.902" height="7.843" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-1.716 8.824 L-1.716 6.863 L1.716 6.863 L1.716 4.902" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="10.784" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-4.412" y="3.922" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">OL</text>
+  </g>
+    </symbol>
+    <symbol id="lv_motor_3ph" viewBox="-6.39 -1.6 35.57 23.95" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M5.392 9.314 C5.392 12.294 2.98 14.706 0 14.706 C-2.98 14.706 -5.392 12.294 -5.392 9.314 C-5.392 6.333 -2.98 3.922 0 3.922 C2.98 3.922 5.392 6.333 5.392 9.314" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="10.784" font-size="5.392" font-weight="bold" text-anchor="middle" fill="#0000ff">M</text>
+    <text x="0" y="14.216" font-size="3.47" text-anchor="middle" fill="#0000ff">3~</text>
+  </g>
+    </symbol>
+    <symbol id="lv_generator" viewBox="-18.76 -1.6 25.15 17.58" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M5.392 9.314 C5.392 12.294 2.98 14.706 0 14.706 C-2.98 14.706 -5.392 12.294 -5.392 9.314 C-5.392 6.333 -2.98 3.922 0 3.922 C2.98 3.922 5.392 6.333 5.392 9.314" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="10.784" font-size="5.392" font-weight="bold" text-anchor="middle" fill="#0000ff">G</text>
+    <text x="0" y="14.216" font-size="3.47" text-anchor="middle" fill="#0000ff">3~</text>
+    <text x="-7.353" y="4.51" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">GEN</text>
+  </g>
+    </symbol>
+    <symbol id="lv_vfd" viewBox="-16.62 -1.6 33.23 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.902" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-10.294" y="4.902" width="20.588" height="13.725" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.627" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="11.029" font-size="3.922" text-anchor="middle" fill="#0000ff">VFD</text>
+  </g>
+    </symbol>
+    <symbol id="lv_soft_starter" viewBox="-22.19 -1.6 32.02 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.902" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-8.824" y="4.902" width="17.647" height="13.725" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.627" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-4.902 16.176 L-1.961 16.176 L2.941 10.294 L4.902 10.294" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-10.784" y="8.824" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">SS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_ups" viewBox="-24.16 -1.6 35.94 25.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.902" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-10.784" y="4.902" width="21.569" height="13.725" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.627" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="13.725" font-size="4.412" font-weight="bold" text-anchor="middle" fill="#0000ff">UPS</text>
+    <text x="-12.745" y="8.824" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">UPS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_capacitor" viewBox="-17.78 -1.6 23.2 15.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.412" y1="4.412" x2="4.412" y2="4.412" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-4.412" y1="6.863" x2="4.412" y2="6.863" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="6.863" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.373" y="2.696" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">CAP</text>
+  </g>
+    </symbol>
+    <symbol id="lv_switch_disconnector" viewBox="-17.78 -1.6 20.74 20.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="12.745" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="12.745" x2="-4.412" y2="4.902" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-6.373" y="5.392" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">SW</text>
+  </g>
+    </symbol>
+    <symbol id="lv_fuse" viewBox="-15.09 -1.6 17.8 18.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-1.716" y="2.941" width="3.431" height="9.804" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="12.745" x2="0" y2="15" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-3.676" y="4.902" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">FUSE</text>
+  </g>
+    </symbol>
+    <symbol id="lv_load_box_kw" viewBox="-18.76 -1.6 25.15 17.31" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5.392" y="3.922" width="10.784" height="10.784" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="8.578" font-size="3.47" text-anchor="middle" fill="#0000ff">kW</text>
+    <text x="-7.353" y="4.412" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">LOAD</text>
+  </g>
+    </symbol>
+    <symbol id="lv_busbar_node" viewBox="-19.25 -3.7 26.13 10.3" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-5.882" y1="0.784" x2="5.882" y2="0.784" stroke="#0000ff" stroke-width="0.5" />
+    <line x1="0" y1="0.784" x2="0" y2="5" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M0.784 0.784 C0.784 1.216 0.431 1.569 0 1.569 C-0.431 1.569 -0.784 1.216 -0.784 0.784 C-0.784 0.353 -0.431 0 0 0 C0.431 0 0.784 0.353 0.784 0.784" fill="#0000ff" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-7.843" y="-0.098" font-size="3.47" font-weight="bold" text-anchor="end" fill="#000000">BUS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_rcbo" viewBox="-51.87 -1.6 65.37 35.7" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-5.642" y1="6.265" x2="-4.525" y2="8.309" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.069" y1="8.132" x2="-5.833" y2="10.735" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-1.804" y1="6.824" x2="-4.525" y2="8.309" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-8.613 10.544 L-6.569 9.426 L-7.686 7.382 L-5.642 6.265" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-7.877 11.853 L-6.113 10.221 L-5.554 11.25 L-7.877 11.853" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-6.113 10.221 L-5.554 11.25 L-7.216 11.25 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <path d="M-5.554 11.25 L-7.216 11.25 L-7.877 11.853 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <line x1="0" y1="0" x2="0" y2="5.441" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0.02" y1="10.103" x2="-2.892" y2="4.853" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="10.029" x2="0" y2="32.5" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.554 14.721 L4.539 14.603 L4.451 14.471 L4.304 14.353 L4.113 14.235 L3.863 14.118 L3.569 14.015 L3.23 13.926 L2.863 13.838 L2.436 13.765 L1.995 13.706 L1.525 13.662 L1.039 13.618 L0.539 13.603 L0.025 13.588 L-0.475 13.603 L-0.975 13.618 L-1.461 13.662 L-1.931 13.706 L-2.373 13.765 L-2.799 13.838 L-3.167 13.926 L-3.505 14.015 L-3.799 14.118 L-4.049 14.235 L-4.24 14.353 L-4.387 14.471 L-4.475 14.603 L-4.505 14.721 L-4.475 14.853 L-4.387 14.985 L-4.24 15.103 L-4.049 15.221 L-3.799 15.324 L-3.505 15.426 L-3.167 15.529 L-2.799 15.618 L-2.373 15.691 L-1.931 15.75 L-1.461 15.794 L-0.975 15.824 L-0.475 15.853 L0.025 15.853 L0.539 15.853 L1.039 15.824 L1.525 15.794 L1.995 15.75 L2.436 15.691 L2.863 15.618 L3.23 15.529 L3.569 15.426 L3.863 15.324 L4.113 15.221 L4.304 15.103 L4.451 14.985 L4.539 14.853 L4.554 14.721" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="5.701" y="5.662" width="4.529" height="4.529" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="6.466" y="9.088" font-size="3.529" fill="#0000ff" text-anchor="start">I</text>
+    <text x="8.23" y="9.088" font-size="2.5" fill="#0000ff" text-anchor="start">Δ</text>
+    <line x1="-1.108" y1="7.936" x2="5.701" y2="7.936" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="10.23" y1="7.936" x2="12.495" y2="7.936" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="12.5" y1="6.794" x2="12.5" y2="9.059" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="7.941" y1="11.324" x2="7.941" y2="14.721" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="7.941" y1="4.529" x2="7.941" y2="5.662" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="4.554" y1="14.701" x2="7.966" y2="14.701" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-11.319" y="3.632" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">RCBO</text>
+  </g>
+    </symbol>
+    <symbol id="lv_rcd_relay_toroid" viewBox="-34.93 -1.6 52.96 28.2" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="25" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.601 13.348 L4.586 13.23 L4.497 13.098 L4.348 12.98 L4.155 12.863 L3.903 12.745 L3.605 12.642 L3.264 12.554 L2.892 12.466 L2.461 12.392 L2.016 12.333 L1.54 12.289 L1.05 12.245 L0.545 12.23 L0.025 12.216 L-0.475 12.23 L-0.975 12.245 L-1.461 12.289 L-1.931 12.333 L-2.373 12.392 L-2.799 12.466 L-3.167 12.554 L-3.505 12.642 L-3.799 12.745 L-4.049 12.863 L-4.24 12.98 L-4.387 13.098 L-4.475 13.23 L-4.505 13.348 L-4.475 13.48 L-4.387 13.613 L-4.24 13.73 L-4.049 13.848 L-3.799 13.951 L-3.505 14.054 L-3.167 14.157 L-2.799 14.245 L-2.373 14.319 L-1.931 14.377 L-1.461 14.422 L-0.975 14.451 L-0.475 14.48 L0.025 14.48 L0.545 14.48 L1.05 14.451 L1.54 14.422 L2.016 14.377 L2.461 14.319 L2.892 14.245 L3.264 14.157 L3.605 14.054 L3.903 13.951 L4.155 13.848 L4.348 13.73 L4.497 13.613 L4.586 13.48 L4.601 13.348" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="4.601" y1="13.333" x2="7.924" y2="13.333" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="7.924" y="8.804" width="9.105" height="9.059" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="10.103" y="14.804" font-size="3.529" fill="#0000ff" text-anchor="start">I</text>
+    <text x="11.886" y="14.804" font-size="3.47" fill="#0000ff" text-anchor="start">Δ</text>
+    <line x1="12.5" y1="8.804" x2="12.5" y2="5" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-6.863" y="5.49" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">RCD</text>
+  </g>
+    </symbol>
+    <symbol id="lv_protection_relay" viewBox="-45.83 -1.6 64.93 23.52" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="4.118" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-13.725" y="4.118" width="27.337" height="11.765" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="13.611" y1="10" x2="17.5" y2="10" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-15.686" y="6.569" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">RELAY</text>
+  </g>
+    </symbol>
+    <symbol id="lv_energy_meter_kwh" viewBox="-41.27 -1.6 47.27 26.87" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-5" y="2.941" width="10" height="12.5" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-5" y1="6.069" x2="5" y2="6.069" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="12.255" font-size="3.676" fill="#0000ff" text-anchor="middle">kWh</text>
+    <text x="-6.961" y="5.392" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">kWh</text>
+  </g>
+    </symbol>
+    <symbol id="lv_ammeter" viewBox="-34.44 -1.6 39.85 21.36" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.412 7.353 C4.412 9.789 2.436 11.765 0 11.765 C-2.436 11.765 -4.412 9.789 -4.412 7.353 C-4.412 4.917 -2.436 2.941 0 2.941 C2.436 2.941 4.412 4.917 4.412 7.353 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="8.824" font-size="4.412" fill="#0000ff" text-anchor="middle">A</text>
+    <text x="-6.373" y="4.412" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">A</text>
+  </g>
+    </symbol>
+    <symbol id="lv_voltmeter" viewBox="-34.44 -1.6 39.85 18.78" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="1.961" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M-2.01 2.941 C-2.01 3.186 -2.206 3.382 -2.451 3.382 C-2.696 3.382 -2.892 3.186 -2.892 2.941 C-2.892 2.696 -2.696 2.5 -2.451 2.5 C-2.206 2.5 -2.01 2.696 -2.01 2.941 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <path d="M0.441 2.206 C0.441 2.451 0.245 2.647 0 2.647 C-0.245 2.647 -0.441 2.451 -0.441 2.206 C-0.441 1.961 -0.245 1.765 0 1.765 C0.245 1.765 0.441 1.961 0.441 2.206 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <path d="M2.892 2.941 C2.892 3.186 2.696 3.382 2.451 3.382 C2.206 3.382 2.01 3.186 2.01 2.941 C2.01 2.696 2.206 2.5 2.451 2.5 C2.696 2.5 2.892 2.696 2.892 2.941 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18" />
+    <line x1="0" y1="6.373" x2="-2.206" y2="3.137" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="6.373" x2="0" y2="7.353" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M4.412 11.765 C4.412 14.201 2.436 16.176 0 16.176 C-2.436 16.176 -4.412 14.201 -4.412 11.765 C-4.412 9.328 -2.436 7.353 0 7.353 C2.436 7.353 4.412 9.328 4.412 11.765 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="13.235" font-size="4.412" fill="#0000ff" text-anchor="middle">V</text>
+    <text x="-6.373" y="4.412" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">V</text>
+  </g>
+    </symbol>
+    <symbol id="lv_pilot_lamp" viewBox="-25.13 -1.6 29.56 21.12" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="0" y1="0" x2="0" y2="2.885" stroke="#0000ff" stroke-width="0.25" />
+    <path d="M3.431 6.25 C3.431 8.111 1.897 9.615 0 9.615 C-1.897 9.615 -3.431 8.111 -3.431 6.25 C-3.431 4.389 -1.897 2.885 0 2.885 C1.897 2.885 3.431 4.389 3.431 6.25 Z" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.426" y1="3.87" x2="2.426" y2="8.63" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-2.426" y1="8.63" x2="2.426" y2="3.87" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="9.615" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25" />
+    <text x="-5.392" y="4.327" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">H</text>
+  </g>
+    </symbol>
+    <symbol id="lv_ats" viewBox="-48.11 -4.83 61.07 31.43" overflow="visible">
+      <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif"><line x1="-10" y1="0" x2="-10" y2="5.392" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-11.961" y1="5.392" x2="-8" y2="5.392" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10" y1="15.196" x2="-13.922" y2="6.863" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10" y1="15.196" x2="-10" y2="18.137" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="10" y1="0" x2="10" y2="5.392" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="8" y1="5.392" x2="11.961" y2="5.392" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="10" y1="15.196" x2="6" y2="6.863" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="10" y1="15.196" x2="10" y2="18.137" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="-10" y1="18.137" x2="10" y2="18.137" stroke="#0000ff" stroke-width="0.25" />
+    <line x1="0" y1="18.137" x2="0" y2="25" stroke="#0000ff" stroke-width="0.25" />
+    <rect x="-4" y="7.108" width="8" height="4.412" fill="none" stroke="#0000ff" stroke-width="0.25" />
+    <text x="0" y="10.539" font-size="3.47" fill="#0000ff" text-anchor="middle">ATS</text>
+    <line x1="-12.77" y1="9.314" x2="-4" y2="9.314" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <line x1="4" y1="9.314" x2="7.175" y2="9.314" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="3 1" />
+    <text x="-10" y="-1.225" font-size="3.47" fill="#000000" text-anchor="middle">1</text>
+    <text x="10" y="-1.225" font-size="3.47" fill="#000000" text-anchor="middle">2</text>
+    <text x="-15.882" y="4.853" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">ATS</text>
+  </g>
+    </symbol>
+    <symbol id="lv_wattmeter" viewBox="-32.78 -1.6 38.8 30.39" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4.412 7.353 C4.412 9.79 2.437 11.765 0 11.765 C-2.437 11.765 -4.412 9.79 -4.412 7.353 C-4.412 4.916 -2.437 2.941 0 2.941 C2.437 2.941 4.412 4.916 4.412 7.353" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="8.897" font-size="4.412" fill="#0000ff" text-anchor="middle">W</text>
+      <text x="-6.373" y="5.809" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">W</text>
+    </g>
+  </symbol>
+  <symbol id="lv_varimeter" viewBox="-32.78 -1.6 38.8 30.39" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4.412 7.353 C4.412 9.79 2.437 11.765 0 11.765 C-2.437 11.765 -4.412 9.79 -4.412 7.353 C-4.412 4.916 -2.437 2.941 0 2.941 C2.437 2.941 4.412 4.916 4.412 7.353" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="8.897" font-size="4.412" fill="#0000ff" text-anchor="middle">var</text>
+      <text x="-6.373" y="5.809" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">var</text>
+    </g>
+  </symbol>
+  <symbol id="lv_frequency_meter" viewBox="-32.78 -1.6 38.8 21.57" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4.412 7.353 C4.412 9.79 2.437 11.765 0 11.765 C-2.437 11.765 -4.412 9.79 -4.412 7.353 C-4.412 4.916 -2.437 2.941 0 2.941 C2.437 2.941 4.412 4.916 4.412 7.353" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="8.897" font-size="4.412" fill="#0000ff" text-anchor="middle">f</text>
+      <text x="-6.373" y="5.809" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">Hz</text>
+    </g>
+  </symbol>
+  <symbol id="lv_pf_meter" viewBox="-32.78 -1.6 38.8 21.57" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.941" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4.412 7.353 C4.412 9.79 2.437 11.765 0 11.765 C-2.437 11.765 -4.412 9.79 -4.412 7.353 C-4.412 4.916 -2.437 2.941 0 2.941 C2.437 2.941 4.412 4.916 4.412 7.353" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="7.053" font-size="2.8" fill="#0000ff" text-anchor="middle">cos</text>
+      <text x="0" y="10.353" font-size="3.5" fill="#0000ff" text-anchor="middle">φ</text>
+      <text x="-6.373" y="5.809" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">cosφ</text>
+    </g>
+  </symbol>
+  <symbol id="lv_transformer_2w" viewBox="-21.46 -1.6 28.06 37.21" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 7.5 C5 10.261 2.761 12.5 0 12.5 C-2.761 12.5 -5 10.261 -5 7.5 C-5 4.739 -2.761 2.5 0 2.5 C2.761 2.5 5 4.739 5 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="12" x2="5" y2="12" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="13" x2="5" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 17.5 C5 20.261 2.761 22.5 0 22.5 C-2.761 22.5 -5 20.261 -5 17.5 C-5 14.739 -2.761 12.5 0 12.5 C2.761 12.5 5 14.739 5 17.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="22.5" x2="0" y2="25" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="6" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">T</text>
+    </g>
+  </symbol>
+  <symbol id="lv_autotransformer" viewBox="-21.46 -1.6 30.56 29.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 7.5 C5 10.261 2.761 12.5 0 12.5 C-2.761 12.5 -5 10.261 -5 7.5 C-5 4.739 -2.761 2.5 0 2.5 C2.761 2.5 5 4.739 5 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0.8 3.7 C0.8 4.142 0.442 4.5 0 4.5 C-0.442 4.5 -0.8 4.142 -0.8 3.7 C-0.8 3.258 -0.442 2.9 0 2.9 C0.442 2.9 0.8 3.258 0.8 3.7" fill="#0000ff" stroke="#0000ff" stroke-width="0.18"/>
+      <line x1="5" y1="7.5" x2="7.5" y2="7.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.5" x2="0" y2="15" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="6" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">AT</text>
+    </g>
+  </symbol>
+  <symbol id="lv_reactor" viewBox="-27.09 -1.6 31.69 31.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0 2.5 Q3 4 0 5.5 Q3 7 0 8.5 Q3 10 0 11.5 Q3 13 0 14.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="14.5" x2="0" y2="17" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-4.5" y="8.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">L</text>
+    </g>
+  </symbol>
+  <symbol id="lv_battery" viewBox="-26.19 -1.6 34.69 31.62" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-4" y1="2.5" x2="4" y2="2.5" stroke="#0000ff" stroke-width="0.5"/>
+      <line x1="-2" y1="5" x2="2" y2="5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="5" x2="0" y2="7.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-4" y1="7.5" x2="4" y2="7.5" stroke="#0000ff" stroke-width="0.5"/>
+      <line x1="-2" y1="10" x2="2" y2="10" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="10" x2="0" y2="12.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="5" y="3.3" font-size="3.47" fill="#0000ff" text-anchor="start">+</text>
+      <text x="5" y="11.5" font-size="3.47" fill="#0000ff" text-anchor="start">−</text>
+      <text x="-5.5" y="4" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">BAT</text>
+    </g>
+  </symbol>
+  <symbol id="lv_motor_1ph" viewBox="-13.79 -1.6 22.29 24.72" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5.392 9.314 C5.392 12.292 2.978 14.706 0 14.706 C-2.978 14.706 -5.392 12.292 -5.392 9.314 C-5.392 6.336 -2.978 3.922 0 3.922 C2.978 3.922 5.392 6.336 5.392 9.314" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="10.77" font-size="5.392" fill="#0000ff" text-anchor="middle" font-weight="bold">M</text>
+      <text x="0" y="14.544" font-size="3.47" fill="#0000ff" text-anchor="middle">1~</text>
+      <text x="6.892" y="7.157" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">M</text>
+    </g>
+  </symbol>
+  <symbol id="lv_rectifier" viewBox="-29.09 -1.6 35.69 27.87" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-5" y="2.5" width="10" height="12.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="7.45" font-size="4.0" fill="#0000ff" text-anchor="middle">~</text>
+      <line x1="-5" y1="8.75" x2="5" y2="8.75" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.8" y1="10.625" x2="1.8" y2="10.625" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.8" y1="12.25" x2="1.8" y2="12.25" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1.5 9 L1.5 9 L0 11 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.18"/>
+      <line x1="0" y1="15" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="7.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">RECT</text>
+    </g>
+  </symbol>
+  <symbol id="lv_pushbutton_no" viewBox="-17.52 -1.6 21.08 20.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="-3.922" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-3.5" y="6" width="3" height="3" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="9" x2="-2" y2="10" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.373" y="4.902" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">NO</text>
+    </g>
+  </symbol>
+  <symbol id="lv_pushbutton_nc" viewBox="-17.52 -1.6 21.08 20.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="-3.922" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-3.5" y="6" width="3" height="3" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="9" x2="-2" y2="10" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.373" y="4.902" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">NC</text>
+    </g>
+  </symbol>
+  <symbol id="lv_selector_switch" viewBox="-28.97 -1.6 32.53 20.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.745" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.745" x2="-4.412" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0 7.5 C0 8.715 -0.985 9.7 -2.2 9.7 C-3.415 9.7 -4.4 8.715 -4.4 7.5 C-4.4 6.285 -3.415 5.3 -2.2 5.3 C-0.985 5.3 0 6.285 0 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.2" y1="7.5" x2="-2.2" y2="5.3" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0 7.5 C0 6.285 -0.985 5.3 -2.2 5.3" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.373" y="4.902" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">SA</text>
+    </g>
+  </symbol>
+  <symbol id="lv_neutral_link" viewBox="-16.14 -1.6 19.24 18.2" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.5" y1="3.922" x2="1.5" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="10" x2="0" y2="15" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="10" x2="-3" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-5" y="4.902" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">N</text>
+    </g>
+  </symbol>
+  <symbol id="lv_busbar_coupler" viewBox="-16.6 -11.1 33.2 15.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="-15" y1="0" x2="-5" y2="0" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="0" x2="-5" y2="-3" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="0" x2="-5" y2="3" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-6.5" y1="0" x2="-3.5" y2="0" stroke="#0000ff" stroke-width="0.375"/>
+      <line x1="-5" y1="0" x2="2" y2="-5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="3.5" y1="0" x2="6.5" y2="0" stroke="#0000ff" stroke-width="0.375"/>
+      <line x1="5" y1="0" x2="15" y2="0" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="-7" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">BUS</text>
+    </g>
+  </symbol>
+  <symbol id="lv_contact_no" viewBox="-17.14 -1.6 20.7 20.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="-3.922" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6" y="4" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">NO</text>
+    </g>
+  </symbol>
+  <symbol id="lv_contact_nc" viewBox="-17.14 -1.6 20.7 20.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="-3.922" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.765" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6" y="4" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">NC</text>
+    </g>
+  </symbol>
+  <symbol id="lv_lighting_load" viewBox="-13.28 -1.6 20.38 19.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4 6.5 C4 8.709 2.209 10.5 0 10.5 C-2.209 10.5 -4 8.709 -4 6.5 C-4 4.291 -2.209 2.5 0 2.5 C2.209 2.5 4 4.291 4 6.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.72" y1="3.78" x2="2.72" y2="9.22" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2.72" y1="3.78" x2="-2.72" y2="9.22" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="5.5" y="5.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">EL</text>
+    </g>
+  </symbol>
+  <symbol id="lv_heating_load" viewBox="-26.19 -1.6 31.79 22.21" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-4" y="2.5" width="8" height="10" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-2 6 L0 9 L2 6" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-5.5" y="6.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">EH</text>
+    </g>
+  </symbol>
+  <symbol id="lv_generic_load" viewBox="-28.09 -1.6 33.69 21.21" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-4" y="2.5" width="8" height="8" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="4.9" x2="2" y2="8.1" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-5.5" y="5.7" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">Z</text>
+    </g>
+  </symbol>
+  <symbol id="lv_socket_outlet" viewBox="-17.09 -1.6 24.19 19.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4 6.5 C4 8.709 2.209 10.5 0 10.5 C-2.209 10.5 -4 8.709 -4 6.5 C-4 4.291 -2.209 2.5 0 2.5 C2.209 2.5 4 4.291 4 6.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.6" y1="4.5" x2="-1.6" y2="8.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="1.6" y1="4.5" x2="1.6" y2="8.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="5.5" y="5.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">XS</text>
+    </g>
+  </symbol>
+  <symbol id="lv_isolating_transformer" viewBox="-21.46 -1.6 28.06 37.21" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M5 7.5 C5 10.261 2.761 12.5 0 12.5 C-2.761 12.5 -5 10.261 -5 7.5 C-5 4.739 -2.761 2.5 0 2.5 C2.761 2.5 5 4.739 5 7.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5" y1="12.5" x2="5" y2="12.5" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="1.5 1.5"/>
+      <path d="M5 17.5 C5 20.261 2.761 22.5 0 22.5 C-2.761 22.5 -5 20.261 -5 17.5 C-5 14.739 -2.761 12.5 0 12.5 C2.761 12.5 5 14.739 5 17.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="22.5" x2="0" y2="25" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="6" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">TI</text>
+    </g>
+  </symbol>
+  <symbol id="lv_inverter" viewBox="-29.59 -1.6 36.69 27.87" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-5.5" y="2.5" width="11" height="12.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="5.25" x2="2" y2="5.25" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="6.875" x2="2" y2="6.875" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5.5" y1="8.75" x2="5.5" y2="8.75" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-2.4 11.5 Q-1.2 9.5 0 11.5 Q1.2 13.5 2.4 11.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1.2 7.55 L0 9.25 L1.2 7.55" fill="#0000ff" stroke="#0000ff" stroke-width="0.18"/>
+      <line x1="0" y1="15" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-7" y="7.5" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">INV</text>
+    </g>
+  </symbol>
+  <symbol id="lv_pv_module" viewBox="-28.19 -1.6 37.79 26.02" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-6" y="2.5" width="12" height="8" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="2.5" x2="-2" y2="10.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2" y1="2.5" x2="2" y2="10.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-6" y1="6.5" x2="6" y2="6.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="8" y1="1.5" x2="3" y2="4.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M2 3 L3 4.5 L4.5 4" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="10.5" x2="0" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-7.5" y="6.1" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">PV</text>
+    </g>
+  </symbol>
+  <symbol id="lv_dc_disconnect" viewBox="-25.78 -1.6 29.34 21.71" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="3.922" x2="1.961" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.745" x2="0" y2="17.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.745" x2="-4.412" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-7" y="4.902" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">DC</text>
+    </g>
+  </symbol>
+  <symbol id="lv_earth_bar" viewBox="-25.14 0.9 45.55 13.7" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="-12.5" y1="7.5" x2="12.5" y2="7.5" stroke="#139b48" stroke-width="0.5"/>
+      <line x1="-7.5" y1="2.5" x2="-7.5" y2="7.5" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="0" y1="2.5" x2="0" y2="7.5" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="7.5" y1="2.5" x2="7.5" y2="7.5" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="0" y1="7.5" x2="0" y2="10" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="-4" y1="10" x2="4" y2="10" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="-3" y1="11.5" x2="3" y2="11.5" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="-2" y1="13" x2="2" y2="13" stroke="#139b48" stroke-width="0.25"/>
+      <text x="14.5" y="8.3" font-size="3.47" fill="#139b48" text-anchor="start" font-weight="bold">PE</text>
+    </g>
+  </symbol>
+  <symbol id="lv_emergency_stop" viewBox="-25.28 -1.6 31.38 28.2" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M4.5 7 C4.5 9.485 2.485 11.5 0 11.5 C-2.485 11.5 -4.5 9.485 -4.5 7 C-4.5 4.515 -2.485 2.5 0 2.5 C2.485 2.5 4.5 4.515 4.5 7" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.475" y1="4.525" x2="2.475" y2="9.475" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2.475" y1="4.525" x2="-2.475" y2="9.475" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="11.5" x2="0" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.961" y1="13" x2="1.961" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="20" x2="-3.922" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="20" x2="0" y2="25" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-6.5" y="6" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">S</text>
+    </g>
+  </symbol>
+  <symbol id="lv_motor_starter_dol" viewBox="-39.73 -1.6 49.33 26.62" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-8" y="2.5" width="16" height="15" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="4" x2="0" y2="6" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1.5" y1="6" x2="1.5" y2="6" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="10.5" x2="-3" y2="7" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1.5 9 Q-0.8 7.7 0 9" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-8" y1="10.75" x2="8" y2="10.75" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-4.4 12.25 L-1.6 12.25 L1.6 15.25 L4.4 15.25" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="17.5" x2="0" y2="20" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-9.5" y="7" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">DOL</text>
+    </g>
+  </symbol>
+  <symbol id="lv_battery_storage" viewBox="-38.82 -1.6 49.42 26.92" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="2.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-9" y="2.5" width="18" height="18" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-4.5" y1="4.5" x2="4.5" y2="4.5" stroke="#0000ff" stroke-width="0.5"/>
+      <line x1="-2.7" y1="5.5" x2="2.7" y2="5.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-4.5" y1="7" x2="4.5" y2="7" stroke="#0000ff" stroke-width="0.5"/>
+      <line x1="-2.7" y1="8" x2="2.7" y2="8" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-4.5" y1="9.5" x2="4.5" y2="9.5" stroke="#0000ff" stroke-width="0.5"/>
+      <line x1="-2.7" y1="10.5" x2="2.7" y2="10.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-9" y1="12.4" x2="9" y2="12.4" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="14.9" x2="2" y2="14.9" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2" y1="16.2" x2="2" y2="16.2" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1 15.9 L0 14.6 L1 15.9" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="14.6" x2="0" y2="22.2" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-1 20.9 L0 22.2 L1 20.9" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="20.5" x2="0" y2="23" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-10.5" y="7.9" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">BESS</text>
+    </g>
+  </symbol>
+  <symbol id="lv_capacitor_bank" viewBox="-28.4 -1.6 38.82 35.26" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-8.824" y1="4.902" x2="8.824" y2="4.902" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5.882" y1="4.902" x2="-5.882" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-8.823" y1="7.353" x2="-2.941" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-8.823" y1="9.804" x2="-2.941" y2="9.804" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5.882" y1="9.804" x2="-5.882" y2="12.255" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="4.902" x2="0" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.941" y1="7.353" x2="2.941" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.941" y1="9.804" x2="2.941" y2="9.804" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="9.804" x2="0" y2="12.255" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="5.882" y1="4.902" x2="5.882" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2.941" y1="7.353" x2="8.823" y2="7.353" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2.941" y1="9.804" x2="8.823" y2="9.804" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="5.882" y1="9.804" x2="5.882" y2="12.255" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-8.824" y1="12.255" x2="8.824" y2="12.255" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="12.255" x2="0" y2="14.706" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-3.922" y1="14.706" x2="3.922" y2="14.706" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="-2.451" y1="16.177" x2="2.451" y2="16.177" stroke="#139b48" stroke-width="0.25"/>
+      <line x1="-0.98" y1="17.647" x2="0.98" y2="17.647" stroke="#139b48" stroke-width="0.25"/>
+      <text x="-9.624" y="13.722" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">CAP</text>
+    </g>
+  </symbol>
+  <symbol id="lv_manual_transfer_switch" viewBox="-29.38 -4.62 40.78 32.89" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <text x="-7.475" y="-1.225" font-size="2.5" fill="#000000" text-anchor="end">A</text>
+      <text x="7.475" y="-1.225" font-size="2.5" fill="#000000" text-anchor="start">B</text>
+      <line x1="-6.25" y1="0" x2="-6.25" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="6.25" y1="0" x2="6.25" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="3.922" x2="0" y2="1.471" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.451" y1="1.471" x2="2.451" y2="1.471" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-9.804" y="3.922" width="19.608" height="13.725" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-7.475" y1="7.844" x2="-5.025" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="5.025" y1="7.844" x2="7.475" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-6.25" y1="3.922" x2="-6.25" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="6.25" y1="3.922" x2="6.25" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M0.6 14.216 C0.6 14.547 0.331 14.816 0 14.816 C-0.331 14.816 -0.6 14.547 -0.6 14.216 C-0.6 13.885 -0.331 13.616 0 13.616 C0.331 13.616 0.6 13.885 0.6 14.216" fill="#0000ff" stroke="#0000ff" stroke-width="0.18"/>
+      <line x1="0" y1="14.216" x2="-6.25" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="14.216" x2="6.25" y2="7.844" stroke="#0000ff" stroke-width="0.25" stroke-dasharray="2 1"/>
+      <line x1="0" y1="14.216" x2="0" y2="17.647" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="17.647" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-10.604" y="12.742" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">MTS</text>
+    </g>
+  </symbol>
+  <symbol id="lv_dimmer" viewBox="-24.58 -1.6 35.01 29.87" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="0" y1="18.628" x2="0" y2="22.5" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-8.824" y="3.922" width="17.648" height="14.706" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-5.882" y1="14.706" x2="5.882" y2="7.844" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="5.882" y1="7.844" x2="4.889" y2="9.118" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="5.882" y1="7.844" x2="4.284" y2="8.082" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-3 15.687 C-3 14.187 0 14.187 0 15.687 C0 17.187 3 17.187 3 15.687" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-9.624" y="12.742" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">DIM</text>
+    </g>
+  </symbol>
+  <symbol id="lv_ev_charger" viewBox="-28.4 -1.6 38.82 34.28" overflow="visible">
+    <g fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+      <line x1="0" y1="0" x2="0" y2="3.922" stroke="#0000ff" stroke-width="0.25"/>
+      <rect x="-8.824" y="3.922" width="17.648" height="13.725" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.5" y1="9.5" x2="-2.5" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="2.5" y1="9.5" x2="2.5" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-2.5" y1="13" x2="2.5" y2="13" stroke="#0000ff" stroke-width="0.25"/>
+      <path d="M-2.5 9.5 C-2.5 8.119 -1.381 7 0 7 C1.381 7 2.5 8.119 2.5 9.5" fill="none" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="-1" y1="13" x2="-1" y2="14.5" stroke="#0000ff" stroke-width="0.25"/>
+      <line x1="1" y1="13" x2="1" y2="14.5" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="0" y="16.447" font-size="3.47" fill="#0000ff" text-anchor="middle" font-weight="bold">EV</text>
+      <line x1="0" y1="3.922" x2="0" y2="7" stroke="#0000ff" stroke-width="0.25"/>
+      <text x="-9.624" y="12.742" font-size="3.47" fill="#000000" text-anchor="end" font-weight="bold">EV</text>
+    </g>
+  </symbol>
+</defs>
+</svg>

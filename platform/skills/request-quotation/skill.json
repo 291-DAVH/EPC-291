@@ -1,0 +1,23 @@
+{
+  "name": "request-quotation",
+  "description": "Consulta precios y disponibilidad de equipos eléctricos a partir del catálogo de equipos.",
+  "version": "1.0.0",
+  "supports_learning": true,
+  "learnable_content": [
+    "pdf",
+    "examples",
+    "references"
+  ],
+  "knowledge_types": {
+    "pdf": "Listas de precios de fabricantes o distribuidores (sin datos económicos del cliente)",
+    "examples": "Especificaciones técnicas de equipos de proyectos anteriores",
+    "references": "Tablas de equivalencias entre fabricantes, fichas técnicas"
+  },
+  "capabilities": [
+    "query_catalog",
+    "compare_equipment",
+    "generate_datasheet"
+  ],
+  "invocation": "explicit",
+  "context_requires": []
+}

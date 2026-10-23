@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -1 16 67" width="16mm" height="67mm" role="img" aria-label="Tramo de cable con identificacion">
+  <title>Tramo de cable con identificacion</title>
+  <desc>Tramo de cable (linea roja + flecha) con rotulos de circuito, seccion y aislacion. Origen: cable superior. Unidad = 1 mm. Textos variables (rotulos).</desc>
+
+  <!-- Sistema de coordenadas: x=0 es el eje del cable; y=0 es el puerto superior. Unidad = 1 mm. -->
+  <g id="lv_cable_run" fill="none" stroke-linecap="butt" stroke-linejoin="round" font-family="Arial, sans-serif">
+    <line x1="0" y1="0" x2="0" y2="52.07" stroke="#ff0000" stroke-width="0.25" />
+    <g transform="translate(0 52.07)">
+      <path d="M1.265 0 L0.015 3.441 L-1.235 0 L1.265 0" fill="none" stroke="#ff0000" stroke-width="0.25" />
+      <path d="M-1.235 0 L1.265 0 L0.015 3.441 Z" fill="#ff0000" stroke="#ff0000" stroke-width="0.18" />
+    </g>
+    <line x1="0" y1="57.07" x2="0" y2="60.07" stroke="#ff0000" stroke-width="0.25" />
+  </g>
+
+  <g id="ports" display="none" fill="#ff00ff" stroke="none">
+    <circle id="port_top" cx="0" cy="0" r="0.6" data-dir="up" />
+    <circle id="port_bottom" cx="0" cy="60.07" r="0.6" data-dir="down" />
+  </g>
+
+  <g id="label_slots" fill="#000000" font-family="Arial, sans-serif">
+    <text id="slot_cable_tag" data-key="tag" data-example="LD-02 / 28 m" transform="translate(-0.8 50.07) rotate(-90)" font-size="2.5" text-anchor="start" fill="#0000ff">{tag}</text>
+    <text id="slot_cable_spec" data-key="cable_spec" data-example="3x2.5/2.5 mm² + PE 2.5 mm²" transform="translate(2.9 50.07) rotate(-90)" font-size="1.7" text-anchor="start" fill="#000000">{cable_spec}</text>
+    <text id="slot_cable_insulation" data-key="cable_insulation" data-example="XLPE/Cu IRAM 2178" transform="translate(6.0 50.07) rotate(-90)" font-size="1.7" text-anchor="start" fill="#000000">{cable_insulation}</text>
+  
+    <text id="slot_manufacturer" data-key="manufacturer" data-example="Fabricante" x="0" y="64" font-size="1.7" fill="#000000" text-anchor="middle">{manufacturer}</text></g>
+</svg>

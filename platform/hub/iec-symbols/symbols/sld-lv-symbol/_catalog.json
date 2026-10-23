@@ -1,0 +1,5952 @@
+{
+  "library": "SLD_LV",
+  "category": "LV",
+  "diagram_type": "SLD",
+  "version": "2.4.0",
+  "generated": "2026-10-12",
+  "units": "mm (1 unidad = 1 mm; símbolos a escala 1, sin agrandar en el diagrama)",
+  "coordinate_system": "x=0 en el eje del conductor; y=0 en el puerto superior; y crece hacia abajo",
+  "style": {
+    "stroke_default": "#0000ff",
+    "stroke_width": 0.25,
+    "line_weights_mm": {
+      "simbolo_y_conductor": 0.25,
+      "barra": 0.5,
+      "borde_de_rellenos": 0.18
+    },
+    "dash_mm": {
+      "E_trazos": [
+        3,
+        1
+      ],
+      "F_trazo_largo_y_corto": [
+        10,
+        1,
+        2,
+        1
+      ]
+    },
+    "lettering_mm": {
+      "h_texto": 2.5,
+      "h_titulo": 3.5,
+      "h_minimo": 1.8,
+      "font_size_por_h": "font-size = h / 0.72"
+    },
+    "grid_mm": 2.5,
+    "cable_external": "#ff0000",
+    "earth": "#139b48",
+    "cell_outline": "#dcdcdc",
+    "font": "osifont (ISO 3098), ISOCPEUR, DejaVu Sans"
+  },
+  "symbols": [
+    {
+      "id": "lv_acb_basic",
+      "file": "291_E_LV_SLD_IEC60617_acb.svg",
+      "name_es": "Interruptor de aire ACB (símbolo de leyenda)",
+      "name_en": "Air circuit breaker (ACB), legend symbol",
+      "description": "Versión simplificada del ACB según la leyenda del plano.",
+      "tags": [
+        "ACB",
+        "interruptor"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.461,
+          "y": 18.454,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_basic_1p_mld",
+        "lv_acb_basic_2p_mld",
+        "lv_acb_basic_3p_mld",
+        "lv_acb_basic_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_drawout",
+      "file": "291_E_LV_SLD_IEC60617_acb_drawout.svg",
+      "name_es": "Interruptor de aire ACB extraíble",
+      "name_en": "Air circuit breaker (ACB), drawout",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "extraible"
+      ],
+      "description": "Interruptor de aire ACB extraíble: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.525,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "63 A",
+          "x": -14.525,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "10 kA",
+          "x": -14.525,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -14.525,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": -14.525,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_drawout_1p_mld",
+        "lv_acb_drawout_2p_mld",
+        "lv_acb_drawout_3p_mld",
+        "lv_acb_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_lsig",
+      "file": "291_E_LV_SLD_IEC60617_acb_lsig.svg",
+      "name_es": "Interruptor de aire ACB con unidad LSIG",
+      "name_en": "Air circuit breaker (ACB), with LSIG trip unit",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "LSIG"
+      ],
+      "description": "Interruptor de aire ACB con unidad LSIG: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "I>>>",
+        "I>>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.525,
+          "y": 3.47273,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "63 A",
+          "x": -14.525,
+          "y": 10.2727,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "10 kA",
+          "x": -14.525,
+          "y": 13.2727,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -14.525,
+          "y": 16.2727,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": -14.525,
+          "y": 19.2727,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_lsig_1p_mld",
+        "lv_acb_lsig_2p_mld",
+        "lv_acb_lsig_3p_mld",
+        "lv_acb_lsig_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_lsig_drawout",
+      "file": "291_E_LV_SLD_IEC60617_acb_lsig_drawout.svg",
+      "name_es": "Interruptor de aire ACB con unidad LSIG extraíble",
+      "name_en": "Air circuit breaker (ACB), with LSIG trip unit, drawout",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "LSIG",
+        "extraible"
+      ],
+      "description": "Interruptor de aire ACB con unidad LSIG extraíble: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "I>>>",
+        "I>>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.525,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "63 A",
+          "x": -14.525,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "10 kA",
+          "x": -14.525,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -14.525,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": -14.525,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_lsig_drawout_1p_mld",
+        "lv_acb_lsig_drawout_2p_mld",
+        "lv_acb_lsig_drawout_3p_mld",
+        "lv_acb_lsig_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_lsig_motorized",
+      "file": "291_E_LV_SLD_IEC60617_acb_lsig_motorized.svg",
+      "name_es": "Interruptor de aire ACB con unidad LSIG motorizado",
+      "name_en": "Air circuit breaker (ACB), with LSIG trip unit, motor-operated",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "LSIG",
+        "motorizado"
+      ],
+      "description": "Interruptor de aire ACB con unidad LSIG motorizado: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 78.56,
+        "h": 53.8
+      },
+      "viewBox": {
+        "x": -68.08,
+        "y": -4.5,
+        "w": 78.56,
+        "h": 53.8
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 48.03,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "M",
+        "I>>>",
+        "I>>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "TAG-01",
+          "x": -26.485,
+          "y": 3.832,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "2000 A",
+          "x": -26.485,
+          "y": 10.632,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "66 kA",
+          "x": -26.485,
+          "y": 13.632,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -26.485,
+          "y": 16.632,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -26.485,
+          "y": 19.632,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_lsig_motorized_1p_mld",
+        "lv_acb_lsig_motorized_2p_mld",
+        "lv_acb_lsig_motorized_3p_mld",
+        "lv_acb_lsig_motorized_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_lsig_motorized_drawout",
+      "file": "291_E_LV_SLD_IEC60617_acb_lsig_motorized_drawout.svg",
+      "name_es": "Interruptor de aire ACB con unidad LSIG motorizado extraíble",
+      "name_en": "Air circuit breaker (ACB), with LSIG trip unit, motor-operated, drawout",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "LSIG",
+        "motorizado",
+        "extraible"
+      ],
+      "description": "Interruptor de aire ACB con unidad LSIG motorizado extraíble: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 78.56,
+        "h": 53.8
+      },
+      "viewBox": {
+        "x": -68.08,
+        "y": -4.5,
+        "w": 78.56,
+        "h": 53.8
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 48.03,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "M",
+        "I>>>",
+        "I>>",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "TAG-01",
+          "x": -26.485,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "2000 A",
+          "x": -26.485,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "66 kA",
+          "x": -26.485,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -26.485,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -26.485,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_lsig_motorized_drawout_1p_mld",
+        "lv_acb_lsig_motorized_drawout_2p_mld",
+        "lv_acb_lsig_motorized_drawout_3p_mld",
+        "lv_acb_lsig_motorized_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_motorized",
+      "file": "291_E_LV_SLD_IEC60617_acb_motorized.svg",
+      "name_es": "Interruptor de aire ACB con motorización",
+      "name_en": "Air circuit breaker (ACB), motor-operated",
+      "description": "ACB con unidad de protección (I>, I>>), marcador de equipo y motor de carga (M).",
+      "tags": [
+        "ACB",
+        "interruptor"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 78.56,
+        "h": 41.1
+      },
+      "viewBox": {
+        "x": -68.08,
+        "y": -4.5,
+        "w": 78.56,
+        "h": 41.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "M",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -19.593,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "2000 A",
+          "x": -19.598,
+          "y": 23.456,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "66 kA",
+          "x": -19.608,
+          "y": 28.206,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_motorized_1p_mld",
+        "lv_acb_motorized_2p_mld",
+        "lv_acb_motorized_3p_mld",
+        "lv_acb_motorized_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_acb_motorized_drawout",
+      "file": "291_E_LV_SLD_IEC60617_acb_motorized_drawout.svg",
+      "name_es": "Interruptor de aire ACB motorizado extraíble",
+      "name_en": "Air circuit breaker (ACB), motor-operated, drawout",
+      "tags": [
+        "ACB",
+        "interruptor",
+        "motorizado",
+        "extraible"
+      ],
+      "description": "Interruptor de aire ACB motorizado extraíble: símbolo generado por script a partir de la familia acb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 78.56,
+        "h": 41.1
+      },
+      "viewBox": {
+        "x": -68.08,
+        "y": -4.5,
+        "w": 78.56,
+        "h": 41.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "M",
+        "ACB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "TAG-01",
+          "x": -26.485,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "2000 A",
+          "x": -26.485,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "66 kA",
+          "x": -26.485,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -26.485,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -26.485,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_acb_motorized_drawout_1p_mld",
+        "lv_acb_motorized_drawout_2p_mld",
+        "lv_acb_motorized_drawout_3p_mld",
+        "lv_acb_motorized_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_ammeter",
+      "file": "291_E_LV_SLD_IEC60617_ammeter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Amperímetro",
+      "name_en": "Ammeter",
+      "description": "Instrumento indicador (IEC 60617 S00910) con letra A. Se conecta al secundario de un TI.",
+      "tags": [
+        "amperímetro",
+        "medición"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00910 / S01426",
+      "notes": null,
+      "iec_60617": [
+        "S00910",
+        "S01426"
+      ],
+      "size": {
+        "w": 43.616,
+        "h": 27.095
+      },
+      "viewBox": {
+        "x": -35.028,
+        "y": -1.6,
+        "w": 43.616,
+        "h": 27.095
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "A",
+        "A"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "0–800 A",
+          "x": -6.373,
+          "y": 8.941,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "800/5 A",
+          "x": -6.373,
+          "y": 13.471,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P2",
+          "x": -6.373,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_ats",
+      "file": "291_E_LV_SLD_IEC60617_ats.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Transferencia automática (ATS)",
+      "name_en": "Automatic transfer switch (ATS)",
+      "description": "Dos interruptores-seccionadores (S00290) con enclavamiento mecánico y mando automático común; dos entradas (red / grupo) y una salida.",
+      "tags": [
+        "ATS",
+        "transferencia",
+        "enclavamiento"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00290 / S00295",
+      "notes": null,
+      "iec_60617": [
+        "S00290",
+        "S00295"
+      ],
+      "size": {
+        "w": 62.071,
+        "h": 31.43
+      },
+      "viewBox": {
+        "x": -48.11,
+        "y": -4.83,
+        "w": 62.071,
+        "h": 31.43
+      },
+      "ports": [
+        {
+          "id": "top_1",
+          "x": -10.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "top_2",
+          "x": 10.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "ATS",
+        "1",
+        "2",
+        "ATS"
+      ],
+      "label_slots": [
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "630 A",
+          "x": -15.882,
+          "y": 9.431,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "poles",
+          "placeholder": "{poles}",
+          "example": "4P",
+          "x": -15.882,
+          "y": 13.961,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -15.882,
+          "y": 18.49,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q0",
+          "x": -15.882,
+          "y": 23.02,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_autotransformer",
+      "file": "291_E_LV_SLD_IEC60617_autotransformer.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Autotransformador",
+      "name_en": "Autotransformer",
+      "description": "Autotransformador de un solo devanado con derivación según IEC 60617 S00328.",
+      "tags": [
+        "autotransformador",
+        "autotransformer",
+        "AT"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00328",
+      "notes": null,
+      "iec_60617": [
+        "S00328"
+      ],
+      "size": {
+        "w": 40.5,
+        "h": 34.71
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 40.5,
+        "h": 34.71
+      },
+      "ports": [
+        {
+          "id": "tap",
+          "x": 7.5,
+          "y": 7.5,
+          "dir": "right"
+        },
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "AT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 17.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ratio",
+          "placeholder": "{ratio}",
+          "example": "400/0–400 V",
+          "x": -6.5,
+          "y": 21.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "10 kVA",
+          "x": -6.5,
+          "y": 25.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_battery",
+      "file": "291_E_LV_SLD_IEC60617_battery.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Batería / acumulador",
+      "name_en": "Battery / accumulator",
+      "description": "Batería de acumuladores según IEC 60617 S00257. Se usa en circuitos de alimentación de emergencia (UPS, SAI, SCADA).",
+      "tags": [
+        "batería",
+        "acumulador",
+        "battery",
+        "UPS",
+        "DC",
+        "emergencia"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00257",
+      "notes": null,
+      "iec_60617": [
+        "S00257"
+      ],
+      "size": {
+        "w": 38.0,
+        "h": 36.62
+      },
+      "viewBox": {
+        "x": -29.75,
+        "y": -1.6,
+        "w": 38.0,
+        "h": 36.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "+",
+        "−",
+        "BAT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-GB1",
+          "x": -5.5,
+          "y": 14.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "48 V DC",
+          "x": -5.5,
+          "y": 18.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "capacity",
+          "placeholder": "{capacity}",
+          "example": "100 Ah",
+          "x": -5.5,
+          "y": 23.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "cells",
+          "placeholder": "{cells}",
+          "example": "2×12 V",
+          "x": -5.5,
+          "y": 27.73,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_battery_storage",
+      "file": "291_E_LV_SLD_IEC60617_battery_storage.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Sistema de almacenamiento en baterías (BESS)",
+      "name_en": "Battery energy storage system (BESS)",
+      "description": "Sistema de almacenamiento de energía en baterías con inversor bidireccional. Se usa en instalaciones fotovoltaicas, gestión de carga y respaldo de energía.",
+      "tags": [
+        "BESS",
+        "batería",
+        "battery",
+        "almacenamiento",
+        "storage",
+        "inversor",
+        "bidireccional"
+      ],
+      "origin": "drawn",
+      "source": "Convención de la industria (IEC 62933)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 49.82,
+        "h": 31.92
+      },
+      "viewBox": {
+        "x": -38.82,
+        "y": -1.6,
+        "w": 49.82,
+        "h": 31.92
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 23.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "BESS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-GB1",
+          "x": -10.5,
+          "y": 9.8,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power_kw",
+          "placeholder": "{power_kw}",
+          "example": "100 kW",
+          "x": -10.5,
+          "y": 14.21,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "capacity_kwh",
+          "placeholder": "{capacity_kwh}",
+          "example": "200 kWh",
+          "x": -10.5,
+          "y": 18.62,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "400 V AC",
+          "x": -10.5,
+          "y": 23.03,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_busbar_coupler",
+      "file": "291_E_LV_SLD_IEC60617_busbar_coupler.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Acoplador de barras",
+      "name_en": "Busbar coupler / bus tie",
+      "description": "Interruptor de acoplamiento de barras (bus tie) según IEC 60617. Conecta o separa dos secciones de barras colectoras en un TGBT.",
+      "tags": [
+        "acoplador",
+        "barras",
+        "bus tie",
+        "coupler",
+        "secciones"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 58.0,
+        "h": 23.1
+      },
+      "viewBox": {
+        "x": -41.0,
+        "y": -11.1,
+        "w": 58.0,
+        "h": 23.1
+      },
+      "ports": [
+        {
+          "id": "left",
+          "x": -15.0,
+          "y": 0.0,
+          "dir": "left"
+        },
+        {
+          "id": "right",
+          "x": 15.0,
+          "y": 0.0,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "BUS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q7",
+          "x": 0.0,
+          "y": -2.59,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_busbar_node",
+      "file": "291_E_LV_SLD_IEC60617_busbar_node.svg",
+      "name_es": "Nodo de barra (derivación)",
+      "name_en": "Busbar tap node",
+      "description": "Punto de conexión de un alimentador a la barra.",
+      "tags": [
+        "barra"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 39.882,
+        "h": 20.7
+      },
+      "viewBox": {
+        "x": -31.882,
+        "y": -3.7,
+        "w": 39.882,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 5.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "BUS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.843,
+          "y": 4.314,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_bypass_ups",
+      "file": "291_E_LV_SLD_IEC60617_bypass_ups.svg",
+      "name_es": "Conmutador by-pass para UPS",
+      "name_en": "UPS bypass selector",
+      "description": "Selector de posición 1-2 con contactos y línea de enclavamiento (by-pass manual).",
+      "tags": [
+        "UPS",
+        "conmutador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 3 (108-2026-SOXXXXXX-E-DU-003)",
+      "notes": null,
+      "size": {
+        "w": 95.559,
+        "h": 28.75
+      },
+      "viewBox": {
+        "x": -60.324,
+        "y": -1.0,
+        "w": 95.559,
+        "h": 28.75
+      },
+      "ports": [],
+      "fixed_texts": [
+        "BYPASS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -36.275,
+          "y": 12.206,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_cable_arrow_in",
+      "file": "291_E_LV_SLD_IEC60617_cable_arrow_in.svg",
+      "name_es": "Flecha de acometida (cable que ingresa)",
+      "name_en": "Incoming cable arrow",
+      "description": "Flecha roja hacia abajo: cable que ingresa al tablero.",
+      "tags": [
+        "cable"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 35.25,
+        "h": 20.5
+      },
+      "viewBox": {
+        "x": -27.25,
+        "y": -1.0,
+        "w": 35.25,
+        "h": 20.5
+      },
+      "ports": [],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -3.235,
+          "y": 3.971,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_cable_arrow_out",
+      "file": "291_E_LV_SLD_IEC60617_cable_arrow_out.svg",
+      "name_es": "Flecha de carga (cable que sale)",
+      "name_en": "Outgoing cable arrow",
+      "description": "Flecha roja: cable que sale hacia destino/carga.",
+      "tags": [
+        "cable"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 35.235,
+        "h": 20.5
+      },
+      "viewBox": {
+        "x": -27.235,
+        "y": -1.0,
+        "w": 35.235,
+        "h": 20.5
+      },
+      "ports": [],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -3.186,
+          "y": 3.971,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_cable_run",
+      "file": "291_E_LV_SLD_IEC60617_cable_run.svg",
+      "name_es": "Tramo de cable con identificación",
+      "name_en": "Cable run with identification",
+      "description": "Tramo de cable con identificación (símbolo 0.3.0). Generado por script; falta revisión.",
+      "tags": [
+        "cable"
+      ],
+      "origin": "generated",
+      "source": "Símbolo 0.3.0",
+      "notes": "Entrada agregada en 0.4.15 (faltaba en el catálogo).",
+      "size": {
+        "w": 16.0,
+        "h": 67.0
+      },
+      "viewBox": {
+        "x": -8.0,
+        "y": -1.0,
+        "w": 16.0,
+        "h": 67.0
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 60.07,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "LD-02 / 28 m",
+          "x": 0.0,
+          "y": 0.0,
+          "anchor": "start",
+          "size": 2.5
+        },
+        {
+          "key": "cable_spec",
+          "placeholder": "{cable_spec}",
+          "example": "3x2.5/2.5 mm² + PE 2.5 mm²",
+          "x": 0.0,
+          "y": 0.0,
+          "anchor": "start",
+          "size": 1.7
+        },
+        {
+          "key": "cable_insulation",
+          "placeholder": "{cable_insulation}",
+          "example": "XLPE/Cu IRAM 2178",
+          "x": 0.0,
+          "y": 0.0,
+          "anchor": "start",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": 0.0,
+          "y": 64.0,
+          "anchor": "middle",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": []
+    },
+    {
+      "id": "lv_capacitor",
+      "file": "291_E_LV_SLD_IEC60617_capacitor.svg",
+      "name_es": "Condensador / banco de compensación",
+      "name_en": "Capacitor (PFC bank)",
+      "description": "Dos placas en serie con el conductor; derivación.",
+      "tags": [
+        "capacitor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 37.088,
+        "h": 20.7
+      },
+      "viewBox": {
+        "x": -29.75,
+        "y": -1.6,
+        "w": 37.088,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CAP"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 7.108,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_capacitor_bank",
+      "file": "291_E_LV_SLD_IEC60617_capacitor_bank.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": "lv_capacitor_3p_mld",
+      "name_es": "Banco de capacitores (corrección FP)",
+      "name_en": "Capacitor bank (power factor correction)",
+      "description": "Banco de capacitores trifásico para corrección del factor de potencia según IEC 60617. Tres condensadores en paralelo sobre bus común con conexión a tierra/neutro.",
+      "tags": [
+        "capacitor",
+        "banco",
+        "PFC",
+        "factor de potencia",
+        "condensador",
+        "compensación reactiva"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00459",
+      "notes": null,
+      "iec_60617": [
+        "S00459"
+      ],
+      "size": {
+        "w": 45.5,
+        "h": 40.113
+      },
+      "viewBox": {
+        "x": -34.75,
+        "y": -1.6,
+        "w": 45.5,
+        "h": 40.113
+      },
+      "ports": [
+        {
+          "id": "in",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "CAP"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -9.624,
+          "y": 18.132,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "load",
+          "placeholder": "{load}",
+          "example": "Banco FP",
+          "x": -9.624,
+          "y": 22.542,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "kvar",
+          "placeholder": "{kvar}",
+          "example": "100 kVAr",
+          "x": -9.624,
+          "y": 26.952,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "400 V",
+          "x": -9.624,
+          "y": 31.362,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_contact_nc",
+      "file": "291_E_LV_SLD_IEC60617_contact_nc.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Contacto normalmente cerrado (NC)",
+      "name_en": "Break contact, normally closed (NC)",
+      "description": "Contacto de apertura normalmente cerrado según IEC 60617 S00182. Contacto auxiliar de relé, contactor o protección.",
+      "tags": [
+        "contacto",
+        "contact",
+        "NC",
+        "relé",
+        "auxiliar",
+        "control",
+        "normalmente cerrado"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00182",
+      "notes": null,
+      "iec_60617": [
+        "S00182"
+      ],
+      "size": {
+        "w": 37.922,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -29.922,
+        "y": -1.6,
+        "w": 37.922,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "NC"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-K1:11-12",
+          "x": -6.0,
+          "y": 8.41,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_contact_no",
+      "file": "291_E_LV_SLD_IEC60617_contact_no.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Contacto normalmente abierto (NA)",
+      "name_en": "Make contact, normally open (NO)",
+      "description": "Contacto de cierre normalmente abierto según IEC 60617 S00180. Contacto auxiliar de relé, contactor o protección.",
+      "tags": [
+        "contacto",
+        "contact",
+        "NA",
+        "NO",
+        "relé",
+        "auxiliar",
+        "control"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00180",
+      "notes": null,
+      "iec_60617": [
+        "S00180"
+      ],
+      "size": {
+        "w": 37.922,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -29.922,
+        "y": -1.6,
+        "w": 37.922,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "NO"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-K1:13-14",
+          "x": -6.0,
+          "y": 8.41,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_contactor",
+      "file": "291_E_LV_SLD_IEC60617_contactor.svg",
+      "name_es": "Contactor de potencia",
+      "name_en": "Power contactor",
+      "description": "Cuchilla con arco de extinción sobre el conductor.",
+      "tags": [
+        "contactor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 38.412,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -30.412,
+        "y": -1.6,
+        "w": 38.412,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "CONTACTOR"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 9.314,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_contactor_1p_mld",
+        "lv_contactor_2p_mld",
+        "lv_contactor_3p_mld",
+        "lv_contactor_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_ct",
+      "file": "291_E_LV_SLD_IEC60617_ct.svg",
+      "name_es": "Transformador de corriente (TI)",
+      "name_en": "Current transformer (CT)",
+      "description": "Círculo sobre el conductor (primario) con salida de secundario a la derecha.",
+      "tags": [
+        "TI",
+        "medicion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 44.213,
+        "h": 23.2
+      },
+      "viewBox": {
+        "x": -29.713,
+        "y": -1.6,
+        "w": 44.213,
+        "h": 23.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        },
+        {
+          "id": "secondary",
+          "x": 12.5,
+          "y": 7.5,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "CT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -5.098,
+          "y": 8.387,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_dc_disconnect",
+      "file": "291_E_LV_SLD_IEC60617_dc_disconnect.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Seccionador DC",
+      "name_en": "DC disconnect switch",
+      "description": "Seccionador o interruptor de carga DC para instalaciones fotovoltaicas y de batería según IEC 60617. Permite aislar el circuito DC de forma segura.",
+      "tags": [
+        "seccionador",
+        "DC",
+        "solar",
+        "fotovoltaico",
+        "batería",
+        "disconnect",
+        "aislamiento"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 (adaptación DC)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 38.412,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -30.412,
+        "y": -1.6,
+        "w": 38.412,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "DC"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-QS1",
+          "x": -7.0,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "1000 V DC",
+          "x": -7.0,
+          "y": 13.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "32 A",
+          "x": -7.0,
+          "y": 17.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_dimmer",
+      "file": "291_E_LV_SLD_IEC60617_dimmer.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Regulador de alumbrado (dimmer)",
+      "name_en": "Lighting dimmer / phase controller",
+      "description": "Regulador de intensidad lumínica (TRIAC/SCR) para cargas de alumbrado AC. Símbolo de caja con flecha de control variable según IEC 60617 S00513.",
+      "tags": [
+        "dimmer",
+        "atenuación",
+        "TRIAC",
+        "SCR",
+        "alumbrado",
+        "regulador",
+        "control de fase"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00513",
+      "notes": null,
+      "iec_60617": [
+        "S00513"
+      ],
+      "size": {
+        "w": 45.5,
+        "h": 34.87
+      },
+      "viewBox": {
+        "x": -34.75,
+        "y": -1.6,
+        "w": 45.5,
+        "h": 34.87
+      },
+      "ports": [
+        {
+          "id": "in",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "out",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "DIM"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-DIM1",
+          "x": -9.624,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "load",
+          "placeholder": "{load}",
+          "example": "Alumbrado",
+          "x": -9.624,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "2.5 kW",
+          "x": -9.624,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_earth_bar",
+      "file": "291_E_LV_SLD_IEC60617_earth_bar.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Barra de tierra (barra PE)",
+      "name_en": "Earth bar (PE busbar)",
+      "description": "Barra colectora de protección a tierra (PE) según IEC 60617. Punto de conexión centralizado de los conductores de protección.",
+      "tags": [
+        "tierra",
+        "PE",
+        "barra",
+        "earth bar",
+        "protección",
+        "puesta a tierra",
+        "EMC"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617",
+      "notes": "Barra horizontal PE con bornes de conexión. Puertos 'top_*' son las entradas de conductores PE.",
+      "iec_60617": [],
+      "size": {
+        "w": 58.91,
+        "h": 18.7
+      },
+      "viewBox": {
+        "x": -38.5,
+        "y": 0.9,
+        "w": 58.91,
+        "h": 18.7
+      },
+      "ports": [
+        {
+          "id": "top_1",
+          "x": -7.5,
+          "y": 2.5,
+          "dir": "up"
+        },
+        {
+          "id": "top_2",
+          "x": 0.0,
+          "y": 2.5,
+          "dir": "up"
+        },
+        {
+          "id": "top_3",
+          "x": 7.5,
+          "y": 2.5,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "PE"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-PE",
+          "x": -14.0,
+          "y": 5.5,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_earth_pe",
+      "file": "291_E_LV_SLD_IEC60617_earth_pe.svg",
+      "name_es": "Puesta a tierra (PE)",
+      "name_en": "Earth connection (PE)",
+      "description": "Símbolo de tierra dentro de círculo, en verde (color PE de los planos).",
+      "tags": [
+        "tierra",
+        "PE"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 41.922,
+        "h": 25.48
+      },
+      "viewBox": {
+        "x": -33.01,
+        "y": -1.6,
+        "w": 41.922,
+        "h": 25.48
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "PE"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -8.971,
+          "y": 10.392,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_emergency_stop",
+      "file": "291_E_LV_SLD_IEC60617_emergency_stop.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Pulsador de paro de emergencia (seta)",
+      "name_en": "Emergency stop pushbutton (mushroom head)",
+      "description": "Pulsador de parada de emergencia con cabeza tipo seta según IEC 60617 S00332. Contacto NC (normalmente cerrado). Se usa en circuitos de mando para parada de emergencia.",
+      "tags": [
+        "emergencia",
+        "paro",
+        "seta",
+        "E-STOP",
+        "mushroom",
+        "NC",
+        "pulsador",
+        "S00332"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00332",
+      "notes": null,
+      "iec_60617": [
+        "S00332"
+      ],
+      "size": {
+        "w": 38.5,
+        "h": 33.2
+      },
+      "viewBox": {
+        "x": -30.5,
+        "y": -1.6,
+        "w": 38.5,
+        "h": 33.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "S"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-S0",
+          "x": -6.5,
+          "y": 7.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "circuit",
+          "placeholder": "{circuit}",
+          "example": "STOP",
+          "x": -6.5,
+          "y": 11.91,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_energy_meter_kwh",
+      "file": "291_E_LV_SLD_IEC60617_energy_meter_kwh.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Medidor de energía (kWh)",
+      "name_en": "Watt-hour meter",
+      "description": "Contador de energía activa según IEC 60617 S00933: rectángulo con franja superior y rótulo kWh.",
+      "tags": [
+        "medidor",
+        "energía",
+        "kWh"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00933",
+      "notes": null,
+      "iec_60617": [
+        "S00933"
+      ],
+      "size": {
+        "w": 49.27,
+        "h": 31.429
+      },
+      "viewBox": {
+        "x": -41.27,
+        "y": -1.6,
+        "w": 49.27,
+        "h": 31.429
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "kWh",
+        "kWh"
+      ],
+      "label_slots": [
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "PM5560",
+          "x": -6.961,
+          "y": 9.922,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "accuracy_class",
+          "placeholder": "{accuracy_class}",
+          "example": "Cl. 0.5S",
+          "x": -6.961,
+          "y": 14.451,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "800/5 A",
+          "x": -6.961,
+          "y": 18.98,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.961,
+          "y": 23.51,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_ev_charger",
+      "file": "291_E_LV_SLD_IEC60617_ev_charger.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Cargador vehículo eléctrico (EVSE)",
+      "name_en": "EV charging point (EVSE)",
+      "description": "Punto de carga para vehículo eléctrico según IEC 60364-7-722 / IEC 62196. Dispositivo terminal; sin puerto de salida.",
+      "tags": [
+        "EV",
+        "vehículo eléctrico",
+        "cargador",
+        "EVSE",
+        "electromovilidad",
+        "IEC 62196"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60364-7-722 / IEC 62196",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 45.5,
+        "h": 39.133
+      },
+      "viewBox": {
+        "x": -34.75,
+        "y": -1.6,
+        "w": 45.5,
+        "h": 39.133
+      },
+      "ports": [
+        {
+          "id": "in",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "EV",
+        "EV"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-EV1",
+          "x": -9.624,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "load",
+          "placeholder": "{load}",
+          "example": "Cargador EV",
+          "x": -9.624,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "22 kW",
+          "x": -9.624,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "400 V 3F",
+          "x": -9.624,
+          "y": 30.382,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_frequency_meter",
+      "file": "291_E_LV_SLD_IEC60617_frequency_meter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Frecuencímetro",
+      "name_en": "Frequency meter",
+      "description": "Instrumento indicador (IEC 60617 S00910) con letra f. Mide frecuencia.",
+      "tags": [
+        "frecuencímetro",
+        "frequency meter",
+        "Hz",
+        "medición"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00910",
+      "notes": null,
+      "iec_60617": [
+        "S00910"
+      ],
+      "size": {
+        "w": 41.956,
+        "h": 27.305
+      },
+      "viewBox": {
+        "x": -33.368,
+        "y": -1.6,
+        "w": 41.956,
+        "h": 27.305
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "f",
+        "Hz"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "45–55 Hz",
+          "x": -6.373,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.373,
+          "y": 17.675,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_fuse",
+      "file": "291_E_LV_SLD_IEC60617_fuse.svg",
+      "name_es": "Fusible",
+      "name_en": "Fuse",
+      "description": "Rectángulo con línea central.",
+      "tags": [
+        "fusible"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 35.716,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -27.716,
+        "y": -1.6,
+        "w": 35.716,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "FUSE"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -3.676,
+          "y": 9.314,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_fuse_1p_mld",
+        "lv_fuse_2p_mld",
+        "lv_fuse_3p_mld",
+        "lv_fuse_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_fuse_disconnector_nh00",
+      "file": "291_E_LV_SLD_IEC60617_fuse_disconnector_nh00.svg",
+      "name_es": "Fusible seccionable NH00",
+      "name_en": "NH00 fuse disconnector",
+      "description": "Fusible NH con barras de conexión (columna de protección de TGBT).",
+      "tags": [
+        "fusible",
+        "NH00"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 71.76,
+        "h": 28.6
+      },
+      "viewBox": {
+        "x": -63.76,
+        "y": -4.5,
+        "w": 71.76,
+        "h": 28.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "NH00"
+      ],
+      "label_slots": [
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -15.284,
+          "y": 3.615,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "50 A",
+          "x": -15.304,
+          "y": 15.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "100 kA",
+          "x": -15.294,
+          "y": 21.81,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_fuse_disconnector_nh00_1p_mld",
+        "lv_fuse_disconnector_nh00_2p_mld",
+        "lv_fuse_disconnector_nh00_3p_mld",
+        "lv_fuse_disconnector_nh00_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_fuse_spd_fu",
+      "file": "291_E_LV_SLD_IEC60617_fuse_spd_fu.svg",
+      "name_es": "Fusible + descargador de sobretensión (FU+SPD)",
+      "name_en": "Fuse + SPD (FU+SPD)",
+      "description": "Dispositivo de protección contra sobretensiones transitorias con fusibles.",
+      "tags": [
+        "SPD",
+        "fusible"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 36.647,
+        "h": 48.2
+      },
+      "viewBox": {
+        "x": -28.647,
+        "y": -1.6,
+        "w": 36.647,
+        "h": 48.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 40.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "FU+SPD"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -4.608,
+          "y": 21.324,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_fuse_spd_fu_1p_mld",
+        "lv_fuse_spd_fu_2p_mld",
+        "lv_fuse_spd_fu_3p_mld",
+        "lv_fuse_spd_fu_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_fuse_switch_fs",
+      "file": "291_E_LV_SLD_IEC60617_fuse_switch_fs.svg",
+      "name_es": "Fusible seccionador (FS)",
+      "name_en": "Fuse-switch disconnector (FS)",
+      "description": "Fusible seccionador según leyenda.",
+      "tags": [
+        "fusible",
+        "FS"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 39.025,
+        "h": 45.7
+      },
+      "viewBox": {
+        "x": -31.025,
+        "y": -1.6,
+        "w": 39.025,
+        "h": 45.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 37.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "FS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.961,
+          "y": 19.608,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_fuse_switch_fs_1p_mld",
+        "lv_fuse_switch_fs_2p_mld",
+        "lv_fuse_switch_fs_3p_mld",
+        "lv_fuse_switch_fs_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_generator",
+      "file": "291_E_LV_SLD_IEC60617_generator.svg",
+      "name_es": "Generador trifásico",
+      "name_en": "Three-phase generator",
+      "description": "Círculo con G y 3~.",
+      "tags": [
+        "generador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 38.608,
+        "h": 20.374
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 38.608,
+        "h": 20.374
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "G",
+        "3~",
+        "GEN"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.353,
+          "y": 8.922,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_generic_load",
+      "file": "291_E_LV_SLD_IEC60617_generic_load.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Carga genérica",
+      "name_en": "Generic load",
+      "description": "Carga genérica o impedancia no especificada según IEC 60617. Se usa para representar cargas diversas (motores pequeños, equipos, etc.).",
+      "tags": [
+        "carga",
+        "load",
+        "impedancia",
+        "genérico"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 40.0,
+        "h": 28.21
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 40.0,
+        "h": 28.21
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "Z"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Z1",
+          "x": -5.5,
+          "y": 8.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power_kva",
+          "placeholder": "{power_kva}",
+          "example": "10 kVA",
+          "x": -5.5,
+          "y": 12.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "400 V",
+          "x": -5.5,
+          "y": 17.32,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_heating_load",
+      "file": "291_E_LV_SLD_IEC60617_heating_load.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Carga resistiva / calefacción",
+      "name_en": "Resistive heating load",
+      "description": "Elemento calefactor resistivo según IEC 60617 S00785. Se usa para circuitos de calefacción eléctrica, traceado térmico, resistencias.",
+      "tags": [
+        "calefacción",
+        "heating",
+        "resistencia",
+        "calentador",
+        "traceado",
+        "EH"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00785",
+      "notes": null,
+      "iec_60617": [
+        "S00785"
+      ],
+      "size": {
+        "w": 40.0,
+        "h": 27.21
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 40.0,
+        "h": 27.21
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "EH"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-EH1",
+          "x": -5.5,
+          "y": 9.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power_kw",
+          "placeholder": "{power_kw}",
+          "example": "3 kW",
+          "x": -5.5,
+          "y": 13.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "400 V",
+          "x": -5.5,
+          "y": 18.32,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_inverter",
+      "file": "291_E_LV_SLD_IEC60617_inverter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Inversor DC/AC",
+      "name_en": "DC/AC inverter",
+      "description": "Inversor o convertidor DC/AC según IEC 60617 S00451. Se usa en instalaciones fotovoltaicas, UPS y sistemas de almacenamiento de energía.",
+      "tags": [
+        "inversor",
+        "inverter",
+        "DC/AC",
+        "convertidor",
+        "solar",
+        "PV",
+        "fotovoltaico"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00451",
+      "notes": null,
+      "iec_60617": [
+        "S00451"
+      ],
+      "size": {
+        "w": 38.5,
+        "h": 32.87
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 38.5,
+        "h": 32.87
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "INV"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-UF1",
+          "x": -7.0,
+          "y": 10.75,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "dc_input",
+          "placeholder": "{dc_input}",
+          "example": "750 V DC",
+          "x": -7.0,
+          "y": 15.16,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ac_output",
+          "placeholder": "{ac_output}",
+          "example": "400 V / 50 Hz",
+          "x": -7.0,
+          "y": 19.57,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "10 kW",
+          "x": -7.0,
+          "y": 23.98,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_isolating_transformer",
+      "file": "291_E_LV_SLD_IEC60617_isolating_transformer.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Transformador de aislamiento",
+      "name_en": "Isolating transformer",
+      "description": "Transformador de aislamiento con pantalla electrostática según IEC 60617 S00323. Se usa para separar galvánicamente circuitos y eliminar ruido de modo común.",
+      "tags": [
+        "transformador",
+        "aislamiento",
+        "isolation",
+        "pantalla",
+        "TR-ISO",
+        "galvánico"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00323",
+      "notes": null,
+      "iec_60617": [
+        "S00323"
+      ],
+      "size": {
+        "w": 39.0,
+        "h": 42.21
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 39.0,
+        "h": 42.21
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "TI"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 24.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ratio",
+          "placeholder": "{ratio}",
+          "example": "230/230 V",
+          "x": -6.5,
+          "y": 28.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "1 kVA",
+          "x": -6.5,
+          "y": 33.32,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_lighting_load",
+      "file": "291_E_LV_SLD_IEC60617_lighting_load.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Carga de alumbrado (lámpara)",
+      "name_en": "Lighting load (lamp)",
+      "description": "Lámpara o carga de alumbrado según IEC 60617 S00869. Símbolo de círculo con X interior. Se usa para luminarias, circuitos de alumbrado.",
+      "tags": [
+        "lámpara",
+        "alumbrado",
+        "lighting",
+        "lamp",
+        "luminaria",
+        "luz"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00869",
+      "notes": null,
+      "iec_60617": [
+        "S00869"
+      ],
+      "size": {
+        "w": 40.0,
+        "h": 26.71
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 40.0,
+        "h": 26.71
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "EL"
+      ],
+      "label_slots": [
+        {
+          "key": "power_w",
+          "placeholder": "{power_w}",
+          "example": "60 W",
+          "x": 5.5,
+          "y": 7.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "230 V",
+          "x": 5.5,
+          "y": 11.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-EL1",
+          "x": 5.5,
+          "y": 15.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_load_box_kw",
+      "file": "291_E_LV_SLD_IEC60617_load_box_kw.svg",
+      "name_es": "Carga genérica (caja kW)",
+      "name_en": "Generic load (kW box)",
+      "description": "Cuadrado con rótulo de potencia.",
+      "tags": [
+        "carga"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 38.608,
+        "h": 20.104
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 38.608,
+        "h": 20.104
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "kW",
+        "LOAD"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.353,
+          "y": 8.824,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_manual_transfer_switch",
+      "file": "291_E_LV_SLD_IEC60617_manual_transfer_switch.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": "lv_ats_3p_mld",
+      "name_es": "Interruptor de transferencia manual (MTS)",
+      "name_en": "Manual transfer switch (MTS)",
+      "description": "Interruptor de transferencia manual con dos entradas de alimentación (A y B) y una salida. Actuador manual tipo T. Para transferencia de emergencia sin automatismo.",
+      "tags": [
+        "transferencia",
+        "manual",
+        "MTS",
+        "conmutador",
+        "changeover",
+        "transfer switch"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00335 / IEC 61008",
+      "notes": null,
+      "iec_60617": [
+        "S00335"
+      ],
+      "size": {
+        "w": 47.608,
+        "h": 37.89
+      },
+      "viewBox": {
+        "x": -35.804,
+        "y": -4.62,
+        "w": 47.608,
+        "h": 37.89
+      },
+      "ports": [
+        {
+          "id": "in_a",
+          "x": -6.25,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "in_b",
+          "x": 6.25,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "out",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "A",
+        "B",
+        "MTS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q0",
+          "x": -10.604,
+          "y": 17.152,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "load",
+          "placeholder": "{load}",
+          "example": "Panel B",
+          "x": -10.604,
+          "y": 21.562,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "630 A",
+          "x": -10.604,
+          "y": 25.972,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_mcb",
+      "file": "291_E_LV_SLD_IEC60617_mcb.svg",
+      "name_es": "Interruptor termomagnético (MCB)",
+      "name_en": "Miniature circuit breaker (MCB)",
+      "description": "MCB unipolar/bipolar con disparador térmico.",
+      "tags": [
+        "MCB",
+        "interruptor"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 3 (108-2026-SOXXXXXX-E-DU-003)",
+      "notes": null,
+      "size": {
+        "w": 67.78,
+        "h": 43.6
+      },
+      "viewBox": {
+        "x": -59.78,
+        "y": -4.5,
+        "w": 67.78,
+        "h": 43.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 32.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "MCB"
+      ],
+      "label_slots": [
+        {
+          "key": "poles",
+          "placeholder": "{poles}",
+          "example": "2P",
+          "x": -11.314,
+          "y": 8.162,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "curve_rating",
+          "placeholder": "{curve_rating}",
+          "example": "C32",
+          "x": -11.304,
+          "y": 12.691,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "6kA",
+          "x": -11.314,
+          "y": 17.235,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_mcb_1p_mld",
+        "lv_mcb_2p_mld",
+        "lv_mcb_3p_mld",
+        "lv_mcb_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_mccb_basic",
+      "file": "291_E_LV_SLD_IEC60617_mccb_basic.svg",
+      "name_es": "Interruptor de caja moldeada MCCB (símbolo de leyenda)",
+      "name_en": "MCCB, legend symbol",
+      "description": "Versión simplificada del MCCB con funcionalidad LSIG según la leyenda.",
+      "tags": [
+        "MCCB",
+        "interruptor"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>>>",
+        "I>",
+        "I>>",
+        "MCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.461,
+          "y": 18.824,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_mccb_basic_1p_mld",
+        "lv_mccb_basic_2p_mld",
+        "lv_mccb_basic_3p_mld",
+        "lv_mccb_basic_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_mccb_drawout",
+      "file": "291_E_LV_SLD_IEC60617_mccb_drawout.svg",
+      "name_es": "Interruptor de caja moldeada MCCB extraíble",
+      "name_en": "Moulded-case circuit breaker (MCCB), drawout",
+      "tags": [
+        "MCCB",
+        "interruptor",
+        "extraible"
+      ],
+      "description": "Interruptor de caja moldeada MCCB extraíble: símbolo generado por script a partir de la familia mccb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>",
+        "MCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.525,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "63 A",
+          "x": -14.525,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "10 kA",
+          "x": -14.525,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -14.525,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": -14.525,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_mccb_drawout_1p_mld",
+        "lv_mccb_drawout_2p_mld",
+        "lv_mccb_drawout_3p_mld",
+        "lv_mccb_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_mccb_lsig_drawout",
+      "file": "291_E_LV_SLD_IEC60617_mccb_lsig_drawout.svg",
+      "name_es": "Interruptor de caja moldeada MCCB con unidad LSIG extraíble",
+      "name_en": "Moulded-case circuit breaker (MCCB), with LSIG trip unit, drawout",
+      "tags": [
+        "MCCB",
+        "interruptor",
+        "LSIG",
+        "extraible"
+      ],
+      "description": "Interruptor de caja moldeada MCCB con unidad LSIG extraíble: símbolo generado por script a partir de la familia mccb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 50.5,
+        "h": 43.85
+      },
+      "viewBox": {
+        "x": -38.525,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 43.85
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 35.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>>>",
+        "I>",
+        "I>>",
+        "MCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -14.525,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "63 A",
+          "x": -14.525,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "10 kA",
+          "x": -14.525,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -14.525,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Fabricante",
+          "x": -14.525,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": []
+    },
+    {
+      "id": "lv_mccb_motorized",
+      "file": "291_E_LV_SLD_IEC60617_mccb_motorized.svg",
+      "name_es": "Interruptor de caja moldeada MCCB (LSIG, motorizado)",
+      "name_en": "Moulded-case circuit breaker (MCCB), motor-operated",
+      "description": "MCCB con funciones I>, I>>, I>>>, I>> y motor (M).",
+      "tags": [
+        "MCCB",
+        "interruptor"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 79.442,
+        "h": 53.6
+      },
+      "viewBox": {
+        "x": -68.03,
+        "y": -4.5,
+        "w": 79.442,
+        "h": 53.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 47.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>>>",
+        "I>",
+        "I>>",
+        "M",
+        "MCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -19.559,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "800 A",
+          "x": -19.569,
+          "y": 24.471,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "50 kA",
+          "x": -19.559,
+          "y": 30.706,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_mccb_motorized_1p_mld",
+        "lv_mccb_motorized_2p_mld",
+        "lv_mccb_motorized_3p_mld",
+        "lv_mccb_motorized_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_mccb_motorized_drawout",
+      "file": "291_E_LV_SLD_IEC60617_mccb_motorized_drawout.svg",
+      "name_es": "Interruptor de caja moldeada MCCB motorizado extraíble",
+      "name_en": "Moulded-case circuit breaker (MCCB), motor-operated, drawout",
+      "tags": [
+        "MCCB",
+        "interruptor",
+        "motorizado",
+        "extraible"
+      ],
+      "description": "Interruptor de caja moldeada MCCB motorizado extraíble: símbolo generado por script a partir de la familia mccb. Falta revisión normativa.",
+      "origin": "generated",
+      "source": "Generado con tools/build_entries (familia SLD/MLD existente)",
+      "notes": "Entrada generada automáticamente. Revisar referencia IEC 60617 y textos.",
+      "size": {
+        "w": 79.442,
+        "h": 53.6
+      },
+      "viewBox": {
+        "x": -68.03,
+        "y": -4.5,
+        "w": 79.442,
+        "h": 53.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 47.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I>>",
+        "I>>>",
+        "I>",
+        "I>>",
+        "M",
+        "MCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "TAG-01",
+          "x": -26.451,
+          "y": 2.2,
+          "anchor": "end",
+          "size": 2.5
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "800 A",
+          "x": -26.451,
+          "y": 9.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "50 kA",
+          "x": -26.451,
+          "y": 12.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "trip_unit",
+          "placeholder": "{trip_unit}",
+          "example": "TM/ETU",
+          "x": -26.451,
+          "y": 15.0,
+          "anchor": "end",
+          "size": 1.7
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -26.451,
+          "y": 18.0,
+          "anchor": "end",
+          "size": 1.7
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_mccb_motorized_drawout_1p_mld",
+        "lv_mccb_motorized_drawout_2p_mld",
+        "lv_mccb_motorized_drawout_3p_mld",
+        "lv_mccb_motorized_drawout_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_motor_1ph",
+      "file": "291_E_LV_SLD_IEC60617_motor_1ph.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Motor monofásico",
+      "name_en": "Single-phase motor",
+      "description": "Círculo con M y 1~. Motor de inducción monofásico.",
+      "tags": [
+        "motor",
+        "motor monofásico",
+        "1~",
+        "electromotriz"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 39.108,
+        "h": 27.514
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 39.108,
+        "h": 27.514
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "M",
+        "1~",
+        "M"
+      ],
+      "label_slots": [
+        {
+          "key": "power_kw",
+          "placeholder": "{power_kw}",
+          "example": "2.2 kW",
+          "x": 6.892,
+          "y": 12.01,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "10 A",
+          "x": 6.892,
+          "y": 16.42,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-M1",
+          "x": 6.892,
+          "y": 20.83,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_motor_3ph",
+      "file": "291_E_LV_SLD_IEC60617_motor_3ph.svg",
+      "name_es": "Motor trifásico",
+      "name_en": "Three-phase motor",
+      "description": "Círculo con M y 3~. Rotulos: potencia (kW), corriente, tag.",
+      "tags": [
+        "motor",
+        "carga"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 59.788,
+        "h": 26.744
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 59.788,
+        "h": 26.744
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "M",
+        "3~"
+      ],
+      "label_slots": [
+        {
+          "key": "power_kw",
+          "placeholder": "{power_kw}",
+          "example": "30 KW",
+          "x": 7.353,
+          "y": 8.333,
+          "anchor": "start",
+          "size": 3.47
+        },
+        {
+          "key": "current",
+          "placeholder": "{current}",
+          "example": "49.1A",
+          "x": 7.353,
+          "y": 12.745,
+          "anchor": "start",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "620-035",
+          "x": 0.0,
+          "y": 20.588,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_motor_starter_dol",
+      "file": "291_E_LV_SLD_IEC60617_motor_starter_dol.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Arrancador directo (DOL)",
+      "name_en": "Direct on-line starter (DOL)",
+      "description": "Arrancador directo DOL: contactor + relé térmico integrados. Se usa para arrancar motores hasta ~15 kW directamente a tensión de red.",
+      "tags": [
+        "DOL",
+        "arrancador",
+        "starter",
+        "directo",
+        "motor",
+        "contactor",
+        "térmico"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 (símbolo propio industria)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 49.73,
+        "h": 31.62
+      },
+      "viewBox": {
+        "x": -39.73,
+        "y": -1.6,
+        "w": 49.73,
+        "h": 31.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 20.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "DOL"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -9.5,
+          "y": 9.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "motor_kw",
+          "placeholder": "{motor_kw}",
+          "example": "7.5 kW",
+          "x": -9.5,
+          "y": 13.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "16 A",
+          "x": -9.5,
+          "y": 18.32,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "setting",
+          "placeholder": "{setting}",
+          "example": "13-16 A",
+          "x": -9.5,
+          "y": 22.73,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_network_analyzer_ar",
+      "file": "291_E_LV_SLD_IEC60617_network_analyzer_ar.svg",
+      "name_es": "Analizador de red (AR)",
+      "name_en": "Network analyzer (AR)",
+      "description": "Caja rotulada AR para el analizador de red.",
+      "tags": [
+        "medicion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 39.142,
+        "h": 19.5
+      },
+      "viewBox": {
+        "x": -31.142,
+        "y": -1.0,
+        "w": 39.142,
+        "h": 19.5
+      },
+      "ports": [],
+      "fixed_texts": [
+        "AR",
+        "AR"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -7.108,
+          "y": 7.745,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_neutral_link",
+      "file": "291_E_LV_SLD_IEC60617_neutral_link.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Enlace de neutro",
+      "name_en": "Neutral link",
+      "description": "Puente de neutro desconectable según IEC 60617. Permite aislar el neutro para mediciones de aislamiento.",
+      "tags": [
+        "neutro",
+        "neutral",
+        "enlace",
+        "link",
+        "TN"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 37.0,
+        "h": 23.2
+      },
+      "viewBox": {
+        "x": -29.0,
+        "y": -1.6,
+        "w": 37.0,
+        "h": 23.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "N"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-N1",
+          "x": -5.0,
+          "y": 9.5,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_pf_meter",
+      "file": "291_E_LV_SLD_IEC60617_pf_meter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Medidor de factor de potencia",
+      "name_en": "Power factor meter",
+      "description": "Instrumento indicador (IEC 60617 S00910) con símbolo cos φ. Mide factor de potencia.",
+      "tags": [
+        "factor de potencia",
+        "power factor",
+        "cos phi",
+        "medición"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00910",
+      "notes": null,
+      "iec_60617": [
+        "S00910"
+      ],
+      "size": {
+        "w": 41.956,
+        "h": 27.305
+      },
+      "viewBox": {
+        "x": -33.368,
+        "y": -1.6,
+        "w": 41.956,
+        "h": 27.305
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "cos",
+        "φ",
+        "cosφ"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "0.5 ind–0.5 cap",
+          "x": -6.373,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.373,
+          "y": 17.675,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_pilot_lamp",
+      "file": "291_E_LV_SLD_IEC60617_pilot_lamp.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Lámpara piloto / presencia de tensión",
+      "name_en": "Pilot lamp / voltage presence indicator",
+      "description": "Lámpara de señalización (IEC 60617 S00965): círculo con cruz entre fase y neutro.",
+      "tags": [
+        "señalización",
+        "piloto",
+        "lámpara"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00965",
+      "notes": null,
+      "iec_60617": [
+        "S00965"
+      ],
+      "size": {
+        "w": 40.569,
+        "h": 28.62
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 40.569,
+        "h": 28.62
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "H"
+      ],
+      "label_slots": [
+        {
+          "key": "color",
+          "placeholder": "{color}",
+          "example": "RD",
+          "x": -5.392,
+          "y": 8.769,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voltage",
+          "placeholder": "{voltage}",
+          "example": "230 V",
+          "x": -5.392,
+          "y": 13.225,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-H1",
+          "x": -5.392,
+          "y": 17.755,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_protection_relay",
+      "file": "291_E_LV_SLD_IEC60617_protection_relay.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Relé de protección",
+      "name_en": "Protection relay",
+      "description": "Relé de medida (IEC 60617 S00327): caja con las funciones ANSI como dato variable. Entrada desde TI/TT arriba, salida de disparo a la derecha.",
+      "tags": [
+        "relé",
+        "protección",
+        "ANSI"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00327 / S00342",
+      "notes": null,
+      "iec_60617": [
+        "S00327",
+        "S00342"
+      ],
+      "size": {
+        "w": 64.105,
+        "h": 22.637
+      },
+      "viewBox": {
+        "x": -45.218,
+        "y": -1.6,
+        "w": 64.105,
+        "h": 22.637
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.074,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "trip",
+          "x": 16.887,
+          "y": 9.444,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "RELAY"
+      ],
+      "label_slots": [
+        {
+          "key": "ansi_functions",
+          "placeholder": "{ansi_functions}",
+          "example": "50/51 50N/51N",
+          "x": 0.0,
+          "y": 11.225,
+          "anchor": "middle",
+          "size": 3.47
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "VIP 40",
+          "x": -15.686,
+          "y": 11.098,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "manufacturer",
+          "placeholder": "{manufacturer}",
+          "example": "Sch. Electric",
+          "x": -15.686,
+          "y": 15.627,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-F11",
+          "x": -15.686,
+          "y": 20.157,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_pushbutton_nc",
+      "file": "291_E_LV_SLD_IEC60617_pushbutton_nc.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Pulsador normalmente cerrado (NC)",
+      "name_en": "Pushbutton, normally closed (NC)",
+      "description": "Pulsador de cierre según IEC 60617 S00202. Contacto momentáneo de reposición automática.",
+      "tags": [
+        "pulsador",
+        "pushbutton",
+        "NC",
+        "control"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00202",
+      "notes": null,
+      "iec_60617": [
+        "S00202"
+      ],
+      "size": {
+        "w": 37.922,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -29.922,
+        "y": -1.6,
+        "w": 37.922,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "NC"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-S1",
+          "x": -6.373,
+          "y": 9.312,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_pushbutton_no",
+      "file": "291_E_LV_SLD_IEC60617_pushbutton_no.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Pulsador normalmente abierto (NA)",
+      "name_en": "Pushbutton, normally open (NO)",
+      "description": "Pulsador de apertura según IEC 60617 S00201. Contacto momentáneo de reposición automática.",
+      "tags": [
+        "pulsador",
+        "pushbutton",
+        "NO",
+        "control"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00201",
+      "notes": null,
+      "iec_60617": [
+        "S00201"
+      ],
+      "size": {
+        "w": 37.922,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -29.922,
+        "y": -1.6,
+        "w": 37.922,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "NO"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-S1",
+          "x": -6.373,
+          "y": 9.312,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_pv_module",
+      "file": "291_E_LV_SLD_IEC60617_pv_module.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Módulo fotovoltaico (panel solar)",
+      "name_en": "Photovoltaic module (solar panel)",
+      "description": "Módulo fotovoltaico o panel solar. Convención de la industria. Se usa en instalaciones de generación solar fotovoltaica.",
+      "tags": [
+        "fotovoltaico",
+        "solar",
+        "PV",
+        "panel",
+        "módulo",
+        "generación",
+        "renovable"
+      ],
+      "origin": "drawn",
+      "source": "Convención de la industria fotovoltaica (IEC 62446)",
+      "notes": null,
+      "iec_60617": [],
+      "size": {
+        "w": 43.0,
+        "h": 30.52
+      },
+      "viewBox": {
+        "x": -32.5,
+        "y": -1.6,
+        "w": 43.0,
+        "h": 30.52
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": -0.071,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": -0.071,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "PV"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-PV1",
+          "x": -7.5,
+          "y": 8.9,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power_wp",
+          "placeholder": "{power_wp}",
+          "example": "400 Wp",
+          "x": -7.5,
+          "y": 13.31,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "voc",
+          "placeholder": "{voc}",
+          "example": "48 V",
+          "x": -7.5,
+          "y": 17.72,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "isc",
+          "placeholder": "{isc}",
+          "example": "10 A",
+          "x": -7.5,
+          "y": 22.13,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_rcbo",
+      "file": "291_E_LV_SLD_IEC60617_rcbo.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": [
+        "lv_rcbo_1p_mld",
+        "lv_rcbo_2p_mld",
+        "lv_rcbo_4p_mld"
+      ],
+      "name_es": "Interruptor termomagnético diferencial (RCBO)",
+      "name_en": "Residual current breaker with overcurrent protection (RCBO)",
+      "description": "Interruptor automático con disparador térmico y magnético, más toroide y relé diferencial IΔ que actúan sobre el mismo contacto.",
+      "tags": [
+        "RCBO",
+        "diferencial",
+        "termomagnético"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00287 / S00120 / S00121 / S00327",
+      "notes": null,
+      "iec_60617": [
+        "S00287",
+        "S00120",
+        "S00121",
+        "S00327"
+      ],
+      "size": {
+        "w": 66.37,
+        "h": 40.7
+      },
+      "viewBox": {
+        "x": -51.87,
+        "y": -1.6,
+        "w": 66.37,
+        "h": 40.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 32.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "I",
+        "Δ",
+        "RCBO"
+      ],
+      "label_slots": [
+        {
+          "key": "poles",
+          "placeholder": "{poles}",
+          "example": "2P",
+          "x": -11.314,
+          "y": 8.162,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "curve_rating",
+          "placeholder": "{curve_rating}",
+          "example": "C32",
+          "x": -11.314,
+          "y": 12.691,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "sensitivity",
+          "placeholder": "{sensitivity}",
+          "example": "30mA",
+          "x": -11.314,
+          "y": 17.221,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "breaking_capacity",
+          "placeholder": "{breaking_capacity}",
+          "example": "6kA",
+          "x": -11.314,
+          "y": 21.75,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -11.314,
+          "y": 26.279,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_rccb",
+      "file": "291_E_LV_SLD_IEC60617_rccb.svg",
+      "name_es": "Interruptor diferencial (RCCB)",
+      "name_en": "Residual-current circuit breaker (RCCB)",
+      "description": "RCCB con toroide y bobina diferencial.",
+      "tags": [
+        "RCCB",
+        "diferencial"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 3 (108-2026-SOXXXXXX-E-DU-003)",
+      "notes": null,
+      "size": {
+        "w": 64.28,
+        "h": 43.6
+      },
+      "viewBox": {
+        "x": -49.78,
+        "y": -4.5,
+        "w": 64.28,
+        "h": 43.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 32.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "Δ",
+        "I",
+        "RCCB"
+      ],
+      "label_slots": [
+        {
+          "key": "poles",
+          "placeholder": "{poles}",
+          "example": "2P",
+          "x": -11.294,
+          "y": 8.324,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "25A",
+          "x": -11.309,
+          "y": 12.853,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "sensitivity",
+          "placeholder": "{sensitivity}",
+          "example": "30mA",
+          "x": -11.304,
+          "y": 17.382,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_rccb_1p_mld",
+        "lv_rccb_2p_mld",
+        "lv_rccb_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_rcd_relay_toroid",
+      "file": "291_E_LV_SLD_IEC60617_rcd_relay_toroid.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Relé diferencial con toroide",
+      "name_en": "Residual current relay with core-balance toroid",
+      "description": "Toroide sobre el conductor conectado a un relé de medida IΔ; la salida de disparo actúa sobre el interruptor asociado (MCCB/ACB).",
+      "tags": [
+        "diferencial",
+        "relé",
+        "toroide"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00327 / S00333",
+      "notes": null,
+      "iec_60617": [
+        "S00327",
+        "S00333"
+      ],
+      "size": {
+        "w": 53.959,
+        "h": 33.2
+      },
+      "viewBox": {
+        "x": -34.93,
+        "y": -1.6,
+        "w": 53.959,
+        "h": 33.2
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        },
+        {
+          "id": "trip",
+          "x": 12.5,
+          "y": 5.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "I",
+        "Δ",
+        "RCD"
+      ],
+      "label_slots": [
+        {
+          "key": "sensitivity",
+          "placeholder": "{sensitivity}",
+          "example": "0.03…30 A",
+          "x": -6.863,
+          "y": 10.02,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "time_delay",
+          "placeholder": "{time_delay}",
+          "example": "0…1 s",
+          "x": -6.863,
+          "y": 14.549,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "model",
+          "placeholder": "{model}",
+          "example": "RH99M",
+          "x": -6.863,
+          "y": 19.078,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-F1",
+          "x": -6.863,
+          "y": 23.608,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_reactor",
+      "file": "291_E_LV_SLD_IEC60617_reactor.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Reactor / inductancia",
+      "name_en": "Reactor / inductor",
+      "description": "Bobina de inductancia o reactor de potencia según IEC 60617 S00310. Se usa como choke de entrada de VFD, reactancia limitadora de corriente o reactor de filtro.",
+      "tags": [
+        "reactor",
+        "bobina",
+        "inductancia",
+        "choke",
+        "inductor"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00310",
+      "notes": null,
+      "iec_60617": [
+        "S00310"
+      ],
+      "size": {
+        "w": 35.09,
+        "h": 37.21
+      },
+      "viewBox": {
+        "x": -27.09,
+        "y": -1.6,
+        "w": 35.09,
+        "h": 37.21
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "L"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-L1",
+          "x": -4.5,
+          "y": 19.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "impedance",
+          "placeholder": "{impedance}",
+          "example": "4%",
+          "x": -4.5,
+          "y": 23.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "30 kVA",
+          "x": -4.5,
+          "y": 27.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_rectifier",
+      "file": "291_E_LV_SLD_IEC60617_rectifier.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Rectificador (AC/DC)",
+      "name_en": "Rectifier (AC/DC)",
+      "description": "Convertidor AC/DC (rectificador de puente). Según IEC 60617 S00449. Se usa como fuente de alimentación DC para baterías y controles.",
+      "tags": [
+        "rectificador",
+        "rectifier",
+        "AC/DC",
+        "convertidor",
+        "cargador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00449",
+      "notes": null,
+      "iec_60617": [
+        "S00449"
+      ],
+      "size": {
+        "w": 39.0,
+        "h": 32.87
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 39.0,
+        "h": 32.87
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "~",
+        "RECT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-UF1",
+          "x": -6.5,
+          "y": 10.75,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ac_input",
+          "placeholder": "{ac_input}",
+          "example": "400 V AC",
+          "x": -6.5,
+          "y": 15.16,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "dc_output",
+          "placeholder": "{dc_output}",
+          "example": "48 V DC",
+          "x": -6.5,
+          "y": 19.57,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "5 kW",
+          "x": -6.5,
+          "y": 23.98,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_selector_switch",
+      "file": "291_E_LV_SLD_IEC60617_selector_switch.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Interruptor selector rotativo",
+      "name_en": "Rotary selector switch",
+      "description": "Interruptor selector rotativo de 2 ó 3 posiciones (MANUAL / 0 / AUTO). Según IEC 60617 S00085. Usado para selección LOCAL/REMOTO o MANUAL/AUTO.",
+      "tags": [
+        "selector",
+        "rotativo",
+        "rotary",
+        "manual",
+        "auto",
+        "control"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00085",
+      "notes": null,
+      "iec_60617": [
+        "S00085"
+      ],
+      "size": {
+        "w": 38.412,
+        "h": 25.7
+      },
+      "viewBox": {
+        "x": -30.412,
+        "y": -1.6,
+        "w": 38.412,
+        "h": 25.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 17.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "SA"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-S1",
+          "x": -6.373,
+          "y": 9.8,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "positions",
+          "placeholder": "{positions}",
+          "example": "MAN/0/AUTO",
+          "x": -6.373,
+          "y": 14.21,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_socket_outlet",
+      "file": "291_E_LV_SLD_IEC60617_socket_outlet.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Toma de corriente (base enchufe)",
+      "name_en": "Socket outlet",
+      "description": "Toma de corriente o base de enchufe según IEC 60617 S00842. Se usa en circuitos de usos varios y fuerza.",
+      "tags": [
+        "toma",
+        "enchufe",
+        "socket",
+        "outlet",
+        "base",
+        "usos varios"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00842",
+      "notes": null,
+      "iec_60617": [
+        "S00842"
+      ],
+      "size": {
+        "w": 38.0,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -30.0,
+        "y": -1.6,
+        "w": 38.0,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "XS"
+      ],
+      "label_slots": [
+        {
+          "key": "rating",
+          "placeholder": "{rating}",
+          "example": "16 A / 230 V",
+          "x": 5.5,
+          "y": 7.0,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ip_rating",
+          "placeholder": "{ip_rating}",
+          "example": "IP44",
+          "x": 5.5,
+          "y": 11.41,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-XS1",
+          "x": 5.5,
+          "y": 15.82,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_soft_starter",
+      "file": "291_E_LV_SLD_IEC60617_soft_starter.svg",
+      "name_es": "Arrancador suave",
+      "name_en": "Soft starter",
+      "description": "Caja con rótulo SS.",
+      "tags": [
+        "arrancador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 45.5,
+        "h": 30.7
+      },
+      "viewBox": {
+        "x": -34.751,
+        "y": -1.6,
+        "w": 45.5,
+        "h": 30.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "SS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -10.784,
+          "y": 13.235,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_spd_varistor",
+      "file": "291_E_LV_SLD_IEC60617_spd_varistor.svg",
+      "name_es": "Descargador de sobretensión (SPD) con varistor",
+      "name_en": "Surge protective device (SPD)",
+      "description": "Caja con símbolo de varistor; se conecta a tierra por su extremo inferior.",
+      "tags": [
+        "SPD",
+        "proteccion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 66.77,
+        "h": 33.6
+      },
+      "viewBox": {
+        "x": -58.77,
+        "y": -4.5,
+        "w": 66.77,
+        "h": 33.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "SPD"
+      ],
+      "label_slots": [
+        {
+          "key": "class",
+          "placeholder": "{class}",
+          "example": "Type II",
+          "x": -15.289,
+          "y": 11.961,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "impulse_current",
+          "placeholder": "{impulse_current}",
+          "example": "65 kA",
+          "x": -15.299,
+          "y": 18.196,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_spd_varistor_1p_mld",
+        "lv_spd_varistor_2p_mld",
+        "lv_spd_varistor_3p_mld",
+        "lv_spd_varistor_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_switch_3way",
+      "file": "291_E_LV_SLD_IEC60617_switch_3way.svg",
+      "name_es": "Conmutador de 3 vías (SW)",
+      "name_en": "Three-way changeover switch (SW)",
+      "description": "Conmutador de tres vías usado como selector de alimentación (TGBT 1 / TGBT 2).",
+      "tags": [
+        "conmutador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 3 (108-2026-SOXXXXXX-E-DU-003)",
+      "notes": "Recorte del plano de servicios auxiliares; la geometría exacta del contacto es la del original.",
+      "size": {
+        "w": 55.304,
+        "h": 20.7
+      },
+      "viewBox": {
+        "x": -47.304,
+        "y": -1.6,
+        "w": 55.304,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "SW"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -23.284,
+          "y": 7.255,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_switch_disconnector",
+      "file": "291_E_LV_SLD_IEC60617_switch_disconnector.svg",
+      "name_es": "Seccionador (corte visible)",
+      "name_en": "Switch disconnector",
+      "description": "Cuchilla con contacto fijo y barra superior.",
+      "tags": [
+        "seccionador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 38.412,
+        "h": 18.1
+      },
+      "viewBox": {
+        "x": -30.412,
+        "y": -1.6,
+        "w": 38.412,
+        "h": 18.1
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 15.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "SW"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -6.373,
+          "y": 9.804,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_switch_disconnector_1p_mld",
+        "lv_switch_disconnector_2p_mld",
+        "lv_switch_disconnector_3p_mld",
+        "lv_switch_disconnector_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_thermal_overload",
+      "file": "291_E_LV_SLD_IEC60617_thermal_overload.svg",
+      "name_es": "Relé térmico de sobrecarga",
+      "name_en": "Thermal overload relay",
+      "description": "Rectángulo con elemento bimetálico en serie con el conductor.",
+      "tags": [
+        "rele",
+        "proteccion"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 36.451,
+        "h": 20.7
+      },
+      "viewBox": {
+        "x": -28.451,
+        "y": -1.6,
+        "w": 36.451,
+        "h": 20.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 12.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "OL"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -4.412,
+          "y": 8.333,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD",
+      "mld_equivalent": [
+        "lv_thermal_overload_1p_mld",
+        "lv_thermal_overload_2p_mld",
+        "lv_thermal_overload_3p_mld",
+        "lv_thermal_overload_4p_mld"
+      ]
+    },
+    {
+      "id": "lv_three_phase_marker",
+      "file": "291_E_LV_SLD_IEC60617_three_phase_marker.svg",
+      "name_es": "Marcador 3 fases + neutro",
+      "name_en": "Three-phase + neutral marker",
+      "description": "Trazos oblicuos con círculo que indican 3 fases más neutro sobre un conductor.",
+      "tags": [
+        "marcador"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 37.377,
+        "h": 18.27
+      },
+      "viewBox": {
+        "x": -29.377,
+        "y": -1.0,
+        "w": 37.377,
+        "h": 18.27
+      },
+      "ports": [],
+      "fixed_texts": [],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -5.343,
+          "y": 7.108,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_transformer_2w",
+      "file": "291_E_LV_SLD_IEC60617_transformer_2w.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Transformador de dos devanados",
+      "name_en": "Two-winding transformer",
+      "description": "Transformador de dos devanados según IEC 60617 S00321. Dos bobinas (círculos) acopladas magnéticamente.",
+      "tags": [
+        "transformador",
+        "transformer",
+        "TR",
+        "aislamiento"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00321",
+      "notes": null,
+      "iec_60617": [
+        "S00321"
+      ],
+      "size": {
+        "w": 39.0,
+        "h": 42.21
+      },
+      "viewBox": {
+        "x": -31.0,
+        "y": -1.6,
+        "w": 39.0,
+        "h": 42.21
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 25.0,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "T"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-T1",
+          "x": -6.5,
+          "y": 24.5,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ratio",
+          "placeholder": "{ratio}",
+          "example": "400/230 V",
+          "x": -6.5,
+          "y": 28.91,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "power",
+          "placeholder": "{power}",
+          "example": "5 kVA",
+          "x": -6.5,
+          "y": 33.32,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_ups",
+      "file": "291_E_LV_SLD_IEC60617_ups.svg",
+      "name_es": "UPS",
+      "name_en": "Uninterruptible power supply (UPS)",
+      "description": "Caja con rótulo UPS, entrada y salida.",
+      "tags": [
+        "UPS"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 50.5,
+        "h": 30.7
+      },
+      "viewBox": {
+        "x": -37.25,
+        "y": -1.6,
+        "w": 50.5,
+        "h": 30.7
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "UPS",
+        "UPS"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -12.745,
+          "y": 13.235,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_varimeter",
+      "file": "291_E_LV_SLD_IEC60617_varimeter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Varímetro (potencia reactiva)",
+      "name_en": "Varimeter (reactive power)",
+      "description": "Instrumento indicador (IEC 60617 S00910) con letras var. Mide potencia reactiva.",
+      "tags": [
+        "varímetro",
+        "varimeter",
+        "potencia reactiva",
+        "medición"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00910",
+      "notes": null,
+      "iec_60617": [
+        "S00910"
+      ],
+      "size": {
+        "w": 41.956,
+        "h": 36.125
+      },
+      "viewBox": {
+        "x": -33.368,
+        "y": -1.6,
+        "w": 41.956,
+        "h": 36.125
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "var",
+        "var"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "0–800 kvar",
+          "x": -6.373,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "800/5 A",
+          "x": -6.373,
+          "y": 17.675,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "vt_ratio",
+          "placeholder": "{vt_ratio}",
+          "example": "20000/100 V",
+          "x": -6.373,
+          "y": 22.085,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.373,
+          "y": 26.495,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_vfd",
+      "file": "291_E_LV_SLD_IEC60617_vfd.svg",
+      "name_es": "Variador de frecuencia (VFD)",
+      "name_en": "Variable frequency drive (VFD)",
+      "description": "Caja con rótulo VFD y corriente nominal.",
+      "tags": [
+        "variador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio (misma simbología de las láminas)",
+      "notes": null,
+      "size": {
+        "w": 52.316,
+        "h": 33.6
+      },
+      "viewBox": {
+        "x": -36.0,
+        "y": -4.5,
+        "w": 52.316,
+        "h": 33.6
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        },
+        {
+          "id": "bottom",
+          "x": 0.0,
+          "y": 22.5,
+          "dir": "down"
+        }
+      ],
+      "fixed_texts": [
+        "VFD"
+      ],
+      "label_slots": [
+        {
+          "key": "rated_current",
+          "placeholder": "{rated_current}",
+          "example": "6.0A",
+          "x": 0.0,
+          "y": 15.931,
+          "anchor": "middle",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_voltmeter",
+      "file": "291_E_LV_SLD_IEC60617_voltmeter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Voltímetro con conmutador voltimétrico",
+      "name_en": "Voltmeter with selector switch",
+      "description": "Voltímetro (IEC 60617 S00913) alimentado a través de un conmutador de varias posiciones (S00271) para leer L-L y L-N.",
+      "tags": [
+        "voltímetro",
+        "medición",
+        "conmutador"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00913 / S00271",
+      "notes": null,
+      "iec_60617": [
+        "S00913",
+        "S00271"
+      ],
+      "size": {
+        "w": 43.616,
+        "h": 20.104
+      },
+      "viewBox": {
+        "x": -35.028,
+        "y": -1.6,
+        "w": 43.616,
+        "h": 20.104
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "V",
+        "V"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "0–500 V",
+          "x": -6.373,
+          "y": 8.941,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P3",
+          "x": -6.373,
+          "y": 13.471,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    },
+    {
+      "id": "lv_vt",
+      "file": "291_E_LV_SLD_IEC60617_vt.svg",
+      "name_es": "Transformador de tensión (TT)",
+      "name_en": "Voltage transformer (VT)",
+      "description": "Dos círculos solapados con estrella (Y) y derivación.",
+      "tags": [
+        "TT",
+        "medicion"
+      ],
+      "origin": "extracted",
+      "source": "Lámina 2 (108-2026-SOXXXXXX-E-DU-002)",
+      "notes": null,
+      "size": {
+        "w": 48.0,
+        "h": 24.5
+      },
+      "viewBox": {
+        "x": -36.0,
+        "y": -3.45,
+        "w": 48.0,
+        "h": 24.5
+      },
+      "ports": [
+        {
+          "id": "primary",
+          "x": -10.0,
+          "y": 5.0,
+          "dir": "left"
+        },
+        {
+          "id": "secondary",
+          "x": 10.0,
+          "y": 5.0,
+          "dir": "right"
+        }
+      ],
+      "fixed_texts": [
+        "VT"
+      ],
+      "label_slots": [
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-Q1",
+          "x": -11.961,
+          "y": 3.951,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ],
+      "diagram_type": "SLD"
+    },
+    {
+      "id": "lv_wattmeter",
+      "file": "291_E_LV_SLD_IEC60617_wattmeter.svg",
+      "diagram_type": "SLD",
+      "sld_equivalent": null,
+      "mld_equivalent": null,
+      "name_es": "Vatímetro (potencia activa)",
+      "name_en": "Wattmeter (active power)",
+      "description": "Instrumento indicador (IEC 60617 S00910) con letra W. Mide potencia activa.",
+      "tags": [
+        "vatímetro",
+        "wattmeter",
+        "potencia activa",
+        "medición"
+      ],
+      "origin": "drawn",
+      "source": "Dibujo propio según IEC 60617 S00910",
+      "notes": null,
+      "iec_60617": [
+        "S00910"
+      ],
+      "size": {
+        "w": 41.956,
+        "h": 36.125
+      },
+      "viewBox": {
+        "x": -33.368,
+        "y": -1.6,
+        "w": 41.956,
+        "h": 36.125
+      },
+      "ports": [
+        {
+          "id": "top",
+          "x": 0.0,
+          "y": 0.0,
+          "dir": "up"
+        }
+      ],
+      "fixed_texts": [
+        "W",
+        "W"
+      ],
+      "label_slots": [
+        {
+          "key": "scale_range",
+          "placeholder": "{scale_range}",
+          "example": "0–1500 kW",
+          "x": -6.373,
+          "y": 13.265,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "ct_ratio",
+          "placeholder": "{ct_ratio}",
+          "example": "800/5 A",
+          "x": -6.373,
+          "y": 17.675,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "vt_ratio",
+          "placeholder": "{vt_ratio}",
+          "example": "20000/100 V",
+          "x": -6.373,
+          "y": 22.085,
+          "anchor": "end",
+          "size": 3.47
+        },
+        {
+          "key": "tag",
+          "placeholder": "{tag}",
+          "example": "-P1",
+          "x": -6.373,
+          "y": 26.495,
+          "anchor": "end",
+          "size": 3.47
+        }
+      ]
+    }
+  ],
+  "standards": "Forma IEC 60617; líneas IRAM 4502; letras IRAM 4503; puertos en retícula de 2,5 mm"
+}

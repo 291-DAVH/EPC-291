@@ -1,0 +1,27 @@
+{
+  "name": "create-management-document",
+  "description": "Crea documentos de gestión PM² (charter, actas, informes, planes) para el proyecto activo.",
+  "version": "1.0.0",
+  "supports_learning": true,
+  "learnable_content": [
+    "pdf",
+    "templates",
+    "examples",
+    "standards"
+  ],
+  "knowledge_types": {
+    "pdf": "Documentos PM² del cliente de proyectos anteriores (formato y convenciones)",
+    "templates": "Plantillas corporativas del cliente para informes y actas",
+    "examples": "Ejemplos de charters y planes aprobados por el cliente",
+    "standards": "Procedimientos internos de gestión del cliente"
+  },
+  "capabilities": [
+    "create_document",
+    "export_pdf",
+    "export_docx"
+  ],
+  "invocation": "explicit",
+  "context_requires": [
+    "90_MANAGEMENT"
+  ]
+}

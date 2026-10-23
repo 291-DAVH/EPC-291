@@ -1,0 +1,455 @@
+{
+ "grupo": "canalizaciones",
+ "reglas": [
+  {
+   "id": "canalizaciones.ortogonalidad",
+   "grupo": "canalizaciones",
+   "tema": "Recorrido de canalizaciones",
+   "regla": "El recorrido respeta la ortogonalidad del ambiente (líneas verticales y horizontales o paralelas a las aristas); no se permiten tendidos en diagonal.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "diagonal_permitida": false
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.1",
+    "pagina_impresa": 54,
+    "cita": "No se permiten los tendidos en diagonal."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.distancia_cajas_a_marcos_solados_techos",
+   "grupo": "canalizaciones",
+   "tema": "Ubicación de cajas respecto de marcos, solados y techos",
+   "regla": "El borde de la caja más cercano queda a no más de 0,25 m del marco de aberturas, 0,30 m del cielorraso o techo y 0,20 m del solado.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "a_marco_max_m": 0.25,
+    "a_cielorraso_max_m": 0.3,
+    "a_solado_max_m": 0.2
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.1",
+    "pagina_impresa": 54,
+    "cita": "a no más de 0,25 m de la arista externa de cada marco de aberturas colocadas en obra, a no más de 0,30 m de los cielorrasos o techos y no más de 0,20 m de los solados."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.curvas_max_entre_cajas",
+   "grupo": "canalizaciones",
+   "tema": "Cantidad de curvas",
+   "regla": "Entre bocas, cajas o gabinetes se admiten como máximo tres curvas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "curvas_max": 3
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.1",
+    "pagina_impresa": 54,
+    "cita": "En todos los casos se respetará la cantidad máxima de tres curvas entre bocas, cajas o gabinetes."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.distancia_entre_curvas",
+   "grupo": "canalizaciones",
+   "tema": "Distancia entre curvas consecutivas",
+   "regla": "La distancia mínima entre dos curvas consecutivas no es menor que diez veces el diámetro exterior del caño.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "distancia_min_en_diametros_exteriores": 10
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.8.5",
+    "pagina_impresa": 64,
+    "cita": "no será menor que diez veces el diámetro exterior del caño"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.cajas_de_paso_distancia",
+   "grupo": "canalizaciones",
+   "tema": "Cajas de paso en tramos largos",
+   "regla": "En tramos rectos horizontales sin derivación se coloca al menos una caja cada 12 m, y en tramos verticales una cada 15 m.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "horizontal_max_m": 12,
+    "vertical_max_m": 15
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.8.3",
+    "pagina_impresa": 63,
+    "cita": "como mínimo una caja cada 12 m y en tramos verticales un mínimo de una caja cada 15 m"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.sujecion_flexibles",
+   "grupo": "canalizaciones",
+   "tema": "Sujeción de cañerías curvables",
+   "regla": "Las cañerías curvables se sujetan a intervalos regulares que no superan un metro.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "separacion_max_m": 1
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.3.4 b)",
+    "pagina_impresa": 58,
+    "cita": "que no superen el metro de distancia entre ellos"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.llenado_max_caños_no_tabulados",
+   "grupo": "canalizaciones",
+   "tema": "Ocupación máxima de canalizaciones",
+   "regla": "Para casos no previstos en la Tabla 771.12.IX y conductos no circulares, el área ocupada por los conductores (con aislación) no supera el 35 % de la sección interna menor del conducto; es decir, 65 % de capacidad libre.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ocupacion_max_pct": 35,
+    "reserva_libre_min_pct": 65
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.13.4",
+    "pagina_impresa": 83,
+    "cita": "no será mayor que el 35 % de la sección interna menor del conducto"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.diametro_min_principal_seccional",
+   "grupo": "canalizaciones",
+   "tema": "Diámetro mínimo de caños para circuitos principales y seccionales",
+   "regla": "Circuitos principales o seccionales: diámetro interno mínimo 15 mm (RL 19 / RS 19) o sección mínima 200 mm² en otras formas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "diametro_interno_min_mm": 15,
+    "designacion": "RL 19 / RS 19",
+    "seccion_min_otras_formas_mm2": 200
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.13.4",
+    "pagina_impresa": 83,
+    "cita": "el diámetro interno mínimo de los caños de sección circular será de 15 mm (RL 19 y RS 19) y la sección mínima para otras formas será de 200 mm²"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.diametro_min_terminales",
+   "grupo": "canalizaciones",
+   "tema": "Diámetro mínimo de caños para circuitos terminales",
+   "regla": "Circuitos terminales: diámetro interno mínimo 13 mm (RL 16 / RS 16) o sección mínima 150 mm² en otras formas.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "diametro_interno_min_mm": 13,
+    "designacion": "RL 16 / RS 16",
+    "seccion_min_otras_formas_mm2": 150
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.13.4",
+    "pagina_impresa": 83,
+    "cita": "será de 13 mm (RL 16 y RS 16) y la sección mínima para otras formas será de 150 mm²"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.tablero_principal_a_seccional",
+   "grupo": "canalizaciones",
+   "tema": "Cañería entre tablero principal y primer seccional",
+   "regla": "La cañería que vincula el tablero principal con el primer seccional (incluidas columnas montantes) es de diámetro mínimo R19 (3/4\").",
+   "tipo": "obligatorio",
+   "parametros": {
+    "designacion_min": "R19",
+    "pulgadas": 0.75
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.8.5 t)",
+    "pagina_impresa": 43,
+    "cita": "dicha cañería deberá ser de diámetro mínimo R19"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.recomendacion_r25_viviendas",
+   "grupo": "canalizaciones",
+   "tema": "Cañería del tablero principal al seccional en viviendas (770)",
+   "regla": "En viviendas se recomienda proyectar esa canalización con cañería R25 (1\") por la incertidumbre de cargas futuras.",
+   "tipo": "recomendado",
+   "parametros": {
+    "designacion": "R25",
+    "pulgadas": 1
+   },
+   "aplica_a": [
+    "viviendas"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-770",
+    "edicion": "2017",
+    "clausula": "770.7.1",
+    "pagina_impresa": 13,
+    "cita": "se recomienda proyectar esta canalización con cañería de diámetro R25"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.un_conductor_en_caño_metalico",
+   "grupo": "canalizaciones",
+   "tema": "Un solo conductor por caño metálico",
+   "regla": "No se admite un solo conductor aislado o cable unipolar dentro de un caño metálico.",
+   "tipo": "prohibido",
+   "parametros": {},
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.13.4",
+    "pagina_impresa": 83,
+    "cita": "No está permitida la instalación de un solo conductor aislado o un cable unipolar por dentro de un caño metálico."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.un_conductor_en_caño_no_metalico",
+   "grupo": "canalizaciones",
+   "tema": "Un conductor por caño no metálico en tramos rectos",
+   "regla": "Con un solo conductor por caño no metálico, en tramos rectos sin curvas, el diámetro interno es al menos 1,5 veces el diámetro exterior máximo del conductor.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "relacion_diametro_min": 1.5
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.13.4",
+    "pagina_impresa": 83,
+    "cita": "el diámetro interno del caño será como mínimo 1,5 veces el diámetro exterior máximo del conductor o cable alojado."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.perfiles_ocupacion",
+   "grupo": "canalizaciones",
+   "tema": "Perfiles registrables y canales",
+   "regla": "El llenado de perfiles registrables no supera 45 % con cuplas exteriores o 35 % con cuplas interiores.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ocupacion_max_cuplas_exteriores_pct": 45,
+    "ocupacion_max_cuplas_interiores_pct": 35
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771.12.3.10.2",
+    "pagina_impresa": 71,
+    "cita": "no debe superar el 45 % de ocupación, si las cuplas de unión de los tramos de perfil son instaladas en el exterior del perfil, o el 35 % si las cuplas de unión son interiores"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.columnas_luminarias_35pct",
+   "grupo": "canalizaciones",
+   "tema": "Entrada de cables en columnas de iluminación exterior",
+   "regla": "Los cables no ocupan más del 35 % de la sección interior de los caños de entrada y salida.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "ocupacion_max_pct": 35
+   },
+   "aplica_a": [
+    "alumbrado exterior"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "771-B.8.3.7",
+    "pagina_impresa": 182,
+    "cita": "Los cables no deberán ocupar más del 35 % de la sección interior de los caños."
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+  },
+  {
+   "id": "canalizaciones.curvas_fabrica_tabla",
+   "grupo": "canalizaciones",
+   "tema": "Radios de curvatura de curvas de fábrica (caño liviano o semipesado)",
+   "regla": "Radio mínimo y máximo de curvas lisas (CL) o roscadas (CR) según el diámetro nominal.",
+   "tipo": "obligatorio",
+   "parametros": {
+    "unidad": "mm",
+    "campos": [
+     "designacion_IRAM_mm",
+     "radio_min",
+     "radio_max"
+    ]
+   },
+   "aplica_a": [
+    "viviendas",
+    "oficinas",
+    "locales",
+    "oficinas",
+    "locales"
+   ],
+   "fuente": {
+    "norma": "AEA 90364-7-771",
+    "edicion": "2006",
+    "clausula": "Tabla 771.12.VIII",
+    "pagina_impresa": 64,
+    "cita": "Tabla 771.12.VIII - Radios de curvatura para curvas construidas en fábrica"
+   },
+   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario",
+   "tabla": [
+    {
+     "diametro_nominal": "5/8\"",
+     "designacion_iram_mm": 16,
+     "radio_min_mm": 35,
+     "radio_max_mm": 45
+    },
+    {
+     "diametro_nominal": "3/4\"",
+     "designacion_iram_mm": 19,
+     "radio_min_mm": 42,
+     "radio_max_mm": 52
+    },
+    {
+     "diametro_nominal": "7/8\"",
+     "designacion_iram_mm": 22,
+     "radio_min_mm": 50,
+     "radio_max_mm": 55
+    },
+    {
+     "diametro_nominal": "1\"",
+     "designacion_iram_mm": 25,
+     "radio_min_mm": 59,
+     "radio_max_mm": 69
+    },
+    {
+     "diametro_nominal": "1 1/4\"",
+     "designacion_iram_mm": 32,
+     "radio_min_mm": 74,
+     "radio_max_mm": 84
+    },
+    {
+     "diametro_nominal": "1 1/2\"",
+     "designacion_iram_mm": 38,
+     "radio_min_mm": 90,
+     "radio_max_mm": 100
+    },
+    {
+     "diametro_nominal": "2\"",
+     "designacion_iram_mm": 51,
+     "radio_min_mm": 120,
+     "radio_max_mm": 130
+    }
+   ]
+  }
+ ]
+}

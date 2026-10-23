@@ -1,0 +1,13 @@
+{
+  "_encabezado": "FICTICIO – reemplazar por extracto de norma",
+  "_nota": "Todos los valores son [VERIFICAR]: no provienen de ninguna norma. Reemplazar con una ficha de extracto (la ficha de extracto de la norma (calc-library.md, regla 9)).",
+  "fuente": {"id_nrm": "[VERIFICAR]", "edicion": "[VERIFICAR]", "tabla": "[VERIFICAR]", "pagina": "[VERIFICAR]"},
+  "conductores": [
+    {"seccion_mm2": 1.5, "i_adm_a": 15.0, "r_ohm_km": 12.0, "x_ohm_km": 0.10},
+    {"seccion_mm2": 2.5, "i_adm_a": 20.0, "r_ohm_km": 7.0, "x_ohm_km": 0.10},
+    {"seccion_mm2": 4, "i_adm_a": 27.0, "r_ohm_km": 4.5, "x_ohm_km": 0.09},
+    {"seccion_mm2": 6, "i_adm_a": 34.0, "r_ohm_km": 3.0, "x_ohm_km": 0.09},
+    {"seccion_mm2": 10, "i_adm_a": 46.0, "r_ohm_km": 1.8, "x_ohm_km": 0.08},
+    {"seccion_mm2": 16, "i_adm_a": 62.0, "r_ohm_km": 1.1, "x_ohm_km": 0.08}
+  ]
+}
