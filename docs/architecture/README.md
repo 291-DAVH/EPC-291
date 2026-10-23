@@ -14,7 +14,7 @@ Status: **proposed** (not yet applied to the folders). Decisions are recorded in
 
 ```
                        ┌──────────────── CLIENTS ─────────────────┐
-                       │ frontend/web (portal)   frontend/console │   desktop (Rust/Tauri) later, ADR-0007
+                       │ frontend/web (portal)   frontend/console │   desktop deferred (ADR-0007)
                        └───────────────┬──────────────────────────┘
                                        │ HTTPS / OpenAPI
         ┌──────────────────────────────▼──────────────────────────────┐
