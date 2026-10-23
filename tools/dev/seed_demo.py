@@ -230,6 +230,61 @@ def planning(i, ws, discs, start, due, progress, rnd):
     jdump(ws / "05-management" / "backlog.json", {"schema_version": "1.0", "items": items})
 
 
+def sld_svg(project, feeders, three_line=False):
+    """Small illustrative single-line (or multi-line) diagram of a main board with its feeders. Simulated data."""
+    w = 160 + 120 * len(feeders)
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} 330" width="{w}" height="330" font-family="Arial" font-size="11">',
+           '<rect width="100%" height="100%" fill="#fff"/>',
+           f'<text x="12" y="20" font-size="13" font-weight="bold">{project} - Tablero general ({"multifilar" if three_line else "unifilar"})</text>']
+    mid = [w / 2 + (k - 1) * 8 for k in range(3)] if three_line else [w / 2]
+    for x in mid:
+        out.append(f'<line x1="{x}" y1="40" x2="{x}" y2="95" stroke="#000" stroke-width="1.5"/>')
+        out.append(f'<rect x="{x - 9}" y="95" width="18" height="26" fill="#fff" stroke="#000" stroke-width="1.5"/>')
+        out.append(f'<line x1="{x}" y1="121" x2="{x}" y2="150" stroke="#000" stroke-width="1.5"/>')
+    out.append(f'<text x="{w / 2 + 28}" y="62">Red BT 3x380/220 V</text><text x="{w / 2 + 28}" y="112">Interruptor general</text>')
+    out.append(f'<line x1="70" y1="150" x2="{w - 70}" y2="150" stroke="#000" stroke-width="5"/><text x="70" y="143">Barra principal</text>')
+    for i, (name, amps) in enumerate(feeders):
+        x = 100 + 120 * i
+        xs = [x - 8, x, x + 8] if three_line else [x]
+        for xx in xs:
+            out.append(f'<line x1="{xx}" y1="150" x2="{xx}" y2="190" stroke="#000" stroke-width="1.5"/>')
+            out.append(f'<rect x="{xx - 6}" y="190" width="12" height="20" fill="#fff" stroke="#000" stroke-width="1.5"/>')
+            out.append(f'<line x1="{xx}" y1="210" x2="{xx}" y2="255" stroke="#000" stroke-width="1.5"/>')
+        out.append(f'<circle cx="{x}" cy="270" r="14" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="{x - 4}" y="274">M</text>')
+        out.append(f'<text x="{x - 38}" y="305">{name}</text><text x="{x - 38}" y="319">{amps} A</text>')
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def engineering(pdir, ccode, code, discs, rnd):
+    """Engineering workspace content: SVG diagrams and text lists (what the engineer sees in the Engineering tab)."""
+    base = pdir / "workspace" / "02-engineering"
+    feeders = [(rnd.choice(["Fuerza motriz", "Iluminación", "Tomas", "Climatización", "Bombas", "Compresor", "Tablero seccional"]), rnd.choice([16, 25, 32, 40, 63, 100])) for _ in range(rnd.randint(3, 5))]
+    el = base / "electrical" / "PQ-01"
+    (el / "drawings" / "svg").mkdir(parents=True, exist_ok=True)
+    (el / "calc").mkdir(parents=True, exist_ok=True)
+    (el / "docs").mkdir(parents=True, exist_ok=True)
+    (el / "drawings" / "svg" / "SLD-tablero-general.svg").write_text(sld_svg(code, feeders), encoding="utf-8", newline="\n")
+    (el / "drawings" / "svg" / "MLD-tablero-general.svg").write_text(sld_svg(code, feeders, True), encoding="utf-8", newline="\n")
+    rows = ["circuito;descripcion;potencia_kW;corriente_A;seccion_mm2;caida_pct"]
+    for k, (name, amps) in enumerate(feeders, 1):
+        sec = {16: 2.5, 25: 4, 32: 6, 40: 10, 63: 16, 100: 35}[amps]
+        rows.append(f"C{k:02d};{name};{round(amps * 0.38 * 1.73 * 0.85, 1)};{amps};{sec};{round(rnd.uniform(0.6, 2.8), 1)}")
+    (el / "calc" / "cuadro-de-cargas.csv").write_text("\n".join(rows) + "\n", encoding="utf-8", newline="\n")
+    (el / "calc" / "lista-de-cables.csv").write_text("cable;origen;destino;longitud_m\n" + "\n".join(
+        f"CB-{k:02d};Tablero general;{n};{rnd.randint(8, 90)}" for k, (n, _) in enumerate(feeders, 1)) + "\n", encoding="utf-8", newline="\n")
+    (el / "docs" / "criterios-de-diseno.md").write_text(
+        f"# Criterios de diseño eléctrico - {code}\n\n- Norma de referencia: AEA 90364-7-771 (borrador de reglas, sin validar).\n"
+        "- Caída de tensión máxima: 3 % en circuitos terminales, 5 % total.\n- Conductores de cobre, aislación XLPE.\n"
+        "- Datos simulados para demostración.\n", encoding="utf-8", newline="\n")
+    for d in discs:
+        if d == "electrical":
+            continue
+        pq = base / d / "PQ-01"
+        (pq / "docs").mkdir(parents=True, exist_ok=True)
+        (pq / "docs" / "alcance.md").write_text(f"# {DISC_NAME[d]} - alcance\n\nLista de documentos y criterios de la disciplina (datos simulados).\n", encoding="utf-8", newline="\n")
+
+
 def build_project(i, root, rnd):
     client, ccode = CLIENTS[i]
     pname = PROJECTS[i]
@@ -320,6 +375,7 @@ def build_project(i, root, rnd):
     jdump(ws / "00-setup" / "requirements.json", reqs)
 
     planning(i, ws, discs, start, due, progress, rnd)
+    engineering(pdir, ccode, code, discs, rnd)
 
     # reports
     reps = []

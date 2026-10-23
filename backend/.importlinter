@@ -113,6 +113,40 @@ layers =
     epc.modules.deliverables.service
     epc.modules.deliverables.repository
 
+[importlinter:contract:engineering-encapsulated]
+name = engineering: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.engineering.api
+    epc.modules.engineering.service
+    epc.modules.engineering.repository
+
+[importlinter:contract:engineering-layers]
+name = engineering: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.engineering.api
+    epc.modules.engineering.service
+    epc.modules.engineering.repository
+
 [importlinter:contract:identity-encapsulated]
 name = identity: other modules use only its public interface
 type = forbidden

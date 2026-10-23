@@ -13,6 +13,7 @@ from epc.core.errors import DomainError
 from epc.modules.admin import api as admin_api
 from epc.modules.backlog import api as backlog_api
 from epc.modules.deliverables import api as deliverables_api
+from epc.modules.engineering import api as engineering_api
 from epc.modules.identity import api as identity_api
 from epc.modules.identity import public as identity
 from epc.modules.intake import api as intake_api
@@ -41,7 +42,7 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, engineering_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     return app
 

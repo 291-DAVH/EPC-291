@@ -1,3 +1,3 @@
-"""engineering: Orchestration of calculations and drawing generation per discipline; wraps engine/calc and engine/drawing.
+"""engineering: read-only view of a project's engineering workspace (SVG diagrams, calculation lists and notes as text).
 
-Planned (target architecture, docs/architecture). No behavior yet."""
+Orchestration of calculations and drawing generation will grow here and wrap engine/calc and engine/drawing."""

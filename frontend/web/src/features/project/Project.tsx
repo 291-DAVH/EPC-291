@@ -1,10 +1,11 @@
 import { FormEvent, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ApiError, DeliverableItem, Gantt, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, useApi } from "@epc/ui";
+import { ApiError, DeliverableItem, Gantt, Me, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, useApi } from "@epc/ui";
 import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
+import Engineering from "./Engineering";
 
-const TABS = ["overview", "plan", "deliverables", "inputs", "requirements", "reports"] as const;
+const TABS = ["overview", "plan", "engineering", "deliverables", "inputs", "requirements", "reports"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Project() {
@@ -12,7 +13,10 @@ export default function Project() {
   const { t } = useI18n();
   const fmt = useFmt();
   const [sp, setSp] = useSearchParams();
-  const tab = (TABS.includes(sp.get("tab") as Tab) ? sp.get("tab") : "overview") as Tab;
+  const me = useApi<Me>("/me");
+  const engineer = me.data?.role === "admin";          // the engineering workspace is internal: admin/engineer role only
+  const wanted = sp.get("tab") as Tab;
+  const tab = (TABS.includes(wanted) && (wanted !== "engineering" || engineer) ? wanted : "overview") as Tab;
   const base = `/app/projects/${client}/${code}`;
   const p = useApi<PortfolioProject>(base);
   const [rev, setRev] = useState(0);                       // bump to reload lists after sending information
@@ -45,7 +49,7 @@ export default function Project() {
       </div>
 
       <div className="tabs" role="tablist">
-        {TABS.map((x) => (
+        {TABS.filter((x) => x !== "engineering" || engineer).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
             {t(("u.tab." + x) as Key)}
             {x === "inputs" && d.inputs.open > 0 && <span className="dot">{d.inputs.open}</span>}
@@ -55,6 +59,7 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
+      {tab === "engineering" && <Engineering client={client} code={code} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} />}
       {tab === "requirements" && <Requirements base={base} rev={rev} />}
