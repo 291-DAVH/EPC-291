@@ -103,7 +103,7 @@ def cmd_registry():
         reg["plugins"][pid] = {"version": m["version"], "kind": m["kind"], "status": m.get("status", "active"),
                                "requires": m.get("requires", {}), "skills": [s["id"] for s in m.get("skills", [])],
                                "hash": tree_hash(m["_dir"])}
-    (HUB / "registry.json").write_text(json.dumps(reg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (HUB / "registry.json").write_text(json.dumps(reg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     for e in errors:
         print("ERROR:", e)
     print(f"registry.json: {len(plugins)} plugins, {len(owners)} owned skills, {len(errors)} error(s)")
@@ -145,7 +145,7 @@ def cmd_lock(project):
     p = Path(project) / ".epc"
     p.mkdir(parents=True, exist_ok=True)
     lock = {"schema_version": "1.0", "plugins": {k: {"version": v["version"], "hash": v["hash"]} for k, v in reg["plugins"].items() if v["status"] != "pending"}}
-    (p / "plugins.lock").write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+    (p / "plugins.lock").write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {p / 'plugins.lock'}")
     return 0
 
