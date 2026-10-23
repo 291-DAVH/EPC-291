@@ -77,6 +77,9 @@ def main():
     run("importlinter-config", [py, str(REPO / "tools" / "ci" / "gen_importlinter.py"), "--check"], REPO)
     run("backend-contracts", [py, "-c", "from importlinter.cli import lint_imports_command as m; m()", "--config", str(backend / ".importlinter")], backend, env=benv)
     run("backend", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], backend, env=benv)
+    if (REPO / "database" / "alembic.ini").exists():
+        run("database", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], REPO / "database")
+    run("infra", [py, str(REPO / "tools" / "ci" / "check_infra.py")], REPO)
     for area in AREAS:
         d = ENGINE / area
         if (d / "tests").is_dir():

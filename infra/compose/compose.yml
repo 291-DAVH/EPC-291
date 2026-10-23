@@ -1,0 +1,57 @@
+# Local stack:  docker compose -f infra/compose/compose.yml --env-file infra/compose/.env up --build
+name: epc-291
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-epc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in infra/compose/.env}
+      POSTGRES_DB: ${POSTGRES_DB:-epc}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-epc} -d ${POSTGRES_DB:-epc}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    build:
+      context: ../..
+      dockerfile: infra/docker/backend.Dockerfile
+    command: ["alembic", "-c", "database/alembic.ini", "upgrade", "head"]
+    environment:
+      EPC_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-epc}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-epc}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/backend.Dockerfile
+    environment:
+      EPC_ROLE: ${EPC_ROLE:-user}
+      EPC_USER: ${EPC_USER:-}
+      EPC_ORG: ${EPC_ORG:-}
+      EPC_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-epc}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-epc}
+    volumes:
+      - projects:/data/projects
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/frontend.Dockerfile
+    ports:
+      - "8080:8080"     # customer app
+      - "127.0.0.1:8081:8081"     # console (local only)
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
+  projects:
