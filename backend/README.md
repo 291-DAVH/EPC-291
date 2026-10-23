@@ -26,6 +26,7 @@ tests/
 | `requirements` | structured requirements and their sources |
 | `management` | portfolio, project summary, reports |
 | `engineering` | read-only view of the engineering workspace for the engineer/admin: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text (CSV, XLSX, Markdown), and the editable design criteria of the project (catalog + overrides + history + generated report) |
+| `sld` | data entry for the single-line diagram (board, titleblock, circuits), validation, and execution of the sld plugin generator (`epc_drawing.sld`) unchanged; outputs are published into the engineering folders |
 | `wbs` | work breakdown structure (EDT): dotted-number tree, weights, progress rolled up from the leaves |
 | `schedule` | activities with dates and finish-to-start dependencies; critical path, slack, conflicts, late work |
 | `backlog` | internal project backlog (tasks, changes, risks, questions, defects); never shown to the customer |

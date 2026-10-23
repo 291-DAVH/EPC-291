@@ -23,6 +23,7 @@ from epc.modules.projects import api as projects_api
 from epc.modules.projects import public as projects
 from epc.modules.requirements import api as requirements_api
 from epc.modules.schedule import api as schedule_api
+from epc.modules.sld import api as sld_api
 from epc.modules.wbs import api as wbs_api
 
 PUBLIC_PREFIXES = ("/api/app/",)            # the end-user surface
@@ -42,7 +43,7 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, engineering_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, requirements_api, engineering_api, sld_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     return app
 

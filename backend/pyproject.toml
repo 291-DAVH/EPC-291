@@ -7,7 +7,7 @@ name = "epc-backend"
 version = "0.1.0"
 description = "EPC-291 backend: FastAPI modular monolith"
 requires-python = ">=3.10"
-dependencies = ["fastapi", "uvicorn[standard]", "python-multipart", "pydantic>=2", "epc-rules", "openpyxl>=3.1"]
+dependencies = ["fastapi", "uvicorn[standard]", "python-multipart", "pydantic>=2", "epc-rules", "epc-drawing", "openpyxl>=3.1"]
 
 [project.optional-dependencies]
 dev = ["httpx2", "import-linter>=2"]
