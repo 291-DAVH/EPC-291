@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.2",
-    "pagina_impresa": 67,
-    "cita": "más un espacio de reserva no inferior al 20 %"
+    "pagina_impresa": 67
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "bandejas.una_capa",
@@ -46,10 +45,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.2",
-    "pagina_impresa": 67,
-    "cita": "no permitiéndose más que una capa de cables"
+    "pagina_impresa": 67
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "bandejas.solo_control_40pct",
@@ -72,10 +70,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.2",
-    "pagina_impresa": 67,
-    "cita": "ocupada hasta un 40 % de la sección transversal útil"
+    "pagina_impresa": 67
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "bandejas.separacion_entre_bandejas",
@@ -98,10 +95,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.2",
-    "pagina_impresa": 67,
-    "cita": "con una separación mínima de 0,3 m entre cada una"
+    "pagina_impresa": 67
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "bandejas.altura_montaje",
@@ -125,10 +121,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.3",
-    "pagina_impresa": 69,
-    "cita": "las alturas mínimas de montaje serán: 2,2 m en interiores, 3,5 m en exteriores y 4 m donde exista circulación"
+    "pagina_impresa": 69
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "bandejas.tapas_hasta_2_2m",
@@ -150,10 +145,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.9.3",
-    "pagina_impresa": 69,
-    "cita": "altura de 2,2 m, medida desde el nivel de piso terminado"
+    "pagina_impresa": 69
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

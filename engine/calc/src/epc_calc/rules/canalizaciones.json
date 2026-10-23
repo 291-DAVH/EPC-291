@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.1",
-    "pagina_impresa": 54,
-    "cita": "No se permiten los tendidos en diagonal."
+    "pagina_impresa": 54
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.distancia_cajas_a_marcos_solados_techos",
@@ -48,10 +47,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.1",
-    "pagina_impresa": 54,
-    "cita": "a no más de 0,25 m de la arista externa de cada marco de aberturas colocadas en obra, a no más de 0,30 m de los cielorrasos o techos y no más de 0,20 m de los solados."
+    "pagina_impresa": 54
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.curvas_max_entre_cajas",
@@ -73,10 +71,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.1",
-    "pagina_impresa": 54,
-    "cita": "En todos los casos se respetará la cantidad máxima de tres curvas entre bocas, cajas o gabinetes."
+    "pagina_impresa": 54
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.distancia_entre_curvas",
@@ -98,10 +95,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.8.5",
-    "pagina_impresa": 64,
-    "cita": "no será menor que diez veces el diámetro exterior del caño"
+    "pagina_impresa": 64
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.cajas_de_paso_distancia",
@@ -124,10 +120,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.8.3",
-    "pagina_impresa": 63,
-    "cita": "como mínimo una caja cada 12 m y en tramos verticales un mínimo de una caja cada 15 m"
+    "pagina_impresa": 63
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.sujecion_flexibles",
@@ -149,10 +144,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.3.4 b)",
-    "pagina_impresa": 58,
-    "cita": "que no superen el metro de distancia entre ellos"
+    "pagina_impresa": 58
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.llenado_max_caños_no_tabulados",
@@ -175,10 +169,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.13.4",
-    "pagina_impresa": 83,
-    "cita": "no será mayor que el 35 % de la sección interna menor del conducto"
+    "pagina_impresa": 83
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.diametro_min_principal_seccional",
@@ -202,10 +195,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.13.4",
-    "pagina_impresa": 83,
-    "cita": "el diámetro interno mínimo de los caños de sección circular será de 15 mm (RL 19 y RS 19) y la sección mínima para otras formas será de 200 mm²"
+    "pagina_impresa": 83
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.diametro_min_terminales",
@@ -229,10 +221,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.13.4",
-    "pagina_impresa": 83,
-    "cita": "será de 13 mm (RL 16 y RS 16) y la sección mínima para otras formas será de 150 mm²"
+    "pagina_impresa": 83
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.tablero_principal_a_seccional",
@@ -255,10 +246,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 t)",
-    "pagina_impresa": 43,
-    "cita": "dicha cañería deberá ser de diámetro mínimo R19"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.recomendacion_r25_viviendas",
@@ -277,10 +267,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.7.1",
-    "pagina_impresa": 13,
-    "cita": "se recomienda proyectar esta canalización con cañería de diámetro R25"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.un_conductor_en_caño_metalico",
@@ -300,10 +289,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.13.4",
-    "pagina_impresa": 83,
-    "cita": "No está permitida la instalación de un solo conductor aislado o un cable unipolar por dentro de un caño metálico."
+    "pagina_impresa": 83
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.un_conductor_en_caño_no_metalico",
@@ -325,10 +313,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.13.4",
-    "pagina_impresa": 83,
-    "cita": "el diámetro interno del caño será como mínimo 1,5 veces el diámetro exterior máximo del conductor o cable alojado."
+    "pagina_impresa": 83
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.perfiles_ocupacion",
@@ -351,10 +338,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.3.10.2",
-    "pagina_impresa": 71,
-    "cita": "no debe superar el 45 % de ocupación, si las cuplas de unión de los tramos de perfil son instaladas en el exterior del perfil, o el 35 % si las cuplas de unión son interiores"
+    "pagina_impresa": 71
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.columnas_luminarias_35pct",
@@ -372,10 +358,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771-B.8.3.7",
-    "pagina_impresa": 182,
-    "cita": "Los cables no deberán ocupar más del 35 % de la sección interior de los caños."
+    "pagina_impresa": 182
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "canalizaciones.curvas_fabrica_tabla",
@@ -402,10 +387,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "Tabla 771.12.VIII",
-    "pagina_impresa": 64,
-    "cita": "Tabla 771.12.VIII - Radios de curvatura para curvas construidas en fábrica"
+    "pagina_impresa": 64
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario",
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario",
    "tabla": [
     {
      "diametro_nominal": "5/8\"",

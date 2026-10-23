@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 g)",
-    "pagina_impresa": 42,
-    "cita": "como mínimo una boca de iluminación para uso general cada 5 m de longitud, o fracción, o bien en cada descanso"
+    "pagina_impresa": 42
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.ventiladores_cuentan_como_boca",
@@ -46,10 +45,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 c)",
-    "pagina_impresa": 42,
-    "cita": "cualquiera de ellos se computará como una boca de iluminación"
+    "pagina_impresa": 42
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.mbts_comando_ambientes_mojados",
@@ -71,10 +69,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 l)",
-    "pagina_impresa": 43,
-    "cita": "serán ali- mentados con muy baja tensión sin puesta a tierra (MBTS)"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.escuelas_louver",
@@ -90,10 +87,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.4 i)",
-    "pagina_impresa": 41,
-    "cita": "Las luminarias de las aulas no deberán llevar las lámparas a la vista"
+    "pagina_impresa": 41
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.luminarias_puertas_acceso_2_5m",
@@ -111,10 +107,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771-B.8.2.1",
-    "pagina_impresa": 177,
-    "cita": "situadas a menos de 2,50 m de altura por encima del solado, deben cerrarse con una llave especial o una herramienta"
+    "pagina_impresa": 177
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.deposito_densidad_minimo",
@@ -135,10 +130,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.3.3.1",
-    "pagina_impresa": 36,
-    "cita": "(como mínimo dos bocas)"
+    "pagina_impresa": 36
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.deposito_densidad_medio",
@@ -159,10 +153,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.3.3.2",
-    "pagina_impresa": 36,
-    "cita": "(como mínimo 8 bocas)"
+    "pagina_impresa": 36
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.deposito_densidad_elevado",
@@ -183,10 +176,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.3.3.3",
-    "pagina_impresa": 37,
-    "cita": "(como mínimo 36 bocas)"
+    "pagina_impresa": 37
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "iluminacion.deposito_densidad_superior",
@@ -207,10 +199,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.3.3.4",
-    "pagina_impresa": 37,
-    "cita": "(como mínimo 90 bocas)"
+    "pagina_impresa": 37
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

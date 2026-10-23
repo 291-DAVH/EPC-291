@@ -23,7 +23,6 @@
     "clausula": "514.3.1",
     "pagina_impresa": "51-19",
     "pagina_pdf": 45,
-    "cita": "Conductor Neutro: Color Azul claro o celeste",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
@@ -51,7 +50,6 @@
     "clausula": "514.3.3",
     "pagina_impresa": "51-19",
     "pagina_pdf": 45,
-    "cita": "Línea 1 (L1) Color Castaño (Marrón)",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
@@ -78,10 +76,9 @@
     "clausula": "514.3.2",
     "pagina_impresa": "51-19",
     "pagina_pdf": 45,
-    "cita": "verde-amarillo en toda su longitud y ademas con marcas azul claro en sus extremos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "colores.cubierta_verde_amarilla_no_activos",
@@ -102,10 +99,9 @@
     "clausula": "514.3.3",
     "pagina_impresa": "51-19",
     "pagina_pdf": 45,
-    "cita": "No se permite el empleo de cables multipolares o unipolares segun IRAM 2178 o 2268 o 62266",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }

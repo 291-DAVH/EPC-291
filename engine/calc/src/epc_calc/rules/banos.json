@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.30.2",
-    "pagina_impresa": 6,
-    "cita": "la altura de la zona 0 es 10 cm"
+    "pagina_impresa": 6
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.zona1_altura",
@@ -46,10 +45,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.30.3",
-    "pagina_impresa": 7,
-    "cita": "el plano horizontal que queda a 225 cm por sobre el punto más alto del piso de la bañera o"
+    "pagina_impresa": 7
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.zona1_duchador_movil",
@@ -71,10 +69,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.30.3",
-    "pagina_impresa": 7,
-    "cita": "a una distancia de 120 cm desde el punto de conexión a la salida de agua del conducto"
+    "pagina_impresa": 7
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.zona1_ducha_sin_receptaculo_fija",
@@ -96,10 +93,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.30.3",
-    "pagina_impresa": 7,
-    "cita": "a una distancia horizontal de 60 cm desde la flor de la ducha"
+    "pagina_impresa": 7
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.zona2_ancho",
@@ -121,10 +117,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.30.4",
-    "pagina_impresa": 7,
-    "cita": "situada a 60 cm por afuera de la zona 1"
+    "pagina_impresa": 7
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.ip_zona_0",
@@ -147,10 +142,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.512.2",
-    "pagina_impresa": 10,
-    "cita": "en la zona 0: IPX7"
+    "pagina_impresa": 10
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.ip_zona_1",
@@ -173,10 +167,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.512.2",
-    "pagina_impresa": 10,
-    "cita": "en la zona 1: IPX5"
+    "pagina_impresa": 10
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.ip_zona_2",
@@ -199,10 +192,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.512.2",
-    "pagina_impresa": 10,
-    "cita": "en la zona 2: IPX4"
+    "pagina_impresa": 10
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.ip_zona_3",
@@ -225,10 +217,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.512.2",
-    "pagina_impresa": 10,
-    "cita": "en la zona 3: IPX1"
+    "pagina_impresa": 10
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.diferencial_30ma",
@@ -250,10 +241,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.412.5",
-    "pagina_impresa": 8,
-    "cita": "deberán ser protegidos complementariamente contra los contactos directos por medio de interruptores diferenciales de IΔn ≤ 30 mA"
+    "pagina_impresa": 8
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.separacion_electrica",
@@ -275,10 +265,9 @@
     "norma": "AEA 90364-7-701",
     "edicion": "2012",
     "clausula": "701.413.5",
-    "pagina_impresa": 10,
-    "cita": "Para los circuitos que alimenten un solo tomacorriente."
+    "pagina_impresa": 10
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "banos.hidromasaje_alimentacion",
@@ -301,10 +290,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 s)",
-    "pagina_impresa": 43,
-    "cita": "La alimentación a dichas bañeras deberá realizarse en forma fija y permanente desde un interruptor diferencial de IΔn ≤ 30 mA"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

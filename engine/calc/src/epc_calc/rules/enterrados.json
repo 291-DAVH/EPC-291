@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.1",
-    "pagina_impresa": 86,
-    "cita": "a una profundidad mínima de 0,7 m respecto de la superficie del terreno"
+    "pagina_impresa": 86
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "enterrados.recubrimiento_conductos",
@@ -47,10 +46,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.2",
-    "pagina_impresa": 86,
-    "cita": "recubrimiento mínimo de 0,7 m de tierra de relleno por sobre el conducto"
+    "pagina_impresa": 86
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "enterrados.pendiente_conductos",
@@ -72,10 +70,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.2",
-    "pagina_impresa": 86,
-    "cita": "con pendiente mínima del 1 % hacia las cámaras de inspección"
+    "pagina_impresa": 86
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "enterrados.diametro_conductos_tabla",
@@ -97,10 +94,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "Tabla 771.12.XIV",
-    "pagina_impresa": 86,
-    "cita": "Tabla 771.12.XIV - Diámetro mínimo de conductos enterrados"
+    "pagina_impresa": 86
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario",
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario",
    "tabla": [
     {
      "d_mm": "d <= 25",
@@ -142,10 +138,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.3",
-    "pagina_impresa": 87,
-    "cita": "se extienda, como mínimo, 0,30 m más allá del perímetro de la construcción"
+    "pagina_impresa": 87
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "enterrados.cruces_caño_de_reserva",
@@ -167,10 +162,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.3",
-    "pagina_impresa": 87,
-    "cita": "se dejará previsto como mínimo un caño de reserva"
+    "pagina_impresa": 87
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "enterrados.proteccion_hormigon_pobre",
@@ -193,10 +187,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.12.4.2.2",
-    "pagina_impresa": 86,
-    "cita": "espesor mínimo de 5 cm"
+    "pagina_impresa": 86
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

@@ -21,10 +21,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) I",
-    "pagina_impresa": 22,
-    "cita": "cuya corriente de funcionamiento permanente no sea mayor que 10 A"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.iug_proteccion_max",
@@ -47,10 +46,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) I",
-    "pagina_impresa": 22,
-    "cita": "Estos circuitos contarán con protecciones en ambos polos para una corriente no mayor de 16 A"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.iug_bocas_max",
@@ -72,10 +70,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) I",
-    "pagina_impresa": 22,
-    "cita": "no mayor de 16 A y el número máximo de bocas de salida será de quince (15)"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.tug_corriente_unitaria",
@@ -98,10 +95,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) II",
-    "pagina_impresa": 22,
-    "cita": "podrán co- nectarse cargas unitarias de no más de 10 A"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.tug_proteccion_max",
@@ -124,10 +120,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) II",
-    "pagina_impresa": 22,
-    "cita": "protecciones en ambos polos para una corriente no mayor de 20 A"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.tug_bocas_max",
@@ -149,10 +144,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 a) II",
-    "pagina_impresa": 22,
-    "cita": "no mayor de 20 A y el número máximo de bocas de salida será de quince (15)"
+    "pagina_impresa": 22
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.uso_especial_proteccion_y_bocas",
@@ -175,10 +169,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 b)",
-    "pagina_impresa": 23,
-    "cita": "protecciones en ambos polos para una corriente no mayor de 32 A y el número máximo de bocas de salida es de doce (12)"
+    "pagina_impresa": 23
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.tue_corriente_unitaria",
@@ -201,10 +194,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 b) II",
-    "pagina_impresa": 23,
-    "cita": "pueden conec- tarse cargas unitarias, de hasta 20 A por medio de tomacorrientes tipo 2P+T de 20 A"
+    "pagina_impresa": 23
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.iue_a_la_intemperie",
@@ -226,10 +218,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 b) I",
-    "pagina_impresa": 23,
-    "cita": "Este tipo de circuitos debe ser empleado para la iluminación de lugares a la intemperie"
+    "pagina_impresa": 23
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.iluminacion_mayor_10a",
@@ -252,10 +243,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 b)",
-    "pagina_impresa": 42,
-    "cita": "Si la carga fuese superior a los 10 A, podrá optarse por un circuito de iluminación de uso especial (IUE) hasta un consumo de 20 A."
+    "pagina_impresa": 42
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.apm",
@@ -279,10 +269,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 c2) I",
-    "pagina_impresa": 24,
-    "cita": "El número máximo de bocas será de 15, la carga máxima por boca de 10 A y la protección del circuito no puede ser mayor que 25 A."
+    "pagina_impresa": 24
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.mbtf",
@@ -306,10 +295,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 c2) III",
-    "pagina_impresa": 24,
-    "cita": "El número máximo de bocas (en 220 V) será de 15, la carga máxima por boca de 10 A y la protección del circuito no puede ser mayor que 20 A."
+    "pagina_impresa": 24
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.ate_bocas_max",
@@ -331,10 +319,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 c1) II",
-    "pagina_impresa": 24,
-    "cita": "Los circuitos ATE deberán tener como máximo quince (15) bocas"
+    "pagina_impresa": 24
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.ite",
@@ -355,10 +342,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 c2) IV",
-    "pagina_impresa": 25,
-    "cita": "El número máximo de bocas por fase o línea será de 12, la carga máxima por boca de 10 A"
+    "pagina_impresa": 25
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.fuentes_comunicaciones_2200va",
@@ -380,10 +366,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 j)",
-    "pagina_impresa": 42,
-    "cita": "la suma de sus potencias nominales no sea mayor que 2200 VA."
+    "pagina_impresa": 42
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.tomas_por_boca",
@@ -407,10 +392,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 a)",
-    "pagina_impresa": 42,
-    "cita": "pero el número máximo de tomacorrientes por boca es de cuatro (4)"
+    "pagina_impresa": 42
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.caja_de_paso_como_boca",
@@ -432,10 +416,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 Nota 1",
-    "pagina_impresa": 21,
-    "cita": "si están ubicadas a una altura no inferior a 1,80 m."
+    "pagina_impresa": 21
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "circuitos.equilibrio_trifasico",
@@ -455,10 +438,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 q)",
-    "pagina_impresa": 43,
-    "cita": "se procurará mantener el sistema lo más equilibrado posible"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }
