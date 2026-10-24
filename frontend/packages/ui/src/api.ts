@@ -92,6 +92,7 @@ export interface Me {
   role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
   org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "admin" | "member" | ""; signup?: boolean;
   username?: string; has_password?: boolean; account_type?: AccountType; landing?: string; app_url?: string; console_url?: string; abilities?: Record<string, string[]>; assigned?: string[];
+  can_view_as?: boolean; viewing_as?: "" | "owner" | "admin" | "member";
   organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "admin" | "member"; current: boolean }[];
 }
 export interface PortfolioProject {
