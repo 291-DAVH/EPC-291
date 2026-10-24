@@ -337,8 +337,9 @@ LOOPBACK = {"127.0.0.1", "::1", "localhost", "testclient"}
 
 
 def master_enabled() -> bool:
-    """The MASTER account exists only in development, with accounts required, and only when its password is set in the environment: in production it is inert."""
-    return settings.env != "production" and settings.auth == "required" and bool(settings.dev_master_password)
+    """The MASTER account exists only when the environment is explicitly `dev`, accounts are required and its password is set in the environment. The repository
+    carries no password and no default: in production, staging or any deployment where the variable is not set, it is inert."""
+    return settings.env == "dev" and settings.auth == "required" and bool(settings.dev_master_password)
 
 
 def _master_user(identifier: str, password: str, ip: str) -> Optional[dict]:

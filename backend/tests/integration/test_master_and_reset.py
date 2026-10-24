@@ -52,11 +52,12 @@ class TestMasterAccount(Master):
 
     def test_it_is_inert_in_production(self):
         self.assertEqual(self.master()[1].status_code, 200)                                                 # the row exists now
-        settings.env = "production"
-        service.reset_throttle()
-        self.assertEqual(self.master()[1].status_code, 401)
-        self.assertEqual(self.master(who=MASTER_EMAIL)[1].status_code, 401)
-        self.assertFalse(service.master_enabled())
+        for env in ("production", "staging", ""):                                                          # only the explicit `dev` environment enables it
+            settings.env = env
+            service.reset_throttle()
+            self.assertEqual(self.master()[1].status_code, 401, env)
+            self.assertEqual(self.master(who=MASTER_EMAIL)[1].status_code, 401, env)
+            self.assertFalse(service.master_enabled(), env)
         settings.env = "dev"
         settings.dev_master_password = ""
         service.reset_throttle()
