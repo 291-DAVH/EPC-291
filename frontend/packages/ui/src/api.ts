@@ -84,7 +84,7 @@ export interface ProjectOptions {
 }
 export interface NewProjectBody {
   client_name: string; client_code: string; project_code: string; project_name: string; jurisdiction: string;
-  methodology: string; locale: string; disciplines: string[]; phase: string;
+  methodology: string; locale: string; disciplines: string[]; phase: string; issuer?: string;
 }
 
 export type AccountType = "staff" | "reviewer" | "inspector" | "auditor" | "individual" | "corporate_owner" | "corporate_admin" | "corporate_member" | "";
@@ -189,12 +189,19 @@ export interface BoardMemoView {
   } | null;
 }
 export interface SldView {
+  parties?: { issuer: string; client: string; team: Partial<TeamRow> };
   input: SldData; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
   options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[]; route_kinds: string[] };
 }
 
 /* ---- master data ---- */
 export interface OrganizationData { legal_name: string; tax_id: string; email: string; website: string; address: string; phone: string; default_locale: string; has_logo: boolean }
+export interface IssuerRecord extends OrganizationData { id: string; default: boolean }
+export interface TeamRow { drawn_by: string; checked_by: string; approved_by: string }
+export interface PartiesView {
+  issuer_id: string; issuer: IssuerRecord | null; issuers: { id: string; legal_name: string; default: boolean }[];
+  client: { id: string; name: string; tax_id: string; has_logo: boolean; in_directory: boolean }; disciplines: string[]; team: Record<string, TeamRow>; people: string[];
+}
 export interface ClientRecord { id: string; name: string; tax_id: string; email: string; website: string; address: string; has_logo: boolean }
 export interface PersonRecord { id: string; name: string; role: string; registration: string }
 

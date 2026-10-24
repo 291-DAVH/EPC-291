@@ -2,21 +2,23 @@ import { useState } from "react";
 import DesignCriteria from "./DesignCriteria";
 import SldInput from "./SldInput";
 import Issuing from "./Issuing";
+import Parties from "./Parties";
 import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, State, useApi, useI18n } from "@epc/ui";
 
 /** Engineering workspace of a project: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text. Engineer/admin only. */
 export default function Engineering({ client, code, onOpenDeliverables }: { client: string; code: string; onOpenDeliverables: () => void }) {
   const { t } = useI18n();
-  const [sub, setSub] = useState<"files" | "sld" | "criteria" | "issue">("files");
+  const [sub, setSub] = useState<"files" | "sld" | "criteria" | "parties" | "issue">("files");
   return (
     <>
       <div className="subtabs" role="tablist">
-        {(["files", "sld", "criteria", "issue"] as const).map((x) => (
+        {(["files", "parties", "sld", "criteria", "issue"] as const).map((x) => (
           <button key={x} role="tab" aria-selected={sub === x} className={sub === x ? "on" : ""} onClick={() => setSub(x)}>{t(("eng.sub." + x) as Key)}</button>
         ))}
       </div>
       {sub === "files" && <Files client={client} code={code} />}
-      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} />}
+      {sub === "parties" && <Parties client={client} code={code} />}
+      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={() => setSub("parties")} />}
       {sub === "criteria" && <DesignCriteria client={client} code={code} />}
       {sub === "issue" && <Issuing client={client} code={code} onOpenDeliverables={onOpenDeliverables} />}
     </>

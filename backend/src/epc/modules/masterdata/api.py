@@ -1,8 +1,9 @@
 from fastapi import APIRouter, File, UploadFile
 from fastapi.responses import FileResponse
 
-from epc.modules.masterdata import service
-from epc.modules.masterdata.models import ClientIn, OrganizationIn, PersonIn
+from epc.modules.masterdata import parties, service
+from epc.modules.masterdata.models import ClientIn, IssuerIn, OrganizationIn, PartiesIn, PersonIn
+from epc.modules.projects import public as projects
 
 # Master data is configuration of the office: admin/engineer role only (never under /api/app).
 router = APIRouter(prefix="/api/data")
@@ -17,6 +18,31 @@ def get_organization():
 @router.put("/organization")
 def put_organization(body: OrganizationIn):
     return service.save_organization(body)
+
+
+@router.get("/issuers")
+def list_issuers():
+    return service.issuers()
+
+
+@router.post("/issuers", status_code=201)
+def add_issuer(body: IssuerIn):
+    return service.add_issuer(body)
+
+
+@router.put("/issuers/{iid}")
+def update_issuer(iid: str, body: IssuerIn):
+    return service.update_issuer(iid, body)
+
+
+@router.post("/issuers/{iid}/default")
+def default_issuer(iid: str):
+    return service.make_default_issuer(iid)
+
+
+@router.delete("/issuers/{iid}", status_code=204)
+def delete_issuer(iid: str):
+    service.delete_issuer(iid, parties.issuer_in_use)
 
 
 @router.get("/clients")
@@ -73,3 +99,18 @@ def get_logo(kind: str):
 @router.delete("/logos/{kind}", status_code=204)
 def delete_logo(kind: str):
     service.delete_logo(kind)
+
+
+# Who issues and who signs a project (staff only, like the rest of the engineering surface).
+parties_router = APIRouter(prefix="/api/projects/{client}/{code}/parties")
+
+
+@parties_router.get("")
+def get_parties(client: str, code: str):
+    return parties.view(projects.get_project_dir(client, code))
+
+
+@parties_router.put("")
+def put_parties(client: str, code: str, body: PartiesIn):
+    return parties.save(projects.get_project_dir(client, code), body)
+

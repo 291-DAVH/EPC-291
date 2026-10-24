@@ -155,9 +155,9 @@ def _project_info(d: Path) -> dict:
             "client": meta.get("client", ""), "locale": meta.get("locale", "es")}
 
 
-def _issuer() -> str:
+def _issuer(d: Path) -> str:
     try:
-        return (masterdata.organization().get("legal_name") or "").strip()
+        return (masterdata.issuer_name(d) or "").strip()      # the company this project issues in the name of
     except Exception:                                   # noqa: BLE001 - no master data yet: the generic wording is used
         return ""
 
@@ -172,7 +172,7 @@ def package_name(d: Path, tr: dict) -> str:
 
 def message(d: Path, tr_id: str, lang: Optional[str] = None) -> dict:
     tr = get(d, tr_id)
-    return texts.email(_lang(d, lang), tr, _project_info(d), package_name(d, tr), _issuer())
+    return texts.email(_lang(d, lang), tr, _project_info(d), package_name(d, tr), _issuer(d))
 
 
 def transmittal_pdf(d: Path, tr_id: str, lang: Optional[str] = None) -> Tuple[Path, str]:
@@ -180,7 +180,7 @@ def transmittal_pdf(d: Path, tr_id: str, lang: Optional[str] = None) -> Tuple[Pa
     out = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
     out.close()
     try:
-        repository.render_transmittal_pdf(texts.document(_lang(d, lang), tr, _project_info(d), _issuer()), Path(out.name))
+        repository.render_transmittal_pdf(texts.document(_lang(d, lang), tr, _project_info(d), _issuer(d)), Path(out.name))
     except Exception as exc:
         Path(out.name).unlink(missing_ok=True)
         raise Failure(str(exc))

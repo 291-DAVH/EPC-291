@@ -1,21 +1,21 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
-import { ApiError, ClientRecord, Key, OrganizationData, Page, PersonRecord, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, Badge, ClientRecord, IssuerRecord, Key, Page, PersonRecord, State, api, useApi, useI18n } from "@epc/ui";
 
-type Tab = "organization" | "clients" | "people";
+type Tab = "issuers" | "clients" | "people";
 const json = { "Content-Type": "application/json" };
 
 /** Information that does not change between projects, entered once (company, clients, people, logos). Admin/engineer role only. */
 export default function Data() {
   const { t } = useI18n();
-  const [tab, setTab] = useState<Tab>("organization");
+  const [tab, setTab] = useState<Tab>("issuers");
   return (
     <Page title={t("data.title")} help={t("data.help")}>
       <div className="subtabs" role="tablist">
-        {(["organization", "clients", "people"] as Tab[]).map((x) => (
+        {(["issuers", "clients", "people"] as Tab[]).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => setTab(x)}>{t(("data.tab." + x) as Key)}</button>
         ))}
       </div>
-      {tab === "organization" && <Organization />}
+      {tab === "issuers" && <Issuers />}
       {tab === "clients" && <Clients />}
       {tab === "people" && <People />}
     </Page>
@@ -58,30 +58,63 @@ function Logo({ kind, has, onChange }: { kind: string; has: boolean; onChange: (
   );
 }
 
-function Organization() {
+function Issuers() {
   const { t } = useI18n();
   const [rev, setRev] = useState(0);
-  const org = useApi<OrganizationData>(`/data/organization?r=${rev}`);
-  const [edit, setEdit] = useState<Partial<OrganizationData>>({});
-  const [msg, setMsg] = useState("");
-  if (!org.data) return <State loading={org.loading} error={org.error} />;
-  const v = { ...org.data, ...edit };
-  const set = (k: keyof OrganizationData, val: string) => { setEdit({ ...edit, [k]: val }); setMsg(""); };
+  const list = useApi<IssuerRecord[]>(`/data/issuers?r=${rev}`);
+  const blank = { id: "", legal_name: "", tax_id: "", email: "", website: "", address: "", phone: "", default_locale: "es-AR" };
+  const [form, setForm] = useState<typeof blank | null>(null);
+  const [err, setErr] = useState("");
+  const reload = () => setRev((n) => n + 1);
   const save = async (e: FormEvent) => {
     e.preventDefault();
+    if (!form) return;
     try {
-      await api("/data/organization", { method: "PUT", headers: json, body: JSON.stringify({ legal_name: v.legal_name, tax_id: v.tax_id, email: v.email, website: v.website, address: v.address, phone: v.phone, default_locale: v.default_locale }) });
-      setEdit({}); setRev((n) => n + 1); setMsg(t("data.saved"));
-    } catch (x) { setMsg(errorText(x)); }
+      await api(form.id ? `/data/issuers/${form.id}` : "/data/issuers", { method: form.id ? "PUT" : "POST", headers: json, body: JSON.stringify(form) });
+      setForm(null); setErr(""); reload();
+    } catch (x) { setErr(errorText(x)); }
   };
-  const text = (k: keyof OrganizationData, label: Key) => <Field label={label}><input value={String(v[k] ?? "")} onChange={(e) => set(k, e.target.value)} /></Field>;
+  const del = async (id: string) => {
+    if (!window.confirm(t("data.confirmDelete"))) return;
+    try { await api(`/data/issuers/${id}`, { method: "DELETE" }); reload(); } catch (x) { setErr(errorText(x)); }
+  };
+  const makeDefault = async (id: string) => { await api(`/data/issuers/${id}/default`, { method: "POST" }); reload(); };
+  const f = (k: keyof typeof blank, label: Key) => <Field label={label}><input value={form ? String(form[k] ?? "") : ""} onChange={(e) => form && setForm({ ...form, [k]: e.target.value })} /></Field>;
   return (
-    <form className="card" onSubmit={save}>
-      <div className="fgrid">{text("legal_name", "data.legalName")}{text("tax_id", "data.taxId")}{text("email", "data.email")}{text("website", "data.website")}{text("address", "data.address")}{text("phone", "data.phone")}</div>
-      <div className="row" style={{ marginTop: 14 }}><button className="primary" type="submit">{t("data.save")}</button><span className="muted small">{msg}</span></div>
-      <h3 style={{ marginTop: 18 }}>{t("data.logo")}</h3>
-      <Logo kind="organization" has={org.data.has_logo} onChange={() => setRev((n) => n + 1)} />
-    </form>
+    <div className="grid" style={{ gap: 14 }}>
+      <div className="card">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <h2 style={{ margin: 0 }}>{t("data.tab.issuers")}</h2>
+          {!form && <button className="primary" onClick={() => setForm(blank)}>+ {t("data.add")}</button>}
+        </div>
+        <p className="muted small" style={{ margin: "4px 0 8px" }}>{t("data.issuersHelp")}</p>
+        {err && !form && <div className="small" style={{ color: "var(--bad)" }}>{err}</div>}
+        {!list.data ? <State loading={list.loading} error={list.error} /> : list.data.length === 0 ? <div className="state">{t("data.issuersEmpty")}</div> : (
+          <table>
+            <thead><tr><th>{t("data.legalName")}</th><th>{t("data.taxId")}</th><th>{t("data.logo")}</th><th /></tr></thead>
+            <tbody>
+              {list.data.map((i) => (
+                <tr key={i.id}>
+                  <td><b>{i.legal_name}</b> {i.default && <Badge tone="accent">{t("data.default")}</Badge>}</td><td>{i.tax_id}</td>
+                  <td><Logo kind={`issuer-${i.id}`} has={i.has_logo} onChange={reload} /></td>
+                  <td style={{ whiteSpace: "nowrap" }}>
+                    <button onClick={() => setForm({ id: i.id, legal_name: i.legal_name, tax_id: i.tax_id, email: i.email, website: i.website, address: i.address, phone: i.phone, default_locale: i.default_locale })}>{t("data.edit")}</button>{" "}
+                    {!i.default && <><button onClick={() => makeDefault(i.id)}>{t("data.makeDefault")}</button>{" "}</>}
+                    <button onClick={() => del(i.id)}>{t("data.delete")}</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+      {form && (
+        <form className="card" onSubmit={save}>
+          <div className="fgrid">{f("legal_name", "data.legalName")}{f("tax_id", "data.taxId")}{f("email", "data.email")}{f("website", "data.website")}{f("address", "data.address")}{f("phone", "data.phone")}</div>
+          <div className="row" style={{ marginTop: 12 }}><button className="primary" type="submit">{t("data.save")}</button><button type="button" onClick={() => { setForm(null); setErr(""); }}>{t("data.cancel")}</button>{err && <span className="small" style={{ color: "var(--bad)" }}>{err}</span>}</div>
+        </form>
+      )}
+    </div>
   );
 }
 
