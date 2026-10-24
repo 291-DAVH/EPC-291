@@ -91,7 +91,7 @@ export type AccountType = "staff" | "reviewer" | "inspector" | "auditor" | "indi
 export interface Me {
   role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
   org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "admin" | "member" | ""; signup?: boolean;
-  account_type?: AccountType; landing?: string; app_url?: string; abilities?: Record<string, string[]>; assigned?: string[];
+  username?: string; has_password?: boolean; account_type?: AccountType; landing?: string; app_url?: string; abilities?: Record<string, string[]>; assigned?: string[];
   organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "admin" | "member"; current: boolean }[];
 }
 export interface PortfolioProject {
@@ -228,6 +228,10 @@ export interface GeneratedReport {
   language: string; prepared_by: string; summary: string; md: string; pdf: string; published: string | null;
 }
 export interface ReportingView { methodology: string; language: string; types: ReportType[]; reports: GeneratedReport[] }
+
+/* ---- sign-in with a provider ---- */
+export interface SocialProvider { id: string; name: string }
+export interface IdentitiesView { has_password: boolean; identities: { provider: string; email: string; created_at: string }[] }
 
 /* ---- accounts and organizations ---- */
 export interface OrgMember { user_id: string; email: string; name: string; role: "owner" | "admin" | "member"; active: boolean; last_login_at: string | null; me: boolean }

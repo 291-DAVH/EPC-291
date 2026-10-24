@@ -24,11 +24,14 @@ from typing import Dict, List, Optional, Tuple
 from epc.core.config import settings
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound, TooManyRequests, Unauthorized
 from epc.modules.identity import repository as repo
-from epc.modules.identity import permissions
+from epc.modules.identity import oauth, permissions
+from epc.modules.identity.oauth import OAuthError
 from epc.modules.identity.models import ASSIGNED_ROLES, NO_ORG_ROLES, ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
 
 COOKIE = "epc_session"
 EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+USERNAME = re.compile(r"^[a-z0-9][a-z0-9._-]{2,29}$")
+RESERVED_ALIASES = {"admin", "administrator", "root", "support", "staff", "system", "soporte", "ayuda", "help", "null", "none", "me", "api"}
 MIN_PASSWORD = 10
 INVITATION_DAYS = 7
 COMPANY_SEATS = 5
@@ -80,6 +83,19 @@ def _check_email(email: str) -> str:
 
 def _invite_url(token: str) -> str:
     return f"{settings.public_url}/?invite={token}"
+
+
+def _check_username(raw: Optional[str], exclude=None) -> Optional[str]:
+    """An optional alias to sign in with instead of the email: lowercase, 3 to 30 characters, never an '@' (that is how the two are told apart)."""
+    u = (raw or "").strip().lower()
+    if not u:
+        return None
+    if "@" in u or not USERNAME.match(u) or u in RESERVED_ALIASES:
+        raise Invalid({"username": "3 to 30 letters, digits, dot, dash or underscore, starting with a letter or digit, no @"})
+    other = repo.user_by_username(u)
+    if other and str(other["id"]) != str(exclude):
+        raise Conflict({"username": "this alias is already taken"})
+    return u
 
 
 def _slug(name: str) -> str:
@@ -154,7 +170,7 @@ def _from_session(token: str) -> Optional[Principal]:
     user = repo.user_by_id(row["user_id"])
     if not user or not user["active"]:
         return None
-    base = dict(authenticated=True, name=user["display_name"], email=user["email"], user_id=str(user["id"]))
+    base = dict(authenticated=True, name=user["display_name"], email=user["email"], user_id=str(user["id"]), username=user["username"] or "", has_password=bool(user["password_hash"]))
     if user["platform_role"] in NO_ORG_ROLES:
         assigned = tuple(o["slug"] for o in repo.assigned_orgs(user["id"]) if o["active"]) if user["platform_role"] in ASSIGNED_ROLES else ()
         return Principal(role=user["platform_role"], assigned=assigned, **base)
@@ -204,7 +220,7 @@ def _organizations(p: Principal) -> List[dict]:
 
 
 def me(p: Principal, with_orgs: bool = False) -> dict:
-    out = {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "account_type": account_type(p), "name": p.name, "email": p.email,
+    out = {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "account_type": account_type(p), "name": p.name, "email": p.email, "username": p.username, "has_password": p.has_password,
            "org": p.org_name, "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open",
            "landing": "/norms" if p.role == "standards" else "/", "app_url": settings.public_url, "abilities": permissions.abilities_of(account_type(p)),
            "assigned": list(p.assigned)}
@@ -300,11 +316,12 @@ def _open_session(user: dict, org: Optional[dict]) -> Tuple[str, Principal]:
     return token, p
 
 
-def login(email: str, password: str, org_slug: str = "", ip: str = "") -> Tuple[str, Principal]:
-    email = (email or "").strip().lower()
+def login(identifier: str, password: str, org_slug: str = "", ip: str = "") -> Tuple[str, Principal]:
+    """`identifier` is the email or the alias: the person types one box."""
+    email = (identifier or "").strip().lower()
     _throttle(f"e:{email}", 5)
     _throttle(f"i:{ip}", 30)
-    user = repo.user_by_email(email)
+    user = repo.user_by_login(email)
     ok = verify_password(password or "", user["password_hash"] if user else None)
     if not user or not ok or not user["active"]:
         _throttle(f"e:{email}", 5, add=True)
@@ -333,16 +350,31 @@ def change_password(p: Principal, current_password: str, new_password: str, keep
     if not p.authenticated or p.simulated or not p.user_id:
         raise Forbidden("not available without an account")
     user = repo.user_by_id(p.user_id)
-    if not user or not verify_password(current_password or "", user["password_hash"]):
-        raise Invalid({"current_password": "wrong password"})
+    if not user or (user["password_hash"] and not verify_password(current_password or "", user["password_hash"])):
+        raise Invalid({"current_password": "wrong password"})                              # an account created through a provider has none yet: it just sets one
     _check_password(new_password, user["email"])
     repo.update_user(user["id"], password_hash=hash_password(new_password))
     repo.delete_user_sessions(user["id"], keep_hash=token_hash(keep_token) if keep_token else None)       # other devices must log in again
     audit("password_changed", target=user["email"], actor=p)
 
 
+def set_username(p: Principal, username: str) -> Principal:
+    """The person chooses (or clears) the alias they can sign in with."""
+    if not p.authenticated or p.simulated or not p.user_id:
+        raise Forbidden("not available without an account")
+    alias = _check_username(username, exclude=p.user_id)
+    repo.update_user(p.user_id, username=alias)
+    audit("username_changed", target=alias or "", actor=p)
+    return replace_principal(p, username=alias or "")
+
+
+def replace_principal(p: Principal, **changes) -> Principal:
+    import dataclasses
+    return dataclasses.replace(p, **changes)
+
+
 # ---------------------------------------------------------------- creating accounts
-def signup(kind: str, org_name: str, name: str, email: str, password: str) -> Tuple[str, Principal]:
+def signup(kind: str, org_name: str, name: str, email: str, password: str, username: str = "") -> Tuple[str, Principal]:
     if settings.signup != "open":
         raise Forbidden("self-registration is closed: ask for an invitation")
     email = _check_email(email)
@@ -356,11 +388,12 @@ def signup(kind: str, org_name: str, name: str, email: str, password: str) -> Tu
     if errors:
         raise Invalid(errors)
     _check_password(password, email)
+    alias = _check_username(username)
     if repo.user_by_email(email):
         raise Conflict({"email": "this email is already registered"})
     label = name.strip() if kind == "individual" else org_name.strip()
     org = repo.insert_org(_slug(label), label, kind, 1 if kind == "individual" else COMPANY_SEATS)
-    user = repo.insert_user(email, name.strip(), hash_password(password))
+    user = repo.insert_user(email, name.strip(), hash_password(password), username=alias)
     repo.insert_membership(org["id"], user["id"], "owner")
     token, p = _open_session(user, org)
     audit("signup", target=f"{kind}:{org['slug']}", org=str(org["id"]), actor=p)
@@ -439,7 +472,7 @@ def invitation_info(token: str) -> dict:
     return {"email": inv["email"], "role": inv["role"], "org": inv["org"]["name"], "kind": inv["org"]["kind"], "existing_account": repo.user_by_email(inv["email"]) is not None}
 
 
-def accept_invitation(token: str, name: str, password: str) -> Tuple[str, Principal]:
+def accept_invitation(token: str, name: str, password: str, username: str = "") -> Tuple[str, Principal]:
     inv = _open_invitation(token)
     org = inv["org"]
     user = repo.user_by_email(inv["email"])
@@ -450,11 +483,12 @@ def accept_invitation(token: str, name: str, password: str) -> Tuple[str, Princi
         if not (name or "").strip():
             raise Invalid({"name": "required"})
         _check_password(password, inv["email"])
+    alias = _check_username(username) if not user else None
     taken = repo.count_members(org["id"])
     if taken >= org["seats"]:
         raise Conflict({"seats": "the organization has no seats left: ask its owner"})
     if not user:
-        user = repo.insert_user(inv["email"], name.strip(), hash_password(password))
+        user = repo.insert_user(inv["email"], name.strip(), hash_password(password), username=alias)
     if not repo.membership(org["id"], user["id"]):
         repo.insert_membership(org["id"], user["id"], inv["role"])
     repo.accept_invitation(inv["id"])
@@ -579,7 +613,7 @@ def staff_users() -> List[dict]:
     for u in repo.list_users():
         orgs = [{"slug": o["slug"], "name": o["name"], "role": o["role"]} for o in repo.memberships_of_user(u["id"])]
         assigned = [{"slug": o["slug"], "name": o["name"]} for o in repo.assigned_orgs(u["id"])] if u["platform_role"] in ASSIGNED_ROLES else []
-        out.append({"id": str(u["id"]), "email": u["email"], "name": u["display_name"], "active": bool(u["active"]), "platform_role": u["platform_role"],
+        out.append({"id": str(u["id"]), "email": u["email"], "username": u["username"] or "", "name": u["display_name"], "active": bool(u["active"]), "platform_role": u["platform_role"],
                     "last_login_at": repo.as_utc(u["last_login_at"]).isoformat() if u["last_login_at"] else None, "organizations": orgs, "assignments": assigned})
     return out
 
@@ -613,7 +647,7 @@ def staff_set_password(user_id: str, password: str) -> None:
     audit("password_set_by_staff", target=user["email"])
 
 
-def staff_create_user(email: str, name: str, password: str, platform_role: str) -> dict:
+def staff_create_user(email: str, name: str, password: str, platform_role: str, username: str = "") -> dict:
     """Staff create an account that belongs to no customer organization: staff, norm reviewer, inspector or external auditor."""
     if platform_role not in NO_ORG_ROLES:
         raise Invalid({"platform_role": ", ".join(NO_ORG_ROLES)})
@@ -623,7 +657,7 @@ def staff_create_user(email: str, name: str, password: str, platform_role: str) 
     _check_password(password, email)
     if repo.user_by_email(email):
         raise Conflict({"email": "this email is already registered"})
-    u = repo.insert_user(email, name.strip(), hash_password(password), platform_role=platform_role)
+    u = repo.insert_user(email, name.strip(), hash_password(password), platform_role=platform_role, username=_check_username(username))
     audit("user_created", target=email, detail={"role": platform_role})
     return {"id": str(u["id"]), "email": u["email"], "name": u["display_name"], "platform_role": platform_role}
 
@@ -652,3 +686,173 @@ def staff_set_assignments(p: Principal, user_id: str, slugs: List[str]) -> List[
     for s in sorted(set(before) - set(now)):
         audit("assignment_revoked", target=user["email"], org=str(before[s]["id"]), detail={"org": s}, actor=p)
     return [{"slug": o["slug"], "name": o["name"]} for o in orgs]
+
+
+# ---------------------------------------------------------------- sign-in and sign-up with an external provider
+# Rules that keep it safe:
+#  * only customer accounts can use a provider: the engineering team, norm reviewers, inspectors and auditors always use their password;
+#  * an existing account is linked to a provider automatically only when the provider vouches for the email (Google, GitHub verified email, LinkedIn); otherwise the person
+#    must sign in with their password first and link the provider from their account page (Facebook never vouches for an address);
+#  * a new account needs the subscription type (asked after the provider answers) and only exists when sign-up is open or through an invitation addressed to that email;
+#  * an account created through a provider has no password until its owner sets one, and its last way to sign in cannot be removed.
+def oauth_providers() -> List[dict]:
+    return oauth.enabled()
+
+
+def oauth_start(provider: str, mode: str, invite: str, actor: Principal) -> Tuple[str, str]:
+    oauth.require(provider)
+    extra: dict = {"m": "login"}
+    if mode == "link":
+        if not actor.authenticated or actor.simulated or not actor.user_id or actor.role != "user":
+            raise Unauthorized({"errors": {"login": "sign in to link a provider"}})
+        extra = {"m": "link", "u": actor.user_id}
+    elif invite:
+        try:
+            _open_invitation(invite)
+        except NotFound:
+            raise OAuthError("invalid_invitation")
+        extra = {"m": "login", "inv": invite}
+    return oauth.start(provider, extra)
+
+
+def _customer_session(user: dict, provider: str, ip: str) -> Tuple[str, Principal]:
+    if user["platform_role"] != "user":
+        raise OAuthError("internal_account_password_only")
+    if not user["active"]:
+        raise OAuthError("account_disabled")
+    orgs = [o for o in repo.memberships_of_user(user["id"]) if o["member_active"] and o["active"]]
+    if not orgs:
+        raise OAuthError("no_organization")
+    token, p = _open_session(user, orgs[0])
+    audit("social_login", target=provider, actor=p, ip=ip)
+    return token, p
+
+
+def _display_name(profile: dict) -> str:
+    return (profile.get("name") or "").strip() or profile["email"].split("@")[0]
+
+
+def oauth_callback(provider: str, code: str, state: str, cookie: Optional[str], ip: str = "") -> dict:
+    """Result: {"token": session token} (signed in), {"pending": cookie} (authenticated at the provider, no account yet) or {"to": path} (linked)."""
+    flow = oauth.unsign(cookie or "")
+    if not flow or flow.get("p") != provider or not state or not hmac.compare_digest(str(flow.get("s", "")), state):
+        raise OAuthError("invalid_state")
+    if not code:
+        raise OAuthError("cancelled")
+    prof = oauth.profile(provider, code, flow.get("v", ""))
+    if not prof["subject"]:
+        raise OAuthError("provider_error")
+    ident = repo.identity_find(provider, prof["subject"])
+
+    if flow.get("m") == "link":
+        user = repo.user_by_id(flow.get("u"))
+        if not user or user["platform_role"] != "user":
+            raise OAuthError("invalid_state")
+        if ident and str(ident["user_id"]) != str(user["id"]):
+            raise OAuthError("identity_in_use")
+        if not ident:
+            repo.insert_identity(user["id"], provider, prof["subject"], prof["email"])
+            audit("identity_linked", target=provider, actor=Principal(authenticated=True, user_id=str(user["id"]), email=user["email"]))
+        return {"to": f"/account?linked={provider}"}
+
+    if flow.get("inv"):
+        return _social_invitation(provider, prof, ident, flow["inv"], ip)
+
+    if ident:
+        token, _ = _customer_session(repo.user_by_id(ident["user_id"]), provider, ip)
+        return {"token": token}
+    if not prof["email"]:
+        raise OAuthError("no_email")
+    existing = repo.user_by_email(prof["email"])
+    if existing:
+        if existing["platform_role"] != "user":
+            raise OAuthError("internal_account_password_only")
+        if not prof["email_verified"]:
+            raise OAuthError("email_exists_login_first")
+        repo.insert_identity(existing["id"], provider, prof["subject"], prof["email"])
+        audit("identity_linked", target=f"{provider} (same verified email)", actor=Principal(authenticated=True, user_id=str(existing["id"]), email=existing["email"]))
+        token, _ = _customer_session(existing, provider, ip)
+        return {"token": token}
+    if settings.signup != "open":
+        raise OAuthError("signup_closed")
+    return {"pending": oauth.sign({"p": provider, "sub": prof["subject"], "email": prof["email"], "name": _display_name(prof)}, ttl=900)}
+
+
+def _social_invitation(provider: str, prof: dict, ident: Optional[dict], token: str, ip: str) -> dict:
+    try:
+        inv = _open_invitation(token)
+    except NotFound:
+        raise OAuthError("invalid_invitation")
+    if not prof["email"] or not prof["email_verified"] or prof["email"] != inv["email"]:
+        raise OAuthError("invitation_email_mismatch")
+    org = inv["org"]
+    user = repo.user_by_email(inv["email"])
+    if ident and (not user or str(ident["user_id"]) != str(user["id"])):
+        raise OAuthError("identity_in_use")
+    if user and user["platform_role"] != "user":
+        raise OAuthError("internal_account_password_only")
+    if repo.count_members(org["id"]) >= org["seats"] and not (user and repo.membership(org["id"], user["id"])):
+        raise OAuthError("no_seats")
+    if not user:
+        user = repo.insert_user(inv["email"], _display_name(prof), None)
+    if not repo.identity_find(provider, prof["subject"]):
+        repo.insert_identity(user["id"], provider, prof["subject"], prof["email"])
+    if not repo.membership(org["id"], user["id"]):
+        repo.insert_membership(org["id"], user["id"], inv["role"])
+    repo.accept_invitation(inv["id"])
+    session, p = _open_session(user, org)
+    audit("invitation_accepted", target=inv["email"], org=str(org["id"]), detail={"role": inv["role"], "via": provider}, actor=p, ip=ip)
+    return {"token": session}
+
+
+def oauth_pending(cookie: Optional[str]) -> dict:
+    d = oauth.unsign(cookie or "")
+    if not d or "sub" not in d:
+        raise NotFound("there is no sign-up in progress")
+    return {"provider": d["p"], "email": d["email"], "name": d["name"]}
+
+
+def oauth_complete(cookie: Optional[str], kind: str, org_name: str, username: str, ip: str = "") -> Tuple[str, Principal]:
+    """The person authenticated at the provider chooses the type of subscription and the account is created (no password: the provider vouches for them)."""
+    d = oauth.unsign(cookie or "")
+    if not d or "sub" not in d:
+        raise Invalid({"social": "the sign-up expired: start again"})
+    if settings.signup != "open":
+        raise Forbidden("self-registration is closed: ask for an invitation")
+    errors = {}
+    if kind not in ORG_KINDS:
+        errors["kind"] = "individual or company"
+    if kind == "company" and not (org_name or "").strip():
+        errors["org_name"] = "required"
+    if errors:
+        raise Invalid(errors)
+    alias = _check_username(username)
+    if repo.user_by_email(d["email"]) or repo.identity_find(d["p"], d["sub"]):
+        raise Conflict({"email": "this email is already registered"})
+    label = d["name"] if kind == "individual" else org_name.strip()
+    org = repo.insert_org(_slug(label), label, kind, 1 if kind == "individual" else COMPANY_SEATS)
+    user = repo.insert_user(d["email"], d["name"], None, username=alias)
+    repo.insert_membership(org["id"], user["id"], "owner")
+    repo.insert_identity(user["id"], d["p"], d["sub"], d["email"])
+    token, p = _open_session(user, org)
+    audit("social_signup", target=f"{d['p']}:{kind}:{org['slug']}", org=str(org["id"]), actor=p, ip=ip)
+    return token, p
+
+
+def identities_of(p: Principal) -> dict:
+    if not p.authenticated or p.simulated or not p.user_id:
+        return {"has_password": False, "identities": []}
+    return {"has_password": p.has_password, "identities": [{"provider": i["provider"], "email": i["email"], "created_at": repo.as_utc(i["created_at"]).isoformat()} for i in repo.identities_of(p.user_id)]}
+
+
+def unlink_identity(p: Principal, provider: str) -> None:
+    if not p.authenticated or p.simulated or not p.user_id:
+        raise Forbidden("not available without an account")
+    mine = repo.identities_of(p.user_id)
+    if not any(i["provider"] == provider for i in mine):
+        raise NotFound("this provider is not linked")
+    if not p.has_password and len(mine) <= 1:
+        raise Conflict({"identity": "it is your only way to sign in: set a password first"})
+    repo.delete_identity(p.user_id, provider)
+    audit("identity_unlinked", target=provider, actor=p)
+

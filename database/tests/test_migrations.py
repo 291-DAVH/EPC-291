@@ -10,7 +10,7 @@ from alembic.config import Config
 from alembic.script import ScriptDirectory
 
 DB = Path(__file__).resolve().parents[1]
-GLOBAL_TABLES = {"organizations", "users"}
+GLOBAL_TABLES = {"organizations", "users", "identities"}      # identities belong to a person, not to a tenant
 
 
 class TestMigrations(unittest.TestCase):
@@ -42,7 +42,7 @@ class TestMigrations(unittest.TestCase):
     def test_upgrade_creates_tables_and_every_tenant_table_has_organization_id(self):
         command.upgrade(self.cfg, "head")
         names, e = self.tables()
-        self.assertTrue({"organizations", "users", "memberships", "projects", "deliverables", "ledger_entries", "sessions", "invitations"} <= names)
+        self.assertTrue({"organizations", "users", "memberships", "projects", "deliverables", "ledger_entries", "sessions", "invitations", "audit_log", "user_assignments", "identities"} <= names)
         insp = sa.inspect(e)
         for t in names - GLOBAL_TABLES:
             self.assertIn("organization_id", [c["name"] for c in insp.get_columns(t)], t)

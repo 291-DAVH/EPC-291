@@ -31,7 +31,7 @@ class Base(unittest.TestCase):
         if os.environ.get("EPC_TEST_DATABASE_URL"):
             db._migrate(settings.database_url)                    # only SQLite is migrated automatically
             with db.engine().begin() as cx:
-                for table in ("sessions", "invitations", "user_assignments", "audit_log", "memberships", "users", "organizations"):
+                for table in ("sessions", "invitations", "user_assignments", "audit_log", "identities", "memberships", "users", "organizations"):
                     cx.execute(sa.text(f"DELETE FROM {table}"))
         service.reset_throttle()
         self.app = create_app()

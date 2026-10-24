@@ -19,7 +19,7 @@ tests/
 
 | Module | Purpose |
 |---|---|
-| `identity` | accounts and sessions (US-0018, ADR-0009, ADR-0013): sign-in recognizes the kind of account (staff, norm reviewer, inspector, external auditor, independent, corporate owner / administrator / member), individual and corporate organizations with seats, invitations, assignments of inspectors and auditors to organizations, the permission matrix (`permissions.py`) enforced by the request guard (401/403), the organizations visible to each account (used by `projects`) and the platform audit log; `EPC_AUTH=simulated` keeps the role-from-environment mode for development |
+| `identity` | accounts and sessions (US-0018, ADR-0009, ADR-0013): sign-in recognizes the kind of account (staff, norm reviewer, inspector, external auditor, independent, corporate owner / administrator / member), individual and corporate organizations with seats, invitations, assignments of inspectors and auditors to organizations, the permission matrix (`permissions.py`) enforced by the request guard (401/403), the organizations visible to each account (used by `projects`) the platform audit log, sign-in by email or alias and with Google, GitHub, Facebook or LinkedIn (`oauth.py`); `EPC_AUTH=simulated` keeps the role-from-environment mode for development |
 | `projects` | create and list projects, options |
 | `deliverables` | deliverables list, downloads (several formats per drawing, e.g. DXF + PDF) and the ZIP delivery package |
 | `intake` | customer inputs (voice of customer, stories, documents) and their automatic analysis with the Claude API (admin/engineer, explicit confirmation, amounts removed, validated by the plugin's own validator, usage recorded) |

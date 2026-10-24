@@ -14,7 +14,8 @@ from starlette.concurrency import run_in_threadpool
 from epc.core.config import settings
 from epc.modules.identity import permissions, service
 
-ANONYMOUS_PATHS = {"/api/health", "/api/me", "/api/auth/login", "/api/auth/signup", "/api/auth/accept-invitation", "/api/auth/invitation"}
+ANONYMOUS_PATHS = {"/api/health", "/api/me", "/api/auth/login", "/api/auth/signup", "/api/auth/accept-invitation", "/api/auth/invitation", "/api/auth/providers"}
+ANONYMOUS_PREFIXES = ("/api/auth/oauth/",)           # sign-in and sign-up with a provider: the routes decide what each step needs
 
 
 def install_role_guard(app: FastAPI, public_paths: Iterable[str], public_prefixes: Iterable[str], public_post_paths: Iterable[str]) -> None:
@@ -26,7 +27,7 @@ def install_role_guard(app: FastAPI, public_paths: Iterable[str], public_prefixe
         handle = service.activate(principal)
         try:
             path = request.url.path
-            if path.startswith("/api/") and request.method != "OPTIONS" and path not in ANONYMOUS_PATHS:
+            if path.startswith("/api/") and request.method != "OPTIONS" and path not in ANONYMOUS_PATHS and not path.startswith(ANONYMOUS_PREFIXES):
                 if settings.auth == "required" and not principal.authenticated:
                     return JSONResponse({"detail": "authentication required"}, status_code=401)
                 subject = permissions.subject_of(path, request.method, app_paths, app_posts)

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { ApiError, InvitationCreated, Me, OrgMember, OrgView, Page, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, IdentitiesView, InvitationCreated, Me, OrgMember, OrgView, Page, SocialProvider, State, api, useApi, useI18n } from "@epc/ui";
 
 const json = { "Content-Type": "application/json" };
 
@@ -32,14 +32,61 @@ export default function Account() {
             </div>
           )}
         </div>
-        {m.auth === "required" && <Password />}
+        {m.auth === "required" && <Alias current={m.username ?? ""} />}
+        {m.auth === "required" && ["individual", "corporate_owner", "corporate_admin", "corporate_member"].includes(m.account_type ?? "") && <Linked hasPassword={m.has_password !== false} />}
+        {m.auth === "required" && <Password needCurrent={m.has_password !== false} />}
         {m.auth === "required" && (m.org_role === "owner" || m.org_role === "admin") && <People meRole={m.org_role} />}
       </div>
     </Page>
   );
 }
 
-function Password() {
+function Alias({ current }: { current: string }) {
+  const { t } = useI18n();
+  const [value, setValue] = useState(current);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    try { await api("/auth/username", { method: "PUT", headers: json, body: JSON.stringify({ username: value }) }); setMsg({ ok: true, text: t("acc.aliasSaved") }); }
+    catch (x) { setMsg({ ok: false, text: errorText(x) }); }
+  };
+  return (
+    <form className="card" onSubmit={save}>
+      <h2 style={{ marginTop: 0 }}>{t("acc.alias")}</h2>
+      <p className="muted small" style={{ margin: "0 0 8px" }}>{t("acc.aliasHelp")}</p>
+      <div className="row"><input value={value} onChange={(e) => setValue(e.target.value)} autoComplete="username" placeholder={t("auth.username")} /><button className="primary" type="submit">{t("ident.save")}</button></div>
+      {msg && <div className={"alert " + (msg.ok ? "ok" : "bad")} style={{ marginTop: 10 }}>{msg.text}</div>}
+    </form>
+  );
+}
+
+/** Providers linked to the account (Google, GitHub, Facebook, LinkedIn): link a new one, or remove one while another way to sign in remains. */
+function Linked({ hasPassword }: { hasPassword: boolean }) {
+  const { t } = useI18n();
+  const [rev, setRev] = useState(0);
+  const ids = useApi<IdentitiesView>(`/auth/identities?r=${rev}`);
+  const providers = useApi<SocialProvider[]>("/auth/providers");
+  const [msg, setMsg] = useState("");
+  if (!ids.data || !providers.data || providers.data.length === 0) return null;
+  const linked = new Set(ids.data.identities.map((i) => i.provider));
+  const unlink = async (p: string) => { try { await api(`/auth/identities/${p}`, { method: "DELETE" }); setMsg(""); setRev((n) => n + 1); } catch (x) { setMsg(x instanceof ApiError && x.status === 409 ? t("acc.lastWay") : errorText(x)); } };
+  return (
+    <div className="card">
+      <h2 style={{ marginTop: 0 }}>{t("acc.linked")}</h2>
+      <p className="muted small" style={{ margin: "0 0 8px" }}>{t("acc.linkedHelp")}</p>
+      {providers.data.map((p) => (
+        <div key={p.id} className="row between" style={{ padding: "4px 0" }}>
+          <span><b>{p.name}</b> {linked.has(p.id) && <span className="badge ok">{t("acc.isLinked")} · {ids.data!.identities.find((i) => i.provider === p.id)?.email}</span>}</span>
+          {linked.has(p.id) ? <button onClick={() => unlink(p.id)}>{t("acc.unlink")}</button> : <a className="btn" href={`/api/auth/oauth/${p.id}/start?mode=link`}>{t("acc.link")}</a>}
+        </div>
+      ))}
+      {!hasPassword && <div className="muted small" style={{ marginTop: 6 }}>{t("acc.noPassword")}</div>}
+      {msg && <div className="alert bad" style={{ marginTop: 8 }}>{msg}</div>}
+    </div>
+  );
+}
+
+function Password({ needCurrent }: { needCurrent: boolean }) {
   const { t } = useI18n();
   const [cur, setCur] = useState("");
   const [next, setNext] = useState("");
@@ -53,9 +100,9 @@ function Password() {
   };
   return (
     <form className="card" onSubmit={submit}>
-      <h2 style={{ marginTop: 0 }}>{t("acc.password")}</h2>
+      <h2 style={{ marginTop: 0 }}>{t(needCurrent ? "acc.password" : "acc.setPassword")}</h2>
       <div className="fgrid">
-        <label className="field"><span>{t("acc.currentPw")}</span><input type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} required /></label>
+        {needCurrent && <label className="field"><span>{t("acc.currentPw")}</span><input type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} required /></label>}
         <label className="field"><span>{t("acc.newPw")}</span><input type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} required /></label>
       </div>
       <div className="muted small" style={{ marginTop: 6 }}>{t("auth.minPw")}</div>
