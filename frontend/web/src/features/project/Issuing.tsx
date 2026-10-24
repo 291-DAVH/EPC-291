@@ -35,8 +35,12 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
   };
   const showMail = async (id: string) => {
     if (mail?.id === id) { setMail(null); return; }
-    const m = await api<{ subject: string; body: string }>(`${base}/${id}/message`);
-    setMail({ id, ...m }); setCopied("");
+    try {
+      const m = await api<{ subject: string; body: string }>(`${base}/${id}/message`);
+      setMail({ id, ...m }); setCopied(""); setMsg("");
+    } catch (x) {
+      setMsg(`${t("issue.messageFailed")} (${x instanceof ApiError ? x.status : "error"})`);
+    }
   };
   const copy = async (what: string, text: string) => { try { await navigator.clipboard.writeText(text); setCopied(what); } catch { /* the text stays selectable */ } };
   const markSent = async (id: string) => { await api(`${base}/${id}/sent`, { method: "POST" }); setMsg(t("issue.sentOk")); setRev((n) => n + 1); };
@@ -81,6 +85,7 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
             <h2 style={{ margin: 0 }}>{t("issue.transmittals")}</h2>
             <button onClick={onOpenDeliverables}>{t("issue.openDeliverables")}</button>
           </div>
+          {msg && <div className="alert" style={{ marginTop: 8 }}>{msg}</div>}
           <table>
             <tbody>
               {[...v.transmittals].reverse().map((tr) => (
