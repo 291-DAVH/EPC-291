@@ -5,6 +5,9 @@ Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
 y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [0.5.2] - 2026-10-24
+- Packaging: the README logo copy was removed from the assets (the generator never used it).
+
 ## [Unreleased]
 
 ### Pendiente

@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "plugins": {
     "aea-calc": {
-      "version": "1.6.0",
+      "version": "1.6.1",
       "kind": "calc",
       "status": "active",
       "requires": {},
@@ -15,7 +15,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "a1ea9b85d4005aa9"
+      "hash": "3d3c4a9dda00cd31"
     },
     "board-design": {
       "version": "0.1.0",
@@ -58,7 +58,7 @@
       "hash": "04503c87e8f48536"
     },
     "iec-symbols": {
-      "version": "0.4.16",
+      "version": "0.4.17",
       "kind": "knowledge",
       "status": "active",
       "requires": {},
@@ -68,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "34f372fba145a56e"
+      "hash": "066147caa6443af3"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -82,7 +82,7 @@
       "hash": "2546ba51bd50723e"
     },
     "iram-titleblock": {
-      "version": "0.5.1",
+      "version": "0.5.2",
       "kind": "generator",
       "status": "active",
       "requires": {},
@@ -93,7 +93,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "2fd271a5f7edd4e9"
+      "hash": "e48128c077575f39"
     },
     "mld": {
       "version": "0.2.0",
