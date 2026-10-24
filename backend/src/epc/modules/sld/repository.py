@@ -1,25 +1,21 @@
 """Files of the SLD feature inside workspace/02-engineering/electrical/<package>/ (src = input, build = scratch, drawings/calc = outputs)."""
-import datetime as dt
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
 
-PACKAGE = "PQ-01"
-DISCIPLINE = "electrical"
-
+# Excel column <-> form field names, used to turn the plugin's example workbook into form data
 BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "system"), ("ICC_KA", "icc_ka"), ("FP_DEFAULT", "fp_default"),
               ("FRECUENCIA_HZ", "frequency_hz"), ("PROYECTO", "project"), ("LONG_ACOMETIDA_m", "feeder_length_m")]
 CIRCUIT_COLS = [("TAG", "tag"), ("DESCRIPCION", "description"), ("CARGA", "load"), ("UNIDAD_CARGA", "unit"), ("DESTINO", "destination"), ("PARENT_TAG", "parent_tag"),
                 ("TOPOLOGY", "topology"), ("FASE", "phase"), ("LONGITUD_m", "length_m"), ("FP", "fp"), ("RENDIMIENTO", "efficiency"), ("KIND", "kind"),
                 ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type")]
-TITLEBLOCK_COLS = {"company": "Empresa: razón social", "company_cuit": "Empresa: CUIT", "client": "Cliente: razón social", "client_cuit": "Cliente: CUIT",
-                   "drawn_by": "Proyectado por", "checked_by": "Verificado por", "approved_by": "Validado por", "description": "Descripción",
-                   "location": "Ubicación", "scale": "Escala", "revision": "Revisión", "status": "Estado"}
+PACKAGE = "PQ-01"
+DISCIPLINE = "electrical"
 
 
 def pkg(d: Path) -> Path:
@@ -50,48 +46,20 @@ def save_status(d: Path, status: dict) -> None:
     write_json(work_dir(d) / "status.json", status)
 
 
-def write_excel(path: Path, data: dict) -> None:
-    """The workbook the plugin reads: sheets TABLERO (CAMPO/VALOR) and CIRCUITOS (one row per circuit)."""
-    import openpyxl
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "TABLERO"
-    ws.append(["DATOS DEL TABLERO"])
-    ws.append(["CAMPO", "VALOR"])
-    for col, key in BOARD_ROWS:
-        ws.append([col, data["board"].get(key)])
-    cs = wb.create_sheet("CIRCUITOS")
-    cs.append(["CIRCUITOS"])
-    cs.append([c for c, _ in CIRCUIT_COLS])
-    for row in data["circuits"]:
-        cs.append([None if row.get(k) in (None, "") else row.get(k) for _, k in CIRCUIT_COLS])
-    path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(path)
+def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[str, Path], diagrams: str = "sld"):
+    """Criteria-driven calculation + SLD through the engine's `epc_drawing.board_design` (the plugin pipeline, as it runs inside Claude)."""
+    work.mkdir(parents=True, exist_ok=True)
+    write_json(work / "input.json", data)
+    write_json(work / "criteria.json", criteria)
+    cmd = [sys.executable, "-m", "epc_drawing.board_design", "--input", str(work / "input.json"), "--criteria", str(work / "criteria.json"),
+           "--out", str(work), "--name", name, "--diagrams", diagrams]
+    for k, p in logos.items():
+        cmd += ["--logo", f"{k}={p}"]
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=900)
 
 
-def write_titleblock(folder: Path, tb: dict) -> None:
-    """Copy the plugin's titleblock workbook and fill the common data of its first row (company, client, people...). No logos are copied."""
-    import openpyxl
-    folder.mkdir(parents=True, exist_ok=True)
-    target = folder / "input-titleblocks.xlsx"
-    shutil.copy(settings.engine / "drawing" / "examples" / "sld" / "titleblock" / "input-titleblocks.xlsx", target)
-    wb = openpyxl.load_workbook(target)
-    ws = wb["Láminas"]
-    hdr = {c.value: c.column for c in ws[1]}
-    today = dt.date.today()
-    for key, col in TITLEBLOCK_COLS.items():
-        ws.cell(2, hdr[col]).value = tb.get(key) or None
-    for col in ("Proyectado: fecha", "Verificado: fecha", "Validado: fecha"):
-        ws.cell(2, hdr[col]).value = dt.datetime(today.year, today.month, today.day)
-    wb.save(target)
-
-
-def run_generator(xlsx: Path, out: Path, name: str, rotulo_dir: Path):
-    out.mkdir(parents=True, exist_ok=True)
-    import os
-    env = dict(os.environ, SLD_ROTULO_DIR=str(rotulo_dir))
-    return subprocess.run([sys.executable, "-m", "epc_drawing.sld.sld_paginate", "default", str(xlsx), str(out), name, "default", "default"],
-                          env=env, capture_output=True, text=True, timeout=600)
+def read_summary(work: Path) -> dict:
+    return read_json(work / "out" / "summary.json", {}) or {}
 
 
 def render_pdfs(out: Path, name: str) -> List[str]:
@@ -104,21 +72,29 @@ def render_pdfs(out: Path, name: str) -> List[str]:
     return warnings
 
 
-def publish(d: Path, out: Path, name: str, previous: List[str]) -> List[str]:
-    """Copy outputs into the engineering folders (SVG -> drawings/svg, DXF -> drawings/dxf, calculation JSON -> calc) and drop the previous run's files."""
+def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: Optional[str] = None) -> List[str]:
+    """Copy outputs into the engineering folders (SVG -> drawings/svg, DXF -> drawings/dxf, PDF -> drawings/pdf, calculation JSON -> calc).
+    The files of the previous run that this run replaces are removed (an MLD run keeps the SLD files of an earlier run, and vice versa)."""
     base = pkg(d)
+    prefixes = ("SLD_" + name, "MLD_" + name, name + "_")
+    mine = [f for f in sorted(out.iterdir()) if f.name.startswith(prefixes) and f.suffix.lower() in (".svg", ".dxf", ".pdf", ".json")]
+    now_kinds = {p for f in mine for p in prefixes if f.name.startswith(p)}
+    kept: List[str] = []
     for rel in previous:
-        (base / rel).unlink(missing_ok=True)
+        fname = Path(rel).name
+        replaced = (previous_name != name) or (fname.startswith(name + "_") and "calc/" in rel) or any(fname.startswith(p) for p in now_kinds)
+        if replaced:
+            (base / rel).unlink(missing_ok=True)
+        else:
+            kept.append(rel)
     placed: List[str] = []
-    for f in sorted(out.glob(f"{name}*")):
-        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".pdf": "drawings/pdf", ".json": "calc"}.get(f.suffix.lower())
-        if not sub:
-            continue
+    for f in mine:
+        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".pdf": "drawings/pdf", ".json": "calc"}[f.suffix.lower()]
         dest = base / sub / f.name
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(f, dest)
         placed.append(f"{sub}/{f.name}")
-    return placed
+    return kept + placed
 
 
 def example_data() -> Dict:

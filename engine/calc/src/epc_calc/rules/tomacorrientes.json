@@ -22,10 +22,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.2",
-    "pagina_impresa": 44,
-    "cita": "la arista inferior quede a no menos de 0,15 m del nivel del solado terminado."
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.altura_arista_inferior_770",
@@ -45,10 +44,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.7.2",
-    "pagina_impresa": 13,
-    "cita": "quede entre 0,2 y 0,3 m del nivel del solado (piso) terminado."
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.mesadas_771",
@@ -70,10 +68,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.2",
-    "pagina_impresa": 44,
-    "cita": "a no menos de 0,10 m del nivel de mesada"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.mesadas_770",
@@ -91,10 +88,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.7.2",
-    "pagina_impresa": 13,
-    "cita": "a no menos de 0,10 m del nivel de mesada"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ninos_bajos_2x10t_771",
@@ -113,10 +109,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.2",
-    "pagina_impresa": 44,
-    "cita": "hasta una altura de 0,9 m del nivel del solado terminado deberán ser de 2x10+T construidos según Norma IRAM 2071"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.baldeado_771",
@@ -140,10 +135,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.2",
-    "pagina_impresa": 44,
-    "cita": "a no menos de 0,20 m del nivel del solado ter- minado"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.baldeado_770",
@@ -161,10 +155,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.7.2",
-    "pagina_impresa": 13,
-    "cita": "a no menos de 0,30 m del nivel del solado terminado"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.orificios_hacia_arriba",
@@ -184,10 +177,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.6.2",
-    "pagina_impresa": 44,
-    "cita": "Se recomienda no instalar los tomacorrientes sobre planos horizontales"
+    "pagina_impresa": 44
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.mixtas_bajo_090",
@@ -209,10 +201,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 p)",
-    "pagina_impresa": 43,
-    "cita": "No se permite la instalación de bocas de tomacorrientes conectadas al circuito de iluminación, situadas a menos de 0,90 m del nivel del solado terminado."
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.toilette_toma_en_iluminacion",
@@ -232,10 +223,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.5 n)",
-    "pagina_impresa": 43,
-    "cita": "el tomacorriente requerido en los puntos mínimos de utilización podrá cargarse al circuito de iluminación"
+    "pagina_impresa": 43
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ate_color_rojo",
@@ -257,10 +247,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.7.6 c1) II",
-    "pagina_impresa": 24,
-    "cita": "se instalarán tomacorrientes de color rojo"
+    "pagina_impresa": 24
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.escuelas_aulas_pizarron",
@@ -281,10 +270,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.4 j)",
-    "pagina_impresa": 41,
-    "cita": "Una de estas bocas deberá ubicarse entre 0,2 y 0,4 m del nivel del solado terminado"
+    "pagina_impresa": 41
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.escuelas_inicial_1_7m",
@@ -302,10 +290,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.4 j)",
-    "pagina_impresa": 41,
-    "cita": "no se instalarán bocas de tomacorrientes a alturas infe- riores a los 1,7 m"
+    "pagina_impresa": 41
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.deposito_perimetro",
@@ -326,10 +313,9 @@
     "norma": "AEA 90364-7-771",
     "edicion": "2006",
     "clausula": "771.8.3.3.3.1 a 771.8.3.3.3.4",
-    "pagina_impresa": 36,
-    "cita": "una boca para tomacorrientes de uso general por cada 9 m, o fracción, de perímetro"
+    "pagina_impresa": 36
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_modo_0_2_interior",
@@ -348,10 +334,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.4.1",
-    "pagina_impresa": 13,
-    "cita": "deben ser de tipo IRAM 2071 de 10 A"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_un_vehiculo_por_modulo",
@@ -369,10 +354,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.1",
-    "pagina_impresa": 12,
-    "cita": "No se permite cargar en simultáneo más de un VE por módulo de tomacorriente."
+    "pagina_impresa": 12
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_diferencial_30ma_clase_a",
@@ -391,10 +375,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.2",
-    "pagina_impresa": 12,
-    "cita": "deben estar protegidos por un interruptor diferencial clase A de corriente"
+    "pagina_impresa": 12
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_modo_3_4_acu",
@@ -412,10 +395,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.4.2 y 3.5.2",
-    "pagina_impresa": 13,
-    "cita": "es obligatoria la instalación de una estación de carga, con un circuito eléctrico dedicado"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_ip_intemperie",
@@ -434,10 +416,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.5.1 y 3.5.2",
-    "pagina_impresa": 13,
-    "cita": "IP mínimo debe ser IP55 o superior"
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   },
   {
    "id": "tomacorrientes.ev_una_acometida",
@@ -455,10 +436,9 @@
     "norma": "AEA 90364-7-722",
     "edicion": "2018",
     "clausula": "722, apartado 3.6",
-    "pagina_impresa": 13,
-    "cita": "No se admite más de una acometida con medición independiente por inmueble."
+    "pagina_impresa": 13
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

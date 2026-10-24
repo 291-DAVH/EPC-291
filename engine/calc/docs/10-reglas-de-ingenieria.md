@@ -38,21 +38,21 @@ Reúne en JSON los requisitos de diseño que fijan las normas y que no son cálc
  "tipo": "obligatorio",
  "parametros": {"altura_min_m": 0.15, "referencia": "arista inferior de la caja"},
  "aplica_a": ["viviendas", "oficinas", "locales"],
- "fuente": {"norma": "AEA 90364-7-771", "edicion": "2006", "clausula": "771.8.6.2", "pagina_impresa": 44, "cita": "la arista inferior quede a no menos de 0,15 m del nivel del solado terminado."}
+ "fuente": {"norma": "AEA 90364-7-771", "edicion": "2006", "clausula": "771.8.6.2", "pagina_impresa": 44}
 }
 ```
 
 - **tipo**: `obligatorio`, `recomendado` o `prohibido`.
 - **parametros**: el valor de la regla, con la unidad en el nombre (`_m`, `_mm`, `_pct`, `_a`, `_cm`, `_va`).
-- **fuente**: norma, edición, cláusula, página impresa y cita textual. En las Partes 4 y 5 la página impresa es de la forma `54-5` y se agregan `pagina_pdf` y `verificacion`.
+- **fuente**: norma, edición, cláusula y página impresa, solo como referencia para ubicar el requisito en la norma; no se incluye texto de la norma (derecho de autor). En las Partes 4 y 5 la página impresa es de la forma `54-5` y se agregan `pagina_pdf` y `verificacion`.
 - **tabla** (opcional): las tablas de la norma, con `columnas`, `filas`, unidades y notas.
 
 ### Cómo se leyeron las Partes 4 y 5
 
 Esas normas están escaneadas (sin texto). El texto sale de OCR, que pierde las tildes y desfigura las tablas. Por eso cada regla de esas partes dice cómo se comprobó:
 
-- `ocr`: la cita se buscó en el OCR de la página PDF indicada. La búsqueda ignora tildes y vocales y admite diferencias de letras sueltas, porque el OCR las confunde. Los números en prosa se contrastaron además con la imagen de la página.
-- `visual`: los valores de la tabla se leyeron sobre la imagen de la página; la cita es el título de la tabla, comprobado contra el OCR.
+- `ocr`: el requisito se ubicó y se contrastó en el OCR de la página PDF indicada; los números en prosa se contrastaron además con la imagen de la página.
+- `visual`: los valores de la tabla se leyeron sobre la imagen de la página; el título de la tabla se comprobó contra el OCR.
 
 ## Pasos para usarlo
 
@@ -65,21 +65,15 @@ La Sección 771 (viviendas, oficinas y locales) y la 770 (viviendas) a veces exi
 
 ## Cómo se verifica
 
-El script `rules/build_rules.py` contiene las reglas. Antes de escribir los JSON comprueba que cada cita aparece palabra por palabra en el texto de la norma, a continuación de la cláusula indicada, y calcula la página impresa. Si una cita no coincide, el script falla. Para regenerar:
-
-```
-python -B library/calculations/rules/build_rules.py <carpeta_con_texto_de_las_normas> library/calculations/rules
-```
-
-La carpeta de entrada contiene el texto extraído de `assets/` (`AEA_90364-7-771.txt`, `-770`, `-701` y `-722`). Para incluir las Partes 4 y 5 se agrega como tercer argumento la carpeta con el OCR por página (`n4_p068.txt`, `n5_p245.txt`, etc.); las reglas de esas partes están en `rules/reglas_ocr.py`. Sin ese argumento solo se generan las de la Parte 7.
+Cada regla se redactó con palabras propias a partir de la lectura de la norma y se contrastó contra ella (cláusula, página y valores). Las normas y la herramienta de verificación que las contrastaba (con los fragmentos literales que usaba para ubicarlas) son material privado: están fuera del repositorio, en `local/dev-knowledge/`, porque contienen texto protegido por derecho de autor. Lo que se publica es solo el resultado: reglas, parámetros y referencias. Una prueba (`test_sin_texto_literal_de_la_norma`) impide que vuelva a entrar texto literal de la norma en estos archivos.
 
 ## Limitaciones
 
 - Cubre las Secciones 771, 770, 701 y 722 y, de las Partes 4 y 5, los capítulos 41, 43, 51 (colores), 52 (secciones mínimas, neutro, caída de tensión y curvas) y 54 (puesta a tierra y conductores de protección).
 - De las Partes 4 y 5 no se incorporaron: el capítulo 42 (efectos térmicos), el 44 (sobretensiones), el 434 (cortocircuito), las Tablas 52.1 y B52 (capacidad de cables, que ya están en 771.16) y la Parte 2 (definiciones). La IT 90909-1 remite a AEA 90909-0 para el factor de tensión c, que no está en `assets/`; por eso no hay reglas con ese factor.
 - La Tabla 41.3 se leyó sobre una imagen de 120 dpi; conviene confirmar los tiempos de 230 V contra la norma impresa.
-- El valor de `parametros` es una lectura de la cita; ante una duda, la fuente es la cita.
-- No están todas las reglas de las normas: están las que se expresan como valor, límite o prohibición y se pudieron respaldar con una cita. Los puntos mínimos de utilización por ambiente de viviendas y oficinas (tablas por grado de electrificación) no se incluyeron porque sus tablas no son confiables en el texto extraído; solo se incluyeron las densidades de depósitos, que están en prosa.
+- El valor de `parametros` es una lectura de la norma; ante una duda, la fuente es la cláusula y la página indicadas.
+- No están todas las reglas de las normas: están las que se expresan como valor, límite o prohibición y se pudieron respaldar con su cláusula y página. Los puntos mínimos de utilización por ambiente de viviendas y oficinas (tablas por grado de electrificación) no se incluyeron porque sus tablas no son confiables en el texto extraído; solo se incluyeron las densidades de depósitos, que están en prosa.
 - Estado: borrador pendiente de validación del usuario.
 
 ## Módulo

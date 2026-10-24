@@ -19,4 +19,22 @@ def format_policy() -> dict:
     return service.format_policy()
 
 
-__all__ = ["counts", "due_soon", "format_policy"]
+def add_items(project_dir: Path, new_items: list) -> list:
+    """Register deliverables (ENT ids are assigned) and return them."""
+    return service.add_items(project_dir, new_items)
+
+
+def next_code_number(project_dir: Path, prefix: str) -> int:
+    return service.next_code_number(project_dir, prefix)
+
+
+def set_delivered(project_dir: Path, item_ids: list, date_iso: str) -> None:
+    service.set_delivered(project_dir, item_ids, date_iso)
+
+
+def list_items(project_dir: Path) -> list:
+    """Deliverables with their status, due date and overdue flag."""
+    return service.list_items(project_dir)
+
+
+__all__ = ["counts", "due_soon", "format_policy", "add_items", "next_code_number", "set_delivered", "list_items"]

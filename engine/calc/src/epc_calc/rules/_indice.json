@@ -1,11 +1,11 @@
 {
- "descripcion": "Reglas de ingeniería extraídas de las normas AEA en assets/, una por requisito, con cláusula, página y cita textual.",
+ "descripcion": "Reglas de ingeniería derivadas de las normas AEA (leídas y redactadas con palabras propias), una por requisito, con norma, edición, cláusula y página como referencia. No incluyen texto de la norma.",
  "esquema": {
   "id": "grupo.nombre",
   "tipo": "obligatorio | recomendado | prohibido",
   "parametros": "valores numéricos o textuales de la regla",
   "aplica_a": "tipos de inmueble o instalación",
-  "fuente": "norma, edición, cláusula, página impresa y cita textual verificada"
+  "fuente": "norma, edición, cláusula y página impresa donde está el requisito (solo referencia; sin texto de la norma)"
  },
  "grupos": {
   "circuitos": {

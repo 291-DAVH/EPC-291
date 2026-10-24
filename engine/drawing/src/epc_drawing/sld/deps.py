@@ -112,7 +112,7 @@ def rotulo(indice, fmt='A1'):
     wb.save(os.path.join(work, 'input-titleblocks.xlsx'))
     # logos: junto al Excel en src/ (provider-logo-*.svg, client-logo-*.svg); el generador los busca en la carpeta de trabajo
     for f in os.listdir(ROTULO_DIR):
-        if f.endswith('.svg') and ('-logo-' in f):
+        if f.endswith(('.svg', '.png')) and ('-logo-' in f):
             shutil.copy(os.path.join(ROTULO_DIR, f), work)
     subprocess.run([sys.executable, '-m', 'epc_drawing.titleblock.titleblocks_generator'], check=True, capture_output=True, cwd=work)   # sin -I: necesita ezdxf del usuario
     return os.path.join(work, 'svg', archivo), os.path.join(work, 'svg', 'modifications-block-IRAM4508.svg')

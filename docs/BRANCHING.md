@@ -26,7 +26,7 @@ feature/b                      o
    python -m unittest discover -s tests -t .      # from backend/ (+ lint-imports)
    ```
    or, in one step: `python tools/ci/run_gate.py` (the full battery).
-3. `dev` goes to `main` when the whole suite is green and the checklist is done: changelog updated, version bumped in the affected `plugin.json`, no draft rules promoted by mistake, no PDF/DWG/dev-knowledge content staged.
+3. `dev` goes to `main` when the whole suite is green and the checklist is done: changelog updated, version bumped in the affected `plugin.json`, no draft rules promoted by mistake, no PDF/DWG/dev-knowledge content staged, and no development credential (the gate check `dev-credentials` enforces it: the MASTER account lives only in the developer's git-ignored `local/`, ADR-0015).
 4. Commit messages follow Conventional Commits: `feat(scope): ...`, `fix(scope): ...`, `docs: ...`, `chore: ...`.
 5. Never push `local/dev-knowledge/`, `local/legacy/`, client projects or copyrighted files. They are listed in `.gitignore`; the hook adds a second barrier.
 

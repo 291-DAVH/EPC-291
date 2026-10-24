@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "methodology": "pm2",
+  "source": "PM² logs: Risk Log, Change Log, Issue Log, Decision Log, Assumptions, Stakeholder Matrix (rules/m8-management-documents.md)",
+  "note": "Records are never deleted: they change status and keep a history of who changed what and when. `closed_states` are the statuses that take a record out of the active list.",
+  "registers": [
+    {
+      "id": "risk", "prefix": "RIE", "name": {"es": "Riesgos", "en": "Risks"}, "derive": "risk_level", "closed_states": ["closed", "occurred"],
+      "columns": ["title", "level", "strategy", "owner", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Riesgo", "en": "Risk"}},
+        {"id": "description", "type": "longtext", "label": {"es": "Causa, evento y efecto", "en": "Cause, event and effect"}},
+        {"id": "category", "type": "enum", "label": {"es": "Categoría", "en": "Category"}, "options": [
+          {"id": "technical", "es": "Técnico", "en": "Technical"}, {"id": "schedule", "es": "Cronograma", "en": "Schedule"},
+          {"id": "external", "es": "Externo / Cliente", "en": "External / Client"}, {"id": "organizational", "es": "Organizacional", "en": "Organizational"}]},
+        {"id": "probability", "type": "number", "min": 1, "max": 5, "required": true, "label": {"es": "Probabilidad (1-5)", "en": "Probability (1-5)"}},
+        {"id": "impact", "type": "number", "min": 1, "max": 5, "required": true, "label": {"es": "Impacto (1-5)", "en": "Impact (1-5)"}},
+        {"id": "strategy", "type": "enum", "label": {"es": "Estrategia", "en": "Strategy"}, "options": [
+          {"id": "avoid", "es": "Evitar", "en": "Avoid"}, {"id": "reduce", "es": "Reducir", "en": "Reduce"}, {"id": "accept", "es": "Aceptar", "en": "Accept"}, {"id": "transfer", "es": "Transferir", "en": "Transfer"}]},
+        {"id": "response", "type": "longtext", "label": {"es": "Respuesta / acción", "en": "Response / action"}},
+        {"id": "owner", "type": "text", "label": {"es": "Responsable", "en": "Owner"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierto", "en": "Open"}, {"id": "mitigating", "es": "En mitigación", "en": "Mitigating"},
+          {"id": "closed", "es": "Cerrado", "en": "Closed"}, {"id": "occurred", "es": "Materializado", "en": "Occurred"}]},
+        {"id": "closed_on", "type": "date", "label": {"es": "Fecha de cierre", "en": "Closing date"}},
+        {"id": "closing_reason", "type": "text", "label": {"es": "Motivo de cierre", "en": "Closing reason"}}
+      ]
+    },
+    {
+      "id": "change", "prefix": "RFC", "name": {"es": "Cambios", "en": "Changes"}, "closed_states": ["rejected", "implemented", "closed"],
+      "columns": ["title", "category", "owner", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Cambio solicitado", "en": "Requested change"}},
+        {"id": "description", "type": "longtext", "label": {"es": "Descripción", "en": "Description"}},
+        {"id": "category", "type": "enum", "label": {"es": "Categoría", "en": "Category"}, "options": [
+          {"id": "scope", "es": "Alcance", "en": "Scope"}, {"id": "design", "es": "Diseño", "en": "Design"}, {"id": "regulation", "es": "Normativa", "en": "Regulation"}, {"id": "client", "es": "Cliente", "en": "Client"}]},
+        {"id": "requested_by", "type": "text", "label": {"es": "Solicitado por", "en": "Requested by"}},
+        {"id": "impact_scope", "type": "text", "label": {"es": "Impacto en alcance", "en": "Scope impact"}},
+        {"id": "impact_schedule", "type": "text", "label": {"es": "Impacto en cronograma", "en": "Schedule impact"}},
+        {"id": "owner", "type": "text", "label": {"es": "Responsable", "en": "Owner"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierto", "en": "Open"}, {"id": "evaluated", "es": "Evaluado", "en": "Evaluated"}, {"id": "approved", "es": "Aprobado", "en": "Approved"},
+          {"id": "rejected", "es": "Rechazado", "en": "Rejected"}, {"id": "deferred", "es": "Diferido", "en": "Deferred"},
+          {"id": "implemented", "es": "Implementado", "en": "Implemented"}, {"id": "closed", "es": "Cerrado", "en": "Closed"}]},
+        {"id": "decision_ref", "type": "text", "label": {"es": "Decisión (DEC)", "en": "Decision (DEC)"}},
+        {"id": "decided_on", "type": "date", "label": {"es": "Fecha de decisión", "en": "Decision date"}},
+        {"id": "justification", "type": "longtext", "label": {"es": "Justificación", "en": "Justification"}}
+      ]
+    },
+    {
+      "id": "issue", "prefix": "INC", "name": {"es": "Incidencias", "en": "Issues"}, "closed_states": ["closed"],
+      "columns": ["title", "type", "owner", "due", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Asunto", "en": "Issue"}},
+        {"id": "type", "type": "enum", "required": true, "default": "pending", "label": {"es": "Tipo", "en": "Type"}, "options": [
+          {"id": "blocker", "es": "Bloqueo", "en": "Blocker"}, {"id": "pending", "es": "Pendiente", "en": "Pending"}, {"id": "client_info", "es": "Información del cliente", "en": "Client information"},
+          {"id": "action", "es": "Punto de acción", "en": "Action item"}, {"id": "incident", "es": "Incidencia", "en": "Incident"}]},
+        {"id": "description", "type": "longtext", "label": {"es": "Descripción", "en": "Description"}},
+        {"id": "impact", "type": "text", "label": {"es": "Impacto (paquete / fecha)", "en": "Impact (package / date)"}},
+        {"id": "owner", "type": "text", "required": true, "label": {"es": "Responsable", "en": "Owner"}},
+        {"id": "due", "type": "date", "required": true, "label": {"es": "Fecha comprometida", "en": "Due date"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierto", "en": "Open"}, {"id": "in_progress", "es": "En curso", "en": "In progress"}, {"id": "closed", "es": "Cerrado", "en": "Closed"}]},
+        {"id": "closed_on", "type": "date", "label": {"es": "Fecha de cierre", "en": "Closing date"}},
+        {"id": "evidence", "type": "text", "label": {"es": "Evidencia de cierre", "en": "Closing evidence"}}
+      ]
+    },
+    {
+      "id": "decision", "prefix": "DEC", "name": {"es": "Decisiones", "en": "Decisions"}, "closed_states": ["superseded"],
+      "columns": ["title", "decided_by", "decided_on", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Decisión", "en": "Decision"}},
+        {"id": "description", "type": "longtext", "label": {"es": "Detalle y motivo", "en": "Detail and reason"}},
+        {"id": "decided_by", "type": "text", "label": {"es": "Decidió", "en": "Decided by"}},
+        {"id": "decided_on", "type": "date", "label": {"es": "Fecha", "en": "Date"}},
+        {"id": "origin", "type": "text", "label": {"es": "Origen (RFC, RIE…)", "en": "Origin (RFC, RIE…)"}},
+        {"id": "status", "type": "enum", "required": true, "default": "active", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "active", "es": "Vigente", "en": "Active"}, {"id": "superseded", "es": "Reemplazada", "en": "Superseded"}]},
+        {"id": "superseded_by", "type": "text", "label": {"es": "Reemplazada por", "en": "Superseded by"}}
+      ]
+    },
+    {
+      "id": "assumption", "prefix": "SUP", "name": {"es": "Supuestos", "en": "Assumptions"}, "closed_states": ["validated", "invalidated"],
+      "columns": ["title", "basis", "owner", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Supuesto", "en": "Assumption"}},
+        {"id": "basis", "type": "text", "required": true, "label": {"es": "Base del valor", "en": "Basis of the value"}},
+        {"id": "description", "type": "longtext", "label": {"es": "Detalle", "en": "Detail"}},
+        {"id": "owner", "type": "text", "label": {"es": "Responsable de validarlo", "en": "Owner of its validation"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierto", "en": "Open"}, {"id": "validated", "es": "Validado", "en": "Validated"}, {"id": "invalidated", "es": "Invalidado", "en": "Invalidated"}]}
+      ]
+    },
+    {
+      "id": "stakeholder", "prefix": "STK", "name": {"es": "Interesados", "en": "Stakeholders"}, "closed_states": [],
+      "columns": ["name", "organization", "role", "attitude", "strategy"],
+      "fields": [
+        {"id": "name", "type": "text", "required": true, "label": {"es": "Nombre", "en": "Name"}},
+        {"id": "organization", "type": "text", "label": {"es": "Organización", "en": "Organization"}},
+        {"id": "role", "type": "text", "label": {"es": "Rol en el proyecto", "en": "Role in the project"}},
+        {"id": "power", "type": "number", "min": 1, "max": 5, "label": {"es": "Poder (1-5)", "en": "Power (1-5)"}},
+        {"id": "interest", "type": "number", "min": 1, "max": 5, "label": {"es": "Interés (1-5)", "en": "Interest (1-5)"}},
+        {"id": "attitude", "type": "enum", "label": {"es": "Actitud", "en": "Attitude"}, "options": [
+          {"id": "favorable", "es": "Favorable", "en": "Supportive"}, {"id": "neutral", "es": "Neutral", "en": "Neutral"}, {"id": "reluctant", "es": "Reticente", "en": "Reluctant"}]},
+        {"id": "strategy", "type": "enum", "label": {"es": "Estrategia", "en": "Strategy"}, "options": [
+          {"id": "manage_closely", "es": "Gestionar de cerca", "en": "Manage closely"}, {"id": "keep_satisfied", "es": "Mantener satisfecho", "en": "Keep satisfied"},
+          {"id": "keep_informed", "es": "Informar", "en": "Keep informed"}, {"id": "monitor", "es": "Monitorear", "en": "Monitor"}]},
+        {"id": "channel", "type": "text", "label": {"es": "Canal", "en": "Channel"}},
+        {"id": "owner", "type": "text", "label": {"es": "Responsable del vínculo", "en": "Relationship owner"}}
+      ]
+    },
+    {
+      "id": "observation", "prefix": "OBS", "name": {"es": "Observaciones", "en": "Observations"}, "closed_states": ["closed"],
+      "columns": ["title", "type", "severity", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Observación", "en": "Observation"}},
+        {"id": "type", "type": "enum", "required": true, "default": "inspection", "label": {"es": "Origen", "en": "Origin"}, "options": [
+          {"id": "inspection", "es": "Inspección", "en": "Inspection"}, {"id": "audit", "es": "Auditoría", "en": "Audit"}]},
+        {"id": "severity", "type": "enum", "required": true, "default": "minor", "label": {"es": "Gravedad", "en": "Severity"}, "options": [
+          {"id": "info", "es": "Informativa", "en": "Informative"}, {"id": "minor", "es": "Menor", "en": "Minor"},
+          {"id": "major", "es": "Mayor", "en": "Major"}, {"id": "critical", "es": "Crítica", "en": "Critical"}]},
+        {"id": "description", "type": "longtext", "label": {"es": "Descripción", "en": "Description"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierta", "en": "Open"}, {"id": "answered", "es": "Respondida", "en": "Answered"}, {"id": "closed", "es": "Cerrada", "en": "Closed"}]},
+        {"id": "response", "type": "longtext", "label": {"es": "Respuesta del cliente", "en": "Client response"}},
+        {"id": "closed_on", "type": "date", "label": {"es": "Fecha de cierre", "en": "Closing date"}}
+      ]
+    }
+  ]
+}

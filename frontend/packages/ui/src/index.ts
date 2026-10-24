@@ -1,8 +1,10 @@
 export * from "./api";
+export { AuthGate, signOut } from "./auth";
 export * from "./components";
 export * from "./i18n";
 export * from "./theme";
 export { Shell } from "./Shell";
+export { default as Norms } from "./norms/Norms";
 export type { NavItem } from "./Shell";
 export { default as NewProject } from "./NewProject";
 export { WbsTree } from "./plan/WbsTree";

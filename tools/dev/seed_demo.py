@@ -306,7 +306,7 @@ def build_project(i, root, rnd):
     shutil.copytree(TEMPLATE, pdir, ignore=shutil.ignore_patterns("plugins.lock", "project.json"))
     ws = pdir / "workspace"
     meta = {"schema_version": "1.0", "client": client, "client_code": ccode, "project_code": code, "project_name": pname, "jurisdiction": "AR",
-            "locale": "es-AR", "methodology": rnd.choice(["pm2", "pm2", "pm2", "pmi"]), "disciplines": discs, "phase": phase, "engine_min_version": "0.1.0",
+            "locale": "es-AR", "methodology": "pm2", "disciplines": discs, "phase": phase, "engine_min_version": "0.1.0",
             "created": start.isoformat() + "T09:00:00", "simulated": True}
     jdump(pdir / ".epc" / "project.json", meta)
 

@@ -7,13 +7,13 @@
 **Automated EPC engineering, built from plugins.**
 Calculations, drawings, documents and standards-based rules for engineering projects, with a web app for customers and a technical console for engineers.
 
-[![Version](https://img.shields.io/badge/version-0.2.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.3.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Gate](https://img.shields.io/badge/test%20battery-21%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
 [![React](https://img.shields.io/badge/web-React%20%2B%20TypeScript-0ea5e9?style=for-the-badge)](frontend/)
 [![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-336791?style=for-the-badge)](database/)
-[![Plugins](https://img.shields.io/badge/plugins-12-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
+[![Plugins](https://img.shields.io/badge/plugins-13-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
 [![Argentina](https://img.shields.io/badge/jurisdiction-AR-64748b?style=for-the-badge)](engine/jurisdictions/)
 
 [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Architecture](docs/architecture/README.md) · [Planning board](planning/BOARD.md) · [Documentation](docs/README.md)
@@ -40,7 +40,7 @@ The customer sees only projects, deliverables, input data, requirements, reports
 | Area | Folder | Content | State |
 |---|---|---|---|
 | Engineering engine | `engine/` | calc, rules, standards, drawing, documents + country packs | ✅ |
-| Claude layer | `claude/` | 12 plugins, 14 skills, agents, marketplace | ✅ |
+| Claude layer | `claude/` | 13 plugins, 15 skills, agents, marketplace | ✅ |
 | Backend | `backend/` | 11 modules with enforced boundaries (import-linter) | ✅ |
 | Frontend | `frontend/` | `web` (customer), `console` (admin), `packages/ui` | ✅ |
 | Database | `database/` | Alembic baseline: organizations, users, projects, deliverables, ledger | ✅ |
@@ -81,7 +81,7 @@ Run the app with 20 simulated projects (two terminals):
 cd frontend && npm install && npm run dev:web        # npm run dev:console for the console
 ```
 
-`EPC_ROLE=admin` unlocks the technical API and the console. Full stack with PostgreSQL: see [infra/README.md](infra/README.md).
+In development the role is simulated: `EPC_ROLE=admin` unlocks the technical API and the console. With `EPC_AUTH=required` (the default in production and in the compose stack) there are real accounts: individual and corporate subscriptions, owners who manage their people, and the staff console; create the first staff account with `python -m epc.modules.identity.cli create-admin` (ADR-0009). Full stack with PostgreSQL: see [infra/README.md](infra/README.md).
 
 ## 🗂️ Structure
 
@@ -107,11 +107,12 @@ EPC-291/
 
 | Plugin | Version | Kind | Requires |
 |---|---|---|---|
-| `aea-calc` | 1.6.0 | calc | — |
-| `iec-symbols` | 0.4.16 | knowledge | — |
-| `iram-titleblock` | 0.5.1 | generator | — |
-| `sld` | 0.1.1 | generator | aea-calc, iec-symbols, iram-titleblock |
-| `mld` | 0.1.0 (pending) | generator | sld, iram-titleblock, iec-symbols |
+| `aea-calc` | 1.6.1 | calc | — |
+| `iec-symbols` | 0.4.17 | knowledge | — |
+| `iram-titleblock` | 0.5.2 | generator | — |
+| `sld` | 0.1.2 | generator | aea-calc, iec-symbols, iram-titleblock |
+| `mld` | 0.2.0 | generator | aea-calc, sld, iram-titleblock, iec-symbols |
+| `board-design` | 0.1.0 | workflow | aea-calc, sld, mld, iec-symbols, iram-titleblock |
 | `standard-ingest` | 0.1.0 | workflow | — |
 | `intake-analysis` | 0.1.0 | workflow | — |
 | `pm2-docs` | 0.1.0 | workflow | doc-quality |
@@ -148,7 +149,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test 
 
 ## 📜 Status and license
 
-Release 0.2.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+Release 0.3.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
 
 <div align="center">
 

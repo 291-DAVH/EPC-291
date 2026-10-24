@@ -6,7 +6,7 @@ React + TypeScript (Vite) in an npm workspace. Two apps over one shared package;
 frontend/
   packages/ui/        @epc/ui: API client and types, i18n (es, en), components, theme, Shell, shared form, WbsTree, Gantt, styles
   web/                @epc/web: what the customer sees (port 5173)
-    src/features/     portfolio/  project/ (incl. read-only Plan tab: Gantt + WBS; Engineering tab for the admin/engineer role: Files = SVG diagrams and text lists, SLD data = board, titleblock and circuits form that runs the SLD generator; Design criteria = quick editing with origin and history)  new-project/
+    src/features/     portfolio/  project/ (incl. read-only Plan tab: Gantt + WBS; Engineering tab for the admin/engineer role: Files = SVG diagrams and text lists, SLD data = board, titleblock and circuits form that runs the criteria-driven calculation and the SLD/MLD generators, and shows the calculation per circuit; Design criteria = quick editing with origin and history; Issue = prepare a transmittal from the generated drawings and confirm it was sent)  new-project/  data/ (Datos: company, clients, people, logos; admin/engineer)
   console/            @epc/console: technical console, admin role only (port 5174)
     src/features/     overview/  plugins/  skills/  rules/  checker/  planning/ (backlog + WBS + schedule)  project-files/
 ```

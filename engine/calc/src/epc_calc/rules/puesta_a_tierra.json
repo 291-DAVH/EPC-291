@@ -23,10 +23,9 @@
     "clausula": "541.3",
     "pagina_impresa": "54-4",
     "pagina_pdf": 244,
-    "cita": "debe ser menor o igual a 40 ohm",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.tt_ra_tabla_54_1",
@@ -50,7 +49,6 @@
     "clausula": "Tabla 54.1",
     "pagina_impresa": "54-5",
     "pagina_pdf": 245,
-    "cita": "Valores máximos de resistencia de puesta a tierra de protección para un esquema TT",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -143,10 +141,9 @@
     "clausula": "542.2.1",
     "pagina_impresa": "54-5",
     "pagina_pdf": 245,
-    "cita": "deberán ser seleccionados para resistir la corrosión y tener adecuada resistencia mecánica",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.electrodos_dimensiones_tabla_54_2",
@@ -167,7 +164,6 @@
     "clausula": "Tabla 54.2",
     "pagina_impresa": "54-6",
     "pagina_pdf": 246,
-    "cita": "Dimensiones mínimas que deben cumplir los electrodos de puesta a tierra enterrados en el suelo",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -349,10 +345,9 @@
     "clausula": "542.2.3",
     "pagina_impresa": "54-8",
     "pagina_pdf": 248,
-    "cita": "Como minimo se debe emplear una jabalina JA o JL 16 x 1500 mm",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.armaduras_no_electrodo",
@@ -373,10 +368,9 @@
     "clausula": "542.2.3",
     "pagina_impresa": "54-8",
     "pagina_pdf": 248,
-    "cita": "No se permite el empleo de las armaduras de hormigon armado como electrodo especifico de puesta a tierra",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.anillo_cimientos_dos_hincados",
@@ -399,10 +393,9 @@
     "clausula": "542.2.3",
     "pagina_impresa": "54-8",
     "pagina_pdf": 248,
-    "cita": "se deberan incorporar como minimo dos electrodos hincados en extremos opuestos del anillo",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.canerias_no_electrodo",
@@ -423,10 +416,9 @@
     "clausula": "542.2.6",
     "pagina_impresa": "54-8",
     "pagina_pdf": 248,
-    "cita": "no se deberan emplear como electrodos de puesta a tierra",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.electrodo_camara_inspeccion",
@@ -447,10 +439,9 @@
     "clausula": "542.2.6 Nota 2",
     "pagina_impresa": "54-8",
     "pagina_pdf": 248,
-    "cita": "Cada electrodo debe finalizar en una camara de inspeccion",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.jabalinas_separacion",
@@ -473,10 +464,9 @@
     "clausula": "542.2.2 Nota",
     "pagina_impresa": "54-7",
     "pagina_pdf": 247,
-    "cita": "sea igual o mayor que 2 veces el largo de la jabalina de mayor longitud del conjunto",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.verificar_por_medicion",
@@ -497,10 +487,9 @@
     "clausula": "542.2.2",
     "pagina_impresa": "54-7",
     "pagina_pdf": 247,
-    "cita": "debera ser verificada por medicion al final de la ejecucion de los trabajos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.conductor_enterrado_tabla_54_3",
@@ -532,7 +521,6 @@
     "clausula": "Tabla 54.3",
     "pagina_impresa": "54-9",
     "pagina_pdf": 249,
-    "cita": "Secciones minimas de los conductores de puesta a tierra enterrados",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -583,10 +571,9 @@
     "clausula": "542.4",
     "pagina_impresa": "54-9",
     "pagina_pdf": 249,
-    "cita": "30 mm x 3 mm x 100 mm, con por lo menos 5 perforaciones",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.bep_obligatoria",
@@ -607,10 +594,9 @@
     "clausula": "542.4.1",
     "pagina_impresa": "54-9",
     "pagina_pdf": 249,
-    "cita": "con puntos de conexion individuales para cada conductor",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.bep_desconexion_individual",
@@ -631,10 +617,9 @@
     "clausula": "542.4.2",
     "pagina_impresa": "54-10",
     "pagina_pdf": 250,
-    "cita": "debera poderse desco- nectar individualmente",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "puesta_a_tierra.conductor_FE_color",
@@ -658,10 +643,9 @@
     "clausula": "542.4.1 Nota 2",
     "pagina_impresa": "54-10",
     "pagina_pdf": 250,
-    "cita": "el conductor debera ser marcado con la sigla FE",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }

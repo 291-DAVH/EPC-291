@@ -7,13 +7,13 @@
 **Ingeniería EPC automatizada, armada con plugins.**
 Cálculos, planos, documentos y reglas basadas en normas para proyectos de ingeniería, con una aplicación web para clientes y una consola técnica para ingenieros.
 
-[![Versión](https://img.shields.io/badge/versi%C3%B3n-0.2.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/versi%C3%B3n-0.3.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Batería](https://img.shields.io/badge/bater%C3%ADa%20de%20pruebas-21%20controles-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
 [![React](https://img.shields.io/badge/web-React%20%2B%20TypeScript-0ea5e9?style=for-the-badge)](frontend/)
 [![PostgreSQL](https://img.shields.io/badge/base%20de%20datos-PostgreSQL-336791?style=for-the-badge)](database/)
-[![Plugins](https://img.shields.io/badge/plugins-12-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
+[![Plugins](https://img.shields.io/badge/plugins-13-f0abfc?style=for-the-badge)](claude/plugins/registry.json)
 [![Argentina](https://img.shields.io/badge/jurisdicci%C3%B3n-AR-64748b?style=for-the-badge)](engine/jurisdictions/)
 
 [Contribuir](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Arquitectura](docs/architecture/README.md) · [Tablero de planificación](planning/BOARD.md) · [Documentación](docs/README.md)
@@ -40,7 +40,7 @@ El cliente ve solo proyectos, entregables, datos de entrada, requisitos, informe
 | Área | Carpeta | Contenido | Estado |
 |---|---|---|---|
 | Motor de ingeniería | `engine/` | calc, rules, standards, drawing, documents + paquetes por país | ✅ |
-| Capa de Claude | `claude/` | 12 plugins, 14 skills, agentes, marketplace | ✅ |
+| Capa de Claude | `claude/` | 13 plugins, 15 skills, agentes, marketplace | ✅ |
 | Backend | `backend/` | 11 módulos con límites verificados (import-linter) | ✅ |
 | Frontend | `frontend/` | `web` (cliente), `console` (admin), `packages/ui` | ✅ |
 | Base de datos | `database/` | Base de Alembic: organizaciones, usuarios, proyectos, entregables, registro | ✅ |
@@ -107,11 +107,12 @@ EPC-291/
 
 | Plugin | Versión | Tipo | Requiere |
 |---|---|---|---|
-| `aea-calc` | 1.6.0 | cálculo | — |
-| `iec-symbols` | 0.4.16 | conocimiento | — |
-| `iram-titleblock` | 0.5.1 | generador | — |
-| `sld` | 0.1.1 | generador | aea-calc, iec-symbols, iram-titleblock |
-| `mld` | 0.1.0 (pendiente) | generador | sld, iram-titleblock, iec-symbols |
+| `aea-calc` | 1.6.1 | cálculo | — |
+| `iec-symbols` | 0.4.17 | conocimiento | — |
+| `iram-titleblock` | 0.5.2 | generador | — |
+| `sld` | 0.1.2 | generador | aea-calc, iec-symbols, iram-titleblock |
+| `mld` | 0.2.0 | generador | aea-calc, sld, iram-titleblock, iec-symbols |
+| `board-design` | 0.1.0 | flujo | aea-calc, sld, mld, iec-symbols, iram-titleblock |
 | `standard-ingest` | 0.1.0 | flujo | — |
 | `intake-analysis` | 0.1.0 | flujo | — |
 | `pm2-docs` | 0.1.0 | flujo | doc-quality |
@@ -148,7 +149,7 @@ Lee [CONTRIBUTING.md](CONTRIBUTING.md), abre una rama desde `dev`, corre la bate
 
 ## 📜 Estado y licencia
 
-Versión 0.2.0. Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/calc/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
+Versión 0.3.0. Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/calc/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
 
 <div align="center">
 

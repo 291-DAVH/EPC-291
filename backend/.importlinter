@@ -21,12 +21,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -56,12 +61,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -93,12 +103,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -128,12 +143,17 @@ source_modules =
     epc.modules.deliverables
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -165,12 +185,17 @@ source_modules =
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -178,6 +203,8 @@ source_modules =
 forbidden_modules =
     epc.modules.identity.api
     epc.modules.identity.service
+    epc.modules.identity.repository
+    epc.modules.identity.models
     epc.modules.identity.guard
 
 [importlinter:contract:identity-layers]
@@ -186,6 +213,8 @@ type = layers
 layers =
     epc.modules.identity.api
     epc.modules.identity.service
+    epc.modules.identity.repository
+    epc.modules.identity.models
 
 [importlinter:contract:intake-encapsulated]
 name = intake: other modules use only its public interface
@@ -199,12 +228,17 @@ source_modules =
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -222,6 +256,48 @@ layers =
     epc.modules.intake.service
     epc.modules.intake.repository
 
+[importlinter:contract:issuing-encapsulated]
+name = issuing: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.issuing.api
+    epc.modules.issuing.service
+    epc.modules.issuing.repository
+    epc.modules.issuing.models
+
+[importlinter:contract:issuing-layers]
+name = issuing: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.issuing.api
+    epc.modules.issuing.service
+    epc.modules.issuing.repository
+    epc.modules.issuing.models
+
 [importlinter:contract:knowledge-encapsulated]
 name = knowledge: other modules use only its public interface
 type = forbidden
@@ -235,11 +311,16 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -272,11 +353,16 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -294,6 +380,88 @@ layers =
     epc.modules.management.service
     epc.modules.management.repository
 
+[importlinter:contract:masterdata-encapsulated]
+name = masterdata: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.masterdata.api
+    epc.modules.masterdata.service
+    epc.modules.masterdata.repository
+    epc.modules.masterdata.models
+
+[importlinter:contract:masterdata-layers]
+name = masterdata: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.masterdata.api
+    epc.modules.masterdata.service
+    epc.modules.masterdata.repository
+    epc.modules.masterdata.models
+
+[importlinter:contract:norms-encapsulated]
+name = norms: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.norms.api
+    epc.modules.norms.service
+    epc.modules.norms.repository
+
+[importlinter:contract:norms-layers]
+name = norms: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.norms.api
+    epc.modules.norms.service
+    epc.modules.norms.repository
+
 [importlinter:contract:projects-encapsulated]
 name = projects: other modules use only its public interface
 type = forbidden
@@ -307,11 +475,16 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -331,6 +504,88 @@ layers =
     epc.modules.projects.repository
     epc.modules.projects.models
 
+[importlinter:contract:registers-encapsulated]
+name = registers: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.registers.api
+    epc.modules.registers.service
+    epc.modules.registers.repository
+
+[importlinter:contract:registers-layers]
+name = registers: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.registers.api
+    epc.modules.registers.service
+    epc.modules.registers.repository
+
+[importlinter:contract:reporting-encapsulated]
+name = reporting: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.reporting.api
+    epc.modules.reporting.service
+    epc.modules.reporting.repository
+    epc.modules.reporting.models
+
+[importlinter:contract:reporting-layers]
+name = reporting: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.reporting.api
+    epc.modules.reporting.service
+    epc.modules.reporting.repository
+    epc.modules.reporting.models
+
 [importlinter:contract:requirements-encapsulated]
 name = requirements: other modules use only its public interface
 type = forbidden
@@ -344,12 +599,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.schedule
     epc.modules.sld
     epc.modules.wbs
@@ -379,12 +639,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.sld
     epc.modules.wbs
@@ -416,12 +681,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.wbs
@@ -453,12 +723,17 @@ source_modules =
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
+    epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld

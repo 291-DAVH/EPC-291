@@ -8,4 +8,9 @@ def count(project_dir: Path) -> int:
     return service.count(project_dir)
 
 
-__all__ = ["count"]
+def list_requirements(project_dir: Path) -> list:
+    """Requirements with open and answered questions."""
+    return service.list_requirements(project_dir)
+
+
+__all__ = ["count", "list_requirements"]

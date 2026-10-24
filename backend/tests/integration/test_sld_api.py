@@ -24,8 +24,8 @@ class TestSld(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        self._old = (settings.projects_dir, settings.role)
-        settings.projects_dir, settings.role = self.root, "admin"
+        self._old = (settings.projects_dir, settings.role, settings.data_dir)
+        settings.projects_dir, settings.role, settings.data_dir = self.root, "admin", self.root / "_data"
         self.c = TestClient(create_app())
         r = self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta",
                                                 "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
@@ -34,7 +34,7 @@ class TestSld(unittest.TestCase):
         self.pkg = self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "electrical" / "PQ-01"
 
     def tearDown(self):
-        settings.projects_dir, settings.role = self._old
+        settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
 
     def wait(self):
@@ -99,6 +99,59 @@ class TestSld(unittest.TestCase):
         self.assertEqual(st2["state"], "done", st2)
         self.assertTrue(all("OTRO-02" in o for o in st2["outputs"]))
         self.assertFalse(any((self.pkg / o).exists() for o in outs))
+
+    def test_design_criteria_govern_the_calculation_that_feeds_the_diagram(self):
+        feeder = [{"tag": "C-01", "description": "ALIMENTADOR TD-1", "load": 100, "unit": "A", "destination": "TD-1", "topology": "single", "phase": "3F",
+                   "length_m": 60, "kind": "mccb"}]
+        self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": feeder, "titleblock": TB}).status_code, 200)
+        self.c.post(self.base + "/generate")
+        self.assertEqual(self.wait()["state"], "done")
+        r1 = self.c.get(self.base + "/calculation").json()
+        row1 = r1["rows"][0]
+        self.assertEqual((row1["tipo"], row1["limite_pct"]), ("seccional", 1.0))
+        self.assertTrue(row1["cumple"])
+        self.assertEqual(r1["criteria"]["limits_pct"], {"seccional": 1.0, "terminal": 3.0, "motor": 5.0})
+        # a different feeder limit in the project's design criteria (the widest the catalog allows) changes the section, and the drawing says so
+        crit = next(c for c in __import__("json").loads((settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json").read_text(encoding="utf-8"))["criteria"] if c["id"] == "vd_sectional_pct")
+        loose = crit["max"]
+        self.assertGreater(loose, crit["default"])
+        self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": loose, "source": "client", "note": "pedido del cliente"})
+        self.c.post(self.base + "/generate")
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        row2 = self.c.get(self.base + "/calculation").json()["rows"][0]
+        self.assertEqual(row2["limite_pct"], loose)
+        self.assertLess(row2["S"], row1["S"])                        # a looser drop limit needs less copper
+        self.assertLessEqual(row2["du_propia_pct"], loose)
+        svg = (self.pkg / next(o for o in st["outputs"] if o.endswith(".svg") and "TABLA" not in o)).read_text(encoding="utf-8")
+        self.assertIn(f"seccionales {loose:g} %", svg)
+        self.assertTrue(any(o.endswith("_criterios.json") for o in st["outputs"]))
+        self.assertTrue(any(o.endswith("_dimensionado.json") for o in st["outputs"]))
+
+    def test_multi_line_diagram_from_the_same_calculation(self):
+        self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "bogus"}).status_code, 422)
+        self.c.post(self.base + "/generate")
+        sld = self.wait()
+        self.assertEqual(sld["state"], "done", sld)
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "mld"}).status_code, 202)
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        outs = st["outputs"]
+        self.assertTrue(any("/SLD_" in o and o.endswith(".dxf") for o in outs), outs)                     # the SLD of the earlier run is kept
+        for ext in (".svg", ".dxf", ".pdf"):
+            self.assertTrue(any("/MLD_" in o and o.endswith(ext) for o in outs), (ext, outs))
+        for o in outs:
+            self.assertTrue((self.pkg / o).exists(), o)
+        ov = self.c.get("/api/projects/ACME/P-1/engineering").json()
+        kinds = {d["name"]: d["kind"] for d in ov["diagrams"]}
+        self.assertTrue(any(k == "multi_line" for k in kinds.values()) and any(k == "single_line" for k in kinds.values()), kinds)
+        mld = next(o for o in outs if "/MLD_" in o and o.endswith(".svg"))
+        svg = (self.pkg / mld).read_text(encoding="utf-8")
+        self.assertIn("multifilar", svg)
+        self.assertIn("Oficina de Ingeniería SA", svg)                                                    # same titleblock as the SLD
+        for tag in ("C-01", "M-01", "G-01-A"):
+            self.assertIn(tag, svg)
 
     def test_users_cannot_use_it(self):
         settings.role = "user"

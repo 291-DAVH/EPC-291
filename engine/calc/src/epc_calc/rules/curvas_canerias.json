@@ -23,10 +23,9 @@
     "clausula": "521.8.8",
     "pagina_impresa": "52-24",
     "pagina_pdf": 78,
-    "cita": "No se admitiran mas de tres curvas de la caneria entre cajas o gabinetes consecutivos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "curvas_canerias.distancia_entre_curvas",
@@ -49,10 +48,9 @@
     "clausula": "521.8.8",
     "pagina_impresa": "52-24",
     "pagina_pdf": 78,
-    "cita": "no sera menor que diez veces el diametro exterior del cano",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "curvas_canerias.radios_metalicos_tabla_52_11",
@@ -73,7 +71,6 @@
     "clausula": "Tabla 52.11",
     "pagina_impresa": "52-24",
     "pagina_pdf": 78,
-    "cita": "Radios de curvatura para canos metalicos rigidos",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -152,7 +149,6 @@
     "clausula": "Tabla 52.12",
     "pagina_impresa": "52-24",
     "pagina_pdf": 78,
-    "cita": "Radios minimos de curvatura para canos de material sintetico",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",

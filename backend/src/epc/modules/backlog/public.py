@@ -9,4 +9,9 @@ def counts(project_dir: Path) -> dict:
     return service.counts(project_dir)
 
 
-__all__ = ["counts"]
+def view(project_dir: Path) -> dict:
+    """Backlog items with counts and the open estimate (hours)."""
+    return service.view(project_dir)
+
+
+__all__ = ["counts", "view"]

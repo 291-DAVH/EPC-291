@@ -1,12 +1,16 @@
 import { FormEvent, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ApiError, DeliverableItem, Gantt, Me, PackagesView, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, useApi } from "@epc/ui";
+import { ApiError, AnalysisResult, AnalysisStatus, DeliverableItem, Gantt, Me, PackagesView, InputItem, PortfolioProject, ReportItem, RequirementItem, ScheduleView, WbsTree, WbsView, api, useApi } from "@epc/ui";
 import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
+import Reporting from "./Reporting";
+import Registers from "./Registers";
+import Observations from "./Observations";
 
-const TABS = ["overview", "plan", "engineering", "deliverables", "inputs", "requirements", "reports"] as const;
+const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "deliverables", "observations", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 type Tab = (typeof TABS)[number];
+const ENGINEER_TABS: Tab[] = ["engineering", "registers"];          // internal work: admin/engineer role only
 
 export default function Project() {
   const { client = "", code = "" } = useParams();
@@ -15,8 +19,10 @@ export default function Project() {
   const [sp, setSp] = useSearchParams();
   const me = useApi<Me>("/me");
   const engineer = me.data?.role === "admin";          // the engineering workspace is internal: admin/engineer role only
+  const can = (subject: string, action: string) => !!me.data?.abilities?.[subject]?.includes(action);
+  const canWrite = can("app", "write");                // inspectors and auditors read only: the screens hide what the server would refuse
   const wanted = sp.get("tab") as Tab;
-  const tab = (TABS.includes(wanted) && (wanted !== "engineering" || engineer) ? wanted : "overview") as Tab;
+  const tab = (TABS.includes(wanted) && (!ENGINEER_TABS.includes(wanted) || engineer) ? wanted : "overview") as Tab;
   const base = `/app/projects/${client}/${code}`;
   const p = useApi<PortfolioProject>(base);
   const [rev, setRev] = useState(0);                       // bump to reload lists after sending information
@@ -49,7 +55,7 @@ export default function Project() {
       </div>
 
       <div className="tabs" role="tablist">
-        {TABS.filter((x) => x !== "engineering" || engineer).map((x) => (
+        {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
             {t(("u.tab." + x) as Key)}
             {x === "inputs" && d.inputs.open > 0 && <span className="dot">{d.inputs.open}</span>}
@@ -59,11 +65,13 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
-      {tab === "engineering" && <Engineering client={client} code={code} />}
+      {tab === "registers" && <Registers client={client} code={code} />}
+      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
-      {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} />}
-      {tab === "requirements" && <Requirements base={base} rev={rev} />}
-      {tab === "reports" && <Reports base={base} go={go} />}
+      {tab === "observations" && <Observations base={base} can={can} />}
+      {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
+      {tab === "requirements" && <Requirements canWrite={canWrite} base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
+      {tab === "reports" && <Reports base={base} go={go} engineer={engineer} client={client} code={code} />}
     </>
   );
 }
@@ -196,7 +204,7 @@ function Deliverables({ base }: { base: string }) {
 }
 
 /* ---------------- inputs ---------------- */
-function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number; onSent: () => void; initialKind: string }) {
+function Inputs({ canWrite, base, rev, onSent, initialKind, engineer, client, code }: { canWrite: boolean; base: string; rev: number; onSent: () => void; initialKind: string; engineer: boolean; client: string; code: string }) {
   const { t } = useI18n();
   const fmt = useFmt();
   const [r, setR] = useState(0);
@@ -234,8 +242,10 @@ function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number;
   };
   const tone = (s: string) => (s === "structured" ? "ok" : s === "analyzing" ? "warn" : "accent");
   return (
+    <>
+      {engineer && <AnalysisPanel client={client} code={code} onDone={onSent} />}
     <div className="cols2">
-      <form className="card form" onSubmit={submit} noValidate>
+      {canWrite && <form className="card form" onSubmit={submit} noValidate>
         <h2>{t("u.i.title")}</h2>
         <p className="muted">{t("u.i.help")}</p>
         <label className="field"><span>{t("u.i.kind")}</span>
@@ -257,7 +267,7 @@ function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number;
         </label>
         {ok && <div className="alert ok" role="status">{t("u.i.sent")}</div>}
         <div className="row"><button className="primary" type="submit" disabled={busy}>{t("u.i.send")}</button></div>
-      </form>
+      </form>}
       <div className="card">
         <h2>{t("u.i.list")}</h2>
         <State loading={list.loading && !list.data} error={list.error} />
@@ -277,11 +287,46 @@ function Inputs({ base, rev, onSent, initialKind }: { base: string; rev: number;
         </div>
       </div>
     </div>
+    </>
   );
 }
 
 /* ---------------- requirements ---------------- */
-function Requirements({ base, rev }: { base: string; rev: number }) {
+/** An open question: click "Responder", write the answer; it is stored with who answered and when. */
+function OpenQuestion({ canWrite, base, reqId, question, onAnswered }: { canWrite: boolean; base: string; reqId: string; question: string; onAnswered: () => void }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    setBusy(true); setErr("");
+    try {
+      await api(`${base}/requirements/${reqId}/answer`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, answer: text }) });
+      onAnswered();
+    } catch (x) { setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error"); } finally { setBusy(false); }
+  };
+  return (
+    <li>
+      {!canWrite ? question : !open ? (
+        <button className="qbtn" onClick={() => setOpen(true)} title={t("u.r.answer")}>{question} <span className="qhint">{t("u.r.answer")} →</span></button>
+      ) : (
+        <form onSubmit={save}>
+          <div>{question}</div>
+          <textarea autoFocus rows={3} value={text} onChange={(e) => setText(e.target.value)} placeholder={t("u.r.answerPlaceholder")} required style={{ width: "100%", marginTop: 6 }} />
+          {err && <div className="small" style={{ color: "var(--bad)" }}>{err}</div>}
+          <div className="row" style={{ marginTop: 6 }}>
+            <button className="primary" type="submit" disabled={busy || !text.trim()}>{t("u.r.saveAnswer")}</button>
+            <button type="button" onClick={() => { setOpen(false); setText(""); }}>{t("common.close")}</button>
+          </div>
+        </form>
+      )}
+    </li>
+  );
+}
+
+function Requirements({ canWrite, base, rev, onChange }: { canWrite: boolean; base: string; rev: number; onChange: () => void }) {
   const { t } = useI18n();
   const { data, loading, error } = useApi<RequirementItem[]>(base + "/requirements?r=" + rev);
   return (
@@ -302,7 +347,26 @@ function Requirements({ base, rev }: { base: string; rev: number }) {
             <p style={{ margin: "8px 0", fontWeight: 600 }}>{r.statement}</p>
             <div className="row small"><Badge>{r.type}</Badge>{r.discipline !== "general" && <Badge>{t(("projects.disc." + r.discipline) as Key)}</Badge>}</div>
             {r.acceptance.length > 0 && (<><h4>{t("u.r.acceptance")}</h4><ul>{r.acceptance.map((a) => <li key={a}>{a}</li>)}</ul></>)}
-            {r.open_questions.length > 0 && (<><h4 className="warnh">{t("u.r.questions")}</h4><ul>{r.open_questions.map((a) => <li key={a}>{a}</li>)}</ul></>)}
+            {r.open_questions.length > 0 && (
+              <>
+                <h4 className="warnh">{t("u.r.questions")}</h4>
+                <ul className="qlist">{r.open_questions.map((q) => <OpenQuestion key={q} canWrite={canWrite} base={base} reqId={r.id} question={q} onAnswered={onChange} />)}</ul>
+              </>
+            )}
+            {(r.answered_questions ?? []).length > 0 && (
+              <>
+                <h4 className="okh">{t("u.r.answered")}</h4>
+                <ul className="qlist">
+                  {r.answered_questions!.map((a, i) => (
+                    <li key={i}>
+                      <div>{a.question}</div>
+                      <div className="answer">{a.answer}</div>
+                      <div className="muted small">{t("u.r.answeredBy")} {a.by} · {new Date(a.at).toLocaleString()}</div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
             <div className="muted small">{t("u.r.origin")}: {r.source_titles.join(", ")}</div>
           </div>
         ))}
@@ -312,11 +376,14 @@ function Requirements({ base, rev }: { base: string; rev: number }) {
 }
 
 /* ---------------- reports ---------------- */
-function Reports({ base, go }: { base: string; go: (t: Tab, x?: Record<string, string>) => void }) {
+function Reports({ base, go, engineer, client, code }: { base: string; go: (t: Tab, x?: Record<string, string>) => void; engineer: boolean; client: string; code: string }) {
   const { t } = useI18n();
   const fmt = useFmt();
-  const { data, loading, error } = useApi<ReportItem[]>(base + "/reports");
+  const [rev, setRev] = useState(0);
+  const { data, loading, error } = useApi<ReportItem[]>(base + "/reports?r=" + rev);
   return (
+    <>
+    {engineer && <Reporting client={client} code={code} onPublished={() => setRev((n) => n + 1)} />}
     <div className="cols2">
       <div className="card">
         <h2>{t("u.rp.title")}</h2>
@@ -339,6 +406,7 @@ function Reports({ base, go }: { base: string; go: (t: Tab, x?: Record<string, s
         <button className="primary" onClick={() => go("inputs", { kind: "report" })}>{t("u.rp.report")}</button>
       </div>
     </div>
+    </>
   );
 }
 
@@ -353,6 +421,44 @@ function Plan({ base }: { base: string }) {
     <div className="grid" style={{ gap: 14 }}>
       <Gantt schedule={sch.data} today={new Date().toISOString().slice(0, 10)} />
       <WbsTree wbs={wbs.data} />
+    </div>
+  );
+}
+
+/* ---------------- automatic analysis (admin/engineer only) ---------------- */
+function AnalysisPanel({ client, code, onDone }: { client: string; code: string; onDone: () => void }) {
+  const { t } = useI18n();
+  const path = `/projects/${client}/${code}/analysis`;
+  const [rev, setRev] = useState(0);
+  const st = useApi<AnalysisStatus>(`${path}?r=${rev}`);
+  const [busy, setBusy] = useState(false);
+  const [res, setRes] = useState<AnalysisResult | null>(null);
+  const [err, setErr] = useState("");
+  if (!st.data) return null;
+  const run = async () => {
+    if (!window.confirm(t("an.confirm"))) return;
+    setBusy(true); setErr(""); setRes(null);
+    try {
+      setRes(await api<AnalysisResult>(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ confirm: true }) }));
+      setRev((n) => n + 1); onDone();
+    } catch (x) {
+      setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error");
+    } finally { setBusy(false); }
+  };
+  const d = st.data;
+  return (
+    <div className="card" style={{ marginBottom: 14 }}>
+      <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
+        <div>
+          <b>{t("an.title")}</b> <span className="muted">· {d.pending} {t("an.pending")}</span>
+          <div className="muted small">{t("an.help")}</div>
+        </div>
+        <button className="primary" disabled={busy || !d.configured || d.pending === 0} onClick={run}>{busy ? t("an.running") : t("an.run")}</button>
+      </div>
+      {!d.configured && <div className="alert" style={{ marginTop: 8 }}>{t("an.notConfigured")}</div>}
+      {res && <div className="alert ok" style={{ marginTop: 8 }}><b>{t("an.done")}:</b> {res.created.length} {t("an.created")}, {res.merged.length} {t("an.merged")}, {res.open_questions} {t("an.questions")}</div>}
+      {err && <div className="alert bad" style={{ marginTop: 8 }}><b>{t("an.failed")}:</b> {err}</div>}
+      {d.usage.calls > 0 && <div className="muted small" style={{ marginTop: 6 }}>{t("an.usage")}: {d.usage.calls} {t("an.calls")} · {d.usage.input_tokens + d.usage.output_tokens} {t("an.tokens")} · {d.model}</div>}
     </div>
   );
 }

@@ -6,6 +6,7 @@ from typing import Dict, List
 from epc.core.config import settings
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import SLUG, count_files, today
+from epc.modules.identity import public as identity
 from epc.modules.projects import repository
 from epc.modules.projects.models import NewProject
 
@@ -70,6 +71,7 @@ def create(p: NewProject) -> dict:
     jur = next(j for j in opts["jurisdictions"] if j["id"] == p.jurisdiction)
     if not settings.template_dir.is_dir():
         raise Failure("project skeleton not found (management/templates/project-skeleton)")
+    owner = identity.org_for_new_project(p.org)
     target = settings.projects_dir / p.client_code / p.project_code
     if target.exists():
         raise Conflict({"project_code": "a project with this client and code already exists"})
@@ -79,6 +81,8 @@ def create(p: NewProject) -> dict:
         meta = {"schema_version": "1.0", "client": p.client_name.strip(), "client_code": p.client_code, "project_code": p.project_code,
                 "project_name": p.project_name.strip(), "jurisdiction": p.jurisdiction, "locale": p.locale or jur["default_locale"],
                 "methodology": p.methodology, "disciplines": p.disciplines, "phase": p.phase, "engine_min_version": "0.1.0", "created": created}
+        if owner:
+            meta["org"] = owner
         repository.write_meta(target, meta)
         repository.stamp_status(target, p.phase, today().isoformat())
         locked = repository.refresh_lock(target)
@@ -87,6 +91,20 @@ def create(p: NewProject) -> dict:
         repository.remove_created(target)
         raise Failure(f"could not create project: {e}")
     return {**admin_view(target), "plugins_locked": locked}
+
+
+def set_org(client: str, code: str, org: str) -> dict:
+    """Staff: give a project to an organization (projects created before accounts existed have none and are visible only to staff)."""
+    d = get_dir(client, code)
+    if org and not identity.org_exists(org):
+        raise Invalid({"org": "unknown organization"})
+    meta = repository.read_meta(d)
+    if org:
+        meta["org"] = org
+    else:
+        meta.pop("org", None)
+    repository.write_meta(d, meta)
+    return admin_view(d)
 
 
 def tree(project_id: str, area: str, depth: int, formats: dict) -> dict:

@@ -31,7 +31,6 @@
     "clausula": "Tabla 52.24",
     "pagina_impresa": "52-62",
     "pagina_pdf": 116,
-    "cita": "Sección mínima de conductores",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -138,10 +137,9 @@
     "clausula": "524.2.1",
     "pagina_impresa": "52-62",
     "pagina_pdf": 116,
-    "cita": "en sistemas monofasicos de dos conductores, cualquiera que sea la seccion de los conductores",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.neutro_reducido",
@@ -166,10 +164,9 @@
     "clausula": "524.2.2",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "la seccion del conductor neutro debe ser por lo menos igual a 16",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.neutro_armonicas_145",
@@ -193,10 +190,9 @@
     "clausula": "524.2.3",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "igual a 1,45 veces la corriente prevista de utilizacion en los conductores de linea",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.neutro_no_comun",
@@ -217,10 +213,9 @@
     "clausula": "524.2.4",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "El conductor neutro no puede ser comun a varios circuitos",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.caida_tension_iluminacion",
@@ -243,10 +238,9 @@
     "clausula": "525 1)",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "Circuitos destinados total o parcialmente a la iluminacion: 3 %",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.caida_tension_motores",
@@ -270,10 +264,9 @@
     "clausula": "525 2)",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "5 % en regimen y 15 % durante el arranque",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.caida_tension_otras_cargas",
@@ -296,10 +289,9 @@
     "clausula": "525 3)",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "cargas electricas distintas de la iluminacion y los motores electricos: 5% en regimen",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "conductores.caida_tension_seccionales_recomendado",
@@ -323,10 +315,9 @@
     "clausula": "525 Nota",
     "pagina_impresa": "52-63",
     "pagina_pdf": 117,
-    "cita": "se recomienda que la caida de tension en los circuitos seccionales no exceda del 1 %",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }

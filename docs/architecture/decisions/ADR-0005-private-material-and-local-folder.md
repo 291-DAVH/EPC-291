@@ -11,6 +11,9 @@ Standards (copyrighted), third-party reports, client documents, demo data and ar
 - The project skeleton (formerly `projects/_template`) moves to `management/templates/project-skeleton/`, versioned.
 - Real client projects live in their own repositories; they may be cloned under `local/projects/`.
 
+## Clarification (2026-10-23)
+Only the **sources** (standards, study material, client data) are private. What Claude extracts from them, written in its own words as structured rules, formulas and tables, is engine knowledge and ships with the engine (see `docs/explanation/knowledge.md`). The earlier `**/knowledge/` ignore rule contradicted this and was removed; `local/`, `*.pdf` and the hook remain the protection.
+
 ## Consequences
 - (+) A clean root and one obvious place for everything that is not ours to publish.
 - (-) Scripts and launch files that point to the old folder names must be updated (phase 2).

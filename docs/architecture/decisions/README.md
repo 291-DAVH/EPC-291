@@ -12,3 +12,10 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0006](ADR-0006-database-strategy.md) | PostgreSQL for platform state, files for engineering artifacts | Accepted |
 | [0007](ADR-0007-desktop-edition-rust.md) | Desktop edition with Rust (Tauri), engine stays in Python | Deferred |
 | [0008](ADR-0008-cad-strategy-2d-first.md) | CAD strategy: 2D first with ezdxf and shapely | Accepted |
+| [0009](ADR-0009-identity-and-subscriptions.md) | Accounts, organizations (individual and corporate) and tenant isolation | Accepted |
+| [0010](ADR-0010-registers-as-platform-data.md) | Management registers are platform data, defined by the methodology | Accepted |
+| [0011](ADR-0011-norm-review.md) | Norm review by a dedicated reviewer role | Accepted |
+| [0012](ADR-0012-single-source-of-truth.md) | One source of truth per datum | Accepted |
+| [0013](ADR-0013-account-types-and-permissions.md) | Account types, a permission matrix and an audit log | Accepted |
+| [0014](ADR-0014-sign-in-alias-and-providers.md) | Sign-in with an alias and with external providers | Accepted |
+| [0015](ADR-0015-development-master-account.md) | A MASTER account for development only | Accepted |

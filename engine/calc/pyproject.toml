@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "epc-calc"
-version = "1.6.0"
+version = "1.6.1"
 description = "EPC-291 calculation engine: LV sizing (AEA 90364 / IEC 60364), voltage drop, short circuit, protection, earthing"
 requires-python = ">=3.10"
 dependencies = ["openpyxl>=3.1"]

@@ -24,7 +24,6 @@
     "clausula": "433.1",
     "pagina_impresa": "43-10",
     "pagina_pdf": 158,
-    "cita": "Las condiciones 1) y 2) dadas mas arriba, se pueden interpretar como tres condiciones",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario"
@@ -48,10 +47,9 @@
     "clausula": "433.1",
     "pagina_impresa": "43-10",
     "pagina_pdf": 158,
-    "cita": "la corriente maxima de fusion en los tiempos convencionales, para los fusibles gG",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_sobrecorrientes.temperaturas_tabla_43_1",
@@ -72,7 +70,6 @@
     "clausula": "Tabla 43.1",
     "pagina_impresa": "43-6",
     "pagina_pdf": 154,
-    "cita": "Temperatura caracteristica de los conductores",
     "verificacion": "visual"
    },
    "estado": "borrador: valores leídos sobre la imagen de la página; título contrastado con el OCR; a validar por el usuario",
@@ -145,10 +142,9 @@
     "clausula": "431.2.1",
     "pagina_impresa": "43-7",
     "pagina_pdf": 155,
-    "cita": "no es necesario prever una deteccion de sobreintensidad ni un dispositivo de desconexion sobre el conductor neutro",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_sobrecorrientes.neutro_it_no_distribuir",
@@ -169,10 +165,9 @@
     "clausula": "431.2.2",
     "pagina_impresa": "43-7",
     "pagina_pdf": 155,
-    "cita": "es altamente recomendable no distribuir el conductor neutro",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_sobrecorrientes.neutro_secuencia_maniobra",
@@ -193,10 +188,9 @@
     "clausula": "431.3",
     "pagina_impresa": "43-8",
     "pagina_pdf": 156,
-    "cita": "el conductor neutro no sea desconectado antes que los conductores de linea",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_sobrecorrientes.poder_de_corte",
@@ -217,10 +211,9 @@
     "clausula": "432.1 Nota 2",
     "pagina_impresa": "43-8",
     "pagina_pdf": 156,
-    "cita": "La capacidad de ruptura de un dispositivo de proteccion debera ser igual o superior al valor de la corriente presunta",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   },
   {
    "id": "proteccion_sobrecorrientes.aM_no_sobrecarga",
@@ -241,10 +234,9 @@
     "clausula": "432.3 Nota 1",
     "pagina_impresa": "43-9",
     "pagina_pdf": 157,
-    "cita": "estos fusibles no deben ser empleados para la proteccion contra sobrecargas",
     "verificacion": "ocr"
    },
-   "estado": "borrador: cita contrastada con el OCR de la página (coincidencia aproximada, sin tildes); a validar por el usuario"
+   "estado": "borrador: cláusula y página contrastadas con la norma (lectura OCR/visual); a validar por el usuario"
   }
  ]
 }

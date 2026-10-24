@@ -17,10 +17,9 @@
     "norma": "AEA 90364-7-770",
     "edicion": "2017",
     "clausula": "770.7.7",
-    "pagina_impresa": 17,
-    "cita": "deben estar instaladas a una altura"
+    "pagina_impresa": 17
    },
-   "estado": "borrador: cita verificada contra el texto del PDF; valores a validar por el usuario"
+   "estado": "borrador: cláusula y página verificadas contra el texto de la norma; valores a validar por el usuario"
   }
  ]
 }

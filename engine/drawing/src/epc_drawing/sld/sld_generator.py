@@ -22,6 +22,15 @@ IZ3 = [(1.5,13),(2.5,17),(4,23),(6,30),(10,40),(16,54),(25,70),(35,86),(50,103),
 IZ2 = [(1.5,14),(2.5,20),(4,26),(6,33),(10,45),(16,60),(25,78),(35,97),(50,116),(70,146),(95,175),(120,202),(150,224),(185,256),(240,299),(300,343)]
 IZT = {1: IZ2, 3: IZ3}
 MOTOR_TOPO = {'dol','dol_ol','star_delta','softstarter','vfd','dol_rcd'}
+# Límites de caída de tensión [%] (criterios de diseño del proyecto): acometida/seccionales, circuitos terminales y motores. Sin criterios: 1 / 3 / 5.
+LIM_ACOM = float(os.environ.get('SLD_LIM_ACOMETIDA_PCT') or 1.0)
+LIM_TERM = float(os.environ.get('SLD_LIM_TERMINAL_PCT') or 3.0)
+LIM_MOTOR = float(os.environ.get('SLD_LIM_MOTOR_PCT') or 5.0)
+# Cálculo de epc_calc (aea_pipeline, con los criterios de diseño): si se entrega, manda sobre el cálculo simplificado de este generador.
+# SLD_CALC_JSON = {TAG: {In, Ib, icu, S, dU, disp}} (contrato de aea_export); SLD_CALC_DETAIL = {TAG: {limite_pct, du_propia_pct, ...}} (opcional).
+PRE = json.load(open(os.environ['SLD_CALC_JSON'], encoding='utf-8')) if os.environ.get('SLD_CALC_JSON') else {}
+DET = json.load(open(os.environ['SLD_CALC_DETAIL'], encoding='utf-8')) if os.environ.get('SLD_CALC_DETAIL') else {}
+CALC_NOTE = os.environ.get('SLD_CALC_NOTE', '')
 PITCH, X0, YBAR, GAP = 68.0, 58.0, 85.0, 3.0
 BLUE, RED, GREEN, BLACK = '#0000ff', '#ff0000', '#139b48', '#000000'
 FONT = "Arial, Helvetica, sans-serif"
@@ -125,7 +134,7 @@ def calc(t):
         motor = c['topo'] in MOTOR_TOPO
         In = nxt(max((1.25*Ib if motor else Ib), 6), COMM)
     icu = nxt(ICC, ICU) if ICC <= 100 else 100
-    lim = 5.0 if motor else 3.0
+    lim = LIM_MOTOR if motor else LIM_TERM
     lighting = 'ILUM' in c['desc'].upper()
     smin = 1.5 if lighting else 2.5
     S = max(sect_for(In, ph), smin); L = c['L'] or 0.0
@@ -134,6 +143,11 @@ def calc(t):
         S = bigger(S, ph); dv = dU(Ib, L, S, ph, fp)
     PE = max(2.5, S if S <= 16 else (16 if S <= 35 else S/2))
     R[t] = dict(Ib=Ib, P=P, In=In, icu=icu, S=S, PE=PE, dv=dv, motor=motor, ph=ph, fp=fp, L=L, lim=lim, parent=bool(KIDS[t]))
+    if t in PRE:                                           # el cálculo de epc_calc (criterios de diseño) manda
+        pc, dt_ = PRE[t], DET.get(t, {})
+        S_ = pc['S']
+        R[t].update(In=pc['In'], Ib=pc['Ib'], icu=pc['icu'], S=S_, PE=max(2.5, S_ if S_ <= 16 else (16 if S_ <= 35 else S_/2)),
+                    dv=dt_.get('du_propia_pct', pc['dU']), lim=dt_.get('limite_pct', lim))
     return R[t]
 for t in ORDER: calc(t)
 
@@ -316,13 +330,13 @@ for n_ in (1, 2, 3, 4):                                 # ternas en paralelo
         if n_ * IZ3D[S_] < IN_MAIN: continue
         R_ = 1000/(56*S_)/n_; X_ = 0.08/n_               # ohm/km con n ternas en paralelo
         dU_ = SQ3_ * IB_TOT * (LA/1000) * (R_*FPDEF + X_*SIN_) / V * 100
-        if dU_ <= 1.0 + 1e-9: cands.append((n_*S_, n_, S_, dU_))
-if not cands: print('AVISO: acometida no cumple 1 % con n<=4', file=sys.stderr); cands = [(0, 4, 300, 99.0)]
+        if dU_ <= LIM_ACOM + 1e-9: cands.append((n_*S_, n_, S_, dU_))
+if not cands: print(f'AVISO: acometida no cumple {LIM_ACOM:g} % con n<=4', file=sys.stderr); cands = [(0, 4, 300, 99.0)]
 _, n_a, S_a, dU_a = min(cands, key=lambda c: (c[1], c[2]))   # menos ternas en paralelo, luego menor seccion
 N_a = neutral(S_a); PE_a = pe_of(S_a)
 form_a = (f"3x{S_a}/{N_a} mm² + PE {PE_a:g} mm²" if n_a == 1 else f"{n_a} x (3x{S_a}/{N_a} mm² + PE {PE_a:g} mm²)")
 ACOM = dict(n=n_a, S=S_a, N=N_a, PE=PE_a, dU=dU_a, L=LA, I=IB_TOT, In=IN_MAIN, txt=form_a)
-ACOM_TXT = (f"Acometida: {form_a} · L {LA:g} m · I {IB_TOT:.0f} A · ΔU {dU_a:.2f} % (máx. 1 %)")
+ACOM_TXT = (f"Acometida: {form_a} · L {LA:g} m · I {IB_TOT:.0f} A · ΔU {dU_a:.2f} % (máx. {LIM_ACOM:g} %)")
 # texto de la acometida, junto al cable de entrada (horizontal, sobre el Q-GRAL)
 T(XA + 6, 31.5, f"ACOMETIDA / {LA:g} m", size=FS_DES, bold=True)
 T(XA + 6, 31.5 + 3.0*_SP, f"{form_a} · XLPE/Cu IRAM 2178")
@@ -409,7 +423,7 @@ _k_ref = len(D)   # A3: marca de inicio de la columna de referencias
 notes = ("Notas: calculo referencial para revision del diagrama (no reemplaza la memoria de calculo). "
          "Ib segun CARGA/UNIDAD y FP; In comercial >= 1,25·Ib en motores y >= Ib en el resto; Icu >= Icc; "
          "Iz segun AEA 90364-7-771 Tabla 771.16.III, metodo B2, PVC IRAM 2178, 40 C; caida de tension con X=0,08 Ω/km; "
-         "limite 3 % (5 % motores); PE segun AEA 90364 (S/2 si S>35 mm²).")
+         f"limite {LIM_TERM:g} % ({LIM_MOTOR:g} % motores); PE segun AEA 90364 (S/2 si S>35 mm²)." + (f" {CALC_NOTE}" if CALC_NOTE else ""))
 
 COMPACTO = os.environ.get('SLD_FORMATO', 'A1') == 'A3'   # A3: referencias en 3 columnas a 2 mm, junto al rótulo
 if COMPACTO:
@@ -444,7 +458,7 @@ calc_lines = [
     ACOM_TXT,
     "In >= 1,25·Ib (motores) o >= Ib (resto), serie comercial",
     "Icu = Icc redondeada al comercial superior",
-    "Iz AEA 771.16.III (B2); S por Iz >= In, ΔU <= 3 % (5 % motores)",
+    f"Iz AEA 771.16.III (B2); S por Iz >= In, ΔU <= {LIM_TERM:g} % ({LIM_MOTOR:g} % motores)",
 ]
 for ln in calc_lines:
     for w_ in textwrap.wrap(ln, WRAPC if COMPACTO else 80):
@@ -469,10 +483,10 @@ checks = [
     ('Icu >= Icc en todos los dispositivos', icu_ok),
     ('In >= Ib en todos los circuitos', True),
     ('Iz del cable >= In (seccion por tabla)', True),
-    (f'ΔU maxima {dvmax:.2f} % (limite 3 % / 5 % motores)', dv_ok),
+    (f'ΔU maxima {dvmax:.2f} % (limite {LIM_TERM:g} % / {LIM_MOTOR:g} % motores)', dv_ok),
     ('In >= 1,25·Ib en motores', mot_ok),
     ('Diferencial 30 mA en circuitos 1F', not dif_pending),
-    (f"ΔU acometida {ACOM['dU']:.2f} % (limite 1 %)", ACOM['dU'] <= 1.0 + 1e-9),
+    (f"ΔU acometida {ACOM['dU']:.2f} % (limite {LIM_ACOM:g} %)", ACOM['dU'] <= LIM_ACOM + 1e-9),
 ]
 for txt, ok in checks:
     st = 'OK' if ok else 'REVISAR'

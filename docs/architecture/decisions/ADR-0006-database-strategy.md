@@ -1,6 +1,6 @@
 # ADR-0006: PostgreSQL for platform state, files for engineering artifacts
 
-Status: Accepted (baseline schema and migrations implemented in phase 7; no module uses the database yet). Date: 2026-10-23.
+Status: Accepted (baseline schema and migrations implemented in phase 7; `identity` is the first module that uses the database, see ADR-0009). Date: 2026-10-23.
 
 ## Context
 Engineering artifacts (calculation JSON, drawings, Markdown sources, deliverables) are diffable, reviewable and delivered as files, so they belong in per-project git repositories. Platform concerns (users, organizations, roles, subscriptions, project index, jobs, audit ledger, notifications) need transactions, queries and concurrency. Today there is no database: everything is files, which cannot support multiple users.

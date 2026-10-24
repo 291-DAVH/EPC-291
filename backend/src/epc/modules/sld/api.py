@@ -25,8 +25,14 @@ def get_example(client: str, code: str):
 
 
 @router.post("/generate", status_code=202)
-def generate(client: str, code: str):
-    return service.generate(projects.get_project_dir(client, code))
+def generate(client: str, code: str, diagrams: str = "sld"):
+    """diagrams: sld (default), mld or sld,mld. The calculation, governed by the design criteria, is redone every time."""
+    return service.generate(projects.get_project_dir(client, code), diagrams=diagrams)
+
+
+@router.get("/calculation")
+def get_calculation(client: str, code: str):
+    return service.calculation(projects.get_project_dir(client, code))
 
 
 @router.get("/status")
