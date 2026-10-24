@@ -15,7 +15,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "3d3c4a9dda00cd31"
+      "hash": "d7d766d2891dfe67"
     },
     "board-design": {
       "version": "0.1.0",
@@ -35,7 +35,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "515cdfa554444aa7"
+      "hash": "fc703fb2238ac6b8"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -46,7 +46,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "24797cae4e129a25"
+      "hash": "b0b028e32b19de61"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -68,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "066147caa6443af3"
+      "hash": "9c09ddbb9bb981f3"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -93,7 +93,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "e48128c077575f39"
+      "hash": "96aef1eaa40c44c0"
     },
     "mld": {
       "version": "0.2.0",
@@ -112,7 +112,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "363169fbad79dc5c"
+      "hash": "5a1cb67b6186bf97"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -127,7 +127,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "5fd0e319ba6c32f4"
+      "hash": "730cd5611d28d114"
     },
     "procurement": {
       "version": "0.1.0",
@@ -158,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "fd8630ceb35988b6"
+      "hash": "a8c5c41ba80148da"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -173,7 +173,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "670c21c316a859df"
+      "hash": "8ab54c99d81366b7"
     },
     "standard-ingest": {
       "version": "0.1.0",
@@ -187,7 +187,7 @@
         "standards",
         "rules"
       ],
-      "hash": "f86194b0332aeb16"
+      "hash": "1999e7841b361153"
     }
   },
   "skills": {

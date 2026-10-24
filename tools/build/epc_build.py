@@ -74,7 +74,8 @@ def load_plugins():
 
 def tree_hash(d):
     h = hashlib.sha256()
-    for f in sorted(p for p in d.rglob("*") if p.is_file() and not (set(p.parts) & {"__pycache__", ".git"}) and p.suffix != ".pyc"):
+    for f in sorted(p for p in d.rglob("*") if p.is_file() and not (set(p.parts) & {"__pycache__", ".git", "build", "dist"}) and p.suffix != ".pyc"
+                    and not any(x.endswith(".egg-info") for x in p.parts)):          # only sources: generated folders differ per machine and would change the hash
         h.update(str(f.relative_to(d)).replace("\\", "/").encode())
         h.update(f.read_bytes())
     return h.hexdigest()[:16]
@@ -129,7 +130,7 @@ def validate(plugins):
     return errors, owners
 
 
-def cmd_registry():
+def cmd_registry(check=False):
     plugins = load_plugins()
     errors, owners = validate(plugins)
     reg = {"schema_version": "1.0", "plugins": {}, "skills": {k: {"owner": v} for k, v in sorted(owners.items())}}
@@ -137,7 +138,13 @@ def cmd_registry():
         reg["plugins"][pid] = {"version": m["version"], "kind": m["kind"], "status": m.get("status", "active"),
                                "requires": m.get("requires", {}), "skills": [s["id"] for s in m.get("skills", [])],
                                "engine": m.get("engine", []), "hash": plugin_hash(m)}
-    (HUB / "registry.json").write_text(json.dumps(reg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    text = json.dumps(reg, indent=2, ensure_ascii=False) + "\n"
+    target = HUB / "registry.json"
+    if check:                                           # the gate and the hook verify; they never rewrite the versioned file
+        if target.read_bytes().decode("utf-8").replace("\r\n", "\n") != text:
+            errors.append("registry.json is out of date: run `python tools/build/epc_build.py registry` and commit it")
+    else:
+        target.write_text(text, encoding="utf-8", newline="\n")
     for e in errors:
         print("ERROR:", e)
     print(f"registry.json: {len(plugins)} plugins, {len(owners)} owned skills, {len(errors)} error(s)")
@@ -249,11 +256,11 @@ def cmd_lock(project):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("registry")
+    sub.add_parser("registry").add_argument("--check", action="store_true", help="fail if registry.json differs from what the sources produce")
     sp = sub.add_parser("package")
     sp.add_argument("target")
     sub.add_parser("marketplace")
     sl = sub.add_parser("lock")
     sl.add_argument("project")
     a = ap.parse_args()
-    sys.exit({"registry": cmd_registry, "package": lambda: cmd_package(a.target), "marketplace": cmd_marketplace, "lock": lambda: cmd_lock(a.project)}[a.cmd]())
+    sys.exit({"registry": lambda: cmd_registry(a.check), "package": lambda: cmd_package(a.target), "marketplace": cmd_marketplace, "lock": lambda: cmd_lock(a.project)}[a.cmd]())
