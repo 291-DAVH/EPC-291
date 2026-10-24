@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { ApiError, Badge, NormPoint, NormPointRow, NormUnit, Page, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, NormPoint, NormPointRow, NormUnit, api, useApi } from "../api";
+import { Badge, Page, State } from "../components";
+import { useI18n } from "../i18n";
 
 const json = { "Content-Type": "application/json" };
 const STATUS_TONE: Record<string, "ok" | "bad" | "warn" | undefined> = { approved: "ok", rejected: "bad", stale: "warn", pending: undefined };

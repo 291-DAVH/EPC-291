@@ -86,6 +86,9 @@ def plugin_hash(m):
     for a in m.get("engine", []):
         if (ENGINE / a / "src").is_dir():
             h.update(tree_hash(ENGINE / a / "src").encode())
+    for rel in m.get("engine_data", []):                # a corrected norm value changes the plugin's hash: projects locked to the old one are warned
+        if (ENGINE / rel).is_file():
+            h.update(rel.encode() + (ENGINE / rel).read_bytes())
     return h.hexdigest()[:16]
 
 
@@ -112,6 +115,9 @@ def validate(plugins):
         for a in m.get("engine", []):
             if not (ENGINE / a / "src").is_dir():
                 errors.append(f"{pid}: engine area '{a}' not found in engine/")
+        for rel in m.get("engine_data", []):
+            if not (ENGINE / rel).is_file():
+                errors.append(f"{pid}: engine data '{rel}' not found in engine/")
         for ag in m.get("agents", []):
             if not (AGENTS / f"{ag}.md").exists():
                 errors.append(f"{pid}: agent '{ag}' not found in claude/agents")
@@ -172,6 +178,9 @@ def assemble(m, dest: Path):
             if f.is_file() and not (set(rel.parts) & {"__pycache__"}) and f.suffix not in {".pyc", ".pdf"} and ".egg-info" not in str(rel):
                 (dest / "lib" / rel).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(f, dest / "lib" / rel)
+    for rel in m.get("engine_data", []):                # data the engine reads (e.g. the design-criteria catalog): generated from its single source in engine/
+        (dest / "lib" / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ENGINE / rel, dest / "lib" / rel)
     for ag in m.get("agents", []):
         (dest / "agents").mkdir(exist_ok=True)
         shutil.copy2(AGENTS / f"{ag}.md", dest / "agents" / f"{ag}.md")

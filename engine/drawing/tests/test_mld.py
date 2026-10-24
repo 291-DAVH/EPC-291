@@ -44,7 +44,7 @@ class TestGenerate(unittest.TestCase):
             old = deps.ROTULO_DIR
             deps.ROTULO_DIR = str(tb)                                              # never touch the example workbook
             try:
-                made = M.generate(data, B.calculate(data, B.BASE_CRITERIA), tmp / "out", "MLD_TGBT-01")
+                made = M.generate(data, B.calculate(data, B.catalog_defaults()), tmp / "out", "MLD_TGBT-01")
                 return made, [Path(m["svg"]).read_text(encoding="utf-8") for m in made], [Path(m["dxf"]).exists() if m["dxf"] else False for m in made]
             finally:
                 deps.ROTULO_DIR = old

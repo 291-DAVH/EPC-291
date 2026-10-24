@@ -15,3 +15,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0009](ADR-0009-identity-and-subscriptions.md) | Accounts, organizations (individual and corporate) and tenant isolation | Accepted |
 | [0010](ADR-0010-registers-as-platform-data.md) | Management registers are platform data, defined by the methodology | Accepted |
 | [0011](ADR-0011-norm-review.md) | Norm review by a dedicated reviewer role | Accepted |
+| [0012](ADR-0012-single-source-of-truth.md) | One source of truth per datum | Accepted |

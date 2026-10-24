@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Me, NavItem, Page, Shell, State, useApi, useI18n } from "@epc/ui";
+import { Me, NavItem, Norms, Page, Shell, State, useApi, useI18n } from "@epc/ui";
 import Overview from "./features/overview/Overview";
 import Plugins from "./features/plugins/Plugins";
 import Skills from "./features/skills/Skills";
@@ -8,7 +8,6 @@ import Checker from "./features/checker/Checker";
 import ProjectFiles from "./features/project-files/ProjectFiles";
 import Planning from "./features/planning/Planning";
 import Identity from "./features/identity/Identity";
-import Norms from "./features/norms/Norms";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },

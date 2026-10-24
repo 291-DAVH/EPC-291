@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Me, NavItem, Page, Shell, useApi, useI18n } from "@epc/ui";
+import { Me, NavItem, Norms, Shell, useApi } from "@epc/ui";
 import Dashboard from "./features/portfolio/Dashboard";
 import Project from "./features/project/Project";
 import NewProjectPage from "./features/new-project/NewProjectPage";
@@ -12,10 +12,13 @@ const NAV: NavItem[] = [
 ];
 
 export default function App() {
-  const { t } = useI18n();
   const me = useApi<Me>("/me");
   if (me.data?.role === "standards") {                    // the norm reviewer works in the console
-    return <Shell nav={[]} me={me.data}><Page title={t("norms.web.title")} help={t("norms.web.help")}>{null}</Page></Shell>;
+    return (
+      <Shell nav={[{ to: "/norms", key: "nav.norms", icon: "§" }]} me={me.data}>
+        <Routes><Route path="/norms" element={<Norms />} /><Route path="*" element={<Navigate to="/norms" replace />} /></Routes>
+      </Shell>
+    );
   }
   const admin = me.data?.role === "admin";                // master data is configuration of the office: admin/engineer only
   const accounts = me.data?.auth === "required";          // with real accounts everyone gets an account page (password, and the people of the organization for its owner)

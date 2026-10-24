@@ -36,40 +36,27 @@ TITLEBLOCK_COLS = {"company": "Empresa: razón social", "company_cuit": "Empresa
                    "location": "Ubicación", "scale": "Escala", "revision": "Revisión", "status": "Estado"}
 
 
-# Base design criteria (AR, electrical). The catalog engine/jurisdictions/AR/electrical/design-criteria.json is the source (the norms reviewer corrects it there);
-# this copy is only the fallback when the plugin runs outside the repository. A project overrides any of them.
-BASE_CRITERIA = {
-    "nominal_voltage_v": 380,
-    "frequency_hz": 50,
-    "socket_height_m": 0.3,
-    "switch_height_m": 1.1,
-    "board_height_m": 1.8,
-    "vd_sectional_pct": 1,
-    "vd_lighting_sockets_pct": 3,
-    "vd_motors_pct": 5,
-    "conductor_material": "cobre",
-    "insulation": "XLPE",
-    "min_section_lighting_mm2": 1.5,
-    "min_section_sockets_mm2": 2.5,
-    "rcd_sensitivity_ma": 30,
-    "board_spare_pct": 20,
-    "raceway_fill_max_pct": 40
-}
+def catalog_file(discipline: str = "electrical") -> Optional[Path]:
+    """The design-criteria catalog: the only place where the base values live (the norms reviewer corrects them there). In the repository it is
+    engine/jurisdictions/AR/<discipline>/; a built plugin carries a copy generated from it under lib/ (see `engine_data` in the plugin manifest)."""
+    for base in Path(__file__).resolve().parents[:5]:
+        f = base / "jurisdictions" / "AR" / discipline / "design-criteria.json"
+        if f.is_file():
+            return f
+    return None
 
 
-def catalog_defaults(discipline: str = "electrical") -> Optional[dict]:
-    """Default values of the criteria catalog of the repository (None when the plugin runs without it)."""
-    f = Path(__file__).resolve().parents[3] / "jurisdictions" / "AR" / discipline / "design-criteria.json"
-    try:
-        return {c["id"]: c["default"] for c in json.loads(f.read_text(encoding="utf-8-sig"))["criteria"]}
-    except (OSError, ValueError, KeyError):
-        return None
+def catalog_defaults(discipline: str = "electrical") -> dict:
+    """Base value of every criterion, read from the catalog."""
+    f = catalog_file(discipline)
+    if f is None:
+        raise FileNotFoundError("design-criteria.json not found: the plugin was built without its catalog")
+    return {c["id"]: c["default"] for c in json.loads(f.read_text(encoding="utf-8-sig"))["criteria"]}
 
 
 def resolve_criteria(project_dir: Optional[Path] = None, discipline: str = "electrical") -> dict:
-    """Catalog values (or the fallback copy) with the project's overrides (`workspace/00-setup/design-criteria.json`, written by the web app) applied."""
-    crit = dict(BASE_CRITERIA)
-    crit.update(catalog_defaults(discipline) or {})
+    """Catalog values with the project's overrides (`workspace/00-setup/design-criteria.json`, written by the web app) applied."""
+    crit = catalog_defaults(discipline)
     if project_dir:
         f = Path(project_dir) / "workspace" / "00-setup" / "design-criteria.json"
         if f.is_file():

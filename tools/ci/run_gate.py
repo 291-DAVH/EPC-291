@@ -6,6 +6,7 @@
 Checks
   registry          plugin registry (plugins, skills, agents, engine areas)
   skill-conflicts   duplicate / orphan skills (production rules)
+  single-source     no two versioned files hold the same content (one source of truth per datum)
   board             planning/BOARD.md is up to date
   api               API tests (user surface, role guard, uploads, project creation)
   engine-calc       LV calculation tests
@@ -73,6 +74,7 @@ def main():
     backend = REPO / "backend"
     benv = dict(ENGINE_ENV, PYTHONPATH=os.pathsep.join([str(backend / "src"), ENGINE_ENV["PYTHONPATH"]]))
     run("ignored-sources", [py, str(REPO / "tools" / "ci" / "check_ignored_sources.py")], REPO)
+    run("single-source", [py, str(REPO / "tools" / "ci" / "check_single_source.py")], REPO)
     run("importlinter-config", [py, str(REPO / "tools" / "ci" / "gen_importlinter.py"), "--check"], REPO)
     run("backend-contracts", [py, "-c", "from importlinter.cli import lint_imports_command as m; m()", "--config", str(backend / ".importlinter")], backend, env=benv)
     run("backend", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], backend, env=benv)
