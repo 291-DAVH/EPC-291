@@ -152,7 +152,7 @@ def org_for_new_project(requested: str = "") -> str:
     if p.role == "admin":
         if requested and not repo.org_by_slug(requested):
             raise Invalid({"org": "unknown organization"})
-        return requested
+        return requested or p.org_slug                              # a project created while working inside an organization belongs to it
     return p.org_slug
 
 
@@ -173,7 +173,12 @@ def _from_session(token: str) -> Optional[Principal]:
     base = dict(authenticated=True, name=user["display_name"], email=user["email"], user_id=str(user["id"]), username=user["username"] or "", has_password=bool(user["password_hash"]))
     if user["platform_role"] in NO_ORG_ROLES:
         assigned = tuple(o["slug"] for o in repo.assigned_orgs(user["id"]) if o["active"]) if user["platform_role"] in ASSIGNED_ROLES else ()
-        return Principal(role=user["platform_role"], assigned=assigned, **base)
+        acting = {}
+        if user["platform_role"] == "admin" and row["organization_id"]:                # staff working inside an organization: they act as its owner
+            org = repo.org_by_id(row["organization_id"])
+            if org:
+                acting = dict(org_id=str(org["id"]), org_slug=org["slug"], org_name=org["name"], org_kind=org["kind"], org_role="owner")
+        return Principal(role=user["platform_role"], assigned=assigned, **base, **acting)
     org = repo.org_by_id(row["organization_id"]) if row["organization_id"] else None
     mem = repo.membership(org["id"], user["id"]) if org else None
     if not org or not org["active"] or not mem or not mem["active"]:
@@ -213,6 +218,8 @@ def account_type(p: Principal) -> str:
 
 
 def _organizations(p: Principal) -> List[dict]:
+    if p.authenticated and not p.simulated and p.user_id and p.role == "admin":              # the engineering team can enter any organization
+        return [{"slug": o["slug"], "name": o["name"], "kind": o["kind"], "role": "owner", "current": o["slug"] == p.org_slug} for o in repo.list_orgs()]
     if not p.authenticated or p.simulated or not p.user_id or p.role in NO_ORG_ROLES:
         return []
     return [{"slug": o["slug"], "name": o["name"], "kind": o["kind"], "role": o["role"], "current": o["slug"] == p.org_slug}
@@ -222,7 +229,7 @@ def _organizations(p: Principal) -> List[dict]:
 def me(p: Principal, with_orgs: bool = False) -> dict:
     out = {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "account_type": account_type(p), "name": p.name, "email": p.email, "username": p.username, "has_password": p.has_password,
            "org": p.org_name, "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open",
-           "landing": "/norms" if p.role == "standards" else "/", "app_url": settings.public_url, "abilities": permissions.abilities_of(account_type(p)),
+           "landing": "/norms" if p.role == "standards" else "/", "app_url": settings.public_url, "console_url": settings.console_url, "abilities": permissions.abilities_of(account_type(p)),
            "assigned": list(p.assigned)}
     if with_orgs:
         out["organizations"] = _organizations(p)
@@ -235,8 +242,15 @@ def current_user() -> dict:
 
 def switch_org(p: Principal, token: Optional[str], slug: str) -> Principal:
     """A person who belongs to several organizations changes the one the session works in, without signing in again."""
-    if not p.authenticated or p.simulated or not p.user_id or p.role in NO_ORG_ROLES or not token:
+    if not p.authenticated or p.simulated or not p.user_id or not token or p.role not in ("user", "admin"):
         raise Forbidden("this account does not belong to organizations")
+    if p.role == "admin":                                         # staff: any organization, or none (the whole platform)
+        org = repo.org_by_slug(slug) if slug else None
+        if slug and not org:
+            raise NotFound("organization not found")
+        repo.update_session_org(token_hash(token), org["id"] if org else None)
+        audit("organization_entered" if org else "organization_left", target=slug or "", org=str(org["id"]) if org else None, actor=p)
+        return _from_session(token) or p
     org = repo.org_by_slug(slug or "")
     mem = repo.membership(org["id"], p.user_id) if org else None
     if not org or not org["active"] or not mem or not mem["active"]:
@@ -248,7 +262,8 @@ def switch_org(p: Principal, token: Optional[str], slug: str) -> Principal:
 
 def require_manager(p: Principal) -> Principal:
     """The owner or an administrator of the organization."""
-    if not p.authenticated or p.simulated or p.role != "user" or p.org_role not in ("owner", "admin") or not p.org_id:
+    allowed = p.role == "admin" or (p.role == "user" and p.org_role in ("owner", "admin"))          # staff inside an organization act as its owner
+    if not p.authenticated or p.simulated or not allowed or not p.org_id:
         raise Forbidden("only the owner or an administrator of the organization can do this")
     return p
 

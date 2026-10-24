@@ -54,6 +54,7 @@ class Settings:
     session_hours: int = 12
     cookie_secure: bool = False
     public_url: str = "http://localhost:5173"      # address of the customer app, used in invitation links (EPC_PUBLIC_URL)
+    console_url: str = "http://localhost:5174"     # address of the technical console, offered to the engineering team as a link (EPC_CONSOLE_URL)
     secret_key: str = ""        # signs the short-lived cookies of the sign-in with providers (EPC_SECRET_KEY); random per process when not set
     oauth: dict = field(default_factory=dict)      # provider -> {client_id, client_secret}, only the configured ones (EPC_OAUTH_<PROVIDER>_CLIENT_ID / _CLIENT_SECRET)
 
@@ -85,6 +86,7 @@ class Settings:
             session_hours=int(os.environ.get("EPC_SESSION_HOURS", "12")),
             cookie_secure=os.environ.get("EPC_COOKIE_SECURE", "") == "1",
             public_url=os.environ.get("EPC_PUBLIC_URL", "http://localhost:5173").rstrip("/"),
+            console_url=os.environ.get("EPC_CONSOLE_URL", "http://localhost:5174").rstrip("/"),
             secret_key=os.environ.get("EPC_SECRET_KEY") or secrets.token_urlsafe(32),
             oauth={p: {"client_id": os.environ[f"EPC_OAUTH_{p.upper()}_CLIENT_ID"], "client_secret": os.environ[f"EPC_OAUTH_{p.upper()}_CLIENT_SECRET"]}
                    for p in ("google", "github", "facebook", "linkedin") if os.environ.get(f"EPC_OAUTH_{p.upper()}_CLIENT_ID") and os.environ.get(f"EPC_OAUTH_{p.upper()}_CLIENT_SECRET")},
