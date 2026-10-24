@@ -5,6 +5,9 @@ Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
 y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [0.4.17] - 2026-10-24
+- Packaging: one copy of the shared logo and of the multi-line symbol library (duplicates removed; the library of the generator is the only one).
+
 ## [0.4.16] - 2026-10-22
 
 - Nuevos símbolos MCCB sin extracción (basic y motorized) en SLD (`mccb_basic`, `mccb_motorized`) y MLD 1p–4p (`mccb_basic_Np`, `mccb_motorized_Np`), generados a partir de sus versiones drawout quitando las flechas de extracción. En la versión motorizada, el puerto inferior se ubica al final del conductor.

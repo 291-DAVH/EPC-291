@@ -7,7 +7,7 @@
 **Automated EPC engineering, built from plugins.**
 Calculations, drawings, documents and standards-based rules for engineering projects, with a web app for customers and a technical console for engineers.
 
-[![Version](https://img.shields.io/badge/version-0.2.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.3.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Gate](https://img.shields.io/badge/test%20battery-21%20checks-2ea44f?style=for-the-badge)](tools/ci/run_gate.py)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?style=for-the-badge)](backend/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge)](backend/)
@@ -107,9 +107,9 @@ EPC-291/
 
 | Plugin | Version | Kind | Requires |
 |---|---|---|---|
-| `aea-calc` | 1.6.0 | calc | — |
-| `iec-symbols` | 0.4.16 | knowledge | — |
-| `iram-titleblock` | 0.5.1 | generator | — |
+| `aea-calc` | 1.6.1 | calc | — |
+| `iec-symbols` | 0.4.17 | knowledge | — |
+| `iram-titleblock` | 0.5.2 | generator | — |
 | `sld` | 0.1.2 | generator | aea-calc, iec-symbols, iram-titleblock |
 | `mld` | 0.2.0 | generator | aea-calc, sld, iram-titleblock, iec-symbols |
 | `board-design` | 0.1.0 | workflow | aea-calc, sld, mld, iec-symbols, iram-titleblock |
@@ -149,7 +149,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test 
 
 ## 📜 Status and license
 
-Release 0.2.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+Release 0.3.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
 
 <div align="center">
 

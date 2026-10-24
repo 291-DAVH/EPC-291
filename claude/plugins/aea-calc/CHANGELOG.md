@@ -5,6 +5,9 @@ Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
 y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.6.1] - 2026-10-24
+- Engine: the rule and table data can be reloaded after a correction by the norm reviewer (`limpiar_cache_reglas`, `limpiar_cache_tablas`).
+
 ## [Unreleased]
 
 ## [1.6.0] - 2026-10-22

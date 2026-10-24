@@ -3,6 +3,10 @@
 All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.md` (releases are tagged on `main`).
 
 ## [Unreleased]
+
+## [0.3.0] - 2026-10-24
+Third release: accounts and organizations with real sign-in (email, alias and Google, GitHub, Facebook, LinkedIn), roles and permissions, inspectors and auditors, master data, issuing to the client, criteria-driven calculation and multi-line diagrams, automatic analysis of customer input, management reports and registers of the methodology, norm review, and a single source of truth per datum.
+
 ### Fixed
 - **Registers and Reports showed "could not connect to the API (409)" in some demo projects.** The demo generator gave projects a random methodology that included PMI, which does not exist yet (only PM² has a pack; a real project cannot be created with PMI), so their registers and report catalog were missing. The generator now uses PM² only, the 11 demo projects that had PMI were corrected, and a methodology without registers or reports is now reported as such (`available: false`, with a clear message on the screen) instead of failing.
 
