@@ -49,14 +49,17 @@ def _view_field(f: dict, lang: str) -> dict:
 
 def view(d: Path, lang: Optional[str] = None) -> dict:
     lg = _lang(d, lang)
-    defs = _defs(d)
+    meta = projects.read_meta(d)
+    defs = repository.definitions(meta.get("methodology") or "pm2")
+    if not defs:                                                    # a methodology without registers (for example one that is not available yet): say so, do not fail
+        return {"methodology": meta.get("methodology") or "pm2", "available": False, "language": lg, "registers": []}
     regs = []
     for r in defs["registers"]:
         items = repository.load(d, r["id"])
         closed = sum(1 for i in items if i.get("status") in r["closed_states"])
         regs.append({"id": r["id"], "prefix": r["prefix"], "name": r["name"].get(lg) or r["name"]["es"], "columns": r["columns"], "closed_states": r["closed_states"],
                      "fields": [_view_field(f, lg) for f in r["fields"]], "derived": r.get("derive"), "counts": {"total": len(items), "active": len(items) - closed}})
-    return {"methodology": defs["methodology"], "language": lg, "registers": regs}
+    return {"methodology": defs["methodology"], "available": True, "language": lg, "registers": regs}
 
 
 def items(d: Path, kind: str) -> List[dict]:

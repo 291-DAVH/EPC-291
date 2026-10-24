@@ -15,6 +15,7 @@ export default function Registers({ client, code }: { client: string; code: stri
   const view = useApi<RegistersView>(`${base}?r=${rev}`);
   const [kind, setKind] = useState("");
   if (!view.data) return <State loading={view.loading} error={view.error} />;
+  if (view.data.available === false) return <div className="state">{t("reg.unavailable")} ({view.data.methodology.toUpperCase()})</div>;
   const def = view.data.registers.find((r) => r.id === kind) ?? view.data.registers[0];
   return (
     <div className="grid" style={{ gap: 14 }}>
