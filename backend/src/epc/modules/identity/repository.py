@@ -6,7 +6,7 @@ from typing import List, Optional
 import sqlalchemy as sa
 
 from epc.core import db
-from epc.modules.identity.models import invitations, memberships, organizations, sessions, users
+from epc.modules.identity.models import audit_log, invitations, memberships, organizations, sessions, user_assignments, users
 
 
 def now() -> dt.datetime:
@@ -206,3 +206,35 @@ def accept_invitation(inv_id) -> None:
 
 def delete_invitation(inv_id) -> None:
     _write(sa.delete(invitations).where(invitations.c.id == uid(inv_id)))
+
+
+# ---- audit log
+def insert_audit(actor_id, actor_email: str, action: str, target: str, org_id, detail: dict, ip: str) -> None:
+    _write(sa.insert(audit_log).values(id=uuid.uuid4(), organization_id=uid(org_id) if org_id else None, actor_id=uid(actor_id) if actor_id else None, actor_email=actor_email or "",
+                                       action=action, target=(target or "")[:300], detail=detail or {}, ip=ip or "", at=now()))
+
+
+def list_audit(limit: int = 100, action: Optional[str] = None, actor: Optional[str] = None, org_id=None) -> List[dict]:
+    q = sa.select(audit_log).order_by(audit_log.c.at.desc()).limit(limit)
+    if action:
+        q = q.where(audit_log.c.action == action)
+    if actor:
+        q = q.where(sa.func.lower(audit_log.c.actor_email) == actor.lower())
+    if org_id:
+        q = q.where(audit_log.c.organization_id == uid(org_id))
+    return _all(q)
+
+
+# ---- assignments of inspectors and auditors
+def assigned_orgs(user_id) -> List[dict]:
+    q = (sa.select(organizations).select_from(user_assignments.join(organizations, organizations.c.id == user_assignments.c.organization_id))
+         .where(user_assignments.c.user_id == uid(user_id)).order_by(organizations.c.name))
+    return _all(q)
+
+
+def set_assignments(user_id, org_ids, granted_by) -> None:
+    with db.engine().begin() as cx:
+        cx.execute(sa.delete(user_assignments).where(user_assignments.c.user_id == uid(user_id)))
+        for o in org_ids:
+            cx.execute(sa.insert(user_assignments).values(id=uuid.uuid4(), user_id=uid(user_id), organization_id=uid(o), granted_by=uid(granted_by) if granted_by else None, granted_at=now()))
+

@@ -11,8 +11,8 @@ from epc.modules.identity import public as identity
 
 def _visible(d: Path) -> bool:
     """Tenant isolation: a customer sees only the projects of their organization; staff and simulated mode see all."""
-    org = identity.visible_org()
-    return org is None or read_json(d / ".epc" / "project.json", {}).get("org") == org
+    orgs = identity.visible_orgs()
+    return orgs is None or read_json(d / ".epc" / "project.json", {}).get("org") in orgs
 
 
 def project_dirs() -> List[Path]:

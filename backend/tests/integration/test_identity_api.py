@@ -270,7 +270,7 @@ class TestOrganizations(Base):
         me = staff.get("/api/me").json()
         self.assertEqual((me["account_type"], me["landing"]), ("staff", "/"))
         admin, _ = self.new_org(staff, "Metal SRL", seats=3, owner="boss@metal.com")
-        self.assertEqual(admin.get("/api/me").json()["account_type"], "corporate_admin")
+        self.assertEqual(admin.get("/api/me").json()["account_type"], "corporate_owner")
         inv = admin.post("/api/app/org/invitations", json={"email": "ana@metal.com"}).json()
         member = self.client()
         member.post("/api/auth/accept-invitation", json={"token": inv["token"], "name": "Ana", "password": PW})
@@ -304,7 +304,7 @@ class TestOrganizations(Base):
         self.assertEqual((r.status_code, r.json()["org"], r.json()["account_type"]), (200, "Beta SRL", "corporate_member"))
         self.assertEqual(c.get("/api/app/portfolio").json()["projects"], [])                        # Beta's projects, not Alfa's
         self.assertEqual(c.get("/api/app/org").status_code, 403)                                      # only a member there
-        self.assertEqual(c.post("/api/auth/switch-org", json={"org": "alfa-srl"}).json()["account_type"], "corporate_admin")
+        self.assertEqual(c.post("/api/auth/switch-org", json={"org": "alfa-srl"}).json()["account_type"], "corporate_owner")
         self.assertEqual(c.post("/api/auth/switch-org", json={"org": "no-existe"}).status_code, 404)
         self.assertEqual(o2.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 404)   # not a member of that one
         self.assertEqual(staff.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 403)
@@ -324,6 +324,120 @@ class TestOrganizations(Base):
         self.assertFalse(second.get("/api/me").json()["authenticated"])
         self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": PW}).status_code, 401)
         self.assertEqual(self.client().post("/api/auth/login", json={"email": "owner@x.com", "password": "another-pass-22"}).status_code, 200)
+
+
+class TestPermissionMatrix(Base):
+    """Every kind of account against the same list of requests: what is allowed and what is not is data (permissions.py), and the server enforces it."""
+
+    def accounts(self):
+        staff = self.staff()
+        owner, slug = self.new_org(staff, "Metal SRL", seats=5, owner="owner@m.com")
+        out = {"staff": staff, "corporate_owner": owner}
+        for email, role, key in (("admin@m.com", "admin", "corporate_admin"), ("member@m.com", "member", "corporate_member")):
+            inv = owner.post("/api/app/org/invitations", json={"email": email, "role": role}).json()
+            c = self.client()
+            self.assertEqual(c.post("/api/auth/accept-invitation", json={"token": inv["token"], "name": role.title(), "password": PW}).status_code, 200)
+            out[key] = c
+        settings.signup = "open"
+        solo = self.client()
+        solo.post("/api/auth/signup", json={"kind": "individual", "name": "Solo", "email": "solo@x.com", "password": PW})
+        out["individual"] = solo
+        for email, role in (("rev@x.com", "standards"), ("insp@x.com", "inspector"), ("aud@x.com", "auditor")):
+            self.assertEqual(staff.post("/api/identity/users", json={"email": email, "name": role, "password": PW, "platform_role": role}).status_code, 201)
+            c = self.client()
+            self.assertEqual(c.post("/api/auth/login", json={"email": email, "password": PW}).status_code, 200)
+            out[{"standards": "reviewer"}.get(role, role)] = c
+        return out
+
+    def test_each_kind_of_account_reaches_exactly_what_the_matrix_says(self):
+        accs = self.accounts()
+        everyone_in_the_app = {"staff", "individual", "corporate_owner", "corporate_admin", "corporate_member", "inspector", "auditor"}
+        customers = {"staff", "individual", "corporate_owner", "corporate_admin", "corporate_member"}
+        managers = {"staff", "individual", "corporate_owner", "corporate_admin"}
+        cases = [("get", "/api/app/portfolio", everyone_in_the_app), ("get", "/api/projects/options", everyone_in_the_app), ("post", "/api/projects", customers),
+                 ("get", "/api/app/org", managers), ("post", "/api/app/org/invitations", managers),
+                 ("get", "/api/norms/units", {"staff", "reviewer"}), ("get", "/api/identity/orgs", {"staff"}), ("get", "/api/identity/audit", {"staff"}),
+                 ("get", "/api/plugins", {"staff"}), ("get", "/api/projects", {"staff"}), ("get", "/api/rules/standards", {"staff"})]
+        for method, path, allowed in cases:
+            for kind, c in accs.items():
+                if kind == "staff" and path.startswith("/api/app/org"):
+                    continue                                                    # the matrix lets staff through, but they belong to no organization to manage
+                r = getattr(c, method)(path, json={}) if method == "post" else c.get(path)
+                self.assertEqual(r.status_code != 403, kind in allowed, f"{kind} {method.upper()} {path} -> {r.status_code}")
+
+    def test_me_tells_the_screens_what_to_show(self):
+        accs = self.accounts()
+        for kind, c in accs.items():
+            self.assertEqual(c.get("/api/me").json()["account_type"], kind)
+        self.assertEqual(accs["auditor"].get("/api/me").json()["abilities"], {"app": ["read"], "observation": ["read", "write"]})
+        self.assertEqual(accs["corporate_member"].get("/api/me").json()["abilities"], {"app": ["read", "write"], "observation": ["read"]})
+        self.assertIn("norms", accs["reviewer"].get("/api/me").json()["abilities"])
+        self.assertEqual(sorted(accs["staff"].get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org"])
+
+    def test_security_headers(self):
+        r = self.client().get("/api/health")
+        self.assertEqual((r.headers["x-content-type-options"], r.headers["x-frame-options"], r.headers["referrer-policy"]), ("nosniff", "DENY", "same-origin"))
+        self.assertEqual(self.client().get("/api/me").headers["cache-control"], "no-store")
+        settings.cookie_secure = True
+        try:
+            self.assertIn("max-age", self.client().get("/api/health").headers["strict-transport-security"])
+        finally:
+            settings.cookie_secure = False
+
+
+class TestAuditLog(Base):
+    def test_sensitive_actions_are_recorded_without_secrets(self):
+        staff = self.staff()
+        c = self.client()
+        c.post("/api/auth/login", json={"email": "staff@office.com", "password": "wrong-password-1"})
+        owner, slug = self.new_org(staff, "Metal SRL", seats=3, owner="o@m.com")
+        inv = owner.post("/api/app/org/invitations", json={"email": "a@m.com", "role": "member"}).json()
+        a = self.client()
+        a.post("/api/auth/accept-invitation", json={"token": inv["token"], "name": "A", "password": PW})
+        mid = next(m["user_id"] for m in owner.get("/api/app/org").json()["members"] if m["email"] == "a@m.com")
+        owner.patch(f"/api/app/org/members/{mid}", json={"role": "admin"})
+        owner.post("/api/auth/password", json={"current_password": PW, "new_password": "another-pass-22"})
+        staff.patch(f"/api/identity/orgs/{slug}", json={"seats": 6})
+        log = staff.get("/api/identity/audit?limit=200").json()
+        actions = [e["action"] for e in log]
+        for want in ("login", "login_failed", "organization_created", "invitation_accepted", "invitation_created", "member_updated", "password_changed", "organization_updated"):
+            self.assertIn(want, actions)
+        failed = next(e for e in log if e["action"] == "login_failed")
+        self.assertEqual((failed["target"], failed["actor"]), ("staff@office.com", "staff@office.com"))
+        upd = next(e for e in log if e["action"] == "member_updated")
+        self.assertEqual((upd["actor"], upd["target"], upd["org"], upd["detail"]["to"]), ("o@m.com", "a@m.com", slug, {"role": "admin"}))
+        blob = json.dumps(log)
+        for secret in (PW, "another-pass-22", "wrong-password-1", inv["token"]):
+            self.assertNotIn(secret, blob)
+        self.assertEqual([e["action"] for e in staff.get("/api/identity/audit?action=login_failed").json()], ["login_failed"])
+        self.assertTrue(all(e["org"] == slug for e in staff.get(f"/api/identity/audit?org={slug}").json()))
+        self.assertEqual(owner.get("/api/identity/audit").status_code, 403)                   # only the platform staff read it
+
+
+class TestCompanyAdministrator(Base):
+    def test_an_administrator_manages_people_but_not_the_owners(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL", seats=6, owner="o@m.com")
+        tok = lambda email, role: owner.post("/api/app/org/invitations", json={"email": email, "role": role}).json()["token"]
+        admin, member = self.client(), self.client()
+        admin.post("/api/auth/accept-invitation", json={"token": tok("adm@m.com", "admin"), "name": "Adm", "password": PW})
+        member.post("/api/auth/accept-invitation", json={"token": tok("mem@m.com", "member"), "name": "Mem", "password": PW})
+        self.assertEqual(admin.get("/api/me").json()["account_type"], "corporate_admin")
+        people = {m["email"]: m["user_id"] for m in admin.get("/api/app/org").json()["members"]}
+        self.assertEqual(len(people), 3)
+        self.assertEqual(admin.post("/api/app/org/invitations", json={"email": "x@m.com", "role": "member"}).status_code, 201)
+        self.assertEqual(admin.post("/api/app/org/invitations", json={"email": "y@m.com", "role": "admin"}).status_code, 201)
+        self.assertEqual(admin.patch(f"/api/app/org/members/{people['mem@m.com']}", json={"role": "admin"}).status_code, 200)
+        self.assertEqual(admin.patch(f"/api/app/org/members/{people['mem@m.com']}", json={"role": "member"}).status_code, 200)
+        self.assertEqual(admin.post("/api/app/org/invitations", json={"email": "z@m.com", "role": "owner"}).status_code, 403)
+        self.assertEqual(admin.patch(f"/api/app/org/members/{people['mem@m.com']}", json={"role": "owner"}).status_code, 403)
+        self.assertEqual(admin.patch(f"/api/app/org/members/{people['o@m.com']}", json={"active": False}).status_code, 403)
+        self.assertEqual(admin.patch(f"/api/app/org/members/{people['o@m.com']}", json={"role": "member"}).status_code, 403)
+        self.assertEqual(admin.delete(f"/api/app/org/members/{people['o@m.com']}").status_code, 403)
+        self.assertEqual(member.get("/api/app/org").status_code, 403)
+        self.assertEqual(owner.patch(f"/api/app/org/members/{people['adm@m.com']}", json={"role": "owner"}).status_code, 200)
+        self.assertEqual(owner.patch(f"/api/app/org/members/{people['o@m.com']}", json={"role": "admin"}).status_code, 200)
+        self.assertEqual(owner.patch(f"/api/app/org/members/{people['adm@m.com']}", json={"role": "member"}).status_code, 403)         # the first owner is an administrator now
 
 
 class TestStaff(Base):

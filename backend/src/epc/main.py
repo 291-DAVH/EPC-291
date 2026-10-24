@@ -42,6 +42,19 @@ def create_app() -> FastAPI:
     identity.install_role_guard(app, public_paths=identity.PUBLIC_PATHS | projects.PUBLIC_PATHS,
                                 public_prefixes=PUBLIC_PREFIXES, public_post_paths=projects.PUBLIC_POST_PATHS)
 
+    @app.middleware("http")
+    async def security_headers(request: Request, call_next):
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        response.headers.setdefault("Referrer-Policy", "same-origin")
+        response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        if request.url.path.startswith(("/api/auth/", "/api/me", "/api/identity/", "/api/norms/")):
+            response.headers["Cache-Control"] = "no-store"                    # account data is never kept by a cache
+        if settings.cookie_secure:
+            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+        return response
+
     @app.exception_handler(DomainError)
     async def domain_error(_: Request, exc: DomainError):
         return JSONResponse({"detail": exc.detail}, status_code=exc.status)

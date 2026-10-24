@@ -71,7 +71,11 @@ class NewUserIn(BaseModel):
     email: str
     name: str
     password: str
-    platform_role: str = "standards"
+    platform_role: str = "standards"                      # standards | inspector | auditor | admin
+
+
+class AssignmentsIn(BaseModel):
+    orgs: list = []
 
 
 class PasswordSet(BaseModel):
@@ -114,7 +118,7 @@ def accept_invitation(body: AcceptIn, response: Response):
 
 @router.post("/api/auth/logout")
 def logout(request: Request, response: Response):
-    service.logout(request.cookies.get(service.COOKIE))
+    service.logout(request.cookies.get(service.COOKIE), service.current())
     response.delete_cookie(service.COOKIE, path="/")
     return {"ok": True}
 
@@ -194,6 +198,18 @@ def staff_create_user(body: NewUserIn):
 def staff_update_user(user_id: str, body: UserPatch):
     service.staff_update_user(service.current(), user_id, body.active, body.platform_role)
     return {"ok": True}
+
+
+@router.put("/api/identity/users/{user_id}/assignments")
+def staff_set_assignments(user_id: str, body: AssignmentsIn):
+    """Organizations an inspector or external auditor may see (exactly this list)."""
+    return service.staff_set_assignments(service.current(), user_id, [str(x) for x in body.orgs])
+
+
+@router.get("/api/identity/audit")
+def staff_audit(limit: int = 100, action: Optional[str] = None, actor: Optional[str] = None, org: Optional[str] = None):
+    """Who did what, to what and when (sign-ins, failed sign-ins, accounts, roles, invitations, assignments)."""
+    return service.audit_log(limit, action, actor, org)
 
 
 @router.put("/api/identity/users/{user_id}/password")
