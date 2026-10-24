@@ -6,7 +6,7 @@ from typing import List, Optional
 import sqlalchemy as sa
 
 from epc.core import db
-from epc.modules.identity.models import audit_log, identities, invitations, memberships, organizations, sessions, user_assignments, users
+from epc.modules.identity.models import MASTER_EMAIL, audit_log, identities, invitations, memberships, organizations, sessions, user_assignments, users
 
 
 def now() -> dt.datetime:
@@ -85,7 +85,7 @@ def update_user(user_id, **values) -> None:
 
 def count_staff() -> int:
     with db.engine().connect() as cx:
-        return cx.execute(sa.select(sa.func.count()).select_from(users).where(users.c.platform_role == "admin", users.c.active.is_(True))).scalar() or 0
+        return cx.execute(sa.select(sa.func.count()).select_from(users).where(users.c.platform_role == "admin", users.c.active.is_(True), users.c.email != MASTER_EMAIL)).scalar() or 0
 
 
 # ---- organizations
@@ -264,4 +264,14 @@ def insert_identity(user_id, provider: str, subject: str, email: str) -> None:
 
 def delete_identity(user_id, provider: str) -> None:
     _write(sa.delete(identities).where(identities.c.user_id == uid(user_id), identities.c.provider == provider))
+
+
+def delete_all_accounts(include_audit: bool = False) -> dict:
+    """Development only: every account, organization, membership, session, invitation, assignment and linked identity."""
+    counts = {}
+    with db.engine().begin() as cx:
+        tables = [sessions, invitations, user_assignments, identities, memberships] + ([audit_log] if include_audit else []) + [users, organizations]
+        for tb in tables:
+            counts[tb.name] = cx.execute(sa.delete(tb)).rowcount
+    return counts
 

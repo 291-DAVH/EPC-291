@@ -124,12 +124,21 @@ class Social(Base):
 
 
 class TestProviders(Social):
-    def test_only_configured_providers_are_offered(self):
-        self.assertEqual([p["id"] for p in self.client().get("/api/auth/providers").json()], list(PROVIDERS))
+    def test_only_configured_providers_are_offered_in_production(self):
+        self.assertEqual([(p["id"], p["configured"]) for p in self.client().get("/api/auth/providers").json()], [(p, True) for p in PROVIDERS])
         settings.oauth = {"google": settings.oauth["google"], "github": settings.oauth["github"]}
-        self.assertEqual([p["name"] for p in self.client().get("/api/auth/providers").json()], ["Google", "GitHub"])
+        # in development the others are listed too (as not configured) so their buttons can be seen before the keys exist
+        self.assertEqual([(p["id"], p["configured"]) for p in self.client().get("/api/auth/providers").json()],
+                         [("google", True), ("github", True), ("facebook", False), ("linkedin", False)])
+        old = settings.env
+        settings.env = "production"
+        try:
+            self.assertEqual([p["name"] for p in self.client().get("/api/auth/providers").json()], ["Google", "GitHub"])             # the end user never sees an unconfigured one
+            settings.oauth = {}
+            self.assertEqual(self.client().get("/api/auth/providers").json(), [])
+        finally:
+            settings.env = old
         settings.oauth = {}
-        self.assertEqual(self.client().get("/api/auth/providers").json(), [])
         self.assertEqual(self.error_of(self.client().get("/api/auth/oauth/google/start", follow_redirects=False)), "provider_unavailable")
 
     def test_start_sends_the_person_to_the_provider_with_a_signed_state(self):

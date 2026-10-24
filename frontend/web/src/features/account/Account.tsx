@@ -67,14 +67,15 @@ function Linked({ hasPassword }: { hasPassword: boolean }) {
   const ids = useApi<IdentitiesView>(`/auth/identities?r=${rev}`);
   const providers = useApi<SocialProvider[]>("/auth/providers");
   const [msg, setMsg] = useState("");
-  if (!ids.data || !providers.data || providers.data.length === 0) return null;
+  const usable = (providers.data ?? []).filter((p) => p.configured !== false);
+  if (!ids.data || !providers.data || usable.length === 0) return null;
   const linked = new Set(ids.data.identities.map((i) => i.provider));
   const unlink = async (p: string) => { try { await api(`/auth/identities/${p}`, { method: "DELETE" }); setMsg(""); setRev((n) => n + 1); } catch (x) { setMsg(x instanceof ApiError && x.status === 409 ? t("acc.lastWay") : errorText(x)); } };
   return (
     <div className="card">
       <h2 style={{ marginTop: 0 }}>{t("acc.linked")}</h2>
       <p className="muted small" style={{ margin: "0 0 8px" }}>{t("acc.linkedHelp")}</p>
-      {providers.data.map((p) => (
+      {usable.map((p) => (
         <div key={p.id} className="row between" style={{ padding: "4px 0" }}>
           <span><b>{p.name}</b> {linked.has(p.id) && <span className="badge ok">{t("acc.isLinked")} · {ids.data!.identities.find((i) => i.provider === p.id)?.email}</span>}</span>
           {linked.has(p.id) ? <button onClick={() => unlink(p.id)}>{t("acc.unlink")}</button> : <a className="btn" href={`/api/auth/oauth/${p.id}/start?mode=link`}>{t("acc.link")}</a>}

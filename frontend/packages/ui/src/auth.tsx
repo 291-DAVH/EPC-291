@@ -25,7 +25,11 @@ function SocialButtons({ providers, invite }: { providers: SocialProvider[]; inv
   return (
     <div className="social">
       <div className="muted small social-or"><span>{t("auth.or")}</span></div>
-      {providers.map((p) => (
+      {providers.map((p) => p.configured === false ? (
+        <span key={p.id} className={"socialbtn disabled " + p.id} title={t("auth.notConfiguredHint")} aria-disabled="true">
+          <span className="socialmark" aria-hidden>{p.name[0]}</span>{p.name} · {t("auth.notConfigured")}
+        </span>
+      ) : (
         <a key={p.id} className={"socialbtn " + p.id} href={`/api/auth/oauth/${p.id}/start${invite ? `?invite=${encodeURIComponent(invite)}` : ""}`}>
           <span className="socialmark" aria-hidden>{p.name[0]}</span>{t("auth.continueWith")} {p.name}
         </a>

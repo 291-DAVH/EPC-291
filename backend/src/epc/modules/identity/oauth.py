@@ -42,8 +42,8 @@ class OAuthError(Exception):
 
 
 # ---------------------------------------------------------------- availability
-def enabled() -> List[dict]:
-    return [{"id": pid, "name": p["name"]} for pid, p in PROVIDERS.items() if settings.oauth.get(pid)]
+def enabled(include_unconfigured: bool = False) -> List[dict]:
+    return [{"id": pid, "name": p["name"], "configured": bool(settings.oauth.get(pid))} for pid, p in PROVIDERS.items() if include_unconfigured or settings.oauth.get(pid)]
 
 
 def require(provider: str) -> dict:

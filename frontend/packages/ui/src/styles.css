@@ -250,3 +250,5 @@ textarea.mono { font-family: var(--mono, ui-monospace, monospace); font-size: 12
 
 /* ---- the engineering team moves between the applications */
 .expertlinks { display: grid; gap: 2px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+.socialbtn.disabled { opacity: .55; cursor: not-allowed; font-weight: 400; }
+.socialbtn.disabled:hover { background: var(--panel); }

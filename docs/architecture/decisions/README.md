@@ -18,3 +18,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0012](ADR-0012-single-source-of-truth.md) | One source of truth per datum | Accepted |
 | [0013](ADR-0013-account-types-and-permissions.md) | Account types, a permission matrix and an audit log | Accepted |
 | [0014](ADR-0014-sign-in-alias-and-providers.md) | Sign-in with an alias and with external providers | Accepted |
+| [0015](ADR-0015-development-master-account.md) | A MASTER account for development only | Accepted |
