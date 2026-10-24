@@ -13,4 +13,9 @@ def overall_progress(project_dir: Path) -> float:
     return service.overall_progress(project_dir)
 
 
-__all__ = ["has_node", "overall_progress"]
+def view(project_dir: Path) -> dict:
+    """WBS with rolled-up progress: {nodes, progress, counts}."""
+    return service.view(project_dir)
+
+
+__all__ = ["has_node", "overall_progress", "view"]

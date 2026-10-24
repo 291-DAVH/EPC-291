@@ -17,6 +17,9 @@ Genera documentos de gestión de proyectos siguiendo la metodología PM² v3.0 (
 ## Plugin de referencia
 Usar `.claude/library/plugins/management/plugin.json` v2.0 para identificar el template (`templates[].file`), la fase (`templates[].phase`) y ubicar los canvases HTML.
 
+## Informes automáticos
+Los informes D11 a D15 (estado, avance, riesgos, esfuerzo, cambios) los genera la plataforma con los datos del proyecto: pestaña *Informes* (ingeniero/admin) o `POST /api/projects/{id}/reporting`; siguen las plantillas de `management/methodologies/pm2/rules/management-templates.md` y quedan en `workspace/05-management/progress|reports/`. Usa esta skill para el resto de los artefactos (actas, planes, lienzos, registros).
+
 ## Ciclo de vida PM²
 
 ```

@@ -194,6 +194,14 @@ export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
 export interface AnalysisResult { analyzed: number; created: string[]; merged: string[]; open_questions: number; usage: { input_tokens: number; output_tokens: number }; model: string; attempts: number }
 
+/* ---- management reports (methodology: PM2) ---- */
+export interface ReportType { id: string; code: string; name: string; audience: "client" | "internal"; command: string; next_number: number; last_period_end: string | null }
+export interface GeneratedReport {
+  id: string; type: string; code: string; nn: number; name: string; audience: "client" | "internal"; date: string; period: [string, string];
+  language: string; prepared_by: string; summary: string; md: string; pdf: string; published: string | null;
+}
+export interface ReportingView { methodology: string; language: string; types: ReportType[]; reports: GeneratedReport[] }
+
 /* ---- accounts and organizations ---- */
 export interface OrgMember { user_id: string; email: string; name: string; role: "owner" | "member"; active: boolean; last_login_at: string | null; me: boolean }
 export interface OrgInvitation { id: string; email: string; role: "owner" | "member"; expires_at: string }

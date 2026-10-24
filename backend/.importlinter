@@ -29,6 +29,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -66,6 +67,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -105,6 +107,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -142,6 +145,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -181,6 +185,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -221,6 +226,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -258,6 +264,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -297,6 +304,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -336,6 +344,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -373,6 +382,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -412,6 +422,7 @@ source_modules =
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld
@@ -430,6 +441,46 @@ layers =
     epc.modules.projects.service
     epc.modules.projects.repository
     epc.modules.projects.models
+
+[importlinter:contract:reporting-encapsulated]
+name = reporting: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.reporting.api
+    epc.modules.reporting.service
+    epc.modules.reporting.repository
+    epc.modules.reporting.models
+
+[importlinter:contract:reporting-layers]
+name = reporting: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.reporting.api
+    epc.modules.reporting.service
+    epc.modules.reporting.repository
+    epc.modules.reporting.models
 
 [importlinter:contract:requirements-encapsulated]
 name = requirements: other modules use only its public interface
@@ -452,6 +503,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.schedule
     epc.modules.sld
     epc.modules.wbs
@@ -489,6 +541,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.sld
     epc.modules.wbs
@@ -528,6 +581,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.wbs
@@ -567,6 +621,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
     epc.modules.sld

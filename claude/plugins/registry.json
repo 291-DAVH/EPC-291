@@ -35,7 +35,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "4da00acb189724a3"
+      "hash": "5e7d1a54ed0fb8fc"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -68,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "64ea8c7362f38cbe"
+      "hash": "d220a5228ccb49cb"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -93,7 +93,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "46a6525f44437185"
+      "hash": "208fb9c8774114f4"
     },
     "mld": {
       "version": "0.2.0",
@@ -112,7 +112,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "59c495b1901fd35a"
+      "hash": "4505ec6b3c00ec28"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -158,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "6823aae46e98f251"
+      "hash": "10081592fb4e6148"
     },
     "spec-writer": {
       "version": "0.1.0",

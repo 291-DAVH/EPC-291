@@ -67,3 +67,17 @@ def report_file(d: Path, report_id: str) -> Tuple[Path, str]:
     if not item or not item.get("file"):
         raise NotFound("file not found")
     return safe_file(d / "deliverables", item["file"]), f"{report_id}.pdf"
+
+
+def publish_report(d: Path, source_pdf: Path, title: str, kind: str, date_iso: str, summary: str) -> dict:
+    """Make a generated report visible to the client: copy the PDF under deliverables/informes and add it to the reports index (id INF-nnn)."""
+    import shutil
+    items = repository.reports_index(d)
+    n = max((int(x["id"].split("-")[1]) for x in items if str(x.get("id", "")).startswith("INF-")), default=0) + 1
+    rid = f"INF-{n:03d}"
+    dst = d / "deliverables" / "informes" / f"{rid}.pdf"
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_pdf, dst)
+    item = {"id": rid, "title": title, "type": kind, "date": date_iso, "file": f"informes/{rid}.pdf", "summary": summary}
+    repository.save_reports_index(d, items + [item])
+    return item
