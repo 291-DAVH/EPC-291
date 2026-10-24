@@ -68,7 +68,7 @@ def main():
     a = ap.parse_args()
     py = str(PYTHON)
 
-    run("registry", [py, str(BUILD), "registry"], REPO)
+    run("registry", [py, str(BUILD), "registry", "--check"], REPO)
     run("skill-conflicts", [py, str(CONFLICTS), "--env", "production"], REPO)
     if BOARD:
         run("board", [py, str(BOARD), "--check"], REPO)
