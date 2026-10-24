@@ -26,7 +26,7 @@ from epc.core.errors import Conflict, Forbidden, Invalid, NotFound, TooManyReque
 from epc.modules.identity import repository as repo
 from epc.modules.identity import oauth, permissions
 from epc.modules.identity.oauth import OAuthError
-from epc.modules.identity.models import ASSIGNED_ROLES, NO_ORG_ROLES, ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
+from epc.modules.identity.models import ASSIGNED_ROLES, MASTER_EMAIL, NO_ORG_ROLES, ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
 
 COOKIE = "epc_session"
 EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -78,6 +78,8 @@ def _check_email(email: str) -> str:
     email = (email or "").strip().lower()
     if not EMAIL.match(email) or len(email) > 254:
         raise Invalid({"email": "not a valid email address"})
+    if email.endswith("@dev.invalid"):
+        raise Invalid({"email": "this address is reserved"})                      # the development MASTER account can never be registered
     return email
 
 
@@ -300,7 +302,7 @@ def audit_log(limit: int = 100, action: Optional[str] = None, actor: Optional[st
     o = repo.org_by_slug(org) if org else None
     names = {str(x["id"]): x["slug"] for x in repo.list_orgs()}
     return [{"at": repo.as_utc(r["at"]).isoformat(), "actor": r["actor_email"], "action": r["action"], "target": r["target"], "org": names.get(str(r["organization_id"]), ""),
-             "detail": r["detail"], "ip": r["ip"]} for r in repo.list_audit(min(max(limit, 1), 500), action, actor, o["id"] if o else None)]
+             "detail": r["detail"], "ip": r["ip"]} for r in repo.list_audit(min(max(limit, 1), 500), action, actor, o["id"] if o else None) if r["actor_email"] != MASTER_EMAIL]
 
 
 # ---------------------------------------------------------------- sessions
@@ -331,11 +333,38 @@ def _open_session(user: dict, org: Optional[dict]) -> Tuple[str, Principal]:
     return token, p
 
 
+LOOPBACK = {"127.0.0.1", "::1", "localhost", "testclient"}
+
+
+def master_enabled() -> bool:
+    """The MASTER account exists only in development, with accounts required, and only when its password is set in the environment: in production it is inert."""
+    return settings.env != "production" and settings.auth == "required" and bool(settings.dev_master_password)
+
+
+def _master_user(identifier: str, password: str, ip: str) -> Optional[dict]:
+    """A development shortcut for the maintainer: one fixed account of the engineering team, reachable only from this machine, with the password of the environment.
+    It has no password of its own in the database, is hidden from every list and from the staff counts, and cannot be registered or reached in production."""
+    if not master_enabled() or ip not in LOOPBACK or identifier not in (settings.dev_master_user, MASTER_EMAIL):
+        return None
+    if not hmac.compare_digest(password.encode("utf-8"), settings.dev_master_password.encode("utf-8")):
+        return None
+    user = repo.user_by_email(MASTER_EMAIL) or repo.insert_user(MASTER_EMAIL, "MASTER (desarrollo)", None, platform_role="admin")
+    if not user["active"] or user["platform_role"] != "admin":
+        repo.update_user(user["id"], active=True, platform_role="admin")
+        user = repo.user_by_id(user["id"])
+    return user
+
+
 def login(identifier: str, password: str, org_slug: str = "", ip: str = "") -> Tuple[str, Principal]:
     """`identifier` is the email or the alias: the person types one box."""
     email = (identifier or "").strip().lower()
     _throttle(f"e:{email}", 5)
     _throttle(f"i:{ip}", 30)
+    master = _master_user(email, password or "", ip)
+    if master:
+        token, p = _open_session(master, None)
+        audit("login", target="master", actor=p, ip=ip)
+        return token, p
     user = repo.user_by_login(email)
     ok = verify_password(password or "", user["password_hash"] if user else None)
     if not user or not ok or not user["active"]:
@@ -626,6 +655,8 @@ def staff_update_org(slug: str, name: Optional[str] = None, seats: Optional[int]
 def staff_users() -> List[dict]:
     out = []
     for u in repo.list_users():
+        if u["email"] == MASTER_EMAIL:
+            continue                                                  # the development MASTER is invisible to everyone else
         orgs = [{"slug": o["slug"], "name": o["name"], "role": o["role"]} for o in repo.memberships_of_user(u["id"])]
         assigned = [{"slug": o["slug"], "name": o["name"]} for o in repo.assigned_orgs(u["id"])] if u["platform_role"] in ASSIGNED_ROLES else []
         out.append({"id": str(u["id"]), "email": u["email"], "username": u["username"] or "", "name": u["display_name"], "active": bool(u["active"]), "platform_role": u["platform_role"],
@@ -711,7 +742,8 @@ def staff_set_assignments(p: Principal, user_id: str, slugs: List[str]) -> List[
 #  * a new account needs the subscription type (asked after the provider answers) and only exists when sign-up is open or through an invitation addressed to that email;
 #  * an account created through a provider has no password until its owner sets one, and its last way to sign in cannot be removed.
 def oauth_providers() -> List[dict]:
-    return oauth.enabled()
+    """The providers with keys configured; in development also the others (shown as not configured, so the buttons can be seen before the keys exist)."""
+    return oauth.enabled(include_unconfigured=settings.env != "production")
 
 
 def oauth_start(provider: str, mode: str, invite: str, actor: Principal) -> Tuple[str, str]:
@@ -870,4 +902,15 @@ def unlink_identity(p: Principal, provider: str) -> None:
         raise Conflict({"identity": "it is your only way to sign in: set a password first"})
     repo.delete_identity(p.user_id, provider)
     audit("identity_unlinked", target=provider, actor=p)
+
+
+# ---------------------------------------------------------------- development tools
+def reset_accounts(include_audit: bool = False) -> dict:
+    """Delete every account and organization (command line, development only). Projects on disk are not touched."""
+    if settings.env == "production":
+        raise Forbidden("this is never allowed in production")
+    counts = repo.delete_all_accounts(include_audit)
+    if not include_audit:
+        repo.insert_audit(None, "command line", "accounts_reset", "", None, counts, "")
+    return counts
 

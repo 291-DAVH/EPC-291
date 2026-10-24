@@ -230,7 +230,7 @@ export interface GeneratedReport {
 export interface ReportingView { methodology: string; language: string; types: ReportType[]; reports: GeneratedReport[] }
 
 /* ---- sign-in with a provider ---- */
-export interface SocialProvider { id: string; name: string }
+export interface SocialProvider { id: string; name: string; configured?: boolean }
 export interface IdentitiesView { has_password: boolean; identities: { provider: string; email: string; created_at: string }[] }
 
 /* ---- accounts and organizations ---- */

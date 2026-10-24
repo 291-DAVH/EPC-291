@@ -41,6 +41,7 @@ invitations = sa.Table(
     sa.Column("role", sa.String(20)), sa.Column("token_hash", sa.String(64)), sa.Column("invited_by", sa.Uuid),
     sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)), sa.Column("accepted_at", sa.DateTime(timezone=True)))
 
+MASTER_EMAIL = "master@dev.invalid"      # the development-only MASTER account; the domain is reserved so nobody can register it
 ORG_KINDS = ("individual", "company")
 ORG_ROLES = ("owner", "admin", "member")
 PLATFORM_ROLES = ("user", "admin", "standards", "inspector", "auditor")      # customer | engineering staff | norm reviewer | internal inspector | external auditor
