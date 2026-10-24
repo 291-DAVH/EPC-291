@@ -194,6 +194,21 @@ export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
 export interface AnalysisResult { analyzed: number; created: string[]; merged: string[]; open_questions: number; usage: { input_tokens: number; output_tokens: number }; model: string; attempts: number }
 
+/* ---- project registers (risks, changes, issues, decisions, assumptions, stakeholders) ---- */
+export interface RegisterField {
+  id: string; type: "text" | "longtext" | "number" | "date" | "enum"; required: boolean; label: string; min?: number; max?: number; default?: string;
+  options?: { id: string; label: string }[];
+}
+export interface RegisterDef {
+  id: string; prefix: string; name: string; columns: string[]; closed_states: string[]; fields: RegisterField[]; derived: string | null;
+  counts: { total: number; active: number };
+}
+export interface RegistersView { methodology: string; language: string; registers: RegisterDef[] }
+export interface RegisterRecord {
+  id: string; opened: string; created_by: string; updated_at: string; level?: number; level_name?: string;
+  history: { at: string; by: string; action: string; changes?: Record<string, [unknown, unknown]> }[]; [field: string]: unknown;
+}
+
 /* ---- management reports (methodology: PM2) ---- */
 export interface ReportType { id: string; code: string; name: string; audience: "client" | "internal"; command: string; next_number: number; last_period_end: string | null }
 export interface GeneratedReport {

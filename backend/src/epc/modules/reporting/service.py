@@ -16,6 +16,7 @@ from epc.modules.identity import public as identity
 from epc.modules.intake import public as intake
 from epc.modules.management import public as management
 from epc.modules.projects import public as projects
+from epc.modules.registers import public as registers
 from epc.modules.reporting import builders, repository
 from epc.modules.reporting.models import GenerateIn
 from epc.modules.requirements import public as requirements
@@ -74,8 +75,8 @@ def _context(d: Path, meta: dict, lg: str, nn: int, ps: dt.date, pe: dt.date) ->
     return {"meta": meta, "lang": lg, "status": projects.read_status(d), "project_name": meta.get("project_name") or meta.get("project_code") or d.name,
             "wbs": wbs.view(d), "schedule": schedule.view(d), "backlog": backlog.view(d), "deliverables": deliverables.list_items(d),
             "requirements": requirements.list_requirements(d), "inputs": intake.input_counts(d),
-            "rfc": repository.read_register(d, "change-requests.md", "rfc"), "risks": repository.read_register(d, "assumptions-and-decisions.md", "risk"),
-            "issues": repository.read_register(d, "issue-log.md", "issue"), "stakeholders": repository.read_register(d, "stakeholders.md", "stakeholder"),
+            "rfc": registers.items(d, "change"), "risks": registers.items(d, "risk"), "issues": registers.items(d, "issue"), "stakeholders": registers.items(d, "stakeholder"),
+            "closed": {k: registers.closed_states(d, k) for k in ("change", "risk", "issue")}, "label": registers.labeler(d, lg),
             "period_start": ps, "period_end": pe, "today": today(), "nn": nn, "prepared_by": who.get("name") or who.get("email") or "-"}
 
 

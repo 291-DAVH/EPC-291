@@ -5,9 +5,11 @@ import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
 import Reporting from "./Reporting";
+import Registers from "./Registers";
 
-const TABS = ["inputs", "requirements", "plan", "engineering", "deliverables", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
+const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "deliverables", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 type Tab = (typeof TABS)[number];
+const ENGINEER_TABS: Tab[] = ["engineering", "registers"];          // internal work: admin/engineer role only
 
 export default function Project() {
   const { client = "", code = "" } = useParams();
@@ -17,7 +19,7 @@ export default function Project() {
   const me = useApi<Me>("/me");
   const engineer = me.data?.role === "admin";          // the engineering workspace is internal: admin/engineer role only
   const wanted = sp.get("tab") as Tab;
-  const tab = (TABS.includes(wanted) && (wanted !== "engineering" || engineer) ? wanted : "overview") as Tab;
+  const tab = (TABS.includes(wanted) && (!ENGINEER_TABS.includes(wanted) || engineer) ? wanted : "overview") as Tab;
   const base = `/app/projects/${client}/${code}`;
   const p = useApi<PortfolioProject>(base);
   const [rev, setRev] = useState(0);                       // bump to reload lists after sending information
@@ -50,7 +52,7 @@ export default function Project() {
       </div>
 
       <div className="tabs" role="tablist">
-        {TABS.filter((x) => x !== "engineering" || engineer).map((x) => (
+        {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
             {t(("u.tab." + x) as Key)}
             {x === "inputs" && d.inputs.open > 0 && <span className="dot">{d.inputs.open}</span>}
@@ -60,6 +62,7 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
+      {tab === "registers" && <Registers client={client} code={code} />}
       {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
