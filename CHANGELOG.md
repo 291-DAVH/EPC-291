@@ -4,6 +4,11 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 
+### Added
+- Several boards per project (Ingeniería › Unifilar): each board has its own data, calculation, memo, summary and diagrams; a board can be added at any time and declares which upstream board and circuit feeds it. Projects with the previous single board are migrated automatically.
+- Calculation memo (MC) and project summary (SP) of every board, calculated before the diagram and issued as Markdown (view) and PDF (deliverable): acometida, internal wiring (thermal) vs outgoing wiring (voltage drop, with transition terminal flag), protections (curve, breaking capacity, minimum short-circuit current, overload coordination), residual-current device analysis, trip-curve bands and selectivity between protections in series. The diagram is generated only from a memo calculated on the current data.
+- `aea-calc` 1.7.0 (`board_memo`), `board-design` 0.2.0 and patch bumps of the plugins that wrap the engine.
+
 ### Changed
 - Engineering › Files shows calculations as a readable table (circuits, criteria, compliance) and Markdown as formatted text; the software's own formats (JSON, YAML, Python, Markdown download) are no longer shown to people (technical files only on request, administration).
 

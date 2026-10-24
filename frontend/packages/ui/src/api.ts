@@ -165,7 +165,7 @@ export interface CriteriaView {
 }
 
 /* ---- single-line diagram input ---- */
-export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number }
+export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number; supplied_from: string; supply_tag: string }
 export interface SldCircuit {
   tag: string; description: string; load: number | null; unit: string; destination: string; parent_tag: string; topology: string; phase: string;
   length_m: number; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string;
@@ -176,8 +176,19 @@ export interface SldTitleblock {
 }
 export interface SldData { board: SldBoard; circuits: SldCircuit[]; titleblock: SldTitleblock }
 export interface SldStatus { state: "idle" | "running" | "done" | "failed"; name?: string; outputs: string[]; log: string[]; error?: string; started?: string; finished?: string }
+export interface BoardRow { id: string; name: string; voltage_v: number; system: string; icc_ka: number; circuits: number; supplied_from: string; supply_tag: string; state: string; finished?: string }
+export interface MemoCurve { curva: string; In: number; min: number[][]; max: number[][] }
+export interface MemoSelectivity { aguas_arriba: string; aguas_abajo: string; relacion_termica: number | null; is_a: number; resultado: "total" | "parcial" | "revisar"; nota: string }
+export interface BoardMemoView {
+  available: boolean; stale: boolean; files: string[]; finished?: string;
+  memo: {
+    validated: boolean; board: { name: string; icc_ka: number };
+    curvas: Record<string, MemoCurve>; selectividad: MemoSelectivity[];
+    resumen: { circuits: number; cumplen: number; no_cumplen: number; transiciones: number; global: boolean; observaciones: string[] };
+  } | null;
+}
 export interface SldView {
-  input: SldData; saved: boolean; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
+  input: SldData; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
   options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[] };
 }
 

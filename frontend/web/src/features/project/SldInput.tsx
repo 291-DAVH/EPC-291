@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { ApiError, Badge, CalcView, CalculationTable, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
+import BoardMemo from "./BoardMemo";
+import { ApiError, Badge, BoardMemoView, BoardRow, CalcView, CalculationTable, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
@@ -8,16 +9,69 @@ const blankCircuit = (): SldCircuit => ({
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
 const json = { "Content-Type": "application/json" };
 
-/** Data that feeds the single-line diagram. The sld plugin generator runs on it unchanged and its outputs land in the Files tab. */
+/** The boards of the project: each one has its own data, calculation and diagrams, and a project can start with one and add others later. */
 export default function SldInput({ client, code, onOpenFiles }: { client: string; code: string; onOpenFiles: () => void }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/sld`;
-  const view = useApi<SldView>(base);
+  const [tick, setTick] = useState(0);
+  const list = useApi<BoardRow[]>(`${base}/boards?t=${tick}`);
+  const [cur, setCur] = useState("");
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ name: "", from: "", tag: "" });
+  const [err, setErr] = useState("");
+  if (!list.data) return <State loading={list.loading} error={list.error} />;
+  const boards = list.data;
+  const id = boards.some((b) => b.id === cur) ? cur : boards[0]?.id ?? "";
+  const add = async () => {
+    try {
+      const v = await api<SldView>(`${base}/boards`, { method: "POST", headers: json, body: JSON.stringify({ name: form.name, supplied_from: form.from, supply_tag: form.tag }) });
+      setCur(v.board_id); setAdding(false); setForm({ name: "", from: "", tag: "" }); setErr(""); setTick((n) => n + 1);
+    } catch (x) { setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(" · ") || String(x) : String(x)); }
+  };
+  return (
+    <div className="grid" style={{ gap: 14 }}>
+      <div className="row" style={{ flexWrap: "wrap", gap: 6 }}>
+        <b className="small">{t("sld.boards")}</b>
+        {boards.map((b) => (
+          <button key={b.id} className={"chip" + (b.id === id ? " on" : "")} style={b.id === id ? { borderColor: "var(--accent)", color: "var(--accent)", fontWeight: 600 } : undefined} onClick={() => { setCur(b.id); setAdding(false); }}>
+            {b.name} <span className="muted small">· {b.circuits} {t("calc.circuits")}{b.supplied_from ? ` · ← ${boards.find((x) => x.id === b.supplied_from)?.name ?? b.supplied_from}` : ""}</span>
+          </button>
+        ))}
+        <button onClick={() => { setAdding(!adding); setErr(""); }}>{adding ? t("projects.cancel") : t("sld.addBoard")}</button>
+      </div>
+      {adding && (
+        <div className="card">
+          <div className="fgrid">
+            <label className="field"><span>{t("sld.name")}</span><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
+            <label className="field"><span>{t("sld.suppliedFrom")}</span>
+              <select value={form.from} onChange={(e) => setForm({ ...form, from: e.target.value })}><option value="">{t("sld.suppliedNone")}</option>{boards.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
+            {form.from && <label className="field"><span>{t("sld.supplyTag")}</span><input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} /></label>}
+          </div>
+          <div className="row" style={{ marginTop: 8 }}>
+            <button className="primary" onClick={add} disabled={!form.name.trim()}>{t("sld.createBoard")}</button>
+            {err && <span className="muted small" style={{ color: "var(--bad, #b00020)" }}>{err}</span>}
+          </div>
+        </div>
+      )}
+      <BoardEditor key={id} client={client} code={code} board={id} boards={boards} onOpenFiles={onOpenFiles}
+        onSaved={(bid) => { if (bid !== id) setCur(bid); setTick((n) => n + 1); }}
+        onDeleted={() => { setCur(""); setTick((n) => n + 1); }} />
+    </div>
+  );
+}
+
+function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDeleted }:
+  { client: string; code: string; board: string; boards: BoardRow[]; onOpenFiles: () => void; onSaved: (id: string) => void; onDeleted: () => void }) {
+  const { t } = useI18n();
+  const base = `/projects/${client}/${code}/sld`;
+  const q = board ? `board=${encodeURIComponent(board)}` : "";
+  const view = useApi<SldView>(`${base}?${q}`);
   const [data, setData] = useState<SldData | null>(null);
   const [dirty, setDirty] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<SldStatus | null>(null);
-  const calc = useApi<CalcView>(`${base}/calculation?s=${status?.finished ?? ""}`);
+  const memo = useApi<BoardMemoView>(`${base}/memo?${q}&s=${status?.finished ?? ""}`);
+  const calc = useApi<CalcView>(`${base}/calculation?${q}&s=${status?.finished ?? ""}`);
   const [msg, setMsg] = useState("");
   const timer = useRef<number | undefined>(undefined);
 
@@ -43,23 +97,24 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
   const fail = (x: unknown) => { if (x instanceof ApiError) setErrors(x.fieldErrors); else setErrors({ error: String(x) }); };
   const save = async (): Promise<boolean> => {
     try {
-      await api(base, { method: "PUT", headers: json, body: JSON.stringify(data) });
+      const v = await api<SldView>(`${base}?${q}`, { method: "PUT", headers: json, body: JSON.stringify(data) });
       setErrors({}); setDirty(false); setMsg(t("sld.saved"));
+      onSaved(v.board_id);
       return true;
     } catch (x) { fail(x); return false; }
   };
   const poll = () => {
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(async () => {
-      const st = await api<SldStatus>(`${base}/status`);
+      const st = await api<SldStatus>(`${base}/status?${q}`);
       setStatus(st);
       if (st.state === "running") poll();
     }, 1500);
   };
-  const generate = async (diagrams: "sld" | "mld" = "sld") => {
+  const generate = async (diagrams: "sld" | "mld" | "none" = "sld") => {
     if (dirty && !(await save())) return;
     try {
-      const st = await api<SldStatus>(`${base}/generate?diagrams=${diagrams}`, { method: "POST" });
+      const st = await api<SldStatus>(`${base}/generate?diagrams=${diagrams}&${q}`, { method: "POST" });
       setStatus(st);
       setErrors({});
       poll();
@@ -80,7 +135,13 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
     field(label, <input type="number" step={step} value={String(data.board[k])} onChange={(e) => set("board", { [k]: Number(e.target.value) } as never)} />);
   const sel = (value: string, items: string[], on: (v: string) => void) => <select value={value} onChange={(e) => on(e.target.value)}>{items.map((x) => <option key={x}>{x}</option>)}</select>;
   const running = status?.state === "running";
+  const memoReady = !!memo.data?.available && !memo.data.stale && !dirty;                // the diagram is drawn only from a memo calculated on the current data
   const errList = Object.entries(errors);
+
+  const remove = async () => {
+    if (!window.confirm(t("sld.deleteConfirm"))) return;
+    try { await api(`${base}/boards/${encodeURIComponent(board)}`, { method: "DELETE" }); onDeleted(); } catch (x) { fail(x); }
+  };
 
   return (
     <div className="grid" style={{ gap: 14 }}>
@@ -98,7 +159,11 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
           {field("sld.freq", sel(String(data.board.frequency_hz), ["50", "60"], (v) => set("board", { frequency_hz: Number(v) })))}
           {text("project", "board", "sld.project")}
           {numeric("feeder_length_m", "sld.feeder")}
+          {field("sld.suppliedFrom", <select value={data.board.supplied_from} onChange={(e) => set("board", { supplied_from: e.target.value, supply_tag: e.target.value ? data.board.supply_tag : "" })}>
+            <option value="">{t("sld.suppliedNone")}</option>{boards.filter((b) => b.id !== board).map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select>)}
+          {data.board.supplied_from && text("supply_tag", "board", "sld.supplyTag")}
         </div>
+        {board && <div className="row" style={{ marginTop: 8 }}><button onClick={remove}>{t("sld.deleteBoard")}</button></div>}
       </div>
 
       <div className="card">
@@ -166,10 +231,19 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
       </div>
 
       <div className="card">
+        <h2>{t("memo.title")}</h2>
+        <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("memo.help")}</p>
+        <div className="row" style={{ marginBottom: 8 }}>
+          <button className={memoReady ? "" : "primary"} onClick={() => generate("none")} disabled={running || data.circuits.length === 0}>{t("memo.run")}</button>
+        </div>
+        {memo.data ? <BoardMemo client={client} code={code} v={memo.data} /> : <State loading={memo.loading} error={memo.error} />}
+      </div>
+
+      <div className="card">
         <div className="row" style={{ flexWrap: "wrap" }}>
           <button onClick={save} disabled={!dirty || running}>{t("sld.save")}</button>
-          <button className="primary" onClick={() => generate("sld")} disabled={running || data.circuits.length === 0}>{t("sld.generate")}</button>
-          <button onClick={() => generate("mld")} disabled={running || data.circuits.length === 0}>{t("sld.generateMld")}</button>
+          <button className="primary" onClick={() => generate("sld")} disabled={running || !memoReady} title={memoReady ? "" : t("memo.needFirst")}>{t("sld.generateSldStep")}</button>
+          <button onClick={() => generate("mld")} disabled={running || !memoReady} title={memoReady ? "" : t("memo.needFirst")}>{t("sld.generateMldStep")}</button>
           {dirty && <span className="muted small">{t("sld.unsaved")}</span>}
           {!dirty && msg && <span className="muted small">{msg}</span>}
         </div>

@@ -380,7 +380,7 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             cc["METODO"] = "B2"                       # B1 solo tiene tabla para PVC
         par = AMP.parametros(cc)
         t_cond = AMP.temp_conductor(par, temp_c)
-        elegida, du_prop, ultimo_error, iz_ok = None, 0.0, None, None
+        elegida, du_prop, ultimo_error, iz_ok, s_termica = None, 0.0, None, None, None
         for s in SERIE_S_MM2:
             if s < smin:
                 continue
@@ -393,6 +393,8 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
                 continue
             if iz_s < margen_iz * in_a:
                 continue
+            if s_termica is None:
+                s_termica = s                       # first section that carries In: what the wiring inside the board needs (the outgoing cable may need more for the drop)
             du_prop = 0.0 if largo == 0 else VDG.caida_tension(
                 fases, i_du, largo, AMP.resistencia_ohm_km(s, par["material"], t_cond), CO.X_CABLE_OHM_KM, fp, un_du)["delta_u_pct"]
             if du_prop <= limite and base + du_prop <= DU_ACUM_MAX_PCT:
@@ -407,6 +409,7 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
         rc, xc = SC.impedance_cable(AMP.resistencia_ohm_km(elegida, par["material"], t_cond), CO.X_CABLE_OHM_KM, largo)
         z_acum[tag] = (rp + rc, xp + xc)
         kind = str(c.get("KIND") or "").strip().lower()
+        i_min = None
         if kind != "rccb":
             i_min = current_sc_min(u, icc, *z_acum[tag], fases)
             if i_min < k_magnetico * in_a:
@@ -416,7 +419,9 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
         if detalle is not None:
             detalle[tag] = {"tipo": tipo, "limite_pct": limite, "du_propia_pct": round(du_prop, 3), "du_acum_pct": round(du_acum[tag], 3),
                             "iz_a": iz_ok, "seccion_min_mm2": smin, "material": par["material"], "aislacion": par["aislacion"], "metodo": par["metodo"],
-                            "cumple": bool(elegida is not None and iz_ok is not None and du_prop <= limite and du_acum[tag] <= DU_ACUM_MAX_PCT)}
+                            "cumple": bool(elegida is not None and iz_ok is not None and du_prop <= limite and du_acum[tag] <= DU_ACUM_MAX_PCT),
+                            "s_termica_mm2": s_termica, "icc_min_a": None if i_min is None else round(i_min, 1), "largo_m": largo, "fases": fases, "fp": fp,
+                            "in_a": in_a, "ib_a": round(i_b, 3), "padre": padre, "kind": kind if kind and kind != "auto" else ("mcb" if in_a <= IN_MAX_MCB_A else "mccb"), "topologia": top}
         for h in hijos[tag]:
             _procesar(h)
 

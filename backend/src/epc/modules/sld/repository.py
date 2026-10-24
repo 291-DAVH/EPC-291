@@ -1,4 +1,5 @@
 """Files of the SLD feature inside workspace/02-engineering/electrical/<package>/ (src = input, build = scratch, drawings/calc = outputs)."""
+import re
 import shutil
 import subprocess
 import sys
@@ -22,28 +23,76 @@ def pkg(d: Path) -> Path:
     return d / "workspace" / "02-engineering" / DISCIPLINE / PACKAGE
 
 
-def input_file(d: Path) -> Path:
-    return pkg(d) / "src" / "sld-input.json"
+def boards_dir(d: Path) -> Path:
+    return pkg(d) / "src" / "boards"
 
 
-def work_dir(d: Path) -> Path:
-    return pkg(d) / "build" / "sld"
+def slug(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")[:40]
 
 
-def load_input(d: Path):
-    return read_json(input_file(d), None)
+def input_file(d: Path, bid: str) -> Path:
+    return boards_dir(d) / bid / "sld-input.json"
 
 
-def save_input(d: Path, data: dict) -> None:
-    write_json(input_file(d), {"schema_version": "1.0", **data})
+def work_dir(d: Path, bid: str) -> Path:
+    return pkg(d) / "build" / "sld" / bid
 
 
-def load_status(d: Path) -> dict:
-    return read_json(work_dir(d) / "status.json", {"state": "idle", "outputs": [], "log": []})
+def migrate_legacy(d: Path) -> None:
+    """A project from before several boards had one `src/sld-input.json` and one `build/sld`: it becomes the first board, nothing is lost."""
+    legacy = pkg(d) / "src" / "sld-input.json"
+    if not legacy.is_file():
+        return
+    data = read_json(legacy, {}) or {}
+    bid = slug((data.get("board") or {}).get("name", "")) or "tablero-1"
+    target = input_file(d, bid)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(legacy), str(target))
+    old, new = pkg(d) / "build" / "sld", work_dir(d, bid)
+    new.mkdir(parents=True, exist_ok=True)
+    for item in ("input.json", "criteria.json", "status.json", "out"):
+        if (old / item).exists():
+            shutil.move(str(old / item), str(new / item))
 
 
-def save_status(d: Path, status: dict) -> None:
-    write_json(work_dir(d) / "status.json", status)
+def board_ids(d: Path) -> List[str]:
+    migrate_legacy(d)
+    root = boards_dir(d)
+    return sorted(p.parent.name for p in root.glob("*/sld-input.json")) if root.is_dir() else []
+
+
+def new_id(d: Path, name: str) -> str:
+    base, ids, n = slug(name) or "tablero", set(board_ids(d)), 1
+    bid = base
+    while bid in ids:
+        n += 1
+        bid = f"{base}-{n}"
+    return bid
+
+
+def load_input(d: Path, bid: str):
+    return read_json(input_file(d, bid), None)
+
+
+def save_input(d: Path, bid: str, data: dict) -> None:
+    write_json(input_file(d, bid), {"schema_version": "1.0", **data})
+
+
+def load_status(d: Path, bid: str) -> dict:
+    return read_json(work_dir(d, bid) / "status.json", {"state": "idle", "outputs": [], "log": []})
+
+
+def save_status(d: Path, bid: str, status: dict) -> None:
+    write_json(work_dir(d, bid) / "status.json", status)
+
+
+def delete_board(d: Path, bid: str) -> None:
+    """Removes the board with the files it published (diagrams and calculation); the other boards are not touched."""
+    for rel in load_status(d, bid).get("outputs", []):
+        (pkg(d) / rel).unlink(missing_ok=True)
+    shutil.rmtree(input_file(d, bid).parent, ignore_errors=True)
+    shutil.rmtree(work_dir(d, bid), ignore_errors=True)
 
 
 def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[str, Path], diagrams: str = "sld"):
@@ -77,7 +126,7 @@ def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: O
     The files of the previous run that this run replaces are removed (an MLD run keeps the SLD files of an earlier run, and vice versa)."""
     base = pkg(d)
     prefixes = ("SLD_" + name, "MLD_" + name, name + "_")
-    mine = [f for f in sorted(out.iterdir()) if f.name.startswith(prefixes) and f.suffix.lower() in (".svg", ".dxf", ".pdf", ".json")]
+    mine = [f for f in sorted(out.iterdir()) if f.name.startswith(prefixes) and f.suffix.lower() in (".svg", ".dxf", ".pdf", ".json", ".md")]
     now_kinds = {p for f in mine for p in prefixes if f.name.startswith(p)}
     kept: List[str] = []
     for rel in previous:
@@ -89,7 +138,9 @@ def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: O
             kept.append(rel)
     placed: List[str] = []
     for f in mine:
-        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".pdf": "drawings/pdf", ".json": "calc"}[f.suffix.lower()]
+        sub = {".svg": "drawings/svg", ".dxf": "drawings/dxf", ".pdf": "drawings/pdf", ".json": "calc", ".md": "docs"}[f.suffix.lower()]
+        if f.suffix.lower() == ".pdf" and f.stem.endswith(("_MC", "_SP")):
+            sub = "docs"                                                   # memo and summary: documents, not drawings
         dest = base / sub / f.name
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(f, dest)

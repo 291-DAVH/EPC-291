@@ -1,6 +1,6 @@
 {
   "id": "mld",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "kind": "generator",
   "description": "Multi-line diagram (MLD) of a board from the same data and calculation as the single-line: each line is expanded into its conductors (L1 L2 L3 N) with the MLD_LV symbols, on IRAM sheets (SVG and DXF; the PDF is rendered by the exporter).",
   "discipline": [
