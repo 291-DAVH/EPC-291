@@ -321,6 +321,29 @@ class TestStaff(Base):
         self.assertEqual(staff.patch(f"/api/identity/users/{sid}", json={"platform_role": "user"}).status_code, 409)
         self.assertEqual(staff.patch(f"/api/identity/users/{sid}", json={"platform_role": "boss"}).status_code, 422)
 
+    def test_norm_reviewer_account_sees_only_the_norms_area(self):
+        staff = self.staff()
+        owner, _ = self.new_org(staff, "Metal SRL")
+        body = {"email": "Rev@Office.com", "name": "Ing. Revisor", "password": PW, "platform_role": "standards"}
+        r = staff.post("/api/identity/users", json=body)
+        self.assertEqual((r.status_code, r.json()["platform_role"], r.json()["email"]), (201, "standards", "rev@office.com"))
+        self.assertEqual(staff.post("/api/identity/users", json=body).status_code, 409)
+        self.assertEqual(staff.post("/api/identity/users", json={**body, "email": "x@office.com", "platform_role": "user"}).status_code, 422)
+        self.assertEqual(staff.post("/api/identity/users", json={**body, "email": "y@office.com", "password": "short"}).status_code, 422)
+        self.assertEqual(owner.post("/api/identity/users", json={**body, "email": "z@office.com"}).status_code, 403)       # customers cannot create accounts
+        rev = self.client()
+        self.assertEqual(rev.post("/api/auth/login", json={"email": "rev@office.com", "password": PW}).status_code, 200)
+        me = rev.get("/api/me").json()
+        self.assertEqual((me["role"], me["org"], me["org_role"]), ("standards", "", ""))
+        self.assertEqual(rev.get("/api/norms/units").status_code, 200)
+        for path in ("/api/app/portfolio", "/api/projects/options", "/api/plugins", "/api/projects", "/api/identity/orgs", "/api/identity/users", "/api/app/org", "/api/rules/standards"):
+            self.assertEqual(rev.get(path).status_code, 403, path)
+        self.assertEqual(rev.post("/api/auth/password", json={"current_password": PW, "new_password": "another-pass-22"}).status_code, 200)     # can change their own password
+        self.assertEqual(owner.get("/api/norms/units").status_code, 403)                                                   # a customer cannot see the norms area
+        uid = next(u["id"] for u in staff.get("/api/identity/users").json() if u["email"] == "rev@office.com")
+        self.assertEqual(staff.patch(f"/api/identity/users/{uid}", json={"active": False}).status_code, 200)
+        self.assertFalse(rev.get("/api/me").json()["authenticated"])
+
 
 class TestTenantIsolation(Base):
     def test_a_customer_sees_only_their_own_organization(self):

@@ -28,7 +28,10 @@ def install_role_guard(app: FastAPI, public_paths: Iterable[str], public_prefixe
             if path.startswith("/api/") and request.method != "OPTIONS":
                 if settings.auth == "required" and not principal.authenticated and path not in ANONYMOUS_PATHS:
                     return JSONResponse({"detail": "authentication required"}, status_code=401)
-                if principal.role != "admin":
+                if principal.role == "standards":                 # norm reviewer: only the norms area, their account and health
+                    if not (path in ANONYMOUS_PATHS or path.startswith(("/api/norms/", "/api/auth/"))):
+                        return JSONResponse({"detail": "forbidden"}, status_code=403)
+                elif principal.role != "admin":
                     public = path in paths or path in ANONYMOUS_PATHS or path.startswith(prefixes) or (path in posts and request.method == "POST")
                     if not public:
                         return JSONResponse({"detail": "forbidden"}, status_code=403)

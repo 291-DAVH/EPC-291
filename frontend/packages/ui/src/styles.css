@@ -221,3 +221,14 @@ h4.okh { color: var(--ok); }
 /* ---- sending message of a transmittal ---- */
 .mailbox { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
 .mailbox textarea { width: 100%; font-family: inherit; line-height: 1.45; }
+
+/* ---- norm review ---- */
+.normgrid { display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 14px; align-items: start; }
+.normunits { display: grid; gap: 6px; padding: 8px; }
+.normunit { display: grid; gap: 4px; text-align: left; padding: 8px 10px; border: 1px solid transparent; background: none; }
+.normunit.on { border-color: var(--accent); background: var(--accent-soft); }
+.normunit .progress { display: block; height: 5px; border-radius: 999px; background: var(--panel-2); overflow: hidden; }
+.normunit .progress span { display: block; height: 100%; background: var(--ok); }
+tr.clickable { cursor: pointer; } tr.clickable:hover td, tr.sel td { background: var(--accent-soft); }
+textarea.mono { font-family: var(--mono, ui-monospace, monospace); font-size: 12.5px; }
+@media (max-width: 900px) { .normgrid { grid-template-columns: minmax(0, 1fr); } }

@@ -31,7 +31,8 @@ invitations = sa.Table(
 
 ORG_KINDS = ("individual", "company")
 ORG_ROLES = ("owner", "member")
-PLATFORM_ROLES = ("user", "admin")
+PLATFORM_ROLES = ("user", "admin", "standards")      # customer | engineering staff | norm reviewer (sees only the norms review area)
+NO_ORG_ROLES = ("admin", "standards")
 
 
 @dataclass(frozen=True)

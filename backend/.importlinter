@@ -25,6 +25,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -64,6 +65,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -105,6 +107,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -144,6 +147,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -185,6 +189,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -227,6 +232,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -266,6 +272,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -307,6 +314,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -348,6 +356,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -387,6 +396,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.management
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -412,6 +422,46 @@ layers =
     epc.modules.masterdata.repository
     epc.modules.masterdata.models
 
+[importlinter:contract:norms-encapsulated]
+name = norms: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.norms.api
+    epc.modules.norms.service
+    epc.modules.norms.repository
+
+[importlinter:contract:norms-layers]
+name = norms: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.norms.api
+    epc.modules.norms.service
+    epc.modules.norms.repository
+
 [importlinter:contract:projects-encapsulated]
 name = projects: other modules use only its public interface
 type = forbidden
@@ -429,6 +479,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.quality
@@ -470,6 +521,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -509,6 +561,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -550,6 +603,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -589,6 +643,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -630,6 +685,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects
@@ -671,6 +727,7 @@ source_modules =
     epc.modules.knowledge
     epc.modules.management
     epc.modules.masterdata
+    epc.modules.norms
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.projects

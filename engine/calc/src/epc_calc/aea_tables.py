@@ -31,6 +31,11 @@ RUTA_JSON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "aea_tables
 _CACHE = {}
 
 
+def limpiar_cache_tablas():
+    """Descarta los datos en memoria: se vuelven a leer del archivo (después de corregir un valor normativo)."""
+    _CACHE.clear()
+
+
 def cargar(ruta=None):
     """Devuelve el contenido de `aea_tables.json` (con caché por ruta)."""
     ruta = ruta or RUTA_JSON

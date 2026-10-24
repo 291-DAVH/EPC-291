@@ -36,8 +36,8 @@ TITLEBLOCK_COLS = {"company": "Empresa: razón social", "company_cuit": "Empresa
                    "location": "Ubicación", "scale": "Escala", "revision": "Revisión", "status": "Estado"}
 
 
-# Base design criteria (AR, electrical): the same values as engine/jurisdictions/AR/electrical/design-criteria.json (a test keeps them equal),
-# so the plugin also works outside the repository. NOT validated against the standards. A project overrides any of them.
+# Base design criteria (AR, electrical). The catalog engine/jurisdictions/AR/electrical/design-criteria.json is the source (the norms reviewer corrects it there);
+# this copy is only the fallback when the plugin runs outside the repository. A project overrides any of them.
 BASE_CRITERIA = {
     "nominal_voltage_v": 380,
     "frequency_hz": 50,
@@ -57,9 +57,19 @@ BASE_CRITERIA = {
 }
 
 
+def catalog_defaults(discipline: str = "electrical") -> Optional[dict]:
+    """Default values of the criteria catalog of the repository (None when the plugin runs without it)."""
+    f = Path(__file__).resolve().parents[3] / "jurisdictions" / "AR" / discipline / "design-criteria.json"
+    try:
+        return {c["id"]: c["default"] for c in json.loads(f.read_text(encoding="utf-8-sig"))["criteria"]}
+    except (OSError, ValueError, KeyError):
+        return None
+
+
 def resolve_criteria(project_dir: Optional[Path] = None, discipline: str = "electrical") -> dict:
-    """Base criteria with the project's overrides (`workspace/00-setup/design-criteria.json`, written by the web app) applied."""
+    """Catalog values (or the fallback copy) with the project's overrides (`workspace/00-setup/design-criteria.json`, written by the web app) applied."""
     crit = dict(BASE_CRITERIA)
+    crit.update(catalog_defaults(discipline) or {})
     if project_dir:
         f = Path(project_dir) / "workspace" / "00-setup" / "design-criteria.json"
         if f.is_file():

@@ -24,6 +24,7 @@ export default function Identity() {
       {err && <div className="alert bad">{err}</div>}
       <div className="grid" style={{ gap: 14 }}>
         <NewOrg onDone={reload} />
+        <NewAccount onDone={reload} />
         <div className="card">
           <h2 style={{ marginTop: 0 }}>{t("ident.orgs")}</h2>
           {!orgs.data ? <State loading={orgs.loading} error={orgs.error} /> : orgs.data.length === 0 ? <div className="state">{t("ident.noOrgs")}</div> : (
@@ -41,13 +42,13 @@ export default function Identity() {
               <tbody>
                 {users.data.map((u) => (
                   <tr key={u.id}>
-                    <td>{u.email} {u.platform_role === "admin" && <span className="badge accent">{t("ident.staff")}</span>}</td>
+                    <td>{u.email} {u.platform_role === "admin" && <span className="badge accent">{t("ident.staff")}</span>}{u.platform_role === "standards" && <span className="badge accent">{t("ident.role.standards")}</span>}</td>
                     <td>{u.name}</td>
                     <td className="small">{u.organizations.map((o) => `${o.name} (${o.role})`).join(", ")}</td>
                     <td><span className={"badge " + (u.active ? "ok" : "bad")}>{t(u.active ? "org.active" : "org.inactive")}</span></td>
                     <td style={{ whiteSpace: "nowrap" }}>
                       <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ active: !u.active }) }))}>{t(u.active ? "ident.disable" : "ident.enable")}</button>{" "}
-                      <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>{" "}
+                      {u.platform_role !== "standards" && <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>}{" "}
                       <button onClick={() => { const pw = window.prompt(t("ident.pwPrompt")); if (pw) act(async () => { await api(`/identity/users/${u.id}/password`, { method: "PUT", headers: json, body: JSON.stringify({ password: pw }) }); window.alert(t("ident.pwDone")); }); }}>{t("ident.setPw")}</button>
                     </td>
                   </tr>
@@ -142,6 +143,38 @@ function NewOrg({ onDone }: { onDone: () => void }) {
           </div>
         </div>
       )}
+    </form>
+  );
+}
+
+/** Accounts that belong to no customer organization: the norm reviewer (only sees the norms review) and engineering staff. */
+function NewAccount({ onDone }: { onDone: () => void }) {
+  const { t } = useI18n();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("standards");
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await api("/identity/users", { method: "POST", headers: json, body: JSON.stringify({ email, name, password, platform_role: role }) });
+      setEmail(""); setName(""); setPassword(""); setMsg({ ok: true, text: t("ident.accountCreated") }); onDone();
+    } catch (x) { setMsg({ ok: false, text: errorText(x) }); }
+  };
+  return (
+    <form className="card" onSubmit={submit}>
+      <h2 style={{ marginTop: 0 }}>{t("ident.newAccount")}</h2>
+      <div className="fgrid">
+        <label className="field"><span>{t("ident.accountRole")}</span>
+          <select value={role} onChange={(e) => setRole(e.target.value)}><option value="standards">{t("ident.role.standards")}</option><option value="admin">{t("ident.role.admin")}</option></select>
+        </label>
+        <label className="field"><span>{t("ident.name")}</span><input value={name} onChange={(e) => setName(e.target.value)} required /></label>
+        <label className="field"><span>{t("auth.email")}</span><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
+        <label className="field"><span>{t("ident.tempPassword")}</span><input type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} required /></label>
+      </div>
+      <div className="row" style={{ marginTop: 12 }}><button className="primary" type="submit">{t("ident.createAccount")}</button></div>
+      {msg && <div className={"alert " + (msg.ok ? "ok" : "bad")} style={{ marginTop: 10 }}>{msg.text}</div>}
     </form>
   );
 }

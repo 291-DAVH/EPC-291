@@ -16,9 +16,11 @@ DATA = {"board": {"name": "TGBT-01", "voltage_v": 380, "system": "TN-S", "icc_ka
 
 class TestBoardDesign(unittest.TestCase):
     @unittest.skipUnless(CATALOG.is_file(), "catalog is part of the repository, not of the installed plugin")
-    def test_base_criteria_equal_the_catalog(self):
+    def test_the_catalog_is_the_source_and_the_fallback_copy_has_the_same_criteria(self):
         cat = json.loads(CATALOG.read_text(encoding="utf-8"))
-        self.assertEqual(B.BASE_CRITERIA, {c["id"]: c["default"] for c in cat["criteria"]})
+        defaults = {c["id"]: c["default"] for c in cat["criteria"]}
+        self.assertEqual(set(B.BASE_CRITERIA), set(defaults))               # the copy follows the catalog's ids (values may be corrected by the norms reviewer)
+        self.assertEqual(B.resolve_criteria(None), defaults)                # the catalog wins
 
     def test_project_overrides_win(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -27,7 +29,7 @@ class TestBoardDesign(unittest.TestCase):
             f.write_text(json.dumps({"overrides": {"electrical": {"vd_sectional_pct": {"value": 0.5, "source": "client"}}}}), encoding="utf-8")
             c = B.resolve_criteria(Path(tmp))
             self.assertEqual((c["vd_sectional_pct"], c["vd_motors_pct"]), (0.5, 5))
-        self.assertEqual(B.resolve_criteria(None)["vd_sectional_pct"], 1)
+        self.assertEqual(B.resolve_criteria(None)["vd_sectional_pct"], B.catalog_defaults()["vd_sectional_pct"] if CATALOG.is_file() else 1)
 
     def test_calculation_follows_the_criteria(self):
         loose = B.calculate(DATA, dict(B.BASE_CRITERIA, vd_sectional_pct=3))
