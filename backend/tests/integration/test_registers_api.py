@@ -86,6 +86,17 @@ class TestRegisters(unittest.TestCase):
         data = json.loads(f.read_text(encoding="utf-8"))
         self.assertEqual((data["kind"], data["items"][0]["id"], data["items"][0]["status"]), ("decision", "DEC-001", "active"))
 
+    def test_a_methodology_without_registers_is_reported_not_a_failure(self):
+        meta = self.root / "ACME" / "P-1" / ".epc" / "project.json"
+        meta.write_text(meta.read_text(encoding="utf-8").replace('"methodology": "pm2"', '"methodology": "pmi"'), encoding="utf-8")        # PMI has no pack yet
+        v = self.c.get(self.base)
+        self.assertEqual((v.status_code, v.json()["available"], v.json()["registers"], v.json()["methodology"]), (200, False, [], "pmi"))
+        self.assertEqual(self.c.post(self.base + "/risk", json={"title": "x", "probability": 1, "impact": 1}).status_code, 409)       # writing still says why not
+        r = self.c.get("/api/projects/ACME/P-1/reporting")
+        self.assertEqual((r.status_code, r.json()["available"], r.json()["types"]), (200, False, []))
+        self.assertEqual(self.c.post("/api/projects/ACME/P-1/reporting", json={"type": "status"}).status_code, 409)
+        self.assertTrue(self.c.get(self.base).json()["registers"] == [])
+
     def test_engineer_only(self):
         settings.role = "user"
         for method, path in (("get", ""), ("get", "/risk"), ("post", "/risk"), ("patch", "/risk/RIE-001")):

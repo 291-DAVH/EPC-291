@@ -59,15 +59,17 @@ def _of_type(items: List[dict], type_id: str) -> List[dict]:
 
 def overview(d: Path, lang: Optional[str] = None) -> dict:
     meta = projects.read_meta(d)
-    cat = _catalog(meta)
     lg = _lang(meta, lang)
     items = repository.generated(d)
+    cat = repository.catalog(meta.get("methodology") or "pm2")
+    if not cat:                                                     # a methodology without a report catalog: say so, keep the reports already generated
+        return {"methodology": meta.get("methodology") or "pm2", "available": False, "language": lg, "types": [], "reports": sorted(items, key=lambda r: (r["date"], r["id"]), reverse=True)}
     types = []
     for t in cat["types"]:
         prev = _of_type(items, t["id"])
         types.append({"id": t["id"], "code": t["code"], "name": t["name"].get(lg) or t["name"]["es"], "audience": t["audience"], "command": t["command"],
                       "next_number": (prev[-1]["nn"] + 1) if prev else 1, "last_period_end": prev[-1]["period"][1] if prev else None})
-    return {"methodology": cat["methodology"], "language": lg, "types": types, "reports": sorted(items, key=lambda r: (r["date"], r["id"]), reverse=True)}
+    return {"methodology": cat["methodology"], "available": True, "language": lg, "types": types, "reports": sorted(items, key=lambda r: (r["date"], r["id"]), reverse=True)}
 
 
 def _context(d: Path, meta: dict, lg: str, nn: int, ps: dt.date, pe: dt.date) -> dict:

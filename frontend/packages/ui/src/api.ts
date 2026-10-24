@@ -215,7 +215,7 @@ export interface RegisterDef {
   id: string; prefix: string; name: string; columns: string[]; closed_states: string[]; fields: RegisterField[]; derived: string | null;
   counts: { total: number; active: number };
 }
-export interface RegistersView { methodology: string; language: string; registers: RegisterDef[] }
+export interface RegistersView { methodology: string; available?: boolean; language: string; registers: RegisterDef[] }
 export interface RegisterRecord {
   id: string; opened: string; created_by: string; updated_at: string; level?: number; level_name?: string;
   history: { at: string; by: string; action: string; changes?: Record<string, [unknown, unknown]> }[]; [field: string]: unknown;
@@ -227,7 +227,7 @@ export interface GeneratedReport {
   id: string; type: string; code: string; nn: number; name: string; audience: "client" | "internal"; date: string; period: [string, string];
   language: string; prepared_by: string; summary: string; md: string; pdf: string; published: string | null;
 }
-export interface ReportingView { methodology: string; language: string; types: ReportType[]; reports: GeneratedReport[] }
+export interface ReportingView { methodology: string; available?: boolean; language: string; types: ReportType[]; reports: GeneratedReport[] }
 
 /* ---- sign-in with a provider ---- */
 export interface SocialProvider { id: string; name: string; configured?: boolean }

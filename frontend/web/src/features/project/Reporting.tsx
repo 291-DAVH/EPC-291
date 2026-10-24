@@ -16,6 +16,7 @@ export default function Reporting({ client, code, onPublished }: { client: strin
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   if (!view.data) return <State loading={view.loading} error={view.error} />;
   const v = view.data;
+  if (v.available === false) return <div className="card" style={{ marginBottom: 14 }}><div className="state">{t("rep.unavailable")} ({v.methodology.toUpperCase()})</div></div>;
   const cur = v.types.find((x) => x.id === type) ?? v.types[0];
   const fail = (x: unknown) => setMsg({ ok: false, text: `${t("rep.failed")}: ${x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || x.status : "error"}` });
 
