@@ -11,7 +11,7 @@ const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.rep
 const json = { "Content-Type": "application/json" };
 
 /** The boards of the project: each one has its own data, calculation and diagrams, and a project can start with one and add others later. */
-export default function SldInput({ client, code, onOpenFiles }: { client: string; code: string; onOpenFiles: () => void }) {
+export default function SldInput({ client, code, onOpenFiles, onOpenParties }: { client: string; code: string; onOpenFiles: () => void; onOpenParties: () => void }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/sld`;
   const [tick, setTick] = useState(0);
@@ -54,15 +54,15 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
           </div>
         </div>
       )}
-      <BoardEditor key={id} client={client} code={code} board={id} boards={boards} onOpenFiles={onOpenFiles}
+      <BoardEditor key={id} client={client} code={code} board={id} boards={boards} onOpenFiles={onOpenFiles} onOpenParties={onOpenParties}
         onSaved={(bid) => { if (bid !== id) setCur(bid); setTick((n) => n + 1); }}
         onDeleted={() => { setCur(""); setTick((n) => n + 1); }} />
     </div>
   );
 }
 
-function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDeleted }:
-  { client: string; code: string; board: string; boards: BoardRow[]; onOpenFiles: () => void; onSaved: (id: string) => void; onDeleted: () => void }) {
+function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, onSaved, onDeleted }:
+  { client: string; code: string; board: string; boards: BoardRow[]; onOpenFiles: () => void; onOpenParties: () => void; onSaved: (id: string) => void; onDeleted: () => void }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/sld`;
   const q = board ? `board=${encodeURIComponent(board)}` : "";
@@ -170,14 +170,14 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDele
 
       <div className="card">
         <h2>{t("sld.titleblock")}</h2>
-        <datalist id="sld-people">{view.data.people.map((n) => <option key={n} value={n} />)}</datalist>
-        <p className="muted small" style={{ margin: "4px 0 0" }}>
-          {t("sld.fromData")} · {t("sld.logos")}: {view.data.logos.company ? "✓" : "—"} {t("sld.logoCompany")} · {view.data.logos.client ? "✓" : "—"} {t("sld.logoClient")}
-        </p>
+        {view.data.parties && (
+          <p className="small" style={{ margin: "4px 0 8px" }}>
+            <b>{t("parties.issuer")}:</b> {view.data.parties.issuer || "—"} · <b>{t("parties.client")}:</b> {view.data.parties.client || "—"} · <b>{t("parties.role.drawn_by")}:</b> {view.data.parties.team.drawn_by || "—"} · <b>{t("parties.role.checked_by")}:</b> {view.data.parties.team.checked_by || "—"} · <b>{t("parties.role.approved_by")}:</b> {view.data.parties.team.approved_by || "—"}
+            {" "}<button onClick={onOpenParties}>{t("sld.changeParties")}</button>
+          </p>
+        )}
+        <p className="muted small" style={{ margin: "0 0 4px" }}>{t("sld.logos")}: {view.data.logos.company ? "✓" : "—"} {t("sld.logoCompany")} · {view.data.logos.client ? "✓" : "—"} {t("sld.logoClient")}</p>
         <div className="fgrid">
-          {text("company", "titleblock", "sld.company")}{text("company_cuit", "titleblock", "sld.companyCuit")}
-          {text("client", "titleblock", "sld.client")}{text("client_cuit", "titleblock", "sld.clientCuit")}
-          {text("drawn_by", "titleblock", "sld.drawnBy")}{text("checked_by", "titleblock", "sld.checkedBy")}{text("approved_by", "titleblock", "sld.approvedBy")}
           {text("description", "titleblock", "sld.description")}{text("location", "titleblock", "sld.location")}
           {text("scale", "titleblock", "sld.scale")}{text("revision", "titleblock", "sld.revision")}{text("status", "titleblock", "sld.status")}
         </div>

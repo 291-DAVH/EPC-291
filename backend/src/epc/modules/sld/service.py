@@ -110,15 +110,22 @@ def _resolve(d: Path, bid: str) -> str:
     return ids[0] if ids else ""
 
 
+BOARD_TITLEBLOCK = ("description", "location", "scale", "revision", "status")           # what a board owns; the rest comes from the project (single source)
+DISCIPLINE = "electrical"
+
+
+def titleblock(d: Path, own: dict) -> dict:
+    """Effective title block: the board's own fields over the project's issuer, client and team of the discipline."""
+    base = Titleblock().model_dump()
+    merged = {**base, **{k: v for k, v in (own or {}).items() if k in BOARD_TITLEBLOCK}}
+    return {**merged, **masterdata.titleblock(d, DISCIPLINE)}
+
+
 def _blank(d: Path, name: str = "") -> dict:
     meta = projects.read_meta(d)
     volt = engineering.criterion_value(d, "nominal_voltage_v") or 380
-    org = masterdata.organization()
-    cl = masterdata.client(meta.get("client_code", "")) or {}
     return {"board": Board(voltage_v=volt, project=meta.get("project_code", ""), name=name).model_dump(), "circuits": [],
-            "titleblock": Titleblock(company=org.get("legal_name", ""), company_cuit=org.get("tax_id", ""),
-                                     client=cl.get("name") or meta.get("client", ""), client_cuit=cl.get("tax_id", ""),
-                                     description=meta.get("project_name", "")).model_dump()}
+            "titleblock": titleblock(d, {"description": meta.get("project_name", "")})}
 
 
 def view(d: Path, bid: str = "") -> dict:
@@ -126,15 +133,21 @@ def view(d: Path, bid: str = "") -> dict:
     saved = repository.load_input(d, bid) if bid else None
     meta = projects.read_meta(d)
     if saved:
-        data = {k: saved[k] for k in ("board", "circuits", "titleblock") if k in saved}
-        data.setdefault("titleblock", Titleblock().model_dump())
+        data = {k: saved[k] for k in ("board", "circuits") if k in saved}
+        data["titleblock"] = titleblock(d, saved.get("titleblock"))
         data["board"] = {**Board().model_dump(), **data["board"]}
     else:
         data = _blank(d)
     return {"input": data, "saved": bool(saved), "board_id": bid, "options": options(), "status": status(d, bid),
             "boards": [{"id": b["id"], "name": b["name"]} for b in boards(d)],
-            "people": [p["name"] for p in masterdata.people()],
-            "logos": {"company": masterdata.logo_path("organization") is not None, "client": masterdata.logo_path("client-" + meta.get("client_code", "-")) is not None}}
+            "people": [p["name"] for p in masterdata.people()], "parties": _parties_line(d),
+            "logos": {k: v is not None for k, v in (("company", masterdata.logos(d)["provider"]), ("client", masterdata.logos(d)["client"]))}}
+
+
+def _parties_line(d: Path) -> dict:
+    """What the sheets will say about the project's issuer, client and team (read-only here: it is set once in the project)."""
+    p = masterdata.project_parties(d)
+    return {"issuer": (p["issuer"] or {}).get("legal_name", ""), "client": p["client"].get("name", ""), "team": p["team"].get(DISCIPLINE, {})}
 
 
 def boards(d: Path) -> list:
@@ -173,6 +186,7 @@ def save(d: Path, body: SldIn, bid: str = "") -> dict:
     data = body.model_dump()
     for c in data["circuits"]:
         c["tag"], c["parent_tag"] = c["tag"].strip(), c["parent_tag"].strip()
+    data["titleblock"] = {k: v for k, v in data["titleblock"].items() if k in BOARD_TITLEBLOCK}            # company, client and people are not the board's
     bid = _resolve(d, bid)
     errors = validate(data)
     for c in data["circuits"]:
@@ -295,9 +309,10 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
             import shutil
             shutil.rmtree(out)
         code = projects.read_meta(d).get("client_code", "-")
-        logos = {k: p for k, p in (("provider", masterdata.logo_path("organization")), ("client", masterdata.logo_path("client-" + code))) if p}
+        logos = {k: p for k, p in masterdata.logos(d).items() if p}
         criteria = engineering.criteria_values(d)
-        res = repository.run_design(work, name, {**data, "upstream": _upstream(d, data["board"]), "validated": engineering.criteria_validated(d)}, criteria, logos, diagrams)
+        res = repository.run_design(work, name, {**data, "titleblock": titleblock(d, data.get("titleblock")), "upstream": _upstream(d, data["board"]),
+                                                 "validated": engineering.criteria_validated(d)}, criteria, logos, diagrams)
         summary = repository.read_summary(work)
         log = list(summary.get("log", [])) + [f"AVISO {a}" for a in summary.get("avisos", [])]
         if res.returncode != 0 or not summary.get("ok"):

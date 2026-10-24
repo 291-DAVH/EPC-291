@@ -4,7 +4,8 @@ from typing import Dict, List, Optional
 
 from epc.core.errors import Conflict, Invalid, NotFound, TooLarge
 from epc.modules.masterdata import repository
-from epc.modules.masterdata.models import ClientIn, OrganizationIn, PersonIn
+from epc.modules.identity import public as identity
+from epc.modules.masterdata.models import ClientIn, IssuerIn, OrganizationIn, PersonIn
 
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,23}$")
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -25,21 +26,123 @@ def _check_contact(data: dict, errors: Dict[str, str]) -> None:
             errors[k] = "up to 200 characters"
 
 
-# ---- organization ----
-def organization() -> dict:
-    org = repository.load_organization()
-    return {**OrganizationIn().model_dump(), **org, "has_logo": repository.logo_path("organization") is not None}
+# ---- issuers (the companies documents are issued in the name of) ----
+ISSUER_FIELDS = tuple(IssuerIn.model_fields)
+ISSUER_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
 
 
-def save_organization(body: OrganizationIn) -> dict:
-    data = body.model_dump()
+def _issuer_defaults() -> dict:
+    return {k: v for k, v in IssuerIn().model_dump().items() if k != "id"}
+
+
+def _issuer_items() -> List[dict]:
+    """The stored list. A project from before several issuers has one `organization.json`: it becomes the first issuer, with its logo."""
+    if not repository.exists("issuers.json") and repository.exists("organization.json"):
+        org = repository.load_organization()
+        repository.save_list("issuers", [{"id": "principal", **{k: org[k] for k in _issuer_defaults() if k in org}}])
+        repository.move_logo("organization", "issuer-principal")
+    items = repository.load_list("issuers")
+    if not items:                                           # a new account: its own company is the first issuer (it can be changed later)
+        name = _account_company()
+        if name:
+            items = [{"id": _slug_id(name), **_issuer_defaults(), "legal_name": name}]
+            repository.save_list("issuers", items)
+    return items
+
+
+def _account_company() -> str:
+    try:
+        return (identity.current_user().org_name or "").strip()
+    except Exception:                                       # noqa: BLE001 - no session (command line, tests)
+        return ""
+
+
+def _slug_id(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:32] or "emisor"
+
+
+def issuers() -> List[dict]:
+    items = _issuer_items()
+    return [{**_issuer_defaults(), **it, "default": n == 0, "has_logo": repository.logo_path(f"issuer-{it['id']}") is not None} for n, it in enumerate(items)]
+
+
+def issuer(iid: str = "") -> Optional[dict]:
+    """The issuer asked for; the default (first) one when `iid` is empty or unknown; None when there are none."""
+    items = issuers()
+    return next((i for i in items if i["id"] == iid), items[0] if items else None)
+
+
+def _validate_issuer(data: dict) -> None:
     errors: Dict[str, str] = {}
     if not data["legal_name"].strip():
         errors["legal_name"] = "required"
     _check_contact(data, errors)
     if errors:
         raise Invalid(errors)
-    repository.save_organization(data)
+
+
+def add_issuer(body: IssuerIn) -> dict:
+    data = body.model_dump()
+    _validate_issuer(data)
+    items = _issuer_items()
+    base, n = _slug_id(data["id"] or data["legal_name"]), 1
+    data["id"] = base
+    while any(i["id"] == data["id"] for i in items):
+        n += 1
+        data["id"] = f"{base}-{n}"
+    repository.save_list("issuers", items + [data])
+    return issuer(data["id"])
+
+
+def update_issuer(iid: str, body: IssuerIn) -> dict:
+    data = body.model_dump()
+    data["id"] = iid
+    _validate_issuer(data)
+    items = _issuer_items()
+    k = next((n for n, i in enumerate(items) if i["id"] == iid), None)
+    if k is None:
+        raise NotFound("issuer not found")
+    items[k] = data
+    repository.save_list("issuers", items)
+    return issuer(iid)
+
+
+def make_default_issuer(iid: str) -> List[dict]:
+    items = _issuer_items()
+    k = next((n for n, i in enumerate(items) if i["id"] == iid), None)
+    if k is None:
+        raise NotFound("issuer not found")
+    repository.save_list("issuers", [items[k]] + items[:k] + items[k + 1:])
+    return issuers()
+
+
+def delete_issuer(iid: str, in_use) -> None:
+    """`in_use(id)` says whether a project issues in its name (the caller knows the projects)."""
+    items = _issuer_items()
+    kept = [i for i in items if i["id"] != iid]
+    if len(kept) == len(items):
+        raise NotFound("issuer not found")
+    if in_use(iid):
+        raise Conflict({"issuer": "projects issue in the name of this company: change them first"})
+    repository.save_list("issuers", kept)
+    repository.delete_logo(f"issuer-{iid}")
+
+
+def organization() -> dict:
+    """The default issuer (kept for the code that asks for the office profile)."""
+    i = issuer("")
+    return {**OrganizationIn().model_dump(), **{k: i[k] for k in OrganizationIn.model_fields if i and k in i}, "has_logo": bool(i and i["has_logo"])}
+
+
+def save_organization(body: OrganizationIn) -> dict:
+    data = body.model_dump()
+    _validate_issuer({**data, "id": ""})
+    items = _issuer_items()
+    if items:
+        items[0] = {**items[0], **data}
+        repository.save_list("issuers", items)
+    else:
+        repository.save_list("issuers", [{"id": _slug_id(data["legal_name"]), **data}])
     return organization()
 
 
@@ -141,8 +244,15 @@ def delete_person(pid: str) -> None:
 
 # ---- logos ----
 def _logo_key(kind: str) -> str:
-    if kind == "organization":
-        return "organization"
+    if kind == "organization":                                      # the default issuer
+        i = issuer("")
+        if i is None:
+            raise NotFound("no issuer")
+        return f"issuer-{i['id']}"
+    if kind.startswith("issuer-"):
+        if not any(i["id"] == kind[7:] for i in issuers()):
+            raise NotFound("issuer not found")
+        return kind
     if kind.startswith("client-") and ID_RE.match(kind[7:]):
         if client(kind[7:]) is None:
             raise NotFound("client not found")

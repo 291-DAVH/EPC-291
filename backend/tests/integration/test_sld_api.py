@@ -31,6 +31,7 @@ class TestSld(unittest.TestCase):
         r = self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta",
                                                 "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
         self.assertEqual(r.status_code, 201, r.text)
+        self.c.put("/api/data/organization", json={"legal_name": "Oficina de Ingeniería SA"})                  # the issuing company: the sheets take it from the project
         self.base = "/api/projects/ACME/P-1/sld"
         self.pkg = self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "electrical" / "PQ-01"
 

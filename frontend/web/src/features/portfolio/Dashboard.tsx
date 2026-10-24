@@ -16,6 +16,7 @@ export default function Dashboard() {
   const [health, setHealth] = useState("");
   const [phase, setPhase] = useState("");
   const [disc, setDisc] = useState("");
+  const [clientF, setClientF] = useState("");
   const [state, setState] = useState<"" | "active" | "closed">("");
   const [sort, setSort] = useState<Sort>("priority");
   const [view, setView] = useState<"cards" | "table">(() => (localStorage.getItem("view") as "cards" | "table") || "cards");
@@ -24,7 +25,7 @@ export default function Dashboard() {
     if (!data) return [];
     const ql = q.trim().toLowerCase();
     return data.projects
-      .filter((p) => (!ql || (p.name + " " + p.client + " " + p.code).toLowerCase().includes(ql)) && (!phase || p.phase === phase) && (!disc || p.disciplines.includes(disc)))
+      .filter((p) => (!ql || (p.name + " " + p.client + " " + p.code).toLowerCase().includes(ql)) && (!phase || p.phase === phase) && (!disc || p.disciplines.includes(disc)) && (!clientF || p.client === clientF))
       .filter((p) => (!state || p.state === state) && (!health || (p.state === "active" && p.health === health)))
       .sort((a, b) => {
         if (sort === "name") return a.name.localeCompare(b.name);
@@ -32,10 +33,11 @@ export default function Dashboard() {
         if (sort === "due") return (a.due ?? "9999").localeCompare(b.due ?? "9999");
         return Number(a.state !== "active") - Number(b.state !== "active") || HEALTH_ORDER[a.health] - HEALTH_ORDER[b.health] || (a.due ?? "9999").localeCompare(b.due ?? "9999");
       });
-  }, [data, q, health, phase, disc, state, sort]);
+  }, [data, q, health, phase, disc, clientF, state, sort]);
+  const clients = useMemo(() => Array.from(new Set((data?.projects ?? []).map((p) => p.client))).sort((a, b) => a.localeCompare(b)), [data]);
 
-  const filtered = !!(q || health || phase || disc || state);
-  const reset = () => { setQ(""); setHealth(""); setPhase(""); setDisc(""); setState(""); };
+  const filtered = !!(q || health || phase || disc || state || clientF);
+  const reset = () => { setQ(""); setHealth(""); setPhase(""); setDisc(""); setState(""); setClientF(""); };
   const k = data?.kpis;
   const setV = (v: "cards" | "table") => { setView(v); try { localStorage.setItem("view", v); } catch { /* storage unavailable */ } };
 
@@ -56,6 +58,7 @@ export default function Dashboard() {
 
       <div className="filters">
         <input type="search" placeholder={t("u.f.search")} value={q} onChange={(e) => setQ(e.target.value)} aria-label={t("u.f.search")} />
+        <Sel label={t("u.f.client")} value={clientF} onChange={setClientF} all={t("u.f.all")} options={clients.map((c) => [c, c])} />
         <Sel label={t("u.f.health")} value={health} onChange={setHealth} all={t("u.f.all")}
           options={["on_track", "at_risk", "delayed"].map((h) => [h, t(("u.health." + h) as Key)])} />
         <Sel label={t("u.f.phase")} value={phase} onChange={setPhase} all={t("u.f.all")}

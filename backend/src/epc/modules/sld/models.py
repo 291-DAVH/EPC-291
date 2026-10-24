@@ -47,6 +47,8 @@ class Circuit(BaseModel):
 
 
 class Titleblock(BaseModel):
+    """The sheet's title block. Company, client and people come from the project (issuer, client, team of the discipline) and are not stored here;
+    what a board owns is its description, location, scale, revision and status."""
     company: str = ""
     company_cuit: str = ""
     client: str = ""

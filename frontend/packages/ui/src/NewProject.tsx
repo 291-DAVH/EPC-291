@@ -9,7 +9,8 @@ const slug = (s: string) =>
 export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Project & { plugins_locked?: number }) => void; onCancel: () => void }) {
   const { t } = useI18n();
   const opts = useApi<ProjectOptions>("/projects/options");
-  const saved = useApi<ClientRecord[]>("/data/clients");           // saved clients (master data); not available to end users: the list is just empty
+  const saved = useApi<ClientRecord[]>("/data/clients");
+  const issuers = useApi<{ id: string; legal_name: string; default: boolean }[]>("/data/issuers");      // staff only: for customers the list is just empty           // saved clients (master data); not available to end users: the list is just empty
   const [f, setF] = useState<NewProjectBody>({
     client_name: "", client_code: "", project_code: "", project_name: "", jurisdiction: "AR", methodology: "pm2",
     locale: "", disciplines: ["electrical"], phase: "IC",
@@ -39,7 +40,15 @@ export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Pro
     if (Object.keys(local).length) return;
     setBusy(true);
     try {
-      onCreated(await api<Project>("/projects", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(f) }));
+      const { issuer, ...body } = f;
+      const created = await api<Project>("/projects", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (!saved.data?.some((c) => c.id.toUpperCase() === f.client_code.toUpperCase())) {          // a new client joins the client list (staff); it can be completed later in Data
+        try { await api("/data/clients", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: f.client_code.toUpperCase().slice(0, 24), name: f.client_name.trim() }) }); } catch { /* customers have no client list */ }
+      }
+      if (issuer) {                                                    // the company this project issues in the name of (the default one when not chosen)
+        try { await api(`/projects/${f.client_code}/${f.project_code}/parties`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ issuer, team: {} }) }); } catch { /* the default issuer stays */ }
+      }
+      onCreated(created);
     } catch (err) {
       if (err instanceof ApiError && Object.keys(err.fieldErrors).length) setErrors(err.fieldErrors);
       else setGeneral(t("projects.error.generic"));
@@ -72,6 +81,13 @@ export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Pro
             <Field label={t("projects.clientCode")} error={errors.client_code} hint={t("projects.clientCodeHelp")}>
               <input className="mono" value={f.client_code} onChange={(e) => { setCodeTouched(true); set({ client_code: e.target.value }); }} />
             </Field>
+            {issuers.data && issuers.data.length > 0 && (
+              <Field label={t("np.issuer")} hint={t("np.issuerHelp")}>
+                <select value={f.issuer ?? ""} onChange={(e) => set({ issuer: e.target.value })}>
+                  {issuers.data.map((i) => <option key={i.id} value={i.default ? "" : i.id}>{i.legal_name}{i.default ? ` · ${t("data.default")}` : ""}</option>)}
+                </select>
+              </Field>
+            )}
             <Field label={t("projects.projectCode")} error={errors.project_code}>
               <input className="mono" value={f.project_code} onChange={(e) => set({ project_code: e.target.value })} />
             </Field>

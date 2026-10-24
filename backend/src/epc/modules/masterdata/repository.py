@@ -20,6 +20,10 @@ def save_organization(data: Dict) -> None:
     write_json(_file("organization.json"), {"schema_version": "1.0", **data})
 
 
+def exists(name: str) -> bool:
+    return _file(name).is_file()
+
+
 def load_list(name: str) -> List[Dict]:
     data = read_json(_file(f"{name}.json"), {}) or {}
     return data.get("items", []) if isinstance(data, dict) else []
@@ -53,3 +57,27 @@ def save_logo(key: str, ext: str, content: bytes) -> Path:
 def delete_logo(key: str) -> None:
     for ext in LOGO_EXT:
         (logos_dir() / f"{key}{ext}").unlink(missing_ok=True)
+
+
+def move_logo(old: str, new: str) -> None:
+    for ext in LOGO_EXT:
+        src = logos_dir() / f"{old}{ext}"
+        if src.is_file():
+            src.replace(logos_dir() / f"{new}{ext}")
+
+
+# ---- project parties: who issues (issuer) and who designs, checks and approves each discipline ----
+def parties_file(d: Path) -> Path:
+    return d / "workspace" / "00-setup" / "parties.json"
+
+
+def load_parties(d: Path) -> Dict:
+    data = read_json(parties_file(d), {}) or {}
+    data.setdefault("issuer", "")
+    data.setdefault("team", {})
+    return data
+
+
+def save_parties(d: Path, data: Dict) -> None:
+    write_json(parties_file(d), {"schema_version": "1.0", **data})
+
