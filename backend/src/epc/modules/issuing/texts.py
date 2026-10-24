@@ -24,13 +24,16 @@ T: Dict[str, Dict[str, str]] = {
         "doc.integrity": "La integridad de cada archivo puede verificarse con la huella SHA-256 consignada en el archivo INDICE.csv del paquete.",
         "doc.page": "Página {n} de {total}", "doc.footer": "Transmittal {tr} · {project}",
         "mail.subject": "[{code}] Transmittal {tr} – {emission} {rev} – {project}",
-        "mail.intro": "Se remite a {client} el transmittal {tr}, correspondiente a la emisión {emission} ({emission_name}), revisión {rev}, del proyecto «{project}» (código {code}).",
-        "mail.list": "La emisión comprende los siguientes documentos:",
+        "mail.greeting": "Estimado equipo de {client}:",
+        "mail.intro": "Nos dirigimos a ustedes para hacer entrega del transmittal {tr}, correspondiente a la emisión {emission} ({emission_name}), revisión {rev}, del proyecto «{project}» (código: {code}).",
+        "mail.list": "Esta entrega incluye los siguientes documentos técnicos:",
+        "mail.item": "* {code} – {name} (Formatos: {formats})",
         "mail.notes": "Observaciones de la emisión: {notes}",
-        "mail.package": "Los documentos se entregan en el paquete «{zip}», que incluye el documento de transmittal con el detalle de su contenido y un índice con la huella SHA-256 de cada archivo.",
-        "mail.request": "Se solicita acusar recibo de la presente emisión y comunicar las observaciones que correspondan dentro del plazo acordado.",
-        "mail.close": "{issuer} queda a disposición para cualquier aclaración.",
-        "issuer.default": "La oficina de ingeniería", "client.default": "el cliente",
+        "mail.package": "Los archivos se encuentran adjuntos en el contenedor comprimido «{zip}». Dentro del mismo, encontrarán el documento formal de transmittal con el desglose del contenido y un archivo de índice que detalla la huella SHA-256 de cada elemento para garantizar su integridad.",
+        "mail.request": "Agradecemos de antemano acusar recibo de este envío y solicitamos nos compartan sus observaciones dentro del plazo contractual acordado.",
+        "mail.close": "{issuer} queda a su entera disposición para resolver cualquier duda o aclaración.",
+        "mail.sign": "Atentamente,",
+        "issuer.default": "La oficina de ingeniería", "client.default": "equipo", "signature.default": "[Nombre / Firma]",
     },
     "en": {
         "doc.title": "TRANSMITTAL", "doc.project": "Project", "doc.client": "Client", "doc.issuer": "Issued by", "doc.emission": "Issue",
@@ -40,13 +43,16 @@ T: Dict[str, Dict[str, str]] = {
         "doc.integrity": "The integrity of each file can be verified with the SHA-256 hash listed in the INDICE.csv file of the package.",
         "doc.page": "Page {n} of {total}", "doc.footer": "Transmittal {tr} · {project}",
         "mail.subject": "[{code}] Transmittal {tr} – {emission} {rev} – {project}",
-        "mail.intro": "Transmittal {tr} is hereby submitted to {client}, for issue {emission} ({emission_name}), revision {rev}, of the project \"{project}\" (code {code}).",
-        "mail.list": "The issue comprises the following documents:",
+        "mail.greeting": "Dear {client} team,",
+        "mail.intro": "We are writing to deliver transmittal {tr}, for issue {emission} ({emission_name}), revision {rev}, of the project \"{project}\" (code: {code}).",
+        "mail.list": "This delivery includes the following technical documents:",
+        "mail.item": "* {code} – {name} (Formats: {formats})",
         "mail.notes": "Remarks on the issue: {notes}",
-        "mail.package": "The documents are delivered in the package \"{zip}\", which includes the transmittal document detailing its contents and an index with the SHA-256 hash of each file.",
-        "mail.request": "Acknowledgement of receipt of this issue is requested, together with any comments within the agreed period.",
-        "mail.close": "{issuer} remains available for any clarification.",
-        "issuer.default": "The engineering office", "client.default": "the client",
+        "mail.package": "The files are attached in the compressed package \"{zip}\". Inside it you will find the formal transmittal document with the breakdown of the contents and an index file listing the SHA-256 hash of each item to guarantee its integrity.",
+        "mail.request": "We kindly ask you to acknowledge receipt of this delivery and to share your comments within the agreed contractual period.",
+        "mail.close": "{issuer} remains at your disposal for any question or clarification.",
+        "mail.sign": "Kind regards,",
+        "issuer.default": "The engineering office", "client.default": "client", "signature.default": "[Name / Signature]",
     },
 }
 
@@ -69,11 +75,12 @@ def email(lang: str, tr: dict, project: dict, zip_name: str, issuer: str) -> dic
     rev = f"Rev {tr['client_rev']}"
     ctx = dict(tr=tr["id"], emission=em, emission_name=EMISSION_NAMES[lang].get(em, em), rev=rev, project=project["name"], code=project["code"],
                client=project["client"] or t["client.default"])
-    lines = [t["mail.intro"].format(**ctx), "", t["mail.list"], ""]
-    lines += [f"{i}. {it['code']} – {it['name']} ({_fmt(it['files'])})" for i, it in enumerate(tr["items"], 1)]
+    lines = [t["mail.greeting"].format(**ctx), "", t["mail.intro"].format(**ctx), "", t["mail.list"], ""]
+    lines += [t["mail.item"].format(code=it["code"], name=it["name"], formats=_fmt(it["files"])) for it in tr["items"]]
     if tr.get("notes"):
         lines += ["", t["mail.notes"].format(notes=tr["notes"])]
-    lines += ["", t["mail.package"].format(zip=zip_name), "", t["mail.request"], "", t["mail.close"].format(issuer=issuer or t["issuer.default"])]
+    lines += ["", t["mail.package"].format(zip=zip_name), "", t["mail.request"], "",
+              t["mail.close"].format(issuer=t["issuer.default"]), t["mail.sign"], "", issuer or t["signature.default"]]
     return {"subject": t["mail.subject"].format(**ctx), "body": "\n".join(lines), "language": lang}
 
 
