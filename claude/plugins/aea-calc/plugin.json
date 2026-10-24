@@ -1,6 +1,6 @@
 {
   "id": "aea-calc",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "kind": "calc",
   "description": "Low-voltage installation sizing (AEA 90364 / IEC 60364): design current, protection, cable section, voltage drop, short-circuit. Outputs a calculation JSON plus Calculation Memo and Project Synthesis.",
   "discipline": [

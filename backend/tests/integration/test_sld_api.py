@@ -245,6 +245,30 @@ class TestSld(unittest.TestCase):
         self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                         # the data changed after the memo
         self.assertEqual(self.c.post(self.base + "/generate").status_code, 409)                                  # and the diagram needs the memo of the current data
 
+    def test_the_real_route_of_a_cable_sets_its_length_and_its_capacity(self):
+        route = [{"kind": "tray_perforated", "length_m": 20, "label": "Bandeja hasta cámara C-1"}, {"kind": "buried_direct", "length_m": 40, "soil_c": 30, "rho_kmw": 2.0},
+                 {"kind": "road_crossing", "length_m": 8, "depth_m": 1.0, "circuits": 3, "label": "Cruce de calzada"}, {"kind": "tray_perforated", "length_m": 12}]
+        circuits = [{**CIRCUITS[0], "route": route}] + CIRCUITS[1:]
+        r = self.c.put(self.base, json={"board": BOARD, "circuits": circuits, "titleblock": TB})
+        self.assertEqual(r.status_code, 200, r.text)
+        saved = r.json()["input"]["circuits"][0]
+        self.assertEqual(saved["length_m"], 80.0)                                                              # the total of the segments, not what was typed
+        self.assertIn("buried_duct", r.json()["options"]["route_kinds"])
+        bad = self.c.put(self.base, json={"board": BOARD, "titleblock": TB, "circuits": [{**CIRCUITS[0], "route": [{"kind": "ducto", "length_m": 5}, {"kind": "buried_direct", "length_m": 0}]}] + CIRCUITS[1:]})
+        self.assertEqual(bad.status_code, 422)
+        self.assertEqual(sorted(k.split(":", 1)[1].split(".", 1)[1] for k in bad.json()["detail"]["errors"]), ["route.segment 1.kind", "route.segment 2.length_m"])
+        self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        memo = self.c.get(self.base + "/memo").json()["memo"]
+        c = memo["circuits"][0]
+        self.assertEqual([t["kind"] for t in c["externo"]["ruta"]], ["tray_perforated", "buried_direct", "road_crossing", "tray_perforated"])
+        self.assertEqual(sum(1 for t in c["externo"]["ruta"] if t["limitante"]), 1)
+        self.assertEqual(c["externo"]["length_m"], 80.0)
+        self.assertIsNone(memo["circuits"][1]["externo"]["ruta"] or None)                                       # a circuit without route keeps its installation
+        mc = self.c.get("/api/projects/ACME/P-1/engineering/text", params={"path": "electrical/PQ-01/docs/" + self.wait()["name"] + "_MC.md"}).json()["text"]
+        self.assertIn("Recorrido real", mc)
+        self.assertIn("Cruce de calzada", mc)
+
     def test_a_downstream_board_reads_its_supply_cable_from_the_upstream_board(self):
         self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.gen({"diagrams": "none"})

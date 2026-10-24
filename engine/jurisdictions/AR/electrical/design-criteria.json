@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "jurisdiction": "AR",
   "discipline": "electrical",
-  "validated": true,
+  "validated": false,
   "note": "Starting values proposed by the platform. They are NOT validated against the standards: confirm each one before using it in a deliverable. A project overrides any of them (client requirement, project decision).",
   "criteria": [
     {"id": "nominal_voltage_v", "group": {"en": "Supply", "es": "Alimentación"}, "label": {"en": "Nominal voltage (three-phase)", "es": "Tensión nominal (trifásica)"}, "unit": "V", "type": "choice", "options": [220, 380, 400], "default": 380},
@@ -19,6 +19,9 @@
     {"id": "min_section_sockets_mm2", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Minimum section, socket circuits", "es": "Sección mínima, circuitos de tomacorrientes"}, "unit": "mm²", "type": "number", "min": 2.5, "max": 10, "default": 2.5},
     {"id": "rcd_sensitivity_ma", "group": {"en": "Protection", "es": "Protecciones"}, "label": {"en": "Residual current device sensitivity", "es": "Sensibilidad del interruptor diferencial"}, "unit": "mA", "type": "choice", "options": [10, 30, 100, 300], "default": 30},
     {"id": "board_spare_pct", "group": {"en": "Protection", "es": "Protecciones"}, "label": {"en": "Spare capacity in boards", "es": "Reserva en tableros"}, "unit": "%", "type": "number", "min": 5, "max": 100, "default": 20},
-    {"id": "raceway_fill_max_pct", "group": {"en": "Raceways", "es": "Canalizaciones"}, "label": {"en": "Maximum raceway fill", "es": "Ocupación máxima de canalizaciones"}, "unit": "%", "type": "number", "min": 40, "max": 60, "default": 40}
+    {"id": "raceway_fill_max_pct", "group": {"en": "Raceways", "es": "Canalizaciones"}, "label": {"en": "Maximum raceway fill", "es": "Ocupación máxima de canalizaciones"}, "unit": "%", "type": "number", "min": 40, "max": 60, "default": 40},
+    {"id": "ambient_temp_c", "group": {"en": "Installation conditions", "es": "Condiciones de instalación"}, "label": {"en": "Ambient air temperature", "es": "Temperatura ambiente (aire)"}, "unit": "°C", "type": "number", "min": 10, "max": 60, "default": 40},
+    {"id": "soil_temp_c", "group": {"en": "Installation conditions", "es": "Condiciones de instalación"}, "label": {"en": "Soil temperature (buried cables)", "es": "Temperatura del suelo (cables enterrados)"}, "unit": "°C", "type": "number", "min": 10, "max": 40, "default": 25},
+    {"id": "soil_resistivity_kmw", "group": {"en": "Installation conditions", "es": "Condiciones de instalación"}, "label": {"en": "Soil thermal resistivity", "es": "Resistividad térmica del terreno"}, "unit": "K·m/W", "type": "number", "min": 0.5, "max": 3, "default": 1}
   ]
 }

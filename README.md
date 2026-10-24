@@ -107,12 +107,12 @@ EPC-291/
 
 | Plugin | Version | Kind | Requires |
 |---|---|---|---|
-| `aea-calc` | 1.7.0 | calc | — |
-| `iec-symbols` | 0.4.18 | knowledge | — |
-| `iram-titleblock` | 0.5.3 | generator | — |
-| `sld` | 0.1.3 | generator | aea-calc, iec-symbols, iram-titleblock |
-| `mld` | 0.2.1 | generator | aea-calc, sld, iram-titleblock, iec-symbols |
-| `board-design` | 0.2.0 | workflow | aea-calc, sld, mld, iec-symbols, iram-titleblock |
+| `aea-calc` | 1.8.0 | calc | — |
+| `iec-symbols` | 0.4.19 | knowledge | — |
+| `iram-titleblock` | 0.5.4 | generator | — |
+| `sld` | 0.1.4 | generator | aea-calc, iec-symbols, iram-titleblock |
+| `mld` | 0.2.2 | generator | aea-calc, sld, iram-titleblock, iec-symbols |
+| `board-design` | 0.2.1 | workflow | aea-calc, sld, mld, iec-symbols, iram-titleblock |
 | `standard-ingest` | 0.1.0 | workflow | — |
 | `intake-analysis` | 0.1.0 | workflow | — |
 | `pm2-docs` | 0.1.0 | workflow | doc-quality |

@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
+import RouteEditor from "./RouteEditor";
 import { ApiError, Badge, BoardMemoView, BoardRow, CalcView, CalculationTable, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
@@ -73,6 +74,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDele
   const memo = useApi<BoardMemoView>(`${base}/memo?${q}&s=${status?.finished ?? ""}`);
   const calc = useApi<CalcView>(`${base}/calculation?${q}&s=${status?.finished ?? ""}`);
   const [msg, setMsg] = useState("");
+  const [routeOf, setRouteOf] = useState<number | null>(null);          // circuit whose real route is being edited
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDele
   const set = <K extends keyof SldData>(k: K, patch: Partial<SldData[K]>) => { setData({ ...data, [k]: { ...(data[k] as object), ...patch } } as SldData); setDirty(true); setMsg(""); };
   const setRow = (i: number, patch: Partial<SldCircuit>) => { setData({ ...data, circuits: data.circuits.map((c, j) => (j === i ? { ...c, ...patch } : c)) }); setDirty(true); setMsg(""); };
   const addRow = () => { setData({ ...data, circuits: [...data.circuits, blankCircuit()] }); setDirty(true); };
-  const delRow = (i: number) => { setData({ ...data, circuits: data.circuits.filter((_, j) => j !== i) }); setDirty(true); };
+  const delRow = (i: number) => { setData({ ...data, circuits: data.circuits.filter((_, j) => j !== i) }); setDirty(true); setRouteOf(null); };
 
   const fail = (x: unknown) => { if (x instanceof ApiError) setErrors(x.fieldErrors); else setErrors({ error: String(x) }); };
   const save = async (): Promise<boolean> => {
@@ -207,7 +209,12 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDele
                   </td>
                   <td>{sel(c.topology, o.topologies, (v) => setRow(i, { topology: v }))}</td>
                   <td>{sel(c.phase, o.phases, (v) => setRow(i, { phase: v }))}</td>
-                  <td><input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} /></td>
+                  <td style={{ whiteSpace: "nowrap" }}>
+                    {(c.route?.length ?? 0) > 0
+                      ? <b className="mono" title={t("route.totalHint")}>{Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
+                      : <input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} />}
+                    {" "}<button className={routeOf === i ? "primary" : ""} onClick={() => setRouteOf(routeOf === i ? null : i)} title={t("route.title")}>{t("route.button")}{(c.route?.length ?? 0) > 0 ? ` (${c.route!.length})` : ""}</button>
+                  </td>
                   <td><input className="w-num" type="number" step="0.01" value={c.fp ?? ""} onChange={(e) => setRow(i, { fp: num(e.target.value) })} /></td>
                   <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => setRow(i, { efficiency: num(e.target.value) })} /></td>
                   <td>{sel(c.kind, o.kinds, (v) => setRow(i, { kind: v }))}</td>
@@ -219,6 +226,10 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onSaved, onDele
           </table>
         </div>
       </div>
+      {routeOf !== null && data.circuits[routeOf] && (
+        <RouteEditor tag={data.circuits[routeOf].tag} route={data.circuits[routeOf].route ?? []} kinds={o.route_kinds} fallbackLength={data.circuits[routeOf].length_m}
+          onChange={(r) => setRow(routeOf, { route: r, ...(r.length ? { length_m: Math.round(r.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 } : {}) })} onClose={() => setRouteOf(null)} />
+      )}
 
       <div className="card">
         <h2>{t("sld.calc")}</h2>

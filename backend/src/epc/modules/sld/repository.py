@@ -23,6 +23,21 @@ def pkg(d: Path) -> Path:
     return d / "workspace" / "02-engineering" / DISCIPLINE / PACKAGE
 
 
+def route_kinds() -> List[str]:
+    from epc_calc import aea_route                                     # the engine owns the kinds of installation (single source)
+    return list(aea_route.KINDS)
+
+
+def route_errors(route: List[dict]) -> Dict[str, str]:
+    from epc_calc import aea_route
+    return aea_route.validate(route)
+
+
+def route_total(route: List[dict]) -> float:
+    from epc_calc import aea_route
+    return aea_route.total_length(route)
+
+
 def boards_dir(d: Path) -> Path:
     return pkg(d) / "src" / "boards"
 

@@ -71,6 +71,9 @@ def excel_rows(data: dict):
     circuitos = []
     for c in data["circuits"]:
         row = {col: (None if c.get(key) in (None, "") else c.get(key)) for col, key in CIRCUIT_COLS}
+        if c.get("route"):                                           # real route: its total is the length of the cable (single source)
+            row["RUTA"] = c["route"]
+            row["LONGITUD_m"] = round(sum(float(s["length_m"]) for s in c["route"]), 3)
         circuitos.append(row)
     return tablero, circuitos
 

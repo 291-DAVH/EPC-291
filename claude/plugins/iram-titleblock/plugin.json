@@ -1,6 +1,6 @@
 {
   "id": "iram-titleblock",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "kind": "generator",
   "description": "IRAM A0-A4 drawing sheets (frame, coordinates, IRAM 4504/4508 title block) with custom company/client blocks and logos.",
   "discipline": [

@@ -166,9 +166,10 @@ export interface CriteriaView {
 
 /* ---- single-line diagram input ---- */
 export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number; supplied_from: string; supply_tag: string }
+export interface SldSegment { kind: string; length_m: number; label: string; ambient_c: number | null; soil_c: number | null; rho_kmw: number | null; circuits: number; depth_m: number | null }
 export interface SldCircuit {
   tag: string; description: string; load: number | null; unit: string; destination: string; parent_tag: string; topology: string; phase: string;
-  length_m: number; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string;
+  length_m: number; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string; route?: SldSegment[];
 }
 export interface SldTitleblock {
   company: string; company_cuit: string; client: string; client_cuit: string; drawn_by: string; checked_by: string; approved_by: string;
@@ -189,7 +190,7 @@ export interface BoardMemoView {
 }
 export interface SldView {
   input: SldData; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
-  options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[] };
+  options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[]; route_kinds: string[] };
 }
 
 /* ---- master data ---- */
