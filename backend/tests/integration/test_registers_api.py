@@ -31,7 +31,7 @@ class TestRegisters(unittest.TestCase):
         self.assertEqual(v["methodology"], "pm2")
         self.assertEqual([(r["id"], r["prefix"], r["name"]) for r in v["registers"]],
                          [("risk", "RIE", "Riesgos"), ("change", "RFC", "Cambios"), ("issue", "INC", "Incidencias"), ("decision", "DEC", "Decisiones"),
-                          ("assumption", "SUP", "Supuestos"), ("stakeholder", "STK", "Interesados")])
+                          ("assumption", "SUP", "Supuestos"), ("stakeholder", "STK", "Interesados"), ("observation", "OBS", "Observaciones")])
         risk = v["registers"][0]
         strategy = next(f for f in risk["fields"] if f["id"] == "strategy")
         self.assertEqual([o["label"] for o in strategy["options"]], ["Evitar", "Reducir", "Aceptar", "Transferir"])

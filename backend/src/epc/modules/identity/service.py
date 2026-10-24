@@ -249,6 +249,17 @@ def audit(action: str, target: str = "", org=None, detail: Optional[dict] = None
     repo.insert_audit(a.user_id, a.email or email, action, target, org if org is not None else (a.org_id or None), detail or {}, ip)
 
 
+def can(subject: str, action: str) -> bool:
+    """Whether the account making the current request has this ability (the matrix of permissions.py)."""
+    return permissions.can(account_type(current()), subject, action)
+
+
+def audit_event(action: str, target: str = "", org_slug: str = "", detail: Optional[dict] = None) -> None:
+    """For other modules: record an event of the current account, optionally tied to an organization (by slug)."""
+    o = repo.org_by_slug(org_slug) if org_slug else None
+    audit(action, target=target, org=str(o["id"]) if o else None, detail=detail)
+
+
 def _email_of(user_id) -> str:
     u = repo.user_by_id(user_id)
     return u["email"] if u else str(user_id)

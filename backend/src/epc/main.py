@@ -65,6 +65,7 @@ def create_app() -> FastAPI:
 
     for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
+    app.include_router(registers_api.observations)               # customer-surface routes of the registers module
     return app
 
 

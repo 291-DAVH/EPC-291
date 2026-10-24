@@ -20,7 +20,8 @@ def main(argv=None) -> int:
     c = sub.add_parser("create-admin", help="create (or reset) a platform staff account")
     c.add_argument("--email", required=True)
     c.add_argument("--name", default="")
-    c.add_argument("--role", choices=["admin", "standards"], default="admin", help="admin = engineering staff; standards = norm reviewer (sees only the norms review area)")
+    c.add_argument("--role", choices=["admin", "standards", "inspector", "auditor"], default="admin",
+                   help="admin = engineering staff; standards = norm reviewer; inspector / auditor = see only the organizations assigned to them")
     c.add_argument("--password-env", help="read the password from this environment variable instead of asking")
     args = ap.parse_args(argv)
     password = os.environ.get(args.password_env, "") if args.password_env else getpass.getpass("Password: ")

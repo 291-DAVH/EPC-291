@@ -16,3 +16,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0010](ADR-0010-registers-as-platform-data.md) | Management registers are platform data, defined by the methodology | Accepted |
 | [0011](ADR-0011-norm-review.md) | Norm review by a dedicated reviewer role | Accepted |
 | [0012](ADR-0012-single-source-of-truth.md) | One source of truth per datum | Accepted |
+| [0013](ADR-0013-account-types-and-permissions.md) | Account types, a permission matrix and an audit log | Accepted |
