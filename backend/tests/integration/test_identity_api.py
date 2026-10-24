@@ -307,7 +307,7 @@ class TestOrganizations(Base):
         self.assertEqual(c.post("/api/auth/switch-org", json={"org": "alfa-srl"}).json()["account_type"], "corporate_owner")
         self.assertEqual(c.post("/api/auth/switch-org", json={"org": "no-existe"}).status_code, 404)
         self.assertEqual(o2.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 404)   # not a member of that one
-        self.assertEqual(staff.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 403)
+        self.assertEqual(staff.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 200)       # the engineering team may enter any organization (TestExpertStaff)
         staff.patch("/api/identity/orgs/beta-srl", json={"active": False})
         self.assertEqual(c.post("/api/auth/switch-org", json={"org": "beta-srl"}).status_code, 404)    # a suspended organization is not selectable
         self.assertEqual([o["slug"] for o in c.get("/api/me").json()["organizations"]], ["alfa-srl"])
@@ -438,6 +438,57 @@ class TestCompanyAdministrator(Base):
         self.assertEqual(owner.patch(f"/api/app/org/members/{people['adm@m.com']}", json={"role": "owner"}).status_code, 200)
         self.assertEqual(owner.patch(f"/api/app/org/members/{people['o@m.com']}", json={"role": "admin"}).status_code, 200)
         self.assertEqual(owner.patch(f"/api/app/org/members/{people['adm@m.com']}", json={"role": "member"}).status_code, 403)         # the first owner is an administrator now
+
+
+class TestExpertStaff(Base):
+    """One account of the engineering team sees everything and can work inside any organization, without a second login."""
+
+    def test_staff_enters_any_organization_and_leaves_it(self):
+        staff = self.staff()
+        a, slug_a = self.new_org(staff, "Alfa SRL", seats=3, owner="a@alfa.com")
+        b, slug_b = self.new_org(staff, "Beta SRL", seats=3, owner="b@beta.com")
+        a.post("/api/projects", json=PROJECT)
+        b.post("/api/projects", json={**PROJECT, "client_code": "OTRO"})
+        me = staff.get("/api/me").json()
+        self.assertEqual((me["account_type"], me["org"], [o["slug"] for o in me["organizations"]]), ("staff", "", [slug_a, slug_b]))
+        self.assertEqual(me["console_url"], settings.console_url)
+        self.assertEqual(staff.get("/api/app/org").status_code, 403)                                          # outside an organization there is no people page
+        self.assertEqual(sorted(p["id"] for p in staff.get("/api/app/portfolio").json()["projects"]), ["ACME/P-1", "OTRO/P-1"])       # but every project is visible
+        r = staff.post("/api/auth/switch-org", json={"org": slug_b})
+        self.assertEqual((r.status_code, r.json()["org"], r.json()["account_type"]), (200, "Beta SRL", "staff"))
+        org = staff.get("/api/app/org").json()                                                                # the people of that organization
+        self.assertEqual((org["name"], [m["email"] for m in org["members"]]), ("Beta SRL", ["b@beta.com"]))
+        inv = staff.post("/api/app/org/invitations", json={"email": "nuevo@beta.com", "role": "member"})
+        self.assertEqual(inv.status_code, 201, inv.text)
+        self.assertEqual(len(staff.get("/api/app/portfolio").json()["projects"]), 2)                          # still sees all projects
+        self.assertEqual(staff.post("/api/projects", json={**PROJECT, "client_code": "NUEVO"}).status_code, 201)
+        self.assertEqual(self.d_org("NUEVO"), slug_b)                                                         # created inside Beta: it belongs to Beta
+        staff.post("/api/auth/switch-org", json={"org": slug_a})
+        self.assertEqual(staff.get("/api/app/org").json()["name"], "Alfa SRL")
+        self.assertEqual(staff.post("/api/auth/switch-org", json={"org": "no-existe"}).status_code, 404)
+        left = staff.post("/api/auth/switch-org", json={"org": ""})
+        self.assertEqual((left.status_code, left.json()["org"]), (200, ""))
+        self.assertEqual(staff.get("/api/app/org").status_code, 403)
+        events = [(e["action"], e["actor"], e["target"]) for e in staff.get("/api/identity/audit?limit=100").json() if e["action"].startswith(("organization_entered", "organization_left", "invitation_created"))]
+        self.assertIn(("organization_entered", "staff@office.com", slug_b), events)
+        self.assertIn(("organization_left", "staff@office.com", ""), events)
+        self.assertIn(("invitation_created", "staff@office.com", "nuevo@beta.com"), events)                   # what the expert does is recorded as theirs
+        # nobody else gets this power
+        self.assertEqual(a.post("/api/auth/switch-org", json={"org": slug_b}).status_code, 404)
+        rev = self.client()
+        staff.post("/api/identity/users", json={"email": "rev@x.com", "name": "Rev", "password": PW, "platform_role": "standards"})
+        rev.post("/api/auth/login", json={"email": "rev@x.com", "password": PW})
+        self.assertEqual(rev.post("/api/auth/switch-org", json={"org": slug_a}).status_code, 403)
+
+    def d_org(self, client_code):
+        import json
+        return json.loads((settings.projects_dir / client_code / "P-1" / ".epc" / "project.json").read_text(encoding="utf-8")).get("org")
+
+    def test_staff_reaches_every_area_with_one_account(self):
+        staff = self.staff()
+        for path in ("/api/app/portfolio", "/api/norms/units", "/api/identity/orgs", "/api/identity/audit", "/api/plugins", "/api/projects", "/api/rules/standards"):
+            self.assertEqual(staff.get(path).status_code, 200, path)
+        self.assertEqual(sorted(staff.get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org"])
 
 
 class TestStaff(Base):

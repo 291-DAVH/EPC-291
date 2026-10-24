@@ -17,7 +17,7 @@ The platform has customers (independent professionals and companies), its own te
 | `inspector` | internal inspector | only the organizations assigned to them; read, plus recording observations |
 | `auditor` | external auditor | only the organizations assigned to them; read-only, plus recording observations |
 | `reviewer` | norm reviewer | only the norm review |
-| `staff` | platform administrator | everything; everything they do is recorded |
+| `staff` | platform administrator | everything, with one account: all organizations' projects, console, norms, accounts and audit; it can also work *inside* an organization (a session context in which it acts as that organization's owner), always recorded under its own name |
 
   One person can belong to several organizations (one account, several memberships) and switches between them; becoming a member of a company never changes the type of an existing account. The independent professional stays an organization of one so that every datum belongs to an organization and isolation is solved in one place.
 - **Permission matrix as data** (`identity/permissions.py`): each kind has abilities (`read`, `write`, `respond`) over subjects (`app`, `org`, `observation`, `norms`, `identity`, `console`). The guard maps every request to a subject and a method to an action and refuses what the matrix does not give; the screens use `abilities` only to hide what would be refused. Services still check what depends on the data (who may touch an owner, which organization).
