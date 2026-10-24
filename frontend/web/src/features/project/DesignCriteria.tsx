@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ApiError, Badge, CriteriaView, Criterion, Key, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, Badge, CriteriaView, Criterion, Key, Markdown, State, api, useApi, useI18n } from "@epc/ui";
 
 const SOURCES = ["client", "standard", "project"] as const;
 
@@ -36,7 +36,7 @@ export default function DesignCriteria({ client, code }: { client: string; code:
       <div className="cols2">
         <div className="card">
           <h2>{t("crit.report")}</h2>
-          {report.data ? <pre className="eng-text" style={{ padding: 0 }}>{report.data.markdown}</pre> : <State loading />}
+          {report.data ? <Markdown text={report.data.markdown} /> : <State loading />}
         </div>
         <div className="card">
           <h2>{t("crit.history")}</h2>

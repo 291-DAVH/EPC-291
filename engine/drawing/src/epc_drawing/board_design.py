@@ -126,6 +126,9 @@ def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
     tablero, circuitos = excel_rows(data)
     detalle: Dict[str, dict] = {}
     datos, avisos = P.calculate(tablero, circuitos, criterios=criteria, detalle=detalle)
+    for c in data.get("circuits", []):                                # the description travels with the calculation, so any view of it reads without the input
+        if c.get("tag") in detalle:
+            detalle[c["tag"]]["descripcion"] = str(c.get("description", ""))
     limites, _, material, aislacion, sens = P.resolver_criterios(criteria)
     return {"datos": datos, "avisos": avisos, "detalle": detalle,
             "limites": {"seccional": limites["seccional"], "terminal": limites["iluminacion"], "motor": limites["motor"]},

@@ -4,6 +4,9 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 
+### Changed
+- Engineering › Files shows calculations as a readable table (circuits, criteria, compliance) and Markdown as formatted text; the software's own formats (JSON, YAML, Python, Markdown download) are no longer shown to people (technical files only on request, administration).
+
 ## [0.3.0] - 2026-10-24
 Third release: accounts and organizations with real sign-in (email, alias and Google, GitHub, Facebook, LinkedIn), roles and permissions, inspectors and auditors, master data, issuing to the client, criteria-driven calculation and multi-line diagrams, automatic analysis of customer input, management reports and registers of the methodology, norm review, and a single source of truth per datum.
 
