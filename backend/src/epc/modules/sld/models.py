@@ -16,6 +16,18 @@ class Board(BaseModel):
     supply_tag: str = ""                    # circuit of the upstream board that is this board's supply
 
 
+class Segment(BaseModel):
+    """One stretch of the real route of a cable: how it is installed there decides its capacity."""
+    kind: str                               # see epc_calc.aea_route.KINDS
+    length_m: float
+    label: str = ""
+    ambient_c: Optional[float] = None       # air stretches (project value when empty)
+    soil_c: Optional[float] = None          # buried stretches
+    rho_kmw: Optional[float] = None         # soil thermal resistivity, buried stretches
+    circuits: int = 1                       # circuits sharing the stretch, this one included
+    depth_m: Optional[float] = None
+
+
 class Circuit(BaseModel):
     tag: str
     description: str = ""
@@ -31,6 +43,7 @@ class Circuit(BaseModel):
     kind: str = "auto"
     notes: str = ""
     cable_type: str = "tetra_sep"
+    route: List[Segment] = []               # real route of the outgoing cable; empty = installed as the circuit says; its total is the length
 
 
 class Titleblock(BaseModel):

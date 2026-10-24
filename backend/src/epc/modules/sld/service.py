@@ -19,6 +19,10 @@ KINDS = ("auto", "mcb", "mccb", "mccb_motorized", "rcbo", "rccb")
 CABLE_TYPES = ("tetra_sep", "tetra_inc", "unifilar")
 SYSTEMS = ("TN-S", "TN-C-S", "IT")
 OPTIONS = {"units": UNITS, "topologies": TOPOLOGIES, "phases": PHASES, "kinds": KINDS, "cable_types": CABLE_TYPES, "systems": SYSTEMS}
+
+
+def options() -> dict:
+    return {**OPTIONS, "route_kinds": repository.route_kinds()}
 MAX_CIRCUITS = 150
 _LOCKS: Dict[str, threading.Lock] = {}
 
@@ -70,6 +74,8 @@ def validate(data: dict) -> Dict[str, str]:
             e[f"{k}.load"] = "must be > 0"
         if c["length_m"] < 0:
             e[f"{k}.length_m"] = "must be >= 0"
+        for fld, msg in repository.route_errors(c.get("route") or []).items():
+            e[f"{k}.route.{fld}"] = msg
         for fld in ("fp", "efficiency"):
             if c[fld] is not None and not 0 < c[fld] <= 1:
                 e[f"{k}.{fld}"] = "between 0 and 1"
@@ -125,7 +131,7 @@ def view(d: Path, bid: str = "") -> dict:
         data["board"] = {**Board().model_dump(), **data["board"]}
     else:
         data = _blank(d)
-    return {"input": data, "saved": bool(saved), "board_id": bid, "options": OPTIONS, "status": status(d, bid),
+    return {"input": data, "saved": bool(saved), "board_id": bid, "options": options(), "status": status(d, bid),
             "boards": [{"id": b["id"], "name": b["name"]} for b in boards(d)],
             "people": [p["name"] for p in masterdata.people()],
             "logos": {"company": masterdata.logo_path("organization") is not None, "client": masterdata.logo_path("client-" + meta.get("client_code", "-")) is not None}}
@@ -169,6 +175,9 @@ def save(d: Path, body: SldIn, bid: str = "") -> dict:
         c["tag"], c["parent_tag"] = c["tag"].strip(), c["parent_tag"].strip()
     bid = _resolve(d, bid)
     errors = validate(data)
+    for c in data["circuits"]:
+        if c.get("route") and not errors:
+            c["length_m"] = repository.route_total(c["route"])                  # with a real route, its total is the length (single source)
     errors.update(_supply_errors(d, bid, data["board"]))
     if errors:
         raise Invalid(errors)
@@ -249,9 +258,10 @@ def _upstream(d: Path, board: dict) -> Optional[dict]:
     info = {"board": name, "tag": tag, "length_m": None}
     st = repository.load_status(d, up)
     calc = read_json(repository.pkg(d) / "calc" / f"{st.get('name')}_dimensionado.json", {}) if st.get("name") else {}
+    detail = read_json(repository.pkg(d) / "calc" / f"{st.get('name')}_dimensionado_detalle.json", {}) if st.get("name") else {}
     if tag and tag in calc:
         circ = next((c for c in data.get("circuits", []) if c["tag"] == tag), {})
-        info.update(calc[tag], length_m=circ.get("length_m"))
+        info.update(calc[tag], length_m=circ.get("length_m"), ruta=(detail.get(tag) or {}).get("ruta") or [], ruta_limitante=(detail.get(tag) or {}).get("ruta_limitante"))
     return info
 
 

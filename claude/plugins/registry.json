@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "plugins": {
     "aea-calc": {
-      "version": "1.7.0",
+      "version": "1.8.0",
       "kind": "calc",
       "status": "active",
       "requires": {},
@@ -15,10 +15,10 @@
       "engine": [
         "calc"
       ],
-      "hash": "ed54c23998e36fc9"
+      "hash": "f2237efc004f922f"
     },
     "board-design": {
-      "version": "0.2.0",
+      "version": "0.2.1",
       "kind": "workflow",
       "status": "active",
       "requires": {
@@ -35,7 +35,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "437b807c6e5e132c"
+      "hash": "7d5bc8e1b38fc79e"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -58,7 +58,7 @@
       "hash": "04503c87e8f48536"
     },
     "iec-symbols": {
-      "version": "0.4.18",
+      "version": "0.4.19",
       "kind": "knowledge",
       "status": "active",
       "requires": {},
@@ -68,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "7b3b664511e85096"
+      "hash": "70bc294311012791"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -82,7 +82,7 @@
       "hash": "2546ba51bd50723e"
     },
     "iram-titleblock": {
-      "version": "0.5.3",
+      "version": "0.5.4",
       "kind": "generator",
       "status": "active",
       "requires": {},
@@ -93,10 +93,10 @@
       "engine": [
         "drawing"
       ],
-      "hash": "850542f5d03313f2"
+      "hash": "40a75bc79a4f6cad"
     },
     "mld": {
-      "version": "0.2.1",
+      "version": "0.2.2",
       "kind": "generator",
       "status": "active",
       "requires": {
@@ -112,7 +112,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "3d442dc58168f83b"
+      "hash": "ae99a2b73c141282"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -143,7 +143,7 @@
       "hash": "4deddfcbcd7e2001"
     },
     "sld": {
-      "version": "0.1.3",
+      "version": "0.1.4",
       "kind": "generator",
       "status": "active",
       "requires": {
@@ -158,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "dd3b19f9394d75a4"
+      "hash": "5399ff711b447f0d"
     },
     "spec-writer": {
       "version": "0.1.0",

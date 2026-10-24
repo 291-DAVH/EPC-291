@@ -50,7 +50,7 @@ class TestNorms(unittest.TestCase):
         units = {u["id"]: u for u in self.c.get(f"{self.base}/units").json()}
         self.assertEqual(units[UNIT_771]["counts"], {"total": 82, "approved": 0, "rejected": 0, "pending": 82, "stale": 0})
         self.assertEqual(sum(u["counts"]["total"] for u in units.values() if u["kind"] == "rule"), 177)
-        self.assertEqual((units[TABLES]["counts"]["total"], units[CRIT]["counts"]["total"]), (29, 15))
+        self.assertEqual((units[TABLES]["counts"]["total"], units[CRIT]["counts"]["total"]), (29, len(self.read("design-criteria.json")["criteria"])))
         self.assertIn("AEA 90364-7-771 (2006)", units[UNIT_771]["name"])
         pts = self.c.get(f"{self.base}/units/{UNIT_771}/points?q=tomacorriente").json()
         self.assertTrue(pts["total"] >= 1 and all(p["status"] == "pending" for p in pts["items"]))
@@ -112,7 +112,8 @@ class TestNorms(unittest.TestCase):
     def test_criteria_are_validated_only_when_all_are_approved(self):
         self.assertFalse(self.read("design-criteria.json")["validated"])
         pts = self.c.get(f"{self.base}/units/{CRIT}/points").json()["items"]
-        self.assertEqual(len(pts), 15)
+        n = len(self.read("design-criteria.json")["criteria"])
+        self.assertEqual(len(pts), n)                                          # one review point per criterion of the catalog
         url = f"{self.base}/units/{CRIT}/points/vd_sectional_pct"
         for patch, field in (({"default": 50}, "default"), ({"options": [1, 2]}, "options"), ({"label": {"es": "x"}}, "label"), ({"group": {}}, "group")):
             r = self.c.put(url, json={"patch": patch})
@@ -122,7 +123,7 @@ class TestNorms(unittest.TestCase):
         self.assertEqual(r.status_code, 200, r.text)
         cat = self.read("design-criteria.json")
         self.assertEqual(next(c for c in cat["criteria"] if c["id"] == "vd_sectional_pct")["default"], 1.5)
-        self.assertEqual(len(cat["criteria"]), 15)
+        self.assertEqual(len(cat["criteria"]), n)
         self.assertFalse(cat["validated"])
         for p in pts:
             self.c.post(f"{self.base}/units/{CRIT}/points/{p['key']}/approve")

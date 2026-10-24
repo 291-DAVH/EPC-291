@@ -39,6 +39,8 @@ U0_V = 230.0
 UL_V = 50.0
 RATIO_TERMICO = 1.6
 RCD_KINDS = ("rccb", "rcbo")
+KIND_ES = {"tray_perforated": "Bandeja perforada / escalera", "tray_solid": "Bandeja no perforada", "conduit_air": "Caño o ducto a la vista / embutido",
+           "chamber": "Cámara de pase (aire)", "buried_direct": "Directamente enterrado", "buried_duct": "Caño o ducto enterrado", "road_crossing": "Cruce bajo calzada (caño enterrado)"}
 MOTORES = {"dol", "dol_ol", "star_delta", "softstarter", "vfd", "dol_rcd"}
 
 NORMA_MARCO = (
@@ -150,7 +152,7 @@ def _circuit(tag: str, circ: Dict[str, dict], dat: dict, det: dict, board: dict,
     return {
         "tag": tag, "description": c.get("description", ""), "tipo": d["tipo"], "parent": d.get("padre", ""), "Ib": ib, "In": in_a,
         "interno": {"S_mm2": s_int, "criterio": "térmico: Iz ≥ In"},
-        "externo": {"S_mm2": s_ext, "length_m": d.get("largo_m"), "iz_a": iz, "du_propia_pct": d.get("du_propia_pct"), "du_acum_pct": d.get("du_acum_pct"),
+        "externo": {"S_mm2": s_ext, "length_m": d.get("largo_m"), "iz_a": iz if iz is not None else next((x["iz_a"] for x in d.get("ruta") or [] if x.get("limitante")), None), "ruta": d.get("ruta") or [], "ruta_limitante": d.get("ruta_limitante"), "du_propia_pct": d.get("du_propia_pct"), "du_acum_pct": d.get("du_acum_pct"),
                     "limite_pct": d.get("limite_pct"), "cumple": cable_ok},
         "transicion": bool(s_int is not None and s_ext is not None and s_ext > s_int),
         "proteccion": {"disp": dat["disp"], "kind": kind, "curva": letter, "In": in_a, "icu_ka": dat["icu"], "icu_ok": icu_ok, "icc_a": round(icc_a, 0),
@@ -202,7 +204,8 @@ def build(board: dict, circuits_in: List[dict], datos: dict, detalle: dict, limi
     curvas = {c["tag"]: {"curva": c["proteccion"]["curva"], "In": c["In"], **curve_band(c["In"], c["proteccion"]["curva"])} for c in items}
     ac = {"desde": (upstream or {}).get("board") or "Red / fuente externa al proyecto", "tag": (upstream or {}).get("tag", ""),
           "length_m": (upstream or {}).get("length_m", board.get("feeder_length_m")), "S_mm2": (upstream or {}).get("S"),
-          "In": (upstream or {}).get("In"), "du_pct": (upstream or {}).get("dU"), "disp": (upstream or {}).get("disp"),
+          "In": (upstream or {}).get("In"), "du_pct": (upstream or {}).get("dU"), "disp": (upstream or {}).get("disp"), "ruta": (upstream or {}).get("ruta") or [],
+          "ruta_limitante": (upstream or {}).get("ruta_limitante"),
           "dato_faltante": not upstream}
     obs = _observations(items, sel, ac, validated)
     resumen = {"circuits": len(items), "cumplen": sum(1 for c in items if c["cumple"]), "no_cumplen": sum(1 for c in items if not c["cumple"]),
@@ -257,6 +260,16 @@ def _doc(m: dict, title: str, blocks: list) -> dict:
     return {"title": title, "subtitle": b["name"], "footer": f"{title} · {b['name']} · {b.get('project') or ''}".strip(" ·"), "page_label": "Página {n} de {total}", "blocks": blocks}
 
 
+def _route_blocks(title: str, ruta: list, limitante, s_mm2) -> list:
+    total = sum(t["length_m"] for t in ruta)
+    gov = next((t for t in ruta if t.get("limitante")), None)
+    head = f"{title}: {sig2(total)} m en {len(ruta)} tramo(s), sección {mm(s_mm2)} mm²" + (f"; limita el tramo {gov['n']} ({KIND_ES.get(gov['kind'], gov['kind'])}), Iz = {sig2(gov['iz_a'])} A." if gov else ".")
+    return [{"type": "p", "text": head},
+            {"type": "table", "columns": [["N", 0.05], ["Instalación", 0.27], ["Descripción", 0.17], ["Largo m", 0.08], ["Método", 0.08], ["Iz A", 0.08], ["f temp.", 0.08], ["f agrup.", 0.08], ["f suelo", 0.07], ["Limita", 0.06]],
+             "rows": [[str(t["n"]), KIND_ES.get(t["kind"], t["kind"]), t.get("label") or "—", sig2(t["length_m"]), t["metodo"], sig2(t["iz_a"]),
+                       f"{t['f_temp']:.2f}".replace(".", ","), f"{t['f_agrup']:.2f}".replace(".", ","), f"{t['f_suelo']:.2f}".replace(".", ","), "✓" if t.get("limitante") else ""] for t in ruta]}]
+
+
 def memoria_doc(m: dict) -> dict:
     b, cr, ac, r = m["board"], m["criteria"], m["acometida"], m["resumen"]
     lim, cond = cr["limits_pct"], cr["conductor"]
@@ -278,6 +291,8 @@ def memoria_doc(m: dict) -> dict:
         B += [{"type": "p", "text": f"Alimentación desde: {ac['desde']}. Longitud de acometida: {sig2(ac['length_m'])} m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior)."}]
     else:
         B += [{"type": "p", "text": f"Alimentación desde el circuito {ac['tag']} de {ac['desde']}: {mm(ac['S_mm2'])} mm², {sig2(ac['length_m'])} m, protección {ac['disp']}, caída de tensión {p1(ac['du_pct'])} %."}]
+    if ac.get("ruta"):
+        B += _route_blocks(f"Acometida: circuito {ac['tag']} de {ac['desde']}", ac["ruta"], ac.get("ruta_limitante"), ac.get("S_mm2"))
     B += [{"type": "h", "text": "3.2 Cableado interno y cableado externo de cada circuito"},
           {"type": "p", "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; "
                                 "si resulta mayor que el interno, se indica la bornera de transición."},
@@ -286,7 +301,14 @@ def memoria_doc(m: dict) -> dict:
            "rows": [[c["tag"], sig2(c["Ib"]), sig2(c["In"]), mm(c["interno"]["S_mm2"]), mm(c["externo"]["S_mm2"]), sig2(c["externo"]["length_m"]), sig2(c["externo"]["iz_a"]),
                      p1(c["externo"]["du_propia_pct"]), p1(c["externo"]["du_acum_pct"]), p1(c["externo"]["limite_pct"]), "sí" if c["transicion"] else "no", mark(c["externo"]["cumple"])]
                     for c in m["circuits"]]},
-          {"type": "h", "text": "4. Protecciones"},
+          ]
+    con_ruta = [c for c in m["circuits"] if c["externo"].get("ruta")]
+    if con_ruta:
+        B += [{"type": "h", "text": "3.3 Recorrido real de los cables de salida y capacidad por tramo"},
+              {"type": "p", "text": "La capacidad de conducción del cable es la del tramo más desfavorable; la caída de tensión se calcula con la longitud total del recorrido."}]
+        for c in con_ruta:
+            B += _route_blocks(f"Circuito {c['tag']}", c["externo"]["ruta"], c["externo"].get("ruta_limitante"), c["externo"]["S_mm2"])
+    B += [{"type": "h", "text": "4. Protecciones"},
           {"type": "table", "columns": [["TAG", 0.09], ["Dispositivo", 0.2], ["Curva", 0.07], ["In A", 0.06], ["Icu kA", 0.07], ["Icc mín A", 0.1], ["k·In A", 0.08], ["Disparo", 0.08],
                                         ["Sobrec.", 0.08], ["I2 A", 0.07], ["Coord.", 0.07], ["Cumple", 0.08]],
            "rows": [[c["tag"], c["proteccion"]["disp"], c["proteccion"]["curva"], sig2(c["proteccion"]["In"]), sig2(c["proteccion"]["icu_ka"]), sig2(c["proteccion"]["icc_min_a"]),

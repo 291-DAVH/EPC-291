@@ -57,6 +57,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 from epc_calc import aea_ampacity as AMP
+from epc_calc import aea_route as AR
 from epc_calc import aea_conductors as CO
 from epc_calc import aea_export as EX
 from epc_calc import aea_voltage_drop as VD
@@ -311,9 +312,16 @@ def resolver_criterios(criterios=None):
     return lim, smin, material, aislacion, float(cr.get("rcd_sensitivity_ma", 30))
 
 
+def resolver_instalacion(criterios=None):
+    """Condiciones de instalación del proyecto (criterios de diseño): temperatura ambiente, temperatura del suelo y resistividad térmica del terreno."""
+    cr = criterios or {}
+    return {"t_amb": float(cr.get("ambient_temp_c", 40.0)), "t_suelo": float(cr.get("soil_temp_c", 25.0)), "rho": float(cr.get("soil_resistivity_kmw", 1.0))}
+
+
 def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C, criterios=None, detalle=None):
     """Dimensiona todos los circuitos. Devuelve (datos_json, avisos) con `datos_json` listo para `aea_export`."""
     limites, smin_tab, mat_def, ais_def, sens_rcd = resolver_criterios(criterios)
+    inst = resolver_instalacion(criterios)
     u = float(tablero.get("TENSION_V", 380))
     icc = float(tablero.get("ICC_KA", 10))
     fp_def = float(tablero.get("FP_DEFAULT", 0.85))
@@ -365,7 +373,9 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             in_a = SERIE_IN_A[-1]
         padre = str(c.get("PARENT_TAG") or "").strip()
         base = du_acum[padre] if padre else 0.0
-        largo = _num_opt(c.get("LONGITUD_m"), 0.0)
+        ruta = list(c.get("RUTA") or [])                              # recorrido real del cable (tramos con instalaciones distintas); sin recorrido, la instalación del circuito
+        largo = AR.total_length(ruta) if ruta else _num_opt(c.get("LONGITUD_m"), 0.0)
+        multipolar = str(c.get("CABLE_TIPO") or "").strip().lower() != "unifilar"
         fp = _num_opt(c.get("FP"), fp_def)
         i_du = VD.corriente_extremo(i_b, "iluminacion") if tipo == "iluminacion" else i_b
         un_du = u if fases == 3 else u / math.sqrt(3)
@@ -376,11 +386,14 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             cc["MATERIAL"] = mat_def
         if not cc.get("AISLACION"):
             cc["AISLACION"] = ais_def
+        for col, k in (("TEMP_AMBIENTE_C", "t_amb"), ("TEMP_SUELO_C", "t_suelo"), ("RESIST_TERMICA_KMW", "rho")):
+            if cc.get(col) in (None, ""):
+                cc[col] = inst[k]
         if not cc.get("METODO") and cc["AISLACION"] == "xlpe":
             cc["METODO"] = "B2"                       # B1 solo tiene tabla para PVC
         par = AMP.parametros(cc)
         t_cond = AMP.temp_conductor(par, temp_c)
-        elegida, du_prop, ultimo_error, iz_ok, s_termica = None, 0.0, None, None, None
+        elegida, du_prop, ultimo_error, iz_ok, s_termica, r_ok = None, 0.0, None, None, None, None
         for s in SERIE_S_MM2:
             if s < smin:
                 continue
@@ -391,17 +404,30 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             except ValueError as e:
                 ultimo_error = str(e)
                 continue
+            if s_termica is None and iz_s >= margen_iz * in_a:
+                s_termica = s                       # first section that carries In: what the wiring inside the board needs (the outgoing cable may need more for the drop or the route)
+            r_s = None
+            if ruta:                                # the cable that leaves the board: the most unfavourable segment of its route governs
+                try:
+                    r_s = AR.iz_ruta(par, ruta, s, fases, inst, multipolar)
+                except ValueError as e:
+                    ultimo_error = str(e)
+                    continue
+                iz_s = r_s["iz_a"]
             if iz_s < margen_iz * in_a:
                 continue
-            if s_termica is None:
-                s_termica = s                       # first section that carries In: what the wiring inside the board needs (the outgoing cable may need more for the drop)
             du_prop = 0.0 if largo == 0 else VDG.caida_tension(
                 fases, i_du, largo, AMP.resistencia_ohm_km(s, par["material"], t_cond), CO.X_CABLE_OHM_KM, fp, un_du)["delta_u_pct"]
             if du_prop <= limite and base + du_prop <= DU_ACUM_MAX_PCT:
-                elegida, iz_ok = s, iz_s
+                elegida, iz_ok, r_ok = s, iz_s, r_s
                 break
         if elegida is None:
             elegida = SERIE_S_MM2[-1]
+            if ruta:
+                try:
+                    r_ok = AR.iz_ruta(par, ruta, elegida, fases, inst, multipolar)
+                except ValueError:
+                    r_ok = None
             avisos.append(f"{tag}: ninguna sección ≤ {elegida} mm² cumple Iz/caída (In {in_a} A, ΔU {du_prop:.2f} %): usar paralelo"
                           + (f" [{ultimo_error}]" if ultimo_error else ""))
         du_acum[tag] = base + du_prop
@@ -415,12 +441,15 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
             if i_min < k_magnetico * in_a:
                 avisos.append(f"{tag}: Icc mín al final {i_min:.0f} A < {k_magnetico}·In ({k_magnetico * in_a:.0f} A): "
                               "verificar disparo magnético (curva) o acortar/ensanchar el cable")
+        if ruta:
+            avisos.extend(f"{tag}: {a}" for a in (r_ok["avisos"] if r_ok else []) + AR.route_warnings(ruta))
         resultado[tag] = EX.circuito_json(in_a, i_b, icu, elegida, du_acum[tag], _dispositivo(c, in_a, fases, sens_rcd))
         if detalle is not None:
             detalle[tag] = {"tipo": tipo, "limite_pct": limite, "du_propia_pct": round(du_prop, 3), "du_acum_pct": round(du_acum[tag], 3),
                             "iz_a": iz_ok, "seccion_min_mm2": smin, "material": par["material"], "aislacion": par["aislacion"], "metodo": par["metodo"],
                             "cumple": bool(elegida is not None and iz_ok is not None and du_prop <= limite and du_acum[tag] <= DU_ACUM_MAX_PCT),
                             "s_termica_mm2": s_termica, "icc_min_a": None if i_min is None else round(i_min, 1), "largo_m": largo, "fases": fases, "fp": fp,
+                            "ruta": r_ok["tramos"] if r_ok else [], "ruta_limitante": r_ok["limitante"] + 1 if r_ok else None, "instalacion": inst,
                             "in_a": in_a, "ib_a": round(i_b, 3), "padre": padre, "kind": kind if kind and kind != "auto" else ("mcb" if in_a <= IN_MAX_MCB_A else "mccb"), "topologia": top}
         for h in hijos[tag]:
             _procesar(h)
