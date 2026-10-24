@@ -64,5 +64,8 @@
   "engine": [
     "calc",
     "drawing"
+  ],
+  "engine_data": [
+    "jurisdictions/AR/electrical/design-criteria.json"
   ]
 }
