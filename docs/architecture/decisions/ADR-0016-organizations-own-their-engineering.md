@@ -12,6 +12,8 @@ The platform is used by independent professionals and by professionals who belon
 - A new organization starts with itself as its first issuing company; it adds others (an independent professional may issue for several companies) and each project picks one once.
 - Personnel carry their functions (designer, checker, approver, responsible, project manager, product owner, inspector, auditor); the team pickers of a project suggest the people with the function.
 
+- The engineering team (and the development MASTER) can **view as** an organization: owner, administrator or member, or the independent professional of an organization of one person. It is a property of the session set by `POST /api/auth/view-as`, allowed only to a stored staff account, which makes the server apply that account type's rights and the organization's visibility; it only ever lowers the team's rights, and each start and end is audited.
+
 ## Consequences
 - (+) One engine of data, many organizations; the screens only hide what the server already refuses.
 - (-) Project folders are still `<client code>/<project code>` in a single namespace: two organizations that use the same client and project codes collide (the second gets "already exists"). Namespacing the folders by organization is the next step.

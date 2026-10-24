@@ -22,7 +22,8 @@ memberships = sa.Table(
 sessions = sa.Table(
     "sessions", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("organization_id", sa.Uuid), sa.Column("user_id", sa.Uuid),
-    sa.Column("token_hash", sa.String(64)), sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)))
+    sa.Column("token_hash", sa.String(64)), sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)),
+    sa.Column("view_as", sa.String(20)))          # engineering team only: the role of the organization the session is looking at the platform as
 identities = sa.Table(
     "identities", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("user_id", sa.Uuid), sa.Column("provider", sa.String(20)), sa.Column("subject", sa.String(200)),
@@ -66,3 +67,5 @@ class Principal:
     has_password: bool = True           # False for an account created through a provider that has not set one
     assigned: Tuple[str, ...] = ()      # inspector / auditor: slugs of the organizations assigned to them
     simulated: bool = False
+    can_view_as: bool = False           # the engineering team can look at the platform as an organization, a member of it or an independent professional
+    viewing_as: str = ""                # owner | admin | member while doing so

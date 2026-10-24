@@ -201,6 +201,17 @@ class OrgIn(BaseModel):
     org: str
 
 
+class ViewAsIn(BaseModel):
+    org: str = ""
+    role: str = ""          # owner | admin | member; empty = back to the team's own view
+
+
+@router.post("/api/auth/view-as")
+def view_as(body: ViewAsIn, request: Request):
+    token = service.token_from(request.cookies.get(service.COOKIE), request.headers.get("authorization"))
+    return service.me(service.view_as(service.current(), token, body.org, body.role), with_orgs=True)
+
+
 @router.post("/api/auth/switch-org")
 def switch_org(body: OrgIn, request: Request):
     token = service.token_from(request.cookies.get(service.COOKIE), request.headers.get("authorization"))

@@ -16,6 +16,10 @@ export interface NavItem {
 export function Shell({ nav, me, children }: { nav: NavItem[]; me?: Me | null; children: ReactNode }) {
   const { t, lang, setLang } = useI18n();
   const theme = useTheme();
+  const viewAs = async (org: string, role: string) => {                // the engineering team looks at the platform as an organization, a member of it or an independent professional
+    await api("/auth/view-as", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ org, role }) });
+    window.location.assign("/");
+  };
   return (
     <div className="shell">
       <aside className="side">
@@ -36,12 +40,23 @@ export function Shell({ nav, me, children }: { nav: NavItem[]; me?: Me | null; c
           </div>
         )}
         <div className="spacer" />
-        {me?.organizations && (me.organizations.length > 1 || (me.role === "admin" && me.organizations.length > 0)) && (
+        {me?.organizations && (me.organizations.length > 1 || ((me.role === "admin" || me.can_view_as) && me.organizations.length > 0)) && (
           <label className="orgswitch">
             <span className="muted small">{t("acct.switchOrg")}</span>
             <select value={me.org_slug ?? ""} onChange={async (e) => { await api("/auth/switch-org", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ org: e.target.value }) }); window.location.assign("/"); }}>
-              {me.role === "admin" && <option value="">{t("acct.allOrgs")}</option>}
+              {(me.role === "admin" || me.can_view_as) && <option value="">{t("acct.allOrgs")}</option>}
               {me.organizations.map((o) => <option key={o.slug} value={o.slug}>{o.name}</option>)}
+            </select>
+          </label>
+        )}
+        {me?.can_view_as && me.org_slug && (
+          <label className="orgswitch">
+            <span className="muted small">{t("acct.viewAs")}</span>
+            <select value={me.viewing_as ?? ""} onChange={async (e) => { await viewAs(me.org_slug ?? "", e.target.value); }}>
+              <option value="">{t("acct.view.team")}</option>
+              {me.organizations?.find((o) => o.slug === me.org_slug)?.kind === "individual"
+                ? <option value="owner">{t("acct.view.individual")}</option>
+                : <>{(["owner", "admin", "member"] as const).map((r) => <option key={r} value={r}>{t(("acct.view." + r) as Key)}</option>)}</>}
             </select>
           </label>
         )}
@@ -52,7 +67,15 @@ export function Shell({ nav, me, children }: { nav: NavItem[]; me?: Me | null; c
           <button onClick={theme.toggle} aria-label={t("theme.toggle")} title={t("theme.toggle")}>{theme.isDark ? "☀" : "☾"}</button>
         </div>
       </aside>
-      <main className="main">{children}</main>
+      <main className="main">
+        {me?.viewing_as && (
+          <div className="alert warn" role="status" style={{ marginBottom: 12 }}>
+            {t("acct.viewing")} <b>{t((me.org_kind === "individual" ? "acct.view.individual" : "acct.view." + me.viewing_as) as Key)}</b> · <b>{me.org}</b>
+            {" "}<button onClick={() => viewAs(me.org_slug ?? "", "")}>{t("acct.viewBack")}</button>
+          </div>
+        )}
+        {children}
+      </main>
     </div>
   );
 }

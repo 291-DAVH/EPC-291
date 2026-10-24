@@ -163,7 +163,11 @@ def session_by_hash(token_hash: str) -> Optional[dict]:
 
 
 def update_session_org(token_hash: str, org_id) -> None:
-    _write(sa.update(sessions).where(sessions.c.token_hash == token_hash).values(organization_id=uid(org_id) if org_id else None))
+    _write(sa.update(sessions).where(sessions.c.token_hash == token_hash).values(organization_id=uid(org_id) if org_id else None, view_as=None))
+
+
+def update_session_view(token_hash: str, org_id, view_as) -> None:
+    _write(sa.update(sessions).where(sessions.c.token_hash == token_hash).values(organization_id=uid(org_id) if org_id else None, view_as=view_as or None))
 
 
 def delete_session(token_hash: str) -> None:

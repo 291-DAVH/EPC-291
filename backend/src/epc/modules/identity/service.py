@@ -190,7 +190,10 @@ def _from_session(token: str) -> Optional[Principal]:
             org = repo.org_by_id(row["organization_id"])
             if org:
                 acting = dict(org_id=str(org["id"]), org_slug=org["slug"], org_name=org["name"], org_kind=org["kind"], org_role="owner")
-        return Principal(role=user["platform_role"], assigned=assigned, **base, **acting)
+                if row.get("view_as") in VIEW_AS_ROLES:                                  # looking at the platform as that organization sees it: the same rights and the same data, nothing more
+                    return Principal(role="user", org_id=str(org["id"]), org_slug=org["slug"], org_name=org["name"], org_kind=org["kind"], org_role=row["view_as"],
+                                     can_view_as=True, viewing_as=row["view_as"], **base)
+        return Principal(role=user["platform_role"], assigned=assigned, can_view_as=user["platform_role"] == "admin", **base, **acting)
     org = repo.org_by_id(row["organization_id"]) if row["organization_id"] else None
     mem = repo.membership(org["id"], user["id"]) if org else None
     if not org or not org["active"] or not mem or not mem["active"]:
@@ -230,7 +233,7 @@ def account_type(p: Principal) -> str:
 
 
 def _organizations(p: Principal) -> List[dict]:
-    if p.authenticated and not p.simulated and p.user_id and p.role == "admin":              # the engineering team can enter any organization
+    if p.authenticated and not p.simulated and p.user_id and (p.role == "admin" or p.can_view_as):              # the engineering team can enter any organization
         return [{"slug": o["slug"], "name": o["name"], "kind": o["kind"], "role": "owner", "current": o["slug"] == p.org_slug} for o in repo.list_orgs()]
     if not p.authenticated or p.simulated or not p.user_id or p.role in NO_ORG_ROLES:
         return []
@@ -242,7 +245,7 @@ def me(p: Principal, with_orgs: bool = False) -> dict:
     out = {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "account_type": account_type(p), "name": p.name, "email": p.email, "username": p.username, "has_password": p.has_password,
            "org": p.org_name, "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open",
            "landing": "/norms" if p.role == "standards" else "/", "app_url": settings.public_url, "console_url": settings.console_url, "abilities": permissions.abilities_of(account_type(p)),
-           "assigned": list(p.assigned)}
+           "assigned": list(p.assigned), "can_view_as": p.can_view_as, "viewing_as": p.viewing_as}
     if with_orgs:
         out["organizations"] = _organizations(p)
     return out
@@ -252,11 +255,35 @@ def current_user() -> dict:
     return me(current())
 
 
+VIEW_AS_ROLES = ("owner", "admin", "member")
+
+
+def view_as(p: Principal, token: Optional[str], slug: str, role: str) -> Principal:
+    """The engineering team looks at the platform as an organization sees it: as its owner, its administrator, one of its members, or, for an organization of one person,
+    as that independent professional. The server then applies exactly what that account may do and see. `role` empty goes back to the team's own view."""
+    row = repo.session_by_hash(token_hash(token)) if token else None
+    user = repo.user_by_id(row["user_id"]) if row else None
+    if not user or user["platform_role"] != "admin" or not p.authenticated or p.simulated:                 # decided on the stored account, not on how the session looks now
+        raise Forbidden("only the engineering team can look at the platform as another account")
+    if not role:
+        repo.update_session_view(token_hash(token), row["organization_id"], None)
+        audit("view_as_ended", target=slug or "", actor=p)
+        return _from_session(token) or p
+    org = repo.org_by_slug(slug or "")
+    if not org or not org["active"]:
+        raise NotFound("organization not found")
+    if role not in VIEW_AS_ROLES or (org["kind"] == "individual" and role != "owner"):
+        raise Invalid({"role": "owner, admin or member (an independent professional is its own owner)"})
+    repo.update_session_view(token_hash(token), org["id"], role)
+    audit("view_as_started", target=f"{slug}:{role}", org=str(org["id"]), actor=p)
+    return _from_session(token) or p
+
+
 def switch_org(p: Principal, token: Optional[str], slug: str) -> Principal:
     """A person who belongs to several organizations changes the one the session works in, without signing in again."""
     if not p.authenticated or p.simulated or not p.user_id or not token or p.role not in ("user", "admin"):
         raise Forbidden("this account does not belong to organizations")
-    if p.role == "admin":                                         # staff: any organization, or none (the whole platform)
+    if p.role == "admin" or p.can_view_as:                                         # staff: any organization, or none (the whole platform)
         org = repo.org_by_slug(slug) if slug else None
         if slug and not org:
             raise NotFound("organization not found")
