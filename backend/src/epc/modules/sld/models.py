@@ -12,6 +12,8 @@ class Board(BaseModel):
     frequency_hz: float = 50
     project: str = ""
     feeder_length_m: float = 20             # supply cable length (acometida)
+    supplied_from: str = ""                 # id of the upstream board that feeds this one (empty: fed from the utility or a source outside the project)
+    supply_tag: str = ""                    # circuit of the upstream board that is this board's supply
 
 
 class Circuit(BaseModel):
@@ -50,3 +52,9 @@ class SldIn(BaseModel):
     board: Board
     circuits: List[Circuit]
     titleblock: Titleblock = Titleblock()
+
+
+class BoardIn(BaseModel):
+    name: str
+    supplied_from: str = ""
+    supply_tag: str = ""

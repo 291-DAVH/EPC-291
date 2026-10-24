@@ -106,6 +106,11 @@ class TestSldUsesMasterData(Base):
         body = {"board": {**v["input"]["board"], "name": "TGBT-01", "icc_ka": 10}, "titleblock": tb,
                 "circuits": [{"tag": "C-01", "description": "ALIMENTADOR", "load": 20, "unit": "A", "destination": "TD-1", "topology": "single", "phase": "3F", "length_m": 20, "kind": "mccb"}]}
         self.assertEqual(self.c.put(base, json=body).status_code, 200)
+        self.assertEqual(self.c.post(base + "/generate", params={"diagrams": "none"}).status_code, 202)           # memo and summary first
+        for _ in range(240):
+            if self.c.get(base + "/status").json()["state"] in ("done", "failed"):
+                break
+            time.sleep(0.5)
         self.assertEqual(self.c.post(base + "/generate").status_code, 202)
         for _ in range(240):
             st = self.c.get(base + "/status").json()

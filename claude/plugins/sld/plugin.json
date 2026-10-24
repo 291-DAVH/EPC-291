@@ -1,6 +1,6 @@
 {
   "id": "sld",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "kind": "generator",
   "description": "Single-line diagram (SLD) of a board on IRAM sheets from a circuit Excel: SVG and DXF per sheet plus a circuit calculation table sheet. Draws the calculation of epc_calc (with the project's design criteria) when it is provided.",
   "discipline": [

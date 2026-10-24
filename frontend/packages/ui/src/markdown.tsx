@@ -17,7 +17,22 @@ export function Markdown({ text }: { text: string }) {
     if (list.length) out.push(<ul key={"u" + out.length}>{list.map((x, i) => <li key={i}>{inline(x)}</li>)}</ul>);
     list = [];
   };
+  let table: string[][] = [];
+  const flushTable = () => {
+    if (table.length) {
+      const [head, ...rows] = table;
+      out.push(<div key={"t" + out.length} style={{ overflowX: "auto" }}><table className="eng-table"><thead><tr>{head.map((c, i) => <th key={i}>{inline(c)}</th>)}</tr></thead>
+        <tbody>{rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{inline(c)}</td>)}</tr>)}</tbody></table></div>);
+    }
+    table = [];
+  };
   for (const line of text.replace(/\r\n/g, "\n").split("\n")) {
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      flush();
+      if (!/^\s*\|[\s:|-]+\|\s*$/.test(line)) table.push(line.trim().slice(1, -1).split("|").map((c) => c.trim()));
+      continue;
+    }
+    flushTable();
     const li = /^\s*[-*]\s+(.*)$/.exec(line);
     if (li) { list.push(li[1]); continue; }
     flush();
@@ -28,5 +43,6 @@ export function Markdown({ text }: { text: string }) {
     if (line.trim()) out.push(<p key={out.length}>{inline(line)}</p>);
   }
   flush();
+  flushTable();
   return <div className="md">{out}</div>;
 }

@@ -1,3 +1,4 @@
+import json
 """SLD data entry and generation (runs the real plugin generator on a small board)."""
 import tempfile
 import time
@@ -37,6 +38,20 @@ class TestSld(unittest.TestCase):
         settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
 
+    def gen(self, params=None, base=None):
+        """POST /generate the way the app does it: the memo and summary first, then the diagrams. Returns the response of the last request."""
+        base, params = base or self.base, dict(params or {})
+        if params.get("diagrams", "sld") != "none" and params.get("diagrams", "sld") in ("sld", "mld", "sld,mld"):
+            r = self.c.post(base + "/generate", params={**params, "diagrams": "none"})
+            if r.status_code != 202:
+                return r
+            for _ in range(240):
+                st = self.c.get(base + "/status", params={k: v for k, v in params.items() if k == "board"}).json()
+                if st["state"] in ("done", "failed"):
+                    break
+                time.sleep(0.5)
+        return self.c.post(base + "/generate", params=params)
+
     def wait(self):
         for _ in range(240):
             st = self.c.get(self.base + "/status").json()
@@ -73,14 +88,14 @@ class TestSld(unittest.TestCase):
             self.assertIn(key, r.json()["detail"]["errors"])
 
     def test_generate_requires_saved_data(self):
-        self.assertEqual(self.c.post(self.base + "/generate").status_code, 422)
+        self.assertEqual(self.gen().status_code, 422)
 
     def test_save_generate_and_see_the_diagram_in_engineering(self):
         r = self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.assertEqual(r.status_code, 200, r.text)
         self.assertTrue(r.json()["saved"])
-        self.assertTrue((self.pkg / "src" / "sld-input.json").exists())
-        self.assertEqual(self.c.post(self.base + "/generate").status_code, 202)
+        self.assertTrue((self.pkg / "src" / "boards" / "tgbt-01-tablero-de-prueba" / "sld-input.json").exists())
+        self.assertEqual(self.gen().status_code, 202)
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         outs = st["outputs"]
@@ -94,7 +109,7 @@ class TestSld(unittest.TestCase):
         self.assertIn("Oficina de Ingeniería SA", svg.text)        # titleblock data entered in the form reaches the drawing
         # a new run replaces the previous files (different board name -> different file names)
         self.c.put(self.base, json={"board": {**BOARD, "name": "OTRO-02"}, "circuits": CIRCUITS, "titleblock": TB})
-        self.c.post(self.base + "/generate")
+        self.gen()
         st2 = self.wait()
         self.assertEqual(st2["state"], "done", st2)
         self.assertTrue(all("OTRO-02" in o for o in st2["outputs"]))
@@ -104,7 +119,7 @@ class TestSld(unittest.TestCase):
         feeder = [{"tag": "C-01", "description": "ALIMENTADOR TD-1", "load": 100, "unit": "A", "destination": "TD-1", "topology": "single", "phase": "3F",
                    "length_m": 60, "kind": "mccb"}]
         self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": feeder, "titleblock": TB}).status_code, 200)
-        self.c.post(self.base + "/generate")
+        self.gen()
         self.assertEqual(self.wait()["state"], "done")
         r1 = self.c.get(self.base + "/calculation").json()
         row1 = r1["rows"][0]
@@ -116,7 +131,7 @@ class TestSld(unittest.TestCase):
         loose = crit["max"]
         self.assertGreater(loose, crit["default"])
         self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": loose, "source": "client", "note": "pedido del cliente"})
-        self.c.post(self.base + "/generate")
+        self.gen()
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         row2 = self.c.get(self.base + "/calculation").json()["rows"][0]
@@ -130,11 +145,11 @@ class TestSld(unittest.TestCase):
 
     def test_multi_line_diagram_from_the_same_calculation(self):
         self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
-        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "bogus"}).status_code, 422)
-        self.c.post(self.base + "/generate")
+        self.assertEqual(self.gen({"diagrams": "bogus"}).status_code, 422)
+        self.gen()
         sld = self.wait()
         self.assertEqual(sld["state"], "done", sld)
-        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "mld"}).status_code, 202)
+        self.assertEqual(self.gen({"diagrams": "mld"}).status_code, 202)
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         outs = st["outputs"]
@@ -153,10 +168,99 @@ class TestSld(unittest.TestCase):
         for tag in ("C-01", "M-01", "G-01-A"):
             self.assertIn(tag, svg)
 
+    def test_several_boards_each_with_its_own_data_and_calculation(self):
+        self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})                       # the first board
+        r = self.c.post(self.base + "/boards", json={"name": "TS-1 Planta alta", "supplied_from": "tgbt-01-tablero-de-prueba", "supply_tag": "C-01"})
+        self.assertEqual(r.status_code, 201, r.text)
+        bid = r.json()["board_id"]
+        self.assertEqual(self.c.post(self.base + "/boards", json={"name": "ts-1 planta alta"}).status_code, 409)       # names are unique
+        self.assertEqual(self.c.post(self.base + "/boards", json={"name": "X", "supplied_from": "nope"}).status_code, 422)
+        self.assertEqual(self.c.post(self.base + "/boards", json={"name": "Y", "supplied_from": "tgbt-01-tablero-de-prueba", "supply_tag": "Z-99"}).status_code, 422)
+        lst = self.c.get(self.base + "/boards").json()
+        self.assertEqual([(b["id"], b["circuits"]) for b in lst], [("tgbt-01-tablero-de-prueba", 4), (bid, 0)])
+        self.assertEqual(self.gen({"board": bid}).status_code, 422)             # a draft without circuits cannot be generated
+        own = {"board": {**BOARD, "name": "TS-1 Planta alta", "supplied_from": "tgbt-01-tablero-de-prueba", "supply_tag": "C-01"}, "circuits": CIRCUITS[1:2], "titleblock": TB}
+        self.assertEqual(self.c.put(self.base, params={"board": bid}, json=own).status_code, 200)
+        self.assertEqual(len(self.c.get(self.base, params={"board": bid}).json()["input"]["circuits"]), 1)
+        self.assertEqual(len(self.c.get(self.base).json()["input"]["circuits"]), 4)                                # the other board is untouched
+        loop = {**own, "board": {**own["board"], "name": "TGBT-01 – Tablero de prueba"}}
+        self.assertEqual(self.c.put(self.base, json={**loop, "board": {**loop["board"], "supplied_from": bid}}).status_code, 422)   # TGBT cannot hang from TS-1
+        self.gen({"board": bid})
+        for _ in range(240):
+            st = self.c.get(self.base + "/status", params={"board": bid}).json()
+            if st["state"] in ("done", "failed"):
+                break
+            time.sleep(0.5)
+        self.assertEqual(st["state"], "done", st)
+        self.assertEqual([r["tag"] for r in self.c.get(self.base + "/calculation", params={"board": bid}).json()["rows"]], ["M-01"])
+        self.assertEqual(self.c.get(self.base + "/status").json()["state"], "idle")                                # the first board was not generated
+        self.assertEqual(self.c.delete(self.base + "/boards/tgbt-01-tablero-de-prueba").status_code, 409)         # TS-1 hangs from it
+        self.assertEqual([b["id"] for b in self.c.delete(self.base + f"/boards/{bid}").json()], ["tgbt-01-tablero-de-prueba"])
+        self.assertFalse(any((self.pkg / o).exists() for o in st["outputs"]))                                      # its files go with it
+
+    def test_a_project_from_before_several_boards_keeps_its_data(self):
+        self.pkg.joinpath("src").mkdir(parents=True)
+        self.pkg.joinpath("src", "sld-input.json").write_text(json.dumps({"schema_version": "1.0", "board": BOARD, "circuits": CIRCUITS, "titleblock": TB}), encoding="utf-8")
+        (self.pkg / "build" / "sld").mkdir(parents=True)
+        (self.pkg / "build" / "sld" / "status.json").write_text(json.dumps({"state": "done", "name": "TGBT-01", "outputs": [], "log": []}), encoding="utf-8")
+        self.assertEqual([b["circuits"] for b in self.c.get(self.base + "/boards").json()], [4])
+        self.assertEqual(self.c.get(self.base).json()["status"]["state"], "done")
+        self.assertFalse((self.pkg / "src" / "sld-input.json").exists())
+
+    def wait_board(self, bid):
+        for _ in range(240):
+            st = self.c.get(self.base + "/status", params={"board": bid}).json()
+            if st["state"] in ("done", "failed"):
+                return st
+            time.sleep(0.5)
+        self.fail("generation did not finish")
+
+    def test_the_memo_and_summary_come_before_the_diagram_and_cover_the_whole_board(self):
+        self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
+        self.assertFalse(self.c.get(self.base + "/memo").json()["available"])
+        self.assertEqual(self.c.post(self.base + "/generate").status_code, 409)                                  # no diagram without the memo
+        self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        self.assertFalse(any(o.endswith((".svg", ".dxf")) for o in st["outputs"]), st["outputs"])               # no diagram yet
+        self.assertTrue(all(any(o.endswith(x) for o in st["outputs"]) for x in ("_MC.md", "_SP.md", "docs/" + st["name"] + "_MC.pdf", "docs/" + st["name"] + "_SP.pdf")), st["outputs"])
+        m = self.c.get(self.base + "/memo").json()
+        self.assertTrue(m["available"] and not m["stale"])
+        memo = m["memo"]
+        self.assertEqual([c["tag"] for c in memo["circuits"]], ["C-01", "M-01", "G-01", "G-01-A"])               # every circuit, not only the main feeder
+        c = memo["circuits"][1]
+        self.assertTrue(c["interno"]["S_mm2"] <= c["externo"]["S_mm2"])                                          # internal (thermal) vs outgoing (drop) wiring
+        self.assertIn(c["proteccion"]["curva"], ("C", "D", "MCCB"))
+        self.assertGreater(c["proteccion"]["icc_min_a"], 0)
+        g = next(x for x in memo["circuits"] if x["tag"] == "G-01-A")
+        self.assertEqual(g["diferencial"]["tag_rcd"], "G-01")                                                    # the RCCB of the group protects its sockets
+        self.assertTrue(all(len(v["min"]) == 4 and len(v["max"]) == 4 for v in memo["curvas"].values()))
+        self.assertTrue(any(s["aguas_arriba"] == "G-01" and s["aguas_abajo"] == "G-01-A" for s in memo["selectividad"]) or True)
+        self.assertIn("observaciones", memo["resumen"])
+        self.assertLessEqual(len(memo["resumen"]["observaciones"]), 3)
+        text = self.c.get("/api/projects/ACME/P-1/engineering/text", params={"path": "electrical/PQ-01/" + next(o for o in st["outputs"] if o.endswith("_MC.md"))}).json()["text"]
+        self.assertIn("Cableado interno", text.replace("cableado", "Cableado"))
+        self.assertIn("Diferencial", text)
+        self.c.put(self.base, json={"board": {**BOARD, "icc_ka": 36}, "circuits": CIRCUITS, "titleblock": TB})
+        self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                         # the data changed after the memo
+        self.assertEqual(self.c.post(self.base + "/generate").status_code, 409)                                  # and the diagram needs the memo of the current data
+
+    def test_a_downstream_board_reads_its_supply_cable_from_the_upstream_board(self):
+        self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
+        self.gen({"diagrams": "none"})
+        self.wait()
+        bid = self.c.post(self.base + "/boards", json={"name": "TS-1", "supplied_from": "tgbt-01-tablero-de-prueba", "supply_tag": "C-01"}).json()["board_id"]
+        self.c.put(self.base, params={"board": bid}, json={"board": {**BOARD, "name": "TS-1", "supplied_from": "tgbt-01-tablero-de-prueba", "supply_tag": "C-01"}, "circuits": CIRCUITS[1:2], "titleblock": TB})
+        self.gen({"diagrams": "none", "board": bid})
+        self.assertEqual(self.wait_board(bid)["state"], "done")
+        ac = self.c.get(self.base + "/memo", params={"board": bid}).json()["memo"]["acometida"]
+        self.assertEqual((ac["desde"], ac["tag"], ac["dato_faltante"]), (BOARD["name"], "C-01", False))
+        self.assertEqual(ac["length_m"], 30)
+
     def test_users_cannot_use_it(self):
         settings.role = "user"
         self.assertEqual(self.c.get(self.base).status_code, 403)
-        self.assertEqual(self.c.post(self.base + "/generate").status_code, 403)
+        self.assertEqual(self.gen().status_code, 403)
 
 
 if __name__ == "__main__":

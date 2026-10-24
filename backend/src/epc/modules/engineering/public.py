@@ -23,9 +23,17 @@ def criteria_values(project_dir: Path, discipline: str = "electrical") -> dict:
         return {}
 
 
+def criteria_validated(project_dir: Path, discipline: str = "electrical") -> bool:
+    """True when the base values of the design criteria were validated against the standards (False when pending or when there is no catalog)."""
+    try:
+        return bool(service.criteria_view(project_dir, discipline)["validated"])
+    except Exception:                                    # noqa: BLE001
+        return False
+
+
 def issuable(project_dir: Path) -> list:
     """Sources that can be issued: [{id, name, discipline, package, kind: drawing|document, files: {format: Path}}]."""
     return repository.issuable(project_dir)
 
 
-__all__ = ["criterion_value", "criteria_values", "issuable"]
+__all__ = ["criterion_value", "criteria_values", "criteria_validated", "issuable"]

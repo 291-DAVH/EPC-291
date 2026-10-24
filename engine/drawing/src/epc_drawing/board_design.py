@@ -166,6 +166,19 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     crit_json.write_text(json.dumps({"criterios": criteria or {}, "limites_pct": res["limites"], "conductor": res["conductor"], "rcd_ma": res["rcd_ma"]},
                                     ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
+    from epc_calc import board_memo as BM                 # memoria de cálculo y síntesis del tablero: mismos números que el unifilar (fuente única)
+    memo = BM.build(data["board"], data["circuits"], res["datos"], res["detalle"], res["limites"], res["conductor"], res["rcd_ma"],
+                    upstream=data.get("upstream"), validated=bool(data.get("validated", True)))
+    (out / f"{name}_memoria.json").write_text(json.dumps(memo, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    (out / f"{name}_MC.md").write_text(BM.memoria_md(memo), encoding="utf-8", newline="\n")
+    (out / f"{name}_SP.md").write_text(BM.sintesis_md(memo), encoding="utf-8", newline="\n")
+    try:                                                   # the memo and the summary as PDF (what is issued to the client)
+        from epc_drawing.export import report_pdf
+        report_pdf.render(BM.memoria_doc(memo), out / f"{name}_MC.pdf")
+        report_pdf.render(BM.sintesis_doc(memo), out / f"{name}_SP.pdf")
+    except Exception as exc:                               # noqa: BLE001 - the calculation stands; the PDF is reported as a warning
+        avisos.append(f"no se pudo generar el PDF de la memoria: {exc}")
+
     env = dict(os.environ, SLD_ROTULO_DIR=str(tb_dir), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_CALC_NOTE=calc_note(res),
                SLD_LIM_ACOMETIDA_PCT=str(res["limites"]["seccional"]), SLD_LIM_TERMINAL_PCT=str(res["limites"]["terminal"]), SLD_LIM_MOTOR_PCT=str(res["limites"]["motor"]))
     log, error = [], None
@@ -182,7 +195,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
         if run.returncode != 0:
             error = (run.stderr or run.stdout).strip()[-600:]
     summary = {"name": name, "ok": error is None, "avisos": avisos, "log": log, "limites_pct": res["limites"], "conductor": res["conductor"],
-               "circuits": len(res["datos"]), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "error": error}
+               "circuits": len(res["datos"]), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"], "error": error}
     (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     return summary
 
@@ -196,7 +209,7 @@ def main(argv=None) -> int:
     ap.add_argument("--criteria")
     ap.add_argument("--logo", action="append", default=[], help="provider=FILE or client=FILE")
     ap.add_argument("--maxl", type=int, default=18)
-    ap.add_argument("--diagrams", default="sld", help="comma list: sld,mld")
+    ap.add_argument("--diagrams", default="sld", help="comma list: sld,mld (or none: calculation, memo and summary only)")
     a = ap.parse_args(argv)
     if a.project:
         pkg = Path(a.project) / "workspace" / "02-engineering" / "electrical" / "PQ-01"

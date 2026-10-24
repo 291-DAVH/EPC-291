@@ -42,6 +42,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 input, select { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
 input[type=checkbox] { accent-color: var(--accent); }
 .grid { display: grid; gap: 12px; }
+.grid > * { min-width: 0; }
 .stats { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); margin-bottom: 20px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
 .stat b { font-size: 28px; display: block; line-height: 1.1; }
@@ -171,6 +172,7 @@ table.wbs tr.wbs-group td { background: var(--panel-2); }
 .eng-view img { display: block; max-width: none; }
 .md { font-size: 14px; line-height: 1.55; } .md h2, .md h3, .md h4, .md h5 { margin: 14px 0 6px; } .md p { margin: 6px 0; } .md ul { margin: 6px 0; padding-left: 20px; } .md blockquote { margin: 8px 0; padding: 6px 12px; border-left: 3px solid var(--line); color: var(--muted); } .md code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; }
 .eng-text { white-space: pre-wrap; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; padding: 12px; margin: 0; }
+table.eng-table { font-size: 13px; } .md table.eng-table th { text-align: left; font-weight: 600; background: var(--panel-2); padding: 4px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 table.eng-table { font-size: 13px; } table.eng-table td, table.eng-table th { padding: 4px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: left; }
 table.eng-table tr:first-child td { font-weight: 600; background: var(--panel-2); }
 
