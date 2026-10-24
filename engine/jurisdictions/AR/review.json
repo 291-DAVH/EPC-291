@@ -1,0 +1,110 @@
+{
+ "schema_version": "1.0",
+ "points": {
+  "criterion:ar-electrical|board_height_m": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:37:16-03:00",
+   "note": "",
+   "sha": "24f05f2ad9a8c417a12dfa38a658ec31e52768fd31287521283c1f3599e755d4"
+  },
+  "criterion:ar-electrical|board_spare_pct": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:32:07-03:00",
+   "note": "",
+   "sha": "60b8cd31691d0ee5a96c8d1c7f39d7bccb4e1602dcb8fc7728ab69c714ce5557"
+  },
+  "criterion:ar-electrical|conductor_material": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:34:59-03:00",
+   "note": "",
+   "sha": "e96710f8391f61ba9ab9379f748c762154489d016fcd992b7526ce1961486953"
+  },
+  "criterion:ar-electrical|frequency_hz": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:27:42-03:00",
+   "note": "",
+   "sha": "ec16ecc4223a66afdc77f1e8431bb369154b2af73d80c7f5dc8692dd3cf253d4"
+  },
+  "criterion:ar-electrical|insulation": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:28:43-03:00",
+   "note": "",
+   "sha": "7e028c0b5ccd5fee86370b0a67a803fb7df3bba8c51e9d7c0961360e1e7f452e"
+  },
+  "criterion:ar-electrical|min_section_lighting_mm2": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:29:21-03:00",
+   "note": "",
+   "sha": "35100e69a2c4b54fde1c76e02d7248b5ea2e78f81de1830de4d41c0dbc13b187"
+  },
+  "criterion:ar-electrical|min_section_sockets_mm2": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:29:41-03:00",
+   "note": "",
+   "sha": "fe8aa82cb7de4d0915b305eb1171f27c1436784624478ade998e0fc0f901b055"
+  },
+  "criterion:ar-electrical|nominal_voltage_v": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:28:33-03:00",
+   "note": "",
+   "sha": "2cf37af912050fdd1fd0b51f982650b047b1c3d1d7933b8ef7e6f00f4f9bac59"
+  },
+  "criterion:ar-electrical|raceway_fill_max_pct": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:36:47-03:00",
+   "note": "",
+   "sha": "723a955ce13e70b63008bd6a3ceebefa8b07c45d33919190eb54f27788042de1"
+  },
+  "criterion:ar-electrical|rcd_sensitivity_ma": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:34:24-03:00",
+   "note": "",
+   "sha": "bb4979aac9a4b608ad8ab7003988061d0c031b63bf874e3c24d1ae3f51a57971"
+  },
+  "criterion:ar-electrical|socket_height_m": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:37:04-03:00",
+   "note": "",
+   "sha": "07b7a3ee92c3905ac059dea4b40e105d3dde6de05a03b219858c4eecec86992b"
+  },
+  "criterion:ar-electrical|switch_height_m": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:27:15-03:00",
+   "note": "",
+   "sha": "fc097d622067ec46cb38afb8bb3604d32aa683aaeb821f87cdc0c7b1df6c80e4"
+  },
+  "criterion:ar-electrical|vd_lighting_sockets_pct": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:36:32-03:00",
+   "note": "",
+   "sha": "0d1265480252a5cb1b10f6164a2c493cf7840cfd787b83d9c86651c723524ff3"
+  },
+  "criterion:ar-electrical|vd_motors_pct": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:36:08-03:00",
+   "note": "",
+   "sha": "78bf7ac17286290999fe4738050e149454865ca729901935b5d73b3bb6f6bde2"
+  },
+  "criterion:ar-electrical|vd_sectional_pct": {
+   "status": "approved",
+   "by": "Daniel A. Villena H.",
+   "at": "2026-10-24T10:35:47-03:00",
+   "note": "",
+   "sha": "2a7325bd36a0b8490d0780753c1da141139f59850fee6beb1fc0f5022bd53f9b"
+  }
+ }
+}
