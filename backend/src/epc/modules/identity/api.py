@@ -1,16 +1,18 @@
 from typing import Optional
 
 from fastapi import APIRouter, Request, Response
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from epc.core.config import settings
-from epc.modules.identity import service
+from epc.modules.identity import oauth, service
 
 router = APIRouter()
 
 
 class LoginIn(BaseModel):
-    email: str
+    login: Optional[str] = None          # email or alias
+    email: Optional[str] = None          # older clients send the email here
     password: str
     org: str = ""
 
@@ -21,6 +23,13 @@ class SignupIn(BaseModel):
     name: str
     email: str
     password: str
+    username: str = ""
+
+
+class CompleteIn(BaseModel):
+    kind: str = "individual"
+    org_name: str = ""
+    username: str = ""
 
 
 class TokenIn(BaseModel):
@@ -31,6 +40,7 @@ class AcceptIn(BaseModel):
     token: str
     name: str = ""
     password: str
+    username: str = ""
 
 
 class PasswordIn(BaseModel):
@@ -71,6 +81,7 @@ class NewUserIn(BaseModel):
     email: str
     name: str
     password: str
+    username: str = ""
     platform_role: str = "standards"                      # standards | inspector | auditor | admin
 
 
@@ -95,13 +106,13 @@ def me():
 # ---- sign in / out (anonymous allowed where listed in guard.ANONYMOUS_PATHS)
 @router.post("/api/auth/login")
 def login(body: LoginIn, request: Request, response: Response):
-    token, p = service.login(body.email, body.password, body.org, request.client.host if request.client else "")
+    token, p = service.login(body.login or body.email or "", body.password, body.org, request.client.host if request.client else "")
     return _start(response, token, p)
 
 
 @router.post("/api/auth/signup", status_code=201)
 def signup(body: SignupIn, response: Response):
-    token, p = service.signup(body.kind, body.org_name, body.name, body.email, body.password)
+    token, p = service.signup(body.kind, body.org_name, body.name, body.email, body.password, body.username)
     return _start(response, token, p)
 
 
@@ -112,8 +123,71 @@ def invitation(body: TokenIn):
 
 @router.post("/api/auth/accept-invitation")
 def accept_invitation(body: AcceptIn, response: Response):
-    token, p = service.accept_invitation(body.token, body.name, body.password)
+    token, p = service.accept_invitation(body.token, body.name, body.password, body.username)
     return _start(response, token, p)
+
+
+# ---- sign-in and sign-up with an external provider (Google, GitHub, Facebook, LinkedIn)
+def _cookie(response: Response, name: str, value: str, max_age: int) -> None:
+    response.set_cookie(name, value, max_age=max_age, httponly=True, samesite="lax", secure=settings.cookie_secure, path=oauth.PATH)       # Lax: the provider sends the person back with a GET
+
+
+@router.get("/api/auth/providers")
+def providers():
+    return service.oauth_providers()
+
+
+@router.get("/api/auth/oauth/pending")
+def oauth_pending(request: Request):
+    return service.oauth_pending(request.cookies.get(oauth.PENDING_COOKIE))
+
+
+@router.post("/api/auth/oauth/complete", status_code=201)
+def oauth_complete(body: CompleteIn, request: Request, response: Response):
+    token, p = service.oauth_complete(request.cookies.get(oauth.PENDING_COOKIE), body.kind, body.org_name, body.username, request.client.host if request.client else "")
+    response.delete_cookie(oauth.PENDING_COOKIE, path=oauth.PATH)
+    return _start(response, token, p)
+
+
+@router.get("/api/auth/oauth/{provider}/start")
+def oauth_start(provider: str, mode: str = "login", invite: str = ""):
+    try:
+        url, flow = service.oauth_start(provider, mode, invite, service.current())
+    except service.OAuthError as e:
+        return RedirectResponse(f"/?auth_error={e.code}", status_code=302)
+    r = RedirectResponse(url, status_code=302)
+    _cookie(r, oauth.COOKIE, flow, 600)
+    return r
+
+
+@router.get("/api/auth/oauth/{provider}/callback")
+def oauth_callback(provider: str, request: Request, code: str = "", state: str = "", error: str = ""):
+    try:
+        res = service.oauth_callback(provider, "" if error else code, state, request.cookies.get(oauth.COOKIE), request.client.host if request.client else "")
+    except service.OAuthError as e:
+        r = RedirectResponse(f"/?auth_error={e.code}", status_code=302)
+    else:
+        if res.get("token"):
+            r = RedirectResponse("/", status_code=302)
+            r.set_cookie(service.COOKIE, res["token"], max_age=settings.session_hours * 3600, httponly=True, samesite="lax", secure=settings.cookie_secure, path="/")
+        elif res.get("pending"):
+            r = RedirectResponse("/?social=pending", status_code=302)
+            _cookie(r, oauth.PENDING_COOKIE, res["pending"], 900)
+        else:
+            r = RedirectResponse(res["to"], status_code=302)
+    r.delete_cookie(oauth.COOKIE, path=oauth.PATH)
+    return r
+
+
+@router.get("/api/auth/identities")
+def identities():
+    return service.identities_of(service.current())
+
+
+@router.delete("/api/auth/identities/{provider}")
+def unlink_identity(provider: str):
+    service.unlink_identity(service.current(), provider)
+    return {"ok": True}
 
 
 @router.post("/api/auth/logout")
@@ -131,6 +205,15 @@ class OrgIn(BaseModel):
 def switch_org(body: OrgIn, request: Request):
     token = service.token_from(request.cookies.get(service.COOKIE), request.headers.get("authorization"))
     return service.me(service.switch_org(service.current(), token, body.org), with_orgs=True)
+
+
+class UsernameIn(BaseModel):
+    username: str = ""
+
+
+@router.put("/api/auth/username")
+def set_username(body: UsernameIn):
+    return service.me(service.set_username(service.current(), body.username), with_orgs=True)
 
 
 @router.post("/api/auth/password")
@@ -191,7 +274,7 @@ def staff_users():
 
 @router.post("/api/identity/users", status_code=201)
 def staff_create_user(body: NewUserIn):
-    return service.staff_create_user(body.email, body.name, body.password, body.platform_role)
+    return service.staff_create_user(body.email, body.name, body.password, body.platform_role, body.username)
 
 
 @router.patch("/api/identity/users/{user_id}")

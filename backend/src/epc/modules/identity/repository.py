@@ -6,7 +6,7 @@ from typing import List, Optional
 import sqlalchemy as sa
 
 from epc.core import db
-from epc.modules.identity.models import audit_log, invitations, memberships, organizations, sessions, user_assignments, users
+from epc.modules.identity.models import audit_log, identities, invitations, memberships, organizations, sessions, user_assignments, users
 
 
 def now() -> dt.datetime:
@@ -54,6 +54,16 @@ def user_by_email(email: str) -> Optional[dict]:
     return _one(sa.select(users).where(sa.func.lower(users.c.email) == email.lower()))
 
 
+def user_by_username(username: str) -> Optional[dict]:
+    return _one(sa.select(users).where(users.c.username == (username or "").lower()))
+
+
+def user_by_login(identifier: str) -> Optional[dict]:
+    """The person is found by email or by alias: an alias never contains '@'."""
+    ident = (identifier or "").strip()
+    return user_by_email(ident) if "@" in ident else user_by_username(ident)
+
+
 def user_by_id(user_id) -> Optional[dict]:
     return _one(sa.select(users).where(users.c.id == uid(user_id)))
 
@@ -62,8 +72,8 @@ def list_users() -> List[dict]:
     return _all(sa.select(users).order_by(users.c.email))
 
 
-def insert_user(email: str, name: str, password_hash: str, platform_role: str = "user", locale: str = "es-AR") -> dict:
-    row = {"id": uuid.uuid4(), "email": email.lower(), "display_name": name, "password_hash": password_hash, "platform_role": platform_role,
+def insert_user(email: str, name: str, password_hash: Optional[str], platform_role: str = "user", locale: str = "es-AR", username: Optional[str] = None) -> dict:
+    row = {"id": uuid.uuid4(), "email": email.lower(), "username": username, "display_name": name, "password_hash": password_hash, "platform_role": platform_role,
            "locale": locale, "active": True, "created_at": now()}
     _write(sa.insert(users).values(**row))
     return row
@@ -237,4 +247,21 @@ def set_assignments(user_id, org_ids, granted_by) -> None:
         cx.execute(sa.delete(user_assignments).where(user_assignments.c.user_id == uid(user_id)))
         for o in org_ids:
             cx.execute(sa.insert(user_assignments).values(id=uuid.uuid4(), user_id=uid(user_id), organization_id=uid(o), granted_by=uid(granted_by) if granted_by else None, granted_at=now()))
+
+
+# ---- linked identities (sign-in with an external provider)
+def identity_find(provider: str, subject: str) -> Optional[dict]:
+    return _one(sa.select(identities).where(identities.c.provider == provider, identities.c.subject == subject))
+
+
+def identities_of(user_id) -> List[dict]:
+    return _all(sa.select(identities).where(identities.c.user_id == uid(user_id)).order_by(identities.c.created_at))
+
+
+def insert_identity(user_id, provider: str, subject: str, email: str) -> None:
+    _write(sa.insert(identities).values(id=uuid.uuid4(), user_id=uid(user_id), provider=provider, subject=subject, email=(email or "").lower(), created_at=now()))
+
+
+def delete_identity(user_id, provider: str) -> None:
+    _write(sa.delete(identities).where(identities.c.user_id == uid(user_id), identities.c.provider == provider))
 

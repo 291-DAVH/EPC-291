@@ -60,7 +60,7 @@ jobs:
         working-directory: backend
         env:
           EPC_TEST_DATABASE_URL: postgresql+psycopg://epc:epc@localhost:5432/epc
-        run: python -m unittest tests.integration.test_identity_api tests.integration.test_assignments_api
+        run: python -m unittest tests.integration.test_identity_api tests.integration.test_assignments_api tests.integration.test_social_login_api
 
   images:
     name: docker images

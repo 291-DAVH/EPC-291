@@ -236,3 +236,14 @@ textarea.mono { font-family: var(--mono, ui-monospace, monospace); font-size: 12
 /* ---- organization switch (a person in several organizations) ---- */
 .orgswitch { display: grid; gap: 3px; margin: 6px 0; }
 .orgswitch select { width: 100%; }
+
+/* ---- sign-in with a provider ---- */
+.social { display: grid; gap: 8px; margin-top: 14px; }
+.social-or { text-align: center; position: relative; }
+.social-or::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--line); }
+.social-or span { position: relative; background: var(--panel); padding: 0 10px; }
+.socialbtn { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text); text-decoration: none; font-weight: 600; }
+.socialbtn:hover { background: var(--panel-2); }
+.socialmark { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-size: 12px; background: var(--muted); }
+.socialbtn.google .socialmark { background: #4285f4; } .socialbtn.github .socialmark { background: #24292f; }
+.socialbtn.facebook .socialmark { background: #1877f2; } .socialbtn.linkedin .socialmark { background: #0a66c2; }
