@@ -112,14 +112,13 @@ class TestIssuing(unittest.TestCase):
         m = self.c.get(f"{self.base}/TR-001/message").json()
         self.assertEqual(m["subject"], "[P-1] Transmittal TR-001 – IFA Rev 00 – Planta")
         body = m["body"]
-        self.assertTrue(body.startswith("Se remite a Acme SA el transmittal TR-001, correspondiente a la emisión IFA (Emitido para Aprobación), revisión Rev 00"))
-        self.assertIn("1. P-1-ELE-001 – Diagrama unifilar (DXF, PDF)", body)
-        self.assertIn("2. P-1-ELE-002 – cargas (XLSX)", body)
+        self.assertTrue(body.startswith("Estimado equipo de Acme SA:\n\nNos dirigimos a ustedes para hacer entrega del transmittal TR-001, correspondiente a la emisión IFA (Emitido para Aprobación), revisión Rev 00"))
+        self.assertIn("* P-1-ELE-001 – Diagrama unifilar (Formatos: DXF, PDF)", body)
+        self.assertIn("* P-1-ELE-002 – cargas (Formatos: XLSX)", body)
         self.assertIn("Observaciones de la emisión: primer envío", body)
-        self.assertIn("P-1_IFA_TR-001_Rev00.zip", body)
-        for first_person in (" envío adjunto", "Adjunto", "Saludos", "Estimad", "Quedo", "le remito"):
-            self.assertNotIn(first_person, body)
-        self.assertIn("is hereby submitted", self.c.get(f"{self.base}/TR-001/message?lang=en").json()["body"])
+        self.assertIn("«P-1_IFA_TR-001_Rev00.zip»", body)
+        self.assertTrue(body.endswith("La oficina de ingeniería queda a su entera disposición para resolver cualquier duda o aclaración.\nAtentamente,\n\n[Nombre / Firma]"))
+        self.assertTrue(self.c.get(f"{self.base}/TR-001/message?lang=en").json()["body"].startswith("Dear Acme SA team,\n\nWe are writing to deliver transmittal TR-001"))
         # transmittal document: a real PDF
         r = self.c.get(f"{self.base}/TR-001/document")
         self.assertEqual((r.status_code, r.headers["content-type"]), (200, "application/pdf"))
