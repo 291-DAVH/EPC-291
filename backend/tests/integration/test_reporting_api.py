@@ -177,7 +177,7 @@ class TestReporting(unittest.TestCase):
 
     def test_engineer_only(self):
         self.gen("status")
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         for method, path in (("get", ""), ("post", ""), ("get", "/STATUS-01/file"), ("post", "/STATUS-01/publish")):
             self.assertEqual(getattr(self.c, method)(self.base + path).status_code, 403, path)
         settings.role = "admin"

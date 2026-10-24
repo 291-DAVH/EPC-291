@@ -79,7 +79,7 @@ class TestDesignCriteria(unittest.TestCase):
         self.assertIn("Socket outlets height**: 1.0 m (client requirement)", en)
 
     def test_users_cannot_edit(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(self.base).status_code, 403)
         self.assertEqual(self.c.put(self.base + "/socket_height_m", json={"value": 1}).status_code, 403)
 

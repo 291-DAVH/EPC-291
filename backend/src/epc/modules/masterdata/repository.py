@@ -1,4 +1,7 @@
-"""Master data files: <EPC_DATA>/{organization,clients,people}.json and logos/."""
+"""Master data files of an organization: <EPC_DATA>/orgs/<slug>/{issuers,clients,people}.json and logos/.
+The platform team outside any organization keeps its own at the root of <EPC_DATA> (what existed before organizations had their own)."""
+import contextlib
+import contextvars
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -8,8 +11,34 @@ from epc.core.fsutil import read_json, write_json
 LOGO_EXT = (".svg", ".png")
 
 
+_SCOPE: contextvars.ContextVar = contextvars.ContextVar("masterdata_scope", default=None)
+
+
+def current_scope() -> str:
+    """Organization whose data is being read: the one a project belongs to when code asks for it (`scope`), else the one the caller works in."""
+    s = _SCOPE.get()
+    if s is not None:
+        return s
+    from epc.modules.identity import public as identity
+    return identity.active_org_slug()
+
+
+@contextlib.contextmanager
+def scope(slug: str):
+    token = _SCOPE.set(slug or "")
+    try:
+        yield
+    finally:
+        _SCOPE.reset(token)
+
+
+def base() -> Path:
+    s = current_scope()
+    return settings.data_dir / "orgs" / s if s else settings.data_dir
+
+
 def _file(name: str) -> Path:
-    return settings.data_dir / name
+    return base() / name
 
 
 def load_organization() -> Dict:
@@ -34,7 +63,7 @@ def save_list(name: str, items: List[Dict]) -> None:
 
 
 def logos_dir() -> Path:
-    return settings.data_dir / "logos"
+    return base() / "logos"
 
 
 def logo_path(key: str) -> Optional[Path]:

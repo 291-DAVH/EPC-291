@@ -65,6 +65,11 @@ def delete_client(cid: str):
     service.delete_client(cid)
 
 
+@router.get("/people/roles")
+def person_roles():
+    return list(service.PERSON_ROLES)
+
+
 @router.get("/people")
 def list_people():
     return service.people()

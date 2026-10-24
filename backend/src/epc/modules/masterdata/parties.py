@@ -11,7 +11,17 @@ from epc.modules.projects import public as projects
 BLANK = {"drawn_by": "", "checked_by": "", "approved_by": ""}
 
 
+def _owner(d: Path) -> str:
+    """The organization that owns the project: its clients, issuers and personnel are the ones that apply."""
+    return projects.read_meta(d).get("org", "")
+
+
 def view(d: Path) -> dict:
+    with repository.scope(_owner(d)):
+        return _view(d)
+
+
+def _view(d: Path) -> dict:
     meta = projects.read_meta(d)
     raw = repository.load_parties(d)
     iss = service.issuer(raw["issuer"])
@@ -21,10 +31,15 @@ def view(d: Path) -> dict:
     disciplines = list(meta.get("disciplines") or [])
     team = {disc: {**BLANK, **{k: v for k, v in (raw["team"].get(disc) or {}).items() if k in BLANK}} for disc in disciplines}
     return {"issuer_id": iss["id"] if iss else "", "issuer": iss, "issuers": [{"id": i["id"], "legal_name": i["legal_name"], "default": i["default"]} for i in service.issuers()],
-            "client": cl, "disciplines": disciplines, "team": team, "people": [p["name"] for p in service.people()]}
+            "client": cl, "disciplines": disciplines, "team": team, "people": [{"name": p["name"], "roles": p["roles"]} for p in service.people()]}
 
 
 def save(d: Path, body) -> dict:
+    with repository.scope(_owner(d)):
+        return _save(d, body)
+
+
+def _save(d: Path, body) -> dict:
     meta = projects.read_meta(d)
     disciplines = set(meta.get("disciplines") or [])
     errors: Dict[str, str] = {}
@@ -55,15 +70,18 @@ def titleblock(d: Path, discipline: str = "electrical") -> dict:
 
 
 def logos(d: Path) -> Dict[str, Optional[Path]]:
-    v = view(d)
-    prov = repository.logo_path(f"issuer-{v['issuer_id']}") if v["issuer_id"] else None
-    return {"provider": prov, "client": repository.logo_path("client-" + (v["client"].get("id") or "-").upper())}
+    with repository.scope(_owner(d)):
+        v = _view(d)
+        prov = repository.logo_path(f"issuer-{v['issuer_id']}") if v["issuer_id"] else None
+        return {"provider": prov, "client": repository.logo_path("client-" + (v["client"].get("id") or "-").upper())}
 
 
 def issuer_in_use(iid: str) -> bool:
     """Whether some project issues in the name of `iid` (an empty choice means the default issuer)."""
     default = (service.issuer("") or {}).get("id")
     for d in projects.list_project_dirs():
+        if _owner(d) != repository.current_scope():          # only the projects of this organization issue in the name of its companies
+            continue
         try:
             chosen = repository.load_parties(d)["issuer"] or default
         except Exception:                                   # noqa: BLE001 - unreadable file: it does not count

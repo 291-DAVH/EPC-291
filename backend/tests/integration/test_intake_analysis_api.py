@@ -162,7 +162,7 @@ class TestAnalysis(unittest.TestCase):
             rec["status"] = "structured"
             p.write_text(json.dumps(rec), encoding="utf-8")
         self.assertEqual(self.c.post(self.base, json={"confirm": True}).json()["analyzed"], 0)
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(self.base).status_code, 403)
         self.assertEqual(self.c.post(self.base, json={"confirm": True}).status_code, 403)
 

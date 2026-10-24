@@ -5,6 +5,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ## [Unreleased]
 
 ### Added
+- Organizations do their own engineering (ADR-0016): the owner, administrators and members of an organization (and an independent professional, an organization of one person) open Ingeniería and Datos for their own projects only. Clients, issuing companies, logos and personnel are per organization; personnel carry functions (designer, checker, approver, responsible, project manager, product owner, inspector, auditor) that the team pickers of a project use. Members read the organization's data, owners and administrators manage it.
 - Issuing companies (Datos › Empresas emisoras): an engineer can issue documents in the name of several companies; each project picks one once (Ingeniería › Emisor y equipo), the default being the account's company. A project from before keeps its company and logo as the first issuer.
 - Per-discipline team of a project (who designs, checks and approves each discipline, entered once per project). The title block of every board takes issuer, client and team from the project; a board keeps only its own description, location, scale, revision and status.
 - Client filter in the project list; a client created with a project joins the client list, and a project whose client is not in the list offers to add it.

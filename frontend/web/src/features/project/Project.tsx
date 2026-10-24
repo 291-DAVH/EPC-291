@@ -18,8 +18,8 @@ export default function Project() {
   const fmt = useFmt();
   const [sp, setSp] = useSearchParams();
   const me = useApi<Me>("/me");
-  const engineer = me.data?.role === "admin";          // the engineering workspace is internal: admin/engineer role only
   const can = (subject: string, action: string) => !!me.data?.abilities?.[subject]?.includes(action);
+  const engineer = can("workspace", "read");           // the engineering workspace: the engineering team and the people of the organization that owns the project
   const canWrite = can("app", "write");                // inspectors and auditors read only: the screens hide what the server would refuse
   const wanted = sp.get("tab") as Tab;
   const tab = (TABS.includes(wanted) && (!ENGINEER_TABS.includes(wanted) || engineer) ? wanted : "overview") as Tab;

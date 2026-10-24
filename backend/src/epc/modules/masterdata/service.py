@@ -7,6 +7,7 @@ from epc.modules.masterdata import repository
 from epc.modules.identity import public as identity
 from epc.modules.masterdata.models import ClientIn, IssuerIn, OrganizationIn, PersonIn
 
+PERSON_ROLES = ("designer", "checker", "approver", "responsible", "project_manager", "product_owner", "inspector", "auditor")
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,23}$")
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 MAX_LOGO = 1_000_000
@@ -51,8 +52,9 @@ def _issuer_items() -> List[dict]:
 
 
 def _account_company() -> str:
+    """The company of the organization whose data this is (a new organization starts with itself as its first issuer)."""
     try:
-        return (identity.current_user().org_name or "").strip()
+        return (identity.org_name(repository.current_scope()) or "").strip()
     except Exception:                                       # noqa: BLE001 - no session (command line, tests)
         return ""
 
@@ -201,7 +203,7 @@ def delete_client(cid: str) -> None:
 
 # ---- people ----
 def people() -> List[dict]:
-    return sorted(repository.load_list("people"), key=lambda p: p["name"].lower())
+    return sorted(({**p, "roles": p.get("roles", [])} for p in repository.load_list("people")), key=lambda p: p["name"].lower())
 
 
 def person(pid: str) -> Optional[dict]:
@@ -213,6 +215,9 @@ def save_person(body: PersonIn, pid: Optional[str] = None) -> dict:
     errors: Dict[str, str] = {}
     if not data["name"].strip():
         errors["name"] = "required"
+    if any(r not in PERSON_ROLES for r in data["roles"]):
+        errors["roles"] = "one of " + ", ".join(PERSON_ROLES)
+    data["roles"] = [r for r in PERSON_ROLES if r in data["roles"]]
     _check_contact(data, errors)
     if errors:
         raise Invalid(errors)

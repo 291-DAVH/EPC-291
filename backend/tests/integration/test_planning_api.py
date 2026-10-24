@@ -67,7 +67,7 @@ class TestWbs(Base):
 
     def test_users_can_read_but_not_write(self):
         self.c.put(f"{self.base}/wbs", json={"nodes": self.nodes})
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(f"{self.user_base}/wbs").status_code, 200)
         self.assertEqual(self.c.put(f"{self.base}/wbs", json={"nodes": []}).status_code, 403)
 
@@ -149,7 +149,7 @@ class TestBacklog(Base):
         self.assertEqual(self.c.patch(f"{self.base}/backlog/BL-001", json={"status": "nope"}).status_code, 422)
 
     def test_backlog_is_internal(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(f"{self.base}/backlog").status_code, 403)
         self.assertEqual(self.c.post(f"{self.base}/backlog", json={"title": "x"}).status_code, 403)
 

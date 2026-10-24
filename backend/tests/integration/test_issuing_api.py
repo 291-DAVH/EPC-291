@@ -141,7 +141,7 @@ class TestIssuing(unittest.TestCase):
         self.assertIn("P-1-ELE-001;Diagrama unifilar;electrical;Rev 00;dxf;", index)
         self.assertEqual(self.c.get(f"{self.base}/TR-099/package").status_code, 404)
         self.assertEqual(self.c.get(f"{self.base}/TR-099/message").status_code, 404)
-        settings.role = "user"                                                    # an engineer action: the customer never reaches it
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         for path in ("message", "document", "package"):
             self.assertEqual(self.c.get(f"{self.base}/TR-001/{path}").status_code, 403)
 
@@ -166,7 +166,7 @@ class TestIssuing(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/..%2Fx").status_code, 404)
 
     def test_clients_cannot_issue(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(self.base).status_code, 403)
         self.assertEqual(self.c.post(self.base, json={"items": [{"source": "x"}]}).status_code, 403)
 

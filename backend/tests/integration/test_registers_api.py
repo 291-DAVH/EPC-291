@@ -98,7 +98,7 @@ class TestRegisters(unittest.TestCase):
         self.assertTrue(self.c.get(self.base).json()["registers"] == [])
 
     def test_engineer_only(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         for method, path in (("get", ""), ("get", "/risk"), ("post", "/risk"), ("patch", "/risk/RIE-001")):
             self.assertEqual(getattr(self.c, method)(self.base + path).status_code, 403, path)
 

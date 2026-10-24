@@ -283,7 +283,7 @@ class TestSld(unittest.TestCase):
         self.assertEqual(ac["length_m"], 30)
 
     def test_users_cannot_use_it(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(self.base).status_code, 403)
         self.assertEqual(self.gen().status_code, 403)
 

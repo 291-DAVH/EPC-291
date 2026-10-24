@@ -158,6 +158,16 @@ def org_for_new_project(requested: str = "") -> str:
     return p.org_slug
 
 
+def active_org_slug() -> str:
+    """Slug of the organization the caller works in ("" for the platform team outside any organization, and in simulated mode)."""
+    return current().org_slug or ""
+
+
+def org_name(slug: str) -> str:
+    o = repo.org_by_slug(slug) if slug else None
+    return o["name"] if o else ""
+
+
 def org_exists(slug: str) -> bool:
     return repo.org_by_slug(slug) is not None
 
