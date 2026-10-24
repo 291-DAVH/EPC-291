@@ -2,28 +2,23 @@
   "schema_version": "1.0",
   "jurisdiction": "AR",
   "discipline": "electrical",
-  "validated": false,
+  "validated": true,
   "note": "Starting values proposed by the platform. They are NOT validated against the standards: confirm each one before using it in a deliverable. A project overrides any of them (client requirement, project decision).",
   "criteria": [
     {"id": "nominal_voltage_v", "group": {"en": "Supply", "es": "Alimentación"}, "label": {"en": "Nominal voltage (three-phase)", "es": "Tensión nominal (trifásica)"}, "unit": "V", "type": "choice", "options": [220, 380, 400], "default": 380},
     {"id": "frequency_hz", "group": {"en": "Supply", "es": "Alimentación"}, "label": {"en": "Frequency", "es": "Frecuencia"}, "unit": "Hz", "type": "choice", "options": [50, 60], "default": 50},
-
     {"id": "socket_height_m", "group": {"en": "Mounting heights", "es": "Alturas de montaje"}, "label": {"en": "Socket outlets height", "es": "Altura de tomacorrientes"}, "unit": "m", "type": "number", "min": 0.1, "max": 2.0, "default": 0.3},
     {"id": "switch_height_m", "group": {"en": "Mounting heights", "es": "Alturas de montaje"}, "label": {"en": "Light switches height", "es": "Altura de llaves de luz"}, "unit": "m", "type": "number", "min": 0.5, "max": 1.6, "default": 1.1},
     {"id": "board_height_m", "group": {"en": "Mounting heights", "es": "Alturas de montaje"}, "label": {"en": "Board operating height (top)", "es": "Altura de operación de tableros (máxima)"}, "unit": "m", "type": "number", "min": 1.0, "max": 2.2, "default": 1.8},
-
-    {"id": "vd_sectional_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in sectional lines (feeders)", "es": "Caída máxima en líneas seccionales"}, "unit": "%", "type": "number", "min": 0.1, "max": 10, "default": 1},
-    {"id": "vd_lighting_sockets_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in lighting and socket circuits", "es": "Caída máxima en circuitos de iluminación y tomacorrientes"}, "unit": "%", "type": "number", "min": 0.5, "max": 10, "default": 3},
-    {"id": "vd_motors_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in motor circuits", "es": "Caída máxima en circuitos de motores"}, "unit": "%", "type": "number", "min": 0.5, "max": 15, "default": 5},
-
+    {"id": "vd_sectional_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in sectional lines (feeders)", "es": "Caída máxima en líneas seccionales"}, "unit": "%", "type": "number", "min": 1, "max": 5, "default": 1},
+    {"id": "vd_lighting_sockets_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in lighting and socket circuits", "es": "Caída máxima en circuitos de iluminación y tomacorrientes"}, "unit": "%", "type": "number", "min": 3, "max": 10, "default": 3},
+    {"id": "vd_motors_pct", "group": {"en": "Voltage drop", "es": "Caída de tensión"}, "label": {"en": "Maximum drop in motor circuits", "es": "Caída máxima en circuitos de motores"}, "unit": "%", "type": "number", "min": 5, "max": 15, "default": 5},
     {"id": "conductor_material", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Conductor material", "es": "Material del conductor"}, "unit": "", "type": "choice", "options": ["cobre", "aluminio"], "default": "cobre"},
     {"id": "insulation", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Insulation", "es": "Aislación"}, "unit": "", "type": "choice", "options": ["XLPE", "PVC"], "default": "XLPE"},
-    {"id": "min_section_lighting_mm2", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Minimum section, lighting circuits", "es": "Sección mínima, circuitos de iluminación"}, "unit": "mm²", "type": "number", "min": 1, "max": 6, "default": 1.5},
-    {"id": "min_section_sockets_mm2", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Minimum section, socket circuits", "es": "Sección mínima, circuitos de tomacorrientes"}, "unit": "mm²", "type": "number", "min": 1.5, "max": 10, "default": 2.5},
-
+    {"id": "min_section_lighting_mm2", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Minimum section, lighting circuits", "es": "Sección mínima, circuitos de iluminación"}, "unit": "mm²", "type": "number", "min": 1.5, "max": 6, "default": 1.5},
+    {"id": "min_section_sockets_mm2", "group": {"en": "Conductors", "es": "Conductores"}, "label": {"en": "Minimum section, socket circuits", "es": "Sección mínima, circuitos de tomacorrientes"}, "unit": "mm²", "type": "number", "min": 2.5, "max": 10, "default": 2.5},
     {"id": "rcd_sensitivity_ma", "group": {"en": "Protection", "es": "Protecciones"}, "label": {"en": "Residual current device sensitivity", "es": "Sensibilidad del interruptor diferencial"}, "unit": "mA", "type": "choice", "options": [10, 30, 100, 300], "default": 30},
-    {"id": "board_spare_pct", "group": {"en": "Protection", "es": "Protecciones"}, "label": {"en": "Spare capacity in boards", "es": "Reserva en tableros"}, "unit": "%", "type": "number", "min": 0, "max": 100, "default": 20},
-
-    {"id": "raceway_fill_max_pct", "group": {"en": "Raceways", "es": "Canalizaciones"}, "label": {"en": "Maximum raceway fill", "es": "Ocupación máxima de canalizaciones"}, "unit": "%", "type": "number", "min": 10, "max": 60, "default": 40}
+    {"id": "board_spare_pct", "group": {"en": "Protection", "es": "Protecciones"}, "label": {"en": "Spare capacity in boards", "es": "Reserva en tableros"}, "unit": "%", "type": "number", "min": 5, "max": 100, "default": 20},
+    {"id": "raceway_fill_max_pct", "group": {"en": "Raceways", "es": "Canalizaciones"}, "label": {"en": "Maximum raceway fill", "es": "Ocupación máxima de canalizaciones"}, "unit": "%", "type": "number", "min": 40, "max": 60, "default": 40}
   ]
 }

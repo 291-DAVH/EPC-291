@@ -87,9 +87,12 @@ export interface NewProjectBody {
   methodology: string; locale: string; disciplines: string[]; phase: string;
 }
 
+export type AccountType = "staff" | "reviewer" | "individual" | "corporate_admin" | "corporate_member" | "";
 export interface Me {
   role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
   org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "member" | ""; signup?: boolean;
+  account_type?: AccountType; landing?: string; app_url?: string;
+  organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "member"; current: boolean }[];
 }
 export interface PortfolioProject {
   id: string; name: string; client: string; code: string; disciplines: string[]; state: string; phase: string; progress: number;

@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
 import { Me, NavItem, Norms, Page, Shell, State, useApi, useI18n } from "@epc/ui";
 import Overview from "./features/overview/Overview";
 import Plugins from "./features/plugins/Plugins";
@@ -27,7 +28,9 @@ export default function App() {
   const { t } = useI18n();
   const me = useApi<Me>("/me");
   const admin = me.data?.role === "admin";
-  const reviewer = me.data?.role === "standards";          // the norm reviewer sees only the norms review
+  const reviewer = me.data?.role === "standards";
+  const customer = me.data?.account_type === "individual" || me.data?.account_type === "corporate_admin" || me.data?.account_type === "corporate_member";
+  useEffect(() => { if (customer && me.data?.app_url) window.location.replace(me.data.app_url); }, [customer, me.data?.app_url]);      // customers work in the customer app          // the norm reviewer sees only the norms review
   return (
     <Shell nav={admin ? NAV : reviewer ? REVIEWER_NAV : []} me={me.data}>
       {!me.data ? (
@@ -38,7 +41,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/norms" replace />} />
         </Routes>
       ) : !admin ? (
-        <Page title={t("console.denied.title")} help={t("console.denied.help")}>{null}</Page>
+        <Page title={t("console.denied.title")} help={t("console.denied.help")}>{customer && me.data?.app_url ? <a className="btn" href={me.data.app_url}>{t("console.denied.go")}</a> : null}</Page>
       ) : (
         <Routes>
           <Route path="/" element={<Overview />} />

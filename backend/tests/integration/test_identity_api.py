@@ -264,6 +264,54 @@ class TestOrganizations(Base):
         pick.post("/api/auth/login", json={"email": "o1@x.com", "password": PW, "org": "beta-srl"})
         self.assertEqual(pick.get("/api/me").json()["org"], "Beta SRL")
 
+    def test_the_account_type_is_recognized_from_email_and_password_alone(self):
+        staff = self.staff()
+        self.assertEqual(self.client().get("/api/me").json()["account_type"], "")
+        me = staff.get("/api/me").json()
+        self.assertEqual((me["account_type"], me["landing"]), ("staff", "/"))
+        admin, _ = self.new_org(staff, "Metal SRL", seats=3, owner="boss@metal.com")
+        self.assertEqual(admin.get("/api/me").json()["account_type"], "corporate_admin")
+        inv = admin.post("/api/app/org/invitations", json={"email": "ana@metal.com"}).json()
+        member = self.client()
+        member.post("/api/auth/accept-invitation", json={"token": inv["token"], "name": "Ana", "password": PW})
+        self.assertEqual(member.get("/api/me").json()["account_type"], "corporate_member")
+        settings.signup = "open"
+        solo = self.client()
+        solo.post("/api/auth/signup", json={"kind": "individual", "name": "Luis", "email": "luis@x.com", "password": PW})
+        self.assertEqual(solo.get("/api/me").json()["account_type"], "individual")
+        staff.post("/api/identity/users", json={"email": "rev@x.com", "name": "Rev", "password": PW, "platform_role": "standards"})
+        rev = self.client()
+        r = rev.post("/api/auth/login", json={"email": "rev@x.com", "password": PW})           # the same form for everyone: nothing else is asked
+        self.assertEqual((r.json()["account_type"], r.json()["landing"]), ("reviewer", "/norms"))
+        # the sign-in answer already says where the person goes, and the owner link for the customer app is included
+        self.assertEqual(solo.post("/api/auth/login", json={"email": "luis@x.com", "password": PW}).json()["landing"], "/")
+        self.assertEqual(solo.get("/api/me").json()["app_url"], settings.public_url)
+
+    def test_a_person_in_several_organizations_switches_without_signing_in_again(self):
+        staff = self.staff()
+        o1, _ = self.new_org(staff, "Alfa SRL", seats=2, owner="p@x.com")
+        o2, slug2 = self.new_org(staff, "Beta SRL", seats=2, owner="q@x.com")
+        self.assertEqual(o1.post("/api/projects", json=PROJECT).status_code, 201)
+        inv = o2.post("/api/app/org/invitations", json={"email": "p@x.com"}).json()
+        c = self.client()
+        c.post("/api/auth/accept-invitation", json={"token": inv["token"], "password": PW})
+        c.cookies.clear()
+        c.post("/api/auth/login", json={"email": "p@x.com", "password": PW})
+        me = c.get("/api/me").json()
+        self.assertEqual((me["org"], [(o["slug"], o["role"], o["current"]) for o in me["organizations"]]), ("Alfa SRL", [("alfa-srl", "owner", True), ("beta-srl", "member", False)]))
+        self.assertEqual(len(c.get("/api/app/portfolio").json()["projects"]), 1)
+        r = c.post("/api/auth/switch-org", json={"org": "beta-srl"})
+        self.assertEqual((r.status_code, r.json()["org"], r.json()["account_type"]), (200, "Beta SRL", "corporate_member"))
+        self.assertEqual(c.get("/api/app/portfolio").json()["projects"], [])                        # Beta's projects, not Alfa's
+        self.assertEqual(c.get("/api/app/org").status_code, 403)                                      # only a member there
+        self.assertEqual(c.post("/api/auth/switch-org", json={"org": "alfa-srl"}).json()["account_type"], "corporate_admin")
+        self.assertEqual(c.post("/api/auth/switch-org", json={"org": "no-existe"}).status_code, 404)
+        self.assertEqual(o2.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 404)   # not a member of that one
+        self.assertEqual(staff.post("/api/auth/switch-org", json={"org": "alfa-srl"}).status_code, 403)
+        staff.patch("/api/identity/orgs/beta-srl", json={"active": False})
+        self.assertEqual(c.post("/api/auth/switch-org", json={"org": "beta-srl"}).status_code, 404)    # a suspended organization is not selectable
+        self.assertEqual([o["slug"] for o in c.get("/api/me").json()["organizations"]], ["alfa-srl"])
+
     def test_password_change_revokes_other_sessions(self):
         staff = self.staff()
         owner, _ = self.new_org(staff, "Metal SRL")
