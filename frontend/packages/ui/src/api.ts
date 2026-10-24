@@ -191,7 +191,7 @@ export interface IssueCandidate { id: string; name: string; discipline: string; 
 export interface TransmittalSummary { id: string; emission: string; client_rev: string; internal_rev: string; status: "prepared" | "sent"; created: string; sent_on: string | null; items: number }
 export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; next_transmittal: string; transmittals: TransmittalSummary[] }
 export interface CalcRow { tag: string; description: string; In: number; Ib: number; icu: number; S: number; dU: number; disp: string; tipo?: string; limite_pct?: number; du_propia_pct?: number; iz_a?: number; cumple?: boolean }
-export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }
+export interface CalcView { name?: string; summary?: { circuits: number; compliant: number; non_compliant: number }; rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }
 
 /* ---- automatic analysis of customer input (admin/engineer) ---- */
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }

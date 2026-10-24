@@ -1,6 +1,8 @@
 export * from "./api";
 export { AuthGate, signOut } from "./auth";
 export * from "./components";
+export { CalculationTable } from "./calculation";
+export { Markdown } from "./markdown";
 export * from "./i18n";
 export * from "./theme";
 export { Shell } from "./Shell";

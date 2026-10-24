@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { ApiError, Badge, CalcView, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, Badge, CalcView, CalculationTable, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
@@ -160,28 +160,7 @@ export default function SldInput({ client, code, onOpenFiles }: { client: string
         <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("sld.calcHelp")}</p>
         {!calc.data || calc.data.rows.length === 0 ? <div className="state">{t("sld.calcNone")}</div> : (
           <>
-            {calc.data.criteria && (
-              <p className="small" style={{ margin: "0 0 8px" }}>
-                <b>{t("sld.calcLimits")}:</b> {t("sld.calcSectional")} {calc.data.criteria.limits_pct.seccional} % · {t("sld.calcTerminal")} {calc.data.criteria.limits_pct.terminal} % · {t("sld.calcMotor")} {calc.data.criteria.limits_pct.motor} %
-                {" · "}<b>{t("sld.calcConductor")}:</b> {calc.data.criteria.conductor.material === "cu" ? "Cu" : "Al"} {calc.data.criteria.conductor.aislacion.toUpperCase()}
-              </p>
-            )}
-            <div style={{ overflowX: "auto" }}>
-              <table className="sldtable">
-                <thead><tr><th>{t("sld.tag")}</th><th>{t("sld.desc")}</th><th>{t("sld.col.type")}</th><th>{t("sld.col.ib")}</th><th>{t("sld.col.in")}</th><th>{t("sld.col.icu")}</th><th>{t("sld.col.s")}</th><th>{t("sld.col.du")}</th><th>{t("sld.col.limit")}</th><th>{t("sld.col.device")}</th><th>{t("sld.col.ok")}</th></tr></thead>
-                <tbody>
-                  {calc.data.rows.map((r) => (
-                    <tr key={r.tag}>
-                      <td className="mono">{r.tag}</td><td>{r.description}</td>
-                      <td>{r.tipo ? t(("sld.type." + r.tipo) as Key) : ""}</td>
-                      <td className="mono">{r.Ib}</td><td className="mono">{r.In}</td><td className="mono">{r.icu}</td><td className="mono">{r.S}</td>
-                      <td className="mono">{r.dU}</td><td className="mono">{r.limite_pct ?? ""}</td><td>{r.disp}</td>
-                      <td>{r.cumple === undefined ? "" : r.cumple ? <Badge tone="ok">✓</Badge> : <Badge tone="bad">✗</Badge>}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <CalculationTable view={calc.data} />
           </>
         )}
       </div>

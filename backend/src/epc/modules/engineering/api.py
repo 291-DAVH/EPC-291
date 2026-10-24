@@ -13,8 +13,8 @@ SVG_HEADERS = {"Content-Security-Policy": "sandbox; default-src 'none'; style-sr
 
 
 @router.get("")
-def engineering_overview(client: str, code: str):
-    return service.overview(projects.get_project_dir(client, code))
+def engineering_overview(client: str, code: str, technical: bool = False):
+    return service.overview(projects.get_project_dir(client, code), technical)
 
 
 @router.get("/svg")
@@ -23,8 +23,13 @@ def engineering_svg(client: str, code: str, path: str):
 
 
 @router.get("/text")
-def engineering_text(client: str, code: str, path: str):
-    return service.text_view(projects.get_project_dir(client, code), path)
+def engineering_text(client: str, code: str, path: str, technical: bool = False):
+    return service.text_view(projects.get_project_dir(client, code), path, technical)
+
+
+@router.get("/calculation")
+def engineering_calculation(client: str, code: str, path: str):
+    return service.calculation_view(projects.get_project_dir(client, code), path)
 
 
 # ---- design criteria (editable per project) ----

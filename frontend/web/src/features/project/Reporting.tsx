@@ -73,7 +73,6 @@ export default function Reporting({ client, code, onPublished }: { client: strin
                 <td>{r.published ? <Badge tone="ok">{t("rep.published")} · {r.published}</Badge> : <Badge>{t("rep.internal")}</Badge>}</td>
                 <td style={{ whiteSpace: "nowrap" }}>
                   <a className="btn" href={`/api${base}/${r.id}/file?format=pdf`} download>PDF</a>{" "}
-                  <a className="btn" href={`/api${base}/${r.id}/file?format=md`} download>MD</a>{" "}
                   {!r.published && <button onClick={() => publish(r)}>{t("rep.publish")}</button>}
                 </td>
               </tr>
