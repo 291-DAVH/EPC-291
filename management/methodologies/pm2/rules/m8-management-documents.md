@@ -1,4 +1,4 @@
-﻿# Módulo M8 — Documentos y puertas de gestión
+# Módulo M8 — Documentos y puertas de gestión
 
 Autoridad: la misma que `CLAUDE.md`. Complementa 4.2, 8.2 y 11. Claude lo lee cuando el usuario pide un informe, registra una incidencia, una reunión, una consulta de obra, una aceptación, o cuando se aproxima una puerta (gate).
 
@@ -13,23 +13,25 @@ Los archivos de `Governance/` existen en ambos modos; en el modo por defecto sol
 
 ## 2. Catálogo (D01 a D28)
 
+> En esta plataforma los registros (riesgos, cambios, incidencias, decisiones, supuestos e interesados) son datos del proyecto, definidos por `registers.json` de la metodología y gestionados en la pestaña *Registros*; los informes D11 a D15 se definen en `reports.json` y se generan en la pestaña *Informes*. Las rutas de la tabla son relativas a `workspace/05-management/`.
+
 | ID | Documento | Ubicación | Disparador |
 |---|---|---|---|
 | D01 | Manual del proyecto | `Governance/project-handbook.md` | `aprobar charter` |
-| D02 | Interesados | `Governance/stakeholders.md` | `aprobar charter` |
+| D02 | Interesados | pestaña Registros › Interesados | `aprobar charter` |
 | D03 | Plan de comunicaciones | `Governance/Communications/comm-plan.md` | `aprobar charter` |
 | D04 | Plan de riesgos | `Governance/risk-plan.md` | `aprobar charter` |
 | D05 | Plan de calidad y HSE | `Governance/Quality_and_HSE/quality-hse-plan.md` | `aprobar charter` |
 | D06 | Plan de adquisiciones | `Governance/procurement-plan.md` | `aprobar charter` |
 | D07 | Plan de aceptación y transición | `Governance/acceptance-transition-plan.md` | `aprobar charter` |
 | D08 | Línea base de esfuerzo | `Planning/effort-baseline.md` | `aprobar plan de paquetes` |
-| D09 | Registro único de incidencias | `issue-log.md` | `registrar incidencia` |
+| D09 | Registro único de incidencias | pestaña Registros › Incidencias | `registrar incidencia` |
 | D10 | Acta de reunión | `Meetings/MTG-nnn_AAAAMMDD.md` | `registrar reunión` |
-| D11 | Informe de estado | `Reports/STATUS-nn_AAAAMMDD.md` | `generar informe de estado` |
-| D12 | Informe de avance | `Progress/progress-nn_AAAAMMDD.md` | `generar informe de avance` |
-| D13 | Informe de riesgos | `Reports/RISKS-nn_AAAAMMDD.md` | `generar informe de riesgos` |
-| D14 | Informe de esfuerzo | `Reports/EFFORT-nn_AAAAMMDD.md` | `generar informe de esfuerzo` |
-| D15 | Informe de cambios | `Reports/CHANGES-nn_AAAAMMDD.md` | `generar informe de cambios` |
+| D11 | Informe de estado | `progress/STATUS-nn_AAAAMMDD` (md y pdf) | pestaña Informes |
+| D12 | Informe de avance | `progress/progress-nn_AAAAMMDD` (md y pdf) | pestaña Informes |
+| D13 | Informe de riesgos | `reports/RISKS-nn_AAAAMMDD` (md y pdf) | pestaña Informes |
+| D14 | Informe de esfuerzo | `reports/EFFORT-nn_AAAAMMDD` (md y pdf) | pestaña Informes |
+| D15 | Informe de cambios | `reports/CHANGES-nn_AAAAMMDD` (md y pdf) | pestaña Informes |
 | D16 | Registro de no conformidades | `Governance/Quality_and_HSE/ncr-log.md` | `registrar incidencia` (NCR) |
 | D17 | Acta de puerta | `Reports/GATE-nn_<fase>.md` | `cerrar fase`, `aprobar inicio` |
 | D18 | Tablero | `Reports/DASHBOARD.md` | `tablero` |

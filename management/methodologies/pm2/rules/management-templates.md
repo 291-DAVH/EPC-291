@@ -1,8 +1,8 @@
-﻿# management-templates.md
+# management-templates.md
 
 > **Propósito:** Plantillas operativas para los documentos D10–D28 del catálogo M8.
-> **Uso:** Claude las usa como base al ejecutar el comando correspondiente.
-> **Ubicación de salida:** `90-management/` (ver ruta exacta en cada sección).
+> **Uso:** base de cada documento; la plataforma las aplica a D11 a D15 y la skill `create-management-document` al resto.
+> **Ubicación de salida:** `workspace/05-management/` del proyecto (ver ruta exacta en cada sección). Los informes D11 a D15 los genera la plataforma; el resto se redacta con la skill `create-management-document`.
 > **Confidencialidad:** Los campos de costo, presupuesto, honorarios y condiciones comerciales son confidenciales y **nunca se completan** a partir de datos reales en estos archivos.
 > **Licencia base:** Adaptado de PM² v3.1 (CC BY 4.0 — European Commission).
 
@@ -13,11 +13,11 @@
 | D-Código | Nombre | Comando |
 |----------|--------|---------|
 | [D10](#d10) | Acta de Reunión | `generar acta de reunión` |
-| [D11](#d11) | Informe de Estado | `generar informe de estado` |
-| [D12](#d12) | Informe de Avance | `generar informe de avance` |
-| [D13](#d13) | Informe de Riesgos | `generar informe de riesgos` |
-| [D14](#d14) | Informe de Esfuerzo | `generar informe de esfuerzo` |
-| [D15](#d15) | Informe de Cambios | `generar informe de cambios` |
+| [D11](#d11) | Informe de Estado | pestaña *Informes* |
+| [D12](#d12) | Informe de Avance | pestaña *Informes* |
+| [D13](#d13) | Informe de Riesgos | pestaña *Informes* |
+| [D14](#d14) | Informe de Esfuerzo | pestaña *Informes* |
+| [D15](#d15) | Informe de Cambios | pestaña *Informes* |
 | [D17](#d17) | Acta de Puerta de Fase | `generar acta de puerta [fase]` |
 | [D18](#d18) | Tablero del Proyecto | `actualizar tablero` |
 | [D19](#d19) | Acta de Aceptación | `generar acta de aceptación` |
@@ -101,8 +101,8 @@
 
 ## D11 — Informe de Estado {#d11}
 
-> **Comando:** `generar informe de estado`
-> **Archivo:** `90-management/progress/STATUS-nn_AAAAMMDD.md`
+> **Generación:** pestaña *Informes* del proyecto (o `POST /api/projects/{id}/reporting`); la plataforma lo completa con los datos del proyecto
+> **Archivo:** `workspace/05-management/progress/STATUS-nn_AAAAMMDD.md` y `.pdf`
 > **Fuente PM²:** Project Status Report — formato compacto (Artefacts v3.1, p.191-192)
 
 ---
@@ -182,8 +182,8 @@
 
 ## D12 — Informe de Avance {#d12}
 
-> **Comando:** `generar informe de avance`
-> **Archivo:** `90-management/progress/progress-nn_AAAAMMDD.md`
+> **Generación:** pestaña *Informes* del proyecto (o `POST /api/projects/{id}/reporting`); la plataforma lo completa con los datos del proyecto
+> **Archivo:** `workspace/05-management/progress/progress-nn_AAAAMMDD.md` y `.pdf`
 > **Fuente PM²:** Project Progress Report (Artefacts v3.1, p.194-196)
 
 ---
@@ -224,7 +224,7 @@
 
 ## 5. Cambios de Alcance
 
-Ver registro completo en `change-requests.md`.
+Ver el registro completo de cambios (pestaña *Registros*).
 
 | rfc-nnn | Título | Estado | Impacto en entregables |
 |---------|--------|--------|----------------------|
@@ -259,15 +259,15 @@ Ver registro completo en `change-requests.md`.
 
 | Documento | Versión / Rev. | Ubicación |
 |-----------|---------------|-----------|
-| change-requests.md | — | 90-management/ |
-| RISK_REGISTER.md | — | 90-management/GOVERNANCE/ |
+| registers/change.json | — | workspace/05-management/ |
+| registers/risk.json | — | workspace/05-management/ |
 
 ---
 
 ## D13 — Informe de Riesgos {#d13}
 
-> **Comando:** `generar informe de riesgos`
-> **Archivo:** `90-management/reports/RISKS-nn_AAAAMMDD.md`
+> **Generación:** pestaña *Informes* del proyecto (o `POST /api/projects/{id}/reporting`); la plataforma lo completa con los datos del proyecto
+> **Archivo:** `workspace/05-management/reports/RISKS-nn_AAAAMMDD.md` y `.pdf`
 
 ---
 
@@ -323,14 +323,14 @@ Ver registro completo en `change-requests.md`.
 - [Conclusión / acción 1]
 - [Conclusión / acción 2]
 
-> **Fuente:** `RISK_REGISTER.md` — última actualización: [DD/MM/AAAA]
+> **Fuente:** registro de riesgos del proyecto (pestaña *Registros*)
 
 ---
 
 ## D14 — Informe de Esfuerzo {#d14}
 
-> **Comando:** `generar informe de esfuerzo`
-> **Archivo:** `90-management/reports/EFFORT-nn_AAAAMMDD.md`
+> **Generación:** pestaña *Informes* del proyecto (o `POST /api/projects/{id}/reporting`); la plataforma lo completa con los datos del proyecto
+> **Archivo:** `workspace/05-management/reports/EFFORT-nn_AAAAMMDD.md` y `.pdf`
 
 ---
 
@@ -371,8 +371,8 @@ Ver registro completo en `change-requests.md`.
 
 ## D15 — Informe de Cambios {#d15}
 
-> **Comando:** `generar informe de cambios`
-> **Archivo:** `90-management/reports/CHANGES-nn_AAAAMMDD.md`
+> **Generación:** pestaña *Informes* del proyecto (o `POST /api/projects/{id}/reporting`); la plataforma lo completa con los datos del proyecto
+> **Archivo:** `workspace/05-management/reports/CHANGES-nn_AAAAMMDD.md` y `.pdf`
 > **Fuente PM²:** Change Log (Artefacts v3.1, p.206)
 
 ---
@@ -428,8 +428,8 @@ Ver registro completo en `change-requests.md`.
 - [Conclusión 1]
 - [Conclusión 2]
 
-> **Fuente:** `change-requests.md` — última actualización: [DD/MM/AAAA]
-> Cada rfc cerrado tiene su `DEC-nnn` correspondiente en `assumptions-and-decisions.md`.
+> **Fuente:** registro de cambios del proyecto (pestaña *Registros*)
+> Cada cambio resuelto tiene su `DEC-nnn` en el registro de decisiones (pestaña *Registros*).
 
 ---
 

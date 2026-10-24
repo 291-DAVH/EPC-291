@@ -1,33 +1,13 @@
-# 90_MANAGEMENT — Gestión del proyecto
+# 05-management: gestión del proyecto
 
-Contiene los documentos vivos de la gestión del proyecto. **Todos son editables por el usuario**, salvo los bloques marcados «GUÍA DEL ARCHIVO (no editar)» que son instrucciones de cabecera.
+Datos de gestión del proyecto, escritos y leídos por la plataforma (pestañas **Plan**, **Registros**, **Informes** del proyecto). El cliente no ve esta carpeta: ve los entregables, los datos de entrada, los requisitos y los informes que se le publican.
 
-## Archivos en la raíz
-
-| Archivo | Quién lo llena | Cuándo |
+| Archivo o carpeta | Qué es | Quién lo escribe |
 |---|---|---|
-| `PROJECT_SCOPE.md` | Project Engineer (con Claude) | Inicio del proyecto |
-| `PROJECT_CHARTER.md` | Project Engineer (con Claude) | Inicio del proyecto |
-| `PROJECT_CHARTER_EXECUTIVE.md` | Project Engineer (con Claude) | Inicio del proyecto |
-| `GOALS.md` | Project Engineer (con Claude) | Inicio del proyecto |
-| `PROJECT_INFORMATION.md` | Project Engineer (con Claude) | Inicio y durante el proyecto |
-| `CLIENT_REQUIREMENTS.md` | Project Engineer (con Claude) | Al recibir requisitos del cliente |
-| `ENGINEERING_STANDARDS.md` | Project Engineer (con Claude) | Inicio del proyecto |
-| `PROJECT_STATUS.md` | Project Engineer / Claude | Al terminar cada sesión y al cambiar de estado |
-| `AUDIT_REGISTER.md` | Auditor / Project Engineer | Por cada auditoría e informe de avance |
-| `CHANGE_REQUESTS.md` | Project Engineer | Por cada RFC abierta |
-| `ASSUMPTIONS_AND_DECISIONS.md` | Project Engineer | Por cada decisión técnica relevante |
-| `TRACEABILITY_MATRIX.md` | Project Engineer (con Claude) | Actualización continua |
-| `DELIVERABLES.md` | Project Engineer (con Claude) | Inicio y actualización por fase |
-| `DRAWING_STATUS.md` | Project Engineer | Por cada cambio de estado de plano |
-| `LESSONS_LEARNED.md` | Todo el equipo | Durante el proyecto |
-| `SCHEDULE_CCPM.md` | Project Engineer (con Claude) | Solo en modo «Ingeniería + gestión» |
+| `project-status.json` | fase, avance, salud y hitos | plataforma (Resumen, Plan) |
+| `wbs.json`, `schedule.json`, `backlog.json` | EDT, cronograma y backlog | pestaña Plan |
+| `deliverables.json` | entregables y su estado | emisión (Ingeniería › Emitir) |
+| `registers/<tipo>.json` | riesgos (RIE), cambios (RFC), incidencias (INC), decisiones (DEC), supuestos (SUP), interesados (STK) | pestaña Registros |
+| `progress/`, `reports/` | informes de gestión generados (Markdown y PDF) y `reports/generated.json` | pestaña Informes |
 
-## Subcarpetas
-
-| Carpeta | Contenido |
-|---|---|
-| `CHARTER/` | Charter PDF/Word generados por `charter_exporter.py` y `canvas_exporter.py` |
-| `GOVERNANCE/` | Planes de gestión (RISK_PLAN, QUALITY_HSE_PLAN, PROJECT_HANDBOOK) |
-| `PROGRESS/` | Informes de avance (`PROGRESS-nn`) |
-| `REPORTS/` | Punch list, close checklist, redline log |
+Los tipos de registro y de informe los define la metodología del proyecto (`management/methodologies/<id>/registers.json` y `reports.json`). Los registros no se borran: cambian de estado y guardan su historial (quién, qué y cuándo).

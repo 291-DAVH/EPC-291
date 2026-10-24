@@ -22,7 +22,7 @@ T: Dict[str, Dict[str, str]] = {
         "description": "Descripción", "level": "Nivel", "action": "Acción en curso", "impact": "Impacto", "owner": "Responsable", "status": "Estado",
         "empty.changes": "Sin solicitudes de cambio registradas.", "empty.risks": "Sin riesgos registrados.", "empty.issues": "Sin incidencias registradas.",
         "empty.decisions": "Sin decisiones pendientes.", "empty.ms": "Sin hitos definidos.",
-        "stakeholders": "Interesados clave", "name": "Nombre", "role": "Rol", "org": "Organización", "involvement": "Nivel de involucramiento", "empty.stk": "Sin interesados registrados (ver stakeholders.md).",
+        "stakeholders": "Interesados clave", "name": "Nombre", "role": "Rol", "org": "Organización", "involvement": "Nivel de involucramiento", "empty.stk": "Sin interesados registrados (pestaña Registros).",
         "ms_deliv": "Hitos y entregables", "deliverable": "Entregable", "revision": "Revisión", "due": "Vencimiento",
         "work_packages": "Plan de trabajo por paquete", "package": "Paquete de trabajo", "progress": "Avance (%)", "remarks": "Observaciones", "empty.wbs": "Sin EDT definida.",
         "scope_changes": "Cambios de alcance", "approved_acc": "Cambios aprobados acumulados", "main_risks": "Riesgos principales y acciones", "main_issues": "Problemas principales y acciones",
@@ -32,14 +32,14 @@ T: Dict[str, Dict[str, str]] = {
         "risk.high": "Riesgos activos de nivel alto", "risk.medium": "Riesgos de nivel medio activos", "risk.new": "Riesgos nuevos en el período", "risk.closed": "Riesgos cerrados en el período",
         "prob": "Prob.", "strategy": "Estrategia", "reason": "Motivo de cierre", "closed_on": "Fecha cierre", "risk.evolution": "Evolución del perfil de riesgo",
         "prev_period": "Período anterior", "curr_period": "Período actual", "high_risks": "Riesgos altos", "risk.conclusions": "Conclusiones y acciones recomendadas",
-        "risk.src": "Fuente: assumptions-and-decisions.md (registro RIE).", "general_cat": "General",
+        "risk.src": "Fuente: registro de riesgos del proyecto (pestaña Registros).", "general_cat": "General",
         "effort.by_disc": "Esfuerzo por disciplina", "discipline": "Disciplina / rol", "hh_base": "HH línea base", "hh_earned": "HH ganadas (según avance)", "hh_left": "HH remanentes",
         "pct": "% avance", "effort.by_pkg": "Esfuerzo por paquete de trabajo", "effort.remaining": "Proyección de esfuerzo remanente", "hh_total": "HH total proyectadas",
         "effort.notes": "Observaciones y alertas", "effort.nohours": "Las horas realmente trabajadas todavía no se registran en la plataforma: no se calcula la desviación contra horas reales; las horas ganadas se obtienen del avance de cada paquete.",
         "effort.nobase": "Sin horas estimadas: carga las estimaciones en el backlog del proyecto.", "effort.noassoc": "Sin disciplina", "effort.nocost": "Los valores corresponden al plan aprobado. No se incluyen tarifas ni costos.",
         "chg.summary": "Resumen del período", "chg.status": "Estado rfc", "chg.period": "Cantidad en período", "chg.acc": "Acumulado total",
         "chg.approved": "Cambios aprobados", "chg.rejected": "Cambios rechazados o diferidos", "chg.eval": "Cambios en proceso de evaluación", "chg.conclusions": "Conclusiones",
-        "chg.src": "Fuente: change-requests.md.", "title_col": "Título", "opened": "Fecha apertura", "decision": "Decisión", "justification": "Justificación",
+        "chg.src": "Fuente: registro de cambios del proyecto (pestaña Registros).", "title_col": "Título", "opened": "Fecha apertura", "decision": "Decisión", "justification": "Justificación",
         "st.open": "Abiertos", "st.evaluated": "Evaluados", "st.approved": "Aprobados", "st.rejected": "Rechazados", "st.deferred": "Diferidos", "st.implemented": "Implementados", "st.closed": "Cerrados",
         "page": "Página {n} de {total}", "footer": "{name} {tr} · {project}", "nd": "n/d", "trend_note": "La tendencia compara con el informe anterior del mismo tipo.",
         "sum.text": "El proyecto se encuentra en la fase «{phase}» con un avance físico de {real} % (planificado: {plan}) y estado general {color}. Se completaron {hd} de {ht} hitos. Entregables vencidos: {od}; datos de entrada en análisis: {oi}; preguntas abiertas en requisitos: {oq}; cambios abiertos: {rfc}; riesgos de nivel alto: {rh}.",
@@ -63,7 +63,7 @@ T: Dict[str, Dict[str, str]] = {
         "description": "Description", "level": "Level", "action": "Action in progress", "impact": "Impact", "owner": "Owner", "status": "Status",
         "empty.changes": "No change requests recorded.", "empty.risks": "No risks recorded.", "empty.issues": "No issues recorded.",
         "empty.decisions": "No pending decisions.", "empty.ms": "No milestones defined.",
-        "stakeholders": "Key stakeholders", "name": "Name", "role": "Role", "org": "Organization", "involvement": "Level of involvement", "empty.stk": "No stakeholders recorded (see stakeholders.md).",
+        "stakeholders": "Key stakeholders", "name": "Name", "role": "Role", "org": "Organization", "involvement": "Level of involvement", "empty.stk": "No stakeholders recorded (Registers tab).",
         "ms_deliv": "Milestones and deliverables", "deliverable": "Deliverable", "revision": "Revision", "due": "Due",
         "work_packages": "Work plan by package", "package": "Work package", "progress": "Progress (%)", "remarks": "Remarks", "empty.wbs": "No WBS defined.",
         "scope_changes": "Scope changes", "approved_acc": "Accumulated approved changes", "main_risks": "Main risks and actions", "main_issues": "Main issues and actions",
@@ -73,14 +73,14 @@ T: Dict[str, Dict[str, str]] = {
         "risk.high": "Active high-level risks", "risk.medium": "Active medium-level risks", "risk.new": "New risks in the period", "risk.closed": "Risks closed in the period",
         "prob": "Prob.", "strategy": "Strategy", "reason": "Closing reason", "closed_on": "Closing date", "risk.evolution": "Risk profile evolution",
         "prev_period": "Previous period", "curr_period": "Current period", "high_risks": "High risks", "risk.conclusions": "Conclusions and recommended actions",
-        "risk.src": "Source: assumptions-and-decisions.md (RIE register).", "general_cat": "General",
+        "risk.src": "Source: the project's risk register (Registers tab).", "general_cat": "General",
         "effort.by_disc": "Effort by discipline", "discipline": "Discipline / role", "hh_base": "Baseline hours", "hh_earned": "Earned hours (by progress)", "hh_left": "Remaining hours",
         "pct": "% progress", "effort.by_pkg": "Effort by work package", "effort.remaining": "Remaining effort forecast", "hh_total": "Total projected hours",
         "effort.notes": "Remarks and alerts", "effort.nohours": "Hours actually worked are not recorded in the platform yet: no variance against actual hours is computed; earned hours come from the progress of each package.",
         "effort.nobase": "No estimated hours: enter the estimates in the project backlog.", "effort.noassoc": "No discipline", "effort.nocost": "Values correspond to the approved plan. No rates or costs are included.",
         "chg.summary": "Summary of the period", "chg.status": "RFC status", "chg.period": "Count in period", "chg.acc": "Accumulated total",
         "chg.approved": "Approved changes", "chg.rejected": "Rejected or deferred changes", "chg.eval": "Changes under evaluation", "chg.conclusions": "Conclusions",
-        "chg.src": "Source: change-requests.md.", "title_col": "Title", "opened": "Opening date", "decision": "Decision", "justification": "Justification",
+        "chg.src": "Source: the project's change register (Registers tab).", "title_col": "Title", "opened": "Opening date", "decision": "Decision", "justification": "Justification",
         "st.open": "Open", "st.evaluated": "Evaluated", "st.approved": "Approved", "st.rejected": "Rejected", "st.deferred": "Deferred", "st.implemented": "Implemented", "st.closed": "Closed",
         "page": "Page {n} of {total}", "footer": "{name} {tr} · {project}", "nd": "n/a", "trend_note": "The trend compares with the previous report of the same type.",
         "sum.text": "The project is in the \"{phase}\" phase with a physical progress of {real} % (planned: {plan}) and an overall status of {color}. {hd} of {ht} milestones are complete. Overdue deliverables: {od}; input items under analysis: {oi}; open questions on requirements: {oq}; open changes: {rfc}; high-level risks: {rh}.",
@@ -109,11 +109,18 @@ def d(s) -> Optional[dt.date]:
     return None
 
 
-def pick(row: dict, *keys: str, default: str = "") -> str:
-    for h, v in row.items():
-        if h != "id" and v and any(k in h for k in keys):
-            return v
-    return default
+def lvl(r: dict) -> str:
+    """high | medium | low: derived by the registers module from probability x impact."""
+    return r.get("level_name") or "medium"
+
+
+def is_closed(c: dict, kind: str, r: dict) -> bool:
+    return r.get("status") in c["closed"][kind]
+
+
+def in_period(c: dict, s) -> bool:
+    x = d(s)
+    return bool(x and c["period_start"] <= x <= c["period_end"])
 
 
 def fmt_date(x) -> str:
@@ -121,46 +128,13 @@ def fmt_date(x) -> str:
     return x.strftime("%d/%m/%Y") if x else ""
 
 
-CLOSED = ("cerrad", "closed", "occurred", "mitigad", "expir", "evitad", "implementad", "implemented")
-STATUS_KEYS = [("st.open", ("abiert", "open", "nuevo", "new")), ("st.evaluated", ("evalu", "analy")), ("st.approved", ("aprob", "approved")),
-               ("st.rejected", ("rechaz", "reject")), ("st.deferred", ("diferid", "defer")), ("st.implemented", ("implement",)), ("st.closed", ("cerrad", "closed"))]
-
-
-def status_key(text: str) -> str:
-    t = (text or "").lower()
-    for key, words in STATUS_KEYS:
-        if any(w in t for w in words):
-            return key
-    return "st.open"
-
-
-def risk_level(row: dict) -> str:
-    """high | medium | low from the level text or from probability x impact (green <= 2, amber 3 to 16, red >= 20)."""
-    txt = pick(row, "nivel", "level").lower()
-    if any(w in txt for w in ("alto", "rojo", "crít", "crit", "high")):
-        return "high"
-    if any(w in txt for w in ("medio", "amarillo", "medium")):
-        return "medium"
-    if any(w in txt for w in ("bajo", "verde", "low")):
-        return "low"
-    nums = [int(x) for x in re.findall(r"\d+", txt)]
-    if nums:
-        v = nums[0]
-        return "high" if v >= 20 else "medium" if v >= 3 else "low"
-    return "medium"
-
-
-def is_closed(row: dict) -> bool:
-    return any(w in pick(row, "estado", "status").lower() for w in CLOSED)
-
-
 # ---------------------------------------------------------------- assessment shared by D11 and D12
 def assess(c: dict) -> dict:
     st, sched, deliv, reqs = c["status"], c["schedule"], c["deliverables"], c["requirements"]
-    rfc_open = [r for r in c["rfc"] if not is_closed(r) and status_key(pick(r, "estado", "status")) in ("st.open", "st.evaluated")]
-    risks = [r for r in c["risks"] if not is_closed(r)]
-    high = [r for r in risks if risk_level(r) == "high"]
-    med = [r for r in risks if risk_level(r) == "medium"]
+    rfc_open = [r for r in c["rfc"] if r.get("status") in ("open", "evaluated")]
+    risks = [r for r in c["risks"] if not is_closed(c, "risk", r)]
+    high = [r for r in risks if lvl(r) == "high"]
+    med = [r for r in risks if lvl(r) == "medium"]
     open_q = sum(len(r.get("open_questions", [])) for r in reqs)
     overdue = sum(1 for x in deliv if x.get("overdue"))
     late = sched["counts"]["late"] if sched.get("activities") else 0
@@ -208,17 +182,19 @@ def milestone_rows(c: dict, a: dict, t: dict) -> List[List[str]]:
     return rows
 
 
-def change_rows(a: dict) -> List[List[str]]:
-    return [[r["id"], pick(r, "título", "titulo", "descrip", "title"), pick(r, "estado", "status")] for r in a["rfc_open"]]
+def change_rows(c: dict, a: dict) -> List[List[str]]:
+    return [[r["id"], r["title"], c["label"]("change", "status", r["status"])] for r in a["rfc_open"]]
 
 
-def risk_rows(risks: List[dict]) -> List[List[str]]:
-    return [[r["id"], pick(r, "descrip", "riesgo", "evento", "risk"), pick(r, "nivel", "level"), pick(r, "respuesta", "acción", "accion", "estrategia", "strategy")] for r in risks]
+def risk_rows(c: dict, risks: List[dict]) -> List[List[str]]:
+    return [[r["id"], r["title"], f"{r.get('level', '')} · {T[c['lang']][lvl(r)]}", r.get("response") or c["label"]("risk", "strategy", r.get("strategy"))]
+            for r in risks]
 
 
 def issue_rows(c: dict) -> List[List[str]]:
-    return [[f"{r['id']} {pick(r, 'descrip', 'asunto', 'title')}".strip(), pick(r, "impacto", "impact"), pick(r, "acci", "estado", "status"), pick(r, "responsable", "owner")]
-            for r in c["issues"] if not is_closed(r)]
+    t = T[c["lang"]]
+    return [[f"{r['id']} {r['title']}", r.get("impact", ""), f"{c['label']('issue', 'status', r['status'])} · {fmt_date(r.get('due'))}", r.get("owner", "")]
+            for r in c["issues"] if not is_closed(c, "issue", r)]
 
 
 def decision_rows(c: dict, t: dict) -> List[List[str]]:
@@ -253,9 +229,9 @@ def status_report(c: dict, prev: Optional[dict]) -> dict:
               {"type": "h", "text": t["next"]}, {"type": "bullets", "items": nxt or [t["none_next"]]},
               {"type": "h", "text": t["milestones"]},
               table([[t["milestone"], 0.3], [t["baseline"], 0.2], [t["forecast"], 0.3], [t["state"], 0.2]], milestone_rows(c, a, t), t["empty.ms"]),
-              {"type": "h", "text": t["active_changes"]}, table([["rfc", 0.2], [t["description"], 0.55], [t["state"], 0.25]], change_rows(a), t["empty.changes"]),
+              {"type": "h", "text": t["active_changes"]}, table([["rfc", 0.2], [t["description"], 0.55], [t["state"], 0.25]], change_rows(c, a), t["empty.changes"]),
               {"type": "h", "text": t["active_risks"]},
-              table([["RIE", 0.15], [t["description"], 0.45], [t["level"], 0.15], [t["action"], 0.25]], risk_rows(a["high"] + a["med"]), t["empty.risks"]),
+              table([["RIE", 0.15], [t["description"], 0.45], [t["level"], 0.15], [t["action"], 0.25]], risk_rows(c, a["high"] + a["med"]), t["empty.risks"]),
               {"type": "h", "text": t["issues"]},
               table([[t["description"], 0.4], [t["impact"], 0.2], [t["action"], 0.2], [t["owner"], 0.2]], issue_rows(c), t["empty.issues"]),
               {"type": "h", "text": t["decisions"]},
@@ -296,13 +272,13 @@ def progress_report(c: dict, prev: Optional[dict]) -> dict:
     t = T[c["lang"]]
     a = assess(c)
     done, _ = period_activities(c, t)
-    stk = [[r["id"], pick(r, "nombre", "name") or r["id"], pick(r, "rol", "role"), pick(r, "organiz", "org"), pick(r, "involucr", "interés", "interes", "actitud")] for r in c["stakeholders"]]
+    stk = [[r["id"], r["name"], r.get("role", ""), r.get("organization", ""), c["label"]("stakeholder", "attitude", r.get("attitude"))] for r in c["stakeholders"]]
     wp = [[f"{n['id']} {n['name']}", n.get("owner", "") or "-", f"{n['progress']:g}", t["ms.done"] if n["status"] == "done" else t["ms.ontime"] if n["status"] == "in_progress" else "-",
            n.get("discipline", "")] for n in c["wbs"]["nodes"] if n["level"] <= 2]
     dl = [[f"{x.get('code', '')} {x.get('name', '')}".strip(), x.get("revision", ""), fmt_date(x.get("due")), t["ms.done"] if x.get("status") == "delivered" else (t["ms.late"] if x.get("overdue") else x.get("status", ""))]
           for x in c["deliverables"]]
     other = [[b["title"], b.get("owner", "") or "-", b["status"], "-"] for b in c["backlog"]["items"] if b["status"] != "done"][:15]
-    appendix = [["change-requests.md", "—", "workspace/05-management/"], ["assumptions-and-decisions.md", "—", "workspace/05-management/"], ["issue-log.md", "—", "workspace/05-management/"]]
+    appendix = [[x, "—", "workspace/05-management/registers/"] for x in ("change.json", "risk.json", "issue.json", "decision.json")]
     blocks = [header_kv(c, t, with_phase=False),
               {"type": "h", "text": f"1. {t['exec']}"}, {"type": "p", "text": f"{t['overall']}: {t['c.' + COLORS[a['overall']]]}. {summary_text(c, a, t)}"},
               {"type": "h", "text": f"2. {t['stakeholders']}"},
@@ -312,11 +288,11 @@ def progress_report(c: dict, prev: Optional[dict]) -> dict:
               table([[t["deliverable"], 0.46], [t["revision"], 0.14], [t["due"], 0.18], [t["state"], 0.22]], dl, ""),
               {"type": "h", "text": f"4. {t['work_packages']}"},
               table([[t["package"], 0.38], [t["owner"], 0.16], [t["progress"], 0.14], [t["state"], 0.14], [t["remarks"], 0.18]], wp, t["empty.wbs"]),
-              {"type": "h", "text": f"5. {t['scope_changes']}"}, table([["rfc", 0.2], [t["description"], 0.55], [t["state"], 0.25]], change_rows(a), t["empty.changes"]),
-              {"type": "p", "text": f"{t['approved_acc']}: {sum(1 for r in c['rfc'] if status_key(pick(r, 'estado', 'status')) in ('st.approved', 'st.implemented'))}"},
+              {"type": "h", "text": f"5. {t['scope_changes']}"}, table([["rfc", 0.2], [t["description"], 0.55], [t["state"], 0.25]], change_rows(c, a), t["empty.changes"]),
+              {"type": "p", "text": f"{t['approved_acc']}: {sum(1 for r in c['rfc'] if r.get('status') in ('approved', 'implemented'))}"},
               {"type": "h", "text": f"6. {t['main_risks']}"},
               table([["RIE", 0.12], [t["description"], 0.4], [t["level"], 0.12], [t["action"], 0.2], [t["owner"], 0.16]],
-                    [[r["id"], pick(r, "descrip", "riesgo", "evento"), pick(r, "nivel", "level"), pick(r, "respuesta", "acci", "estrategia"), pick(r, "responsable", "owner")]
+                    [[r["id"], r["title"], str(r.get("level", "")), r.get("response") or c["label"]("risk", "strategy", r.get("strategy")), r.get("owner", "")]
                      for r in a["high"] + a["med"]], t["empty.risks"]),
               {"type": "h", "text": f"7. {t['main_issues']}"},
               table([[t["description"], 0.4], [t["impact"], 0.2], [t["action"], 0.2], [t["owner"], 0.2]], issue_rows(c), t["empty.issues"]),
@@ -332,27 +308,27 @@ def progress_report(c: dict, prev: Optional[dict]) -> dict:
 def risk_report(c: dict, prev: Optional[dict]) -> dict:
     t = T[c["lang"]]
     a = assess(c)
+    lab = c["label"]
     cats: Dict[str, Dict[str, int]] = {}
     for r in a["risks_active"]:
-        cat = pick(r, "categor", "tipo", "category") or t["general_cat"]
-        cats.setdefault(cat, {"high": 0, "medium": 0, "low": 0})[risk_level(r)] += 1
+        cat = lab("risk", "category", r.get("category")) or t["general_cat"]
+        cats.setdefault(cat, {"high": 0, "medium": 0, "low": 0})[lvl(r)] += 1
     cat_rows = [[k, str(v["high"]), str(v["medium"]), str(v["low"]), str(sum(v.values()))] for k, v in sorted(cats.items())]
     if cat_rows:
         tot = [sum(int(r[i]) for r in cat_rows) for i in range(1, 5)]
         cat_rows.append([t["total"]] + [str(x) for x in tot])
 
     def line(r, full=True):
-        base = [r["id"], pick(r, "descrip", "riesgo", "evento", "risk")]
+        base = [r["id"], r["title"], str(r.get("probability") or ""), str(r.get("impact") or "")]
         if full:
-            return base + [pick(r, "prob"), pick(r, "impacto", "impact"), pick(r, "nivel", "level"), pick(r, "estrategia", "respuesta", "strategy"), pick(r, "responsable", "owner"), pick(r, "estado", "status")]
-        return base + [pick(r, "prob"), pick(r, "impacto", "impact"), pick(r, "estrategia", "respuesta", "strategy"), pick(r, "responsable", "owner")]
+            return base + [str(r.get("level", "")), lab("risk", "strategy", r.get("strategy")), r.get("owner", ""), lab("risk", "status", r["status"])]
+        return base + [lab("risk", "strategy", r.get("strategy")), r.get("owner", "")]
 
-    ps, pe = c["period_start"], c["period_end"]
-    new = [r for r in c["risks"] if d(pick(r, "fecha", "date", "apertura")) and ps <= d(pick(r, "fecha", "date", "apertura")) <= pe]
-    closed = [r for r in c["risks"] if is_closed(r) and d(pick(r, "cierre", "closed")) and ps <= d(pick(r, "cierre", "closed")) <= pe]
+    new = [r for r in c["risks"] if in_period(c, r.get("opened"))]
+    closed = [r for r in c["risks"] if is_closed(c, "risk", r) and in_period(c, r.get("closed_on"))]
     pr_high = (prev or {}).get("risks_high")
     arrow = ARROW[(len(a["high"]) > pr_high) - (len(a["high"]) < pr_high)] if pr_high is not None else "→"
-    concl = [f"{t['cm.risks'].format(h=len(a['high']), m=len(a['med']))}"] if a["risks_active"] else [t["empty.risks"]]
+    concl = [t["cm.risks"].format(h=len(a["high"]), m=len(a["med"]))] if a["risks_active"] else [t["empty.risks"]]
     blocks = [header_kv(c, t, with_phase=False),
               {"type": "h", "text": t["risk.summary"]},
               table([[t["category"], 0.36], [t["high"], 0.16], [t["medium"], 0.16], [t["low"], 0.16], [t["total_active"], 0.16]], cat_rows, t["empty.risks"]),
@@ -360,12 +336,13 @@ def risk_report(c: dict, prev: Optional[dict]) -> dict:
               table([["RIE", 0.09], [t["description"], 0.27], [t["prob"], 0.08], [t["impact"], 0.1], [t["level"], 0.09], [t["strategy"], 0.13], [t["owner"], 0.12], [t["state"], 0.12]],
                     [line(r) for r in a["high"]], t["empty.risks"]),
               {"type": "h", "text": t["risk.medium"]},
-              table([["RIE", 0.1], [t["description"], 0.38], [t["prob"], 0.1], [t["impact"], 0.12], [t["strategy"], 0.15], [t["owner"], 0.15]], [line(r, False) for r in a["med"]], t["empty.risks"]),
+              table([["RIE", 0.1], [t["description"], 0.36], [t["prob"], 0.09], [t["impact"], 0.1], [t["strategy"], 0.17], [t["owner"], 0.18]], [line(r, False) for r in a["med"]], t["empty.risks"]),
               {"type": "h", "text": t["risk.new"]},
-              table([["RIE", 0.1], [t["description"], 0.38], [t["prob"], 0.1], [t["impact"], 0.12], [t["strategy"], 0.15], [t["owner"], 0.15]], [line(r, False) for r in new], t["empty.risks"]),
+              table([["RIE", 0.1], [t["description"], 0.36], [t["prob"], 0.09], [t["impact"], 0.1], [t["strategy"], 0.17], [t["owner"], 0.18]], [line(r, False) for r in new], t["empty.risks"]),
               {"type": "h", "text": t["risk.closed"]},
-              table([["RIE", 0.12], [t["description"], 0.48], [t["reason"], 0.2], [t["closed_on"], 0.2]],
-                    [[r["id"], pick(r, "descrip", "riesgo", "evento"), pick(r, "estado", "status"), fmt_date(pick(r, "cierre", "closed"))] for r in closed], t["empty.risks"]),
+              table([["RIE", 0.12], [t["description"], 0.4], [t["reason"], 0.28], [t["closed_on"], 0.2]],
+                    [[r["id"], r["title"], f"{lab('risk', 'status', r['status'])}{(' – ' + r['closing_reason']) if r.get('closing_reason') else ''}", fmt_date(r.get("closed_on"))] for r in closed],
+                    t["empty.risks"]),
               {"type": "h", "text": t["risk.evolution"]},
               table([[t["prev_period"], 0.35], [t["curr_period"], 0.35], [t["trend"], 0.3]],
                     [[f"{t['high_risks']}: {pr_high if pr_high is not None else t['nd']}", f"{t['high_risks']}: {len(a['high'])}", arrow]], ""),
@@ -420,41 +397,34 @@ def effort_report(c: dict, prev: Optional[dict]) -> dict:
 def change_report(c: dict, prev: Optional[dict]) -> dict:
     t = T[c["lang"]]
     a = assess(c)
-    ps, pe = c["period_start"], c["period_end"]
+    lab = c["label"]
     acc: Dict[str, int] = {}
     per: Dict[str, int] = {}
-    dated = False
     for r in c["rfc"]:
-        k = status_key(pick(r, "estado", "status"))
+        k = r["status"]
         acc[k] = acc.get(k, 0) + 1
-        when = d(pick(r, "fecha", "date", "apertura", "decisi"))
-        if when:
-            dated = True
-            if ps <= when <= pe:
-                per[k] = per.get(k, 0) + 1
-    order = ["st.open", "st.evaluated", "st.approved", "st.rejected", "st.deferred", "st.implemented", "st.closed"]
-    sums = [[t[k], str(per.get(k, 0)) if dated else t["nd"], str(acc.get(k, 0))] for k in order]
-    sums.append([t["total"], str(sum(per.values())) if dated else t["nd"], str(len(c["rfc"]))])
+        when = r.get("opened") if k in ("open", "evaluated") else (r.get("decided_on") or r.get("opened"))
+        if in_period(c, when):
+            per[k] = per.get(k, 0) + 1
+    order = ["open", "evaluated", "approved", "rejected", "deferred", "implemented", "closed"]
+    sums = [[t["st." + k], str(per.get(k, 0)), str(acc.get(k, 0))] for k in order]
+    sums.append([t["total"], str(sum(per.values())), str(len(c["rfc"]))])
 
     def sel(*keys):
-        return [r for r in c["rfc"] if status_key(pick(r, "estado", "status")) in keys]
+        return [r for r in c["rfc"] if r["status"] in keys]
 
-    def line(r):
-        return [r["id"], pick(r, "título", "titulo", "descrip", "title"), pick(r, "categor", "tipo"), pick(r, "dec"), pick(r, "responsable", "owner")]
-
-    concl = [f"{len(c['rfc'])} rfc / {len(sel('st.approved', 'st.implemented'))} {t['st.approved'].lower()}"] if c["rfc"] else [t["empty.changes"]]
+    concl = [f"{len(c['rfc'])} rfc / {len(sel('approved', 'implemented'))} {t['st.approved'].lower()}"] if c["rfc"] else [t["empty.changes"]]
     blocks = [header_kv(c, t, with_phase=False),
               {"type": "h", "text": t["chg.summary"]}, table([[t["chg.status"], 0.5], [t["chg.period"], 0.25], [t["chg.acc"], 0.25]], sums, ""),
               {"type": "h", "text": t["chg.approved"]},
-              table([["rfc", 0.12], [t["title_col"], 0.38], [t["category"], 0.16], ["DEC", 0.12], [t["owner"], 0.22]], [line(r) for r in sel("st.approved", "st.implemented")], t["empty.changes"]),
+              table([["rfc", 0.12], [t["title_col"], 0.38], [t["category"], 0.16], ["DEC", 0.12], [t["owner"], 0.22]],
+                    [[r["id"], r["title"], lab("change", "category", r.get("category")), r.get("decision_ref", ""), r.get("owner", "")] for r in sel("approved", "implemented")], t["empty.changes"]),
               {"type": "h", "text": t["chg.rejected"]},
-              table([["rfc", 0.12], [t["title_col"], 0.38], [t["decision"], 0.2], ["DEC", 0.1], [t["justification"], 0.2]],
-                    [[r["id"], pick(r, "título", "titulo", "descrip", "title"), pick(r, "estado", "status"), pick(r, "dec"), pick(r, "justific", "motivo")] for r in sel("st.rejected", "st.deferred")],
-                    t["empty.changes"]),
+              table([["rfc", 0.12], [t["title_col"], 0.36], [t["decision"], 0.16], ["DEC", 0.12], [t["justification"], 0.24]],
+                    [[r["id"], r["title"], lab("change", "status", r["status"]), r.get("decision_ref", ""), r.get("justification", "")] for r in sel("rejected", "deferred")], t["empty.changes"]),
               {"type": "h", "text": t["chg.eval"]},
-              table([["rfc", 0.12], [t["title_col"], 0.4], [t["opened"], 0.16], [t["owner"], 0.16], [t["deadline"], 0.16]],
-                    [[r["id"], pick(r, "título", "titulo", "descrip", "title"), fmt_date(pick(r, "fecha", "apertura", "date")), pick(r, "evaluador", "responsable", "owner"), fmt_date(pick(r, "límite", "limite", "plazo"))]
-                     for r in sel("st.open", "st.evaluated")], t["empty.changes"]),
+              table([["rfc", 0.12], [t["title_col"], 0.46], [t["opened"], 0.2], [t["owner"], 0.22]],
+                    [[r["id"], r["title"], fmt_date(r.get("opened")), r.get("owner", "")] for r in sel("open", "evaluated")], t["empty.changes"]),
               {"type": "h", "text": t["chg.conclusions"]}, {"type": "bullets", "items": concl}, {"type": "p", "text": t["chg.src"]}]
     return {"title": "INFORME DE CAMBIOS" if c["lang"] == "es" else "CHANGE REPORT", "summary": concl[0], "blocks": blocks,
             "snapshot": {"ranks": a["ranks"], "risks_high": len(a["high"])}}

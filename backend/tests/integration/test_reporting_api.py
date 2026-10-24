@@ -48,19 +48,15 @@ class TestReporting(unittest.TestCase):
         (self.d / "workspace" / "00-setup" / "requirements.json").write_text(json.dumps([
             {"id": "REQ-001", "statement": "s", "type": "funcional", "priority": "alta", "discipline": "general", "acceptance": [], "open_questions": ["¿Peso máximo?"],
              "source_intake": [], "status": "abierto"}]), encoding="utf-8")
-        (self.m / "change-requests.md").write_text(
-            "# registro\n\n| ID | Título | Categoría | Estado | Fecha | DEC | Responsable |\n|---|---|---|---|---|---|---|\n"
-            f"| EJ-rfc-001 | ejemplo | Alcance | ABIERTO | {iso(-2)} | | |\n"
-            f"| rfc-001 | Agregar tablero TS-03 | Alcance | APPROVED | {iso(-4)} | DEC-004 | ME |\n"
-            f"| rfc-002 | Cambiar luminarias | Diseño | ABIERTO | {iso(-1)} | | ME |\n"
-            f"| rfc-003 | Mover sala | Cliente | REJECTED | {iso(-3)} | DEC-005 | ME |\n", encoding="utf-8")
-        (self.m / "assumptions-and-decisions.md").write_text(
-            "| ID | Descripción | Prob. | Impacto | Nivel | Estrategia | Responsable | Estado | Fecha |\n|---|---|---|---|---|---|---|---|---|\n"
-            f"| RIE-001 | Demora del cliente en datos | 4 | 5 | 20 | Mitigar | ME | ABIERTO | {iso(-30)} |\n"
-            f"| RIE-002 | Cambio de norma | 2 | 3 | 6 | Aceptar | ME | ABIERTO | {iso(-2)} |\n"
-            f"| RIE-003 | Proveedor | 1 | 2 | 2 | Aceptar | ME | CERRADO | {iso(-40)} |\n", encoding="utf-8")
-        (self.m / "issue-log.md").write_text("| ID | Descripción | Impacto | Responsable | Estado |\n|---|---|---|---|---|\n| INF-007 | Falta plano de arquitectura | PQ-03 | Cliente | ABIERTO |\n"
-                                              "| BLQ-001 | Resuelto | - | ME | CERRADO |\n", encoding="utf-8")
+        reg = lambda kind, **f: self.assertEqual(self.c.post(f"/api/projects/ACME/P-1/registers/{kind}", json=f).status_code, 201)
+        reg("change", title="Agregar tablero TS-03", category="scope", status="approved", owner="ME", decision_ref="DEC-004")
+        reg("change", title="Cambiar luminarias", category="design", status="open", owner="ME")
+        reg("change", title="Mover sala", category="client", status="rejected", owner="ME", decision_ref="DEC-005", justification="Fuera de alcance")
+        reg("risk", title="Demora del cliente en datos", probability=4, impact=5, strategy="reduce", owner="ME")
+        reg("risk", title="Cambio de norma", probability=2, impact=3, strategy="accept", owner="ME")
+        reg("risk", title="Proveedor", probability=1, impact=2, strategy="accept", owner="ME", status="closed", closing_reason="Entregado")
+        reg("issue", title="Falta plano de arquitectura", type="client_info", impact="PQ-03", owner="Cliente", due=iso(5))
+        reg("issue", title="Resuelto", type="pending", owner="ME", due=iso(1), status="closed")
 
     def tearDown(self):
         settings.projects_dir, settings.role, settings.data_dir = self._old
@@ -96,12 +92,11 @@ class TestReporting(unittest.TestCase):
         self.assertIn("Estado general del proyecto: ROJO", md)
         self.assertIn("| Ingeniería básica aprobada |", md)
         self.assertIn("Con retraso", md)                                      # that milestone date has passed
-        self.assertIn("rfc-002 | Cambiar luminarias", md)
-        self.assertNotIn("EJ-rfc-001", md)                                    # illustrative rows of the register are not data
+        self.assertIn("RFC-002 | Cambiar luminarias | Abierto", md)
         self.assertIn("RIE-001 | Demora del cliente en datos", md)
         self.assertNotIn("RIE-003", md)                                       # closed
-        self.assertIn("INF-007 Falta plano de arquitectura", md)
-        self.assertNotIn("BLQ-001", md)
+        self.assertIn("INC-001 Falta plano de arquitectura | PQ-03 | Abierto", md)
+        self.assertNotIn("INC-002", md)                                       # closed
         self.assertIn("REQ-001: ¿Peso máximo?", md)                           # open questions are the decisions still required from the client
         self.assertIn("Entregables vencidos: 1", md)                          # the unifilar is overdue
         pdf = self.c.get(f"{self.base}/STATUS-01/file").content
@@ -113,7 +108,7 @@ class TestReporting(unittest.TestCase):
 
     def test_trend_compares_with_the_previous_report(self):
         self.gen("status")
-        (self.m / "change-requests.md").write_text("| ID | Título | Estado |\n|---|---|---|\n| rfc-001 | A | APPROVED |\n", encoding="utf-8")   # no open change any more
+        self.assertEqual(self.c.patch("/api/projects/ACME/P-1/registers/change/RFC-002", json={"status": "approved"}).status_code, 200)   # no open change any more
         r2 = self.gen("status")
         self.assertEqual(r2["id"], "STATUS-02")
         self.assertIn("| Cambios | VERDE | ↑ |", self.md(r2))
@@ -133,8 +128,9 @@ class TestReporting(unittest.TestCase):
     def test_risk_report(self):
         md = self.md(self.gen("risks"))
         self.assertIn("| General | 1 | 1 | 0 | 2 |", md)                      # active risks by level (the closed one is not counted)
-        self.assertIn("| RIE-001 | Demora del cliente en datos | 4 | 5 | 20 |", md)
+        self.assertIn("| RIE-001 | Demora del cliente en datos | 4 | 5 | 20 | Reducir | ME | Abierto |", md)
         self.assertIn("RIE-002", md)
+        self.assertIn("| RIE-003 | Proveedor | Cerrado – Entregado |", md)       # closed today, inside the period
         self.assertIn("### Riesgos nuevos en el período", md)
         self.assertIn("Riesgos altos: n/d | Riesgos altos: 1 | →", md)
 
@@ -149,8 +145,8 @@ class TestReporting(unittest.TestCase):
         self.assertIn("| Aprobados | 1 | 1 |", md)
         self.assertIn("| Abiertos | 1 | 1 |", md)
         self.assertIn("| Rechazados | 1 | 1 |", md)
-        self.assertIn("| rfc-001 | Agregar tablero TS-03 | Alcance | DEC-004 | ME |", md)
-        self.assertIn("rfc-003 | Mover sala | REJECTED | DEC-005", md)
+        self.assertIn("| RFC-001 | Agregar tablero TS-03 | Alcance | DEC-004 | ME |", md)
+        self.assertIn("| RFC-003 | Mover sala | Rechazado | DEC-005 | Fuera de alcance |", md)
 
     def test_english_and_period(self):
         r = self.gen("status", lang="en", period_start=iso(-10), period_end=iso(-1))
