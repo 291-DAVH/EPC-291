@@ -14,3 +14,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0008](ADR-0008-cad-strategy-2d-first.md) | CAD strategy: 2D first with ezdxf and shapely | Accepted |
 | [0009](ADR-0009-identity-and-subscriptions.md) | Accounts, organizations (individual and corporate) and tenant isolation | Accepted |
 | [0010](ADR-0010-registers-as-platform-data.md) | Management registers are platform data, defined by the methodology | Accepted |
+| [0011](ADR-0011-norm-review.md) | Norm review by a dedicated reviewer role | Accepted |

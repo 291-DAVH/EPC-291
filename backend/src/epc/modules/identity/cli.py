@@ -20,6 +20,7 @@ def main(argv=None) -> int:
     c = sub.add_parser("create-admin", help="create (or reset) a platform staff account")
     c.add_argument("--email", required=True)
     c.add_argument("--name", default="")
+    c.add_argument("--role", choices=["admin", "standards"], default="admin", help="admin = engineering staff; standards = norm reviewer (sees only the norms review area)")
     c.add_argument("--password-env", help="read the password from this environment variable instead of asking")
     args = ap.parse_args(argv)
     password = os.environ.get(args.password_env, "") if args.password_env else getpass.getpass("Password: ")
@@ -27,11 +28,11 @@ def main(argv=None) -> int:
         print("the passwords differ")
         return 1
     try:
-        user = service.bootstrap_admin(args.email, args.name, password)
+        user = service.bootstrap_admin(args.email, args.name, password, args.role)
     except DomainError as e:
         print(f"error: {e.detail}")
         return 1
-    print(f"staff account ready: {user['email']}")
+    print(f"{args.role} account ready: {user['email']}")
     return 0
 
 

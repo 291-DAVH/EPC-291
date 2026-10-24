@@ -24,7 +24,7 @@ from typing import Dict, List, Optional, Tuple
 from epc.core.config import settings
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound, TooManyRequests, Unauthorized
 from epc.modules.identity import repository as repo
-from epc.modules.identity.models import ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
+from epc.modules.identity.models import NO_ORG_ROLES, ORG_KINDS, ORG_ROLES, PLATFORM_ROLES, Principal
 
 COOKIE = "epc_session"
 EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -93,7 +93,7 @@ def _slug(name: str) -> str:
 
 # ---------------------------------------------------------------- the principal of a request
 def simulated_principal() -> Principal:
-    return Principal(authenticated=True, role="admin" if settings.role == "admin" else "user", name=settings.user, org_name=settings.org, simulated=True)
+    return Principal(authenticated=True, role=settings.role if settings.role in ("admin", "standards") else "user", name=settings.user, org_name=settings.org, simulated=True)
 
 
 def activate(p: Optional[Principal]):
@@ -150,8 +150,8 @@ def _from_session(token: str) -> Optional[Principal]:
     if not user or not user["active"]:
         return None
     base = dict(authenticated=True, name=user["display_name"], email=user["email"], user_id=str(user["id"]))
-    if user["platform_role"] == "admin":
-        return Principal(role="admin", **base)
+    if user["platform_role"] in NO_ORG_ROLES:
+        return Principal(role=user["platform_role"], **base)
     org = repo.org_by_id(row["organization_id"]) if row["organization_id"] else None
     mem = repo.membership(org["id"], user["id"]) if org else None
     if not org or not org["active"] or not mem or not mem["active"]:
@@ -222,7 +222,7 @@ def login(email: str, password: str, org_slug: str = "", ip: str = "") -> Tuple[
         _throttle(f"i:{ip}", 30, add=True)
         raise Unauthorized({"errors": {"login": "wrong email or password"}})
     org = None
-    if user["platform_role"] != "admin":
+    if user["platform_role"] not in NO_ORG_ROLES:
         orgs = [o for o in repo.memberships_of_user(user["id"]) if o["member_active"] and o["active"] and (not org_slug or o["slug"] == org_slug)]
         if not orgs:
             raise Forbidden("this account has no active organization")
@@ -270,15 +270,17 @@ def signup(kind: str, org_name: str, name: str, email: str, password: str) -> Tu
     return _open_session(user, org)
 
 
-def bootstrap_admin(email: str, name: str, password: str) -> dict:
-    """First staff account (command line). Updates the password when the account already exists."""
+def bootstrap_admin(email: str, name: str, password: str, role: str = "admin") -> dict:
+    """First staff account (command line). Updates the password and role when the account already exists."""
+    if role not in ("admin", "standards"):
+        raise Invalid({"role": "admin or standards"})
     email = _check_email(email)
     _check_password(password, email)
     user = repo.user_by_email(email)
     if user:
-        repo.update_user(user["id"], password_hash=hash_password(password), platform_role="admin", active=True)
+        repo.update_user(user["id"], password_hash=hash_password(password), platform_role=role, active=True)
         return repo.user_by_id(user["id"])
-    return repo.insert_user(email, name.strip() or email, hash_password(password), platform_role="admin")
+    return repo.insert_user(email, name.strip() or email, hash_password(password), platform_role=role)
 
 
 # ---------------------------------------------------------------- invitations
@@ -470,7 +472,7 @@ def staff_update_user(p: Principal, user_id: str, active: Optional[bool] = None,
         raise NotFound("user not found")
     if platform_role is not None and platform_role not in PLATFORM_ROLES:
         raise Invalid({"platform_role": "user or admin"})
-    losing_staff = user["platform_role"] == "admin" and (active is False or platform_role == "user")
+    losing_staff = user["platform_role"] == "admin" and (active is False or platform_role in ("user", "standards"))
     if losing_staff and (str(user["id"]) == p.user_id or repo.count_staff() <= 1):
         raise Conflict({"platform_role": "you cannot remove the last staff account or your own"})
     values = {k: v for k, v in (("active", active), ("platform_role", platform_role)) if v is not None}
@@ -487,3 +489,17 @@ def staff_set_password(user_id: str, password: str) -> None:
     _check_password(password, user["email"])
     repo.update_user(user["id"], password_hash=hash_password(password))
     repo.delete_user_sessions(user["id"])
+
+
+def staff_create_user(email: str, name: str, password: str, platform_role: str) -> dict:
+    """Staff create an account that belongs to no customer organization: another staff member or a norm reviewer."""
+    if platform_role not in ("admin", "standards"):
+        raise Invalid({"platform_role": "admin or standards"})
+    email = _check_email(email)
+    if not (name or "").strip():
+        raise Invalid({"name": "required"})
+    _check_password(password, email)
+    if repo.user_by_email(email):
+        raise Conflict({"email": "this email is already registered"})
+    u = repo.insert_user(email, name.strip(), hash_password(password), platform_role=platform_role)
+    return {"id": str(u["id"]), "email": u["email"], "name": u["display_name"], "platform_role": platform_role}

@@ -67,6 +67,13 @@ class UserPatch(BaseModel):
     platform_role: Optional[str] = None
 
 
+class NewUserIn(BaseModel):
+    email: str
+    name: str
+    password: str
+    platform_role: str = "standards"
+
+
 class PasswordSet(BaseModel):
     password: str
 
@@ -166,6 +173,11 @@ def staff_update_org(slug: str, body: OrgPatch):
 @router.get("/api/identity/users")
 def staff_users():
     return service.staff_users()
+
+
+@router.post("/api/identity/users", status_code=201)
+def staff_create_user(body: NewUserIn):
+    return service.staff_create_user(body.email, body.name, body.password, body.platform_role)
 
 
 @router.patch("/api/identity/users/{user_id}")

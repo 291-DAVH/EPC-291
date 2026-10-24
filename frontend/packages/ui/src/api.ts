@@ -194,6 +194,15 @@ export interface CalcView { rows: CalcRow[]; criteria: { limits_pct: { seccional
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
 export interface AnalysisResult { analyzed: number; created: string[]; merged: string[]; open_questions: number; usage: { input_tokens: number; output_tokens: number }; model: string; attempts: number }
 
+/* ---- review of the norm data ---- */
+export interface NormUnit { id: string; kind: "rule" | "table" | "criterion"; name: string; counts: { total: number; approved: number; rejected: number; pending: number; stale: number } }
+export interface NormPointRow { key: string; title: string; group: string; ref: string; status: "pending" | "approved" | "rejected" | "stale"; by: string | null; at: string | null }
+export interface NormPoint {
+  unit: string; kind: "rule" | "table" | "criterion"; key: string; title: string; group: string; ref: string; value: unknown; editable: string[];
+  status: "pending" | "approved" | "rejected" | "stale"; review: { status: string; by: string; at: string; note: string } | null;
+  history: { at: string; by: string; action: string; note: string; changes?: [string, unknown, unknown][] }[];
+}
+
 /* ---- project registers (risks, changes, issues, decisions, assumptions, stakeholders) ---- */
 export interface RegisterField {
   id: string; type: "text" | "longtext" | "number" | "date" | "enum"; required: boolean; label: string; min?: number; max?: number; default?: string;
@@ -227,6 +236,6 @@ export interface OrgView {
 export interface InvitationCreated { id: string; email: string; role: string; expires_at: string; token: string; url: string }
 export interface StaffOrg { slug: string; name: string; kind: "individual" | "company"; seats: number; active: boolean; members: number; created_at: string }
 export interface StaffUser {
-  id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin"; last_login_at: string | null;
+  id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin" | "standards"; last_login_at: string | null;
   organizations: { slug: string; name: string; role: string }[];
 }

@@ -8,6 +8,7 @@ import Checker from "./features/checker/Checker";
 import ProjectFiles from "./features/project-files/ProjectFiles";
 import Planning from "./features/planning/Planning";
 import Identity from "./features/identity/Identity";
+import Norms from "./features/norms/Norms";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },
@@ -18,17 +19,25 @@ const NAV: NavItem[] = [
   { to: "/planning", key: "nav.planning", icon: "▥" },
   { to: "/files", key: "nav.projects", icon: "▤" },
   { to: "/identity", key: "nav.identity", icon: "☺" },
+  { to: "/norms", key: "nav.norms", icon: "§" },
 ];
+const REVIEWER_NAV: NavItem[] = [{ to: "/norms", key: "nav.norms", icon: "§" }];
 
 /** Technical console: only the admin role sees it (the API refuses everything else with 403). */
 export default function App() {
   const { t } = useI18n();
   const me = useApi<Me>("/me");
   const admin = me.data?.role === "admin";
+  const reviewer = me.data?.role === "standards";          // the norm reviewer sees only the norms review
   return (
-    <Shell nav={admin ? NAV : []} me={me.data}>
+    <Shell nav={admin ? NAV : reviewer ? REVIEWER_NAV : []} me={me.data}>
       {!me.data ? (
         <State loading={me.loading} error={me.error} />
+      ) : reviewer ? (
+        <Routes>
+          <Route path="/norms" element={<Norms />} />
+          <Route path="*" element={<Navigate to="/norms" replace />} />
+        </Routes>
       ) : !admin ? (
         <Page title={t("console.denied.title")} help={t("console.denied.help")}>{null}</Page>
       ) : (
@@ -41,6 +50,7 @@ export default function App() {
           <Route path="/planning" element={<Planning />} />
           <Route path="/files" element={<ProjectFiles />} />
           <Route path="/identity" element={<Identity />} />
+          <Route path="/norms" element={<Norms />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}

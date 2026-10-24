@@ -33,6 +33,11 @@ TIPOS = ("obligatorio", "recomendado", "prohibido")
 _CACHE = {}
 
 
+def limpiar_cache_reglas():
+    """Descarta los datos en memoria: se vuelven a leer del archivo (después de corregir un valor normativo)."""
+    _CACHE.clear()
+
+
 def _leer(nombre):
     if nombre not in _CACHE:
         with open(os.path.join(CARPETA, nombre), encoding="utf-8") as f:
