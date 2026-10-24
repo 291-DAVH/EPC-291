@@ -22,7 +22,8 @@ export default function App() {
   }
   const admin = me.data?.role === "admin";                // master data is configuration of the office: admin/engineer only
   const accounts = me.data?.auth === "required";          // with real accounts everyone gets an account page (password, and the people of the organization for its owner)
-  const nav = [...NAV, ...(admin ? [{ to: "/data", key: "u.nav.data", icon: "▤" } as NavItem] : []), ...(accounts ? [{ to: "/account", key: "u.nav.account", icon: "☺" } as NavItem] : [])];
+  const canWrite = !me.data || !!me.data.abilities?.app?.includes("write");           // inspectors and auditors only read: no "new project"
+  const nav = [...NAV.filter((n) => canWrite || n.to !== "/new"), ...(admin ? [{ to: "/data", key: "u.nav.data", icon: "▤" } as NavItem] : []), ...(accounts ? [{ to: "/account", key: "u.nav.account", icon: "☺" } as NavItem] : [])];
   return (
     <Shell nav={nav} me={me.data}>
       <Routes>

@@ -87,12 +87,12 @@ export interface NewProjectBody {
   methodology: string; locale: string; disciplines: string[]; phase: string;
 }
 
-export type AccountType = "staff" | "reviewer" | "individual" | "corporate_admin" | "corporate_member" | "";
+export type AccountType = "staff" | "reviewer" | "inspector" | "auditor" | "individual" | "corporate_owner" | "corporate_admin" | "corporate_member" | "";
 export interface Me {
   role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
-  org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "member" | ""; signup?: boolean;
-  account_type?: AccountType; landing?: string; app_url?: string;
-  organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "member"; current: boolean }[];
+  org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "admin" | "member" | ""; signup?: boolean;
+  account_type?: AccountType; landing?: string; app_url?: string; abilities?: Record<string, string[]>; assigned?: string[];
+  organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "admin" | "member"; current: boolean }[];
 }
 export interface PortfolioProject {
   id: string; name: string; client: string; code: string; disciplines: string[]; state: string; phase: string; progress: number;
@@ -230,8 +230,8 @@ export interface GeneratedReport {
 export interface ReportingView { methodology: string; language: string; types: ReportType[]; reports: GeneratedReport[] }
 
 /* ---- accounts and organizations ---- */
-export interface OrgMember { user_id: string; email: string; name: string; role: "owner" | "member"; active: boolean; last_login_at: string | null; me: boolean }
-export interface OrgInvitation { id: string; email: string; role: "owner" | "member"; expires_at: string }
+export interface OrgMember { user_id: string; email: string; name: string; role: "owner" | "admin" | "member"; active: boolean; last_login_at: string | null; me: boolean }
+export interface OrgInvitation { id: string; email: string; role: "owner" | "admin" | "member"; expires_at: string }
 export interface OrgView {
   slug: string; name: string; kind: "individual" | "company"; seats: number; seats_used: number; seats_pending: number;
   members: OrgMember[]; invitations: OrgInvitation[];
@@ -239,6 +239,7 @@ export interface OrgView {
 export interface InvitationCreated { id: string; email: string; role: string; expires_at: string; token: string; url: string }
 export interface StaffOrg { slug: string; name: string; kind: "individual" | "company"; seats: number; active: boolean; members: number; created_at: string }
 export interface StaffUser {
-  id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin" | "standards"; last_login_at: string | null;
-  organizations: { slug: string; name: string; role: string }[];
+  id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin" | "standards" | "inspector" | "auditor"; last_login_at: string | null;
+  organizations: { slug: string; name: string; role: string }[]; assignments: { slug: string; name: string }[];
 }
+export interface AuditEvent { at: string; actor: string; action: string; target: string; org: string; detail: Record<string, unknown>; ip: string }

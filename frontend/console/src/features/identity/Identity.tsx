@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { ApiError, Page, Project, State, StaffOrg, StaffUser, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, AuditEvent, Page, Project, State, StaffOrg, StaffUser, api, useApi, useI18n } from "@epc/ui";
 
 const json = { "Content-Type": "application/json" };
 
@@ -25,6 +25,7 @@ export default function Identity() {
       <div className="grid" style={{ gap: 14 }}>
         <NewOrg onDone={reload} />
         <NewAccount onDone={reload} />
+        <AuditLog />
         <div className="card">
           <h2 style={{ marginTop: 0 }}>{t("ident.orgs")}</h2>
           {!orgs.data ? <State loading={orgs.loading} error={orgs.error} /> : orgs.data.length === 0 ? <div className="state">{t("ident.noOrgs")}</div> : (
@@ -42,13 +43,13 @@ export default function Identity() {
               <tbody>
                 {users.data.map((u) => (
                   <tr key={u.id}>
-                    <td>{u.email} {u.platform_role === "admin" && <span className="badge accent">{t("ident.staff")}</span>}{u.platform_role === "standards" && <span className="badge accent">{t("ident.role.standards")}</span>}</td>
+                    <td>{u.email} {u.platform_role === "admin" && <span className="badge accent">{t("ident.staff")}</span>}{(["standards", "inspector", "auditor"] as const).includes(u.platform_role as never) && <span className="badge accent">{t(("ident.role." + u.platform_role) as never)}</span>}</td>
                     <td>{u.name}</td>
-                    <td className="small">{u.organizations.map((o) => `${o.name} (${o.role})`).join(", ")}</td>
+                    <td className="small">{u.organizations.map((o) => `${o.name} (${o.role})`).join(", ")}{(u.platform_role === "inspector" || u.platform_role === "auditor") && orgs.data && <Assignments user={u} orgs={orgs.data} act={act} />}</td>
                     <td><span className={"badge " + (u.active ? "ok" : "bad")}>{t(u.active ? "org.active" : "org.inactive")}</span></td>
                     <td style={{ whiteSpace: "nowrap" }}>
                       <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ active: !u.active }) }))}>{t(u.active ? "ident.disable" : "ident.enable")}</button>{" "}
-                      {u.platform_role !== "standards" && <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>}{" "}
+                      {(u.platform_role === "admin" || u.platform_role === "user") && <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>}{" "}
                       <button onClick={() => { const pw = window.prompt(t("ident.pwPrompt")); if (pw) act(async () => { await api(`/identity/users/${u.id}/password`, { method: "PUT", headers: json, body: JSON.stringify({ password: pw }) }); window.alert(t("ident.pwDone")); }); }}>{t("ident.setPw")}</button>
                     </td>
                   </tr>
@@ -167,7 +168,7 @@ function NewAccount({ onDone }: { onDone: () => void }) {
       <h2 style={{ marginTop: 0 }}>{t("ident.newAccount")}</h2>
       <div className="fgrid">
         <label className="field"><span>{t("ident.accountRole")}</span>
-          <select value={role} onChange={(e) => setRole(e.target.value)}><option value="standards">{t("ident.role.standards")}</option><option value="admin">{t("ident.role.admin")}</option></select>
+          <select value={role} onChange={(e) => setRole(e.target.value)}><option value="standards">{t("ident.role.standards")}</option><option value="inspector">{t("ident.role.inspector")}</option><option value="auditor">{t("ident.role.auditor")}</option><option value="admin">{t("ident.role.admin")}</option></select>
         </label>
         <label className="field"><span>{t("ident.name")}</span><input value={name} onChange={(e) => setName(e.target.value)} required /></label>
         <label className="field"><span>{t("auth.email")}</span><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
@@ -178,3 +179,58 @@ function NewAccount({ onDone }: { onDone: () => void }) {
     </form>
   );
 }
+
+/** Organizations an inspector or an external auditor may see: exactly the ticked ones. */
+function Assignments({ user, orgs, act }: { user: StaffUser; orgs: StaffOrg[]; act: (fn: () => Promise<unknown>) => void }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const [sel, setSel] = useState<Set<string>>(new Set(user.assignments.map((a) => a.slug)));
+  const toggle = (slug: string) => { const n = new Set(sel); n.has(slug) ? n.delete(slug) : n.add(slug); setSel(n); };
+  return (
+    <div style={{ marginTop: 6 }}>
+      <b>{t("ident.assigned")}:</b> {user.assignments.length ? user.assignments.map((a) => a.name).join(", ") : <span className="muted">{t("ident.noAssigned")}</span>}{" "}
+      <button onClick={() => setOpen(!open)}>{t("ident.assign")}</button>
+      {open && (
+        <div className="card" style={{ marginTop: 6 }}>
+          {orgs.map((o) => <label key={o.slug} className="small" style={{ display: "block" }}><input type="checkbox" checked={sel.has(o.slug)} onChange={() => toggle(o.slug)} /> {o.name}</label>)}
+          <div className="row" style={{ marginTop: 6 }}>
+            <button className="primary" onClick={() => { act(() => api(`/identity/users/${user.id}/assignments`, { method: "PUT", headers: json, body: JSON.stringify({ orgs: [...sel] }) })); setOpen(false); }}>{t("ident.save")}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Who did what, to what and when: sign-ins, failed sign-ins, accounts, roles, invitations, assignments, observations. */
+function AuditLog() {
+  const { t } = useI18n();
+  const [actor, setActor] = useState("");
+  const [action, setAction] = useState("");
+  const log = useApi<AuditEvent[]>(`/identity/audit?limit=100&actor=${encodeURIComponent(actor)}&action=${encodeURIComponent(action)}`);
+  return (
+    <div className="card">
+      <div className="row between">
+        <h2 style={{ margin: 0 }}>{t("ident.audit")}</h2>
+        <div className="row"><input placeholder={t("ident.auditActor")} value={actor} onChange={(e) => setActor(e.target.value)} /><input placeholder={t("ident.auditAction")} value={action} onChange={(e) => setAction(e.target.value)} /></div>
+      </div>
+      {!log.data ? <State loading={log.loading} error={log.error} /> : log.data.length === 0 ? <div className="state">{t("common.none")}</div> : (
+        <div className="scroll">
+          <table>
+            <thead><tr><th>{t("ident.auditWhen")}</th><th>{t("ident.auditActor")}</th><th>{t("ident.auditAction")}</th><th>{t("ident.auditTarget")}</th></tr></thead>
+            <tbody>
+              {log.data.map((e, i) => (
+                <tr key={i}>
+                  <td className="small">{new Date(e.at).toLocaleString()}</td><td className="small">{e.actor || "—"}</td>
+                  <td><span className={"badge" + (e.action === "login_failed" ? " bad" : "")}>{e.action}</span></td>
+                  <td className="small">{e.target}{e.org ? ` · ${e.org}` : ""}{Object.keys(e.detail ?? {}).length ? <div className="muted mono">{JSON.stringify(e.detail)}</div> : null}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+

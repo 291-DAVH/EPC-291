@@ -6,8 +6,9 @@ import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
 import Reporting from "./Reporting";
 import Registers from "./Registers";
+import Observations from "./Observations";
 
-const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "deliverables", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
+const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "deliverables", "observations", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 type Tab = (typeof TABS)[number];
 const ENGINEER_TABS: Tab[] = ["engineering", "registers"];          // internal work: admin/engineer role only
 
@@ -18,6 +19,8 @@ export default function Project() {
   const [sp, setSp] = useSearchParams();
   const me = useApi<Me>("/me");
   const engineer = me.data?.role === "admin";          // the engineering workspace is internal: admin/engineer role only
+  const can = (subject: string, action: string) => !!me.data?.abilities?.[subject]?.includes(action);
+  const canWrite = can("app", "write");                // inspectors and auditors read only: the screens hide what the server would refuse
   const wanted = sp.get("tab") as Tab;
   const tab = (TABS.includes(wanted) && (!ENGINEER_TABS.includes(wanted) || engineer) ? wanted : "overview") as Tab;
   const base = `/app/projects/${client}/${code}`;
@@ -65,8 +68,9 @@ export default function Project() {
       {tab === "registers" && <Registers client={client} code={code} />}
       {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
-      {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
-      {tab === "requirements" && <Requirements base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
+      {tab === "observations" && <Observations base={base} can={can} />}
+      {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
+      {tab === "requirements" && <Requirements canWrite={canWrite} base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
       {tab === "reports" && <Reports base={base} go={go} engineer={engineer} client={client} code={code} />}
     </>
   );
@@ -200,7 +204,7 @@ function Deliverables({ base }: { base: string }) {
 }
 
 /* ---------------- inputs ---------------- */
-function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { base: string; rev: number; onSent: () => void; initialKind: string; engineer: boolean; client: string; code: string }) {
+function Inputs({ canWrite, base, rev, onSent, initialKind, engineer, client, code }: { canWrite: boolean; base: string; rev: number; onSent: () => void; initialKind: string; engineer: boolean; client: string; code: string }) {
   const { t } = useI18n();
   const fmt = useFmt();
   const [r, setR] = useState(0);
@@ -241,7 +245,7 @@ function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { ba
     <>
       {engineer && <AnalysisPanel client={client} code={code} onDone={onSent} />}
     <div className="cols2">
-      <form className="card form" onSubmit={submit} noValidate>
+      {canWrite && <form className="card form" onSubmit={submit} noValidate>
         <h2>{t("u.i.title")}</h2>
         <p className="muted">{t("u.i.help")}</p>
         <label className="field"><span>{t("u.i.kind")}</span>
@@ -263,7 +267,7 @@ function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { ba
         </label>
         {ok && <div className="alert ok" role="status">{t("u.i.sent")}</div>}
         <div className="row"><button className="primary" type="submit" disabled={busy}>{t("u.i.send")}</button></div>
-      </form>
+      </form>}
       <div className="card">
         <h2>{t("u.i.list")}</h2>
         <State loading={list.loading && !list.data} error={list.error} />
@@ -289,7 +293,7 @@ function Inputs({ base, rev, onSent, initialKind, engineer, client, code }: { ba
 
 /* ---------------- requirements ---------------- */
 /** An open question: click "Responder", write the answer; it is stored with who answered and when. */
-function OpenQuestion({ base, reqId, question, onAnswered }: { base: string; reqId: string; question: string; onAnswered: () => void }) {
+function OpenQuestion({ canWrite, base, reqId, question, onAnswered }: { canWrite: boolean; base: string; reqId: string; question: string; onAnswered: () => void }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
@@ -305,7 +309,7 @@ function OpenQuestion({ base, reqId, question, onAnswered }: { base: string; req
   };
   return (
     <li>
-      {!open ? (
+      {!canWrite ? question : !open ? (
         <button className="qbtn" onClick={() => setOpen(true)} title={t("u.r.answer")}>{question} <span className="qhint">{t("u.r.answer")} →</span></button>
       ) : (
         <form onSubmit={save}>
@@ -322,7 +326,7 @@ function OpenQuestion({ base, reqId, question, onAnswered }: { base: string; req
   );
 }
 
-function Requirements({ base, rev, onChange }: { base: string; rev: number; onChange: () => void }) {
+function Requirements({ canWrite, base, rev, onChange }: { canWrite: boolean; base: string; rev: number; onChange: () => void }) {
   const { t } = useI18n();
   const { data, loading, error } = useApi<RequirementItem[]>(base + "/requirements?r=" + rev);
   return (
@@ -346,7 +350,7 @@ function Requirements({ base, rev, onChange }: { base: string; rev: number; onCh
             {r.open_questions.length > 0 && (
               <>
                 <h4 className="warnh">{t("u.r.questions")}</h4>
-                <ul className="qlist">{r.open_questions.map((q) => <OpenQuestion key={q} base={base} reqId={r.id} question={q} onAnswered={onChange} />)}</ul>
+                <ul className="qlist">{r.open_questions.map((q) => <OpenQuestion key={q} canWrite={canWrite} base={base} reqId={r.id} question={q} onAnswered={onChange} />)}</ul>
               </>
             )}
             {(r.answered_questions ?? []).length > 0 && (

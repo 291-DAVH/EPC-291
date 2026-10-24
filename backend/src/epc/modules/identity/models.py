@@ -1,6 +1,6 @@
 """Identity data: table definitions (a mirror of database/migrations, checked by a test) and the principal that every request carries."""
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Tuple
 
 import sqlalchemy as sa
 
@@ -23,6 +23,14 @@ sessions = sa.Table(
     "sessions", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("organization_id", sa.Uuid), sa.Column("user_id", sa.Uuid),
     sa.Column("token_hash", sa.String(64)), sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)))
+audit_log = sa.Table(
+    "audit_log", metadata,
+    sa.Column("id", sa.Uuid, primary_key=True), sa.Column("organization_id", sa.Uuid), sa.Column("actor_id", sa.Uuid), sa.Column("actor_email", sa.String(254)),
+    sa.Column("action", sa.String(60)), sa.Column("target", sa.String(300)), sa.Column("detail", sa.JSON), sa.Column("ip", sa.String(64)), sa.Column("at", sa.DateTime(timezone=True)))
+user_assignments = sa.Table(
+    "user_assignments", metadata,
+    sa.Column("id", sa.Uuid, primary_key=True), sa.Column("organization_id", sa.Uuid), sa.Column("user_id", sa.Uuid), sa.Column("granted_by", sa.Uuid),
+    sa.Column("granted_at", sa.DateTime(timezone=True)))
 invitations = sa.Table(
     "invitations", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("organization_id", sa.Uuid), sa.Column("email", sa.String(254)),
@@ -30,9 +38,10 @@ invitations = sa.Table(
     sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)), sa.Column("accepted_at", sa.DateTime(timezone=True)))
 
 ORG_KINDS = ("individual", "company")
-ORG_ROLES = ("owner", "member")
-PLATFORM_ROLES = ("user", "admin", "standards")      # customer | engineering staff | norm reviewer (sees only the norms review area)
-NO_ORG_ROLES = ("admin", "standards")
+ORG_ROLES = ("owner", "admin", "member")
+PLATFORM_ROLES = ("user", "admin", "standards", "inspector", "auditor")      # customer | engineering staff | norm reviewer | internal inspector | external auditor
+NO_ORG_ROLES = ("admin", "standards", "inspector", "auditor")        # belong to no customer organization
+ASSIGNED_ROLES = ("inspector", "auditor")                            # see only the organizations assigned to them
 
 
 @dataclass(frozen=True)
@@ -47,5 +56,6 @@ class Principal:
     org_slug: str = ""
     org_name: str = ""
     org_kind: str = ""
-    org_role: str = ""          # owner | member | "" (staff and anonymous)
+    org_role: str = ""          # owner | admin | member | "" (internal accounts and anonymous)
+    assigned: Tuple[str, ...] = ()      # inspector / auditor: slugs of the organizations assigned to them
     simulated: bool = False

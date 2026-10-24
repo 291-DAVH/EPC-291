@@ -26,14 +26,14 @@ export default function Account() {
                 <>
                   <div><div className="muted small">{t("acc.org")}</div>{m.org}</div>
                   <div><div className="muted small">{t("acc.plan")}</div>{t(m.org_kind === "company" ? "auth.company" : "auth.individual")}</div>
-                  <div><div className="muted small">{t("acc.role")}</div>{t(m.org_role === "owner" ? "org.owner" : "org.member")}</div>
+                  <div><div className="muted small">{t("acc.role")}</div>{t(m.org_role === "owner" ? "org.owner" : m.org_role === "admin" ? "org.admin" : "org.member")}</div>
                 </>
               )}
             </div>
           )}
         </div>
         {m.auth === "required" && <Password />}
-        {m.auth === "required" && m.org_role === "owner" && <People />}
+        {m.auth === "required" && (m.org_role === "owner" || m.org_role === "admin") && <People meRole={m.org_role} />}
       </div>
     </Page>
   );
@@ -65,12 +65,12 @@ function Password() {
   );
 }
 
-function People() {
+function People({ meRole }: { meRole: "owner" | "admin" }) {
   const { t } = useI18n();
   const [rev, setRev] = useState(0);
   const org = useApi<OrgView>(`/app/org?r=${rev}`);
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"member" | "owner">("member");
+  const [role, setRole] = useState<"member" | "admin" | "owner">("member");
   const [created, setCreated] = useState<InvitationCreated | null>(null);
   const [copied, setCopied] = useState(false);
   const [err, setErr] = useState("");
@@ -103,15 +103,15 @@ function People() {
               <td>{m.name} {m.me && <span className="muted small">({t("org.you")})</span>}</td>
               <td>{m.email}</td>
               <td>
-                <select value={m.role} onChange={(e) => patch(m, { role: e.target.value })}>
-                  <option value="owner">{t("org.owner")}</option><option value="member">{t("org.member")}</option>
+                <select value={m.role} disabled={meRole !== "owner" && m.role === "owner"} onChange={(e) => patch(m, { role: e.target.value })}>
+                  {(meRole === "owner" || m.role === "owner") && <option value="owner">{t("org.owner")}</option>}<option value="admin">{t("org.admin")}</option><option value="member">{t("org.member")}</option>
                 </select>
               </td>
               <td><span className={"badge " + (m.active ? "ok" : "bad")}>{t(m.active ? "org.active" : "org.inactive")}</span></td>
               <td className="muted small">{m.last_login_at ? new Date(m.last_login_at).toLocaleString() : t("org.never")}</td>
               <td style={{ whiteSpace: "nowrap" }}>
-                <button onClick={() => patch(m, { active: !m.active })}>{t(m.active ? "org.deactivate" : "org.activate")}</button>{" "}
-                {!m.me && <button onClick={() => { if (window.confirm(t("org.confirmRemove"))) act(() => api(`/app/org/members/${m.user_id}`, { method: "DELETE" })); }}>{t("org.remove")}</button>}
+                {(meRole === "owner" || m.role !== "owner") && <button onClick={() => patch(m, { active: !m.active })}>{t(m.active ? "org.deactivate" : "org.activate")}</button>}{" "}
+                {!m.me && (meRole === "owner" || m.role !== "owner") && <button onClick={() => { if (window.confirm(t("org.confirmRemove"))) act(() => api(`/app/org/members/${m.user_id}`, { method: "DELETE" })); }}>{t("org.remove")}</button>}
               </td>
             </tr>
           ))}
@@ -125,7 +125,7 @@ function People() {
             <tbody>
               {o.invitations.map((i) => (
                 <tr key={i.id}>
-                  <td>{i.email}</td><td>{t(i.role === "owner" ? "org.owner" : "org.member")}</td>
+                  <td>{i.email}</td><td>{t(i.role === "owner" ? "org.owner" : i.role === "admin" ? "org.admin" : "org.member")}</td>
                   <td className="muted small">{t("org.expires")} {new Date(i.expires_at).toLocaleDateString()}</td>
                   <td><button onClick={() => act(() => api(`/app/org/invitations/${i.id}`, { method: "DELETE" }))}>{t("org.cancelInv")}</button></td>
                 </tr>
@@ -140,8 +140,8 @@ function People() {
         <form onSubmit={invite}>
           <div className="row">
             <input type="email" placeholder={t("org.email")} value={email} onChange={(e) => setEmail(e.target.value)} required style={{ minWidth: 240 }} />
-            <select value={role} onChange={(e) => setRole(e.target.value as "member" | "owner")}>
-              <option value="member">{t("org.member")}</option><option value="owner">{t("org.owner")}</option>
+            <select value={role} onChange={(e) => setRole(e.target.value as "member" | "admin" | "owner")}>
+              <option value="member">{t("org.member")}</option><option value="admin">{t("org.admin")}</option>{meRole === "owner" && <option value="owner">{t("org.owner")}</option>}
             </select>
             <button className="primary" type="submit" disabled={free < 1}>{t("org.inviteBtn")}</button>
           </div>

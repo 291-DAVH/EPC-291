@@ -42,6 +42,19 @@ def create_app() -> FastAPI:
     identity.install_role_guard(app, public_paths=identity.PUBLIC_PATHS | projects.PUBLIC_PATHS,
                                 public_prefixes=PUBLIC_PREFIXES, public_post_paths=projects.PUBLIC_POST_PATHS)
 
+    @app.middleware("http")
+    async def security_headers(request: Request, call_next):
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        response.headers.setdefault("Referrer-Policy", "same-origin")
+        response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        if request.url.path.startswith(("/api/auth/", "/api/me", "/api/identity/", "/api/norms/")):
+            response.headers["Cache-Control"] = "no-store"                    # account data is never kept by a cache
+        if settings.cookie_secure:
+            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+        return response
+
     @app.exception_handler(DomainError)
     async def domain_error(_: Request, exc: DomainError):
         return JSONResponse({"detail": exc.detail}, status_code=exc.status)
@@ -52,6 +65,7 @@ def create_app() -> FastAPI:
 
     for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
+    app.include_router(registers_api.observations)               # customer-surface routes of the registers module
     return app
 
 

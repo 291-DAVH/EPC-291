@@ -29,7 +29,7 @@ export default function App() {
   const me = useApi<Me>("/me");
   const admin = me.data?.role === "admin";
   const reviewer = me.data?.role === "standards";
-  const customer = me.data?.account_type === "individual" || me.data?.account_type === "corporate_admin" || me.data?.account_type === "corporate_member";
+  const customer = ["individual", "corporate_owner", "corporate_admin", "corporate_member", "inspector", "auditor"].includes(me.data?.account_type ?? "");
   useEffect(() => { if (customer && me.data?.app_url) window.location.replace(me.data.app_url); }, [customer, me.data?.app_url]);      // customers work in the customer app          // the norm reviewer sees only the norms review
   return (
     <Shell nav={admin ? NAV : reviewer ? REVIEWER_NAV : []} me={me.data}>

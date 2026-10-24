@@ -7,7 +7,7 @@ import datetime as dt
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
-from epc.core.errors import Conflict, Invalid, NotFound
+from epc.core.errors import Conflict, Forbidden, Invalid, NotFound
 from epc.core.fsutil import today
 from epc.modules.identity import public as identity
 from epc.modules.projects import public as projects
@@ -188,3 +188,42 @@ def labeler(d: Path, lang: Optional[str] = None) -> Callable[[str, str, str], st
             return (o.get(lg) or o["es"]) if o else str(value or "")
         return "" if value is None else str(value)
     return label
+
+
+# ---- observations: written by inspectors, auditors and staff; the customer can only answer
+def _org_of(d: Path) -> str:
+    return projects.read_meta(d).get("org", "")
+
+
+def observation_definition(d: Path, lang: Optional[str] = None) -> dict:
+    """Fields and option labels of the observation register (defined by the methodology) for the customer-surface screen."""
+    return next(r for r in view(d, lang)["registers"] if r["id"] == "observation")
+
+
+def create_observation(d: Path, data: dict) -> dict:
+    if not identity.can("observation", "write"):
+        raise Forbidden("only inspectors, auditors and the engineering team record observations")
+    data = {k: v for k, v in data.items() if k not in ("status", "response", "closed_on")}      # a new observation is open and unanswered
+    rec = create(d, "observation", data)
+    identity.audit_event("observation_created", target=f"{projects.project_id(d)}:{rec['id']}", org_slug=_org_of(d), detail={"severity": rec["severity"], "type": rec["type"]})
+    return rec
+
+
+def update_observation(d: Path, item_id: str, data: dict) -> dict:
+    if identity.can("observation", "write"):
+        rec = update(d, "observation", item_id, data)
+    elif identity.can("observation", "respond"):
+        extra = set(data) - {"response"}
+        if extra:
+            raise Forbidden("the customer can only answer an observation")
+        current = next((i for i in repository.load(d, "observation") if i["id"] == item_id), None)
+        if current is None:
+            raise NotFound("record not found")
+        if current["status"] == "closed":
+            raise Conflict({"status": "the observation is closed"})
+        rec = update(d, "observation", item_id, {"response": data.get("response", ""), "status": "answered" if (data.get("response") or "").strip() else "open"})
+    else:
+        raise Forbidden("not allowed")
+    identity.audit_event("observation_updated", target=f"{projects.project_id(d)}:{item_id}", org_slug=_org_of(d), detail={"status": rec["status"]})
+    return rec
+

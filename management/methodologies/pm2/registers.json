@@ -108,6 +108,23 @@
         {"id": "channel", "type": "text", "label": {"es": "Canal", "en": "Channel"}},
         {"id": "owner", "type": "text", "label": {"es": "Responsable del vínculo", "en": "Relationship owner"}}
       ]
+    },
+    {
+      "id": "observation", "prefix": "OBS", "name": {"es": "Observaciones", "en": "Observations"}, "closed_states": ["closed"],
+      "columns": ["title", "type", "severity", "status"],
+      "fields": [
+        {"id": "title", "type": "text", "required": true, "label": {"es": "Observación", "en": "Observation"}},
+        {"id": "type", "type": "enum", "required": true, "default": "inspection", "label": {"es": "Origen", "en": "Origin"}, "options": [
+          {"id": "inspection", "es": "Inspección", "en": "Inspection"}, {"id": "audit", "es": "Auditoría", "en": "Audit"}]},
+        {"id": "severity", "type": "enum", "required": true, "default": "minor", "label": {"es": "Gravedad", "en": "Severity"}, "options": [
+          {"id": "info", "es": "Informativa", "en": "Informative"}, {"id": "minor", "es": "Menor", "en": "Minor"},
+          {"id": "major", "es": "Mayor", "en": "Major"}, {"id": "critical", "es": "Crítica", "en": "Critical"}]},
+        {"id": "description", "type": "longtext", "label": {"es": "Descripción", "en": "Description"}},
+        {"id": "status", "type": "enum", "required": true, "default": "open", "label": {"es": "Estado", "en": "Status"}, "options": [
+          {"id": "open", "es": "Abierta", "en": "Open"}, {"id": "answered", "es": "Respondida", "en": "Answered"}, {"id": "closed", "es": "Cerrada", "en": "Closed"}]},
+        {"id": "response", "type": "longtext", "label": {"es": "Respuesta del cliente", "en": "Client response"}},
+        {"id": "closed_on", "type": "date", "label": {"es": "Fecha de cierre", "en": "Closing date"}}
+      ]
     }
   ]
 }
