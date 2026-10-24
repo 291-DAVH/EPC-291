@@ -80,12 +80,12 @@ class PasswordSet(BaseModel):
 
 def _start(response: Response, token: str, principal) -> dict:
     response.set_cookie(service.COOKIE, token, max_age=settings.session_hours * 3600, httponly=True, samesite="lax", secure=settings.cookie_secure, path="/")
-    return service.me(principal)
+    return service.me(principal, with_orgs=True)
 
 
 @router.get("/api/me")
 def me():
-    return service.current_user()
+    return service.me(service.current(), with_orgs=True)
 
 
 # ---- sign in / out (anonymous allowed where listed in guard.ANONYMOUS_PATHS)
@@ -117,6 +117,16 @@ def logout(request: Request, response: Response):
     service.logout(request.cookies.get(service.COOKIE))
     response.delete_cookie(service.COOKIE, path="/")
     return {"ok": True}
+
+
+class OrgIn(BaseModel):
+    org: str
+
+
+@router.post("/api/auth/switch-org")
+def switch_org(body: OrgIn, request: Request):
+    token = service.token_from(request.cookies.get(service.COOKIE), request.headers.get("authorization"))
+    return service.me(service.switch_org(service.current(), token, body.org), with_orgs=True)
 
 
 @router.post("/api/auth/password")

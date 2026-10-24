@@ -232,3 +232,7 @@ h4.okh { color: var(--ok); }
 tr.clickable { cursor: pointer; } tr.clickable:hover td, tr.sel td { background: var(--accent-soft); }
 textarea.mono { font-family: var(--mono, ui-monospace, monospace); font-size: 12.5px; }
 @media (max-width: 900px) { .normgrid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- organization switch (a person in several organizations) ---- */
+.orgswitch { display: grid; gap: 3px; margin: 6px 0; }
+.orgswitch select { width: 100%; }

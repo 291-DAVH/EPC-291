@@ -159,22 +159,65 @@ def _from_session(token: str) -> Optional[Principal]:
     return Principal(role="user", org_id=str(org["id"]), org_slug=org["slug"], org_name=org["name"], org_kind=org["kind"], org_role=mem["role"], **base)
 
 
+def token_from(cookie: Optional[str], authorization: Optional[str]) -> Optional[str]:
+    if cookie:
+        return cookie
+    if authorization and authorization.lower().startswith("bearer "):
+        return authorization[7:].strip()
+    return None
+
+
 def principal_for_request(cookie: Optional[str], authorization: Optional[str]) -> Principal:
     if settings.auth != "required":
         return simulated_principal()
-    token = cookie
-    if not token and authorization and authorization.lower().startswith("bearer "):
-        token = authorization[7:].strip()
+    token = token_from(cookie, authorization)
     return (_from_session(token) if token else None) or Principal()
 
 
-def me(p: Principal) -> dict:
-    return {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "name": p.name, "email": p.email, "org": p.org_name,
-            "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open"}
+def account_type(p: Principal) -> str:
+    """What kind of account this is, worked out from the account itself (the person only types email and password):
+    staff | reviewer | individual | corporate_admin | corporate_member."""
+    if not p.authenticated:
+        return ""
+    if p.role == "admin":
+        return "staff"
+    if p.role == "standards":
+        return "reviewer"
+    if p.org_kind == "company":
+        return "corporate_admin" if p.org_role == "owner" else "corporate_member"
+    return "individual"
+
+
+def _organizations(p: Principal) -> List[dict]:
+    if not p.authenticated or p.simulated or not p.user_id or p.role in NO_ORG_ROLES:
+        return []
+    return [{"slug": o["slug"], "name": o["name"], "kind": o["kind"], "role": o["role"], "current": o["slug"] == p.org_slug}
+            for o in repo.memberships_of_user(p.user_id) if o["member_active"] and o["active"]]
+
+
+def me(p: Principal, with_orgs: bool = False) -> dict:
+    out = {"auth": settings.auth, "authenticated": p.authenticated, "role": p.role, "account_type": account_type(p), "name": p.name, "email": p.email,
+           "org": p.org_name, "org_slug": p.org_slug, "org_kind": p.org_kind, "org_role": p.org_role, "signup": settings.signup == "open",
+           "landing": "/norms" if p.role == "standards" else "/", "app_url": settings.public_url}
+    if with_orgs:
+        out["organizations"] = _organizations(p)
+    return out
 
 
 def current_user() -> dict:
     return me(current())
+
+
+def switch_org(p: Principal, token: Optional[str], slug: str) -> Principal:
+    """A person who belongs to several organizations changes the one the session works in, without signing in again."""
+    if not p.authenticated or p.simulated or not p.user_id or p.role in NO_ORG_ROLES or not token:
+        raise Forbidden("this account does not belong to organizations")
+    org = repo.org_by_slug(slug or "")
+    mem = repo.membership(org["id"], p.user_id) if org else None
+    if not org or not org["active"] or not mem or not mem["active"]:
+        raise NotFound("organization not found")
+    repo.update_session_org(token_hash(token), org["id"])
+    return _from_session(token) or p
 
 
 def require_owner(p: Principal) -> Principal:

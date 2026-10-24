@@ -73,6 +73,7 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
       else if (mode === "signup") { path = "/auth/signup"; body = { kind, org_name: orgName, name, email, password }; }
       const m = await api<Me>(path, { method: "POST", headers: json, body: JSON.stringify(body) });
       if (token) clearInvite();
+      try { window.history.replaceState({}, "", m.landing || "/"); } catch { /* ignore */ }      // each kind of account starts where its work is
       onDone(m);
     } catch (x) { setErr(reason(x, t)); } finally { setBusy(false); }
   };
