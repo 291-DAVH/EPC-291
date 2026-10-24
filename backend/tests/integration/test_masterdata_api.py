@@ -83,10 +83,10 @@ class TestMasterData(Base):
         self.assertEqual(self.c.delete("/api/data/clients/ACME").status_code, 204)             # its logo goes with it
         self.assertEqual(self.c.get("/api/data/logos/client-ACME").status_code, 404)
 
-    def test_users_cannot_reach_master_data(self):
-        settings.role = "user"
-        for path in ("/api/data/organization", "/api/data/clients", "/api/data/people", "/api/data/logos/organization"):
-            self.assertEqual(self.c.get(path).status_code, 403, path)
+    def test_an_organization_reaches_its_own_master_data(self):
+        settings.role = "user"                                           # simulated customer: an organization of one person
+        for path in ("/api/data/organization", "/api/data/clients", "/api/data/people", "/api/data/issuers"):
+            self.assertEqual(self.c.get(path).status_code, 200, path)
 
 
 class TestIssuersAndTeam(Base):
@@ -153,8 +153,8 @@ class TestIssuersAndTeam(Base):
     def test_users_cannot_reach_parties_or_issuers(self):
         url = self.project()
         settings.role = "user"
-        for path in ("/api/data/issuers", url):
-            self.assertEqual(self.c.get(path).status_code, 403, path)
+        self.assertEqual(self.c.get("/api/data/issuers").status_code, 200)                                              # its own companies
+        self.assertEqual(self.c.get(url).status_code, 200)                                                              # and the team of its own project
 
 
 class TestSldUsesMasterData(Base):

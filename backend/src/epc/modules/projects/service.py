@@ -112,6 +112,9 @@ def tree(project_id: str, area: str, depth: int, formats: dict) -> dict:
     base_dir = settings.projects_dir.resolve()
     if base_dir not in root.parents and root != base_dir:
         raise NotFound("bad path")
+    parts = Path(project_id).parts
+    if len(parts) != 2 or repository.find(parts[0], parts[1]) is None:                # only a project the caller may see
+        raise NotFound("project not found")
     base = root / area
     if area not in ("workspace", "deliverables") or not base.exists():
         raise NotFound("area not found")

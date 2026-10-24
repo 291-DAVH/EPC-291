@@ -354,15 +354,18 @@ class TestPermissionMatrix(Base):
         everyone_in_the_app = {"staff", "individual", "corporate_owner", "corporate_admin", "corporate_member", "inspector", "auditor"}
         customers = {"staff", "individual", "corporate_owner", "corporate_admin", "corporate_member"}
         managers = {"staff", "individual", "corporate_owner", "corporate_admin"}
-        cases = [("get", "/api/app/portfolio", everyone_in_the_app), ("get", "/api/projects/options", everyone_in_the_app), ("post", "/api/projects", customers),
+        workers = customers                                                     # an organization does its own engineering (inspectors and auditors only review)
+        cases = [("get", "/api/projects", workers), ("get", "/api/data/clients", workers), ("post", "/api/data/clients", managers), ("put", "/api/data/people/x", managers),
+                 ("get", "/api/data/issuers", workers),
+                 ("get", "/api/app/portfolio", everyone_in_the_app), ("get", "/api/projects/options", everyone_in_the_app), ("post", "/api/projects", customers),
                  ("get", "/api/app/org", managers), ("post", "/api/app/org/invitations", managers),
                  ("get", "/api/norms/units", {"staff", "reviewer"}), ("get", "/api/identity/orgs", {"staff"}), ("get", "/api/identity/audit", {"staff"}),
-                 ("get", "/api/plugins", {"staff"}), ("get", "/api/projects", {"staff"}), ("get", "/api/rules/standards", {"staff"})]
+                 ("get", "/api/plugins", {"staff"}), ("get", "/api/rules/standards", {"staff"})]
         for method, path, allowed in cases:
             for kind, c in accs.items():
                 if kind == "staff" and path.startswith("/api/app/org"):
                     continue                                                    # the matrix lets staff through, but they belong to no organization to manage
-                r = getattr(c, method)(path, json={}) if method == "post" else c.get(path)
+                r = getattr(c, method)(path, json={}) if method in ("post", "put") else c.get(path)
                 self.assertEqual(r.status_code != 403, kind in allowed, f"{kind} {method.upper()} {path} -> {r.status_code}")
 
     def test_me_tells_the_screens_what_to_show(self):
@@ -370,9 +373,10 @@ class TestPermissionMatrix(Base):
         for kind, c in accs.items():
             self.assertEqual(c.get("/api/me").json()["account_type"], kind)
         self.assertEqual(accs["auditor"].get("/api/me").json()["abilities"], {"app": ["read"], "observation": ["read", "write"]})
-        self.assertEqual(accs["corporate_member"].get("/api/me").json()["abilities"], {"app": ["read", "write"], "observation": ["read"]})
+        self.assertEqual(accs["corporate_member"].get("/api/me").json()["abilities"], {"app": ["read", "write"], "observation": ["read"], "workspace": ["read", "write"], "orgdata": ["read"]})
+        self.assertEqual(accs["individual"].get("/api/me").json()["abilities"]["orgdata"], ["read", "write"])
         self.assertIn("norms", accs["reviewer"].get("/api/me").json()["abilities"])
-        self.assertEqual(sorted(accs["staff"].get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org"])
+        self.assertEqual(sorted(accs["staff"].get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org", "orgdata", "workspace"])
 
     def test_security_headers(self):
         r = self.client().get("/api/health")
@@ -488,14 +492,14 @@ class TestExpertStaff(Base):
         staff = self.staff()
         for path in ("/api/app/portfolio", "/api/norms/units", "/api/identity/orgs", "/api/identity/audit", "/api/plugins", "/api/projects", "/api/rules/standards"):
             self.assertEqual(staff.get(path).status_code, 200, path)
-        self.assertEqual(sorted(staff.get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org"])
+        self.assertEqual(sorted(staff.get("/api/me").json()["abilities"]), ["app", "console", "identity", "norms", "observation", "org", "orgdata", "workspace"])
 
 
 class TestStaff(Base):
     def test_customers_cannot_reach_staff_endpoints(self):
         staff = self.staff()
         owner, _ = self.new_org(staff, "Metal SRL")
-        for method, path in (("get", "/api/identity/orgs"), ("get", "/api/identity/users"), ("post", "/api/identity/orgs"), ("get", "/api/plugins"), ("get", "/api/projects")):
+        for method, path in (("get", "/api/identity/orgs"), ("get", "/api/identity/users"), ("post", "/api/identity/orgs"), ("get", "/api/plugins"), ("get", "/api/overview")):
             self.assertEqual(getattr(owner, method)(path).status_code, 403, path)
         self.assertEqual(owner.put("/api/projects/ACME/P-1/org", json={"org": "metal-srl"}).status_code, 403)
 

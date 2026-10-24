@@ -98,7 +98,7 @@ class TestEngineering(unittest.TestCase):
         self.assertEqual(self.c.get(self.base + "/calculation", params={"path": p + "cargas.csv"}).status_code, 422)
 
     def test_users_cannot_see_the_workspace(self):
-        settings.role = "user"
+        settings.role = "auditor"            # reviews only: the engineering is for the engineering team and the organization that owns the project
         self.assertEqual(self.c.get(self.base).status_code, 403)
         self.assertEqual(self.c.get(self.base + "/svg", params={"path": "x.svg"}).status_code, 403)
 

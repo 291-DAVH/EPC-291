@@ -1,5 +1,5 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
-import { ApiError, Badge, ClientRecord, IssuerRecord, Key, Page, PersonRecord, State, api, useApi, useI18n } from "@epc/ui";
+import { ApiError, Badge, ClientRecord, IssuerRecord, Key, Me, Page, PersonRecord, State, api, useApi, useI18n } from "@epc/ui";
 
 type Tab = "issuers" | "clients" | "people";
 const json = { "Content-Type": "application/json" };
@@ -7,6 +7,8 @@ const json = { "Content-Type": "application/json" };
 /** Information that does not change between projects, entered once (company, clients, people, logos). Admin/engineer role only. */
 export default function Data() {
   const { t } = useI18n();
+  const me = useApi<Me>("/me");
+  const write = !me.data || !!me.data.abilities?.orgdata?.includes("write");          // members of an organization read its data; owners and administrators keep it
   const [tab, setTab] = useState<Tab>("issuers");
   return (
     <Page title={t("data.title")} help={t("data.help")}>
@@ -15,9 +17,9 @@ export default function Data() {
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => setTab(x)}>{t(("data.tab." + x) as Key)}</button>
         ))}
       </div>
-      {tab === "issuers" && <Issuers />}
-      {tab === "clients" && <Clients />}
-      {tab === "people" && <People />}
+      {tab === "issuers" && <Issuers write={write} />}
+      {tab === "clients" && <Clients write={write} />}
+      {tab === "people" && <People write={write} />}
     </Page>
   );
 }
@@ -58,7 +60,7 @@ function Logo({ kind, has, onChange }: { kind: string; has: boolean; onChange: (
   );
 }
 
-function Issuers() {
+function Issuers({ write }: { write: boolean }) {
   const { t } = useI18n();
   const [rev, setRev] = useState(0);
   const list = useApi<IssuerRecord[]>(`/data/issuers?r=${rev}`);
@@ -85,7 +87,7 @@ function Issuers() {
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <h2 style={{ margin: 0 }}>{t("data.tab.issuers")}</h2>
-          {!form && <button className="primary" onClick={() => setForm(blank)}>+ {t("data.add")}</button>}
+          {!form && write && <button className="primary" onClick={() => setForm(blank)}>+ {t("data.add")}</button>}
         </div>
         <p className="muted small" style={{ margin: "4px 0 8px" }}>{t("data.issuersHelp")}</p>
         {err && !form && <div className="small" style={{ color: "var(--bad)" }}>{err}</div>}
@@ -97,10 +99,10 @@ function Issuers() {
                 <tr key={i.id}>
                   <td><b>{i.legal_name}</b> {i.default && <Badge tone="accent">{t("data.default")}</Badge>}</td><td>{i.tax_id}</td>
                   <td><Logo kind={`issuer-${i.id}`} has={i.has_logo} onChange={reload} /></td>
-                  <td style={{ whiteSpace: "nowrap" }}>
+                  <td style={{ whiteSpace: "nowrap" }}>{write && <>
                     <button onClick={() => setForm({ id: i.id, legal_name: i.legal_name, tax_id: i.tax_id, email: i.email, website: i.website, address: i.address, phone: i.phone, default_locale: i.default_locale })}>{t("data.edit")}</button>{" "}
                     {!i.default && <><button onClick={() => makeDefault(i.id)}>{t("data.makeDefault")}</button>{" "}</>}
-                    <button onClick={() => del(i.id)}>{t("data.delete")}</button>
+                    <button onClick={() => del(i.id)}>{t("data.delete")}</button></>}
                   </td>
                 </tr>
               ))}
@@ -118,7 +120,7 @@ function Issuers() {
   );
 }
 
-function Clients() {
+function Clients({ write }: { write: boolean }) {
   const { t } = useI18n();
   const [rev, setRev] = useState(0);
   const list = useApi<ClientRecord[]>(`/data/clients?r=${rev}`);
@@ -141,7 +143,7 @@ function Clients() {
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <h2 style={{ margin: 0 }}>{t("data.tab.clients")}</h2>
-          {!form && <button className="primary" onClick={() => { setForm(blank); setEditing(null); }}>+ {t("data.add")}</button>}
+          {!form && write && <button className="primary" onClick={() => { setForm(blank); setEditing(null); }}>+ {t("data.add")}</button>}
         </div>
         {!list.data ? <State loading={list.loading} error={list.error} /> : list.data.length === 0 ? <div className="state">{t("data.empty")}</div> : (
           <table>
@@ -151,9 +153,9 @@ function Clients() {
                 <tr key={c.id}>
                   <td className="mono">{c.id}</td><td>{c.name}</td><td>{c.tax_id}</td>
                   <td><Logo kind={`client-${c.id}`} has={c.has_logo} onChange={reload} /></td>
-                  <td style={{ whiteSpace: "nowrap" }}>
+                  <td style={{ whiteSpace: "nowrap" }}>{write && <>
                     <button onClick={() => { setForm({ id: c.id, name: c.name, tax_id: c.tax_id, email: c.email, website: c.website, address: c.address }); setEditing(c.id); }}>{t("data.edit")}</button>{" "}
-                    <button onClick={() => del(c.id)}>{t("data.delete")}</button>
+                    <button onClick={() => del(c.id)}>{t("data.delete")}</button></>}
                   </td>
                 </tr>
               ))}
@@ -178,11 +180,12 @@ function Clients() {
   );
 }
 
-function People() {
+function People({ write }: { write: boolean }) {
   const { t } = useI18n();
   const [rev, setRev] = useState(0);
   const list = useApi<PersonRecord[]>(`/data/people?r=${rev}`);
-  const blank = { name: "", role: "", registration: "" };
+  const roleList = useApi<string[]>("/data/people/roles");
+  const blank = { name: "", role: "", registration: "", roles: [] as string[] };
   const [form, setForm] = useState<typeof blank | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [err, setErr] = useState("");
@@ -201,18 +204,18 @@ function People() {
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <h2 style={{ margin: 0 }}>{t("data.tab.people")}</h2>
-          {!form && <button className="primary" onClick={() => { setForm(blank); setEditing(null); }}>+ {t("data.add")}</button>}
+          {!form && write && <button className="primary" onClick={() => { setForm(blank); setEditing(null); }}>+ {t("data.add")}</button>}
         </div>
         {!list.data ? <State loading={list.loading} error={list.error} /> : list.data.length === 0 ? <div className="state">{t("data.empty")}</div> : (
           <table>
-            <thead><tr><th>{t("data.name")}</th><th>{t("data.role")}</th><th>{t("data.registration")}</th><th /></tr></thead>
+            <thead><tr><th>{t("data.name")}</th><th>{t("data.role")}</th><th>{t("data.functions")}</th><th>{t("data.registration")}</th><th /></tr></thead>
             <tbody>
               {list.data.map((p) => (
                 <tr key={p.id}>
-                  <td>{p.name}</td><td>{p.role}</td><td>{p.registration}</td>
-                  <td style={{ whiteSpace: "nowrap" }}>
-                    <button onClick={() => { setForm({ name: p.name, role: p.role, registration: p.registration }); setEditing(p.id); }}>{t("data.edit")}</button>{" "}
-                    <button onClick={() => del(p.id)}>{t("data.delete")}</button>
+                  <td>{p.name}</td><td>{p.role}</td><td>{(p.roles ?? []).map((r) => <Badge key={r}>{t(("data.pr." + r) as Key)}</Badge>)}</td><td>{p.registration}</td>
+                  <td style={{ whiteSpace: "nowrap" }}>{write && <>
+                    <button onClick={() => { setForm({ name: p.name, role: p.role, registration: p.registration, roles: p.roles ?? [] }); setEditing(p.id); }}>{t("data.edit")}</button>{" "}
+                    <button onClick={() => del(p.id)}>{t("data.delete")}</button></>}
                   </td>
                 </tr>
               ))}
@@ -226,6 +229,17 @@ function People() {
             <Field label="data.name"><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
             <Field label="data.role"><input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} /></Field>
             <Field label="data.registration"><input value={form.registration} onChange={(e) => setForm({ ...form, registration: e.target.value })} /></Field>
+          </div>
+          <div style={{ marginTop: 10 }}>
+            <div className="muted small">{t("data.functions")}</div>
+            <div className="row" style={{ flexWrap: "wrap" }}>
+              {(roleList.data ?? []).map((r) => (
+                <label key={r} className="row chip">
+                  <input type="checkbox" checked={form.roles.includes(r)} onChange={() => setForm({ ...form, roles: form.roles.includes(r) ? form.roles.filter((x) => x !== r) : [...form.roles, r] })} />
+                  {t(("data.pr." + r) as Key)}
+                </label>
+              ))}
+            </div>
           </div>
           <div className="row" style={{ marginTop: 12 }}><button className="primary" type="submit">{t("data.save")}</button><button type="button" onClick={() => { setForm(null); setEditing(null); setErr(""); }}>{t("data.cancel")}</button>{err && <span className="small" style={{ color: "var(--bad)" }}>{err}</span>}</div>
         </form>

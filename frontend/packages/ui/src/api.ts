@@ -200,10 +200,10 @@ export interface IssuerRecord extends OrganizationData { id: string; default: bo
 export interface TeamRow { drawn_by: string; checked_by: string; approved_by: string }
 export interface PartiesView {
   issuer_id: string; issuer: IssuerRecord | null; issuers: { id: string; legal_name: string; default: boolean }[];
-  client: { id: string; name: string; tax_id: string; has_logo: boolean; in_directory: boolean }; disciplines: string[]; team: Record<string, TeamRow>; people: string[];
+  client: { id: string; name: string; tax_id: string; has_logo: boolean; in_directory: boolean }; disciplines: string[]; team: Record<string, TeamRow>; people: { name: string; roles: string[] }[];
 }
 export interface ClientRecord { id: string; name: string; tax_id: string; email: string; website: string; address: string; has_logo: boolean }
-export interface PersonRecord { id: string; name: string; role: string; registration: string }
+export interface PersonRecord { id: string; name: string; role: string; registration: string; roles: string[] }
 
 /* ---- issuing (engineering -> deliverables) ---- */
 export interface IssueCandidate { id: string; name: string; discipline: string; package: string; kind: "drawing" | "document"; formats: string[]; pdf_will_be_rendered: boolean; last_issue: string | null }

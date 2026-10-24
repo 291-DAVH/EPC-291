@@ -4,6 +4,7 @@ import { ApiError, Badge, Key, PartiesView, State, TeamRow, api, useApi, useI18n
 
 const json = { "Content-Type": "application/json" };
 const ROLES: (keyof TeamRow)[] = ["drawn_by", "checked_by", "approved_by"];
+const FUNCTION: Record<keyof TeamRow, string> = { drawn_by: "designer", checked_by: "checker", approved_by: "approver" };           // who may be suggested for each
 
 /** Who issues and who signs the project: set once here, every board's title block uses it. The issuer is chosen per project; the team per discipline. */
 export default function Parties({ client, code }: { client: string; code: string }) {
@@ -57,7 +58,7 @@ export default function Parties({ client, code }: { client: string; code: string
       <div className="card">
         <h2>{t("parties.team")}</h2>
         <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("parties.teamHelp")}</p>
-        <datalist id="parties-people">{d.people.map((n) => <option key={n} value={n} />)}</datalist>
+        {ROLES.map((r) => <datalist key={r} id={"parties-people-" + r}>{d.people.filter((p) => p.roles.length === 0 || p.roles.includes(FUNCTION[r])).map((p) => <option key={p.name} value={p.name} />)}</datalist>)}
         <div style={{ overflowX: "auto" }}>
           <table className="sldtable">
             <thead><tr><th>{t("u.f.discipline")}</th>{ROLES.map((r) => <th key={r}>{t(("parties.role." + r) as Key)}</th>)}</tr></thead>
@@ -65,7 +66,7 @@ export default function Parties({ client, code }: { client: string; code: string
               {d.disciplines.map((disc) => (
                 <tr key={disc}>
                   <td><b>{t(("projects.disc." + disc) as Key)}</b></td>
-                  {ROLES.map((r) => <td key={r}><input list="parties-people" className="w-desc" value={team[disc]?.[r] ?? ""} onChange={(e) => setCell(disc, r, e.target.value)} aria-label={`${disc} ${r}`} /></td>)}
+                  {ROLES.map((r) => <td key={r}><input list={"parties-people-" + r} className="w-desc" value={team[disc]?.[r] ?? ""} onChange={(e) => setCell(disc, r, e.target.value)} aria-label={`${disc} ${r}`} /></td>)}
                 </tr>
               ))}
             </tbody>

@@ -28,7 +28,7 @@ class TestUserApi(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_internals_are_hidden_from_users(self):
-        for path in ["/api/plugins", "/api/skills", "/api/rules", "/api/overview", "/api/projects", "/api/projects/ACME/P-1/tree",
+        for path in ["/api/plugins", "/api/skills", "/api/rules", "/api/overview", "/api/projects/ACME/P-1/tree",
                      "/api/rules/standards", "/api/policy"]:
             self.assertEqual(self.c.get(path).status_code, 403, path)
         self.assertEqual(self.c.post("/api/rules/check", json={}).status_code, 403)

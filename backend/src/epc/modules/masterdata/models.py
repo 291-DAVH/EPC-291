@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -44,3 +44,4 @@ class PersonIn(BaseModel):
     role: str = ""                  # e.g. "Ingeniero proyectista"
     registration: str = ""          # professional registration number
     initials: Optional[str] = None
+    roles: List[str] = []           # what they do in the organization (see PERSON_ROLES)
