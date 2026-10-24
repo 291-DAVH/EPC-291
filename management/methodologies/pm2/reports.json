@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "methodology": "pm2",
+  "source": "rules/management-templates.md (documents D11 to D15 of the M8 catalog)",
+  "types": [
+    {"id": "status", "code": "D11", "prefix": "STATUS", "folder": "progress", "audience": "client", "kind_label": "estado",
+     "name": {"es": "Informe de estado", "en": "Status report"}, "command": "generar informe de estado"},
+    {"id": "progress", "code": "D12", "prefix": "progress", "folder": "progress", "audience": "client", "kind_label": "avance",
+     "name": {"es": "Informe de avance", "en": "Progress report"}, "command": "generar informe de avance"},
+    {"id": "risks", "code": "D13", "prefix": "RISKS", "folder": "reports", "audience": "internal", "kind_label": "riesgos",
+     "name": {"es": "Informe de riesgos", "en": "Risk report"}, "command": "generar informe de riesgos"},
+    {"id": "effort", "code": "D14", "prefix": "EFFORT", "folder": "reports", "audience": "internal", "kind_label": "esfuerzo",
+     "name": {"es": "Informe de esfuerzo", "en": "Effort report"}, "command": "generar informe de esfuerzo"},
+    {"id": "changes", "code": "D15", "prefix": "CHANGES", "folder": "reports", "audience": "internal", "kind_label": "cambios",
+     "name": {"es": "Informe de cambios", "en": "Change report"}, "command": "generar informe de cambios"}
+  ]
+}

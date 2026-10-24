@@ -4,6 +4,7 @@ import { ApiError, AnalysisResult, AnalysisStatus, DeliverableItem, Gantt, Me, P
 import { Badge, HealthBadge, Progress, State, phaseKey, useFmt } from "@epc/ui";
 import { Key, useI18n } from "@epc/ui";
 import Engineering from "./Engineering";
+import Reporting from "./Reporting";
 
 const TABS = ["inputs", "requirements", "plan", "engineering", "deliverables", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 type Tab = (typeof TABS)[number];
@@ -63,7 +64,7 @@ export default function Project() {
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "inputs" && <Inputs base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
       {tab === "requirements" && <Requirements base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
-      {tab === "reports" && <Reports base={base} go={go} />}
+      {tab === "reports" && <Reports base={base} go={go} engineer={engineer} client={client} code={code} />}
     </>
   );
 }
@@ -368,11 +369,14 @@ function Requirements({ base, rev, onChange }: { base: string; rev: number; onCh
 }
 
 /* ---------------- reports ---------------- */
-function Reports({ base, go }: { base: string; go: (t: Tab, x?: Record<string, string>) => void }) {
+function Reports({ base, go, engineer, client, code }: { base: string; go: (t: Tab, x?: Record<string, string>) => void; engineer: boolean; client: string; code: string }) {
   const { t } = useI18n();
   const fmt = useFmt();
-  const { data, loading, error } = useApi<ReportItem[]>(base + "/reports");
+  const [rev, setRev] = useState(0);
+  const { data, loading, error } = useApi<ReportItem[]>(base + "/reports?r=" + rev);
   return (
+    <>
+    {engineer && <Reporting client={client} code={code} onPublished={() => setRev((n) => n + 1)} />}
     <div className="cols2">
       <div className="card">
         <h2>{t("u.rp.title")}</h2>
@@ -395,6 +399,7 @@ function Reports({ base, go }: { base: string; go: (t: Tab, x?: Record<string, s
         <button className="primary" onClick={() => go("inputs", { kind: "report" })}>{t("u.rp.report")}</button>
       </div>
     </div>
+    </>
   );
 }
 

@@ -32,4 +32,9 @@ def set_delivered(project_dir: Path, item_ids: list, date_iso: str) -> None:
     service.set_delivered(project_dir, item_ids, date_iso)
 
 
-__all__ = ["counts", "due_soon", "format_policy", "add_items", "next_code_number", "set_delivered"]
+def list_items(project_dir: Path) -> list:
+    """Deliverables with their status, due date and overdue flag."""
+    return service.list_items(project_dir)
+
+
+__all__ = ["counts", "due_soon", "format_policy", "add_items", "next_code_number", "set_delivered", "list_items"]
