@@ -14,7 +14,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 ASSIGNS = re.compile(r"EPC_DEV_MASTER_(PASSWORD|USER)\s*[=:]\s*[\"']?[^\s\"'#]")
-SELF = {"tools/ci/check_dev_credentials.py"}
+SELF = {"tools/ci/check_dev_credentials.py", "backend/tests/architecture/test_dev_credentials.py"}      # the detector and its test hold deliberate examples of what it forbids
 
 
 def git(*args) -> str:
