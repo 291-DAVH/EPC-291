@@ -10,6 +10,11 @@ from epc.core.config import settings
 from epc.main import create_app
 
 
+def catalog() -> dict:
+    """The real catalog: the tests follow its current state (the norm reviewer corrects and validates it), they do not freeze its values."""
+    return json.loads((settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json").read_text(encoding="utf-8"))
+
+
 class TestDesignCriteria(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -32,7 +37,7 @@ class TestDesignCriteria(unittest.TestCase):
 
     def test_defaults_come_from_the_catalog(self):
         v = self.c.get(self.base).json()
-        self.assertEqual((v["jurisdiction"], v["discipline"], v["validated"], v["changed"]), ("AR", "electrical", False, 0))
+        self.assertEqual((v["jurisdiction"], v["discipline"], v["validated"], v["changed"]), ("AR", "electrical", catalog()["validated"], 0))
         s = self.item(v, "socket_height_m")
         self.assertEqual((s["value"], s["default"], s["overridden"], s["source"]), (0.3, 0.3, False, "default"))
         self.assertTrue(s["label"]["es"] and s["group"]["en"])
@@ -69,7 +74,7 @@ class TestDesignCriteria(unittest.TestCase):
         self.c.put(self.base + "/socket_height_m", json={"value": 1, "source": "client", "note": "Pedido del cliente"})
         es = self.c.get(self.base + "/report").json()["markdown"]
         self.assertIn("Altura de tomacorrientes**: 1.0 m (pedido del cliente) - Pedido del cliente", es)
-        self.assertIn("sin validar", es)
+        self.assertEqual("sin validar" in es, not catalog()["validated"])        # the report warns only while the catalog is not validated
         en = self.c.get(self.base + "/report", params={"lang": "en"}).json()["markdown"]
         self.assertIn("Socket outlets height**: 1.0 m (client requirement)", en)
 
