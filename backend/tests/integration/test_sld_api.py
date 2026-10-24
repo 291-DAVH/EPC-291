@@ -111,17 +111,20 @@ class TestSld(unittest.TestCase):
         self.assertEqual((row1["tipo"], row1["limite_pct"]), ("seccional", 1.0))
         self.assertTrue(row1["cumple"])
         self.assertEqual(r1["criteria"]["limits_pct"], {"seccional": 1.0, "terminal": 3.0, "motor": 5.0})
-        # a tighter feeder limit in the project's design criteria needs more copper, and the drawing says so
-        self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": 0.5, "source": "client", "note": "pedido del cliente"})
+        # a different feeder limit in the project's design criteria (the widest the catalog allows) changes the section, and the drawing says so
+        crit = next(c for c in __import__("json").loads((settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json").read_text(encoding="utf-8"))["criteria"] if c["id"] == "vd_sectional_pct")
+        loose = crit["max"]
+        self.assertGreater(loose, crit["default"])
+        self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": loose, "source": "client", "note": "pedido del cliente"})
         self.c.post(self.base + "/generate")
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         row2 = self.c.get(self.base + "/calculation").json()["rows"][0]
-        self.assertEqual(row2["limite_pct"], 0.5)
-        self.assertGreater(row2["S"], row1["S"])
-        self.assertLessEqual(row2["du_propia_pct"], 0.5)
+        self.assertEqual(row2["limite_pct"], loose)
+        self.assertLess(row2["S"], row1["S"])                        # a looser drop limit needs less copper
+        self.assertLessEqual(row2["du_propia_pct"], loose)
         svg = (self.pkg / next(o for o in st["outputs"] if o.endswith(".svg") and "TABLA" not in o)).read_text(encoding="utf-8")
-        self.assertIn("seccionales 0.5 %", svg)
+        self.assertIn(f"seccionales {loose:g} %", svg)
         self.assertTrue(any(o.endswith("_criterios.json") for o in st["outputs"]))
         self.assertTrue(any(o.endswith("_dimensionado.json") for o in st["outputs"]))
 

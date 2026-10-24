@@ -28,6 +28,9 @@ class TestNorms(unittest.TestCase):
             shutil.copy2(f, self.root / "rules" / f.name)
         shutil.copy2(pkg / "aea_tables.json", self.root / "aea_tables.json")
         shutil.copy2(settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json", self.root / "design-criteria.json")
+        cat = json.loads((self.root / "design-criteria.json").read_text(encoding="utf-8"))
+        cat["validated"] = False                                            # start from an unreviewed catalog whatever the real one says now
+        repository.write_atomic(self.root / "design-criteria.json", repository.dumps_criteria(cat))
         repository.override({"rules": self.root / "rules", "tables": self.root / "aea_tables.json", "criteria": self.root / "design-criteria.json",
                              "review": self.root / "review.json", "log": self.root / "review-log.jsonl"})
         self._old = (settings.role, settings.user)

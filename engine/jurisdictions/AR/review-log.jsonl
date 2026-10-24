@@ -1,0 +1,15 @@
+{"at": "2026-10-24T10:27:15-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|switch_height_m", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:27:42-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|frequency_hz", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:28:33-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|nominal_voltage_v", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:28:43-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|insulation", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:29:21-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|min_section_lighting_mm2", "action": "edited_approved", "note": "", "changes": [["min", 1, 1.5]]}
+{"at": "2026-10-24T10:29:41-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|min_section_sockets_mm2", "action": "edited_approved", "note": "", "changes": [["min", 1.5, 2.5]]}
+{"at": "2026-10-24T10:32:07-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|board_spare_pct", "action": "edited_approved", "note": "", "changes": [["min", 0, 5]]}
+{"at": "2026-10-24T10:34:24-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|rcd_sensitivity_ma", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:34:59-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|conductor_material", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:35:47-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|vd_sectional_pct", "action": "edited_approved", "note": "", "changes": [["max", 10, 5], ["min", 0.1, 1]]}
+{"at": "2026-10-24T10:36:08-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|vd_motors_pct", "action": "edited_approved", "note": "", "changes": [["min", 0.5, 5]]}
+{"at": "2026-10-24T10:36:32-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|vd_lighting_sockets_pct", "action": "edited_approved", "note": "", "changes": [["min", 0.5, 3]]}
+{"at": "2026-10-24T10:36:47-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|raceway_fill_max_pct", "action": "edited_approved", "note": "", "changes": [["min", 10, 40]]}
+{"at": "2026-10-24T10:37:04-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|socket_height_m", "action": "approved", "note": ""}
+{"at": "2026-10-24T10:37:16-03:00", "by": "Daniel A. Villena H.", "point": "criterion:ar-electrical|board_height_m", "action": "approved", "note": ""}
