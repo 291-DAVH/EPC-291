@@ -21,3 +21,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0015](ADR-0015-development-master-account.md) | A MASTER account for development only | Accepted |
 | [0016](ADR-0016-organizations-own-their-engineering.md) | Organizations do their own engineering; their data is their own | Accepted |
 | [0017](ADR-0017-company-registration.md) | A company registers with its own form, an e-mailed code and validation by the team | Accepted |
+| [0018](ADR-0018-ai-usage-metering-and-limits.md) | Use of Claude is metered per organization and limited by a monthly allowance | Accepted (design) |
