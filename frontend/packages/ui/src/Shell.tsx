@@ -68,6 +68,9 @@ export function Shell({ nav, me, children }: { nav: NavItem[]; me?: Me | null; c
         </div>
       </aside>
       <main className="main">
+        {me?.org_validation === "pending" && !me.viewing_as && (
+          <div className="alert warn small" role="status" style={{ marginBottom: 12 }}>{t("co.pending")}</div>
+        )}
         {me?.viewing_as && (
           <div className="alert warn" role="status" style={{ marginBottom: 12 }}>
             {t("acct.viewing")} <b>{t((me.org_kind === "individual" ? "acct.view.individual" : "acct.view." + me.viewing_as) as Key)}</b> · <b>{me.org}</b>

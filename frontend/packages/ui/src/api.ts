@@ -89,6 +89,7 @@ export interface NewProjectBody {
 
 export type AccountType = "staff" | "reviewer" | "inspector" | "auditor" | "individual" | "corporate_owner" | "corporate_admin" | "corporate_member" | "";
 export interface Me {
+  org_validation?: "validated" | "pending" | "rejected" | "";
   role: string; name: string; org: string; auth?: "simulated" | "required"; authenticated?: boolean; email?: string;
   org_slug?: string; org_kind?: "individual" | "company" | ""; org_role?: "owner" | "admin" | "member" | ""; signup?: boolean;
   username?: string; has_password?: boolean; account_type?: AccountType; landing?: string; app_url?: string; console_url?: string; abilities?: Record<string, string[]>; assigned?: string[];
@@ -261,7 +262,11 @@ export interface OrgView {
   members: OrgMember[]; invitations: OrgInvitation[];
 }
 export interface InvitationCreated { id: string; email: string; role: string; expires_at: string; token: string; url: string }
-export interface StaffOrg { slug: string; name: string; kind: "individual" | "company"; seats: number; active: boolean; members: number; created_at: string }
+export interface StaffOrg {
+  slug: string; name: string; kind: "individual" | "company"; seats: number; active: boolean; members: number; created_at: string;
+  validation: "validated" | "pending" | "rejected"; country: string; tax_id: string; contact_email: string; registered_by: string; validation_note: string;
+  address: { street?: string; number?: string; locality?: string; region?: string; postal_code?: string };
+}
 export interface StaffUser {
   id: string; email: string; name: string; active: boolean; platform_role: "user" | "admin" | "standards" | "inspector" | "auditor"; last_login_at: string | null;
   organizations: { slug: string; name: string; role: string }[]; assignments: { slug: string; name: string }[];

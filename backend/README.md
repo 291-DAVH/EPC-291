@@ -51,7 +51,7 @@ tests/
 uvicorn epc.main:app --app-dir backend/src --port 8000
 cd backend && python -m unittest discover -s tests -t . && lint-imports
 ```
-Configuration comes from environment variables (`EPC_PROJECTS`, `EPC_ROLE`, `EPC_USER`, `EPC_ORG`, `EPC_ENV`, and for accounts `EPC_AUTH`, `EPC_SIGNUP`, `EPC_DATABASE_URL`, `EPC_SESSION_HOURS`, `EPC_COOKIE_SECURE`, `EPC_PUBLIC_URL`), see `.env.example`.
+Configuration comes from environment variables (`EPC_PROJECTS`, `EPC_ROLE`, `EPC_USER`, `EPC_ORG`, `EPC_ENV`, and for accounts `EPC_AUTH`, `EPC_SIGNUP`, `EPC_DATABASE_URL`, `EPC_SESSION_HOURS`, `EPC_COOKIE_SECURE`, `EPC_PUBLIC_URL`, and `EPC_SMTP_HOST`/`PORT`/`USER`/`PASSWORD`/`FROM`/`TLS` for the verification e-mail), see `.env.example`.
 
 With `EPC_AUTH=required` (the default when `EPC_ENV=production`) create the first staff account on the server and sign in from the web:
 ```

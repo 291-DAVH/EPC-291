@@ -9,7 +9,13 @@ metadata = sa.MetaData()
 organizations = sa.Table(
     "organizations", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("slug", sa.String(64)), sa.Column("name", sa.String(200)),
-    sa.Column("kind", sa.String(20)), sa.Column("seats", sa.Integer), sa.Column("active", sa.Boolean), sa.Column("created_at", sa.DateTime(timezone=True)))
+    sa.Column("kind", sa.String(20)), sa.Column("seats", sa.Integer), sa.Column("active", sa.Boolean), sa.Column("created_at", sa.DateTime(timezone=True)),
+    sa.Column("country", sa.String(2)), sa.Column("tax_id", sa.String(40)), sa.Column("validation", sa.String(20)), sa.Column("profile", sa.JSON))
+registrations = sa.Table(
+    "registrations", metadata,
+    sa.Column("id", sa.Uuid, primary_key=True), sa.Column("email", sa.String(254)), sa.Column("code_hash", sa.String(64)), sa.Column("payload", sa.JSON),
+    sa.Column("attempts", sa.Integer), sa.Column("sends", sa.Integer), sa.Column("last_sent_at", sa.DateTime(timezone=True)),
+    sa.Column("created_at", sa.DateTime(timezone=True)), sa.Column("expires_at", sa.DateTime(timezone=True)))
 users = sa.Table(
     "users", metadata,
     sa.Column("id", sa.Uuid, primary_key=True), sa.Column("email", sa.String(254)), sa.Column("username", sa.String(40)), sa.Column("display_name", sa.String(200)),
@@ -67,5 +73,6 @@ class Principal:
     has_password: bool = True           # False for an account created through a provider that has not set one
     assigned: Tuple[str, ...] = ()      # inspector / auditor: slugs of the organizations assigned to them
     simulated: bool = False
+    org_validation: str = ""          # validated | pending | rejected: whether the platform team confirmed the company's registration
     can_view_as: bool = False           # the engineering team can look at the platform as an organization, a member of it or an independent professional
     viewing_as: str = ""                # owner | admin | member while doing so

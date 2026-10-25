@@ -26,6 +26,33 @@ class SignupIn(BaseModel):
     username: str = ""
 
 
+class CompanyRegisterIn(BaseModel):
+    country: str = ""
+    org_name: str = ""
+    tax_id: str = ""
+    street: str = ""
+    number: str = ""
+    locality: str = ""
+    region: str = ""
+    postal_code: str = ""
+    contact_email: str = ""
+    name: str = ""
+    username: str = ""
+    password: str = ""
+    accept_terms: bool = False
+    terms_version: str = ""
+    lang: str = "es"
+
+
+class CompanyVerifyIn(BaseModel):
+    registration: str
+    code: str
+
+
+class RegistrationIn(BaseModel):
+    registration: str
+
+
 class CompleteIn(BaseModel):
     kind: str = "individual"
     org_name: str = ""
@@ -70,6 +97,8 @@ class OrgPatch(BaseModel):
     kind: Optional[str] = None
     seats: Optional[int] = None
     active: Optional[bool] = None
+    validation: Optional[str] = None          # pending | validated | rejected: the team's decision on a company's registration
+    validation_note: Optional[str] = None
 
 
 class UserPatch(BaseModel):
@@ -114,6 +143,33 @@ def login(body: LoginIn, request: Request, response: Response):
 def signup(body: SignupIn, response: Response):
     token, p = service.signup(body.kind, body.org_name, body.name, body.email, body.password, body.username)
     return _start(response, token, p)
+
+
+@router.get("/api/auth/countries")
+def countries():
+    from epc.modules.identity import countries as C
+    return C.catalog()
+
+
+@router.get("/api/auth/terms")
+def terms(lang: str = "es"):
+    return service.terms(lang)
+
+
+@router.post("/api/auth/company/register", status_code=201)
+def company_register(body: CompanyRegisterIn, request: Request):
+    return service.company_register(body.model_dump(), request.client.host if request.client else "")
+
+
+@router.post("/api/auth/company/verify", status_code=201)
+def company_verify(body: CompanyVerifyIn, request: Request, response: Response):
+    token, p = service.company_verify(body.registration, body.code, request.client.host if request.client else "")
+    return _start(response, token, p)
+
+
+@router.post("/api/auth/company/resend")
+def company_resend(body: RegistrationIn):
+    return service.company_resend(body.registration)
 
 
 @router.post("/api/auth/invitation")
@@ -275,7 +331,7 @@ def staff_create_org(body: NewOrgIn):
 
 @router.patch("/api/identity/orgs/{slug}")
 def staff_update_org(slug: str, body: OrgPatch):
-    return service.staff_update_org(slug, body.name, body.seats, body.active, body.kind)
+    return service.staff_update_org(slug, body.name, body.seats, body.active, body.kind, body.validation, body.validation_note)
 
 
 @router.get("/api/identity/users")

@@ -6,7 +6,7 @@ from typing import List, Optional
 import sqlalchemy as sa
 
 from epc.core import db
-from epc.modules.identity.models import MASTER_EMAIL, audit_log, identities, invitations, memberships, organizations, sessions, user_assignments, users
+from epc.modules.identity.models import MASTER_EMAIL, audit_log, identities, invitations, memberships, organizations, sessions, user_assignments, users, registrations
 
 
 def now() -> dt.datetime:
@@ -97,10 +97,35 @@ def org_by_id(org_id) -> Optional[dict]:
     return _one(sa.select(organizations).where(organizations.c.id == uid(org_id)))
 
 
-def insert_org(slug: str, name: str, kind: str, seats: int) -> dict:
-    row = {"id": uuid.uuid4(), "slug": slug, "name": name, "kind": kind, "seats": seats, "active": True, "created_at": now()}
+def insert_org(slug: str, name: str, kind: str, seats: int, **extra) -> dict:
+    row = {"id": uuid.uuid4(), "slug": slug, "name": name, "kind": kind, "seats": seats, "active": True, "created_at": now(), "validation": "validated", **extra}
     _write(sa.insert(organizations).values(**row))
     return row
+
+
+def org_by_tax(country: str, tax_id: str) -> Optional[dict]:
+    return _one(sa.select(organizations).where(organizations.c.country == country, organizations.c.tax_id == tax_id))
+
+
+# ---- registrations awaiting their e-mail code
+def insert_registration(rid, email: str, code_hash: str, payload: dict, expires: dt.datetime) -> None:
+    _write(sa.insert(registrations).values(id=uid(rid), email=email, code_hash=code_hash, payload=payload, attempts=0, sends=1, last_sent_at=now(), created_at=now(), expires_at=expires))
+
+
+def registration_by_id(rid) -> Optional[dict]:
+    return _one(sa.select(registrations).where(registrations.c.id == uid(rid)))
+
+
+def update_registration(rid, **values) -> None:
+    _write(sa.update(registrations).where(registrations.c.id == uid(rid)).values(**values))
+
+
+def delete_registration(rid) -> None:
+    _write(sa.delete(registrations).where(registrations.c.id == uid(rid)))
+
+
+def purge_expired_registrations() -> None:
+    _write(sa.delete(registrations).where(registrations.c.expires_at < now()))
 
 
 def update_org(org_id, **values) -> None:
