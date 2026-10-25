@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "limits": {"max_input_mb": 25, "max_items": 5000},
+  "style": {"line_width_mm": 0.25, "font_size_mm": 2.0, "colors": {"line": "#000000", "highlight": "#d62728"}}
+}
