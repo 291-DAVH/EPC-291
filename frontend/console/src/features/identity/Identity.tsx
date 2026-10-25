@@ -30,7 +30,7 @@ export default function Identity() {
           <h2 style={{ marginTop: 0 }}>{t("ident.orgs")}</h2>
           {!orgs.data ? <State loading={orgs.loading} error={orgs.error} /> : orgs.data.length === 0 ? <div className="state">{t("ident.noOrgs")}</div> : (
             <table>
-              <thead><tr><th>{t("ident.name")}</th><th>{t("ident.kind")}</th><th>{t("ident.seats")}</th><th>{t("ident.members")}</th><th>{t("ident.status")}</th><th /></tr></thead>
+              <thead><tr><th>{t("ident.name")}</th><th>{t("ident.kind")}</th><th>{t("ident.seats")}</th><th>{t("ident.members")}</th><th>{t("ident.validation")}</th><th>{t("ident.status")}</th><th /></tr></thead>
               <tbody>{orgs.data.map((o) => <OrgRow key={o.slug + o.seats + o.kind} o={o} act={act} />)}</tbody>
             </table>
           )}
@@ -87,8 +87,14 @@ export default function Identity() {
 function OrgRow({ o, act }: { o: StaffOrg; act: (fn: () => Promise<unknown>) => void }) {
   const { t } = useI18n();
   const [seats, setSeats] = useState(String(o.seats));
+  const [note, setNote] = useState(o.validation_note);
+  const [open, setOpen] = useState(o.validation === "pending");                  // a registration waiting for the team opens by itself
   const patch = (body: object) => act(() => api(`/identity/orgs/${o.slug}`, { method: "PATCH", headers: json, body: JSON.stringify(body) }));
+  const decide = (validation: string) => patch({ validation, validation_note: note });
+  const a = o.address;
+  const detail = o.kind === "company" && !!o.tax_id;
   return (
+    <>
     <tr>
       <td>{o.name} <span className="muted small mono">{o.slug}</span></td>
       <td>{t(o.kind === "company" ? "auth.company" : "auth.individual")}</td>
@@ -99,9 +105,30 @@ function OrgRow({ o, act }: { o: StaffOrg; act: (fn: () => Promise<unknown>) => 
         ) : 1}
       </td>
       <td>{o.members}</td>
+      <td><span className={"badge " + (o.validation === "validated" ? "ok" : o.validation === "pending" ? "warn" : "bad")}>{t(("ident.val." + o.validation) as never)}</span>{" "}
+        {detail && <button className="linkbtn" onClick={() => setOpen(!open)}>{t("ident.fiscal")}</button>}</td>
       <td><span className={"badge " + (o.active ? "ok" : "bad")}>{t(o.active ? "ident.activeState" : "ident.suspended")}</span></td>
       <td><button onClick={() => patch({ active: !o.active })}>{t(o.active ? "ident.suspend" : "ident.reactivate")}</button></td>
     </tr>
+    {detail && open && (
+      <tr>
+        <td colSpan={7}>
+          <div className="row small" style={{ flexWrap: "wrap", gap: 16 }}>
+            <span><b>{o.country}</b> · <span className="mono">{o.tax_id}</span></span>
+            <span>{[`${a.street ?? ""} ${a.number ?? ""}`.trim(), a.locality, a.region, a.postal_code].filter(Boolean).join(", ")}</span>
+            <span>{o.contact_email}</span>
+            <span className="muted">{o.registered_by}</span>
+          </div>
+          <div className="row" style={{ marginTop: 8, flexWrap: "wrap" }}>
+            <input value={note} placeholder={t("ident.valNote")} onChange={(e) => setNote(e.target.value)} style={{ minWidth: 280 }} />
+            {o.validation !== "validated" && <button className="primary" onClick={() => decide("validated")}>{t("ident.validate")}</button>}
+            {o.validation !== "rejected" && <button onClick={() => decide("rejected")}>{t("ident.reject")}</button>}
+            {o.validation !== "pending" && <button onClick={() => decide("pending")}>{t("ident.revalidate")}</button>}
+          </div>
+        </td>
+      </tr>
+    )}
+    </>
   );
 }
 

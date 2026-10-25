@@ -181,11 +181,11 @@ class TestSocialSignUpAndIn(Social):
         self.assertFalse(c.get("/api/me").json()["authenticated"])                                 # nothing is created before the person chooses
         self.assertEqual(c.get("/api/auth/oauth/pending").json(), {"provider": "google", "email": "ana@gmail.com", "name": "Ana Gómez"})
         self.assertEqual(c.post("/api/auth/oauth/complete", json={"kind": "bogus"}).status_code, 422)
-        self.assertEqual(c.post("/api/auth/oauth/complete", json={"kind": "company", "org_name": ""}).status_code, 422)
-        r = c.post("/api/auth/oauth/complete", json={"kind": "company", "org_name": "Gómez Hnos", "username": "ana.g"})
+        self.assertEqual(c.post("/api/auth/oauth/complete", json={"kind": "company", "org_name": "Gómez Hnos"}).status_code, 422)       # a company needs its own form, not a provider
+        r = c.post("/api/auth/oauth/complete", json={"kind": "individual", "username": "ana.g"})
         self.assertEqual(r.status_code, 201, r.text)
         me = c.get("/api/me").json()
-        self.assertEqual((me["account_type"], me["org"], me["email"], me["username"], me["has_password"]), ("corporate_owner", "Gómez Hnos", "ana@gmail.com", "ana.g", False))
+        self.assertEqual((me["account_type"], me["org"], me["email"], me["username"], me["has_password"]), ("individual", "Ana Gómez", "ana@gmail.com", "ana.g", False))
         self.assertEqual(c.get("/api/auth/oauth/pending").status_code, 404)                        # used once
         ids = c.get("/api/auth/identities").json()
         self.assertEqual((ids["has_password"], [i["provider"] for i in ids["identities"]]), (False, ["google"]))

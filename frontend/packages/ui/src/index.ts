@@ -1,5 +1,6 @@
 export * from "./api";
 export { AuthGate, signOut } from "./auth";
+export { default as CompanySignup } from "./CompanySignup";
 export * from "./components";
 export { CalculationTable } from "./calculation";
 export { Markdown } from "./markdown";

@@ -1,5 +1,6 @@
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react";
 import { ApiError, Me, SocialProvider, api } from "./api";
+import CompanySignup from "./CompanySignup";
 import { Key, useI18n } from "./i18n";
 
 const json = { "Content-Type": "application/json" };
@@ -43,15 +44,13 @@ function SocialComplete({ onDone }: { onDone: (m: Me) => void }) {
   const { t } = useI18n();
   const [who, setWho] = useState<{ provider: string; email: string; name: string } | null>(null);
   const [gone, setGone] = useState(false);
-  const [kind, setKind] = useState<"individual" | "company">("individual");
-  const [orgName, setOrgName] = useState("");
   const [username, setUsername] = useState("");
   const [err, setErr] = useState("");
   useEffect(() => { api<{ provider: string; email: string; name: string }>("/auth/oauth/pending").then(setWho).catch(() => setGone(true)); }, []);
   const submit = async (e: FormEvent) => {
     e.preventDefault(); setErr("");
     try {
-      const m = await api<Me>("/auth/oauth/complete", { method: "POST", headers: json, body: JSON.stringify({ kind, org_name: orgName, username }) });
+      const m = await api<Me>("/auth/oauth/complete", { method: "POST", headers: json, body: JSON.stringify({ kind: "individual", username }) });
       try { window.history.replaceState({}, "", "/"); } catch { /* ignore */ }
       onDone(m);
     } catch (x) { setErr(x instanceof ApiError ? Object.entries(x.fieldErrors).map(([k, v]) => `${k}: ${v}`).join(", ") || String(x.status) : "error"); }
@@ -65,12 +64,7 @@ function SocialComplete({ onDone }: { onDone: (m: Me) => void }) {
             <h1 style={{ marginTop: 12 }}>{t("auth.finishSignup")}</h1>
             <div className="muted small">{who.name} · {who.email} · {who.provider}</div>
             <form onSubmit={submit}>
-              <label className="field"><span>{t("auth.kind")}</span>
-                <select value={kind} onChange={(e) => setKind(e.target.value as "individual" | "company")}>
-                  <option value="individual">{t("auth.individual")}</option><option value="company">{t("auth.company")}</option>
-                </select>
-              </label>
-              {kind === "company" && <label className="field"><span>{t("auth.orgName")}</span><input value={orgName} onChange={(e) => setOrgName(e.target.value)} required /></label>}
+              <div className="muted small">{t("auth.socialIndividual")}</div>
               <label className="field"><span>{t("auth.username")}</span><input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" /></label>
               {err && <div className="alert bad">{t("auth.failed")}: {err}</div>}
               <button className="primary" type="submit">{t("auth.signup")}</button>
@@ -122,7 +116,6 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [orgName, setOrgName] = useState("");
   const [kind, setKind] = useState<"individual" | "company">("individual");
   const [username, setUsername] = useState("");
   const [providers, setProviders] = useState<SocialProvider[]>([]);
@@ -142,7 +135,7 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
       let path = "/auth/login";
       let body: Record<string, unknown> = { login: email, password };
       if (token && inv) { path = "/auth/accept-invitation"; body = { token, name, password, username }; }
-      else if (mode === "signup") { path = "/auth/signup"; body = { kind, org_name: orgName, name, email, password, username }; }
+      else if (mode === "signup") { path = "/auth/signup"; body = { kind: "individual", name, email, password, username }; }
       const m = await api<Me>(path, { method: "POST", headers: json, body: JSON.stringify(body) });
       if (token) clearInvite();
       try { window.history.replaceState({}, "", m.landing || "/"); } catch { /* ignore */ }      // each kind of account starts where its work is
@@ -196,14 +189,14 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
         {!inviting && mode === "signup" && (
           <>
             <h1 style={{ marginTop: 12 }}>{t("auth.signupTitle")}</h1>
-            <form onSubmit={submit}>
-              <label className="field"><span>{t("auth.kind")}</span>
-                <select value={kind} onChange={(e) => setKind(e.target.value as "individual" | "company")}>
-                  <option value="individual">{t("auth.individual")}</option>
-                  <option value="company">{t("auth.company")}</option>
-                </select>
-              </label>
-              {kind === "company" && field("auth.orgName", orgName, setOrgName)}
+            <label className="field"><span>{t("auth.kind")}</span>
+              <select value={kind} onChange={(e) => setKind(e.target.value as "individual" | "company")}>
+                <option value="individual">{t("auth.individual")}</option>
+                <option value="company">{t("auth.company")}</option>
+              </select>
+            </label>
+            {kind === "company" && <CompanySignup onDone={onDone} onBack={() => { setMode("login"); setErr(""); }} />}
+            {kind === "individual" && <form onSubmit={submit}>
               {field("auth.yourName", name, setName, "text", "name")}
               {field("auth.email", email, setEmail, "email", "email")}
               <label className="field"><span>{t("auth.username")}</span><input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" /></label>
@@ -211,9 +204,9 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
               <div className="muted small">{t("auth.minPw")}</div>
               {err && <div className="alert bad">{t("auth.failed")}: {err}</div>}
               <button className="primary" type="submit" disabled={busy}>{t("auth.signup")}</button>
-            </form>
-            <SocialButtons providers={providers} />
-            <div className="switch small"><button className="linkbtn" onClick={() => { setMode("login"); setErr(""); }}>{t("auth.toLogin")}</button></div>
+            </form>}
+            {kind === "individual" && <SocialButtons providers={providers} />}
+            {kind === "individual" && <div className="switch small"><button className="linkbtn" onClick={() => { setMode("login"); setErr(""); }}>{t("auth.toLogin")}</button></div>}
           </>
         )}
         {inviting && (invBad || inv) && (

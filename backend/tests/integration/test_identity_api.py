@@ -158,17 +158,15 @@ class TestSignup(Base):
         self.assertEqual((me["org_kind"], me["org_role"], me["org"], me["role"], me["email"]), ("individual", "owner", "Ana Díaz", "user", "ana@x.com"))
         self.assertEqual(ana.get("/api/app/org").json()["seats"], 1)
         self.assertEqual(ana.post("/api/app/org/invitations", json={"email": "b@x.com"}).status_code, 409)       # one seat: no group
-        corp = self.client()
-        r = corp.post("/api/auth/signup", json={"kind": "company", "org_name": "Metal SRL", "name": "Raúl", "email": "raul@metal.com", "password": PW})
-        self.assertEqual(r.status_code, 201, r.text)
-        self.assertEqual((corp.get("/api/me").json()["org_kind"], corp.get("/api/app/org").json()["seats"]), ("company", service.COMPANY_SEATS))
+        r = self.client().post("/api/auth/signup", json={"kind": "company", "org_name": "Metal SRL", "name": "Raúl", "email": "raul@metal.com", "password": PW})
+        self.assertEqual(r.status_code, 422)                                                                       # a company registers with its own form (test_company_registration)
 
     def test_validation(self):
         settings.signup = "open"
         c = self.client()
         base = {"kind": "individual", "name": "Ana", "email": "ana@x.com", "password": PW}
         for patch, field in (({"password": "short"}, "password"), ({"email": "nope"}, "email"), ({"kind": "group"}, "kind"), ({"name": " "}, "name"),
-                             ({"kind": "company", "org_name": ""}, "org_name")):
+                             ({"kind": "company", "org_name": "X"}, "kind")):
             r = c.post("/api/auth/signup", json={**base, **patch})
             self.assertEqual(r.status_code, 422, patch)
             self.assertIn(field, r.json()["detail"]["errors"])

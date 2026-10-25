@@ -10,7 +10,7 @@ from alembic.config import Config
 from alembic.script import ScriptDirectory
 
 DB = Path(__file__).resolve().parents[1]
-GLOBAL_TABLES = {"organizations", "users", "identities"}      # identities belong to a person, not to a tenant
+GLOBAL_TABLES = {"organizations", "users", "identities", "registrations"}      # identities belong to a person, a registration to a company that is not an organization yet: not to a tenant
 
 
 class TestMigrations(unittest.TestCase):

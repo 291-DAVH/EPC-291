@@ -14,7 +14,8 @@ from starlette.concurrency import run_in_threadpool
 from epc.core.config import settings
 from epc.modules.identity import permissions, service
 
-ANONYMOUS_PATHS = {"/api/health", "/api/me", "/api/auth/login", "/api/auth/signup", "/api/auth/accept-invitation", "/api/auth/invitation", "/api/auth/providers"}
+ANONYMOUS_PATHS = {"/api/health", "/api/me", "/api/auth/login", "/api/auth/signup", "/api/auth/accept-invitation", "/api/auth/invitation", "/api/auth/providers",
+                   "/api/auth/countries", "/api/auth/terms", "/api/auth/company/register", "/api/auth/company/verify", "/api/auth/company/resend"}
 ANONYMOUS_PREFIXES = ("/api/auth/oauth/",)           # sign-in and sign-up with a provider: the routes decide what each step needs
 
 

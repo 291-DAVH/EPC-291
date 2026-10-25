@@ -20,3 +20,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0014](ADR-0014-sign-in-alias-and-providers.md) | Sign-in with an alias and with external providers | Accepted |
 | [0015](ADR-0015-development-master-account.md) | A MASTER account for development only | Accepted |
 | [0016](ADR-0016-organizations-own-their-engineering.md) | Organizations do their own engineering; their data is their own | Accepted |
+| [0017](ADR-0017-company-registration.md) | A company registers with its own form, an e-mailed code and validation by the team | Accepted |

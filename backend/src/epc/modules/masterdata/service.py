@@ -43,20 +43,25 @@ def _issuer_items() -> List[dict]:
         repository.save_list("issuers", [{"id": "principal", **{k: org[k] for k in _issuer_defaults() if k in org}}])
         repository.move_logo("organization", "issuer-principal")
     items = repository.load_list("issuers")
-    if not items:                                           # a new account: its own company is the first issuer (it can be changed later)
-        name = _account_company()
-        if name:
-            items = [{"id": _slug_id(name), **_issuer_defaults(), "legal_name": name}]
+    if not items:                                           # a new account: its own company is the first issuer, with what it declared when it registered (it can be changed later)
+        own = _account_company()
+        if own.get("name"):
+            items = [{"id": _slug_id(own["name"]), **_issuer_defaults(), "legal_name": own["name"], "tax_id": own.get("tax_id", ""), "email": own.get("contact_email", ""),
+                      "address": own.get("address_line", "")}]
             repository.save_list("issuers", items)
     return items
 
 
-def _account_company() -> str:
-    """The company of the organization whose data this is (a new organization starts with itself as its first issuer)."""
+def _account_company() -> dict:
+    """The organization whose data this is: its name and, if it registered as a company, its tax id, contact e-mail and fiscal address."""
     try:
-        return (identity.org_name(repository.current_scope()) or "").strip()
+        slug = repository.current_scope()
+        prof = identity.org_profile(slug) or {"name": (identity.org_name(slug) or "").strip()}
+        a = prof.get("address") or {}
+        line = ", ".join(x for x in (f"{a.get('street', '')} {a.get('number', '')}".strip(), a.get("locality", ""), a.get("region", ""), a.get("postal_code", "")) if x)
+        return {**prof, "address_line": line}
     except Exception:                                       # noqa: BLE001 - no session (command line, tests)
-        return ""
+        return {}
 
 
 def _slug_id(text: str) -> str:
