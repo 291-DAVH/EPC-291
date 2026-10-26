@@ -2,9 +2,9 @@
 from pathlib import Path
 from typing import List
 
-from epc.modules.sld import repository
+from epc.modules.sld import lengths, repository
 
-__all__ = ["circuits"]
+__all__ = ["circuits", "set_plan_lengths"]
 
 
 def circuits(d: Path) -> List[dict]:
@@ -15,3 +15,8 @@ def circuits(d: Path) -> List[dict]:
         name = (data.get("board") or {}).get("name", "")
         out += [{"tag": c["tag"], "description": c.get("description", ""), "board": name, "board_id": bid} for c in data.get("circuits", []) if c.get("tag")]
     return out
+
+
+def set_plan_lengths(provider) -> None:
+    """The plan editor tells this module how to read what the drawings measured for each circuit (see `lengths`)."""
+    lengths.set_plan_lengths(provider)

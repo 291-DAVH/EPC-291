@@ -178,12 +178,14 @@ export interface SldBoard { name: string; voltage_v: number; system: string; icc
 export interface SldSegment { kind: string; length_m: number; label: string; ambient_c: number | null; soil_c: number | null; rho_kmw: number | null; circuits: number; depth_m: number | null }
 export interface SldCircuit {
   tag: string; description: string; load: number | null; unit: string; destination: string; parent_tag: string; topology: string; phase: string;
-  length_m: number; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string; route?: SldSegment[];
+  length_m: number; length_source?: string; fp: number | null; efficiency: number | null; kind: string; notes: string; cable_type: string; route?: SldSegment[];
 }
 export interface SldTitleblock {
   company: string; company_cuit: string; client: string; client_cuit: string; drawn_by: string; checked_by: string; approved_by: string;
   description: string; location: string; scale: string; revision: string; status: string;
 }
+/** Where the length of a circuit comes from now: `used` is what the calculation takes (the plan's or the board's), the other value is shown beside it. */
+export interface LengthInfo { setting: string; used: "plan" | "data"; data_m: number; plan_m: number | null; plan_max_m: number | null; plan_total_m: number | null; levels: string[]; moments: boolean; reason: string; fallback: boolean }
 export interface SldData { board: SldBoard; circuits: SldCircuit[]; titleblock: SldTitleblock }
 export interface SldStatus { state: "idle" | "running" | "done" | "failed"; name?: string; outputs: string[]; log: string[]; error?: string; started?: string; finished?: string }
 export interface BoardRow { id: string; name: string; voltage_v: number; system: string; icc_ka: number; circuits: number; supplied_from: string; supply_tag: string; state: string; finished?: string }
@@ -199,8 +201,8 @@ export interface BoardMemoView {
 }
 export interface SldView {
   parties?: { issuer: string; client: string; team: Partial<TeamRow> };
-  input: SldData; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
-  options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[]; route_kinds: string[] };
+  input: SldData; lengths?: Record<string, LengthInfo>; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
+  options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[]; route_kinds: string[]; length_sources?: string[] };
 }
 
 /* ---- master data ---- */

@@ -3,7 +3,7 @@
 import re
 from typing import Dict
 
-from epc.modules.sld import repository
+from epc.modules.sld import lengths, repository
 
 
 UNITS = ("A", "W", "kW", "MW", "VA", "kVA", "MVA", "HP")
@@ -19,12 +19,13 @@ KINDS = ("auto", "mcb", "mccb", "mccb_motorized", "rcbo", "rccb")
 
 
 CABLE_TYPES = ("tetra_sep", "tetra_inc", "unifilar")
+LENGTH_SOURCES = lengths.SOURCES
 
 
 SYSTEMS = ("TN-S", "TN-C-S", "IT")
 
 
-OPTIONS = {"units": UNITS, "topologies": TOPOLOGIES, "phases": PHASES, "kinds": KINDS, "cable_types": CABLE_TYPES, "systems": SYSTEMS}
+OPTIONS = {"units": UNITS, "topologies": TOPOLOGIES, "phases": PHASES, "kinds": KINDS, "cable_types": CABLE_TYPES, "systems": SYSTEMS, "length_sources": LENGTH_SOURCES}
 
 
 def options() -> dict:
@@ -59,7 +60,8 @@ def _validate_circuit(i: int, c: dict, tags: list, parents: set, e: Dict[str, st
     elif tags.count(t) > 1:
         e[f"{k}.tag"] = "duplicated"
     for field, allowed, message in (("unit", UNITS, "one of " + ", ".join(UNITS)), ("topology", TOPOLOGIES, "invalid"),
-                                    ("phase", PHASES, "one of " + ", ".join(PHASES)), ("kind", KINDS, "invalid"), ("cable_type", CABLE_TYPES, "invalid")):
+                                    ("phase", PHASES, "one of " + ", ".join(PHASES)), ("kind", KINDS, "invalid"), ("cable_type", CABLE_TYPES, "invalid"),
+                                    ("length_source", LENGTH_SOURCES, "one of " + ", ".join(LENGTH_SOURCES))):
         if c[field] not in allowed:
             e[f"{k}.{field}"] = message
     if c["load"] is None and t not in parents:

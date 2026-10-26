@@ -1,13 +1,31 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
 import RouteEditor from "./RouteEditor";
-import { api, ApiError, Badge, BoardMemoView, BoardRow, CalculationTable, CalcView, JSON_HEADERS, Key, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, BoardMemoView, BoardRow, CalculationTable, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
-  length_m: 0, fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
+  length_m: 0, length_source: "auto", fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
 });
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
+
+/** Under the length of a circuit: where it comes from (plan, data or automatic) and what each one says, so it is clear what the calculation takes. */
+function LengthSource({ c, info, sources, onChange, t }: { c: SldCircuit; info?: LengthInfo; sources: string[]; onChange: (v: string) => void; t: (k: Key) => string }) {
+  if ((c.route?.length ?? 0) > 0 || !c.tag.trim()) return null;
+  const plan = info?.plan_m != null;
+  const differs = plan && info!.data_m > 0 && Math.abs(info!.plan_m! - info!.data_m) / info!.data_m > 0.1;
+  return (
+    <div className="muted small" style={{ marginTop: 3 }}>
+      <select value={c.length_source ?? "auto"} onChange={(e) => onChange(e.target.value)} aria-label={t("sld.lenSource")} title={t("sld.lenSource")}>
+        {sources.map((s) => <option key={s} value={s}>{t(("sld.len." + s) as Key)}</option>)}
+      </select>
+      {" "}{info && <Badge tone={info.used === "plan" ? "ok" : undefined}>{t(info.used === "plan" ? "sld.lenUsesPlan" : "sld.lenUsesData")}</Badge>}
+      {plan && <div>{t("sld.lenPlan")}: <b className="mono">{info!.plan_m}</b> m{info!.moments ? ` · ${t("sld.lenMoments")}, ${t("sld.lenMax")} ${info!.plan_max_m} m` : ""}</div>}
+      {info?.fallback && <div style={{ color: "var(--bad)" }}>{t("sld.lenFallback")}</div>}
+      {differs && <div style={{ color: "var(--warn, #b26a00)" }}>{t("sld.lenDiffers")}</div>}
+    </div>
+  );
+}
 
 /** The boards of the project: each one has its own data, calculation and diagrams, and a project can start with one and add others later. */
 export default function SldInput({ client, code, onOpenFiles, onOpenParties }: { client: string; code: string; onOpenFiles: () => void; onOpenParties: () => void }) {
@@ -211,8 +229,9 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
                   <td style={{ whiteSpace: "nowrap" }}>
                     {(c.route?.length ?? 0) > 0
                       ? <b className="mono" title={t("route.totalHint")}>{Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
-                      : <input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} />}
+                      : <input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} title={t("sld.lenData")} />}
                     {" "}<button className={routeOf === i ? "primary" : ""} onClick={() => setRouteOf(routeOf === i ? null : i)} title={t("route.title")}>{t("route.button")}{(c.route?.length ?? 0) > 0 ? ` (${c.route!.length})` : ""}</button>
+                    <LengthSource c={c} info={view.data?.lengths?.[c.tag.trim()]} sources={o.length_sources ?? ["auto", "plan", "data"]} onChange={(v) => setRow(i, { length_source: v })} t={t} />
                   </td>
                   <td><input className="w-num" type="number" step="0.01" value={c.fp ?? ""} onChange={(e) => setRow(i, { fp: num(e.target.value) })} /></td>
                   <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => setRow(i, { efficiency: num(e.target.value) })} /></td>

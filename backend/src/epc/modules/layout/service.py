@@ -85,6 +85,36 @@ def view(d: Path, level: str) -> dict:
             "files": (result or {}).get("files") if result else None, "generated_at": (result or {}).get("generated_at")}
 
 
+def _circuits_by_level(d: Path) -> Dict[str, list]:
+    """Every circuit routed on any drawing: tag -> [(level, route)]."""
+    seen: Dict[str, list] = {}
+    for lv in repository.levels(d):
+        saved = repository.load_drawing(d, lv)
+        try:
+            res = derive_data(lv, {**_blank(), **saved}) if saved else {}
+        except Invalid:
+            continue
+        for tag, r in (res.get("circuits") or {}).items():
+            seen.setdefault(tag, []).append((lv, r))
+    return seen
+
+
+def _measure(found: list) -> dict:
+    lv, r = found[0]
+    complete = bool(r.get("found")) and not r.get("unreached") and r.get("moment_length_m", 0) > 0
+    return {"levels": [x[0] for x in found], "usable": complete and len(found) == 1, "reason": "levels" if len(found) > 1 else "" if complete else "incomplete",
+            "loads_n": len(r.get("loads_detail", [])), "moment_length_m": r.get("moment_length_m", 0.0), "max_distance_m": r.get("max_distance_m", 0.0), "length_m": r.get("length_m", 0.0)}
+
+
+def plan_lengths(d: Path) -> Dict[str, dict]:
+    """What the drawings measured for each circuit, by tag, for the board to use as its length (see `sld.lengths`). A circuit is usable when it is routed completely on
+    one level and reaches at least one load or destination; one drawn over several levels is not (the way between levels is not measured yet)."""
+    return {tag: _measure(found) for tag, found in _circuits_by_level(d).items()}
+
+
+sld.set_plan_lengths(plan_lengths)                              # the board reads its lengths through this (the dependency stays layout -> sld)
+
+
 def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
     data = body.model_dump(by_alias=True)

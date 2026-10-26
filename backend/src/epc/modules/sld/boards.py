@@ -7,7 +7,7 @@ from epc.core.errors import Conflict, Invalid, NotFound
 from epc.modules.engineering import public as engineering
 from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
-from epc.modules.sld import repository
+from epc.modules.sld import lengths, repository
 from epc.modules.sld.models import Board, Circuit, SldIn, Titleblock
 from epc.modules.sld.validation import options, validate
 
@@ -52,7 +52,7 @@ def view(d: Path, bid: str = "") -> dict:
         data["board"] = {**Board().model_dump(), **data["board"]}
     else:
         data = _blank(d)
-    return {"input": data, "saved": bool(saved), "board_id": bid, "options": options(), "status": status(d, bid),
+    return {"input": data, "saved": bool(saved), "board_id": bid, "lengths": lengths.info(d, data["circuits"]), "options": options(), "status": status(d, bid),
             "boards": [{"id": b["id"], "name": b["name"]} for b in boards(d)],
             "people": [p["name"] for p in masterdata.people()], "parties": _parties_line(d),
             "logos": {k: v is not None for k, v in (("company", masterdata.logos(d)["provider"]), ("client", masterdata.logos(d)["client"]))}}

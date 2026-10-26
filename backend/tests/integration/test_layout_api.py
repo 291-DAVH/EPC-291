@@ -147,6 +147,27 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(res["schedule"]["loads"], {"by_circuit": {"C-01": {"LU": 1, "TG": 1}}, "unassigned": ["HV-001"]})
         self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["nodes"][2]["circuit"], "C-01")
 
+    def test_the_board_takes_the_length_of_a_circuit_from_the_plan_or_from_its_data(self):
+        sld = "/api/projects/ACME/P-1/sld"
+        self.c.put("/api/data/organization", json={"legal_name": "Oficina SA"})
+        circuits = [dict(c) for c in CIRCUITS]
+        self.assertEqual(self.c.put(sld, json={"board": BOARD, "circuits": circuits, "titleblock": TB}).status_code, 200)
+        self.assertEqual(self.c.get(sld).json()["lengths"]["C-01"]["used"], "data")               # nothing drawn: the board's own length
+        drawing = {**DRAWING, "nodes": [*DRAWING["nodes"], {"id": "n3", "kind": "LU", "x": 100, "y": 0, "circuit": "C-01"}, {"id": "n4", "kind": "TG", "x": 150, "y": 0, "circuit": "C-01"}],
+                   "circuits": [{"tag": "C-01", "from": "n1", "ternas": 1}]}
+        self.c.put(f"{self.base}/L0", json=drawing)
+        info = self.c.get(sld).json()["lengths"]["C-01"]
+        self.assertEqual((info["used"], info["plan_m"], info["data_m"], info["moments"], info["plan_max_m"]), ("plan", 12.5, 30.0, True, 15.0))
+        self.assertEqual(self.c.get(sld).json()["lengths"]["M-01"]["used"], "data")               # not routed on the plan
+        circuits[0]["length_source"] = "data"
+        circuits[1]["length_source"] = "plan"
+        self.c.put(sld, json={"board": BOARD, "circuits": circuits, "titleblock": TB})
+        lengths = self.c.get(sld).json()["lengths"]
+        self.assertEqual((lengths["C-01"]["used"], lengths["C-01"]["moments"]), ("data", False))
+        self.assertEqual((lengths["M-01"]["used"], lengths["M-01"]["fallback"], lengths["M-01"]["reason"]), ("data", True, "not_drawn"))
+        circuits[0]["length_source"] = "other"
+        self.assertEqual(self.c.put(sld, json={"board": BOARD, "circuits": circuits, "titleblock": TB}).status_code, 422)
+
     def test_generate_needs_a_drawing_and_a_scale(self):
         self.assertEqual(self.c.post(f"{self.base}/L0/generate").status_code, 404)
         self.c.put(f"{self.base}/L0", json={**DRAWING, "scale": None})

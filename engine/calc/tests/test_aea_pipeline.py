@@ -133,6 +133,20 @@ def _xlsx_minimo(ruta):
         z.writestr("xl/worksheets/sheet2.xml", f"<worksheet {ns}><sheetData>{circ}</sheetData></worksheet>")
 
 
+class TestMomentos(unittest.TestCase):
+    def test_a_circuit_measured_by_moments_takes_the_whole_current_not_the_66_percent_of_lighting(self):
+        import copy
+        circuits = copy.deepcopy(CIRC)
+        base, _ = P.calculate(TABLERO, circuits)
+        for c in circuits:
+            if c["TAG"] == "L-01":
+                c["MOMENTOS"] = True
+        moments, _ = P.calculate(TABLERO, circuits)
+        self.assertEqual((base["L-01"]["S"], base["L-01"]["dU"]), (1.5, 2.09))          # 66 % of 7.6 A at 35 m fits 1.5 mm2
+        self.assertEqual(moments["L-01"]["S"], 2.5)                                      # the whole current at the same length needs more section
+        self.assertEqual(moments["M-01"], base["M-01"])
+
+
 class TestXlsx(unittest.TestCase):
     def test_lectura_y_flujo_completo(self):
         with tempfile.TemporaryDirectory() as t:

@@ -446,6 +446,15 @@
    "loads": 0,
    "unreached": [],
    "distance_to_load_m": {},
+   "loads_detail": [
+    {
+     "tag": "CP-001",
+     "distance_m": 60.0,
+     "power_w": null
+    }
+   ],
+   "max_distance_m": 60.0,
+   "moment_length_m": 60.0,
    "stretches": [
     "BN-001/1",
     "BN-001/2",
@@ -471,6 +480,20 @@
     "LU-001": 20.0,
     "TG-001": 30.0
    },
+   "loads_detail": [
+    {
+     "tag": "LU-001",
+     "distance_m": 20.0,
+     "power_w": null
+    },
+    {
+     "tag": "TG-001",
+     "distance_m": 30.0,
+     "power_w": null
+    }
+   ],
+   "max_distance_m": 30.0,
+   "moment_length_m": 25.0,
    "stretches": [
     "BN-001/1",
     "BN-001/2",
