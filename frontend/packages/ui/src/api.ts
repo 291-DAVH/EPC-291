@@ -197,6 +197,7 @@ export interface SldCircuit {
 export interface SldTitleblock {
   company: string; company_cuit: string; client: string; client_cuit: string; drawn_by: string; checked_by: string; approved_by: string;
   description: string; location: string; scale: string; revision: string; status: string;
+  drawing_type: string; replaces: string; replaced_by: string; internal_code: string;
 }
 /** Where the length of a circuit comes from now: `used` is what the calculation takes (the plan's or the board's), the other value is shown beside it. */
 export interface LengthInfo { setting: string; used: "plan" | "data"; data_m: number; plan_m: number | null; plan_max_m: number | null; plan_total_m: number | null; levels: string[]; moments: boolean; reason: string; fallback: boolean }

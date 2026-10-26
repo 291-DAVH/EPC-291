@@ -62,6 +62,10 @@ class Titleblock(BaseModel):
     scale: str = "1:50"
     revision: str = "A"
     status: str = "Emitido"
+    drawing_type: str = ""                  # "Tipo de plano" of the title block
+    replaces: str = ""                      # client code this drawing replaces
+    replaced_by: str = ""                   # client code that replaces it
+    internal_code: str = ""                 # the drawing's internal code (plano N°)
 
 
 class SldIn(BaseModel):

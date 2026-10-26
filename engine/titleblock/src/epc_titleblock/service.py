@@ -26,7 +26,8 @@ FIELDS = ("formato", "proy_fecha", "proy_nombre", "ver_fecha", "ver_nombre", "va
 
 
 PROJECT_FIELDS = {"company": "empresa", "company_cuit": "empresa_cuit", "client": "cliente", "client_cuit": "cliente_cuit", "drawn_by": "proy_nombre", "checked_by": "ver_nombre",
-                  "approved_by": "val_nombre", "description": "descripcion", "location": "ubicacion", "scale": "escala", "revision": "revision", "status": "estado"}
+                  "approved_by": "val_nombre", "description": "descripcion", "location": "ubicacion", "scale": "escala", "revision": "revision", "status": "estado",
+                  "drawing_type": "tipo_plano", "replaces": "reemplaza", "replaced_by": "reemplazado_por", "internal_code": "plano_n"}
 
 
 def project_request(titleblock: dict, logos: dict = None, today: datetime.date = None) -> dict:

@@ -31,9 +31,7 @@ BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "syste
 CIRCUIT_COLS = [("TAG", "tag"), ("DESCRIPCION", "description"), ("CARGA", "load"), ("UNIDAD_CARGA", "unit"), ("DESTINO", "destination"), ("PARENT_TAG", "parent_tag"),
                 ("TOPOLOGY", "topology"), ("FASE", "phase"), ("LONGITUD_m", "length_m"), ("FP", "fp"), ("RENDIMIENTO", "efficiency"), ("KIND", "kind"),
                 ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type")]
-TITLEBLOCK_COLS = {"company": "Empresa: razón social", "company_cuit": "Empresa: CUIT", "client": "Cliente: razón social", "client_cuit": "Cliente: CUIT",
-                   "drawn_by": "Proyectado por", "checked_by": "Verificado por", "approved_by": "Validado por", "description": "Descripción",
-                   "location": "Ubicación", "scale": "Escala", "revision": "Revisión", "status": "Estado"}
+
 
 
 def catalog_file(discipline: str = "electrical") -> Optional[Path]:

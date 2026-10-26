@@ -3,6 +3,7 @@ from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound
 from epc.modules.admin import repository
 from epc.modules.deliverables import public as deliverables
+from epc.modules.identity import public as identity
 from epc.modules.knowledge import public as knowledge
 from epc.modules.projects import public as projects
 
@@ -58,11 +59,14 @@ def save_layers(changes: dict) -> dict:
     if errors:
         raise Invalid(errors)
     repository.save_layers_override(L.override_of(merged))
-    return layers()
+    result = layers()
+    identity.audit_event("drawing_layers_changed", target="global", detail={"changed": result["changed"]})
+    return result
 
 
 def reset_layers() -> dict:
     repository.reset_layers()
+    identity.audit_event("drawing_layers_reset", target="global")
     return layers()
 
 
@@ -86,9 +90,12 @@ def save_solutions(body: dict) -> dict:
     if errors:
         raise Invalid(errors)
     repository.save_solutions_override(S.override_of(doc))
-    return solutions()
+    result = solutions()
+    identity.audit_event("standard_solutions_changed", target="global", detail={"changed": result["changed"]})
+    return result
 
 
 def reset_solutions() -> dict:
     repository.reset_solutions()
+    identity.audit_event("standard_solutions_reset", target="global")
     return solutions()

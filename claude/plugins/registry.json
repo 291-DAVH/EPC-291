@@ -33,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "3e2e8aa00e3a4202"
+      "hash": "aede1dead2903843"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -100,7 +100,7 @@
         "dxf",
         "titleblock"
       ],
-      "hash": "a58f60c1ee445d10"
+      "hash": "a5fdf4c5888b62e7"
     },
     "mld": {
       "version": "0.2.2",
@@ -120,7 +120,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "e99a89e06992e352"
+      "hash": "942fddca9806c238"
     },
     "plan-drawing": {
       "version": "0.1.0",
@@ -182,7 +182,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "d873adf26fa29e50"
+      "hash": "06be14467466ced2"
     },
     "spec-writer": {
       "version": "0.1.0",

@@ -47,6 +47,8 @@ class TestRender(unittest.TestCase):
         self.assertEqual((req["common"]["empresa"], req["common"]["proy_nombre"], req["common"]["escala"], req["common"]["val_fecha"]), ("ACME", "D. Proyecta", "1:50", "26/10/2026"))
         self.assertEqual(req["logos"], {"client": "x.svg"})
         self.assertEqual(req["common"]["revision"], "")
+        mine = service.project_request({"drawing_type": "ESQUEMAS", "replaces": "PLN-1", "replaced_by": "PLN-3", "internal_code": "PLN-2"})["common"]
+        self.assertEqual((mine["tipo_plano"], mine["reemplaza"], mine["reemplazado_por"], mine["plano_n"]), ("ESQUEMAS", "PLN-1", "PLN-3", "PLN-2"))
 
     def test_a_logo_that_exists_is_embedded_and_one_that_does_not_is_a_warning(self):
         with tempfile.TemporaryDirectory() as t:

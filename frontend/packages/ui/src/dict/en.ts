@@ -1061,4 +1061,8 @@ export const en = {
     "solutions.groups.maxIb": "Current per differential (A, max.)",
     "solutions.groups.tag": "Group name ({n} = number)",
     "solutions.groups.description": "Description ({n}, {type}, {phase})",
+    "sld.drawingType": "Drawing type",
+    "sld.replaces": "Client code: replaces",
+    "sld.replacedBy": "Client code: replaced by",
+    "sld.internalCode": "Internal code (drawing no.)",
 } as const;

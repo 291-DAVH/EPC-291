@@ -1061,4 +1061,8 @@ export const es = {
     "solutions.groups.maxIb": "Corriente por diferencial (A, máx.)",
     "solutions.groups.tag": "Nombre del grupo ({n} = número)",
     "solutions.groups.description": "Descripción ({n}, {type}, {phase})",
+    "sld.drawingType": "Tipo de plano",
+    "sld.replaces": "Código del cliente: reemplaza a",
+    "sld.replacedBy": "Código del cliente: reemplazado por",
+    "sld.internalCode": "Código interno (plano N°)",
 } as const;
