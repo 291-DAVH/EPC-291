@@ -13,4 +13,5 @@ jsonschema
 fastapi
 uvicorn[standard]
 python-multipart
+pypdfium2
 matplotlib

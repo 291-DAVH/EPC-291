@@ -121,7 +121,7 @@ def _from_pdf(data: bytes) -> Tuple[bytes, str]:
     with tempfile.TemporaryDirectory() as tmp:
         png = repository.pdf_to_png(data, Path(tmp))
     if png is None:
-        raise Invalid({"file": "this server cannot open a PDF as a plan: export the plan as an image (PNG or JPG) or as a DXF"})
+        raise Invalid({"file": "the PDF could not be read as a plan (it may be damaged or protected): export it as an image (PNG or JPG) or as a DXF"})
     return png, ".png"
 
 
