@@ -27,7 +27,7 @@ This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing`
 
 | | |
 |---|---|
-| Incluye (motor) | `calc`, `mld`, `sld`, `symbols`, `titleblock` |
+| Incluye (motor) | `calc`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` |
 | Es dueño de | `mld` |
 | Necesita (plugins) | `aea-calc`, `iec-symbols`, `sld` |
 | Lo necesitan | `board-design` |

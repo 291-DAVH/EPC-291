@@ -46,7 +46,7 @@ def first(*paths):
 PYTHON = first(REPO / ".venv" / "Scripts" / "python.exe", REPO / ".venv" / "bin" / "python") or Path(sys.executable)
 PLUGINS = REPO / "claude" / "plugins"
 ENGINE = REPO / "engine"
-AREAS = ("calc", "rules", "standards", "symbols", "titleblock", "plan", "sld", "mld", "drawing", "documents")
+AREAS = ("calc", "rules", "standards", "dxf", "symbols", "titleblock", "plan", "sld", "mld", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")

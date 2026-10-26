@@ -5,6 +5,7 @@ root_packages =
     epc_calc
     epc_documents
     epc_drawing
+    epc_dxf
     epc_mld
     epc_plan
     epc_rules
@@ -845,6 +846,7 @@ source_modules =
     epc_calc
     epc_documents
     epc_drawing
+    epc_dxf
     epc_mld
     epc_plan
     epc_rules
@@ -863,3 +865,4 @@ layers =
     epc_mld
     epc_sld
     epc_titleblock | epc_symbols | epc_plan | epc_calc
+    epc_dxf

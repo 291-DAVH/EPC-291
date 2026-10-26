@@ -11,10 +11,11 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `calc` | — | `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
 | `drawing` | `calc`, `mld`, `sld` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
+| `dxf` | — | `backend.admin`, `plan`, `sld` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `plan`, `sld` |
 | `mld` | `calc`, `sld`, `symbols` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
-| `plan` | — | `backend.layout` | `backend.app`, `backend.layout` |
+| `plan` | `dxf` | `backend.layout` | `backend.app`, `backend.layout` |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
-| `sld` | `calc`, `symbols`, `titleblock` | `drawing`, `mld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld` |
+| `sld` | `calc`, `dxf`, `symbols`, `titleblock` | `drawing`, `mld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld` |
 | `standards` | `calc` | — | — |
 | `symbols` | — | `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
 | `titleblock` | — | `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
@@ -23,7 +24,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 
 | Módulo | Usa | Lo usan |
 |---|---|---|
-| `backend.admin` | `backend.core`, `backend.deliverables`, `backend.knowledge`, `backend.projects` | `backend.app` |
+| `backend.admin` | `backend.core`, `backend.deliverables`, `backend.knowledge`, `backend.projects`, `dxf` | `backend.app` |
 | `backend.app` | `backend.admin`, `backend.backlog`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` | — |
 | `backend.backlog` | `backend.core`, `backend.projects`, `backend.wbs` | `backend.app`, `backend.reporting` |
 | `backend.core` | — | `backend.admin`, `backend.app`, `backend.backlog`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
@@ -54,10 +55,11 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | `calc` | `openpyxl` | `openpyxl` | — |
 | `documents` | `playwright`, `pypdf`, `python-docx` | `playwright`, `pypdf`, `python-docx` | — |
 | `drawing` | `ezdxf`, `matplotlib`, `openpyxl` | `epc-calc`, `epc-mld`, `epc-sld`, `epc-titleblock`, `ezdxf`, `matplotlib`, `openpyxl` | — |
-| `mld` | `lxml` | `epc-calc`, `epc-sld`, `epc-symbols`, `ezdxf`, `lxml` | — |
-| `plan` | `ezdxf` | `ezdxf` | — |
+| `dxf` | — | `ezdxf` | — |
+| `mld` | `lxml` | `epc-calc`, `epc-dxf`, `epc-sld`, `epc-symbols`, `ezdxf`, `lxml` | — |
+| `plan` | `ezdxf` | `epc-dxf`, `ezdxf` | — |
 | `rules` | — | — | — |
-| `sld` | `cairosvg`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | `cairosvg`, `epc-calc`, `epc-symbols`, `epc-titleblock`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | — |
+| `sld` | `cairosvg`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | `cairosvg`, `epc-calc`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | — |
 | `standards` | `jsonschema`, `pypdf`, `pypdfium2` | `jsonschema`, `pillow`, `pypdf`, `pypdfium2` | — |
 | `symbols` | — | — | — |
 | `titleblock` | `ezdxf`, `openpyxl`, `shapely`, `svgelements`, `vtracer` | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` | — |
@@ -67,16 +69,17 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | Plugin | Empaqueta (motor) | Requiere (plugins) | Lo requieren |
 |---|---|---|---|
 | `aea-calc` | `calc` | — | `board-design`, `mld`, `sld`, `standard-ingest` |
-| `board-design` | `calc`, `drawing`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `mld`, `sld` | — |
+| `board-design` | `calc`, `drawing`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `mld`, `sld` | — |
 | `doc-quality` | `documents` | — | `pm2-docs`, `spec-writer` |
+| `dxf-output` | `dxf` | — | `plan-drawing`, `sld` |
 | `equipment-catalog` | — | — | `procurement` |
 | `iec-symbols` | `symbols` | — | `mld`, `sld` |
 | `intake-analysis` | — | — | — |
 | `iram-titleblock` | `titleblock` | — | `sld` |
-| `mld` | `calc`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `iec-symbols`, `sld` | `board-design` |
-| `plan-drawing` | `plan` | — | — |
+| `mld` | `calc`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `iec-symbols`, `sld` | `board-design` |
+| `plan-drawing` | `dxf`, `plan` | `dxf-output` | — |
 | `pm2-docs` | `documents` | `doc-quality` | — |
 | `procurement` | — | `equipment-catalog` | — |
-| `sld` | `calc`, `sld`, `symbols`, `titleblock` | `aea-calc`, `iec-symbols`, `iram-titleblock` | `board-design`, `mld` |
+| `sld` | `calc`, `dxf`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` | `board-design`, `mld` |
 | `spec-writer` | `documents` | `doc-quality` | — |
 | `standard-ingest` | `calc`, `rules`, `standards` | `aea-calc` | — |

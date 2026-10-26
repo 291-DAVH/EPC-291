@@ -7,7 +7,7 @@ name = "epc-plan"
 version = "0.1.0"
 description = "EPC-291 plan-drawing engine: nodes and lines over a plan, graph, tags, circuit routes, schedules, DXF"
 requires-python = ">=3.10"
-dependencies = ["ezdxf"]
+dependencies = ["ezdxf", "epc-dxf"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

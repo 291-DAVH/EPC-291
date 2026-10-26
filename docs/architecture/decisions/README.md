@@ -26,3 +26,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0020](ADR-0020-plan-canvas.md) | Drawing the routes over the architectural plan | Accepted (direction) |
 | [0021](ADR-0021-plan-drawing-editor.md) | Plan-drawing editor: levels, scale, graph, circuits and DXF | Accepted |
 | [0022](ADR-0022-engine-split-generated-plugins.md) | Drawing engine split into independent packages; plugins generated from the code | Accepted |
+| [0023](ADR-0023-drawing-services-and-standard-solutions.md) | Drawings as services; DXF layer catalog; standard solutions | Accepted (direction) |

@@ -173,6 +173,10 @@ export interface CriteriaView {
   discipline: string; jurisdiction: string; validated: boolean; notice: string; items: Criterion[]; changed: number; history: CriteriaHistory[];
 }
 
+/* ---- DXF layers (global catalog the MASTER edits) ---- */
+export interface LayerAttrs { name: string; color: number; lineweight: number | null; linetype: string; on: boolean; frozen: boolean; locked: boolean; plot: boolean; description?: { es?: string; en?: string } }
+export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; changed: string[]; options: { lineweights: number[]; linetypes: string[] } }
+
 /* ---- single-line diagram input ---- */
 export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number; supplied_from: string; supply_tag: string }
 export interface SldSegment { kind: string; length_m: number; label: string; ambient_c: number | null; soil_c: number | null; rho_kmw: number | null; circuits: number; depth_m: number | null }

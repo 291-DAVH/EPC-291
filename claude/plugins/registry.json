@@ -25,12 +25,13 @@
       "engine": [
         "calc",
         "drawing",
+        "dxf",
         "mld",
         "sld",
         "symbols",
         "titleblock"
       ],
-      "hash": "9b29c561ac3ca1d3"
+      "hash": "851ddd5d57a39d1c"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -42,6 +43,17 @@
         "documents"
       ],
       "hash": "730910f6302a5c1d"
+    },
+    "dxf-output": {
+      "version": "0.1.0",
+      "kind": "generator",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "engine": [
+        "dxf"
+      ],
+      "hash": "2336b2048c7df30c"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -97,23 +109,27 @@
       "skills": [],
       "engine": [
         "calc",
+        "dxf",
         "mld",
         "sld",
         "symbols",
         "titleblock"
       ],
-      "hash": "6eb4225bec51f36e"
+      "hash": "c701a4e53d53f9e6"
     },
     "plan-drawing": {
       "version": "0.1.0",
       "kind": "generator",
       "status": "active",
-      "requires": {},
+      "requires": {
+        "dxf-output": "^0.1.0"
+      },
       "skills": [],
       "engine": [
+        "dxf",
         "plan"
       ],
-      "hash": "a6b8ff3732f781aa"
+      "hash": "235d81337da0f69d"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -149,17 +165,19 @@
       "status": "active",
       "requires": {
         "aea-calc": "^1.8.0",
+        "dxf-output": "^0.1.0",
         "iec-symbols": "^0.4.19",
         "iram-titleblock": "^0.5.4"
       },
       "skills": [],
       "engine": [
         "calc",
+        "dxf",
         "sld",
         "symbols",
         "titleblock"
       ],
-      "hash": "eb51fea4b134add1"
+      "hash": "45b86999f53f6e06"
     },
     "spec-writer": {
       "version": "0.1.0",

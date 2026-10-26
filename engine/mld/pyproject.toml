@@ -7,7 +7,7 @@ name = "epc-mld"
 version = "0.1.0"
 description = "EPC-291 multi-line diagram generator: each line of the single-line expanded into its conductors"
 requires-python = ">=3.10"
-dependencies = ["epc-calc", "epc-sld", "epc-symbols", "lxml", "ezdxf"]
+dependencies = ["epc-calc", "epc-sld", "epc-symbols", "epc-dxf", "lxml", "ezdxf"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

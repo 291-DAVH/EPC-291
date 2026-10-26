@@ -10,7 +10,9 @@
   "jurisdiction": [
     "AR"
   ],
-  "requires": {},
+  "requires": {
+    "dxf-output": "^0.1.0"
+  },
   "consumes": [
     "PlanDrawing"
   ],
@@ -39,6 +41,7 @@
     "plan"
   ],
   "engine": [
+    "dxf",
     "plan"
   ]
 }

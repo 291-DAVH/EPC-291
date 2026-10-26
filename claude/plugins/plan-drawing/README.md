@@ -8,9 +8,9 @@ The platform uses it through the layout module; it installs and updates on its o
 
 | | |
 |---|---|
-| Incluye (motor) | `plan` |
+| Incluye (motor) | `dxf`, `plan` |
 | Es dueño de | `plan` |
-| Necesita (plugins) | — |
+| Necesita (plugins) | `dxf-output` |
 | Lo necesitan | — |
 | Paquetes de Python | `ezdxf` |
 | Si lo modificas, revisa | plugins —; módulos del backend `backend.layout` |

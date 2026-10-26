@@ -31,7 +31,7 @@ This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing`
 
 | | |
 |---|---|
-| Incluye (motor) | `calc`, `drawing`, `mld`, `sld`, `symbols`, `titleblock` |
+| Incluye (motor) | `calc`, `drawing`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` |
 | Es dueño de | `drawing` |
 | Necesita (plugins) | `aea-calc`, `mld`, `sld` |
 | Lo necesitan | — |

@@ -60,6 +60,11 @@ class Settings:
     secret_key: str = ""        # signs the short-lived cookies of the sign-in with providers (EPC_SECRET_KEY); random per process when not set
     oauth: dict = field(default_factory=dict)      # provider -> {client_id, client_secret}, only the configured ones (EPC_OAUTH_<PROVIDER>_CLIENT_ID / _CLIENT_SECRET)
 
+    @property
+    def layers_file(self) -> Path:
+        """The catalog of DXF layers the MASTER edits (global; a project's own file will win over it later)."""
+        return self.data_dir / "global" / "drawing-layers.json"
+
     @classmethod
     def from_env(cls, repo: Optional[Path] = None) -> "Settings":
         repo = repo or _find_repo()

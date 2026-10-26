@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import ezdxf
+from epc_dxf import layers
 
 from epc_plan import core
 
@@ -47,7 +48,7 @@ def _define_block(doc, sid: str, size: float, scale: float, height: float) -> st
     return name
 
 
-def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float) -> int:
+def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float, layer) -> int:
     """Placed nodes as block insertions with their tag, junctions as small circles. Returns how many entities were added."""
     count = 0
     for n in result["nodes"]:
@@ -55,10 +56,10 @@ def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float) -
         if n["placed"]:
             kind = node_kinds[n["kind"]]
             block = _define_block(doc, kind["simbolo_2d"], cfg["node_symbol_size_m"], scale, height)
-            msp.add_blockref(block, at, dxfattribs={"layer": kind["capa_dxf"]}).add_auto_attribs({"TAG": n["tag"]})
+            msp.add_blockref(block, at, dxfattribs={"layer": layer(kind["capa_dxf"])}).add_auto_attribs({"TAG": n["tag"]})
             count += 1
         elif n["kind"] == "J":
-            msp.add_circle(at, 0.05 * scale, dxfattribs={"layer": cfg["junction_layer"]})
+            msp.add_circle(at, 0.05 * scale, dxfattribs={"layer": layer(cfg["junction_layer"])})
             count += 1
     return count
 
@@ -77,16 +78,16 @@ def _label(s) -> str:
     return s["tag"] + (" [" + ",".join(c["circuit"] for c in s["carries"]) + "]" if s.get("carries") else "")
 
 
-def _add_stretches(msp, result, line_kinds, cfg, scale: float, height: float) -> int:
+def _add_stretches(msp, result, line_kinds, cfg, scale: float, height: float, layer) -> int:
     for s in result["stretches"]:
         pts = [(x * scale, y * scale) for x, y in s["points_m"]]
-        msp.add_lwpolyline(pts, dxfattribs={"layer": line_kinds[s["kind"]]["capa_dxf"]})
+        msp.add_lwpolyline(pts, dxfattribs={"layer": layer(line_kinds[s["kind"]]["capa_dxf"])})
         mid, angle = _label_position(pts)
-        msp.add_text(_label(s), height=height, rotation=angle, dxfattribs={"layer": cfg["tag_layer"]}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
+        msp.add_text(_label(s), height=height, rotation=angle, dxfattribs={"layer": layer(cfg["tag_layer"])}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
     return 2 * len(result["stretches"])
 
 
-def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dict[str, Any] = core.PARAMS) -> List[str]:
+def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dict[str, Any] = core.PARAMS, layers_file=None) -> List[str]:
     """Write the DXF of a result to `path`; returns the warnings (audit findings, read-back differences)."""
     cfg = params["dxf"]
     version = version or cfg["default_version"]
@@ -98,10 +99,12 @@ def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dic
     doc = ezdxf.new(dxfversion=version, setup=True)
     doc.units = code
     msp = doc.modelspace()
-    for name in sorted({k["capa_dxf"] for k in list(line_kinds.values()) + list(node_kinds.values())} | {cfg["tag_layer"], cfg["junction_layer"]}):
-        doc.layers.add(name)
+    catalog = layers.load(layers_file)                         # the catalog says how each layer is called and looks (the MASTER edits it)
+    layer = lambda base: layers.name("plan." + base, catalog)       # noqa: E731 - the layer of a kind, by its role
+    for base in sorted({k["capa_dxf"] for k in list(line_kinds.values()) + list(node_kinds.values())} | {cfg["tag_layer"], cfg["junction_layer"]}):
+        layers.apply(doc, "plan." + base, catalog)
     height = cfg["text_height_m"] * scale
-    expected = _add_nodes(doc, msp, result, node_kinds, cfg, scale, height) + _add_stretches(msp, result, line_kinds, cfg, scale, height)
+    expected = _add_nodes(doc, msp, result, node_kinds, cfg, scale, height, layer) + _add_stretches(msp, result, line_kinds, cfg, scale, height, layer)
 
     path.parent.mkdir(parents=True, exist_ok=True)
     warnings = [f"DXF audit: {e.message}" for e in doc.audit().errors]

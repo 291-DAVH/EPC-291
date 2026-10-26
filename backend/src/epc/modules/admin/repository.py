@@ -62,3 +62,17 @@ def skill_conflicts() -> list:
         return json.loads(out.stdout or "[]")
     except Exception:
         return []
+
+
+def layers_override() -> dict:
+    """What the MASTER changed in the catalog of DXF layers (only the differences with the default catalog)."""
+    return read_json(settings.layers_file, {}).get("layers", {})
+
+
+def save_layers_override(catalog: dict) -> None:
+    from epc.core.fsutil import write_json
+    write_json(settings.layers_file, {"schema_version": "1.0", "layers": catalog})
+
+
+def reset_layers() -> None:
+    settings.layers_file.unlink(missing_ok=True)

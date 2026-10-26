@@ -4,6 +4,7 @@ import sys
 import unittest
 
 from epc.core import engine
+from epc.core.config import settings
 
 
 class TestEngineAdapter(unittest.TestCase):
@@ -20,7 +21,9 @@ class TestEngineAdapter(unittest.TestCase):
         engine.set_runner(fake)
         res = engine.run_module("epc_drawing.export.pdf", ["a.dxf", 3], timeout=7)
         self.assertEqual(seen["cmd"], [sys.executable, "-m", "epc_drawing.export.pdf", "a.dxf", "3"])
+        env = seen["kw"].pop("env")
         self.assertEqual(seen["kw"], {"capture_output": True, "text": True, "timeout": 7})
+        self.assertEqual(env["EPC_LAYERS_JSON"], str(settings.layers_file))                 # the engine delivers DXF with the global catalog of layers
         self.assertEqual(res.stdout, "ok")
 
     def test_tail_prefers_stderr_and_keeps_the_end(self):

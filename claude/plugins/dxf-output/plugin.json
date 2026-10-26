@@ -1,0 +1,38 @@
+{
+  "id": "dxf-output",
+  "version": "0.1.0",
+  "kind": "generator",
+  "description": "DXF output of the platform's drawings: the catalog of layers (name, colour, line weight, line type, state) every drawing is delivered with. The global catalog is edited by the MASTER.",
+  "discipline": [
+    "general"
+  ],
+  "jurisdiction": [
+    "AR"
+  ],
+  "requires": {},
+  "consumes": [
+    "Drawing"
+  ],
+  "produces": [
+    "LayerCatalog"
+  ],
+  "outputs": [
+    {
+      "format": "dxf",
+      "channel": "internal+deliverable"
+    }
+  ],
+  "entitlement": "feature.drawing.dxf",
+  "python": {
+    "requires": [
+      "ezdxf"
+    ]
+  },
+  "skills": [],
+  "owns": [
+    "dxf"
+  ],
+  "engine": [
+    "dxf"
+  ]
+}

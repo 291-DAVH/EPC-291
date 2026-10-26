@@ -54,17 +54,20 @@ def third_party(units: Set[str]) -> List[str]:
     return sorted({d for u in units for d in IM.project_requirements(u)[0] if not d.startswith("epc-")})
 
 
+def plugin_requires(pid: str, m: dict, plugins: Dict[str, dict], direct: Set[str], owners: Dict[str, str]) -> Dict[str, str]:
+    """The plugins that own the packages this one imports, plus what it declares on plugins that own no code."""
+    deps = {owners[t] for t in direct if t in owners and owners[t] != pid}
+    kept = {d: r for d, r in m.get("requires", {}).items() if d in plugins and not plugins[d].get("owns")}
+    return {**{d: f"^{plugins[d]['version']}" for d in sorted(deps)}, **kept}
+
+
 def derived(pid: str, m: dict, plugins: Dict[str, dict], edges: Dict[str, Set[str]], owners: Dict[str, str]) -> dict:
     own = m.get("owns", [])
     if not own:
         return {}
     engine = sorted(reach(own, edges))
     direct = {t for u in own for t in edges.get(u, ()) if t not in own}
-    deps = {owners[t] for t in direct if t in owners and owners[t] != pid}
-    requires = {d: f"^{plugins[d]['version']}" for d in sorted(deps)}
-    kept = {d: r for d, r in m.get("requires", {}).items() if d in plugins and not plugins[d].get("owns")}      # plugins that own no code: declared by hand
-    py = m.get("python", {})
-    return {"engine": engine, "requires": {**requires, **kept}, "python": {**py, "requires": third_party(set(engine))}}
+    return {"engine": engine, "requires": plugin_requires(pid, m, plugins, direct, owners), "python": {**m.get("python", {}), "requires": third_party(set(engine))}}
 
 
 def impacted(pid: str, plugins: Dict[str, dict]) -> List[str]:
@@ -100,30 +103,34 @@ def backend_users() -> Dict[str, Set[str]]:
     return out
 
 
-def apply(check: bool) -> int:
-    plugins = load()
+def _text(f: Path) -> str:
+    return f.read_text(encoding="utf-8").replace("\r\n", "\n") if f.exists() else ""
+
+
+def _readme(pid: str, new: dict, block: str) -> str:
+    body = _text(HUB / pid / "README.md") or f"# {pid}\n\n{new.get('description', '')}\n"
+    return re.sub(re.escape(START) + r".*?" + re.escape(END), block, body, flags=re.S) if START in body else body.rstrip() + "\n\n" + block + "\n"
+
+
+def generate(plugins: Dict[str, dict]) -> Dict[str, Dict[Path, str]]:
+    """Every file this tool owns, by plugin: path -> the text it must have."""
     edges, owners, users = engine_edges(), owner_of(plugins), backend_users()
-    stale: List[str] = []
-    for pid, m in plugins.items():
-        new = {**m, **derived(pid, m, plugins, edges, owners)}
-        plugins[pid] = new
-    for pid, new in plugins.items():
-        manifest = HUB / pid / "plugin.json"
-        text = json.dumps(new, indent=2, ensure_ascii=False) + "\n"
-        readme = HUB / pid / "README.md"
-        body = readme.read_text(encoding="utf-8").replace("\r\n", "\n") if readme.exists() else f"# {pid}\n\n{new.get('description', '')}\n"
-        block = readme_block(pid, new, plugins, users)
-        body = re.sub(re.escape(START) + r".*?" + re.escape(END), block, body, flags=re.S) if START in body else body.rstrip() + "\n\n" + block + "\n"
-        if check:
-            if manifest.read_text(encoding="utf-8").replace("\r\n", "\n") != text or not readme.exists() or readme.read_text(encoding="utf-8").replace("\r\n", "\n") != body:
-                stale.append(pid)
-        else:
-            manifest.write_text(text, encoding="utf-8", newline="\n")
-            readme.write_text(body, encoding="utf-8", newline="\n")
-    if stale:
-        print("ERROR: out of date, run `python tools/build/regen_plugins.py`:", ", ".join(stale))
-        return 1
-    print("plugins " + ("up to date" if check else f"regenerated ({len(plugins)})"))
+    for pid, m in list(plugins.items()):
+        plugins[pid] = {**m, **derived(pid, m, plugins, edges, owners)}
+    return {pid: {HUB / pid / "plugin.json": json.dumps(new, indent=2, ensure_ascii=False) + "\n",
+                  HUB / pid / "README.md": _readme(pid, new, readme_block(pid, new, plugins, users))} for pid, new in plugins.items()}
+
+
+def apply(check: bool) -> int:
+    files = generate(load())
+    stale = sorted(pid for pid, fs in files.items() if any(_text(f) != t for f, t in fs.items()))
+    if check:
+        print("ERROR: out of date, run `python tools/build/regen_plugins.py`:", ", ".join(stale) if stale else "") if stale else print("plugins up to date")
+        return 1 if stale else 0
+    for fs in files.values():
+        for f, t in fs.items():
+            f.write_text(t, encoding="utf-8", newline="\n")
+    print(f"plugins regenerated ({len(files)})")
     return 0
 
 
