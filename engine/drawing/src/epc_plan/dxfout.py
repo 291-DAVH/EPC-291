@@ -72,12 +72,17 @@ def _label_position(pts):
     return mid, angle + 180 if (angle > 90 or angle < -90) else angle
 
 
+def _label(s) -> str:
+    """The tag of a stretch, followed by the circuits it carries when it carries any."""
+    return s["tag"] + (" [" + ",".join(c["circuit"] for c in s["carries"]) + "]" if s.get("carries") else "")
+
+
 def _add_stretches(msp, result, line_kinds, cfg, scale: float, height: float) -> int:
     for s in result["stretches"]:
         pts = [(x * scale, y * scale) for x, y in s["points_m"]]
         msp.add_lwpolyline(pts, dxfattribs={"layer": line_kinds[s["kind"]]["capa_dxf"]})
         mid, angle = _label_position(pts)
-        msp.add_text(s["tag"], height=height, rotation=angle, dxfattribs={"layer": cfg["tag_layer"]}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
+        msp.add_text(_label(s), height=height, rotation=angle, dxfattribs={"layer": cfg["tag_layer"]}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
     return 2 * len(result["stretches"])
 
 

@@ -14,6 +14,7 @@ from epc.modules.identity import public as identity
 from epc.modules.layout import repository
 from epc.modules.layout.models import DrawingIn
 from epc.modules.projects import public as projects
+from epc.modules.sld import public as sld
 
 MAX_UPLOAD = 25 * 1024 * 1024
 RASTER = {b"\x89PNG\r\n\x1a\n": ".png", b"\xff\xd8\xff": ".jpg"}
@@ -39,6 +40,7 @@ def _document(level: str, data: dict, version: str = "") -> dict:
     return {"schema_version": "1.0", "plan": {"id": f"PLAN_{level}", "level": level, "scale": data["scale"], "origin": data["origin"]}, "discipline": data["discipline"],
             "nodes": [{k: v for k, v in n.items() if v not in ("", None)} for n in data["nodes"]],
             "lines": [{k: v for k, v in ln.items() if v not in ("", None)} for ln in data["lines"]],
+            "circuits": data.get("circuits", []),
             **({"outlet": data["outlet"]} if data.get("outlet") else {}), **({"outlet_invert_m": data["outlet_invert_m"]} if data.get("outlet_invert_m") is not None else {}),
             "dxf_version": version or data.get("dxf_version", "")}
 
@@ -65,17 +67,17 @@ def overview(d: Path) -> dict:
     for pid in core.profiles():
         p = core.load_profile(pid)
         profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {})})
-    return {"levels": items, "profiles": profiles, "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
+    return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "outlet": "", "outlet_invert_m": None, "dxf_version": ""}
+    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": ""}
 
 
 def view(d: Path, level: str) -> dict:
     level = _level(level)
     saved = repository.load_drawing(d, level)
-    data = saved or _blank()
+    data = {**_blank(), **saved} if saved else _blank()                # a drawing saved before a field existed gets its default
     result = repository.load_result(d, level)
     up = repository.underlay_file(d, level)
     return {"level": level, "saved": saved is not None, "drawing": data, "result": derive_data(level, data) if saved else None,
@@ -85,7 +87,7 @@ def view(d: Path, level: str) -> dict:
 
 def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
-    data = body.model_dump()
+    data = body.model_dump(by_alias=True)
     derive_data(level, data)                                    # refuse what the engine refuses before storing it
     repository.save_drawing(d, level, data)
     return view(d, level)
@@ -93,7 +95,7 @@ def save(d: Path, level: str, body: DrawingIn) -> dict:
 
 def derive(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
-    return derive_data(level, body.model_dump())
+    return derive_data(level, body.model_dump(by_alias=True))
 
 
 def remove(d: Path, level: str) -> dict:

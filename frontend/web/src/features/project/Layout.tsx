@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { api, Badge, errorText, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
-import { blank, Drawing, nextLevel } from "./planEditing";
+import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
+import { blank, Drawing, nextLevel, Ref } from "./planEditing";
 
-interface Overview { levels: { level: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }[]; profiles: Profile[]; dxf_versions: string[]; default_dxf_version: string }
+interface Overview { levels: { level: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }[]; profiles: Profile[]; circuits: BoardCircuit[]; dxf_versions: string[]; default_dxf_version: string }
 interface LevelView { level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 
 /** Layout of the routes over the architectural plan: one drawing per level (L0 ground, L1.. up, L-1.. down), the tables the engine derives from it, and the DXF and PDF. */
@@ -21,6 +22,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [err, setErr] = useState("");
   const [version, setVersion] = useState("");
   const [busy, setBusy] = useState(false);
+  const [selected, setSelected] = useState<Ref | null>(null);
+  const [focus, setFocus] = useState("");               // the circuit whose route is highlighted
   const [stale, setStale] = useState(false);          // the drawing changed after the files were made
   const timer = useRef<number | null>(null);
   const [stamp, setStamp] = useState(0);                 // bumps the underlay URL after an upload
@@ -30,7 +33,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   useEffect(() => {
     if (!level) { setLv(null); setDrawing(blank()); setDerived(null); return; }
     let live = true;
-    api<LevelView>(`${root}/${level}`).then((v) => { if (live) { setLv(v); setDrawing(v.drawing); setDerived(v.result); setState("idle"); setStale(false); setErr(""); } }).catch((x) => live && setErr(errorText(x)));
+    api<LevelView>(`${root}/${level}`).then((v) => { if (live) { setLv(v); setDrawing(v.drawing); setDerived(v.result); setSelected(null); setFocus(""); setState("idle"); setStale(false); setErr(""); } }).catch((x) => live && setErr(errorText(x)));
     return () => { live = false; };
   }, [level, root]);
 
@@ -115,7 +118,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           </div>
 
           <PlanEditor drawing={drawing} onChange={change} derived={d?.ready ? d : null} profile={profile} lang={lang} readOnly={!canWrite}
-            underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} t={tl} />
+            underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} t={tl}
+            selected={selected} onSelect={setSelected} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} />
+
+          <div className="grid" style={{ gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))" }}>
+            <Properties drawing={drawing} selected={selected} derived={d?.ready ? d : null} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!canWrite} onChange={change} onSelect={setSelected} t={tl} />
+            <Circuits drawing={drawing} derived={d?.ready ? d : null} boardCircuits={ov.data.circuits} readOnly={!canWrite} focus={focus} onFocus={setFocus} onChange={change} t={tl} />
+          </div>
 
           <div className="card">
             <div className="row" style={{ flexWrap: "wrap", gap: 8 }}>
@@ -144,6 +153,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {Object.keys(d.schedule.circuit_routes).length > 0 && (
                 <table><thead><tr><th>{tl("layout.col.circuit")}</th><th>{tl("layout.col.stretches")}</th><th>{tl("layout.col.length")}</th></tr></thead>
                   <tbody>{Object.entries(d.schedule.circuit_routes).map(([c, r]) => <tr key={c}><td className="mono">{c}</td><td className="mono">{r.stretches.join(", ")}</td><td className="mono">{r.length_m}</td></tr>)}</tbody></table>
+              )}
+              {d.schedule.containers.length > 0 && (
+                <table style={{ marginTop: 8 }}><thead><tr><th>{tl("layout.col.tag")}</th><th>{tl("layout.col.kind")}</th><th>{tl("layout.circuits")}</th><th>{tl("layout.props.cables")}</th></tr></thead>
+                  <tbody>{d.schedule.containers.map((c) => <tr key={c.tag}><td className="mono">{c.tag}</td><td>{c.kind}</td><td className="mono">{c.circuits.join(", ")}</td><td className="mono">{c.cables}</td></tr>)}</tbody></table>
               )}
               <table style={{ marginTop: 8 }}>
                 <thead><tr><th>{tl("layout.col.tag")}</th><th>{tl("layout.col.kind")}</th><th>{tl("layout.col.from")}</th><th>{tl("layout.col.to")}</th><th>{tl("layout.col.length")}</th><th>{tl("layout.col.circuit")}</th></tr></thead>

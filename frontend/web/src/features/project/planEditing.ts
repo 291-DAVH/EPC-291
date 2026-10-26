@@ -4,12 +4,13 @@ export type Pt = [number, number];
 export interface Scale { p1: Pt; p2: Pt; distance_m: number }
 export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; attrs?: Record<string, unknown> }
 export interface DLine { id: string; kind: string; points: Pt[]; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
+export interface DCircuit { tag: string; from: string; to: string; via?: string[]; ternas: number }
 export interface Drawing {
-  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; outlet: string; outlet_invert_m: number | null; dxf_version: string;
+  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string;
 }
 export type Ref = { type: "node" | "line"; id: string };
 
-export const blank = (discipline = "electrica_BT"): Drawing => ({ discipline, scale: null, origin: [0, 0], nodes: [], lines: [], outlet: "", outlet_invert_m: null, dxf_version: "" });
+export const blank = (discipline = "electrica_BT"): Drawing => ({ discipline, scale: null, origin: [0, 0], nodes: [], lines: [], circuits: [], outlet: "", outlet_invert_m: null, dxf_version: "" });
 
 export const dist = (a: Pt, b: Pt) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 
@@ -98,3 +99,27 @@ export function redo(h: History, current: Drawing): { h: History; d: Drawing } {
   if (h.future.length === 0) return { h, d: current };
   return { h: { past: [...h.past, current], future: h.future.slice(1) }, d: h.future[0] };
 }
+
+/** A value typed in a properties field: a number when it looks like one, else the text; empty removes the attribute. */
+export function parseAttr(text: string): string | number | undefined {
+  const t = text.trim();
+  if (t === "") return undefined;
+  return /^-?\d+([.,]\d+)?$/.test(t) ? parseFloat(t.replace(",", ".")) : t;
+}
+
+export function setAttr(attrs: Record<string, unknown> | undefined, key: string, text: string): Record<string, unknown> {
+  const next = { ...(attrs ?? {}) };
+  const v = parseAttr(text);
+  if (v === undefined) delete next[key]; else next[key] = v;
+  return next;
+}
+
+export const updateLine = (d: Drawing, id: string, patch: Partial<DLine>): Drawing => ({ ...d, lines: d.lines.map((l) => (l.id === id ? { ...l, ...patch } : l)) });
+export const updateNode = (d: Drawing, id: string, patch: Partial<DNode>): Drawing => ({ ...d, nodes: d.nodes.map((n) => (n.id === id ? { ...n, ...patch } : n)) });
+
+/** Circuits routed over the drawing: the tag comes from the board (a reference, never typed); the origin and the destination are nodes. */
+export const addCircuit = (d: Drawing, tag = ""): Drawing => ({ ...d, circuits: [...d.circuits, { tag, from: "", to: "", ternas: 1 }] });
+export const updateCircuit = (d: Drawing, index: number, patch: Partial<DCircuit>): Drawing => ({ ...d, circuits: d.circuits.map((c, i) => (i === index ? { ...c, ...patch } : c)) });
+export const removeCircuit = (d: Drawing, index: number): Drawing => ({ ...d, circuits: d.circuits.filter((_, i) => i !== index) });
+/** The board circuits not yet routed on this drawing (a circuit is routed once; its parallel cables are its ternas). */
+export const freeCircuits = (d: Drawing, all: string[]): string[] => all.filter((t) => !d.circuits.some((c) => c.tag === t));

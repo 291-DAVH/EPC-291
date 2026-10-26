@@ -3,13 +3,14 @@ import { addLine, addNode, commit, DLine, dist, Drawing, History, metresPerUnit,
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
-export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string }
+export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean }
 export interface Profile { id: string; name: { es: string; en: string }; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string> }
 export interface DerivedNode { id: string; tag: string; kind: string; placed: boolean; x_m: number; y_m: number }
-export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null }
+export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null; carries?: { circuit: string; ternas: number }[]; cables?: number }
+export interface DerivedRoute { found: boolean; from: string; to: string; ternas: number; stretches: string[]; lines: string[]; length_m: number; cable_length_m: number }
 export interface Derived {
-  ready: boolean; plan?: { metres_per_unit: number; origin: Pt }; nodes?: DerivedNode[]; stretches?: DerivedStretch[]; warnings?: string[];
-  schedule?: { lines: Record<string, { lines: number; stretches: number; length_m: number }>; nodes: Record<string, number>; circuit_routes: Record<string, { stretches: string[]; length_m: number }>; length_by_line_m: Record<string, number>; total_length_m: number };
+  ready: boolean; circuits?: Record<string, DerivedRoute>; plan?: { metres_per_unit: number; origin: Pt }; nodes?: DerivedNode[]; stretches?: DerivedStretch[]; warnings?: string[];
+  schedule?: { lines: Record<string, { lines: number; stretches: number; length_m: number }>; nodes: Record<string, number>; circuit_routes: Record<string, { stretches: string[]; length_m: number }>; containers: { tag: string; kind: string; circuits: string[]; cables: number }[]; length_by_line_m: Record<string, number>; total_length_m: number };
   network?: { invert_m: Record<string, number>; validated: boolean; rule: string } | null;
 }
 type Tool = "select" | "scale" | "origin" | "node" | "line" | "erase";
@@ -20,7 +21,7 @@ const NODE_PX = 9;
 
 export interface Props {
   drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null;
-  readOnly?: boolean; t: (key: string) => string; onScaleAsk?: () => void;
+  readOnly?: boolean; t: (key: string) => string; selected: Ref | null; onSelect: (r: Ref | null) => void; highlight?: string[];
 }
 
 function Sym({ id, x, y, s, color, sel }: { id: string; x: number; y: number; s: number; color: string; sel: boolean }) {
@@ -32,14 +33,14 @@ function Sym({ id, x, y, s, color, sel }: { id: string; x: number; y: number; s:
   return <g><rect x={x - r} y={y - r} width={s} height={s} {...common} /><line x1={x - r} y1={y - r} x2={x + r} y2={y + r} {...common} /><line x1={x - r} y1={y + r} x2={x + r} y2={y - r} {...common} /></g>;
 }
 
-export default function PlanEditor({ drawing, onChange, derived, profile, lang, underlayUrl, readOnly, t }: Props) {
+export default function PlanEditor({ drawing, onChange, derived, profile, lang, underlayUrl, readOnly, t, selected, onSelect, highlight = [] }: Props) {
   const [tool, setTool] = useState<Tool>("select");
   const [kindId, setKindId] = useState("");
   const [draft, setDraft] = useState<Pt[]>([]);
   const [hover, setHover] = useState<Pt | null>(null);
   const [scalePts, setScalePts] = useState<Pt[]>([]);
   const [scaleText, setScaleText] = useState("");
-  const [selected, setSelected] = useState<Ref | null>(null);
+  const setSelected = onSelect;
   const [hist, setHist] = useState<History>({ past: [], future: [] });
   const [img, setImg] = useState<{ w: number; h: number } | null>(null);
   const scaleInput = useRef<HTMLInputElement>(null);
@@ -183,7 +184,8 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
           {scalePts.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r={4 * u} fill="#ff7f0e" />)}
           {drawing.lines.map((l) => {
             const sel = selected?.type === "line" && selected.id === l.id;
-            return <g key={l.id}><polyline points={polyline(l.points)} fill="none" stroke={sel ? "var(--bad, #d62728)" : colorOf(l.kind)} strokeWidth={sel ? 4 : 2.2} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+            const lit = highlight.includes(l.id);
+            return <g key={l.id}>{lit && <polyline points={polyline(l.points)} fill="none" stroke="#ff2bd6" strokeOpacity={0.45} strokeWidth={9} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />}<polyline points={polyline(l.points)} fill="none" stroke={sel ? "var(--bad, #d62728)" : colorOf(l.kind)} strokeWidth={sel ? 4 : 2.2} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
               {lineTag[l.id] && <text x={mid(l)[0]} y={mid(l)[1] - 5 * u} fontSize={11 * u} textAnchor="middle" fill={colorOf(l.kind)} stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{lineTag[l.id]}</text>}</g>;
           })}
           {draft.length > 0 && <polyline points={polyline([...draft, ...(hover ? [hover] : [])])} fill="none" stroke={colorOf(kindId)} strokeWidth={2} strokeDasharray="5 4" vectorEffect="non-scaling-stroke" />}

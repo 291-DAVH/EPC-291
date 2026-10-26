@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addLine, addNode, blank, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, blank, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -71,5 +71,29 @@ describe("plan editing rules", () => {
     h = u.h;
     expect(redo(h, u.d).d).toBe(b);
     expect(undo({ past: [], future: [] }, b).d).toBe(b);
+  });
+
+  it("turns typed attribute values into numbers when they look like numbers", () => {
+    expect(parseAttr(" 2,5 ")).toBe(2.5);
+    expect(parseAttr("-3")).toBe(-3);
+    expect(parseAttr("PVC")).toBe("PVC");
+    expect(parseAttr("  ")).toBeUndefined();
+    expect(setAttr({ a: 1, b: 2 }, "a", "")).toEqual({ b: 2 });
+    expect(setAttr(undefined, "ancho_mm", "300")).toEqual({ ancho_mm: 300 });
+  });
+
+  it("edits a line without touching the others", () => {
+    const d = addLine(addLine(blank(), "BN", [[0, 0], [1, 0]]), "CN", [[0, 0], [0, 1]]);
+    const e = updateLine(d, "l1", { tag: "BN-9" });
+    expect(e.lines[0].tag).toBe("BN-9");
+    expect(e.lines[1]).toBe(d.lines[1]);
+  });
+
+  it("adds, edits and removes routed circuits, and offers the board circuits not yet routed", () => {
+    let d = addCircuit(blank(), "C-01");
+    d = updateCircuit(d, 0, { from: "n1", to: "n2", ternas: 2 });
+    expect(d.circuits).toEqual([{ tag: "C-01", from: "n1", to: "n2", ternas: 2 }]);
+    expect(freeCircuits(d, ["C-01", "C-02"])).toEqual(["C-02"]);
+    expect(removeCircuit(d, 0).circuits).toEqual([]);
   });
 });

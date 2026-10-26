@@ -17,6 +17,9 @@ SYMBOLS = json.loads((HERE / "symbols.json").read_text(encoding="utf-8"))["symbo
 _RULES_PLACES = (HERE / "knowledge" / "rules.json", HERE.parents[1] / "knowledge" / "rules.json")
 
 
+from epc_plan import routing   # noqa: E402
+
+
 class PlanError(ValueError):
     """The drawing cannot be processed: the message says what to fix."""
 
@@ -407,6 +410,11 @@ def _read_lines(doc, line_kinds, profile_id: str, origin, k: float) -> List[Dict
     return lines
 
 
+def _read_circuits(doc) -> List[Dict[str, Any]]:
+    """The circuits to route: a tag of the board, an origin node, a destination node, optional nodes to pass through and the number of parallel cables (ternas)."""
+    return [{"tag": c.get("tag", ""), "from": c.get("from", ""), "to": c.get("to", ""), "via": list(c.get("via", [])), "ternas": c.get("ternas", 1)} for c in doc.get("circuits", [])]
+
+
 def _check_unique_ids(nodes, lines) -> None:
     ids = [x["id"] for x in nodes] + [x["id"] for x in lines]
     for dup in sorted({i for i in ids if ids.count(i) > 1}):
@@ -482,6 +490,8 @@ def _stretch_json(s) -> Dict[str, Any]:
         out.update(flows_to=s["flows_to"], flows_from=s["flows_from"])
     if "slope_pct" in s:
         out["slope_pct"] = s["slope_pct"]
+    if "carries" in s:
+        out.update(carries=s["carries"], cables=sum(c["ternas"] for c in s["carries"]))
     return out
 
 
@@ -503,11 +513,12 @@ def process(document: Dict[str, Any], params: Dict[str, Any] = PARAMS, rules: Op
 
     gnodes, stretches, warnings = build_graph(nodes, lines, params["geometry"]["snap_tolerance_m"])
     line_tag = _assign_tags(gnodes, lines, stretches, node_kinds, line_kinds, params, warnings)
+    routes = routing.route_circuits(gnodes, stretches, _read_circuits(doc), {k for k, v in line_kinds.items() if v.get("un_solo_circuito")}, warnings)
     flow = _network(doc, gnodes, stretches, profile["id"], rules, warnings)
     return {
         "schema_version": "1.0", "plan": {"id": plan.get("id", ""), "level": level, "level_number": level_number, "metres_per_unit": k, "origin": list(origin)},
         "discipline": profile["id"], "nodes": [_node_json(x) for x in gnodes], "stretches": [_stretch_json(s) for s in stretches],
-        "schedule": _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds), "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
+        "schedule": _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds), "circuits": routes, "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
     }
 
 
@@ -530,8 +541,13 @@ def _circuit_routes(stretches) -> Dict[str, Dict[str, Any]]:
     return dict(sorted(routes.items()))
 
 
+def _containers(stretches) -> List[Dict[str, Any]]:
+    """What each stretch that carries routed circuits holds: the circuits and how many cables (the sum of their ternas)."""
+    return [{"tag": s["tag"], "kind": s["kind"], "circuits": [c["circuit"] for c in s["carries"]], "cables": sum(c["ternas"] for c in s["carries"])} for s in stretches if s.get("carries")]
+
+
 def _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds) -> Dict[str, Any]:
     nodes = {kid: sum(1 for g in gnodes if g["placed"] and g["kind"] == kid) for kid in node_kinds}
     per_line = {line_tag[ln["id"]]: round(sum(s["length_m"] for s in stretches if s["line"] == ln["id"]), 4) for ln in lines}
     return {"lines": _kind_totals(stretches, line_kinds), "nodes": nodes, "circuit_routes": _circuit_routes(stretches), "length_by_line_m": dict(sorted(per_line.items())),
-            "total_length_m": round(sum(s["length_m"] for s in stretches), 4)}
+            "containers": _containers(stretches), "total_length_m": round(sum(s["length_m"] for s in stretches), 4)}

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Scale(BaseModel):
@@ -28,6 +28,16 @@ class LineIn(BaseModel):
     attrs: Dict[str, Any] = {}
 
 
+class CircuitIn(BaseModel):
+    """A circuit of the board routed over the drawing: from an origin node to a destination node, optionally through other nodes, with its parallel cables (ternas)."""
+    model_config = ConfigDict(populate_by_name=True)
+    tag: str = ""
+    from_: str = Field("", alias="from")
+    to: str = ""
+    via: List[str] = []
+    ternas: int = Field(1, ge=1, le=99)
+
+
 class DrawingIn(BaseModel):
     """What the person drew on one level of the project, in the units of the view (the pixels of the plan)."""
     discipline: str = "electrica_BT"
@@ -35,6 +45,7 @@ class DrawingIn(BaseModel):
     origin: List[float] = [0.0, 0.0]        # the point 0,0 the person set
     nodes: List[NodeIn] = []
     lines: List[LineIn] = []
+    circuits: List[CircuitIn] = []
     outlet: str = ""                        # node where a network drains to
     outlet_invert_m: Optional[float] = None
     dxf_version: str = ""
