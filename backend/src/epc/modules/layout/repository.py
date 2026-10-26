@@ -55,8 +55,26 @@ def save_underlay(d: Path, level: str, ext: str, data: bytes) -> Path:
     return dest
 
 
-def pdf_to_png(pdf: bytes, tmp: Path) -> Optional[bytes]:
-    """First page of a PDF as an image through poppler's `pdftocairo`, called as a separate command (GPL, never linked). None when it is not installed."""
+def _pdf_with_pdfium(pdf: bytes, max_side: int = 3000) -> Optional[bytes]:
+    """First page of a PDF as a PNG with pypdfium2 (Apache-2.0 / BSD-3, the library of Chrome's PDF viewer); None when it is not installed or cannot read the file."""
+    try:
+        import io
+        import pypdfium2
+    except ImportError:
+        return None
+    try:
+        page = pypdfium2.PdfDocument(pdf)[0]
+        width, height = page.get_size()
+        image = page.render(scale=min(2.5, max_side / max(width, height, 1))).to_pil()
+        out = io.BytesIO()
+        image.save(out, format="PNG")
+        return out.getvalue()
+    except Exception:                                         # noqa: BLE001 - a broken or protected PDF is reported by the caller as "cannot open"
+        return None
+
+
+def _pdf_with_poppler(pdf: bytes, tmp: Path) -> Optional[bytes]:
+    """The same through poppler's `pdftocairo`, called as a separate command (GPL, never linked); None when it is not installed."""
     exe = shutil.which("pdftocairo")
     if not exe:
         return None
@@ -66,6 +84,11 @@ def pdf_to_png(pdf: bytes, tmp: Path) -> Optional[bytes]:
     res = subprocess.run([exe, "-png", "-singlefile", "-r", "110", "-f", "1", "-l", "1", str(src), str(tmp / "page")], capture_output=True, text=True, timeout=120)
     out = tmp / "page.png"
     return out.read_bytes() if res.returncode == 0 and out.is_file() else None
+
+
+def pdf_to_png(pdf: bytes, tmp: Path) -> Optional[bytes]:
+    """First page of a PDF as an image for the plan underlay: pypdfium2 first, poppler as a fallback; None when neither can."""
+    return _pdf_with_pdfium(pdf) or _pdf_with_poppler(pdf, tmp)
 
 
 def out_dir(d: Path, level: str) -> Path:

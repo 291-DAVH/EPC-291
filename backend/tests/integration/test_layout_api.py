@@ -89,6 +89,17 @@ class TestLayout(unittest.TestCase):
         for name, data in (("x.exe", b"MZ..."), ("x.txt", b"hello"), ("x.dxf", b"not a dxf"), ("x.png", b"")):
             self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": (name, data, "application/octet-stream")}).status_code, 422, name)
 
+    def test_a_pdf_becomes_an_image_underlay(self):
+        self.c.put(f"{self.base}/L0", json=DRAWING)
+        made = self.c.post(f"{self.base}/L0/generate").json()          # the PDF the platform itself makes is a real, valid PDF
+        pdf = self.c.get(f"{self.base}/L0/files/{made['files']['pdf']}").content
+        r = self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.pdf", pdf, "application/pdf")})
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertEqual(r.json()["underlay"]["kind"], "png")
+        self.assertEqual(self.c.get(f"{self.base}/L0/underlay").content[1:4], b"PNG")
+        bad = self.c.post(f"{self.base}/L0/underlay", files={"file": ("roto.pdf", b"%PDF-1.4 broken", "application/pdf")})
+        self.assertEqual(bad.status_code, 422)
+
     def test_generate_writes_a_dxf_in_the_chosen_version_and_it_downloads(self):
         self.c.put(f"{self.base}/L0", json=DRAWING)
         v = self.c.post(f"{self.base}/L0/generate", params={"version": "R2013"}).json()
