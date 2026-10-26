@@ -124,6 +124,16 @@ class TestNormsEdits(unittest.TestCase):
         self.assertEqual(norms._diff({"a": 1}, {"b": 1}), [["a", 1, None], ["b", None, 1]])
         self.assertEqual(len(norms._diff(list(range(500)), list(range(1, 501)))), 200)
 
+    def test_edit_table(self):
+        old = {"a": 1, "b": [1, 2]}
+        self.assertEqual(norms._edit_table(old, {"value": {"a": 2, "b": [3, 4]}}), {"a": 2, "b": [3, 4]})
+        self.assertEqual(self.errors(norms._edit_table, old, {"other": 1}), {"value": "send the corrected table as {\"value\": ...}"})
+        self.assertEqual(self.errors(norms._edit_table, old, {"value": {"a": 2}}), {"value": "value: the keys cannot change"})
+
+    def test_every_point_kind_has_an_editor_and_a_store(self):
+        self.assertEqual(sorted(norms._EDITORS), ["criterion", "rule", "table"])
+        self.assertEqual(sorted(norms._STORERS), ["criterion", "rule", "table"])
+
     def test_slug_and_hash(self):
         self.assertEqual(norms.sha({"b": 1, "a": 2}), norms.sha({"a": 2, "b": 1}))
         self.assertNotEqual(norms.sha({"a": 1}), norms.sha({"a": 2}))

@@ -240,6 +240,18 @@ def _edit_criterion(old: dict, patch: dict) -> dict:
     return new
 
 
+def _edit_table(old, patch: dict):
+    if set(patch) != {"value"}:
+        raise Invalid({"value": "send the corrected table as {\"value\": ...}"})
+    err = _same_shape(old, patch["value"])
+    if err:
+        raise Invalid({"value": err})
+    return patch["value"]
+
+
+_EDITORS = {"rule": _edit_rule, "table": _edit_table, "criterion": _edit_criterion}       # point kind -> how its patch is validated and applied
+
+
 def _diff(old, new, path: str = "") -> List[list]:
     out: List[list] = []
     if isinstance(old, dict) and isinstance(new, dict):
@@ -254,29 +266,39 @@ def _diff(old, new, path: str = "") -> List[list]:
 
 
 # ---------------------------------------------------------------- writing
+def _store_rule(p: dict, new_value) -> None:
+    for f in repository.rule_files():
+        data = repository.read(f)
+        for i, r in enumerate(data.get("reglas", [])):
+            if r["id"] == p["key"]:
+                data["reglas"][i] = new_value
+                repository.write_like(f, data)
+                return
+
+
+def _store_table(p: dict, new_value) -> None:
+    short, tid = p["key"].split(":", 1)
+    f = repository.paths()["tables"]
+    data = repository.read(f)
+    data[TABLE_SECTIONS[short][0]][tid] = new_value
+    repository.write_like(f, data)
+
+
+def _store_criterion(p: dict, new_value) -> None:
+    cat = repository.read(repository.paths()["criteria"])
+    for i, c in enumerate(cat["criteria"]):
+        if c["id"] == p["key"]:
+            cat["criteria"][i] = new_value
+    repository.write_criteria(cat)
+
+
+_STORERS = {"rule": _store_rule, "table": _store_table, "criterion": _store_criterion}       # point kind -> where its corrected value is written
+
+
 def _store(p: dict, new_value) -> None:
     """Write the corrected value into its data file."""
     try:
-        if p["kind"] == "rule":
-            for f in repository.rule_files():
-                data = repository.read(f)
-                for i, r in enumerate(data.get("reglas", [])):
-                    if r["id"] == p["key"]:
-                        data["reglas"][i] = new_value
-                        repository.write_like(f, data)
-                        return
-        elif p["kind"] == "table":
-            short, tid = p["key"].split(":", 1)
-            f = repository.paths()["tables"]
-            data = repository.read(f)
-            data[TABLE_SECTIONS[short][0]][tid] = new_value
-            repository.write_like(f, data)
-        else:
-            cat = repository.read(repository.paths()["criteria"])
-            for i, c in enumerate(cat["criteria"]):
-                if c["id"] == p["key"]:
-                    cat["criteria"][i] = new_value
-            repository.write_criteria(cat)
+        _STORERS[p["kind"]](p, new_value)
     except OSError:
         raise Conflict({"filesystem": "this installation is read-only: review the norms in the development copy of the repository"})
     repository.clear_engine_cache()
@@ -310,17 +332,7 @@ def _record(p: dict, status: str, note: str, value, action: str, extra: Optional
 def edit(unit_id: str, key: str, patch: dict, note: str = "", approve: bool = False) -> dict:
     p = _point(unit_id, key)
     old = p["value"]
-    if p["kind"] == "table":
-        if set(patch) != {"value"}:
-            raise Invalid({"value": "send the corrected table as {\"value\": ...}"})
-        err = _same_shape(old, patch["value"])
-        if err:
-            raise Invalid({"value": err})
-        new = patch["value"]
-    elif p["kind"] == "rule":
-        new = _edit_rule(old, patch)
-    else:
-        new = _edit_criterion(old, patch)
+    new = _EDITORS[p["kind"]](old, patch)
     changes = _diff(old, new)
     if not changes and not approve:
         raise Invalid({"value": "nothing changed"})
