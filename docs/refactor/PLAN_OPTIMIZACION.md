@@ -144,9 +144,9 @@ Si un paso resulta más riesgoso de lo previsto, se marca **DESCARTADO** aquí c
 | B8 | **HECHO.** `engineering/service.py` → `files.py` + `criteria.py`, con fachada. | `engineering/*` | `test_engineering_api`, `test_design_criteria_api`, `test_validation_units` | tests | Bajo |
 | B9 | **HECHO** salvo el lector de cálculo único (K8), que se **descarta**: `engineering.calculation_view` y `sld.calculation` leen archivos distintos y devuelven formas distintas. `sld/service.py` → `validation`, `boards`, `results`, `jobs`, con fachada. | `sld/*` | `test_sld_api`, `test_validation_units` | tests | Medio |
 | B10 | **HECHO.** `reporting/builders.py` → `texts.py` (textos y colores) + `render.py` (Markdown) + builders; `builders` reexporta los nombres anteriores. | `reporting/*` | `golden/reporting.json` | goldens idénticos | Bajo |
-| B11 | Frontend: `i18n.tsx` partido por idioma/área | `ui/src/i18n*` | `i18n.test.tsx` | Vitest + build | Bajo |
-| B12 | `useCrud` / `CrudTable` para `Data.tsx` | `web/…/Data.tsx` | **sin test previo**: se escribe antes un test de `Data` | Vitest + build | Medio |
-| B13 | `Project.tsx` en archivos por subcomponente | `web/…/project` | `tsc` + build | build | Bajo |
+| B11 | **HECHO.** `i18n.tsx` (1.834 líneas) → provider de 33 líneas + `dict/es.ts` y `dict/en.ts` (1.798 entradas en total, las mismas). El test del diccionario ahora importa ambos archivos. | `ui/src/i18n*` | `i18n.test.tsx` | Vitest + build | Bajo |
+| B12 | **DESCARTADO.** Los tres CRUD de `Data.tsx` no son iguales: `Issuers` captura errores al borrar y tiene «predeterminado», `Clients` y `People` no; los campos, claves de «vacío» y filas difieren. Un `useCrud` común quedaría lleno de opciones para reproducir cada diferencia, ahorraría ~30 de 244 líneas y no hay test de la pantalla (F-4). | — | — | — | Motivo: beneficio bajo, sin red de seguridad |
+| B13 | **HECHO.** `Project.tsx` (464 líneas) → `Project.tsx` (65) + `Overview`, `Deliverables`, `Inputs`, `AnalysisPanel`, `Requirements`, `Reports`, `Plan` y `tabs.ts`; funciones movidas sin cambios. | `web/src/features/project/*` | `tsc` + build | `web-types`, `web-build` | Bajo |
 
 ### Fase C — mayor riesgo
 
