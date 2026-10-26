@@ -3,7 +3,7 @@ name = "epc-plan"
 version = "0.1.0"
 description = "plan: self-contained module of the EPC platform"
 requires-python = ">=3.10"
-dependencies = []          # open-source only; list each with its licence in SPEC.md
+dependencies = ["ezdxf>=1.1"]          # open-source only; ezdxf is MIT (see SPEC.md)
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -13,4 +13,4 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-epc_plan = ["params.json"]
+epc_plan = ["params.json", "symbols.json", "profiles/*.json", "knowledge/*.json"]

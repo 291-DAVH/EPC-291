@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "note": "Unit symbols: coordinates in [-0.5, 0.5], scaled by the symbol size at insertion. Each has an insertion point (0,0) and a connection point (0,0).",
+  "symbols": {
+    "camara": {"disciplina": "*", "prims": [{"t": "rect", "w": 1, "h": 1}, {"t": "line", "a": [-0.5, -0.5], "b": [0.5, 0.5]}, {"t": "line", "a": [-0.5, 0.5], "b": [0.5, -0.5]}]},
+    "caja_pase": {"disciplina": "*", "prims": [{"t": "rect", "w": 1, "h": 1}, {"t": "circle", "r": 0.25}]},
+    "tablero": {"disciplina": "*", "prims": [{"t": "rect", "w": 1, "h": 0.6}, {"t": "line", "a": [-0.5, 0.0], "b": [0.5, 0.0]}]},
+    "boca_registro": {"disciplina": "*", "prims": [{"t": "circle", "r": 0.5}, {"t": "circle", "r": 0.2}]},
+    "linea_simple": {"disciplina": "*", "prims": []}
+  }
+}

@@ -1,3 +1,5 @@
+> **Integrated (ADR-0021).** The engine part now lives in `engine/drawing/src/epc_plan` (tests in `engine/drawing/tests/test_plan.py`, samples in `engine/drawing/tests/fixtures/plan`), the backend module in `backend/src/epc/modules/layout` and the screen in `frontend/web/src/features/project/{Layout,PlanEditor}.tsx` (tab "Trazado"). What stays here is the module's specification (`SPEC.md`), its documents (`docs/`) and the old demo screen.
+
 # plan (module)
 
 What it is: one sentence, written when the module is born. **Read MODULE.md first**: it is the contract this folder follows.

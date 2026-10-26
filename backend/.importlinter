@@ -5,6 +5,7 @@ root_packages =
     epc_calc
     epc_documents
     epc_drawing
+    epc_plan
     epc_rules
     epc_standards
 include_external_packages = False
@@ -23,6 +24,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -63,6 +65,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -105,6 +108,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -145,6 +149,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -187,6 +192,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -230,6 +236,7 @@ source_modules =
     epc.modules.identity
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -270,6 +277,7 @@ source_modules =
     epc.modules.identity
     epc.modules.intake
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -312,6 +320,7 @@ source_modules =
     epc.modules.identity
     epc.modules.intake
     epc.modules.issuing
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -340,6 +349,49 @@ layers =
     epc.modules.knowledge.repository
     epc.modules.knowledge.models
 
+[importlinter:contract:layout-encapsulated]
+name = layout: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.layout.api
+    epc.modules.layout.service
+    epc.modules.layout.repository
+    epc.modules.layout.models
+
+[importlinter:contract:layout-layers]
+name = layout: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.layout.api
+    epc.modules.layout.service
+    epc.modules.layout.repository
+    epc.modules.layout.models
+
 [importlinter:contract:management-encapsulated]
 name = management: other modules use only its public interface
 type = forbidden
@@ -355,6 +407,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.masterdata
     epc.modules.norms
     epc.modules.notifications
@@ -395,6 +448,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.norms
     epc.modules.notifications
@@ -437,6 +491,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.notifications
@@ -477,6 +532,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -519,6 +575,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -559,6 +616,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -601,6 +659,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -641,6 +700,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -683,6 +743,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -725,6 +786,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.layout
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -779,6 +841,7 @@ source_modules =
     epc_calc
     epc_documents
     epc_drawing
+    epc_plan
     epc_rules
     epc_standards
 forbidden_modules =

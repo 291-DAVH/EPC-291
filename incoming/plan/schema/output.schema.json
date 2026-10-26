@@ -1,7 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "plan output",
-  "type": "object",
-  "required": ["schema_version", "warnings"],
-  "properties": {"schema_version": {"const": "1.0"}, "items": {"type": "integer"}, "warnings": {"type": "array", "items": {"type": "string"}}}
-}

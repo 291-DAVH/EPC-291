@@ -1,0 +1,15 @@
+{
+  "id": "sanitaria_cloacas",
+  "nombre": {"es": "Cloacas", "en": "Sewer"},
+  "tramos": [
+    {"id": "CC", "etiqueta": {"es": "Cañería cloacal", "en": "Sewer pipe"}, "prefijo_tag": "CC", "atributos": ["diametro_mm", "material"], "simbolo_2d": "linea_simple", "capa_dxf": "SAN-CLOACA"}
+  ],
+  "nodos": [
+    {"id": "CI", "etiqueta": {"es": "Cámara de inspección", "en": "Inspection chamber"}, "prefijo_tag": "CI", "atributos": ["dimensiones"], "simbolo_2d": "camara", "capa_dxf": "SAN-CAMARA"},
+    {"id": "BR", "etiqueta": {"es": "Boca de registro", "en": "Manhole"}, "prefijo_tag": "BR", "atributos": ["dimensiones"], "simbolo_2d": "boca_registro", "capa_dxf": "SAN-BOCA"}
+  ],
+  "calculos": ["longitud", "cantidad", "pendiente"],
+  "normas": ["pendiente_minima"],
+  "atajos_teclado": {"c": "CI", "b": "BR", "n": "CC"},
+  "unidades_salida": "m"
+}

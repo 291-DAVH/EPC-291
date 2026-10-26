@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "plan result (output)",
+  "type": "object",
+  "required": ["schema_version", "plan", "discipline", "nodes", "stretches", "schedule", "network", "rules_used", "warnings"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "plan": {"type": "object"}, "discipline": {"type": "string"},
+    "nodes": {"type": "array"}, "stretches": {"type": "array"},
+    "schedule": {"type": "object", "required": ["lines", "nodes", "circuit_routes", "length_by_line_m", "total_length_m"]},
+    "network": {"type": ["object", "null"]}, "rules_used": {"type": "array"}, "warnings": {"type": "array", "items": {"type": "string"}},
+    "files": {"type": "object"}
+  }
+}
