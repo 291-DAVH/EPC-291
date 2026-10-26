@@ -32,9 +32,9 @@ This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing`
 | Incluye (motor) | `calc`, `dxf`, `sld`, `symbols`, `titleblock` |
 | Es dueño de | `sld` |
 | Necesita (plugins) | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` |
-| Lo necesitan | `board-design`, `mld` |
+| Lo necesitan | `board-design` |
 | Paquetes de Python | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
-| Si lo modificas, revisa | plugins `board-design`, `mld`; módulos del backend — |
+| Si lo modificas, revisa | plugins `board-design`; módulos del backend — |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

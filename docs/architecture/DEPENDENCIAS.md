@@ -10,15 +10,15 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 |---|---|---|---|
 | `calc` | — | `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
-| `drawing` | `calc`, `dxf`, `mld`, `sld` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
+| `drawing` | `calc`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
 | `dxf` | — | `backend.admin`, `drawing`, `mld`, `plan`, `sld`, `titleblock` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `plan`, `sld`, `titleblock` |
-| `mld` | `calc`, `dxf`, `sld`, `symbols` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
+| `mld` | `calc`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `plan` | `dxf` | `backend.layout` | `backend.app`, `backend.layout` |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
-| `sld` | `calc`, `dxf`, `symbols`, `titleblock` | `drawing`, `mld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld` |
+| `sld` | `calc`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `standards` | `calc` | — | — |
 | `symbols` | — | `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
-| `titleblock` | `dxf` | `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
+| `titleblock` | `dxf` | `drawing`, `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
 
 ## Módulos del backend
 
@@ -56,30 +56,30 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | `documents` | `playwright`, `pypdf`, `python-docx` | `playwright`, `pypdf`, `python-docx` | — |
 | `drawing` | `ezdxf`, `matplotlib`, `openpyxl` | `epc-calc`, `epc-mld`, `epc-sld`, `epc-titleblock`, `ezdxf`, `matplotlib`, `openpyxl` | — |
 | `dxf` | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` | — |
-| `mld` | `lxml` | `epc-calc`, `epc-dxf`, `epc-sld`, `epc-symbols`, `lxml` | — |
+| `mld` | `lxml` | `epc-calc`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `lxml` | — |
 | `plan` | `ezdxf` | `epc-dxf`, `ezdxf` | — |
 | `rules` | — | — | — |
 | `sld` | `cairosvg`, `lxml`, `openpyxl` | `cairosvg`, `epc-calc`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `lxml`, `openpyxl` | — |
 | `standards` | `jsonschema`, `pypdf`, `pypdfium2` | `jsonschema`, `pillow`, `pypdf`, `pypdfium2` | — |
 | `symbols` | — | — | — |
-| `titleblock` | `openpyxl` | `epc-dxf`, `openpyxl` | — |
+| `titleblock` | — | `epc-dxf` | — |
 
 ## Plugins
 
 | Plugin | Empaqueta (motor) | Requiere (plugins) | Lo requieren |
 |---|---|---|---|
 | `aea-calc` | `calc` | — | `board-design`, `mld`, `sld`, `standard-ingest` |
-| `board-design` | `calc`, `drawing`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `mld`, `sld` | — |
+| `board-design` | `calc`, `drawing`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iram-titleblock`, `mld`, `sld` | — |
 | `doc-quality` | `documents` | — | `pm2-docs`, `spec-writer` |
 | `dxf-output` | `dxf` | — | `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld` |
 | `equipment-catalog` | — | — | `procurement` |
 | `iec-symbols` | `symbols` | — | `mld`, `sld` |
 | `intake-analysis` | — | — | — |
-| `iram-titleblock` | `dxf`, `titleblock` | `dxf-output` | `sld` |
-| `mld` | `calc`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iec-symbols`, `sld` | `board-design` |
+| `iram-titleblock` | `dxf`, `titleblock` | `dxf-output` | `board-design`, `mld`, `sld` |
+| `mld` | `calc`, `dxf`, `mld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` | `board-design` |
 | `plan-drawing` | `dxf`, `plan` | `dxf-output` | — |
 | `pm2-docs` | `documents` | `doc-quality` | — |
 | `procurement` | — | `equipment-catalog` | — |
-| `sld` | `calc`, `dxf`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` | `board-design`, `mld` |
+| `sld` | `calc`, `dxf`, `sld`, `symbols`, `titleblock` | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` | `board-design` |
 | `spec-writer` | `documents` | `doc-quality` | — |
 | `standard-ingest` | `calc`, `rules`, `standards` | `aea-calc` | — |

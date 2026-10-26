@@ -9,7 +9,7 @@ Engineering libraries: pure Python, no web and no Claude dependency. The backend
 | [standards](standards/README.md) | `epc_standards` | Standards pipeline: extract, validate (verbatim-copy guard), promote | 6 |
 | [dxf](dxf/README.md) | `epc_dxf` | Catalog of DXF layers (the MASTER edits it), the deliverable service (SVG in development to DXF, semantic roles) and the delivery package | 9 |
 | [symbols](symbols/README.md) | `epc_symbols` | IEC 60617 symbol library (SVG and DXF blocks, catalogs) for single-line and multi-line diagrams | 3 |
-| [titleblock](titleblock/README.md) | `epc_titleblock` | IRAM A0-A4 sheets with the IRAM 4504/4508 title block, company/client blocks and logos | 2 |
+| [titleblock](titleblock/README.md) | `epc_titleblock` | IRAM A0-A4 sheets as a service: a JSON request (formats, fields, logos) in, the filled sheets out | 8 |
 | [sld](sld/README.md) | `epc_sld` | Single-line diagram generator: it draws what `epc_calc` calculated | 2 + smoke |
 | [mld](mld/README.md) | `epc_mld` | Multi-line diagram generator: each line expanded into its conductors | 2 |
 | [plan](plan/README.md) | `epc_plan` | Plan-drawing engine: graph, tags, circuit routes (moment method), schedules, DXF | 56 |
@@ -27,4 +27,4 @@ python -m epc_calc.aea_pipeline input.xlsx
 pip install -e engine/calc -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents
 ```
 Layout of every area: `pyproject.toml`, `src/epc_<area>/`, `tests/`, `README.md` (plus `docs/`, `examples/` where relevant).
-Dependencies between areas (enforced by the `engine-layers` contract and listed in `docs/architecture/DEPENDENCIAS.md`): `epc_drawing` > `epc_mld` > `epc_sld` > `epc_titleblock`, `epc_symbols`, `epc_plan`, `epc_calc`; `epc_standards` needs `epc_calc`; the rest are independent. Each area installs and is updated on its own. `python tools/ci/run_gate.py` runs every area's tests.
+Dependencies between areas (enforced by the `engine-layers` contract and listed in `docs/architecture/DEPENDENCIAS.md`): `epc_drawing` > `epc_mld`, `epc_sld` > `epc_titleblock`, `epc_symbols`, `epc_plan`, `epc_calc` > `epc_dxf`; `epc_standards` needs `epc_calc`; the rest are independent. Each area installs and is updated on its own. `python tools/ci/run_gate.py` runs every area's tests.

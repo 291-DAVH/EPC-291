@@ -14,8 +14,8 @@ SRC = [str(ENGINE / a / "src") for a in ("sld", "calc", "symbols", "titleblock")
 class TestSldPackage(unittest.TestCase):
     def test_the_symbol_library_comes_from_epc_symbols(self):
         sys.path[:0] = SRC
-        from epc_sld import deps
-        self.assertTrue((Path(deps.iec_lib()) / "_catalog.json").is_file())
+        from epc_symbols import library_dir
+        self.assertTrue((Path(library_dir("sld-lv-symbol")) / "_catalog.json").is_file())
 
     def test_without_the_calculation_it_refuses_to_draw(self):
         with tempfile.TemporaryDirectory() as t:

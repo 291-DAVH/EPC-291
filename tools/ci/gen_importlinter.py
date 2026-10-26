@@ -22,7 +22,7 @@ LAYERS = ("api", "service", "repository", "models")                # top -> bott
 
 
 # What may depend on what in the engine: a package imports only from the layers below it, never from a sibling in its own layer. This is what lets each one be taken alone.
-ENGINE_LAYERS = ["epc_drawing", "epc_mld", "epc_sld", "epc_titleblock | epc_symbols | epc_plan | epc_calc", "epc_dxf"]
+ENGINE_LAYERS = ["epc_drawing", "epc_mld | epc_sld", "epc_titleblock | epc_symbols | epc_plan | epc_calc", "epc_dxf"]
 
 
 def engine_packages() -> list[str]:

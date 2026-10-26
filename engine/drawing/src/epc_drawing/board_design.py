@@ -130,32 +130,6 @@ def write_excel(path: Path, tablero: dict, circuitos: List[dict]) -> None:
     wb.save(path)
 
 
-def prepare_titleblock(folder: Path, tb: dict, logos: Optional[Dict[str, Path]] = None) -> Path:
-    """Titleblock workbook (from the packaged template, example data cleared) with the common data of the first A1 row, and the logos
-    (`logos` = {"provider": file, "client": file}) as <provider|client>-logo-<NAME>.<svg|png> next to it."""
-    import openpyxl
-    from epc_sld import deps
-    folder = Path(folder)
-    folder.mkdir(parents=True, exist_ok=True)
-    target = folder / "input-titleblocks.xlsx"
-    deps._crear_excel(str(target), {})
-    wb = openpyxl.load_workbook(target)
-    ws = wb["Láminas"]
-    hdr = {c.value: c.column for c in ws[1]}
-    row = next(r for r in range(2, ws.max_row + 1) if ws.cell(r, hdr["Formato (HOJA)"]).value == "A1")
-    today = dt.date.today()
-    for key, col in TITLEBLOCK_COLS.items():
-        ws.cell(row, hdr[col]).value = tb.get(key) or None
-    for col in ("Proyectado: fecha", "Verificado: fecha", "Validado: fecha"):
-        ws.cell(row, hdr[col]).value = dt.datetime(today.year, today.month, today.day)
-    wb.save(target)
-    for old in folder.glob("*-logo-*"):
-        old.unlink()
-    for prefix, src in (logos or {}).items():
-        shutil.copy(src, folder / f"{prefix}-logo-{prefix.upper()}{Path(src).suffix.lower()}")
-    return target
-
-
 def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
     """aea_pipeline with the design criteria: {"datos": contract JSON, "avisos": [...], "detalle": {...}, "limites": {...}}."""
     from epc_calc import aea_pipeline as P
@@ -198,8 +172,9 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     xlsx = out_dir / "input_for_sld.xlsx"
     write_excel(xlsx, tablero, circuitos)
     (out_dir / "input_design.json").write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
-    tb_dir = out_dir / "titleblock"
-    prepare_titleblock(tb_dir, data.get("titleblock", {}), logos)
+    from epc_titleblock import service as titleblock
+    request_json = out_dir / "titleblock-request.json"                  # what the diagrams ask the title block service for: the project's data and logos
+    request_json.write_text(json.dumps(titleblock.project_request(data.get("titleblock", {}), logos), ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
     calc_json = out / f"{name}_dimensionado.json"
     detail_json = out / f"{name}_dimensionado_detalle.json"
@@ -228,7 +203,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     figures["note"] += " " + calc_note(res)
     figures_json = out / f"{name}_cifras.json"
     figures_json.write_text(json.dumps(figures, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
-    env = dict(os.environ, SLD_ROTULO_DIR=str(tb_dir), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_FIGURES_JSON=str(figures_json))
+    env = dict(os.environ, EPC_TITLEBLOCK_JSON=str(request_json), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_FIGURES_JSON=str(figures_json))
     log, error = [], None
     if "sld" in diagrams:
         run = subprocess.run([sys.executable, "-m", "epc_sld.sld_paginate", "default", str(xlsx), str(out), f"SLD_{name}", "default", "default", str(maxl)],
