@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, assignCircuit, blank, moveElements, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -132,5 +132,20 @@ describe("plan editing rules", () => {
     expect(b.lines[0].points).toEqual([[3, 4], [53, 4]]);
     expect(b.nodes[0]).toMatchObject({ x: 0, y: 0 });
     expect(moveElements(d, [{ type: "node", id: "n1" }], 0, 0)).toBe(d);
+  });
+
+  it("stretches a line end along its axis and moves a segment sideways keeping the joined nodes", () => {
+    let d = addNode(blank(), "LU", [100, 0]);
+    d = addLine(d, "BN", [[0, 0], [100, 0], [100, 50]]);
+    const a = stretchEnd(d, "l1", 1, [100, 80]);
+    expect(a.lines[0].points[2]).toEqual([100, 80]);
+    expect(stretchEnd(d, "l1", 1, [300, 20]).lines[0].points[2]).toEqual([100, 20]);
+    expect(stretchEnd(d, "l1", 1, [100, -9])).toBe(d);
+    const b = moveSegment(d, "l1", 1, [40, 7]);
+    expect(b.lines[0].points).toEqual([[0, 0], [140, 0], [140, 50]]);
+    expect(b.nodes[0]).toMatchObject({ x: 140, y: 0 });
+    const c = moveSegment(d, "l1", 0, [5, 30]);
+    expect(c.lines[0].points[0]).toEqual([0, 30]);
+    expect(c.lines[0].points[1]).toEqual([100, 30]);
   });
 });

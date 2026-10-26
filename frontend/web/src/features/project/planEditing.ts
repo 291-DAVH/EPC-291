@@ -177,3 +177,43 @@ export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): D
     lines: d.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : { ...l, points: l.points.map((p) => (follows(p) ? shift(p) : p)) })),
   };
 }
+
+/** Move some points of one line by their own deltas; the nodes and the points of other lines sitting on a moved point follow it, so the network stays joined. */
+function movePoints(d: Drawing, lineId: string, moves: { i: number; to: Pt }[]): Drawing {
+  const line = d.lines.find((l) => l.id === lineId);
+  if (!line) return d;
+  const at = (a: Pt, b: Pt) => Math.abs(a[0] - b[0]) < 1e-6 && Math.abs(a[1] - b[1]) < 1e-6;
+  const jumps = moves.map((m) => ({ from: line.points[m.i], to: m.to }));
+  const dest = (p: Pt): Pt => jumps.find((j) => at(j.from, p))?.to ?? p;
+  return {
+    ...d,
+    nodes: d.nodes.map((n) => { const q = dest([n.x, n.y]); return q[0] === n.x && q[1] === n.y ? n : { ...n, x: q[0], y: q[1] }; }),
+    lines: d.lines.map((l) => (l.id === lineId ? { ...l, points: l.points.map((p, i) => moves.find((m) => m.i === i)?.to ?? p) } : { ...l, points: l.points.map(dest) })),
+  };
+}
+
+/** Stretch the end of a line along its own direction: the end goes to the closest point of the axis of its last segment, so the line stays straight (orthogonal when it was). */
+export function stretchEnd(d: Drawing, lineId: string, end: 0 | 1, target: Pt): Drawing {
+  const l = d.lines.find((x) => x.id === lineId);
+  if (!l || l.points.length < 2) return d;
+  const i = end === 0 ? 0 : l.points.length - 1;
+  const anchor = l.points[end === 0 ? 1 : i - 1];
+  const ux = l.points[i][0] - anchor[0], uy = l.points[i][1] - anchor[1];
+  const len = Math.hypot(ux, uy);
+  if (len < 1e-9) return d;
+  const t = ((target[0] - anchor[0]) * ux + (target[1] - anchor[1]) * uy) / len;
+  if (t < 1e-6) return d;                                                              // never folds back over the line
+  return movePoints(d, lineId, [{ i, to: [anchor[0] + (ux / len) * t, anchor[1] + (uy / len) * t] }]);
+}
+
+/** Move one segment of a line sideways (perpendicular to itself) by the part of `offset` across it; its neighbours stretch to follow. */
+export function moveSegment(d: Drawing, lineId: string, seg: number, offset: Pt): Drawing {
+  const l = d.lines.find((x) => x.id === lineId);
+  if (!l || seg < 0 || seg + 1 >= l.points.length) return d;
+  const a = l.points[seg], b = l.points[seg + 1];
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  if (len < 1e-9) return d;
+  const n: Pt = [-(b[1] - a[1]) / len, (b[0] - a[0]) / len];
+  const k = offset[0] * n[0] + offset[1] * n[1];
+  return movePoints(d, lineId, [{ i: seg, to: [a[0] + n[0] * k, a[1] + n[1] * k] }, { i: seg + 1, to: [b[0] + n[0] * k, b[1] + n[1] * k] }]);
+}
