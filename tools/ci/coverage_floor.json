@@ -1,8 +1,13 @@
 {
- "backend": 94.7,
- "engine-calc": 82.9,
- "engine-rules": 76.8,
- "engine-standards": 35.6,
- "engine-drawing": 52.9,
- "engine-documents": 79.3
+ "backend": 95.0,
+ "engine-calc": 83.6,
+ "engine-rules": 77.1,
+ "engine-standards": 35.8,
+ "engine-drawing": 85.6,
+ "engine-documents": 79.6,
+ "engine-symbols": 100.0,
+ "engine-titleblock": 0.0,
+ "engine-plan": 90.5,
+ "engine-sld": 1.7,
+ "engine-mld": 19.1
 }

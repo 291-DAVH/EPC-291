@@ -8,17 +8,16 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 
 | Unidad | Usa | Lo usan | Impacto si la modificas |
 |---|---|---|---|
-| `calc` | — | `backend.norms`, `backend.sld`, `drawing.board_design`, `drawing.mld`, `drawing.sld`, `standards` | `backend.app`, `backend.layout`, `backend.norms`, `backend.sld`, `drawing.board_design`, `drawing.mld`, `drawing.sld`, `standards` |
+| `calc` | — | `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
-| `drawing.board_design` | `calc`, `drawing.export`, `drawing.mld`, `drawing.sld` | `backend.sld` | `backend.app`, `backend.layout`, `backend.sld` |
-| `drawing.export` | — | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing.board_design` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing.board_design` |
-| `drawing.mld` | `calc`, `drawing.sld`, `drawing.symbols` | `drawing.board_design` | `backend.app`, `backend.layout`, `backend.sld`, `drawing.board_design` |
-| `drawing.sld` | `calc`, `drawing.symbols`, `drawing.titleblock` | `drawing.board_design`, `drawing.mld` | `backend.app`, `backend.layout`, `backend.sld`, `drawing.board_design`, `drawing.mld` |
-| `drawing.symbols` | — | `drawing.mld`, `drawing.sld` | `backend.app`, `backend.layout`, `backend.sld`, `drawing.board_design`, `drawing.mld`, `drawing.sld` |
-| `drawing.titleblock` | — | `drawing.sld` | `backend.app`, `backend.layout`, `backend.sld`, `drawing.board_design`, `drawing.mld`, `drawing.sld` |
+| `drawing` | `calc`, `mld`, `sld` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
+| `mld` | `calc`, `sld`, `symbols` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `plan` | — | `backend.layout` | `backend.app`, `backend.layout` |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
+| `sld` | `calc`, `symbols`, `titleblock` | `drawing`, `mld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld` |
 | `standards` | `calc` | — | — |
+| `symbols` | — | `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
+| `titleblock` | — | `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
 
 ## Módulos del backend
 
@@ -32,18 +31,18 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `backend.engineering` | `backend.core`, `backend.projects` | `backend.app`, `backend.issuing`, `backend.sld` |
 | `backend.identity` | `backend.core` | `backend.app`, `backend.layout`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements` |
 | `backend.intake` | `backend.core`, `backend.projects` | `backend.app`, `backend.management`, `backend.reporting`, `backend.requirements` |
-| `backend.issuing` | `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `drawing.export` | `backend.app` |
+| `backend.issuing` | `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `drawing` | `backend.app` |
 | `backend.knowledge` | `backend.core`, `rules` | `backend.admin`, `backend.app` |
-| `backend.layout` | `backend.core`, `backend.identity`, `backend.projects`, `backend.sld`, `drawing.export`, `plan` | `backend.app` |
+| `backend.layout` | `backend.core`, `backend.identity`, `backend.projects`, `backend.sld`, `drawing`, `plan` | `backend.app` |
 | `backend.management` | `backend.core`, `backend.deliverables`, `backend.intake`, `backend.projects`, `backend.requirements` | `backend.app`, `backend.reporting` |
 | `backend.masterdata` | `backend.core`, `backend.identity`, `backend.projects` | `backend.app`, `backend.issuing`, `backend.sld` |
 | `backend.norms` | `backend.core`, `backend.identity`, `calc` | `backend.app` |
 | `backend.projects` | `backend.core`, `backend.identity` | `backend.admin`, `backend.app`, `backend.backlog`, `backend.deliverables`, `backend.engineering`, `backend.intake`, `backend.issuing`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
 | `backend.registers` | `backend.core`, `backend.identity`, `backend.projects` | `backend.app`, `backend.reporting` |
-| `backend.reporting` | `backend.backlog`, `backend.core`, `backend.deliverables`, `backend.identity`, `backend.intake`, `backend.management`, `backend.projects`, `backend.registers`, `backend.requirements`, `backend.schedule`, `backend.wbs`, `drawing.export` | `backend.app` |
+| `backend.reporting` | `backend.backlog`, `backend.core`, `backend.deliverables`, `backend.identity`, `backend.intake`, `backend.management`, `backend.projects`, `backend.registers`, `backend.requirements`, `backend.schedule`, `backend.wbs`, `drawing` | `backend.app` |
 | `backend.requirements` | `backend.core`, `backend.identity`, `backend.intake`, `backend.projects` | `backend.app`, `backend.management`, `backend.reporting` |
 | `backend.schedule` | `backend.core`, `backend.projects`, `backend.wbs` | `backend.app`, `backend.reporting` |
-| `backend.sld` | `backend.core`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `calc`, `drawing.board_design`, `drawing.export` | `backend.app`, `backend.layout` |
+| `backend.sld` | `backend.core`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `calc`, `drawing` | `backend.app`, `backend.layout` |
 | `backend.wbs` | `backend.core`, `backend.projects` | `backend.app`, `backend.backlog`, `backend.reporting`, `backend.schedule` |
 
 ## Paquetes externos por unidad del motor
@@ -53,31 +52,31 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | Unidad | Importa | Declarado | Falta declarar |
 |---|---|---|---|
 | `calc` | `openpyxl` | `openpyxl` | — |
-| `documents` | `docx`, `playwright`, `pypdf` | — | `docx`, `playwright`, `pypdf` |
-| `drawing.board_design` | `openpyxl` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | — |
-| `drawing.export` | `ezdxf`, `matplotlib` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | — |
-| `drawing.mld` | `lxml` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | — |
-| `drawing.sld` | `cairosvg`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | `cairosvg` |
-| `drawing.symbols` | — | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | — |
-| `drawing.titleblock` | `ezdxf`, `openpyxl`, `shapely`, `svgelements`, `vtracer` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | `vtracer` |
-| `plan` | `ezdxf` | `epc-calc`, `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements` | — |
+| `documents` | `playwright`, `pypdf`, `python-docx` | `playwright`, `pypdf`, `python-docx` | — |
+| `drawing` | `ezdxf`, `matplotlib`, `openpyxl` | `epc-calc`, `epc-mld`, `epc-sld`, `epc-titleblock`, `ezdxf`, `matplotlib`, `openpyxl` | — |
+| `mld` | `lxml` | `epc-calc`, `epc-sld`, `epc-symbols`, `ezdxf`, `lxml` | — |
+| `plan` | `ezdxf` | `ezdxf` | — |
 | `rules` | — | — | — |
-| `standards` | `jsonschema`, `pypdf`, `pypdfium2` | `jsonschema`, `pypdf` | `pypdfium2` |
+| `sld` | `cairosvg`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | `cairosvg`, `epc-calc`, `epc-symbols`, `epc-titleblock`, `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements` | — |
+| `standards` | `jsonschema`, `pypdf`, `pypdfium2` | `jsonschema`, `pillow`, `pypdf`, `pypdfium2` | — |
+| `symbols` | — | — | — |
+| `titleblock` | `ezdxf`, `openpyxl`, `shapely`, `svgelements`, `vtracer` | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` | — |
 
 ## Plugins
 
 | Plugin | Empaqueta (motor) | Requiere (plugins) | Lo requieren |
 |---|---|---|---|
-| `aea-calc` | `calc` | — | `board-design`, `mld`, `sld` |
-| `board-design` | `calc`, `drawing` | `aea-calc`, `iec-symbols`, `iram-titleblock`, `mld`, `sld` | — |
+| `aea-calc` | `calc` | — | `board-design`, `mld`, `sld`, `standard-ingest` |
+| `board-design` | `calc`, `drawing`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `mld`, `sld` | — |
 | `doc-quality` | `documents` | — | `pm2-docs`, `spec-writer` |
 | `equipment-catalog` | — | — | `procurement` |
-| `iec-symbols` | `drawing` | — | `board-design`, `mld`, `sld` |
+| `iec-symbols` | `symbols` | — | `mld`, `sld` |
 | `intake-analysis` | — | — | — |
-| `iram-titleblock` | `drawing` | — | `board-design`, `mld`, `sld` |
-| `mld` | `calc`, `drawing` | `aea-calc`, `iec-symbols`, `iram-titleblock`, `sld` | `board-design` |
+| `iram-titleblock` | `titleblock` | — | `sld` |
+| `mld` | `calc`, `mld`, `sld`, `symbols`, `titleblock` | `aea-calc`, `iec-symbols`, `sld` | `board-design` |
+| `plan-drawing` | `plan` | — | — |
 | `pm2-docs` | `documents` | `doc-quality` | — |
 | `procurement` | — | `equipment-catalog` | — |
-| `sld` | `calc`, `drawing` | `aea-calc`, `iec-symbols`, `iram-titleblock` | `board-design`, `mld` |
+| `sld` | `calc`, `sld`, `symbols`, `titleblock` | `aea-calc`, `iec-symbols`, `iram-titleblock` | `board-design`, `mld` |
 | `spec-writer` | `documents` | `doc-quality` | — |
-| `standard-ingest` | `rules`, `standards` | — | — |
+| `standard-ingest` | `calc`, `rules`, `standards` | `aea-calc` | — |

@@ -10,11 +10,9 @@
     "AR"
   ],
   "requires": {
-    "aea-calc": "^1.6.0",
-    "sld": "^0.1.2",
-    "mld": "^0.2.0",
-    "iec-symbols": "^0.4.14",
-    "iram-titleblock": "^0.5.1"
+    "aea-calc": "^1.8.0",
+    "mld": "^0.2.2",
+    "sld": "^0.1.4"
   },
   "consumes": [
     "DesignCriteria",
@@ -47,20 +45,28 @@
   "entitlement": "feature.design.board",
   "python": {
     "requires": [
-      "openpyxl>=3.1",
-      "lxml",
       "ezdxf",
-      "svgelements",
+      "lxml",
+      "matplotlib",
+      "openpyxl",
       "shapely",
-      "matplotlib"
+      "svgelements",
+      "vtracer"
     ]
   },
   "skills": [],
   "engine": [
     "calc",
-    "drawing"
+    "drawing",
+    "mld",
+    "sld",
+    "symbols",
+    "titleblock"
   ],
   "engine_data": [
     "jurisdictions/AR/electrical/design-criteria.json"
+  ],
+  "owns": [
+    "drawing"
   ]
 }

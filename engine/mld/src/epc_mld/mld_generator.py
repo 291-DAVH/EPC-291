@@ -3,12 +3,12 @@
 Parte del mismo dato que el unifilar y del cálculo de epc_calc (que ya aplica los criterios de diseño): cada línea del unifilar se "despliega" en
 sus conductores (L1 L2 L3 N) a paso uniforme de 10 mm, con los símbolos MLD_LV de la biblioteca (`<id>_<n>p_mld`) sin escalar.
 
-  from epc_drawing.mld import mld_generator
+  from epc_mld import mld_generator
   mld_generator.generate(data, calc, out_dir, "MLD_TGBT-01")
 
 `data` = {"board": {...}, "circuits": [...], "titleblock": {...}} (el JSON del formulario); `calc` = {"datos": {TAG: {In, Ib, icu, S, dU, disp}},
 "detalle": {...}} (resultado de epc_calc.aea_pipeline). Devuelve la lista de hojas generadas (SVG y DXF).
-Rótulo y láminas: epc_drawing.sld.deps (mismo mecanismo que el unifilar; SLD_ROTULO_DIR apunta al Excel del rótulo).
+Rótulo y láminas: epc_sld.deps (mismo mecanismo que el unifilar; SLD_ROTULO_DIR apunta al Excel del rótulo).
 """
 import datetime
 import json
@@ -21,7 +21,7 @@ from xml.sax.saxutils import escape as xesc
 
 from lxml import etree
 
-from epc_drawing.sld import deps as VL
+from epc_sld import deps as VL
 
 PITCH = 10.0                      # paso entre polos (mm), retícula de la biblioteca
 COL_GAP = 16.0                    # separación entre columnas de circuitos
@@ -38,7 +38,7 @@ POLE_NAMES = {1: ["L"], 2: ["L", "N"], 3: ["L1", "L2", "L3"], 4: ["L1", "L2", "L
 
 
 def library_dir() -> str:
-    from epc_drawing.symbols import library_dir as lib
+    from epc_symbols import library_dir as lib
     return str(lib("mld-lv-symbol"))
 
 
@@ -390,7 +390,7 @@ class Generator:
     @staticmethod
     def to_dxf(svg_path: Path, final: str, out_dir: Path, name: str):
         """DXF por el mismo convertidor del paquete (trazos) y las capas 291-* del unifilar."""
-        from epc_drawing.sld import capas_dxf
+        from epc_sld import capas_dxf
         tmp_svg = out_dir / f"{name}_trazos.svg"
         tmp_svg.write_text(final, encoding="utf-8", newline="\n")
         try:

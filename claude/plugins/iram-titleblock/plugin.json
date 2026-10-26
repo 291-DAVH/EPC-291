@@ -33,9 +33,12 @@
   "entitlement": "feature.drawing.sheets",
   "python": {
     "requires": [
-      "openpyxl>=3.1",
       "ezdxf",
-      "lxml"
+      "lxml",
+      "openpyxl",
+      "shapely",
+      "svgelements",
+      "vtracer"
     ]
   },
   "skills": [],
@@ -44,6 +47,9 @@
     "source": "291_G_IRAM_Custom_TitleBlocks_Generator"
   },
   "engine": [
-    "drawing"
+    "titleblock"
+  ],
+  "owns": [
+    "titleblock"
   ]
 }

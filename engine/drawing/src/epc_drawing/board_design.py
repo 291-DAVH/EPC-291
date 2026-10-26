@@ -134,7 +134,7 @@ def prepare_titleblock(folder: Path, tb: dict, logos: Optional[Dict[str, Path]] 
     """Titleblock workbook (from the packaged template, example data cleared) with the common data of the first A1 row, and the logos
     (`logos` = {"provider": file, "client": file}) as <provider|client>-logo-<NAME>.<svg|png> next to it."""
     import openpyxl
-    from epc_drawing.sld import deps
+    from epc_sld import deps
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
     target = folder / "input-titleblocks.xlsx"
@@ -223,13 +223,13 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     env = dict(os.environ, SLD_ROTULO_DIR=str(tb_dir), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_FIGURES_JSON=str(figures_json))
     log, error = [], None
     if "sld" in diagrams:
-        run = subprocess.run([sys.executable, "-m", "epc_drawing.sld.sld_paginate", "default", str(xlsx), str(out), f"SLD_{name}", "default", "default", str(maxl)],
+        run = subprocess.run([sys.executable, "-m", "epc_sld.sld_paginate", "default", str(xlsx), str(out), f"SLD_{name}", "default", "default", str(maxl)],
                              env=env, capture_output=True, text=True)
         log += [ln for ln in (run.stdout.splitlines() + run.stderr.splitlines()) if ln.startswith(("OK", "AVISO"))]
         if run.returncode != 0:
             error = (run.stderr or run.stdout).strip()[-600:]
     if "mld" in diagrams and error is None:
-        run = subprocess.run([sys.executable, "-m", "epc_drawing.mld.mld_generator", "--input", str(out_dir / "input_design.json"), "--calc", str(calc_json),
+        run = subprocess.run([sys.executable, "-m", "epc_mld.mld_generator", "--input", str(out_dir / "input_design.json"), "--calc", str(calc_json),
                               "--detail", str(detail_json), "--out", str(out), "--name", f"MLD_{name}"], env=env, capture_output=True, text=True)
         log += [ln for ln in (run.stdout.splitlines() + run.stderr.splitlines()) if ln.startswith(("OK", "AVISO"))]
         if run.returncode != 0:

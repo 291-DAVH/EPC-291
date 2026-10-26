@@ -4,8 +4,8 @@ import unittest
 from pathlib import Path
 
 from epc_drawing import board_design as B
-from epc_drawing.mld import mld_generator as M
-from epc_drawing.sld import deps
+from epc_mld import mld_generator as M
+from epc_sld import deps
 
 
 def board(n_extra=0):

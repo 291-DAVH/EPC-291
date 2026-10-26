@@ -10,25 +10,27 @@
       "engine": [
         "calc"
       ],
-      "hash": "89e29a3a76f198b9"
+      "hash": "64c812b1de19fc3e"
     },
     "board-design": {
       "version": "0.2.1",
       "kind": "workflow",
       "status": "active",
       "requires": {
-        "aea-calc": "^1.6.0",
-        "sld": "^0.1.2",
-        "mld": "^0.2.0",
-        "iec-symbols": "^0.4.14",
-        "iram-titleblock": "^0.5.1"
+        "aea-calc": "^1.8.0",
+        "mld": "^0.2.2",
+        "sld": "^0.1.4"
       },
       "skills": [],
       "engine": [
         "calc",
-        "drawing"
+        "drawing",
+        "mld",
+        "sld",
+        "symbols",
+        "titleblock"
       ],
-      "hash": "1593f00ca5725a27"
+      "hash": "9b29c561ac3ca1d3"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -39,7 +41,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "ad0b9b7d1d0601b6"
+      "hash": "730910f6302a5c1d"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -48,7 +50,7 @@
       "requires": {},
       "skills": [],
       "engine": [],
-      "hash": "04503c87e8f48536"
+      "hash": "ec41cd8f2448e2d9"
     },
     "iec-symbols": {
       "version": "0.4.19",
@@ -57,9 +59,9 @@
       "requires": {},
       "skills": [],
       "engine": [
-        "drawing"
+        "symbols"
       ],
-      "hash": "f40a8983e6a28ea3"
+      "hash": "06aef09582aa034e"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -70,7 +72,7 @@
         "structure-customer-input"
       ],
       "engine": [],
-      "hash": "2546ba51bd50723e"
+      "hash": "a7bef06ab6d4bcbb"
     },
     "iram-titleblock": {
       "version": "0.5.4",
@@ -79,26 +81,39 @@
       "requires": {},
       "skills": [],
       "engine": [
-        "drawing"
+        "titleblock"
       ],
-      "hash": "74c3f6374d7705f4"
+      "hash": "3acec46d9a3143ad"
     },
     "mld": {
       "version": "0.2.2",
       "kind": "generator",
       "status": "active",
       "requires": {
-        "aea-calc": "^1.6.0",
-        "sld": "^0.1.2",
-        "iram-titleblock": "^0.5.1",
-        "iec-symbols": "^0.4.14"
+        "aea-calc": "^1.8.0",
+        "iec-symbols": "^0.4.19",
+        "sld": "^0.1.4"
       },
       "skills": [],
       "engine": [
         "calc",
-        "drawing"
+        "mld",
+        "sld",
+        "symbols",
+        "titleblock"
       ],
-      "hash": "f9627842047697f2"
+      "hash": "6eb4225bec51f36e"
+    },
+    "plan-drawing": {
+      "version": "0.1.0",
+      "kind": "generator",
+      "status": "active",
+      "requires": {},
+      "skills": [],
+      "engine": [
+        "plan"
+      ],
+      "hash": "a6b8ff3732f781aa"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -113,7 +128,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "e7ccaa9a120da1ae"
+      "hash": "ee8a931166661c77"
     },
     "procurement": {
       "version": "0.1.0",
@@ -126,23 +141,25 @@
         "request-quotation"
       ],
       "engine": [],
-      "hash": "4deddfcbcd7e2001"
+      "hash": "09d841653e9b444f"
     },
     "sld": {
       "version": "0.1.4",
       "kind": "generator",
       "status": "active",
       "requires": {
-        "aea-calc": "^1.6.0",
-        "iec-symbols": "^0.4.14",
-        "iram-titleblock": "^0.5.1"
+        "aea-calc": "^1.8.0",
+        "iec-symbols": "^0.4.19",
+        "iram-titleblock": "^0.5.4"
       },
       "skills": [],
       "engine": [
         "calc",
-        "drawing"
+        "sld",
+        "symbols",
+        "titleblock"
       ],
-      "hash": "0e8dab5e358fce84"
+      "hash": "eb51fea4b134add1"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -157,21 +174,24 @@
       "engine": [
         "documents"
       ],
-      "hash": "432af9831bcbe8c6"
+      "hash": "a6129895faed5ebe"
     },
     "standard-ingest": {
       "version": "0.1.0",
       "kind": "workflow",
       "status": "active",
-      "requires": {},
+      "requires": {
+        "aea-calc": "^1.8.0"
+      },
       "skills": [
         "analyze-standard"
       ],
       "engine": [
-        "standards",
-        "rules"
+        "calc",
+        "rules",
+        "standards"
       ],
-      "hash": "1999e7841b361153"
+      "hash": "887b1c7415d53379"
     }
   },
   "skills": {

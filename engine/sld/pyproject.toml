@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-sld"
+version = "0.1.0"
+description = "EPC-291 single-line diagram generator (SVG and DXF on IRAM sheets); draws what epc-calc calculated"
+requires-python = ">=3.10"
+dependencies = ["epc-calc", "epc-symbols", "epc-titleblock", "openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely"]
+
+[project.optional-dependencies]
+previews = ["cairosvg"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -3,13 +3,31 @@
   "version": "0.1.0",
   "kind": "workflow",
   "description": "Turns information sent by customers (voice of customer, user stories, meeting notes, documents) into structured, traceable requirements. Lists what is waiting, validates the analysis and stores it; the end user only sees the result.",
-  "discipline": ["all"],
+  "discipline": [
+    "all"
+  ],
   "requires": {},
-  "consumes": ["IntakeItem"],
-  "produces": ["Requirement"],
-  "outputs": [{ "format": "json", "channel": "internal" }],
+  "consumes": [
+    "IntakeItem"
+  ],
+  "produces": [
+    "Requirement"
+  ],
+  "outputs": [
+    {
+      "format": "json",
+      "channel": "internal"
+    }
+  ],
   "entitlement": "feature.intake",
-  "python": { "requires": [] },
-  "skills": [{ "id": "structure-customer-input", "role": "owner" }],
+  "python": {
+    "requires": []
+  },
+  "skills": [
+    {
+      "id": "structure-customer-input",
+      "role": "owner"
+    }
+  ],
   "visibility": "internal"
 }

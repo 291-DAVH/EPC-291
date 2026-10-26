@@ -5,9 +5,13 @@ root_packages =
     epc_calc
     epc_documents
     epc_drawing
+    epc_mld
     epc_plan
     epc_rules
+    epc_sld
     epc_standards
+    epc_symbols
+    epc_titleblock
 include_external_packages = False
 
 [importlinter:contract:admin-encapsulated]
@@ -841,8 +845,21 @@ source_modules =
     epc_calc
     epc_documents
     epc_drawing
+    epc_mld
     epc_plan
     epc_rules
+    epc_sld
     epc_standards
+    epc_symbols
+    epc_titleblock
 forbidden_modules =
     epc
+
+[importlinter:contract:engine-layers]
+name = engine: board design -> multi-line -> single-line -> symbols, title block, plan and calculation (each one installs on its own)
+type = layers
+layers =
+    epc_drawing
+    epc_mld
+    epc_sld
+    epc_titleblock | epc_symbols | epc_plan | epc_calc

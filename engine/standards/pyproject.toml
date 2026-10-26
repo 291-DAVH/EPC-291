@@ -7,10 +7,10 @@ name = "epc-standards"
 version = "0.1.0"
 description = "EPC-291 standards pipeline: text extraction, validation (schema, verbatim-copy guard) and promotion of rules.json"
 requires-python = ">=3.10"
-dependencies = ["pypdf", "jsonschema"]
+dependencies = ["pypdf", "jsonschema", "pypdfium2"]
 
 [project.optional-dependencies]
-render = ["pypdfium2", "pillow"]
+render = ["pillow"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

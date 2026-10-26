@@ -10,9 +10,9 @@
     "AR"
   ],
   "requires": {
-    "aea-calc": "^1.6.0",
-    "iec-symbols": "^0.4.14",
-    "iram-titleblock": "^0.5.1"
+    "aea-calc": "^1.8.0",
+    "iec-symbols": "^0.4.19",
+    "iram-titleblock": "^0.5.4"
   },
   "consumes": [
     "Board",
@@ -39,11 +39,12 @@
   "entitlement": "feature.drawing.sld",
   "python": {
     "requires": [
-      "openpyxl>=3.1",
-      "lxml",
       "ezdxf",
+      "lxml",
+      "openpyxl",
+      "shapely",
       "svgelements",
-      "shapely"
+      "vtracer"
     ],
     "optional": [
       "cairosvg"
@@ -62,6 +63,11 @@
   },
   "engine": [
     "calc",
-    "drawing"
+    "sld",
+    "symbols",
+    "titleblock"
+  ],
+  "owns": [
+    "sld"
   ]
 }
