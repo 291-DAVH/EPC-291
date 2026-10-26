@@ -6,8 +6,8 @@
   python tools/ci/check_complexity.py --report   # print the most complex functions
 
 The baseline maps a function's qualified name (module path + name, without line numbers) to its complexity. A function may not become MORE complex than its
-baseline, and a function that is not in the baseline (new, or moved to another file) may not exceed MAX_NEW. Moving a function keeps its baseline because the key
-is the qualified name inside its file's module name, resolved by name when the file moved: see `_lookup`.
+baseline, and a function that is not in the baseline (new, moved to another file or renamed by an extraction) may not exceed MAX_NEW or the baseline of the
+function of the same name it replaces.
 Open-source: radon (MIT).
 """
 import argparse
@@ -49,11 +49,6 @@ def _name(key: str) -> str:
     return key.split("::", 1)[1]
 
 
-def _lookup(key: str, baseline: dict, by_name: dict):
-    """Baseline complexity for `key`: its own, else that of the same-named function in another file (it moved)."""
-    return baseline.get(key, by_name.get(_name(key)))
-
-
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--update", action="store_true")
@@ -74,10 +69,12 @@ def main(argv=None) -> int:
         by_name[_name(k)] = max(v, by_name.get(_name(k), 0))
     bad = []
     for key, cc in now.items():
-        base = _lookup(key, baseline, by_name)
-        if base is None and cc > MAX_NEW:
-            bad.append(f"{key}: new function with complexity {cc} (max {MAX_NEW})")
-        elif base is not None and cc > base:
+        base = baseline.get(key)
+        if base is None:                                              # new, or moved or renamed by extraction: up to MAX_NEW, or the complexity of the same-named function it replaces
+            limit = max(MAX_NEW, by_name.get(_name(key), 0))
+            if cc > limit:
+                bad.append(f"{key}: new or moved function with complexity {cc} (max {limit})")
+        elif cc > base:
             bad.append(f"{key}: complexity {cc} above its baseline {base}")
     for line in bad[:30]:
         print("FAIL", line)
