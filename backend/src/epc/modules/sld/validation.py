@@ -34,9 +34,7 @@ def options() -> dict:
 MAX_CIRCUITS = 150
 
 
-def validate(data: dict) -> Dict[str, str]:
-    e: Dict[str, str] = {}
-    b = data["board"]
+def _validate_board(b: dict, e: Dict[str, str]) -> None:
     if not b["name"].strip():
         e["board.name"] = "required"
     if not 50 <= b["voltage_v"] <= 1000:
@@ -51,6 +49,50 @@ def validate(data: dict) -> Dict[str, str]:
         e["board.frequency_hz"] = "50 or 60"
     if b["feeder_length_m"] < 0:
         e["board.feeder_length_m"] = "must be >= 0"
+
+
+def _validate_circuit(i: int, c: dict, tags: list, parents: set, e: Dict[str, str]) -> None:
+    t = c["tag"].strip()
+    k = f"circuit:{t or i + 1}"
+    if not t or "," in t:
+        e[f"{k}.tag"] = "required, without commas"
+    elif tags.count(t) > 1:
+        e[f"{k}.tag"] = "duplicated"
+    for field, allowed, message in (("unit", UNITS, "one of " + ", ".join(UNITS)), ("topology", TOPOLOGIES, "invalid"),
+                                    ("phase", PHASES, "one of " + ", ".join(PHASES)), ("kind", KINDS, "invalid"), ("cable_type", CABLE_TYPES, "invalid")):
+        if c[field] not in allowed:
+            e[f"{k}.{field}"] = message
+    if c["load"] is None and t not in parents:
+        e[f"{k}.load"] = "required (a parent device may leave it empty)"
+    if c["load"] is not None and c["load"] <= 0:
+        e[f"{k}.load"] = "must be > 0"
+    if c["length_m"] < 0:
+        e[f"{k}.length_m"] = "must be >= 0"
+    for fld, msg in repository.route_errors(c.get("route") or []).items():
+        e[f"{k}.route.{fld}"] = msg
+    for fld in ("fp", "efficiency"):
+        if c[fld] is not None and not 0 < c[fld] <= 1:
+            e[f"{k}.{fld}"] = "between 0 and 1"
+    p = c["parent_tag"].strip()
+    if p and (p == t or p not in tags):
+        e[f"{k}.parent_tag"] = "unknown or self parent"
+
+
+def _validate_parent_cycles(cs: list, e: Dict[str, str]) -> None:
+    par = {c["tag"].strip(): c["parent_tag"].strip() for c in cs}
+    for t in par:
+        seen, cur = set(), t
+        while cur and cur in par:
+            if cur in seen:
+                e["circuits"] = f"parent cycle at {t}"
+                break
+            seen.add(cur)
+            cur = par[cur]
+
+
+def validate(data: dict) -> Dict[str, str]:
+    e: Dict[str, str] = {}
+    _validate_board(data["board"], e)
     cs = data["circuits"]
     if not cs:
         e["circuits"] = "at least one circuit"
@@ -59,46 +101,9 @@ def validate(data: dict) -> Dict[str, str]:
     tags = [c["tag"].strip() for c in cs]
     parents = {c["parent_tag"].strip() for c in cs if c["parent_tag"].strip()}
     for i, c in enumerate(cs):
-        t = c["tag"].strip()
-        k = f"circuit:{t or i + 1}"
-        if not t or "," in t:
-            e[f"{k}.tag"] = "required, without commas"
-        elif tags.count(t) > 1:
-            e[f"{k}.tag"] = "duplicated"
-        if c["unit"] not in UNITS:
-            e[f"{k}.unit"] = "one of " + ", ".join(UNITS)
-        if c["topology"] not in TOPOLOGIES:
-            e[f"{k}.topology"] = "invalid"
-        if c["phase"] not in PHASES:
-            e[f"{k}.phase"] = "one of " + ", ".join(PHASES)
-        if c["kind"] not in KINDS:
-            e[f"{k}.kind"] = "invalid"
-        if c["cable_type"] not in CABLE_TYPES:
-            e[f"{k}.cable_type"] = "invalid"
-        if c["load"] is None and t not in parents:
-            e[f"{k}.load"] = "required (a parent device may leave it empty)"
-        if c["load"] is not None and c["load"] <= 0:
-            e[f"{k}.load"] = "must be > 0"
-        if c["length_m"] < 0:
-            e[f"{k}.length_m"] = "must be >= 0"
-        for fld, msg in repository.route_errors(c.get("route") or []).items():
-            e[f"{k}.route.{fld}"] = msg
-        for fld in ("fp", "efficiency"):
-            if c[fld] is not None and not 0 < c[fld] <= 1:
-                e[f"{k}.{fld}"] = "between 0 and 1"
-        p = c["parent_tag"].strip()
-        if p and (p == t or p not in tags):
-            e[f"{k}.parent_tag"] = "unknown or self parent"
+        _validate_circuit(i, c, tags, parents, e)
     if not e:                                                         # cycles
-        par = {c["tag"].strip(): c["parent_tag"].strip() for c in cs}
-        for t in par:
-            seen, cur = set(), t
-            while cur and cur in par:
-                if cur in seen:
-                    e["circuits"] = f"parent cycle at {t}"
-                    break
-                seen.add(cur)
-                cur = par[cur]
+        _validate_parent_cycles(cs, e)
     return e
 
 
