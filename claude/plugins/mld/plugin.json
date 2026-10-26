@@ -41,12 +41,7 @@
       "matplotlib"
     ]
   },
-  "skills": [
-    {
-      "id": "convert-sld-to-mld",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "legacy": {
     "name": "mld-generator",
     "source": "mld-generator"

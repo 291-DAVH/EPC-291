@@ -6,16 +6,11 @@
       "kind": "calc",
       "status": "active",
       "requires": {},
-      "skills": [
-        "size-feeder",
-        "dimension-installation",
-        "write-calculation-memo",
-        "write-memo-summary"
-      ],
+      "skills": [],
       "engine": [
         "calc"
       ],
-      "hash": "adaebce677195221"
+      "hash": "89e29a3a76f198b9"
     },
     "board-design": {
       "version": "0.2.1",
@@ -28,14 +23,12 @@
         "iec-symbols": "^0.4.14",
         "iram-titleblock": "^0.5.1"
       },
-      "skills": [
-        "design-board"
-      ],
+      "skills": [],
       "engine": [
         "calc",
         "drawing"
       ],
-      "hash": "60e3f2f09de4adb4"
+      "hash": "1593f00ca5725a27"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -62,13 +55,11 @@
       "kind": "knowledge",
       "status": "active",
       "requires": {},
-      "skills": [
-        "generate-electrical-symbol"
-      ],
+      "skills": [],
       "engine": [
         "drawing"
       ],
-      "hash": "a2f82d31aa39dd48"
+      "hash": "f40a8983e6a28ea3"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -86,14 +77,11 @@
       "kind": "generator",
       "status": "active",
       "requires": {},
-      "skills": [
-        "generate-titleblock-sheet",
-        "generate-iram-sheet"
-      ],
+      "skills": [],
       "engine": [
         "drawing"
       ],
-      "hash": "86243ef29df85b23"
+      "hash": "74c3f6374d7705f4"
     },
     "mld": {
       "version": "0.2.2",
@@ -105,14 +93,12 @@
         "iram-titleblock": "^0.5.1",
         "iec-symbols": "^0.4.14"
       },
-      "skills": [
-        "convert-sld-to-mld"
-      ],
+      "skills": [],
       "engine": [
         "calc",
         "drawing"
       ],
-      "hash": "564a3bac75facba1"
+      "hash": "f9627842047697f2"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -151,14 +137,12 @@
         "iec-symbols": "^0.4.14",
         "iram-titleblock": "^0.5.1"
       },
-      "skills": [
-        "generate-sld"
-      ],
+      "skills": [],
       "engine": [
         "calc",
         "drawing"
       ],
-      "hash": "6747553f349698ed"
+      "hash": "0e8dab5e358fce84"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -194,47 +178,17 @@
     "analyze-standard": {
       "owner": "standard-ingest"
     },
-    "convert-sld-to-mld": {
-      "owner": "mld"
-    },
     "create-management-document": {
       "owner": "pm2-docs"
-    },
-    "design-board": {
-      "owner": "board-design"
-    },
-    "dimension-installation": {
-      "owner": "aea-calc"
-    },
-    "generate-electrical-symbol": {
-      "owner": "iec-symbols"
-    },
-    "generate-iram-sheet": {
-      "owner": "iram-titleblock"
-    },
-    "generate-sld": {
-      "owner": "sld"
     },
     "generate-specification": {
       "owner": "spec-writer"
     },
-    "generate-titleblock-sheet": {
-      "owner": "iram-titleblock"
-    },
     "request-quotation": {
       "owner": "procurement"
     },
-    "size-feeder": {
-      "owner": "aea-calc"
-    },
     "structure-customer-input": {
       "owner": "intake-analysis"
-    },
-    "write-calculation-memo": {
-      "owner": "aea-calc"
-    },
-    "write-memo-summary": {
-      "owner": "aea-calc"
     }
   }
 }

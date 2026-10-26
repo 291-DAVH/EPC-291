@@ -116,6 +116,8 @@ def main():
     if intake.is_dir():
         run("intake", [py, "-m", "unittest", "test_intake"], intake)
 
+    run("impact-map", [py, str(REPO / "tools" / "build" / "impact_map.py"), "--check"], REPO)
+
     example = ENGINE / "drawing" / "examples" / "sld"
     if example.is_dir():
         out = Path(tempfile.mkdtemp(prefix="gate_sld_"))
