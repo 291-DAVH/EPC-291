@@ -175,8 +175,120 @@ def canvas_cases():
             "boxes": {"planning": list(CE.CAJAS_planning), "phase": list(CE.CAJAS_PHASE), "closure": list(CE.CAJAS_CLOSURE)}}
 
 
+# ---------------------------------------------------------------- CCPM input matrix
+TOP_VALUES = [None, "", "x", -1, 0, 1, 25, 1.5, True, [], {}, "2026-13-45", "2026-10-05", ["2026-10-06"], ["x"], "esfuerzo", "rss", "otro", 40, "mon", [0, 1, 2], [9]]
+TOP_FIELDS = ["inicio", "feriados", "dias_laborables", "fecha_limite_contractual", "metodo_buffer", "hitos", "tareas", "horas_por_dia", "tipo_plazo", "plazo_horas",
+              "factor_buffer", "base", "desconocida"]
+TASK_VALUES = [None, "", "x", -1, 0, 2, 100, 1.5, True, [], ["T1"], ["ZZZ"], "2026-10-05", "2026-09-01", "hecha", "excluida", "bloqueada", "pendiente", "Hecha", "elaborar", "revisar", "L1", "PQ"]
+TASK_FIELDS = ["id", "nombre", "recurso", "tipo_recurso", "dur_segura", "dur_segura_h", "dur_agresiva", "dur_agresiva_h", "predecesores", "fecha_no_antes_de", "inicio_real",
+               "fin_real", "estado", "lote", "paquete", "fase_paquete", "entregable"]
+HITO_VALUES = [None, "x", {"nombre": "H"}, {"nombre": "H", "fecha": "2026-10-20"}, {"fecha": "2026-10-20", "tarea": "ZZZ"}, {"fecha": "bad"}, {"fecha": "2026-10-20", "tarea": "T1"}]
+
+
+def _set(i, **fields):
+    def change(d):
+        d["tareas"][i].update(fields)
+    return change
+
+
+def _drop(i, key):
+    def change(d):
+        d["tareas"][i].pop(key, None)
+    return change
+
+
+def _top(**fields):
+    def change(d):
+        d.update(fields)
+    return change
+
+
+def _isolated(d):
+    for t in d["tareas"]:
+        t["predecesores"] = []
+
+
+def _with_date(d):
+    import datetime
+    return {"desde": datetime.date(2026, 10, 12)}
+
+
+def _lots(d):
+    for k, t in enumerate(d["tareas"]):
+        t["lote"] = "L1" if k % 2 == 0 else "L2"
+    return {"lote": "L1"}
+
+
+def _milestone_on_done(d):
+    d["tareas"][0]["estado"] = "hecha"
+    d["tareas"][0]["fin_real"] = "2026-10-02"
+    d["hitos"] = [{"nombre": "H", "fecha": "2026-10-20", "tarea": d["tareas"][0]["id"]}]
+
+
+COMBOS = [
+    _with_date, _lots, _isolated, _milestone_on_done,
+    _top(plazo_horas=80), _top(plazo_horas=80, fecha_limite_contractual="2026-12-01"), _top(plazo_horas=80, fecha_limite_contractual=None),
+    _top(plazo_horas=10, tipo_plazo="esfuerzo"), _top(plazo_horas=100000, tipo_plazo="esfuerzo"), _top(plazo_horas=200, tipo_plazo="esfuerzo", horas_por_dia=6),
+    _top(horas_por_dia=6, plazo_horas=40), _top(metodo_buffer="rss"), _top(factor_buffer=0.3), _top(base={"fin_cadena": "2026-12-01"}), _top(base=[]),
+    _drop(0, "dur_segura"), _set(0, dur_segura=None, dur_segura_h=16), _set(0, dur_segura_h=16, dur_agresiva_h=8), _set(0, dur_segura_h=16, dur_agresiva_h=40),
+    _set(0, dur_agresiva=2, dur_agresiva_h=8), _set(0, dur_segura=None, dur_segura_h=0), _set(1, dur_agresiva=1), _set(1, dur_agresiva=900),
+    _set(0, inicio_real="2026-10-10", fin_real="2026-10-01"), _set(0, inicio_real="2026-10-01", fin_real="2026-10-03"), _set(0, fin_real="2026-10-03", estado="pendiente"),
+    _set(0, estado="hecha", fin_real="2026-10-03"), _set(0, estado="excluida"), _set(0, estado="bloqueada"), _set(0, estado=" Hechá "),
+    _set(0, paquete="PQ-1", fase_paquete="elaborar"), _set(0, fase_paquete="elaborar"), _set(0, paquete="PQ-1", fase_paquete="x"),
+    _set(0, tipo_recurso="externo", recurso=""), _set(0, recurso=""), _set(1, predecesores=["T1", "T1", " T1 "]), _set(0, predecesores="T2"),
+]
+
+
+def _outcome(data, **kw):
+    try:
+        res = ccpm.calcular_ccpm(json.loads(json.dumps(data)), **kw)
+    except Exception as e:                                 # noqa: BLE001 - the type and the message are the behaviour
+        return f"{type(e).__name__}: {e}"
+    return {"sha": digest(res), "warnings": len(res.get("advertencias", []))}
+
+
+def ccpm_matrix():
+    """Every field of the input and of three tasks of each example set to a series of odd values: what the validation answers to each is pinned (message or result digest)."""
+    out = {}
+    for name, task_ids in (("example_ccpm.json", (0, 1, 3)), ("example_ccpm_packages.json", (0, 2))):
+        base = json.loads((PKG / name).read_text(encoding="utf-8"))
+        for f in TOP_FIELDS:
+            for k, v in enumerate(TOP_VALUES):
+                data = json.loads(json.dumps(base))
+                data[f] = v
+                out[f"{name}|top|{f}|{k}"] = _outcome(data)
+        for ti in task_ids:
+            for f in TASK_FIELDS:
+                for k, v in enumerate(TASK_VALUES):
+                    data = json.loads(json.dumps(base))
+                    data["tareas"][ti][f] = v
+                    out[f"{name}|task{ti}|{f}|{k}"] = _outcome(data)
+        for k, v in enumerate(HITO_VALUES):
+            data = json.loads(json.dumps(base))
+            data["hitos"] = [v] if "hitos" in data else [v]
+            out[f"{name}|hito|{k}"] = _outcome(data)
+        for k, desde in enumerate([None, "2026-10-12", "2026-10-10", "bad", 5]):
+            for j, lote in enumerate([None, "L1", "zz", ""]):
+                out[f"{name}|params|{k}|{j}"] = _outcome(base, desde=desde, lote=lote)
+        for k, change in enumerate(COMBOS):
+            data = json.loads(json.dumps(base))
+            kw = change(data) or {}
+            out[f"{name}|combo|{k}"] = _outcome(data, **kw)
+        data = json.loads(json.dumps(base))
+        for t in data["tareas"]:
+            t["estado"] = "hecha"
+        out[f"{name}|all_done"] = _outcome(data)
+        data = json.loads(json.dumps(base))
+        data["tareas"][1]["predecesores"] = [data["tareas"][1]["id"]]
+        out[f"{name}|self_predecessor"] = _outcome(data)
+        data = json.loads(json.dumps(base))
+        data["tareas"].append(json.loads(json.dumps(data["tareas"][0])))
+        out[f"{name}|duplicated_id"] = _outcome(data)
+    return out
+
+
 def all_results():
-    r = {"ccpm": ccpm_cases(), "specification": spec_cases(), "project": project_cases(), "canvas": canvas_cases()}
+    r = {"ccpm": ccpm_cases(), "ccpm_matrix": ccpm_matrix(), "specification": spec_cases(), "project": project_cases(), "canvas": canvas_cases()}
     return json.loads(json.dumps(r, ensure_ascii=False, default=str))      # what a JSON file gives back: tuples are lists
 
 
