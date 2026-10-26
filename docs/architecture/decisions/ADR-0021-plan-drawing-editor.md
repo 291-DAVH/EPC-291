@@ -13,6 +13,8 @@ Status: Accepted (direction; to be built in phases). Date: 2026-10-26. Refines A
 8. **Coordinates.** Every plan has an origin `0,0` that the user sets with a button; coordinates are real metres from that origin, after the two-point scale calibration.
 9. **DXF.** Generated from the model with `ezdxf`, never converted from the SVG. The user can choose the DXF version; the default is the latest `ezdxf` writes (R2018). The gate runs `ezdxf` audit; opening in AutoCAD is a manual check by the owner, recorded as not verified locally.
 
+10. **Circuits over the drawing (owner, 2026-10-26).** A circuit is not drawn cable by cable: the person chooses a circuit of the board (a reference), its origin node, its destination node and its number of parallel cables (ternas), and the program routes it by the shortest way over the drawn stretches. A **conduit (and a road crossing) takes a single circuit**: once a circuit uses it, it is blocked for the others (its ternas may share it); a **tray takes several circuits and several ternas**. Each stretch records what it carries and how many cables; a circuit with no free way is reported, not forced.
+
 ## Consequences
 - (+) One model feeds the schedules, the DXF and the PDF; the cable data stays in one place.
 - (-) The line-to-graph conversion needs clear rules for junctions and crossings and a visible way to correct them.

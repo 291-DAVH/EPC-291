@@ -1,17 +1,119 @@
 {
   "schema_version": "1.0",
-  "plan": {"id": "PLAN-L0", "level": "L0", "scale": {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}, "origin": [100, 300]},
+  "plan": {
+    "id": "PLAN-L0",
+    "level": "L0",
+    "scale": {
+      "p1": [
+        0,
+        0
+      ],
+      "p2": [
+        100,
+        0
+      ],
+      "distance_m": 10
+    },
+    "origin": [
+      100,
+      300
+    ]
+  },
   "discipline": "electrica_BT",
   "dxf_version": "R2018",
   "nodes": [
-    {"id": "n1", "kind": "TB", "x": 100, "y": 300},
-    {"id": "n2", "kind": "CM", "x": 500, "y": 300},
-    {"id": "n3", "kind": "CP", "x": 500, "y": 100}
+    {
+      "id": "n1",
+      "kind": "TB",
+      "x": 100,
+      "y": 300
+    },
+    {
+      "id": "n2",
+      "kind": "CM",
+      "x": 500,
+      "y": 300
+    },
+    {
+      "id": "n3",
+      "kind": "CP",
+      "x": 500,
+      "y": 100
+    }
   ],
   "lines": [
-    {"id": "l1", "kind": "BN", "points": [[100, 300], [500, 300]], "circuit": "C-01", "attrs": {"ancho_mm": 300}},
-    {"id": "l2", "kind": "CN", "points": [[500, 300], [500, 100]], "circuit": "C-01", "attrs": {"diametro_mm": 63}},
-    {"id": "l3", "kind": "CN", "points": [[300, 300], [300, 150]], "circuit": "C-02"},
-    {"id": "l4", "kind": "CN", "points": [[150, 250], [250, 350]]}
+    {
+      "id": "l1",
+      "kind": "BN",
+      "points": [
+        [
+          100,
+          300
+        ],
+        [
+          500,
+          300
+        ]
+      ],
+      "circuit": "C-01",
+      "attrs": {
+        "ancho_mm": 300
+      }
+    },
+    {
+      "id": "l2",
+      "kind": "CN",
+      "points": [
+        [
+          500,
+          300
+        ],
+        [
+          500,
+          100
+        ]
+      ],
+      "circuit": "C-01",
+      "attrs": {
+        "diametro_mm": 63
+      }
+    },
+    {
+      "id": "l3",
+      "kind": "CN",
+      "points": [
+        [
+          300,
+          300
+        ],
+        [
+          300,
+          150
+        ]
+      ],
+      "circuit": "C-02"
+    },
+    {
+      "id": "l4",
+      "kind": "CN",
+      "points": [
+        [
+          150,
+          250
+        ],
+        [
+          250,
+          350
+        ]
+      ]
+    }
+  ],
+  "circuits": [
+    {
+      "tag": "C-01",
+      "from": "n1",
+      "to": "n3",
+      "ternas": 2
+    }
   ]
 }

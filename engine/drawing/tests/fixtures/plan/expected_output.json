@@ -98,7 +98,14 @@
    "attrs": {
     "ancho_mm": 300
    },
-   "circuit": "C-01"
+   "circuit": "C-01",
+   "carries": [
+    {
+     "circuit": "C-01",
+     "ternas": 2
+    }
+   ],
+   "cables": 2
   },
   {
    "tag": "BN-001/2",
@@ -121,7 +128,14 @@
    "attrs": {
     "ancho_mm": 300
    },
-   "circuit": "C-01"
+   "circuit": "C-01",
+   "carries": [
+    {
+     "circuit": "C-01",
+     "ternas": 2
+    }
+   ],
+   "cables": 2
   },
   {
    "tag": "CN-001",
@@ -144,7 +158,14 @@
    "attrs": {
     "diametro_mm": 63
    },
-   "circuit": "C-01"
+   "circuit": "C-01",
+   "carries": [
+    {
+     "circuit": "C-01",
+     "ternas": 2
+    }
+   ],
+   "cables": 2
   },
   {
    "tag": "CN-002",
@@ -239,7 +260,52 @@
    "CN-002": 15.0,
    "CN-003": 14.1421
   },
+  "containers": [
+   {
+    "tag": "BN-001/1",
+    "kind": "BN",
+    "circuits": [
+     "C-01"
+    ],
+    "cables": 2
+   },
+   {
+    "tag": "BN-001/2",
+    "kind": "BN",
+    "circuits": [
+     "C-01"
+    ],
+    "cables": 2
+   },
+   {
+    "tag": "CN-001",
+    "kind": "CN",
+    "circuits": [
+     "C-01"
+    ],
+    "cables": 2
+   }
+  ],
   "total_length_m": 89.1421
+ },
+ "circuits": {
+  "C-01": {
+   "found": true,
+   "from": "n1",
+   "to": "n3",
+   "ternas": 2,
+   "stretches": [
+    "BN-001/1",
+    "BN-001/2",
+    "CN-001"
+   ],
+   "lines": [
+    "l1",
+    "l2"
+   ],
+   "length_m": 60.0,
+   "cable_length_m": 120.0
+  }
  },
  "network": null,
  "rules_used": [],

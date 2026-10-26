@@ -204,6 +204,80 @@ class TestNetworks(unittest.TestCase):
             core.process(self.sewer(outlet="zz"), rules=self.RULES)
 
 
+class TestCircuitRoutes(unittest.TestCase):
+    """A circuit goes from an origin node to a destination node over the drawn stretches; a conduit takes one circuit, a tray takes as many as come."""
+
+    def network(self, circuits, **extra):
+        nodes = [node("A", "TB", 0, 0), node("B", "CM", 200, 0), node("C", "CP", 200, 100)]
+        lines = [line("bn", "BN", [[0, 0], [200, 0]]), line("cn1", "CN", [[200, 0], [200, 100]]), line("cn2", "CN", [[0, 0], [0, 200], [200, 200], [200, 100]])]
+        return core.process(drawing(nodes, lines, circuits=circuits, **extra))
+
+    def test_the_shortest_way_is_taken_and_every_stretch_records_what_it_carries(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "C"}])
+        route = out["circuits"]["C-01"]
+        self.assertEqual((route["found"], route["stretches"], route["length_m"]), (True, ["BN-001", "CN-001"], 30.0))
+        carried = {s["tag"]: s.get("carries") for s in out["stretches"]}
+        self.assertEqual(carried["BN-001"], [{"circuit": "C-01", "ternas": 1}])
+        self.assertIsNone(carried["CN-002"])
+
+    def test_ternas_multiply_the_cable_length_and_the_cables_in_the_tray(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "C", "ternas": 3}])
+        self.assertEqual(out["circuits"]["C-01"]["cable_length_m"], 90.0)
+        self.assertEqual(next(c for c in out["schedule"]["containers"] if c["tag"] == "BN-001")["cables"], 3)
+
+    def test_a_tray_carries_several_circuits_and_counts_their_cables(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "B", "ternas": 2}, {"tag": "C-02", "from": "A", "to": "B"}])
+        tray = next(c for c in out["schedule"]["containers"] if c["tag"] == "BN-001")
+        self.assertEqual((tray["circuits"], tray["cables"]), (["C-01", "C-02"], 3))
+
+    def test_a_conduit_used_by_one_circuit_is_blocked_for_the_next_which_takes_another_way(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "C"}, {"tag": "C-02", "from": "A", "to": "C"}])
+        self.assertEqual(out["circuits"]["C-01"]["stretches"], ["BN-001", "CN-001"])
+        second = out["circuits"]["C-02"]
+        self.assertEqual((second["stretches"], second["length_m"]), (["CN-002"], 50.0))
+        self.assertNotIn("C-02", [c["circuit"] for s in out["stretches"] if s["tag"] == "CN-001" for c in s["carries"]])
+
+    def test_when_every_way_is_blocked_the_circuit_is_not_routed_and_says_why(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "C"}, {"tag": "C-02", "from": "A", "to": "C"}, {"tag": "C-03", "from": "A", "to": "C"}])
+        self.assertFalse(out["circuits"]["C-03"]["found"])
+        self.assertTrue(any("C-03" in w and "another circuit already uses" in w for w in out["warnings"]))
+
+    def test_a_conduit_with_a_drawn_cable_of_another_circuit_is_blocked_too(self):
+        nodes = [node("A", "TB", 0, 0), node("B", "CM", 200, 0)]
+        lines = [line("cn", "CN", [[0, 0], [200, 0]], circuit="C-09")]
+        out = core.process(drawing(nodes, lines, circuits=[{"tag": "C-01", "from": "A", "to": "B"}]))
+        self.assertFalse(out["circuits"]["C-01"]["found"])
+
+    def test_the_same_circuit_may_use_a_conduit_again(self):
+        nodes = [node("A", "TB", 0, 0), node("B", "CM", 200, 0)]
+        lines = [line("cn", "CN", [[0, 0], [200, 0]], circuit="C-01")]
+        out = core.process(drawing(nodes, lines, circuits=[{"tag": "C-01", "from": "A", "to": "B"}]))
+        self.assertTrue(out["circuits"]["C-01"]["found"])
+
+    def test_a_node_to_pass_through_forces_the_way(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "C", "via": ["B"]}])
+        self.assertEqual(out["circuits"]["C-01"]["stretches"], ["BN-001", "CN-001"])
+
+    def test_a_circuit_that_cannot_be_routed_is_reported_not_refused(self):
+        for circuit, text in (({"tag": "C-01", "from": "A", "to": "ZZ"}, "no longer exists"), ({"tag": "C-01", "from": "A", "to": "A"}, "same node"),
+                              ({"tag": "", "from": "A", "to": "C"}, "has no tag")):
+            out = self.network([circuit])
+            self.assertEqual(out["circuits"], {}, text)
+            self.assertTrue(any(text in w for w in out["warnings"]), text)
+
+    def test_a_circuit_defined_twice_keeps_the_first(self):
+        out = self.network([{"tag": "C-01", "from": "A", "to": "B"}, {"tag": "C-01", "from": "A", "to": "C"}])
+        self.assertEqual(out["circuits"]["C-01"]["to"], "B")
+        self.assertTrue(any("defined twice" in w for w in out["warnings"]))
+
+    def test_two_separate_networks_have_no_way_between_them(self):
+        nodes = [node("A", "TB", 0, 0), node("B", "CM", 100, 0), node("X", "CM", 0, 500), node("Y", "CM", 100, 500)]
+        lines = [line("l1", "BN", [[0, 0], [100, 0]]), line("l2", "BN", [[0, 500], [100, 500]])]
+        out = core.process(drawing(nodes, lines, circuits=[{"tag": "C-01", "from": "A", "to": "Y"}]))
+        self.assertFalse(out["circuits"]["C-01"]["found"])
+        self.assertTrue(any("there is no way from" in w for w in out["warnings"]))
+
+
 class TestDxf(unittest.TestCase):
     def make(self, doc, version=""):
         d = tempfile.TemporaryDirectory()

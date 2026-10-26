@@ -3,9 +3,9 @@
   "nombre": {"es": "Instalación eléctrica en baja tensión", "en": "Low-voltage electrical installation"},
   "tramos": [
     {"id": "CA", "etiqueta": {"es": "Cable", "en": "Cable"}, "prefijo_tag": "CA", "atributos": ["circuito", "seccion_mm2", "material", "conductores", "tension_v"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-CABLE"},
-    {"id": "CN", "etiqueta": {"es": "Caño / canalización", "en": "Conduit"}, "prefijo_tag": "CN", "atributos": ["diametro_mm", "material", "instalacion"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-CANAL"},
+    {"id": "CN", "un_solo_circuito": true, "etiqueta": {"es": "Caño / canalización", "en": "Conduit"}, "prefijo_tag": "CN", "atributos": ["diametro_mm", "material", "instalacion"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-CANAL"},
     {"id": "BN", "etiqueta": {"es": "Bandeja", "en": "Tray"}, "prefijo_tag": "BN", "atributos": ["ancho_mm", "alto_mm", "material"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-BANDEJA"},
-    {"id": "CR", "etiqueta": {"es": "Cruce bajo calzada", "en": "Road crossing"}, "prefijo_tag": "CR", "atributos": ["diametro_mm", "profundidad_m"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-CRUCE"}
+    {"id": "CR", "un_solo_circuito": true, "etiqueta": {"es": "Cruce bajo calzada", "en": "Road crossing"}, "prefijo_tag": "CR", "atributos": ["diametro_mm", "profundidad_m"], "simbolo_2d": "linea_simple", "capa_dxf": "ELEC-CRUCE"}
   ],
   "nodos": [
     {"id": "CM", "etiqueta": {"es": "Cámara subterránea", "en": "Underground chamber"}, "prefijo_tag": "CM", "atributos": ["dimensiones", "profundidad_m"], "simbolo_2d": "camara", "capa_dxf": "ELEC-CAMARA"},

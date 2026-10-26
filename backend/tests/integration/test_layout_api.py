@@ -10,6 +10,7 @@ from fastapi.testclient import TestClient
 from epc.core.config import settings
 from epc.main import create_app
 from tests.integration.test_identity_api import PW, PROJECT, Base
+from tests.integration.test_sld_api import BOARD, CIRCUITS, TB
 
 PNG = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==")
 DRAWING = {
@@ -114,6 +115,28 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(self.c.post(f"{self.base}/L0/generate", params={"version": "R14"}).status_code, 422)
         self.assertEqual(self.c.get(f"{self.base}/L0/files/../src/drawing.json").status_code, 404)
         self.assertEqual(self.c.get(f"{self.base}/L0/files/other.dxf").status_code, 404)
+
+    def test_circuits_are_routed_from_an_origin_to_a_destination_and_come_from_the_boards(self):
+        self.c.put("/api/data/organization", json={"legal_name": "Oficina SA"})
+        self.assertEqual(self.c.put("/api/projects/ACME/P-1/sld", json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
+        listed = self.c.get(self.base).json()["circuits"]
+        self.assertEqual({c["tag"] for c in listed}, {"C-01", "M-01", "G-01", "G-01-A"})
+        drawing = {**DRAWING, "circuits": [{"tag": "C-01", "from": "n1", "to": "n2", "ternas": 2}]}
+        v = self.c.put(f"{self.base}/L0", json=drawing).json()
+        route = v["result"]["circuits"]["C-01"]
+        self.assertEqual((route["found"], route["length_m"], route["cable_length_m"]), (True, 20.0, 40.0))
+        self.assertEqual(v["result"]["schedule"]["containers"][0]["cables"], 2)
+        again = self.c.get(f"{self.base}/L0").json()["drawing"]["circuits"]
+        self.assertEqual(again[0]["from"], "n1")                              # the origin keeps its name on the way out and back
+
+    def test_a_drawing_saved_before_circuits_existed_still_opens(self):
+        self.c.put(f"{self.base}/L0", json=DRAWING)
+        import json as _json
+        path = self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "layout" / "L0" / "src" / "drawing.json"
+        data = _json.loads(path.read_text(encoding="utf-8"))
+        data.pop("circuits", None)
+        path.write_text(_json.dumps(data), encoding="utf-8")
+        self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["circuits"], [])
 
     def test_generate_needs_a_drawing_and_a_scale(self):
         self.assertEqual(self.c.post(f"{self.base}/L0/generate").status_code, 404)
