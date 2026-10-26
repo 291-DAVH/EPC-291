@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
@@ -99,10 +99,18 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const apply = (next: Drawing) => { setHist(commit(hist, drawing)); onChange(next); };
   const doUndo = () => { const r = undo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const doRedo = () => { const r = redo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
-  const finishLine = () => { if (draft.length >= 2 && kindId) apply(addLine(drawing, kindId, draft)); setDraft([]); };
-  const cancel = () => { setDraft([]); setScalePts([]); setMarquee(null); onSelect([]); };
+  const finishLine = () => {
+    if (draft.length >= 2 && kindId) {
+      const tag = circuitFor(drawing, selection, draft[0]);                              // from a load or cable of a circuit: the new cable extends that circuit
+      let next = addLine(drawing, kindId, draft);
+      if (tag) { next = joinCircuit(next, tag, new Set(nodeKinds.filter((n) => n.carga).map((n) => n.id))); onSelect([{ type: "line", id: next.lines[next.lines.length - 1].id }]); }
+      apply(next);
+    }
+    setDraft([]);
+  };
+  const cancel = (keepSelection = false) => { setDraft([]); setScalePts([]); setMarquee(null); if (!keepSelection) onSelect([]); };
 
-  const choose = (next: Tool) => { cancel(); setTool(next); };
+  const choose = (next: Tool) => { cancel(next === "line"); setTool(next); };          // the selection goes with the line tool: it says which circuit the cable extends
   const confirmScale = () => {
     const meters = parseFloat(scaleText.replace(",", "."));
     if (scalePts.length === 2 && meters > 0) { apply(setScale(drawing, scalePts[0], scalePts[1], meters)); setScalePts([]); setScaleText(""); setTool("select"); }
@@ -182,7 +190,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     else if ((e.key === "Delete" || e.key === "Backspace") && selection.length > 0 && !readOnly) { apply(removeMany(drawing, selection)); onSelect([]); }
     else if (profile?.shortcuts[e.key.toLowerCase()]) {
       const id = profile.shortcuts[e.key.toLowerCase()];
-      if (nodeKinds.some((n) => n.id === id)) { cancel(); setTool("node"); setKindId(id); } else if (lineKinds.some((l) => l.id === id)) { cancel(); setTool("line"); setKindId(id); }
+      if (nodeKinds.some((n) => n.id === id)) { cancel(); setTool("node"); setKindId(id); } else if (lineKinds.some((l) => l.id === id)) { cancel(true); setTool("line"); setKindId(id); }
     }
   };
 
@@ -228,7 +236,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
         <div className="row" style={{ margin: "6px 0" }}>
           <span>{t("layout.scaleDistance")}</span>
           <input ref={scaleInput} value={scaleText} onChange={(e) => setScaleText(e.target.value)} onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") confirmScale(); }} style={{ width: 90 }} />
-          <button className="primary" onClick={confirmScale}>{t("layout.apply")}</button><button onClick={cancel}>{t("layout.cancel")}</button>
+          <button className="primary" onClick={confirmScale}>{t("layout.apply")}</button><button onClick={() => cancel()}>{t("layout.cancel")}</button>
         </div>
       )}
       <div ref={box} style={{ border: "1px solid var(--line, #ccc)", background: "#fff", height: 560, overflow: "hidden", touchAction: "none" }}>

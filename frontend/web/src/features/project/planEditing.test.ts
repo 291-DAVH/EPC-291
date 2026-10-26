@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, assignCircuit, blank, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, circuitFor, joinCircuit, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -158,5 +158,21 @@ describe("plan editing rules", () => {
     expect(b.lines[0].points).toEqual([[0, 0], [130, 0], [130, 40]]);
     const c = moveElements(d, [{ type: "node", id: "n1" }, { type: "node", id: "n2" }], 7, 9);
     expect(c.lines[0].points).toEqual([[7, 9], [107, 9]]);
+  });
+
+  it("extends a circuit: a new cable from a load or cable of a circuit joins it with the loads it reaches", () => {
+    const loads = new Set(["LU"]);
+    let d = addNode(addNode(addNode(blank(), "TB", [0, 0]), "LU", [100, 0]), "LU", [100, 50]);
+    d = addLine(d, "CA", [[0, 0], [100, 0]]);
+    d = { ...d, nodes: d.nodes.map((n) => (n.id === "n2" ? { ...n, circuit: "C-01" } : n)), lines: d.lines.map((l) => ({ ...l, circuit: "C-01" })) };
+    expect(circuitFor(d, [{ type: "node", id: "n2" }], [100, 0])).toBe("C-01");
+    expect(circuitFor(d, [{ type: "line", id: "l1" }], [9, 9])).toBe("C-01");
+    expect(circuitFor(d, [], [100, 0])).toBe("C-01");                 // starts on a load of the circuit
+    expect(circuitFor(d, [], [0, 0])).toBe("C-01");                   // starts on the cable of the circuit
+    expect(circuitFor(d, [], [500, 500])).toBe("");
+    const e = joinCircuit(addLine(d, "CA", [[100, 0], [100, 50]]), "C-01", loads);
+    expect(e.lines[1].circuit).toBe("C-01");
+    expect(e.nodes.find((n) => n.id === "n3")?.circuit).toBe("C-01");
+    expect(e.nodes.find((n) => n.id === "n1")?.circuit).toBeUndefined();
   });
 });
