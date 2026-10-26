@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable, Dict
 
-from epc_plan import core
+from epc_plan import core, dxfout
 
 
 def _write(status_file: Path, state: Dict[str, Any]) -> None:
@@ -16,10 +16,14 @@ def _write(status_file: Path, state: Dict[str, Any]) -> None:
 
 
 def run(document: Dict[str, Any], out_dir: Path, progress: Callable[[float, str], None] = lambda p, m: None) -> Dict[str, Any]:
-    """Do the work now, in this thread, reporting progress. Returns the output document and writes it to out_dir/result.json."""
+    """Do the work now, in this thread, reporting progress. Writes out_dir/result.json and the DXF (out_dir/<plan id>.dxf) and returns the result."""
     progress(0.0, "start")
     result = core.process(document)
+    progress(0.5, "model")
     out_dir.mkdir(parents=True, exist_ok=True)
+    name = (result["plan"]["id"] or "plan").replace("/", "_")
+    result["files"] = {"dxf": f"{name}.dxf", "dxf_version": document.get("dxf_version") or core.PARAMS["dxf"]["default_version"]}
+    result["warnings"] += dxfout.write_dxf(result, out_dir / f"{name}.dxf", document.get("dxf_version", ""))
     (out_dir / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
     progress(1.0, "done")
     return result

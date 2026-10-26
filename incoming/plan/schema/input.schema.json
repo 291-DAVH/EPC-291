@@ -1,7 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "plan input",
+  "title": "plan drawing (input)",
   "type": "object",
-  "required": ["schema_version"],
-  "properties": {"schema_version": {"const": "1.0"}, "items": {"type": "array"}}
+  "required": ["schema_version", "plan", "discipline"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "plan": {"type": "object", "required": ["scale"], "properties": {
+      "id": {"type": "string"}, "level": {"type": "string", "pattern": "^L(0|[1-9][0-9]*|-[1-9][0-9]*)$", "description": "L0 ground, L1.. up, L-1.. down"},
+      "scale": {"type": "object", "required": ["p1", "p2", "distance_m"], "properties": {"p1": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}, "p2": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}, "distance_m": {"type": "number", "exclusiveMinimum": 0}}},
+      "origin": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2, "description": "the point 0,0 the person set, in view units"}}},
+    "discipline": {"type": "string"},
+    "dxf_version": {"type": "string"},
+    "outlet": {"type": "string", "description": "id of the node where a network drains to"},
+    "outlet_invert_m": {"type": "number"},
+    "nodes": {"type": "array", "items": {"type": "object", "required": ["id", "kind", "x", "y"], "properties": {"id": {"type": "string"}, "kind": {"type": "string"}, "x": {"type": "number"}, "y": {"type": "number"}, "tag": {"type": "string"}, "attrs": {"type": "object"}}}},
+    "lines": {"type": "array", "items": {"type": "object", "required": ["id", "kind", "points"], "properties": {"id": {"type": "string"}, "kind": {"type": "string"}, "points": {"type": "array", "minItems": 2, "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}}, "tag": {"type": "string"}, "circuit": {"type": "string", "description": "tag of the circuit in the board: the line references it, it never creates it"}, "attrs": {"type": "object"}}}}
+  }
 }

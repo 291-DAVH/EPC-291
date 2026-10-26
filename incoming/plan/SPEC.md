@@ -38,6 +38,18 @@ Distances between trays, bending radii, support spacing, fill limits, separation
 ## Screen (`web/`)
 A canvas with pan, zoom, snapping, layers that can be shown or hidden, a calibrate-scale tool, point and polyline tools, a measuring tool and a panel that lists what was derived. Simple first; every setting in `params.json`.
 
+## Phase 1 as built (decisions of ADR-0021)
+- **Input** `schema/input.schema.json`: the plan (`level`, `scale` = two points and the real distance, `origin` = the point 0,0 the person sets), the discipline, nodes, lines (polylines), optionally an `outlet` node and its `outlet_invert_m`, and the DXF version.
+- **Levels:** `L0` ground, `L1`..`LN` up, `L-1`..`L-N` down.
+- **Coordinates:** the view is in screen units (y down); the result is in real metres from the origin, y up, as in CAD.
+- **Lines become a graph:** a line end on another line (a *T*), on a placed node or within the snap tolerance (`params.json`) connects there; a node placed on a line splits it; two lines that only cross are **not** connected unless a node is placed (a warning says so). Every stretch has its length from the scale.
+- **Tags:** correlative per prefix (`CM-001`), a tag the person wrote is kept, duplicates get a new tag and a warning. A cable line **references** the circuit of the board (`circuit`); it never creates one.
+- **Networks:** with an `outlet` the program orients every stretch toward it. Invert levels rise upstream by the minimum slope for the diameter taken from `knowledge/rules.json` (empty and `pending` until the owner provides the norm): without values nothing is invented, and a pending rule gives levels marked provisional.
+- **Output** `schema/output.schema.json`: nodes, stretches, the schedule (counts, lengths per kind and per line, the route of each circuit), the network levels, the rules used and `warnings`.
+- **DXF** (`dxfout.py`): written from the result with ezdxf, never from the SVG; one layer per kind, one block per symbol with the tag as attribute, real text, units from the discipline (m or mm); the version is chosen by the person, the latest (R2018) by default; the file is audited and read back.
+- **Dependencies:** `ezdxf` (MIT).
+- **Disciplines:** `electrica_BT` and `sanitaria_cloacas` as files in `src/epc_plan/profiles/`; symbols in `symbols.json`.
+
 ## Phases
 1. Upload, convert to a view, calibrate, levels.
 2. Draw nodes and routes; lengths and the stretches of the real route are generated.

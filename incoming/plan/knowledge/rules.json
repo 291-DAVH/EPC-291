@@ -1,1 +1,18 @@
-{"schema_version": "1.0", "rules": []}
+{
+  "schema_version": "1.0",
+  "rules": [
+    {
+      "id": "sanitaria_cloacas.pendiente_minima",
+      "topic": "min_slope",
+      "applies_to": "sanitaria_cloacas",
+      "status": "pending",
+      "source": {"norma": "", "edicion": "", "clausula": "", "nota": "To be filled from the sewer standard the owner provides; the values stay empty until then."},
+      "table": [
+        {"diameter_mm": 63, "slope_pct": null},
+        {"diameter_mm": 110, "slope_pct": null},
+        {"diameter_mm": 160, "slope_pct": null},
+        {"diameter_mm": 200, "slope_pct": null}
+      ]
+    }
+  ]
+}

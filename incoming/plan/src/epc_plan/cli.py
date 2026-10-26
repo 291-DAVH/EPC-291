@@ -20,7 +20,7 @@ def main(argv=None) -> int:
     else:
         ap.error("give --demo or --input")
     result = jobs.run(json.loads(src.read_text(encoding="utf-8")), Path(a.out))
-    print(f"OK {Path(a.out) / 'result.json'} ({result['items']} items)")
+    print(f"OK {Path(a.out) / 'result.json'} ({len(result['stretches'])} stretches, {result['schedule']['total_length_m']} m, DXF {result['files']['dxf']})")
     return 0
 
 
