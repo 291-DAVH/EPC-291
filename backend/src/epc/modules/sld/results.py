@@ -5,7 +5,7 @@ from typing import Optional
 
 from epc.core.fsutil import read_json
 from epc.core.hashing import sha256_json
-from epc.modules.sld import repository
+from epc.modules.sld import lengths, repository
 from epc.modules.sld.boards import _resolve, status
 
 
@@ -56,6 +56,6 @@ def memo(d: Path, bid: str = "") -> dict:
     m = read_json(base / f"{st.get('name')}_memoria.json", None) if st.get("name") and st.get("state") == "done" else None
     if not m or not saved:
         return {"available": False, "stale": False, "memo": None, "files": []}
-    stale = st.get("input_hash") != _hash(saved)
+    stale = st.get("input_hash") != _hash(lengths.apply(d, saved))                # a change in the plan that alters a length makes the memo stale
     files = [f for f in (f"docs/{st['name']}_MC.md", f"docs/{st['name']}_SP.md") if (repository.pkg(d) / f).is_file()]
     return {"available": True, "stale": stale, "memo": m, "files": files, "finished": st.get("finished")}

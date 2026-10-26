@@ -126,7 +126,41 @@ def _loads_by_circuit(gnodes, load_kinds: Set[str]) -> Dict[str, List[str]]:
     return loads
 
 
-def _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, loads, warnings) -> Dict[str, Any]:
+_POWER_W = {"potencia_w": 1.0, "potencia_va": 1.0, "potencia_kw": 1000.0}
+
+
+def _weight(g) -> Optional[float]:
+    """The power of a load in W (from its attributes), or None when it has none."""
+    for key, k in _POWER_W.items():
+        try:
+            v = float((g.get("attrs") or {}).get(key))
+        except (TypeError, ValueError):
+            continue
+        if v > 0:
+            return v * k
+    return None
+
+
+def _measured(c: Dict[str, Any], mine: List[str]) -> List[str]:
+    """What the circuit is measured to: its loads, or its destination when it has no load assigned."""
+    return mine or ([c["to"]] if c.get("to") else [])
+
+
+def _moments(mine: List[str], reach: Dict[str, float], tag_of, gnode_of) -> Dict[str, Any]:
+    """The moment method over the loads of a circuit: each load weighs its power (equal when some load has none), its distance is the way from the origin.
+    `moment_length_m` is the length that, with the whole current, gives the same drop as the sum of current x distance of the loads."""
+    placed = [n for n in mine if n in reach]
+    if not placed:
+        return {"loads_detail": [], "max_distance_m": 0.0, "moment_length_m": 0.0}
+    power = [_weight(gnode_of[n]) for n in placed]
+    known = all(power)
+    w = power if known else [1.0] * len(placed)
+    d = [reach[n] for n in placed]
+    return {"loads_detail": [{"tag": tag_of[n], "distance_m": round(x, 4), "power_w": wi if known else None} for n, x, wi in zip(placed, d, w)],
+            "max_distance_m": round(max(d), 4), "moment_length_m": round(sum(wi * x for wi, x in zip(w, d)) / sum(w), 4)}
+
+
+def _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, gnode_of, loads, warnings) -> Dict[str, Any]:
     """The route of one circuit: the stretches that reach all its targets (marked as taken by it), the lengths and what could not be reached."""
     tag, ternas = c["tag"], max(1, int(c.get("ternas") or 1))
     free = lambda si: not (stretches[si]["kind"] in single_kinds and taken[si] - {tag})           # noqa: E731 - a conduit used by another circuit is blocked
@@ -137,7 +171,8 @@ def _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, loads, warn
         warnings.append(_no_way(tag, tag_of, ways, adj))
     mine = loads.get(tag, [])
     return {"found": not lost, "from": c["from"], "to": c.get("to", ""), "ternas": ternas, "loads": len(mine), "unreached": [tag_of[n] for n in lost],
-            "distance_to_load_m": {tag_of[n]: d for n, d in reach.items() if n in mine}, **_record(tag, ternas, used, stretches)}
+            "distance_to_load_m": {tag_of[n]: d for n, d in reach.items() if n in mine}, **_moments(_measured(c, mine), reach, tag_of, gnode_of),
+            **_record(tag, ternas, used, stretches)}
 
 
 def route_circuits(gnodes, stretches, circuits: List[Dict[str, Any]], single_kinds: Set[str], load_kinds: Set[str], warnings: List[str]) -> Dict[str, Dict[str, Any]]:
@@ -145,6 +180,7 @@ def route_circuits(gnodes, stretches, circuits: List[Dict[str, Any]], single_kin
     (`carries`) and returns the route of each circuit by tag."""
     ids = {g["id"] for g in gnodes}
     tag_of = {g["id"]: g["tag"] for g in gnodes}
+    gnode_of = {g["id"]: g for g in gnodes}
     loads = _loads_by_circuit(gnodes, load_kinds)
     adj = _adjacency(stretches)
     taken: Dict[int, Set[str]] = {i: ({s["circuit"]} if s.get("circuit") else set()) for i, s in enumerate(stretches)}
@@ -155,5 +191,5 @@ def route_circuits(gnodes, stretches, circuits: List[Dict[str, Any]], single_kin
         if problem:
             warnings.append(problem)
             continue
-        routes[c["tag"]] = _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, loads, warnings)
+        routes[c["tag"]] = _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, gnode_of, loads, warnings)
     return routes

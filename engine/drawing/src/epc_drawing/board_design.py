@@ -65,6 +65,11 @@ def resolve_criteria(project_dir: Optional[Path] = None, discipline: str = "elec
     return crit
 
 
+def _flags(c: dict) -> dict:
+    """Marks the pipeline reads that are not Excel columns: a length measured on the plan by the moment method (see aea_pipeline)."""
+    return {"MOMENTOS": True} if c.get("moments") else {}
+
+
 def excel_rows(data: dict):
     """(tablero, circuitos) with the Excel column names that the plugin and aea_pipeline read."""
     tablero = {col: data["board"].get(key) for col, key in BOARD_ROWS}
@@ -74,7 +79,7 @@ def excel_rows(data: dict):
         if c.get("route"):                                           # real route: its total is the length of the cable (single source)
             row["RUTA"] = c["route"]
             row["LONGITUD_m"] = round(sum(float(s["length_m"]) for s in c["route"]), 3)
-        circuitos.append(row)
+        circuitos.append({**row, **_flags(c)})
     return tablero, circuitos
 
 

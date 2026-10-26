@@ -9,7 +9,7 @@ from epc.core.errors import Conflict, Invalid
 from epc.modules.engineering import public as engineering
 from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
-from epc.modules.sld import repository
+from epc.modules.sld import lengths, repository
 from epc.modules.sld.boards import _resolve, status, titleblock
 from epc.modules.sld.results import _hash, _upstream, memo
 from epc.modules.sld.validation import _name, validate
@@ -36,6 +36,7 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
         code = projects.read_meta(d).get("client_code", "-")
         logos = {k: p for k, p in masterdata.logos(d).items() if p}
         criteria = engineering.criteria_values(d)
+        data = lengths.apply(d, data)                                  # the length each circuit uses: the plan's or the board's
         res = repository.run_design(work, name, {**data, "titleblock": titleblock(d, data.get("titleblock")), "upstream": _upstream(d, data["board"]),
                                                  "validated": engineering.criteria_validated(d)}, criteria, logos, diagrams)
         summary = repository.read_summary(work)

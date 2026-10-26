@@ -378,7 +378,9 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
         largo = AR.total_length(ruta) if ruta else _num_opt(c.get("LONGITUD_m"), 0.0)
         multipolar = str(c.get("CABLE_TIPO") or "").strip().lower() != "unifilar"
         fp = _num_opt(c.get("FP"), fp_def)
-        i_du = VD.corriente_extremo(i_b, "iluminacion") if tipo == "iluminacion" else i_b
+        # lighting: the drop is checked with 66 % of Ib at the far end (the lighting is spread along the circuit); a circuit measured by moments (LONGITUD_m is then the length
+        # equivalent to the sum of current x distance of its loads) is already weighed load by load and takes the whole current
+        i_du = VD.corriente_extremo(i_b, "iluminacion") if tipo == "iluminacion" and not c.get("MOMENTOS") else i_b
         un_du = u if fases == 3 else u / math.sqrt(3)
         limite = limites[tipo]
         smin = smin_tab[tipo]

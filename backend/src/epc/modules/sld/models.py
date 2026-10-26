@@ -38,6 +38,7 @@ class Circuit(BaseModel):
     topology: str = "single"
     phase: str = "3F"                       # 3F | 1F | 3F+N
     length_m: float = 0
+    length_source: str = "auto"             # auto | plan | data: where the length comes from (see lengths.py)
     fp: Optional[float] = None
     efficiency: Optional[float] = None
     kind: str = "auto"

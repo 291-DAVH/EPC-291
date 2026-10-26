@@ -230,6 +230,18 @@ class TestCircuitRoutes(unittest.TestCase):
         tray = next(c for c in out["schedule"]["containers"] if c["tag"] == "BN-001")
         self.assertEqual((tray["circuits"], tray["cables"]), (["C-01", "C-02"], 3))
 
+    def test_the_moment_length_weighs_each_load_by_its_power_and_a_single_destination_is_its_own_distance(self):
+        nodes = [node("A", "TB", 0, 0), node("L1", "LU", 100, 0, circuit="C-01", attrs={"potencia_w": 100}), node("L2", "LU", 300, 0, circuit="C-01", attrs={"potencia_w": 300})]
+        out = core.process(drawing(nodes, [line("bn", "BN", [[0, 0], [300, 0]])], circuits=[{"tag": "C-01", "from": "A"}]))
+        route = out["circuits"]["C-01"]
+        self.assertEqual((route["max_distance_m"], route["moment_length_m"]), (30.0, 25.0))
+        self.assertEqual([(d["tag"], d["distance_m"], d["power_w"]) for d in route["loads_detail"]], [("LU-001", 10.0, 100.0), ("LU-002", 30.0, 300.0)])
+        nodes[2]["attrs"] = {}                                                                 # a load without power: all weigh the same
+        equal = core.process(drawing(nodes, [line("bn", "BN", [[0, 0], [300, 0]])], circuits=[{"tag": "C-01", "from": "A"}]))["circuits"]["C-01"]
+        self.assertEqual(equal["moment_length_m"], 20.0)
+        single = self.network([{"tag": "C-01", "from": "A", "to": "C"}])["circuits"]["C-01"]
+        self.assertEqual((single["moment_length_m"], single["max_distance_m"]), (30.0, 30.0))
+
     def test_a_conduit_used_by_one_circuit_is_blocked_for_the_next_which_takes_another_way(self):
         out = self.network([{"tag": "C-01", "from": "A", "to": "C"}, {"tag": "C-02", "from": "A", "to": "C"}])
         self.assertEqual(out["circuits"]["C-01"]["stretches"], ["BN-001", "CN-001"])
