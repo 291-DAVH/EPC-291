@@ -1,6 +1,5 @@
 """Deliverables of a project: list, safe downloads, counters used by dashboards."""
 import csv
-import hashlib
 import io
 import re
 import tempfile
@@ -12,6 +11,7 @@ from epc.core import ids
 from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside, read_json, safe_file, today
+from epc.core.hashing import sha256_file
 from epc.modules.deliverables import repository
 from epc.modules.projects import public as projects
 
@@ -137,7 +137,7 @@ def package_zip(d: Path, group: Optional[str] = None) -> Tuple[Path, str]:
             z.write(f["path"], f["rel"])
             it = f["item"]
             w.writerow([it.get("code", ""), it.get("name", ""), it.get("discipline", ""), it.get("revision", ""), f["path"].suffix.lstrip("."),
-                        it.get("delivered_on", ""), f["rel"], hashlib.sha256(f["path"].read_bytes()).hexdigest()])
+                        it.get("delivered_on", ""), f["rel"], sha256_file(f["path"])])
         z.writestr("INDICE.csv", "\ufeff" + index.getvalue())
     return Path(tmp.name), name
 

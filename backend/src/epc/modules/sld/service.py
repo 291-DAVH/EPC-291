@@ -6,6 +6,7 @@ from typing import Dict, Optional
 from epc.core import clock
 from epc.core.errors import Conflict, Invalid, NotFound
 from epc.core.fsutil import read_json
+from epc.core.hashing import sha256_json
 from epc.modules.engineering import public as engineering
 from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
@@ -257,9 +258,7 @@ def calculation(d: Path, bid: str = "") -> dict:
 
 
 def _hash(data: dict) -> str:
-    import hashlib
-    import json
-    return hashlib.sha256(json.dumps(data, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
+    return sha256_json(data)[:16]
 
 
 def _upstream(d: Path, board: dict) -> Optional[dict]:

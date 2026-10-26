@@ -1,5 +1,4 @@
 """Files of the issuing step: deliverables/transmittals/TR-nnn.json and the stamped copies, plus helpers that run the engine exporters."""
-import hashlib
 import json
 import re
 import subprocess
@@ -8,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from epc.core.fsutil import read_json, write_json
+from epc.core.hashing import sha256_file as sha256
 
 
 def transmittals_dir(d: Path) -> Path:
@@ -41,14 +41,6 @@ def write_ledger(d: Path, event: dict) -> None:
     folder.mkdir(parents=True, exist_ok=True)
     n = len(list(folder.glob("*.json"))) + 1
     write_json(folder / f"{n:04d}_{event['event']}.json", event)
-
-
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def plugins_locked(d: Path) -> Dict[str, str]:
