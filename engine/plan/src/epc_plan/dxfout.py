@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import ezdxf
-from epc_dxf import layers
+from epc_dxf import deliverable
 
 from epc_plan import core
 
@@ -99,16 +99,15 @@ def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dic
     doc = ezdxf.new(dxfversion=version, setup=True)
     doc.units = code
     msp = doc.modelspace()
-    catalog = layers.load(layers_file)                         # the catalog says how each layer is called and looks (the MASTER edits it)
-    layer = lambda base: layers.name("plan." + base, catalog)       # noqa: E731 - the layer of a kind, by its role
+    layer = lambda base: "plan." + base                          # noqa: E731 - the draft names a layer by its ROLE; the deliverable service gives it its name and look (the catalog the MASTER edits)
     for base in sorted({k["capa_dxf"] for k in list(line_kinds.values()) + list(node_kinds.values())} | {cfg["tag_layer"], cfg["junction_layer"]}):
-        layers.apply(doc, "plan." + base, catalog)
+        doc.layers.add(layer(base))
     height = cfg["text_height_m"] * scale
     expected = _add_nodes(doc, msp, result, node_kinds, cfg, scale, height, layer) + _add_stretches(msp, result, line_kinds, cfg, scale, height, layer)
 
     path.parent.mkdir(parents=True, exist_ok=True)
     warnings = [f"DXF audit: {e.message}" for e in doc.audit().errors]
-    doc.saveas(str(path))
+    deliverable.finish_draft(doc, path, layers_file)
     back = len(ezdxf.readfile(str(path)).modelspace())
     if back != expected:
         warnings.append(f"DXF read back has {back} entities, expected {expected}")

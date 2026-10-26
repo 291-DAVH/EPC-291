@@ -41,8 +41,11 @@ def defaults() -> dict:
     return _read(DEFAULT_FILE)
 
 
+PARTS = ("solutions", "add_ons", "groups")
+
+
 def _merge(base: dict, extra: dict) -> None:
-    for part in ("solutions", "add_ons"):
+    for part in PARTS:
         for id_, entry in (extra.get(part) or {}).items():
             if entry is None:
                 base.setdefault(part, {}).pop(id_, None)
@@ -65,8 +68,8 @@ def resolve_doc(doc: Optional[dict]) -> dict:
 
 def override_of(doc: dict) -> dict:
     """What a document changes with respect to the default one: id -> its entry, or null for a solution that was removed (what the global file stores)."""
-    base, out = defaults(), {"solutions": {}, "add_ons": {}}
-    for part in ("solutions", "add_ons"):
+    base, out = defaults(), {part: {} for part in PARTS}
+    for part in PARTS:
         mine, theirs = doc.get(part, {}), base.get(part, {})
         out[part] = {**{i: e for i, e in mine.items() if theirs.get(i) != e}, **{i: None for i in theirs if i not in mine}}
     return {k: v for k, v in out.items() if v}
@@ -105,21 +108,36 @@ def matches(when: dict, f: dict) -> bool:
 _FUNCTIONS = {"ceil": math.ceil, "floor": math.floor, "max": max, "min": min, "round": round}
 
 
-def _calc(node: ast.AST, f: dict) -> float:
-    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
+_BINARY = {ast.Add: lambda a, b: a + b, ast.Sub: lambda a, b: a - b, ast.Mult: lambda a, b: a * b, ast.Div: lambda a, b: a / b, ast.FloorDiv: lambda a, b: a // b, ast.Mod: lambda a, b: a % b}
+_ALLOWED = "only numbers, the facts of the circuit, + - * / // % and ceil, floor, max, min, round are allowed"
+
+
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _calc_leaf(node: ast.AST, f: dict) -> float:
+    if isinstance(node, ast.Constant) and _is_number(node.value):
         return node.value
-    if isinstance(node, ast.Name) and isinstance(f.get(node.id), (int, float)) and not isinstance(f.get(node.id), bool):
+    if isinstance(node, ast.Name) and _is_number(f.get(node.id)):
         return f[node.id]
+    raise ValueError(_ALLOWED)
+
+
+def _calc_call(node: ast.Call, f: dict) -> float:
+    if isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:
+        return _FUNCTIONS[node.func.id](*[_calc(a, f) for a in node.args])
+    raise ValueError(_ALLOWED)
+
+
+def _calc(node: ast.AST, f: dict) -> float:
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.USub, ast.UAdd)):
         return -_calc(node.operand, f) if isinstance(node.op, ast.USub) else _calc(node.operand, f)
-    if isinstance(node, ast.BinOp):
-        a, b = _calc(node.left, f), _calc(node.right, f)
-        ops = {ast.Add: lambda: a + b, ast.Sub: lambda: a - b, ast.Mult: lambda: a * b, ast.Div: lambda: a / b, ast.FloorDiv: lambda: a // b, ast.Mod: lambda: a % b}
-        if type(node.op) in ops:
-            return ops[type(node.op)]()
-    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:
-        return _FUNCTIONS[node.func.id](*[_calc(a, f) for a in node.args])
-    raise ValueError("only numbers, the facts of the circuit, + - * / // % and ceil, floor, max, min, round are allowed")
+    if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:
+        return _BINARY[type(node.op)](_calc(node.left, f), _calc(node.right, f))
+    if isinstance(node, ast.Call):
+        return _calc_call(node, f)
+    return _calc_leaf(node, f)
 
 
 def expression(value: Any, f: dict) -> float:
@@ -149,13 +167,18 @@ def _items(items: Iterable[dict], f: dict) -> List[dict]:
     return out
 
 
-def resolve(f: dict, doc: Optional[dict] = None) -> dict:
-    """The solution of a circuit: {"solution": id, "chain": [{"symbol", "short", "poles", "label", "slots"}], "disp": text}. Raises ValueError when no solution matches."""
-    doc = resolve_doc(doc)
+def _winner(doc: dict, f: dict) -> tuple:
+    """(id, solution) of the enabled solution that matches with the highest priority (file order breaks ties)."""
     enabled = [(i, s) for i, s in doc.get("solutions", {}).items() if s.get("enabled", True) and matches(s.get("when", {}), f)]
     if not enabled:
         raise ValueError(f"no standard solution matches circuit {f['tag']}: the document needs one with an empty 'when' as the last resort")
-    sid, sol = max(enumerate(enabled), key=lambda p: (p[1][1].get("priority", 0), -p[0]))[1]
+    return max(enumerate(enabled), key=lambda p: (p[1][1].get("priority", 0), -p[0]))[1]
+
+
+def resolve(f: dict, doc: Optional[dict] = None) -> dict:
+    """The solution of a circuit: {"solution": id, "chain": [{"symbol", "short", "poles", "label", "slots"}], "disp": text}. Raises ValueError when no solution matches."""
+    doc = resolve_doc(doc)
+    sid, sol = _winner(doc, f)
     chain = _items(sol["chain"], f)
     added = [a for a in doc.get("add_ons", {}).values() if a.get("enabled", True) and matches(a.get("when", {}), f)]
     for add in added:
@@ -166,19 +189,33 @@ def resolve(f: dict, doc: Optional[dict] = None) -> dict:
 
 
 # ---------------------------------------------------------------- checking a document
+_TEXT_LISTS = ("topology", "kind", "phase", "type", "text_contains")
+
+
+def _is_text_list(value: Any) -> bool:
+    return isinstance(value, list) and all(isinstance(x, str) for x in value)
+
+
+def _is_limits(value: Any) -> bool:
+    return isinstance(value, dict) and bool(value) and set(value) <= set(RANGES) and all(_is_number(v) for v in value.values())
+
+
+_CHECKS = {**{k: (_is_text_list, "a list of texts") for k in _TEXT_LISTS}, "has_children": (lambda v: isinstance(v, bool), "true or false"),
+           "motor": (lambda v: isinstance(v, bool), "true or false"), "in_a": (_is_limits, "limits from gt, ge, lt, le")}
+
+
+def _condition_problem(where: str, key: str, want: Any) -> Optional[str]:
+    if key not in _CHECKS:
+        return f"{where}.{key}: unknown condition (one of {', '.join(CONDITIONS)})"
+    check, message = _CHECKS[key]
+    return None if check(want) else f"{where}.{key}: {message}"
+
+
 def _condition_errors(where: str, when: Any) -> Iterable[str]:
     if not isinstance(when, dict):
         yield f"{where}: an object of conditions"
         return
-    for key, want in when.items():
-        if key not in CONDITIONS:
-            yield f"{where}.{key}: unknown condition (one of {', '.join(CONDITIONS)})"
-        elif key in ("topology", "kind", "phase", "type", "text_contains") and not (isinstance(want, list) and all(isinstance(x, str) for x in want)):
-            yield f"{where}.{key}: a list of texts"
-        elif key in ("has_children", "motor") and not isinstance(want, bool):
-            yield f"{where}.{key}: true or false"
-        elif key == "in_a" and not (isinstance(want, dict) and want and set(want) <= set(RANGES) and all(isinstance(v, (int, float)) for v in want.values())):
-            yield f"{where}.in_a: limits from gt, ge, lt, le"
+    yield from (m for m in (_condition_problem(where, k, v) for k, v in when.items()) if m)
 
 
 def _item_errors(where: str, it: Any, known: Optional[set]) -> Iterable[str]:
@@ -194,6 +231,39 @@ def _item_errors(where: str, it: Any, known: Optional[set]) -> Iterable[str]:
             str(text).format_map(SAMPLE)
     except (ValueError, KeyError, SyntaxError, IndexError, ZeroDivisionError) as e:
         yield f"{where}: {e}"
+
+
+GROUP_KEYS = ("name", "enabled", "when", "by", "max_circuits", "max_ib_a", "tag", "description")
+
+
+def _group_limit_errors(where: str, rule: dict) -> Iterable[str]:
+    if not isinstance(rule.get("by", []), list) or any(k not in ("type", "phase", "kind", "topology") for k in rule.get("by", [])):
+        yield f"{where}.by: a list of type, phase, kind, topology"
+    if not isinstance(rule.get("max_circuits", 6), int) or rule.get("max_circuits", 6) < 1:
+        yield f"{where}.max_circuits: a whole number from 1"
+    if not _is_number(rule.get("max_ib_a", 40)) or rule.get("max_ib_a", 40) <= 0:
+        yield f"{where}.max_ib_a: a number above 0"
+
+
+def _group_text_errors(where: str, rule: dict) -> Iterable[str]:
+    if not rule.get("tag"):
+        yield f"{where}.tag: required, with {{n}} for the number of the group"
+    try:
+        str(rule.get("tag", "")).format(n=1)
+        for text in (rule.get("description") or {}).values():
+            str(text).format(n=1, type="", phase="")
+    except (KeyError, IndexError, ValueError) as e:
+        yield f"{where}: {e}"
+
+
+def _group_errors(where: str, rule: Any) -> Iterable[str]:
+    """What a rule of automatic groups may contain."""
+    if not isinstance(rule, dict) or set(rule) - set(GROUP_KEYS):
+        yield f"{where}: an object with {', '.join(GROUP_KEYS)}"
+        return
+    yield from _condition_errors(f"{where}.when", rule.get("when", {}))
+    yield from _group_limit_errors(where, rule)
+    yield from _group_text_errors(where, rule)
 
 
 def _entry_errors(where: str, entry: Any, known: Optional[set], needs_priority: bool) -> Iterable[str]:
@@ -219,6 +289,9 @@ def validate(doc: dict, known_symbols: Optional[Iterable[str]] = None) -> Dict[s
         for id_, entry in (doc.get(part) or {}).items():
             for msg in _entry_errors(f"{part}.{id_}", entry, known, needs):
                 errors[msg.split(":")[0]] = msg.split(": ", 1)[1]
+    for id_, rule in (doc.get("groups") or {}).items():
+        for msg in _group_errors(f"groups.{id_}", rule):
+            errors[msg.split(":")[0]] = msg.split(": ", 1)[1]
     last_resort = any(s.get("enabled", True) and not s.get("when") for s in (doc.get("solutions") or {}).values() if isinstance(s, dict))
     if not last_resort:
         errors["solutions"] = "needs an enabled solution with an empty 'when' (the last resort for any circuit)"

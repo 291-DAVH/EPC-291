@@ -33,6 +33,30 @@ def _finish(tmp_dxf: Path, tmp_svg: Path, instances: list, symbol_library, heigh
     return bloques_dxf.insertar(str(tmp_dxf), symbol_library, instances, height_mm, catalog)[0] if instances else 0
 
 
+def _retarget(entity, name: str) -> None:
+    entity.dxf.layer = name
+    for attrib in getattr(entity, "attribs", []):                                   # the attributes of a block reference go with it
+        attrib.dxf.layer = name
+
+
+def finish_draft(doc, dxf_path, layers_file=None) -> dict:
+    """A DXF in development (an ezdxf document) whose entities sit on layers named by their ROLE (`plan.ELEC-LUM`) becomes the deliverable: every role layer is renamed
+    and given the look the catalog says, the entities follow and the file is saved. Returns {"dxf": path, "layers": {name: entities}, "blocks": inserts}."""
+    catalog = _L.load(layers_file)
+    drafts = [lay.dxf.name for lay in doc.layers if lay.dxf.name in catalog]
+    final = {role: _L.apply(doc, role, catalog) for role in drafts}
+    for entity in doc.modelspace():
+        if entity.dxf.layer in final:
+            _retarget(entity, final[entity.dxf.layer])
+    for role in drafts:
+        if final[role] != role:
+            doc.layers.remove(role)
+    Path(dxf_path).parent.mkdir(parents=True, exist_ok=True)
+    doc.saveas(str(dxf_path))
+    layers, blocks = inspect(Path(dxf_path))
+    return {"dxf": str(dxf_path), "layers": layers, "blocks": blocks}
+
+
 def inspect(dxf: Path) -> tuple:
     """(entities per layer, symbols inserted as blocks) of the model space of a DXF."""
     counts: Dict[str, int] = {}

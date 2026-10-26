@@ -18,6 +18,11 @@ def _entry(svg: Path, layers: Dict[str, int], blocks: int, role_of: Dict[str, st
             "layers": {name: {"entities": n, "role": role_of.get(name, "")} for name, n in layers.items()}, "messages": list(messages)}
 
 
+def _native_entry(dxf: Path, layers: Dict[str, int], blocks: int, role_of: Dict[str, str]) -> dict:
+    """A drawing made straight as DXF (the plan): no SVG, the same description of what it holds."""
+    return {"sheet": dxf.stem, "svg": None, "dxf": dxf.name, "blocks": blocks, "layers": {name: {"entities": n, "role": role_of.get(name, "")} for name, n in layers.items()}, "messages": []}
+
+
 def _roles_by_name(catalog: Dict[str, dict]) -> Dict[str, str]:
     return {a["name"]: role for role, a in catalog.items() if "name" in a}
 
@@ -31,6 +36,19 @@ def describe(svgs: Iterable[Path], out_dir: Path, name: str, layers_file=None) -
         if dxf.is_file():
             layers, blocks = deliverable.inspect(dxf)
             sheets.append(_entry(svg, layers, blocks, role_of, []))
+    index = {"schema_version": "1.0", "name": name, "sheets": sheets}
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+    (Path(out_dir) / f"{name}_entregable.json").write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    return index
+
+
+def describe_dxf(dxfs: Iterable[Path], out_dir: Path, name: str, layers_file=None) -> dict:
+    """Write `<name>_entregable.json` for drawings that were made straight as DXF and finished by the service (`deliverable.finish_draft`)."""
+    role_of = _roles_by_name(_L.load(layers_file))
+    sheets = []
+    for dxf in (Path(d) for d in dxfs):
+        layers, blocks = deliverable.inspect(dxf)
+        sheets.append(_native_entry(dxf, layers, blocks, role_of))
     index = {"schema_version": "1.0", "name": name, "sheets": sheets}
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     (Path(out_dir) / f"{name}_entregable.json").write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")

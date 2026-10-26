@@ -405,8 +405,8 @@
     "sha256": "86a5fe14748c8094a08d29a965e609be41119fd4ee9568ae580e5f624b64bafc"
    },
    "summary.json": {
-    "lines": 48,
-    "sha256": "c29cdf7af82ff8d7cb79933ce47436101930c16050c2e93ed3483212c1b57ff7"
+    "lines": 49,
+    "sha256": "7fc9e34263843de35d1143f4ea366c7879c1039f589ec7471b5a71baefdd85cf"
    }
   },
   "non_compliant": [],
@@ -667,8 +667,8 @@
     "sha256": "d798986afcaf35049915e3e47a98a6c0492c9e5e6e4e1d3b7e260a81342c8b17"
    },
    "summary.json": {
-    "lines": 43,
-    "sha256": "bbd433b317e1305e5815c20276d1419c4c9e7fa8bc5e7383281b2455f318b8fe"
+    "lines": 44,
+    "sha256": "9a0a1e1ddda647e1a1e0be4d885b43ebd87ca60529bf5e942e8ee42f2ee9df84"
    }
   },
   "non_compliant": [],
@@ -872,8 +872,8 @@
     "sha256": "28bfa7b1e2baf3c1b4541e6079d82845ef1aec49a9a1c8f5ce49b66f74e71ced"
    },
    "summary.json": {
-    "lines": 43,
-    "sha256": "c34576dd2377214fe81a5f54434c18893ce0efe2dbf0eda6fcc3df7dcc93f22c"
+    "lines": 44,
+    "sha256": "45b952ec5fac1188d6b9db027c846db81bb7962edf9de3be4e7dbe56f5e05a03"
    }
   },
   "non_compliant": [],

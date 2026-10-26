@@ -642,5 +642,59 @@
     }
    ]
   }
+ },
+ "groups": {
+  "differential-lighting": {
+   "name": {
+    "es": "Diferenciales de grupo: iluminación",
+    "en": "Differential groups: lighting"
+   },
+   "enabled": false,
+   "when": {
+    "type": [
+     "iluminacion"
+    ],
+    "kind": [
+     "auto"
+    ]
+   },
+   "by": [
+    "type",
+    "phase"
+   ],
+   "max_circuits": 6,
+   "max_ib_a": 40,
+   "tag": "GD-L{n:02d}",
+   "description": {
+    "es": "Diferencial de iluminación {n}",
+    "en": "Lighting differential {n}"
+   }
+  },
+  "differential-sockets": {
+   "name": {
+    "es": "Diferenciales de grupo: tomacorrientes",
+    "en": "Differential groups: sockets"
+   },
+   "enabled": false,
+   "when": {
+    "type": [
+     "tomacorrientes"
+    ],
+    "kind": [
+     "auto"
+    ]
+   },
+   "by": [
+    "type",
+    "phase"
+   ],
+   "max_circuits": 4,
+   "max_ib_a": 40,
+   "tag": "GD-T{n:02d}",
+   "description": {
+    "es": "Diferencial de tomacorrientes {n}",
+    "en": "Sockets differential {n}"
+   }
+  }
  }
 }

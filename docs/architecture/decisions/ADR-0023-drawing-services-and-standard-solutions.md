@@ -36,4 +36,10 @@ and the layers of the DXF were names written in the code, assigned by where an e
 ## Consequences
 Each piece installs and changes alone; the map `docs/architecture/DEPENDENCIAS.md` says what a change touches. Defaults are identical to what was delivered before (golden outputs unchanged);
 only what the MASTER edits changes a drawing. All steps are done; what remains is the project's and the company's own copies of the two documents (layer catalog and standard solutions), which the loaders already accept.
-The entity-level line weights the single-line takes from its SVG still win over the layer's weight; letting the layer govern is a decision for a later step now that every element has a role.
+When the catalog sets a weight for a layer, the layer governs: the entities of that layer are left "by layer" instead of carrying the stroke width of the SVG; a layer without a weight keeps the strokes (the default).
+The plan editor no longer writes its layers itself: it makes a DXF draft whose layers are roles (`plan.ELEC-LUM`) and hands it to `epc_dxf.deliverable.finish_draft`, which gives every role its name and look from the catalog; its delivery
+package gets the same index as the diagrams (`package.describe_dxf`).
+**Automatic groups of differentials:** the document of standard solutions has a third part, `groups`: rules that put circuits without a differential of their own behind one. A rule says which circuits it takes (the same conditions as a
+solution), how they are split (`by`: type, phase, kind, topology), how many circuits and how much current one differential serves (`max_circuits`, `max_ib_a`) and how the group is named. `epc_calc.grouping` plans the groups,
+`epc_drawing.board_design` adds them to the board data before the calculation, so the memo, the single-line and the multi-line see them as any group. They are switched off by default (lighting and sockets); a circuit with a kind chosen by hand, one that
+already has a differential, or one in a group written by hand is left alone. A change in the document makes the memo of the boards stale.

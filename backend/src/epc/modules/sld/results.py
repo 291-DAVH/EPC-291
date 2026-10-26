@@ -9,6 +9,11 @@ from epc.modules.sld import lengths, repository
 from epc.modules.sld.boards import _resolve, status
 
 
+def _description(tag: str, saved: dict, detail: dict) -> str:
+    """The description of a circuit: the one in the saved data, or the one the calculation carried (a group the standard solutions added has none saved)."""
+    return saved.get(tag) or detail.get(tag, {}).get("descripcion", "")
+
+
 def calculation(d: Path, bid: str = "") -> dict:
     """Result of the last calculation: one row per circuit (what the diagram was drawn from) and the criteria that governed it."""
     bid = _resolve(d, bid)
@@ -22,12 +27,13 @@ def calculation(d: Path, bid: str = "") -> dict:
     crit = read_json(base / f"{name}_criterios.json", {}) or {}
     saved = (repository.load_input(d, bid) if bid else None) or {"circuits": []}
     desc = {c["tag"]: c.get("description", "") for c in saved.get("circuits", [])}
-    rows = [{"tag": t, "description": desc.get(t, ""), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}} for t, v in calc.items()]
+    rows = [{"tag": t, "description": _description(t, desc, detail), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}} for t, v in calc.items()]
     return {"rows": rows, "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
 
 
 def _hash(data: dict) -> str:
-    return sha256_json(data)[:16]
+    """Fingerprint of what a calculation was made from: the board data and the document of standard solutions in force (a change in either makes the memo stale)."""
+    return sha256_json([data, repository.solutions_digest()])[:16]
 
 
 def _upstream(d: Path, board: dict) -> Optional[dict]:

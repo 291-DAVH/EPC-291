@@ -72,15 +72,16 @@ def solutions() -> dict:
     from epc_calc import solutions as S
     doc = S.load(settings.solutions_file)
     changed = S.override_of(doc)
-    return {"solutions": doc.get("solutions", {}), "add_ons": doc.get("add_ons", {}), "default": S.defaults(),
-            "changed": sorted({*(changed.get("solutions") or {}), *(changed.get("add_ons") or {})}),
+    return {"solutions": doc.get("solutions", {}), "add_ons": doc.get("add_ons", {}), "groups": doc.get("groups", {}), "default": S.defaults(),
+            "changed": sorted({i for part in S.PARTS for i in (changed.get(part) or {})}),
             "symbols": repository.sld_symbols(), "options": {"conditions": list(S.CONDITIONS), "phases": list(S.PHASES), "ranges": list(S.RANGES), "item_keys": list(S.ITEM_KEYS)}}
 
 
 def save_solutions(body: dict) -> dict:
     """Store the document the MASTER sent (solutions and add-ons by id); only what differs from the default one is kept. A document that would leave a circuit without a solution is refused."""
     from epc_calc import solutions as S
-    doc = {"solutions": body.get("solutions") or {}, "add_ons": body.get("add_ons") or {}}
+    current = S.load(settings.solutions_file)
+    doc = {part: current.get(part, {}) if body.get(part) is None else body[part] for part in S.PARTS}
     errors = S.validate(doc, [s["id"] for s in repository.sld_symbols()])
     if errors:
         raise Invalid(errors)

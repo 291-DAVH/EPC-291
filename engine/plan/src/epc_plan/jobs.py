@@ -24,6 +24,8 @@ def run(document: Dict[str, Any], out_dir: Path, progress: Callable[[float, str]
     name = (result["plan"]["id"] or "plan").replace("/", "_")
     result["files"] = {"dxf": f"{name}.dxf", "dxf_version": document.get("dxf_version") or core.PARAMS["dxf"]["default_version"]}
     result["warnings"] += dxfout.write_dxf(result, out_dir / f"{name}.dxf", document.get("dxf_version", ""), layers_file=layers_file)
+    from epc_dxf import package
+    package.describe_dxf([out_dir / f"{name}.dxf"], out_dir, name, layers_file)         # the index of the delivery package, like the diagrams'
     (out_dir / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
     progress(1.0, "done")
     return result

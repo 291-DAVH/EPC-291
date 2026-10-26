@@ -58,6 +58,12 @@ def _formato_a3(a3):
     return (os.environ.get('SLD_FORMATO', 'A1') == 'A3') if a3 is None else a3
 
 
+def _poner_grosor(doc, ent, tipo, ancho):
+    """El grosor del trazo del SVG pasa a la entidad, salvo que el catálogo de capas fije el de su capa: entonces manda la capa y la entidad queda «por capa»."""
+    if tipo == 'LINE' and ancho and doc.layers.get(ent.dxf.layer).dxf.get('lineweight', -3) == -3:
+        ent.dxf.lineweight = max(0, min(211, int(round(ancho * 100))))
+
+
 def _poner_rol(ent, extra, cat):
     """El rol del elemento en el SVG (`data-layer`) manda sobre la zona de la lámina: la entidad va a la capa que el catálogo da a ese rol."""
     if extra.get('role'):
@@ -192,8 +198,7 @@ def colorear(svg_path, dxf_path, catalog=None, a3=None):
         if ent.dxf.layer in {_L.name('sld.titleblock', cat), _L.name('sld.sheet', cat)}:   # rótulo y marco: quedan con el color de su capa
             continue
         _color(ent, color)
-        if tipo == 'LINE' and ancho:
-            ent.dxf.lineweight = max(0, min(211, int(round(ancho * 100))))
+        _poner_grosor(doc, ent, tipo, ancho)
     # rellenos de las formas cerradas (flechas rojas, puntos de unión...): HATCH como en el SVG
     msp = doc.modelspace()
     for col, bucles in rellenos:

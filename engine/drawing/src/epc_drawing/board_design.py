@@ -152,6 +152,32 @@ def calc_note(res: dict) -> str:
             f"motores {lim['motor']:g} %; {mat}, aislación {cond['aislacion'].upper()}.")
 
 
+def groups_in(data: dict, criteria: Optional[dict] = None) -> dict:
+    """The board data with the differential groups the rules of the standard solutions ask for (epc_calc.grouping); the same data when no rule applies."""
+    from epc_calc import grouping
+    tablero, rows = excel_rows(data)
+    groups = grouping.plan(tablero, rows, criteria)
+    if not groups:
+        return data
+    out = json.loads(json.dumps(data))
+    parent = {m: g["tag"] for g in groups for m in g["members"]}
+    first = {min(g["members"], key=[c["tag"] for c in data["circuits"]].index): g for g in groups}
+    circuits = []
+    for c in out["circuits"]:
+        if c["tag"] in first:
+            g = first[c["tag"]]
+            circuits.append({"tag": g["tag"], "description": g["description"], "load": None, "unit": "A", "destination": "", "parent_tag": "", "topology": "single", "phase": g["phase"],
+                             "length_m": 0, "fp": None, "efficiency": None, "kind": "rccb", "notes": "", "cable_type": "tetra_sep", "group_of": g["members"]})
+        circuits.append({**c, "parent_tag": parent[c["tag"]]} if c["tag"] in parent else c)
+    out["circuits"] = circuits
+    return out
+
+
+def _groups_of(data: dict) -> dict:
+    """The differential groups the standard solutions added to the board: tag -> the circuits behind it."""
+    return {c["tag"]: c["group_of"] for c in data["circuits"] if c.get("group_of")}
+
+
 def _package_index(out: Path, name: str, error) -> None:
     """The index of the delivery package: every sheet of the single-line and the multi-line with its DXF and the layers it uses (epc_dxf)."""
     from epc_dxf import package
@@ -167,6 +193,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
+    data = groups_in(data, criteria)                          # circuits without a differential are put behind one where the standard solutions ask for it
     res = calculate(data, criteria)
     tablero, circuitos = excel_rows(data)
     xlsx = out_dir / "input_for_sld.xlsx"
@@ -219,7 +246,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
             error = (run.stderr or run.stdout).strip()[-600:]
     _package_index(out, name, error)
     summary = {"name": name, "ok": error is None, "avisos": avisos, "log": log, "limites_pct": res["limites"], "conductor": res["conductor"],
-               "circuits": len(res["datos"]), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"], "error": error}
+               "circuits": len(res["datos"]), "groups": _groups_of(data), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"], "error": error}
     (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     return summary
 

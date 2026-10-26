@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel
@@ -59,7 +59,8 @@ def reset_layers():
 
 class SolutionsIn(BaseModel):
     solutions: Dict[str, Dict[str, Any]]
-    add_ons: Dict[str, Dict[str, Any]] = {}
+    add_ons: Optional[Dict[str, Dict[str, Any]]] = None            # a part that is not sent stays as it is
+    groups: Optional[Dict[str, Dict[str, Any]]] = None
 
 
 @router.get("/solutions")

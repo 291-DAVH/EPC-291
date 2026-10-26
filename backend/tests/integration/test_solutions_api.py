@@ -93,6 +93,35 @@ class TestSolutions(unittest.TestCase):
         self.c.put("/api/solutions", json=doc)
         self.assertEqual(disp(), "RCCB > MCB (13 A)")
 
+    def test_the_rules_of_groups_are_edited_like_the_rest_and_put_the_circuits_behind_a_differential(self):
+        from tests.integration.test_sld_api import BOARD, TB
+        self.c.put("/api/data/organization", json={"legal_name": "Oficina SA"})
+        self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta",
+                                           "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
+        lights = [{"tag": f"L-{i:02d}", "description": "ILUMINACION", "load": 1.0, "unit": "kW", "destination": "", "parent_tag": "", "topology": "single", "phase": "1F", "length_m": 15, "kind": "auto"}
+                  for i in range(1, 4)]
+        self.c.put("/api/projects/ACME/P-1/sld", json={"board": BOARD, "circuits": lights, "titleblock": TB})
+        v = self.c.get("/api/solutions").json()
+        self.assertFalse(v["groups"]["differential-lighting"]["enabled"])
+        doc = {"solutions": v["solutions"], "add_ons": v["add_ons"], "groups": copy.deepcopy(v["groups"])}
+        doc["groups"]["differential-lighting"]["enabled"] = True
+        out = self.c.put("/api/solutions", json=doc).json()
+        self.assertEqual(out["changed"], ["differential-lighting"])
+        bad = copy.deepcopy(doc)
+        bad["groups"]["differential-lighting"]["max_circuits"] = 0
+        self.assertEqual(self.c.put("/api/solutions", json=bad).status_code, 422)
+        import time
+        self.assertEqual(self.c.post("/api/projects/ACME/P-1/sld/generate", params={"diagrams": "none"}).status_code, 202)
+        for _ in range(240):
+            st = self.c.get("/api/projects/ACME/P-1/sld/status").json()
+            if st["state"] in ("done", "failed"):
+                break
+            time.sleep(0.5)
+        self.assertEqual(st["state"], "done", st)
+        rows = {r["tag"]: r for r in self.c.get("/api/projects/ACME/P-1/sld/calculation").json()["rows"]}
+        self.assertEqual(rows["GD-L01"]["description"], "Diferencial de iluminación 1")
+        self.assertTrue(rows["GD-L01"]["disp"].startswith("RCCB"))
+
 
 if __name__ == "__main__":
     unittest.main()
