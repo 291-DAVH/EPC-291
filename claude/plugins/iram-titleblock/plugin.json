@@ -13,7 +13,9 @@
     "IRAM 4504",
     "IRAM 4508"
   ],
-  "requires": {},
+  "requires": {
+    "dxf-output": "^0.1.0"
+  },
   "consumes": [
     "TitleBlock"
   ],
@@ -47,6 +49,7 @@
     "source": "291_G_IRAM_Custom_TitleBlocks_Generator"
   },
   "engine": [
+    "dxf",
     "titleblock"
   ],
   "owns": [

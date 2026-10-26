@@ -25,7 +25,11 @@
   "entitlement": "feature.drawing.dxf",
   "python": {
     "requires": [
-      "ezdxf"
+      "ezdxf",
+      "lxml",
+      "shapely",
+      "svgelements",
+      "vtracer"
     ]
   },
   "skills": [],

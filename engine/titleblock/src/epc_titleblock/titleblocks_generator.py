@@ -36,7 +36,7 @@ for r in range(2, ws.max_row + 1):
     print("regen", row["archivo"], "mod" if mod else "")
 
 # DXF de cada lámina, para CAD (mismas medidas en mm)
-from .svg_to_dxf import convertir
+from epc_dxf.svg_to_dxf import convertir
 for f in sorted(os.listdir(OUT)):
     if f.startswith("sheet-") and f.endswith(".svg"):
         convertir(os.path.join(OUT, f))

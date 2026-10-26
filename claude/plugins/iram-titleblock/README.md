@@ -27,9 +27,9 @@ This plugin is packaging only. The code lives in `engine/drawing` and is copied 
 
 | | |
 |---|---|
-| Incluye (motor) | `titleblock` |
+| Incluye (motor) | `dxf`, `titleblock` |
 | Es dueño de | `titleblock` |
-| Necesita (plugins) | — |
+| Necesita (plugins) | `dxf-output` |
 | Lo necesitan | `sld` |
 | Paquetes de Python | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
 | Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`; módulos del backend — |

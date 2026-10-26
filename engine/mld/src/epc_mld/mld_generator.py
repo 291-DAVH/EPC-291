@@ -22,6 +22,7 @@ from xml.sax.saxutils import escape as xesc
 from lxml import etree
 
 from epc_sld import deps as VL
+from epc_dxf.roles import tag_iram_sheet
 
 PITCH = 10.0                      # paso entre polos (mm), retícula de la biblioteca
 COL_GAP = 16.0                    # separación entre columnas de circuitos
@@ -55,19 +56,19 @@ class Sheet:
     # ---- primitivas
     def line(self, x1, y1, x2, y2, col=BLUE, w=0.25, dash=None):
         dash = f' stroke-dasharray="{dash}"' if dash else ""
-        self.d.append(f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{col}" stroke-width="{w}"{dash}/>')
+        self.d.append(f'<line data-layer="sld.diagram" x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{col}" stroke-width="{w}"{dash}/>')
 
     def dot(self, x, y, col=BLUE):
-        self.d.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="0.9" fill="{col}" stroke="{col}" stroke-width="0.18"/>')
+        self.d.append(f'<circle data-layer="sld.diagram" cx="{x:.2f}" cy="{y:.2f}" r="0.9" fill="{col}" stroke="{col}" stroke-width="0.18"/>')
 
     def text(self, x, y, s, size=FS_TXT, bold=False, anchor="start", col=BLACK, rot=None):
         b = ' font-weight="bold"' if bold else ""
         r = f' transform="rotate({rot} {x:.2f} {y:.2f})"' if rot is not None else ""
-        self.d.append(f'<text x="{x:.2f}" y="{y:.2f}" font-size="{size}" font-family="{xesc(FONT)}" text-anchor="{anchor}" fill="{col}"{b}{r}>{xesc(str(s))}</text>')
+        self.d.append(f'<text data-layer="sld.text" x="{x:.2f}" y="{y:.2f}" font-size="{size}" font-family="{xesc(FONT)}" text-anchor="{anchor}" fill="{col}"{b}{r}>{xesc(str(s))}</text>')
 
     def rect(self, x, y, w, h, col=BLUE, w_=0.25, dash=None, fill="none"):
         dash = f' stroke-dasharray="{dash}"' if dash else ""
-        self.d.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" fill="{fill}" stroke="{col}" stroke-width="{w_}"{dash}/>')
+        self.d.append(f'<rect data-layer="sld.diagram" x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" fill="{fill}" stroke="{col}" stroke-width="{w_}"{dash}/>')
 
     # ---- símbolos
     def symbol_file(self, sid: str) -> Optional[str]:
@@ -100,6 +101,7 @@ class Sheet:
         for sl in frag.xpath(".//*[@id='label_slots']"):
             sl.attrib.pop("id", None)
             sl.set("fill", BLACK)
+            sl.set("data-layer", "sld.text")             # the texts of a symbol are annotation
             for t_ in sl.iter():
                 t_.attrib.pop("font-weight", None)
         for p in frag.xpath(".//*[@id='ports']") + frag.xpath(".//*[local-name()='metadata']"):
@@ -114,7 +116,7 @@ class Sheet:
                     el.remove(ch)
             elif el.getparent() is not None:
                 el.getparent().remove(el)
-        self.d.append(f'<g class="sym" data-sid="{sid}" transform="translate({x:.2f},{y:.2f})">' + etree.tostring(frag, encoding="unicode") + "</g>")
+        self.d.append(f'<g class="sym" data-layer="sld.diagram" data-sid="{sid}" transform="translate({x:.2f},{y:.2f})">' + etree.tostring(frag, encoding="unicode") + "</g>")
 
 
 def pole_id(base: str, n: int, cat: dict) -> Optional[str]:
@@ -364,7 +366,7 @@ class Generator:
 
     def write_sheet(self, sh: Sheet, index: int, name: str, out_dir: Path) -> tuple:
         lam_path, mod_path = VL.rotulo(index, fmt="A1")
-        lam = Path(lam_path).read_text(encoding="utf-8")
+        lam = tag_iram_sheet(Path(lam_path).read_text(encoding="utf-8"))
         today = datetime.date.today().strftime("%d/%m/%Y")
         vals = {"cliente": "No indicado", "denominacion": self.board.get("name", ""), "denominacion_2": "DIAGRAMA MULTIFILAR BT", "empresa": "—",
                 "plano_n": str(self.board.get("project") or ""), "plano_propio": name, "escala": "S/E", "emision": today, "reemplaza": "—",
@@ -390,20 +392,11 @@ class Generator:
     @staticmethod
     def to_dxf(svg_path: Path, final: str, out_dir: Path, name: str):
         """DXF por el mismo convertidor del paquete (trazos) y las capas 291-* del unifilar."""
-        from epc_sld import capas_dxf
-        tmp_svg = out_dir / f"{name}_trazos.svg"
-        tmp_svg.write_text(final, encoding="utf-8", newline="\n")
-        try:
-            VL.svg_a_dxf(str(tmp_svg))
-            tmp_dxf = out_dir / f"{name}_trazos.dxf"
-            capas_dxf.aplicar(str(tmp_dxf))
-            capas_dxf.colorear(str(tmp_svg), str(tmp_dxf))
-            os.replace(tmp_dxf, out_dir / f"{name}.dxf")
-            tmp_svg.unlink(missing_ok=True)
-            return out_dir / f"{name}.dxf"
-        except PermissionError:
-            print(f"AVISO no se pudo escribir {name}.dxf: está abierto en otro programa", file=sys.stderr)
-            return None
+        from epc_dxf import deliverable
+        done = deliverable.convert(svg_path)
+        for line in done["messages"]:
+            print(line, file=sys.stderr)
+        return done["dxf"]
 
 
 def generate(data: dict, calc: dict, out_dir, name: str, lib: Optional[str] = None, maxw: float = XMAX - X0) -> List[dict]:

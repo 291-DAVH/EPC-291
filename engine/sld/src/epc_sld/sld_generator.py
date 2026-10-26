@@ -9,6 +9,7 @@ try:
 except (ImportError, OSError):
     cairosvg = None
 from . import deps as VL
+from epc_dxf import roles as ROLES
 
 LIB, XLSX, OUT, NAME, LAMINA, MODBLOCK = sys.argv[1:7]
 if LIB == 'default': LIB = VL.iec_lib()                     # símbolos: iec60617-symbol-generator
@@ -162,7 +163,7 @@ def _sym_file(sid):
 def sym_svg(sid, slots, x, y):
     if not os.path.exists(_sym_file(sid)):
         print('AVISO: falta símbolo', sid, '-> recuadro ??', file=sys.stderr)
-        return (f'<g class="sym" transform="translate({x:.2f},{y:.2f})">'
+        return (f'<g class="sym" data-layer="sld.diagram" transform="translate({x:.2f},{y:.2f})">'
                 '<rect x="-5" y="0" width="10" height="10" fill="none" stroke="#0000ff" stroke-width="0.25"/>'
                 '<text x="0" y="6.4" font-size="3.47" text-anchor="middle" font-family="Arial, sans-serif" fill="#000000">??</text></g>')
     if sid not in _cache:
@@ -174,7 +175,7 @@ def sym_svg(sid, slots, x, y):
         _cache[sid] = etree.tostring(node, encoding='unicode') + extra
     frag = etree.fromstring('<g xmlns="http://www.w3.org/2000/svg">' + _cache[sid] + '</g>')
     for sl in frag.xpath(".//*[@id='label_slots']"):
-        sl.attrib.pop('id', None); sl.set('fill', '#000000')
+        sl.attrib.pop('id', None); sl.set('fill', '#000000'); sl.set('data-layer', 'sld.text')      # los textos de un símbolo son anotación
         for t_ in sl.iter():
             t_.attrib.pop('font-weight', None)
     for p in frag.xpath(".//*[@id='ports']") + frag.xpath(".//*[local-name()='metadata']"):
@@ -191,23 +192,24 @@ def sym_svg(sid, slots, x, y):
             for ch in list(el): el.remove(ch)
         elif el.getparent() is not None:
             el.getparent().remove(el)
-    return f'<g class="sym" data-sid="{sid}" transform="translate({x:.2f},{y:.2f})">' + etree.tostring(frag, encoding='unicode') + '</g>'
+    return f'<g class="sym" data-layer="sld.diagram" data-sid="{sid}" transform="translate({x:.2f},{y:.2f})">' + etree.tostring(frag, encoding='unicode') + '</g>'
 def place(sid, slots, x, y):
     USED.add(sid); D.append(sym_svg(sid, slots, x, y))
 def bottom_off(sid):
     if sid not in CAT: return 10.0 if not os.path.exists(_sym_file(sid)) else 5.0
     p = [q for q in CAT[sid].get('ports', []) if q['id'] == 'bottom']
     return p[0]['y'] if p else CAT[sid]['size']['h']
+ROL = 'sld.diagram'            # rol de las líneas que se dibujan ahora (la tabla y las referencias son anotación: sld.text)
 def line(x1, y1, x2, y2, col=BLUE, w=0.25, dash=None):
     d = f' stroke-dasharray="{dash}"' if dash else ''
-    D.append(f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{col}" stroke-width="{w}"{d}/>')
+    D.append(f'<line data-layer="{ROL}" x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{col}" stroke-width="{w}"{d}/>')
 _S_DIAG = (400.0 - 35.0) / 608.0 if os.environ.get('SLD_FORMATO', 'A1') == 'A3' else 1.0   # escala del diagrama y tabla en A3
 _TXT_VIS = FS_TXT / _S_DIAG if _S_DIAG != 1.0 else None   # A3: texto del diagrama y tabla a 2 mm visibles (None = tamaño normal)
 _SP = 1.6 if _TXT_VIS is not None else 1.0   # A3: más separación entre líneas de texto (2 mm) para que no se solapen
 def T(x, y, s, size=FS_TXT, bold=False, anchor='start', col=BLACK):
     if _TXT_VIS is not None: size = _TXT_VIS
     b = ' font-weight="bold"' if bold else ''
-    D.append(f'<text x="{x:.2f}" y="{y:.2f}" font-size="{size}" font-family="{xesc(FONT)}" text-anchor="{anchor}" fill="{col}"{b}>{xesc(str(s))}</text>')
+    D.append(f'<text data-layer="sld.text" x="{x:.2f}" y="{y:.2f}" font-size="{size}" font-family="{xesc(FONT)}" text-anchor="{anchor}" fill="{col}"{b}>{xesc(str(s))}</text>')
 def draw_chain(elems, xc, y):
     prev = None; yy = y
     for sid, sl in elems:
@@ -308,7 +310,7 @@ T(x_cab1 - 5, y_pe - 1.5, 'BARRA PE', anchor='end', col=GREEN)   # 5 mm antes de
 # recuadro gris de linea entrecortada fina: engloba el tablero; las cargas quedan fuera (en campo)
 BOX_X0, BOX_Y0, BOX_X1 = 35.0, 20.0, 643.0   # 5 mm desde los limites internos de la hoja
 BOX_Y1 = y_out - 2.0
-D.append(f'<rect x="{BOX_X0:.2f}" y="{BOX_Y0:.2f}" width="{BOX_X1-BOX_X0:.2f}" height="{BOX_Y1-BOX_Y0:.2f}" fill="none" stroke="#808080" stroke-width="0.25" stroke-dasharray="4 2"/>')
+D.append(f'<rect data-layer="sld.diagram" x="{BOX_X0:.2f}" y="{BOX_Y0:.2f}" width="{BOX_X1-BOX_X0:.2f}" height="{BOX_Y1-BOX_Y0:.2f}" fill="none" stroke="#808080" stroke-width="0.25" stroke-dasharray="4 2"/>')
 TREE = []
 def walk(t):
     TREE.append(t)
@@ -316,6 +318,7 @@ def walk(t):
 for t in ROOTS: walk(t)
 
 _k_tab = len(D)   # A3: marca de inicio de la tabla
+ROL = 'sld.text'   # desde aquí, tabla de circuitos y columna de referencias: anotación
 # ---------- tabla de circuitos (bajo el diagrama) ----------
 cols = [('TAG',16),('DESCRIPCIÓN',120),('P [kW]',18),('FASE',14),('Ib [A]',18),('In [A]',18),('Icu [kA]',18),
         ('DISPOSITIVO',150),('CABLE F/N [mm²]',30),('PE [mm²]',18),('L [m]',16),('ΔU [%]',20)]
@@ -418,6 +421,7 @@ if LAMINA == 'default':   # rótulo: plugin iram-titleblock-plugin; una fila del
                               'Proyecto': TB.get('PROYECTO')})
     LAMINA, MODBLOCK = VL.rotulo(_nombres.index(NAME), fmt=FORMATO)
 lam = open(LAMINA, encoding='utf-8').read()
+lam = ROLES.tag_iram_sheet(lam)   # marco y rótulo de la plantilla IRAM, con su rol de capa
 vals = {'cliente': 'No indicado', 'denominacion': TB['NOMBRE'], 'denominacion_2': 'DIAGRAMA UNIFILAR BT',
         'empresa': '—', 'plano_n': str(TB.get('PROYECTO') or ''), 'plano_propio': NAME,
         'escala': 'S/E', 'emision': today, 'reemplaza': '—', 'notas': 'Referencial: ver columnas de calculo'}
@@ -468,22 +472,10 @@ if left: print('AVISO placeholders sin reemplazar:', left[:5])
 etree.fromstring(final.encode('utf-8'))
 svg_path = os.path.join(OUT, NAME + '.svg')
 open(svg_path, 'w', encoding='utf-8').write(final)
-try:
-    # Símbolos con bloque DXF (iec60617): se insertan como INSERT; el resto de trazos pasa por el convertidor.
-    from . import bloques_dxf as BD, capas_dxf
-    sin_sim, insts = BD.separar(final, LIB)
-    tmp_svg = os.path.join(OUT, NAME + '_trazos.svg')
-    open(tmp_svg, 'w', encoding='utf-8').write(sin_sim)
-    VL.svg_a_dxf(tmp_svg)   # <NAME>_trazos.dxf
-    tmp_dxf = os.path.join(OUT, NAME + '_trazos.dxf')
-    capas_dxf.aplicar(tmp_dxf)
-    capas_dxf.colorear(tmp_svg, tmp_dxf)   # color y grosor del trazo del SVG (solo diagrama)
-    n_ins, n_bl = BD.insertar(tmp_dxf, LIB, insts, float(re.search(r'height="([\d.]+)mm"', final).group(1)))
-    print(f'DXF {NAME}: {n_ins} símbolos como bloques ({n_bl} definiciones)', file=sys.stderr)
-    os.replace(tmp_dxf, os.path.join(OUT, NAME + '.dxf'))
-    os.remove(tmp_svg)
-except PermissionError:
-    print(f'AVISO no se pudo escribir {NAME}.dxf: está abierto en otro programa (cerrarlo y volver a generar)', file=sys.stderr)
+# El SVG en desarrollo pasa a entregable por el servicio de epc_dxf (capas del catálogo, símbolos como bloques, color y grosor del trazo).
+from epc_dxf import deliverable as DL
+for ln in DL.convert(svg_path, symbol_library=LIB)['messages']:
+    print(ln, file=sys.stderr)
 summ = {t: dict(In=R[t]['In'], Ib=round(R[t]['Ib'], 1), icu=R[t]['icu'], S=R[t]['S'], dU=round(R[t]['dv'], 2), disp=disp_of(t)) for t in TREE}
 json.dump(summ, open(os.path.join(OUT, NAME + '_calculo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('OK', NAME, 'circuitos', len(TREE), 'y_out', round(y_out, 1), 'fin tabla', round(ry, 1), 'dU max', round(dvmax, 2))

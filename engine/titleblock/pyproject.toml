@@ -7,7 +7,7 @@ name = "epc-titleblock"
 version = "0.1.0"
 description = "EPC-291 IRAM A0-A4 sheets with the IRAM 4504/4508 title block, custom company/client blocks and logos"
 requires-python = ">=3.10"
-dependencies = ["openpyxl>=3.1", "ezdxf", "shapely", "svgelements", "vtracer", "lxml"]
+dependencies = ["epc-dxf", "openpyxl>=3.1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

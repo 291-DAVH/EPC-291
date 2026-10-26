@@ -7,7 +7,7 @@ Engineering libraries: pure Python, no web and no Claude dependency. The backend
 | [calc](calc/README.md) | `epc_calc` | LV electrical sizing (AEA 90364 / IEC 60364): demand, protection, cable section, voltage drop, short circuit, earthing; Excel pipeline | 205 |
 | [rules](rules/README.md) | `epc_rules` | Rules engine: load `rules.json` per jurisdiction, query, check (PASS / FAIL / not evaluated) | 8 |
 | [standards](standards/README.md) | `epc_standards` | Standards pipeline: extract, validate (verbatim-copy guard), promote | 6 |
-| [dxf](dxf/README.md) | `epc_dxf` | Catalog of DXF layers every drawing is delivered with (the MASTER edits it); later the SVG-to-DXF deliverable service | 5 |
+| [dxf](dxf/README.md) | `epc_dxf` | Catalog of DXF layers (the MASTER edits it), the deliverable service (SVG in development to DXF, semantic roles) and the delivery package | 9 |
 | [symbols](symbols/README.md) | `epc_symbols` | IEC 60617 symbol library (SVG and DXF blocks, catalogs) for single-line and multi-line diagrams | 3 |
 | [titleblock](titleblock/README.md) | `epc_titleblock` | IRAM A0-A4 sheets with the IRAM 4504/4508 title block, company/client blocks and logos | 2 |
 | [sld](sld/README.md) | `epc_sld` | Single-line diagram generator: it draws what `epc_calc` calculated | 2 + smoke |

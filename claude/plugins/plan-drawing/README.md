@@ -12,7 +12,7 @@ The platform uses it through the layout module; it installs and updates on its o
 | Es dueño de | `plan` |
 | Necesita (plugins) | `dxf-output` |
 | Lo necesitan | — |
-| Paquetes de Python | `ezdxf` |
+| Paquetes de Python | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` |
 | Si lo modificas, revisa | plugins —; módulos del backend `backend.layout` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.

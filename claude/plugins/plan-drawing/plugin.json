@@ -33,7 +33,11 @@
   "entitlement": "feature.drawing.plan",
   "python": {
     "requires": [
-      "ezdxf"
+      "ezdxf",
+      "lxml",
+      "shapely",
+      "svgelements",
+      "vtracer"
     ]
   },
   "skills": [],

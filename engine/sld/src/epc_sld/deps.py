@@ -120,6 +120,6 @@ def rotulo(indice, fmt='A1'):
 
 def svg_a_dxf(svg_path):
     """DXF con el mismo convertidor del paquete (svg_to_dxf.convertir): mismo nombre, extensión .dxf."""
-    from epc_titleblock.svg_to_dxf import convertir
+    from epc_dxf.svg_to_dxf import convertir
     convertir(svg_path)
     return os.path.splitext(svg_path)[0] + '.dxf'

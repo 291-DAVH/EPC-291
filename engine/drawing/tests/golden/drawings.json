@@ -32,8 +32,8 @@
      "TEXT": 384,
      "VPORT": 1
     },
-    "lines": 68098,
-    "sha256": "924f8a03640cafa41025cc66e60bf99ea4776c4af2acfb4e4a9277af31f173c5"
+    "lines": 68050,
+    "sha256": "c95f434931d856b161240b5af25f58055f35c23326f9caf4996f241b244710b1"
    },
    "MLD_T1_H1.svg": {
     "elements": {
@@ -49,7 +49,7 @@
      "tspan": 4
     },
     "lines": 1536,
-    "sha256": "d8eb622cacdefc1f09836228461af9ad383e311053716c77f475df26c8f75d4b"
+    "sha256": "5d500d1284f595a641562a580a1e996a5167e1c3e3c09c84781f92b7f616852c"
    },
    "MLD_T1_H2.dxf": {
     "entities": {
@@ -81,8 +81,8 @@
      "TEXT": 285,
      "VPORT": 1
     },
-    "lines": 60258,
-    "sha256": "96f373e4d923d436dbf9ee63229f227889f1663ef1e42aabdbeecaed9fb6e1d4"
+    "lines": 60210,
+    "sha256": "75fd7cd2017c0300bfb6a8ba4a1a3daac152bc772a6739463fea1a83219edda1"
    },
    "MLD_T1_H2.svg": {
     "elements": {
@@ -98,7 +98,7 @@
      "tspan": 4
     },
     "lines": 1164,
-    "sha256": "1df8dac108901ae44660cc647e67962647741b9dbb46f0d655118e7042703f2c"
+    "sha256": "916d8b35b104675f2b0ff2030848c78ab3e2c2cab9bb480bc52ee8136e6fc3ac"
    },
    "SLD_T1_H1.dxf": {
     "entities": {
@@ -130,8 +130,8 @@
      "TEXT": 215,
      "VPORT": 1
     },
-    "lines": 31546,
-    "sha256": "fda038e6783ba033dc5e0aea800c69c599ef349e4028887f020549a2c2950f6a"
+    "lines": 31506,
+    "sha256": "819531d6e0bb5233fc728bdd434db25ce3723a11a20892badbe91e15fc25e17d"
    },
    "SLD_T1_H1.svg": {
     "elements": {
@@ -147,7 +147,7 @@
      "tspan": 4
     },
     "lines": 1022,
-    "sha256": "d95d13f8f1d64218531cbc2e01c9b408675eed2abe372f75d2af0c10a3536077"
+    "sha256": "7c7c3c4bcba3c7b958f2e2289c8c47782513609bbca388d239319561d79266aa"
    },
    "SLD_T1_H1_calculo.json": {
     "lines": 49,
@@ -183,8 +183,8 @@
      "TEXT": 181,
      "VPORT": 1
     },
-    "lines": 26512,
-    "sha256": "f1ab6db4a4a27e670c4d6d296c1ee70ee52be38dbedae4db5e1eb262aff69cd4"
+    "lines": 26476,
+    "sha256": "77b9d63401503374289d7ff03c43134aa5c9f4b303f6dc3a477838a6b8ec7450"
    },
    "SLD_T1_H2.svg": {
     "elements": {
@@ -200,7 +200,7 @@
      "tspan": 4
     },
     "lines": 882,
-    "sha256": "bea87669fdba37b5c66d782ee574e7a2b6aa8a6e10e28f7799dc68b79150b0bc"
+    "sha256": "62611f2ac4037f752f9608e9f18ffa42cf5653c0ba132fadbc4becff1456f535"
    },
    "SLD_T1_H2_calculo.json": {
     "lines": 41,
@@ -236,8 +236,8 @@
      "TEXT": 180,
      "VPORT": 1
     },
-    "lines": 24946,
-    "sha256": "2a34f939c9c042a5cd933360432c5d9f0102f97392c8e662723d7a3bc0e9a095"
+    "lines": 24910,
+    "sha256": "0033af878b7091dcb1bcbe701182e1fea9bb67bc8b444a7b54d80a003c3bf663"
    },
    "SLD_T1_H3.svg": {
     "elements": {
@@ -253,7 +253,7 @@
      "tspan": 4
     },
     "lines": 874,
-    "sha256": "5b19b1c4d8cd751d6dfdcee1d8eade1576706999db0b39d57ae849bfbeaefcaf"
+    "sha256": "9b316250ad9d4a52bdb77639524d3a25ab4dcdf0b4422ee95c8699a67876e804"
    },
    "SLD_T1_H3_calculo.json": {
     "lines": 57,
@@ -289,8 +289,8 @@
      "TEXT": 172,
      "VPORT": 1
     },
-    "lines": 25860,
-    "sha256": "953ed128841cd13a6a2b4f339a648e2bcda618e41ab04d55ea36a9b8a29948c2"
+    "lines": 25824,
+    "sha256": "4e83128189d74df893b989f8d427372b7a60852ed183561f45c68d229b569ebd"
    },
    "SLD_T1_H4.svg": {
     "elements": {
@@ -306,7 +306,7 @@
      "tspan": 4
     },
     "lines": 884,
-    "sha256": "6b5cdabfc2ff6923b6d035e577e29fae2bf400d67e4704884fb4df12c5b0870f"
+    "sha256": "54e478b7a6569724739874caad00a8972748cfd962fdc90c7a5933208293ec1c"
    },
    "SLD_T1_H4_calculo.json": {
     "lines": 49,
@@ -342,8 +342,8 @@
      "TEXT": 376,
      "VPORT": 1
     },
-    "lines": 20384,
-    "sha256": "06a7b2196c176c5a2237da0645773151f7958ba5d473c1fce00f16f86acf0837"
+    "lines": 20352,
+    "sha256": "f14b327eaabcbdb6b6b26e33892f005032f64e3ab196a408a67b1b0b6f9e2aa5"
    },
    "SLD_T1_TABLA.svg": {
     "elements": {
@@ -358,7 +358,7 @@
      "tspan": 4
     },
     "lines": 520,
-    "sha256": "d8c3aa44bc170916672ef79f98d6b098121f96fb75befd927041970709abb9f5"
+    "sha256": "6e538bd6c641e801ee17cdff65c8a6fd0622cb78dbc48c88897a8fd27e47f23a"
    },
    "SLD_T1_TABLA_calculo.json": {
     "lines": 193,
@@ -395,6 +395,10 @@
    "T1_dimensionado_detalle.json": {
     "lines": 794,
     "sha256": "41b05c30647eed606e1dc1732a37d12b2854cc0fa1ca8007dc1fbe215cd1af80"
+   },
+   "T1_entregable.json": {
+    "lines": 184,
+    "sha256": "38661b6d2c9d8c669d9d5b5b01060a8c458ab795e6f4aac95e8ebc096e430cf4"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -441,8 +445,8 @@
      "TEXT": 237,
      "VPORT": 1
     },
-    "lines": 36158,
-    "sha256": "d8713a948fd80f734bcf024ba4a8709645a2730a069e963c1d8821929b62c30c"
+    "lines": 36114,
+    "sha256": "fd236f08423d7900fec551a739006547a7511e3558a284b518ac0c5367a2f634"
    },
    "SLD_T1_H1.svg": {
     "elements": {
@@ -458,7 +462,7 @@
      "tspan": 4
     },
     "lines": 1204,
-    "sha256": "4e71c86599cf18c798e94d0e9388354658d79dd8a008f3bae5b9a7b1a40f3b92"
+    "sha256": "f131b2a63f3e3f79b45bb5d633e96f5e223d93159132c513e49fab9d94591498"
    },
    "SLD_T1_H1_calculo.json": {
     "lines": 65,
@@ -494,8 +498,8 @@
      "TEXT": 203,
      "VPORT": 1
     },
-    "lines": 29074,
-    "sha256": "b53cef22dd7b7c1213eb78f2879500de03c8c031d40d288d90e0df8d6e4cb275"
+    "lines": 29038,
+    "sha256": "28790ee03c821369889785a81e72b7b2a22fad4e073b379d69c6ed46ecba9623"
    },
    "SLD_T1_H2.svg": {
     "elements": {
@@ -511,7 +515,7 @@
      "tspan": 4
     },
     "lines": 1051,
-    "sha256": "8984b52a3b27eea10b7f98763868c196faedd2cd9bb97387067f6fb8cde5d431"
+    "sha256": "b6db502f7b988f6718b3d5ecfe6570604c807b464aa1ddbdb6e214782e6ac251"
    },
    "SLD_T1_H2_calculo.json": {
     "lines": 73,
@@ -547,8 +551,8 @@
      "TEXT": 179,
      "VPORT": 1
     },
-    "lines": 27470,
-    "sha256": "fc9b839c7e61e9573a4bb206f30bbd81a089c30f3720fedaf27234904f99068b"
+    "lines": 27434,
+    "sha256": "e0c0083f2e2d0dc5115e20eaa7e426fb386fffe792cc91348fdd66b5fe4b7c92"
    },
    "SLD_T1_H3.svg": {
     "elements": {
@@ -564,7 +568,7 @@
      "tspan": 4
     },
     "lines": 956,
-    "sha256": "2fda7ea84b9c25d668eb5432df2bdb0ee68f8eabc7eb55b0239fdae92aba3d03"
+    "sha256": "f14bde355e70db03d6ad9d0659f2a831069be5b5f9ff57a9b4e41357568c746d"
    },
    "SLD_T1_H3_calculo.json": {
     "lines": 57,
@@ -600,8 +604,8 @@
      "TEXT": 376,
      "VPORT": 1
     },
-    "lines": 20384,
-    "sha256": "b909d91d1bb07cb8b37c212529e75f2b73867ad7a738f636e466a8a2a0bc4895"
+    "lines": 20352,
+    "sha256": "b4233c508ca4448cd1be558fd2b45d9ea956bb368e2790658a8dfcad1349819a"
    },
    "SLD_T1_TABLA.svg": {
     "elements": {
@@ -616,7 +620,7 @@
      "tspan": 4
     },
     "lines": 520,
-    "sha256": "1e0e6f53a450d8f77415304bc96b5de53361b5f2e58a66ac5bb936eaa373091b"
+    "sha256": "7d9be5414ff154da8b256bfa160ef3803d40606ad780bd2a0280094bb0930605"
    },
    "SLD_T1_TABLA_calculo.json": {
     "lines": 193,
@@ -653,6 +657,10 @@
    "T1_dimensionado_detalle.json": {
     "lines": 794,
     "sha256": "980dd59498094ee93704278dc1d6c66b8ea4bd6676ca42b088dc6128fb24fef8"
+   },
+   "T1_entregable.json": {
+    "lines": 106,
+    "sha256": "33742797a53063ea073421271a803bb1116a6e023ae6b31c8f7e3f610f8b0568"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -699,8 +707,8 @@
      "TEXT": 177,
      "VPORT": 1
     },
-    "lines": 29578,
-    "sha256": "515d2acf37aeb1973ae3ad5e1599cc74a6ae0ad01f09d05bab779864c24c7ea5"
+    "lines": 29530,
+    "sha256": "d778dddf9d1b617a7712401cf338a77653278bee4b79e255bfbd909b3345a3c3"
    },
    "MLD_T1.svg": {
     "elements": {
@@ -716,7 +724,7 @@
      "tspan": 4
     },
     "lines": 590,
-    "sha256": "7ce1387d2853564bb2975bdda6e02c114d2630ad98d01d3f11b93c8ed6662c5f"
+    "sha256": "10676773db4a6caea67d5a1f177cb340030c3de71ef70191d1bca17c75b84f56"
    },
    "SLD_T1.dxf": {
     "entities": {
@@ -748,8 +756,8 @@
      "TEXT": 167,
      "VPORT": 1
     },
-    "lines": 22928,
-    "sha256": "ddd21ac5c22ba95138f079d257ac8de120dbbc5bb75f9d4c1a15f59b5f3f9340"
+    "lines": 22892,
+    "sha256": "422602cb37e9250a567e613fdc50108d94eafd052044ff9718fd245da2f1abe4"
    },
    "SLD_T1.svg": {
     "elements": {
@@ -765,7 +773,7 @@
      "tspan": 4
     },
     "lines": 728,
-    "sha256": "c7cc8facaec3a325b40fea8c30d7e449028118d64ada9e1533b16a226de2c838"
+    "sha256": "55bc42d4b50c397e315e893c7574f56c4dd97be58cb9c304dcd3cfd2ec5a978a"
    },
    "SLD_T1_TABLA.dxf": {
     "entities": {
@@ -797,8 +805,8 @@
      "TEXT": 136,
      "VPORT": 1
     },
-    "lines": 11184,
-    "sha256": "d03bea5254d4208bf3b6ba7d2a85ec1c1e4379d8cb93d5edf32c971615b19824"
+    "lines": 11152,
+    "sha256": "54cceacbd84e531c6426b79b0c11d2a0976d391b959054485a63b7cdb5627816"
    },
    "SLD_T1_TABLA.svg": {
     "elements": {
@@ -813,7 +821,7 @@
      "tspan": 4
     },
     "lines": 260,
-    "sha256": "cfa5abcd32d08d3f7a111f4bbaf0ada24e383a92071fec9a4a2762cf474f1f83"
+    "sha256": "2b8e679bba4eaa0e06de0a1c744bc9e9e5576f3e932dfa2b59bd988a32117375"
    },
    "SLD_T1_TABLA_calculo.json": {
     "lines": 33,
@@ -854,6 +862,10 @@
    "T1_dimensionado_detalle.json": {
     "lines": 134,
     "sha256": "00f9afdac5627c9c9a8c6b946e132446d727d627189beac7e8b04e669e905c04"
+   },
+   "T1_entregable.json": {
+    "lines": 80,
+    "sha256": "3a72a247a8ec1d9da5e89e6962cc823582a4124459765f2df883f9a7e36eb51b"
    },
    "T1_memoria.json": {
     "lines": 436,
