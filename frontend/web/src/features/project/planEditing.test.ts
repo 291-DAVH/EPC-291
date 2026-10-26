@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, assignCircuit, blank, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, moveElements, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -120,5 +120,17 @@ describe("plan editing rules", () => {
     expect(cleared.drawing.nodes.every((n) => n.circuit === undefined)).toBe(true);
     d = r.drawing;
     expect(d.nodes[2].circuit).toBeUndefined();
+  });
+
+  it("moves nodes and lines; lines ending on a moved node follow it", () => {
+    let d = addNode(addNode(blank(), "LU", [0, 0]), "LU", [50, 0]);
+    d = addLine(d, "BN", [[0, 0], [50, 0]]);
+    const a = moveElements(d, [{ type: "node", id: "n1" }], 10, 5);
+    expect(a.nodes[0]).toMatchObject({ x: 10, y: 5 });
+    expect(a.lines[0].points).toEqual([[10, 5], [50, 0]]);
+    const b = moveElements(d, [{ type: "line", id: "l1" }], 3, 4);
+    expect(b.lines[0].points).toEqual([[3, 4], [53, 4]]);
+    expect(b.nodes[0]).toMatchObject({ x: 0, y: 0 });
+    expect(moveElements(d, [{ type: "node", id: "n1" }], 0, 0)).toBe(d);
   });
 });
