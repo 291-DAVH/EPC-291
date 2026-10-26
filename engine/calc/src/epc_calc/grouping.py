@@ -21,26 +21,33 @@ def _tag(pattern: str, n: int, taken: set) -> tuple:
     return pattern.format(n=n), n
 
 
+def _board_context(tablero: dict, criteria) -> dict:
+    """What every circuit of the board shares when its facts are made: voltage, power factor, breaking capacity and the sensitivity of the differentials."""
+    icu = P._primero(P.SERIE_ICU_KA, float(tablero.get("ICC_KA", 10))) or P.SERIE_ICU_KA[-1]
+    return {"u": float(tablero.get("TENSION_V", 380)), "fp": float(tablero.get("FP_DEFAULT", 0.85)), "icu": icu, "rcd_ma": P.resolver_criterios(criteria)[4]}
+
+
+def _facts_of(row: dict, ib: float, ctx: dict) -> dict:
+    top = str(row.get("TOPOLOGY") or "single").strip().lower()
+    motor = top in P.TOPOLOGIAS_MOTOR
+    in_a = P._primero(P.SERIE_IN_A, ib * (P.MARGIN_MOTOR if motor else 1.0)) or P.SERIE_IN_A[-1]
+    return SOL.facts(row["TAG"], str(row.get("DESCRIPCION") or ""), str(row.get("NOTAS") or ""), top, str(row.get("KIND") or "auto").strip().lower() or "auto",
+                     str(row.get("FASE") or "3F").strip().upper(), P.type_circuit(row, False), in_a, ib, ctx["icu"], ctx["rcd_ma"], False, motor)
+
+
+def _candidate(row: dict, parents: set, ctx: dict, doc: dict) -> Optional[dict]:
+    """The circuit with its facts when a group may take it: a leaf without a parent whose own devices include no differential; None otherwise."""
+    ib = P.corriente_proyecto(row, ctx["u"], ctx["fp"])
+    if ib is None or str(row.get("PARENT_TAG") or "").strip() or row["TAG"] in parents:
+        return None
+    f = _facts_of(row, ib, ctx)
+    return None if any(i["symbol"] in DIFFERENTIAL for i in SOL.resolve(f, doc)["chain"]) else {"row": row, "facts": f, "ib": ib}
+
+
 def _candidates(tablero: dict, rows: List[dict], criteria, doc: dict) -> List[dict]:
-    """The circuits a group may take: leaves without a parent whose own solution has no differential. Each one with its facts."""
-    u, fp_def = float(tablero.get("TENSION_V", 380)), float(tablero.get("FP_DEFAULT", 0.85))
-    icc = float(tablero.get("ICC_KA", 10))
-    icu = P._primero(P.SERIE_ICU_KA, icc) or P.SERIE_ICU_KA[-1]
-    rcd_ma = P.resolver_criterios(criteria)[4]
+    ctx = _board_context(tablero, criteria)
     parents = {str(r.get("PARENT_TAG") or "").strip() for r in rows}
-    out = []
-    for row in rows:
-        ib = P.corriente_proyecto(row, u, fp_def)
-        if ib is None or str(row.get("PARENT_TAG") or "").strip() or row["TAG"] in parents:
-            continue
-        top = str(row.get("TOPOLOGY") or "single").strip().lower()
-        motor = top in P.TOPOLOGIAS_MOTOR
-        in_a = P._primero(P.SERIE_IN_A, ib * (P.MARGIN_MOTOR if motor else 1.0)) or P.SERIE_IN_A[-1]
-        f = SOL.facts(row["TAG"], str(row.get("DESCRIPCION") or ""), str(row.get("NOTAS") or ""), top, str(row.get("KIND") or "auto").strip().lower() or "auto",
-                      str(row.get("FASE") or "3F").strip().upper(), P.type_circuit(row, False), in_a, ib, icu, rcd_ma, False, motor)
-        if not any(i["symbol"] in DIFFERENTIAL for i in SOL.resolve(f, doc)["chain"]):
-            out.append({"row": row, "facts": f, "ib": ib})
-    return out
+    return [c for c in (_candidate(row, parents, ctx, doc) for row in rows) if c]
 
 
 def _split(items: List[dict], rule: dict) -> List[List[dict]]:
@@ -53,32 +60,45 @@ def _split(items: List[dict], rule: dict) -> List[List[dict]]:
     return groups
 
 
+def _rule_groups(rid: str, rule: dict, mine: List[dict], taken: set) -> List[dict]:
+    """The groups one rule asks for among the circuits it takes: split by the keys of the rule, then filled in order."""
+    buckets: Dict[tuple, List[dict]] = {}
+    for c in mine:
+        buckets.setdefault(tuple(c["facts"][k] for k in rule.get("by", [])), []).append(c)
+    made, n = [], 1
+    for bucket in buckets.values():
+        for members in _split(bucket, rule):
+            tag, number = _tag(rule["tag"], n, taken)
+            taken.add(tag)
+            n = number + 1
+            f = members[0]["facts"]
+            made.append({"rule": rid, "tag": tag, "members": [m["row"]["TAG"] for m in members], "phase": f["phase"], "type": f["type"], "ib_a": round(sum(m["ib"] for m in members), 3),
+                         "description": (rule.get("description") or {}).get("es", "Diferencial de grupo").format(n=number, type=f["type"], phase=f["phase"])})
+    return made
+
+
+def _take(pool: List[dict], rule: dict) -> tuple:
+    """(the circuits a rule takes from the pool, the pool that is left)."""
+    mine = [c for c in pool if SOL.matches(rule.get("when", {}), c["facts"])]
+    return mine, [c for c in pool if c not in mine]
+
+
+def _first_member_order(made: List[dict], rows: List[dict]) -> List[dict]:
+    order = {r["TAG"]: i for i, r in enumerate(rows)}
+    return sorted(made, key=lambda g: min(order[t] for t in g["members"]))
+
+
 def plan(tablero: dict, rows: List[dict], criteria: Optional[dict] = None, documento: Optional[dict] = None) -> List[dict]:
     """The groups the enabled rules ask for: [{"rule", "tag", "members": [tags], "phase", "type", "ib_a", "description"}], in the order of the first member of each."""
     doc = SOL.resolve_doc(documento)
     rules = [(i, r) for i, r in (doc.get("groups") or {}).items() if r.get("enabled", True)]
-    if not rules:
-        return []
-    pool = _candidates(tablero, rows, criteria, doc)
+    pool = _candidates(tablero, rows, criteria, doc) if rules else []
     taken = {r["TAG"] for r in rows}
     made: List[dict] = []
     for rid, rule in rules:
-        mine = [c for c in pool if SOL.matches(rule.get("when", {}), c["facts"])]
-        pool = [c for c in pool if c not in mine]
-        buckets: Dict[tuple, List[dict]] = {}
-        for c in mine:
-            buckets.setdefault(tuple(c["facts"][k] for k in rule.get("by", [])), []).append(c)
-        n = 1
-        for bucket in buckets.values():
-            for members in _split(bucket, rule):
-                tag, number = _tag(rule["tag"], n, taken)
-                taken.add(tag)
-                n = number + 1
-                f = members[0]["facts"]
-                made.append({"rule": rid, "tag": tag, "members": [m["row"]["TAG"] for m in members], "phase": f["phase"], "type": f["type"], "ib_a": round(sum(m["ib"] for m in members), 3),
-                             "description": (rule.get("description") or {}).get("es", "Diferencial de grupo").format(n=number, type=f["type"], phase=f["phase"])})
-    order = {r["TAG"]: i for i, r in enumerate(rows)}
-    return sorted(made, key=lambda g: min(order[t] for t in g["members"]))
+        mine, pool = _take(pool, rule)
+        made += _rule_groups(rid, rule, mine, taken)
+    return _first_member_order(made, rows)
 
 
 def group_row(group: dict) -> dict:

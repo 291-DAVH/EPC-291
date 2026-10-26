@@ -4,7 +4,8 @@ import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuit
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
 export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean; carga?: boolean }
-export interface Profile { id: string; name: { es: string; en: string }; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string> }
+export type Prim = { t: "rect"; w: number; h: number } | { t: "circle"; r: number } | { t: "line"; a: [number, number]; b: [number, number] };
+export interface Profile { id: string; name: { es: string; en: string }; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string>; symbols?: Record<string, Prim[]> }
 export interface DerivedNode { id: string; tag: string; kind: string; placed: boolean; x_m: number; y_m: number }
 export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null; carries?: { circuit: string; ternas: number }[]; cables?: number }
 export interface DerivedRoute { found: boolean; from: string; to: string; ternas: number; stretches: string[]; lines: string[]; length_m: number; cable_length_m: number }
@@ -25,9 +26,14 @@ export interface Props {
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[];
 }
 
-function Sym({ id, x, y, s, color, sel }: { id: string; x: number; y: number; s: number; color: string; sel: boolean }) {
+const DRAWN_HERE = ["luminaria", "tomacorriente", "tomacorriente_especial", "hvac", "boca_registro", "caja_pase", "tablero"];
+
+function Sym({ id, x, y, s, color, sel, prims }: { id: string; x: number; y: number; s: number; color: string; sel: boolean; prims?: Prim[] }) {
   const common = { fill: "#fff", stroke: sel ? "#d62728" : color, strokeWidth: sel ? 3 : 1.6, vectorEffect: "non-scaling-stroke" as const };
   const r = s / 2;
+  if (prims && !DRAWN_HERE.includes(id)) {                                  // a symbol of the engine's own (an SVG file): drawn from its primitives
+    return <g>{prims.map((p, i) => p.t === "rect" ? <rect key={i} x={x - p.w * s / 2} y={y - p.h * s / 2} width={p.w * s} height={p.h * s} {...common} /> : p.t === "circle" ? <circle key={i} cx={x} cy={y} r={p.r * s} {...common} /> : <line key={i} x1={x + p.a[0] * s} y1={y + p.a[1] * s} x2={x + p.b[0] * s} y2={y + p.b[1] * s} {...common} />)}</g>;
+  }
   if (id === "luminaria") return <g><circle cx={x} cy={y} r={r} {...common} /><line x1={x - r * 0.7} y1={y - r * 0.7} x2={x + r * 0.7} y2={y + r * 0.7} {...common} /><line x1={x - r * 0.7} y1={y + r * 0.7} x2={x + r * 0.7} y2={y - r * 0.7} {...common} /></g>;
   if (id === "tomacorriente" || id === "tomacorriente_especial") {
     return <g><circle cx={x} cy={y} r={r} {...common} /><line x1={x - r} y1={y} x2={x + r} y2={y} {...common} /><line x1={x} y1={y} x2={x} y2={y - r} {...common} />{id === "tomacorriente_especial" && <circle cx={x} cy={y + r * 0.45} r={r * 0.25} {...common} />}</g>;
@@ -259,7 +265,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
           {drawing.nodes.map((n) => {
             const sel = isSel({ type: "node", id: n.id });
             const sym = kindOf(n.kind)?.simbolo_2d ?? "camara";
-            return <g key={n.id}><Sym id={sym} x={n.x} y={n.y} s={NODE_PX * 2 * u} color="#222" sel={sel} />
+            return <g key={n.id}><Sym id={sym} x={n.x} y={n.y} s={NODE_PX * 2 * u} color="#222" sel={sel} prims={profile?.symbols?.[sym]} />
               {n.circuit && <circle cx={n.x} cy={n.y} r={NODE_PX * 1.5 * u} fill="none" stroke={circuitColor(n.circuit)} strokeWidth={3} vectorEffect="non-scaling-stroke" />}
               <text x={n.x + NODE_PX * 1.2 * u} y={n.y - NODE_PX * 1.2 * u} fontSize={11 * u} fill="#222" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{nodeTag[n.id] ?? n.id}{n.circuit ? ` · ${n.circuit}` : ""}</text>
               {drawing.outlet === n.id && <circle cx={n.x} cy={n.y} r={NODE_PX * 1.6 * u} fill="none" stroke="#2ca02c" strokeWidth={2} vectorEffect="non-scaling-stroke" />}</g>;

@@ -168,6 +168,20 @@
       ],
       "simbolo_2d": "hvac",
       "capa_dxf": "ELEC-HVAC"
+    },
+    {
+      "id": "PL",
+      "etiqueta": {
+        "es": "Pleno (conducto vertical entre niveles)",
+        "en": "Plenum (vertical shaft between levels)"
+      },
+      "prefijo_tag": "PL",
+      "atributos": [
+        "pleno",
+        "altura_m"
+      ],
+      "simbolo_2d": "pleno",
+      "capa_dxf": "ELEC-PLENO"
     }
   ],
   "calculos": [
@@ -184,7 +198,8 @@
     "l": "LU",
     "g": "TG",
     "e": "TE",
-    "h": "HV"
+    "h": "HV",
+    "v": "PL"
   },
   "unidades_salida": "m"
 }

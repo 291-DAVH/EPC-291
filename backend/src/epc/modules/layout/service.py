@@ -67,7 +67,8 @@ def overview(d: Path) -> dict:
     profiles = []
     for pid in core.profiles():
         p = core.load_profile(pid)
-        profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {})})
+        symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
+        profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
     return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 

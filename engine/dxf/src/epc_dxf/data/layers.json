@@ -280,6 +280,20 @@
     "es": "Nodos de unión del plano",
     "en": "Plan junction nodes"
    }
+  },
+  "plan.ELEC-PLENO": {
+   "name": "ELEC-PLENO",
+   "color": 6,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Plenos entre niveles (plano)",
+    "en": "Plenums between levels (plan)"
+   }
   }
  }
 }

@@ -1422,6 +1422,7 @@
 "engine/sld/src/epc_sld/sld_generator.py::dU": 3,
 "engine/sld/src/epc_sld/sld_generator.py::disp_of": 4,
 "engine/sld/src/epc_sld/sld_generator.py::draw_chain": 3,
+"engine/sld/src/epc_sld/sld_generator.py::generate": 122,
 "engine/sld/src/epc_sld/sld_generator.py::gw": 3,
 "engine/sld/src/epc_sld/sld_generator.py::has_dif": 6,
 "engine/sld/src/epc_sld/sld_generator.py::layout": 4,

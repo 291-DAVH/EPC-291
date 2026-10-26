@@ -11,9 +11,14 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from epc_plan import svgsymbol
+
 HERE = Path(__file__).resolve().parent
 PARAMS = json.loads((HERE / "params.json").read_text(encoding="utf-8"))
 SYMBOLS = json.loads((HERE / "symbols.json").read_text(encoding="utf-8"))["symbols"]
+for _entry in SYMBOLS.values():                         # a symbol may be an SVG file: its primitives are read from it
+    if "svg" in _entry:
+        _entry["prims"] = svgsymbol.prims(HERE / _entry["svg"])
 _RULES_PLACES = (HERE / "knowledge" / "rules.json", HERE.parents[1] / "knowledge" / "rules.json")
 
 
