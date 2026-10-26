@@ -33,8 +33,9 @@ def measure():
     result = {}
     for rel in sources():
         try:
-            blocks = cc_visit((REPO / rel).read_text(encoding="utf-8", errors="replace"))
-        except SyntaxError:
+            blocks = cc_visit((REPO / rel).read_text(encoding="utf-8-sig", errors="replace"))         # utf-8-sig: several modules start with a byte order mark
+        except SyntaxError as e:
+            print(f"not measured: {rel} ({e.msg})", file=sys.stderr)
             continue
         for b in blocks:
             if b.__class__.__name__ == "Class":
