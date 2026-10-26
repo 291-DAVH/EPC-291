@@ -4,7 +4,7 @@
   python tools/build/impact_map.py            write docs/architecture/DEPENDENCIAS.md
   python tools/build/impact_map.py --check    fail if the file differs from what the code gives (the gate runs this)
 
-Units: the engine packages (calc, documents, standards, rules, plan and the parts of epc_drawing: symbols, titleblock, sld, mld, export, board_design), the modules
+Units: the engine packages (calc, documents, standards, rules, plan and symbols, titleblock, sld, mld and drawing), the modules
 of the backend and the plugins. An edge is an import or a reference to an engine module by name (a subprocess `-m epc_drawing.export.pdf`). Nothing here is declared by hand:
 if the code changes, the map changes, and the gate asks for the file to be regenerated.
 """
@@ -19,23 +19,20 @@ from typing import Dict, Iterable, List, Set
 
 REPO = Path(__file__).resolve().parents[2]
 TARGET = REPO / "docs" / "architecture" / "DEPENDENCIAS.md"
-ENGINE_PKGS = {"epc_calc": "calc", "epc_documents": "documents", "epc_standards": "standards", "epc_rules": "rules", "epc_plan": "plan", "epc_drawing": "drawing"}
-ENGINE_ROOTS = {"calc": "engine/calc/src/epc_calc", "documents": "engine/documents/src/epc_documents", "standards": "engine/standards/src/epc_standards",
-                "rules": "engine/rules/src/epc_rules", "plan": "engine/drawing/src/epc_plan", "drawing": "engine/drawing/src/epc_drawing"}
-PYPROJECT = {"calc": "engine/calc", "documents": "engine/documents", "standards": "engine/standards", "rules": "engine/rules", "plan": "engine/drawing", "drawing": "engine/drawing"}
-NAME_REF = re.compile(r"\bepc_(?:calc|documents|standards|rules|plan|drawing)(?:\.[a-z_]+)*")
+ENGINE_PKGS = {"epc_calc": "calc", "epc_documents": "documents", "epc_standards": "standards", "epc_rules": "rules", "epc_plan": "plan", "epc_symbols": "symbols",
+               "epc_titleblock": "titleblock", "epc_sld": "sld", "epc_mld": "mld", "epc_drawing": "drawing"}
+ENGINE_ROOTS = {a: f"engine/{a}/src/epc_{a}" for a in ENGINE_PKGS.values()}
+PYPROJECT = {a: f"engine/{a}" for a in ENGINE_PKGS.values()}
+NAME_REF = re.compile(r"\bepc_(?:calc|documents|standards|rules|plan|symbols|titleblock|sld|mld|drawing)(?:\.[a-z_]+)*")
 STD = set(sys.stdlib_module_names)
 IGNORED_THIRD_PARTY = {"epc", "tests", "conftest", "pytest"}
 
 
 def unit_of_module(dotted: str) -> str:
-    """The unit a dotted module name belongs to (engine unit, backend module) or '' when it is neither."""
+    """The unit a dotted module name belongs to (engine package, backend module) or '' when it is neither."""
     parts = dotted.split(".")
     if parts[0] in ENGINE_PKGS:
-        base = ENGINE_PKGS[parts[0]]
-        if base == "drawing":
-            return f"drawing.{parts[1]}" if len(parts) > 1 else ""            # naming the package alone says nothing about which part is used
-        return base
+        return ENGINE_PKGS[parts[0]] if parts[0] != "epc_drawing" or len(parts) > 1 else ""        # naming epc_drawing alone says nothing about what is used
     if parts[0] == "epc" and len(parts) > 1:
         return f"backend.{parts[2]}" if parts[1] == "modules" and len(parts) > 2 else "backend.core" if parts[1] == "core" else "backend.app"
     return ""
@@ -45,8 +42,7 @@ def unit_of_file(path: Path) -> str:
     rel = path.relative_to(REPO).as_posix()
     for base, root in ENGINE_ROOTS.items():
         if rel.startswith(root + "/"):
-            inner = rel[len(root) + 1:].split("/")
-            return f"drawing.{inner[0].removesuffix('.py')}" if base == "drawing" and len(inner) >= 1 and inner[0] != "__init__.py" else base
+            return base
     if rel.startswith("backend/src/epc/modules/"):
         return "backend." + rel.split("/")[4]
     return "backend.core" if rel.startswith("backend/src/epc/core/") else "backend.app"
@@ -102,10 +98,8 @@ def scan() -> tuple:
 
 
 def engine_units() -> List[str]:
-    """Every unit of the engine, whether or not anything uses it: the packages and the parts of epc_drawing."""
-    drawing = REPO / ENGINE_ROOTS["drawing"]
-    parts = {f"drawing.{p.name.removesuffix('.py')}" for p in drawing.iterdir() if not p.name.startswith(("__", ".")) and (p.is_dir() or p.suffix == ".py")}
-    return sorted({"calc", "documents", "standards", "rules", "plan"} | parts)
+    """Every engine package, whether or not anything uses it."""
+    return sorted(ENGINE_PKGS.values())
 
 
 def dependents(edges: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
@@ -127,10 +121,26 @@ def closure(start: str, graph: Dict[str, Set[str]]) -> Set[str]:
     return seen
 
 
-def declared_dependencies(unit: str) -> Set[str]:
+IMPORT_TO_DIST = {"docx": "python-docx", "yaml": "pyyaml", "PIL": "pillow", "cv2": "opencv-python"}
+
+
+def _dist_name(requirement: str) -> str:
+    return re.split(r"[<>=~!\[; ]", requirement.strip())[0].lower().replace("_", "-")
+
+
+def project_requirements(unit: str) -> tuple:
+    """(required, optional) distribution names of the engine package, as written in its pyproject.toml."""
+    import tomllib
     f = REPO / PYPROJECT[unit] / "pyproject.toml"
-    m = re.search(r"dependencies\s*=\s*\[(.*?)\]", f.read_text(encoding="utf-8"), re.S) if f.exists() else None
-    return {re.split(r"[<>=~!\[; ]", x.strip().strip("\"'"))[0].lower().replace("_", "-") for x in (m.group(1).split(",") if m else []) if x.strip()}
+    project = tomllib.loads(f.read_text(encoding="utf-8")).get("project", {}) if f.exists() else {}
+    required = {_dist_name(r) for r in project.get("dependencies", [])}
+    optional = {_dist_name(r) for group in project.get("optional-dependencies", {}).values() for r in group}
+    return required, optional
+
+
+def declared_dependencies(unit: str) -> Set[str]:
+    required, optional = project_requirements(unit)
+    return required | optional
 
 
 def plugins() -> Dict[str, dict]:
@@ -164,9 +174,8 @@ def render() -> str:
     L += ["", "## Paquetes externos por unidad del motor", "", "Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.", "",
           "| Unidad | Importa | Declarado | Falta declarar |", "|---|---|---|---|"]
     for u in units:
-        base = "drawing" if u.startswith("drawing.") else u
-        imported = {x.lower().replace("_", "-") for x in third.get(u, ())}
-        declared = declared_dependencies(base)
+        imported = {IMPORT_TO_DIST.get(x, x).lower().replace("_", "-") for x in third.get(u, ())}
+        declared = declared_dependencies(u)
         L.append(f"| `{u}` | {cell(imported)} | {cell(declared)} | {cell(imported - declared)} |")
     L += ["", "## Plugins", "", "| Plugin | Empaqueta (motor) | Requiere (plugins) | Lo requieren |", "|---|---|---|---|"]
     ps = plugins()

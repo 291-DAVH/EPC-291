@@ -7,7 +7,10 @@ name = "epc-documents"
 version = "0.1.0"
 description = "EPC-291 documents engine: verifiers, input converter, CCPM scheduling, PM2 exporters"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["pypdf"]
+
+[project.optional-dependencies]
+exports = ["python-docx", "playwright"]      # Word and PDF exports of the canvases and charters
 
 [tool.setuptools.packages.find]
 where = ["src"]

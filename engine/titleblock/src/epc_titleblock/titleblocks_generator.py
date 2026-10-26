@@ -1,7 +1,7 @@
 import subprocess, os, html, sys
 from openpyxl import load_workbook
 W = os.getcwd(); HERE = os.path.dirname(os.path.abspath(__file__))
-# Dos formas de uso (ejecutar con: python -m epc_drawing.titleblock.titleblocks_generator):
+# Dos formas de uso (ejecutar con: python -m epc_titleblock.titleblocks_generator):
 #  - carpeta del proyecto con input-titleblocks.xlsx: logos y salida en esa misma carpeta (svg/)
 #  - sin Excel en la carpeta: plantilla y logos del paquete, salida en ./svg
 if os.path.exists(os.path.join(W, "input-titleblocks.xlsx")):
@@ -23,7 +23,7 @@ for r in range(2, ws.max_row + 1):
     if not row["formato"]: continue
     mod = row["mod"] == "SI"
     dst = os.path.join(OUT, row["archivo"])
-    subprocess.run([sys.executable, "-m", "epc_drawing.titleblock.sheet_generator", row["formato"], dst] + (["--mod"] if mod else []),
+    subprocess.run([sys.executable, "-m", "epc_titleblock.sheet_generator", row["formato"], dst] + (["--mod"] if mod else []),
                    check=True, capture_output=True, cwd=OUT, env=ENV)
     s = open(dst, encoding="utf-8").read()
     for k in KEYS:

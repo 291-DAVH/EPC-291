@@ -4,6 +4,7 @@ import json
 import os
 import re
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,18 @@ def read_json(path: Path, default: Any = None) -> Any:
         return default
 
 
+def replace_when_free(tmp: str, path: Path, tries: int = 20) -> None:
+    """os.replace that waits while a reader has the target open (Windows refuses to replace it at that moment)."""
+    for attempt in range(tries):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            if attempt == tries - 1:
+                raise
+            time.sleep(0.05)
+
+
 def write_json(path: Path, obj: Any) -> None:
     """Atomic write (temporary file + rename), UTF-8, LF."""
     path = Path(path)
@@ -27,7 +40,7 @@ def write_json(path: Path, obj: Any) -> None:
     with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
         json.dump(obj, f, indent=2, ensure_ascii=False)
         f.write("\n")
-    os.replace(tmp, path)
+    replace_when_free(tmp, path)
 
 
 def count_files(folder: Path) -> int:

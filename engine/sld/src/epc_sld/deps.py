@@ -1,14 +1,14 @@
-"""Dependencies of the SLD generator, resolved inside the epc_drawing package.
+"""Dependencies of the SLD generator, resolved from the epc_symbols and epc_titleblock packages.
 
-- symbol library: epc_drawing.symbols (sld-lv-symbol)
-- title block and IRAM sheets: epc_drawing.titleblock
+- symbol library: epc_symbols (sld-lv-symbol)
+- title block and IRAM sheets: epc_titleblock
 - calculation formulas: epc_calc (a regular package, imported directly)
 """
 import os, sys, tempfile, subprocess
 from pathlib import Path
 
-from epc_drawing import titleblock as _titleblock
-from epc_drawing.symbols import library_dir
+import epc_titleblock as _titleblock
+from epc_symbols import library_dir
 
 HERE = Path(__file__).resolve().parent
 CACHE = os.path.join(tempfile.gettempdir(), 'epc_sld_work')
@@ -114,12 +114,12 @@ def rotulo(indice, fmt='A1'):
     for f in os.listdir(ROTULO_DIR):
         if f.endswith(('.svg', '.png')) and ('-logo-' in f):
             shutil.copy(os.path.join(ROTULO_DIR, f), work)
-    subprocess.run([sys.executable, '-m', 'epc_drawing.titleblock.titleblocks_generator'], check=True, capture_output=True, cwd=work)   # sin -I: necesita ezdxf del usuario
+    subprocess.run([sys.executable, '-m', 'epc_titleblock.titleblocks_generator'], check=True, capture_output=True, cwd=work)   # sin -I: necesita ezdxf del usuario
     return os.path.join(work, 'svg', archivo), os.path.join(work, 'svg', 'modifications-block-IRAM4508.svg')
 
 
 def svg_a_dxf(svg_path):
     """DXF con el mismo convertidor del paquete (svg_to_dxf.convertir): mismo nombre, extensión .dxf."""
-    from epc_drawing.titleblock.svg_to_dxf import convertir
+    from epc_titleblock.svg_to_dxf import convertir
     convertir(svg_path)
     return os.path.splitext(svg_path)[0] + '.dxf'

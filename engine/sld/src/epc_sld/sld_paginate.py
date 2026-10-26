@@ -42,7 +42,7 @@ for i, g in enumerate(groups, 1):
         env['SLD_TITLE_SUFFIX'] = f'(hoja {i} de {len(groups)})'
         env['SLD_PREV'] = str(i-1) if i > 1 else ''
         env['SLD_NEXT'] = str(i+1) if i < len(groups) else ''
-    res = subprocess.run([sys.executable, '-m', 'epc_drawing.sld.sld_generator', lib, xlsx, out, nm, lam, mod],
+    res = subprocess.run([sys.executable, '-m', 'epc_sld.sld_generator', lib, xlsx, out, nm, lam, mod],
                          env=env, capture_output=True, text=True)
     print(res.stdout.strip().splitlines()[-1] if res.stdout.strip() else res.stderr.strip()[-300:])
     for ln in res.stderr.splitlines():
@@ -57,7 +57,7 @@ env['SLD_SOLO_TABLA'] = '1'
 env.pop('SLD_SIN_TABLA', None)
 for k in ('SLD_SUBSET', 'SLD_PREV', 'SLD_NEXT'): env.pop(k, None)
 env['SLD_TITLE_SUFFIX'] = '(tabla de cálculo)'
-res = subprocess.run([sys.executable, '-m', 'epc_drawing.sld.sld_generator', lib, xlsx, out, TABLA, lam, mod],
+res = subprocess.run([sys.executable, '-m', 'epc_sld.sld_generator', lib, xlsx, out, TABLA, lam, mod],
                      env=env, capture_output=True, text=True)
 print(res.stdout.strip().splitlines()[-1] if res.stdout.strip() else res.stderr.strip()[-300:])
 for ln in res.stderr.splitlines():

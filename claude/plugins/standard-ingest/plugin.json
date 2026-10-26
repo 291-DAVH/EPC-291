@@ -10,7 +10,9 @@
     "AR",
     "INTL"
   ],
-  "requires": {},
+  "requires": {
+    "aea-calc": "^1.8.0"
+  },
   "consumes": [
     "StandardPdf"
   ],
@@ -26,10 +28,10 @@
   "entitlement": "feature.rules.ingest",
   "python": {
     "requires": [
+      "jsonschema",
+      "openpyxl",
       "pypdf",
-      "pypdfium2",
-      "pillow",
-      "jsonschema"
+      "pypdfium2"
     ],
     "optional": [
       "jsonschema"
@@ -42,10 +44,15 @@
     }
   ],
   "engine": [
-    "standards",
-    "rules"
+    "calc",
+    "rules",
+    "standards"
   ],
   "legacy": {
     "source": "engine/calc/src/epc_calc/rules (177 rules imported by epc_standards.import_legacy_rules)"
-  }
+  },
+  "owns": [
+    "standards",
+    "rules"
+  ]
 }

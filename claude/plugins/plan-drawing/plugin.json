@@ -1,0 +1,44 @@
+{
+  "id": "plan-drawing",
+  "version": "0.1.0",
+  "kind": "generator",
+  "description": "Plan-drawing editor engine: nodes and lines drawn over a plan become a graph with correlative tags, circuit routes (moment-method lengths), schedules and DXF/PDF. Profiles: low-voltage electrical and sanitary sewer.",
+  "discipline": [
+    "electrical",
+    "sanitary"
+  ],
+  "jurisdiction": [
+    "AR"
+  ],
+  "requires": {},
+  "consumes": [
+    "PlanDrawing"
+  ],
+  "produces": [
+    "Drawing:PLAN",
+    "Schedule"
+  ],
+  "outputs": [
+    {
+      "format": "dxf",
+      "channel": "internal+deliverable"
+    },
+    {
+      "format": "pdf",
+      "channel": "internal+deliverable"
+    }
+  ],
+  "entitlement": "feature.drawing.plan",
+  "python": {
+    "requires": [
+      "ezdxf"
+    ]
+  },
+  "skills": [],
+  "owns": [
+    "plan"
+  ],
+  "engine": [
+    "plan"
+  ]
+}

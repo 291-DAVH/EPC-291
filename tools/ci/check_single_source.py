@@ -16,8 +16,8 @@ REPO = Path(__file__).resolve().parents[2]
 EXEMPT_PARTS = ("/tests/fixtures/", "/node_modules/", "/dist/", "/incoming/")      # incoming/: modules that stand alone carry a copy of the contract and the prompt by design
 MIN_BYTES = 200
 ALLOWED = [
-    ({"engine/drawing/src/epc_drawing/titleblock/assets/client-logo-DAVH.svg", "engine/drawing/src/epc_drawing/titleblock/assets/provider-logo-DAVH.svg",
-      "engine/drawing/src/epc_drawing/titleblock/assets/client-logo-DAVH.png", "engine/drawing/src/epc_drawing/titleblock/assets/provider-logo-DAVH.png", "assets/logo.png"},
+    ({"engine/titleblock/src/epc_titleblock/assets/client-logo-DAVH.svg", "engine/titleblock/src/epc_titleblock/assets/provider-logo-DAVH.svg",
+      "engine/titleblock/src/epc_titleblock/assets/client-logo-DAVH.png", "engine/titleblock/src/epc_titleblock/assets/provider-logo-DAVH.png", "assets/logo.png"},
      "sample logos: the generator reads one file per role (client / provider) and the sample uses the platform's own artwork for both"),
     ({"claude/plugins/aea-calc/LICENSE", "claude/plugins/iram-titleblock/LICENSE"}, "each plugin carries its own license text"),
     ({"frontend/console/src/main.tsx", "frontend/web/src/main.tsx"}, "entry points of two applications (three imports and a render call)"),

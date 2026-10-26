@@ -5,6 +5,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ## [Unreleased]
 
 ### Changed
+- The drawing engine is split into independent packages (`epc_symbols`, `epc_titleblock`, `epc_sld`, `epc_mld`, `epc_plan`, `epc_drawing`) with enforced layers (ADR-0022). Plugins are regenerated from the code: they declare only what they own, and `engine`, `requires` and Python packages are derived; new plugin `plan-drawing`. Skills the platform now does were removed. The dependency map is `docs/architecture/DEPENDENCIAS.md`.
 - The single-line and multi-line diagrams only draw: every number they show (power, PE and neutral sections, main bar, feeder, checks, notes) comes from the calculation engine. The feeder shows "Pendiente" when there is no upstream board instead of an invented section.
 
 ### Added

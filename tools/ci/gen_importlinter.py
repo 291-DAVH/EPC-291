@@ -21,12 +21,22 @@ INTERNAL = ("api", "service", "repository", "models", "guard")     # never impor
 LAYERS = ("api", "service", "repository", "models")                # top -> bottom
 
 
+# What may depend on what in the engine: a package imports only from the layers below it, never from a sibling in its own layer. This is what lets each one be taken alone.
+ENGINE_LAYERS = ["epc_drawing", "epc_mld", "epc_sld", "epc_titleblock | epc_symbols | epc_plan | epc_calc"]
+
+
 def engine_packages() -> list[str]:
     return sorted(p.name for src in (REPO / "engine").glob("*/src") for p in src.iterdir() if (p / "__init__.py").exists())
 
 
 def module_names() -> list[str]:
     return sorted(p.name for p in MODULES.iterdir() if (p / "__init__.py").exists())
+
+
+def engine_layers(engines: list[str]) -> list[str]:
+    top_down = [l for l in ENGINE_LAYERS if all(x in engines for x in l.split(" | "))]
+    return ["[importlinter:contract:engine-layers]", "name = engine: board design -> multi-line -> single-line -> symbols, title block, plan and calculation (each one installs on its own)",
+            "type = layers", "layers =", *[f"    {l}" for l in top_down], ""]
 
 
 def render() -> str:
@@ -52,6 +62,7 @@ def render() -> str:
             "source_modules =", "    epc.core", "forbidden_modules =", "    epc.modules", ""]
     out += ["[importlinter:contract:engine-independent]", "name = engine packages never import the backend", "type = forbidden", "allow_indirect_imports = True",
             "source_modules =", *[f"    {e}" for e in engines], "forbidden_modules =", "    epc", ""]
+    out += engine_layers(engines)
     return "\n".join(out)
 
 

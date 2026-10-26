@@ -63,7 +63,7 @@ def colorear(svg_path, dxf_path):
     import sys as _sys
     from ezdxf.colors import rgb2int
     from svgelements import SVG, Circle, Ellipse, Path, Polygon, Rect, Shape, SimpleLine, Text
-    from epc_drawing.titleblock import svg_to_dxf as S
+    from epc_titleblock import svg_to_dxf as S
     svg = SVG.parse(svg_path, reify=True)
     elementos = list(svg.elements())
     formas = [e for e in elementos if isinstance(e, Shape) and not isinstance(e, Text)]

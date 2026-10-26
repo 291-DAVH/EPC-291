@@ -46,7 +46,7 @@ def first(*paths):
 PYTHON = first(REPO / ".venv" / "Scripts" / "python.exe", REPO / ".venv" / "bin" / "python") or Path(sys.executable)
 PLUGINS = REPO / "claude" / "plugins"
 ENGINE = REPO / "engine"
-AREAS = ("calc", "rules", "standards", "drawing", "documents")
+AREAS = ("calc", "rules", "standards", "symbols", "titleblock", "plan", "sld", "mld", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
@@ -117,8 +117,9 @@ def main():
         run("intake", [py, "-m", "unittest", "test_intake"], intake)
 
     run("impact-map", [py, str(REPO / "tools" / "build" / "impact_map.py"), "--check"], REPO)
+    run("plugins-generated", [py, str(REPO / "tools" / "build" / "regen_plugins.py"), "--check"], REPO)
 
-    example = ENGINE / "drawing" / "examples" / "sld"
+    example = ENGINE / "sld" / "examples" / "sld"
     if example.is_dir():
         out = Path(tempfile.mkdtemp(prefix="gate_sld_"))
         run("sld-smoke", [py, "-m", "epc_drawing.board_design", "--xlsx", str(example / "input_for_sld_V1.xlsx"), "--out", str(out), "--name", "SLD_V1"],

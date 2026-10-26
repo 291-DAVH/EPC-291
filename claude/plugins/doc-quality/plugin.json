@@ -21,7 +21,9 @@
   ],
   "entitlement": "feature.quality",
   "python": {
-    "requires": []
+    "requires": [
+      "pypdf"
+    ]
   },
   "system": {
     "optional": [
@@ -34,6 +36,9 @@
     "source": "00-Template-Claude/.claude/library/plugins/calculations"
   },
   "engine": [
+    "documents"
+  ],
+  "owns": [
     "documents"
   ]
 }

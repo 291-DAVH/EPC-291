@@ -164,7 +164,7 @@ def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: O
 def example_data() -> Dict:
     """The plugin's example workbook as input data (a starting point for the form)."""
     import openpyxl
-    wb = openpyxl.load_workbook(settings.engine / "drawing" / "examples" / "sld" / "input_for_sld_V1.xlsx", data_only=True)
+    wb = openpyxl.load_workbook(settings.engine / "sld" / "examples" / "sld" / "input_for_sld_V1.xlsx", data_only=True)
     board = {}
     for row in wb["TABLERO"].iter_rows(values_only=True):
         for col, key in BOARD_ROWS:

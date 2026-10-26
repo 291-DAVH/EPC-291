@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from epc_drawing.symbols import KINDS, library_dir  # noqa: E402
+from epc_symbols import KINDS, library_dir  # noqa: E402
 
 
 def symbol_file(folder: Path, sid: str):

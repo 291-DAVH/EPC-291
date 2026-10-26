@@ -7,10 +7,9 @@
     "electrical"
   ],
   "requires": {
-    "aea-calc": "^1.6.0",
-    "sld": "^0.1.2",
-    "iram-titleblock": "^0.5.1",
-    "iec-symbols": "^0.4.14"
+    "aea-calc": "^1.8.0",
+    "iec-symbols": "^0.4.19",
+    "sld": "^0.1.4"
   },
   "consumes": [
     "CircuitCalculation",
@@ -33,12 +32,12 @@
   "entitlement": "feature.drawing.mld",
   "python": {
     "requires": [
-      "openpyxl>=3.1",
-      "lxml",
       "ezdxf",
-      "svgelements",
+      "lxml",
+      "openpyxl",
       "shapely",
-      "matplotlib"
+      "svgelements",
+      "vtracer"
     ]
   },
   "skills": [],
@@ -48,6 +47,12 @@
   },
   "engine": [
     "calc",
-    "drawing"
+    "mld",
+    "sld",
+    "symbols",
+    "titleblock"
+  ],
+  "owns": [
+    "mld"
   ]
 }

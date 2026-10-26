@@ -24,3 +24,5 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0018](ADR-0018-ai-usage-metering-and-limits.md) | Use of Claude is metered per organization and limited by a monthly allowance | Accepted (design) |
 | [0019](ADR-0019-engineering-roadmap.md) | What the engineering area grows into | Accepted (direction) |
 | [0020](ADR-0020-plan-canvas.md) | Drawing the routes over the architectural plan | Accepted (direction) |
+| [0021](ADR-0021-plan-drawing-editor.md) | Plan-drawing editor: levels, scale, graph, circuits and DXF | Accepted |
+| [0022](ADR-0022-engine-split-generated-plugins.md) | Drawing engine split into independent packages; plugins generated from the code | Accepted |

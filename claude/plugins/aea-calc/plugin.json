@@ -41,7 +41,7 @@
   "entitlement": "feature.calc.electrical",
   "python": {
     "requires": [
-      "openpyxl>=3.1"
+      "openpyxl"
     ]
   },
   "skills": [],
@@ -51,6 +51,9 @@
     "status": "draft: norm tables pending validation (see docs/11-pendientes.md)"
   },
   "engine": [
+    "calc"
+  ],
+  "owns": [
     "calc"
   ]
 }

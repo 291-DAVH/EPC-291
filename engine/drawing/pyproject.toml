@@ -5,18 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "epc-drawing"
 version = "0.1.0"
-description = "EPC-291 drawing engine: IEC 60617 symbols, IRAM sheets, single-line and multi-line diagrams"
+description = "EPC-291 board design: calculation + single-line + multi-line in one go, and the exports (PDF, stamped DXF)"
 requires-python = ">=3.10"
-dependencies = ["epc-calc", "openpyxl>=3.1", "lxml", "ezdxf", "svgelements", "shapely", "matplotlib"]
-
-[project.optional-dependencies]
-previews = ["cairosvg", "pillow"]
+dependencies = ["epc-calc", "epc-sld", "epc-mld", "epc-titleblock", "openpyxl>=3.1", "ezdxf", "matplotlib"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.package-data]
-"epc_drawing.symbols" = ["library/**/*"]
-"epc_drawing.titleblock" = ["templates/**/*", "assets/*"]
-"epc_drawing.mld" = ["data/**/*", "templates/*"]
-epc_plan = ["params.json", "symbols.json", "profiles/*.json", "knowledge/*.json", "schema/*.json"]
