@@ -46,7 +46,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const [view, setView] = useState<View>({ x: 0, y: 0, w: 1200, h: 800 });
   const box = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const pan = useRef<{ sx: number; sy: number; v: View } | null>(null);
+  const pan = useRef<{ sx: number; sy: number; v: View; u: number } | null>(null);
 
   const lineKinds = profile?.lines ?? [];
   const nodeKinds = profile?.nodes ?? [];
@@ -68,10 +68,16 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
 
   useEffect(() => { if (scalePts.length === 2) scaleInput.current?.focus(); }, [scalePts.length]);
 
-  const upp = () => (box.current ? view.w / Math.max(1, box.current.clientWidth) : 1);     // view units per screen pixel
+  // The drawing is scaled to fit the box keeping its proportions, so the screen-to-view mapping comes from the browser's own matrix of the SVG (never from the box size).
+  const upp = () => { const m = svgRef.current?.getScreenCTM(); return m && m.a ? 1 / m.a : 1; };     // view units per screen pixel
   const toView = (e: { clientX: number; clientY: number }): Pt => {
-    const r = svgRef.current!.getBoundingClientRect();
-    return [view.x + ((e.clientX - r.left) / r.width) * view.w, view.y + ((e.clientY - r.top) / r.height) * view.h];
+    const svg = svgRef.current!;
+    const m = svg.getScreenCTM();
+    if (!m) return [view.x, view.y];
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(m.inverse());
+    return [p.x, p.y];
   };
   const apply = (next: Drawing) => { setHist(commit(hist, drawing)); onChange(next); };
   const doUndo = () => { const r = undo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
@@ -87,7 +93,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
 
   const onDown = (e: React.PointerEvent) => {
     if (e.button === 1 || (tool === "select" && e.button === 0 && !pick(drawing, toView(e), 8 * upp()))) {
-      pan.current = { sx: e.clientX, sy: e.clientY, v: view };                      // the middle button, or an empty spot with the select tool, drags the view
+      pan.current = { sx: e.clientX, sy: e.clientY, v: view, u: upp() };                      // the middle button, or an empty spot with the select tool, drags the view
       (e.target as Element).setPointerCapture?.(e.pointerId);
     }
     if (e.button !== 0 || (readOnly && tool !== "select")) return;
@@ -106,9 +112,8 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   };
   const onMove = (e: React.PointerEvent) => {
     if (pan.current) {
-      const r = svgRef.current!.getBoundingClientRect();
       const p = pan.current;
-      setView({ ...p.v, x: p.v.x - ((e.clientX - p.sx) / r.width) * p.v.w, y: p.v.y - ((e.clientY - p.sy) / r.height) * p.v.h });
+      setView({ ...p.v, x: p.v.x - (e.clientX - p.sx) * p.u, y: p.v.y - (e.clientY - p.sy) * p.u });
       return;
     }
     const raw = toView(e);
