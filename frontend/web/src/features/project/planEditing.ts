@@ -250,3 +250,27 @@ export function moveSegment(d: Drawing, lineId: string, seg: number, offset: Pt)
   const k = offset[0] * n[0] + offset[1] * n[1];
   return movePoints(d, lineId, [{ i: seg, to: [a[0] + n[0] * k, a[1] + n[1] * k] }, { i: seg + 1, to: [b[0] + n[0] * k, b[1] + n[1] * k] }]);
 }
+
+/** The circuit a new cable belongs to: that of the single element selected (a load or a cable already in a circuit) or, without selection, that of the load or cable it starts from. */
+export function circuitFor(d: Drawing, selection: Ref[], start: Pt): string {
+  if (selection.length === 1) {
+    const r = selection[0];
+    const c = r.type === "node" ? d.nodes.find((n) => n.id === r.id)?.circuit : d.lines.find((l) => l.id === r.id)?.circuit;
+    if (c) return c;
+  }
+  const node = d.nodes.find((n) => n.circuit && same([n.x, n.y], start));
+  if (node) return node.circuit!;
+  return d.lines.find((l) => l.circuit && l.points.some((p) => same(p, start)))?.circuit ?? "";
+}
+
+/** Put the last line of the drawing in a circuit: the line takes the tag, and the loads it reaches that have no circuit yet join it, so the route grows one load at a time. */
+export function joinCircuit(d: Drawing, tag: string, loadKinds: Set<string>): Drawing {
+  const l = d.lines[d.lines.length - 1];
+  if (!tag || !l) return d;
+  const ends = [l.points[0], l.points[l.points.length - 1]];
+  return {
+    ...d,
+    lines: d.lines.map((x) => (x.id === l.id ? { ...x, circuit: tag } : x)),
+    nodes: d.nodes.map((n) => (!n.circuit && loadKinds.has(n.kind) && ends.some((p) => same(p, [n.x, n.y])) ? { ...n, circuit: tag } : n)),
+  };
+}
