@@ -582,19 +582,9 @@ def _hallazgo(sev, cat, archivo, msg):
     return {"severidad": sev, "categoria": cat, "archivo": archivo, "mensaje": msg}
 
 
-def verificar_proyecto(raiz, citas_todos=False):
-    """Recorre la carpeta del proyecto y devuelve un dict con hallazgos, marcas y resumen."""
-    if not os.path.isdir(raiz):
-        raise ValueError(f"No existe la carpeta del proyecto: {raiz}")
-    raiz = os.path.abspath(raiz)
-    rel = lambda p: os.path.relpath(p, raiz).replace(os.sep, "/")
-    hall = []
-    lme, nota_lme = _parsear_lme(raiz)
-
-    archivos = list(_recorrer(raiz))
-    md = [p for p in archivos if p.lower().endswith(".md")]
-    # --- documentos con código y revisión en el nombre
-    docs = defaultdict(list)     # codigo -> [{ruta, rev, anexo, ext}]
+def _agrupar_documentos(archivos, rel, hall):
+    """Documentos con código y revisión en el nombre: {código: [{ruta, rev, ext, anexo, medio}]}. Los borradores sueltos se avisan y no cuentan."""
+    docs = defaultdict(list)
     for p in archivos:
         m = RE_ARCHIVO.match(os.path.basename(p))
         if m and RE_BORRADOR.search(m.group("resto")):
@@ -606,6 +596,11 @@ def verificar_proyecto(raiz, citas_todos=False):
             docs[m.group("codigo")].append({"ruta": p, "rev": m.group("rev"), "ext": m.group("ext").lower(),
                                             "anexo": "annex" in m.group("resto").lower(),
                                             "medio": m.group("medio")})
+    return docs
+
+
+def _revisiones_vigentes(docs, rel, hall):
+    """Revisión vigente de cada código (la mayor de los documentos principales) y los avisos de versiones superadas, Rev 00 y anexos desfasados."""
     vigente = {}
     for cod, lista in docs.items():
         principales = [d for d in lista if not d["anexo"]]
@@ -624,31 +619,39 @@ def verificar_proyecto(raiz, citas_todos=False):
             if d["anexo"] and d["rev"] != vigente[cod]:
                 hall.append(_hallazgo("ERROR", "revision", rel(d["ruta"]),
                                       f"El anexo es Rev {d['rev']} pero el documento {cod} vigente es Rev {vigente[cod]}."))
+    return vigente
 
-    # (a) coherencia de revisión
+
+def _verificar_filas_control(d, filas_ctrl, rel, hall):
+    """Filas del «Control de revisiones»: la Rev 00.n nace de la rfc-n y cada unidad del último dígito, de un comentario REV-nnn."""
+    previa = None
+    for rv, linea in filas_ctrl:
+        partes, fase = _partes_rev(rv)
+        numeros = partes[:3]
+        cambia_solo_fase = previa is not None and numeros == previa and fase is not None
+        if partes[0] == "00" and len(partes) >= 2:
+            if int(partes[1]) >= 1 and (len(partes) < 3 or int(partes[2]) == 0) \
+                    and not re.search(r"rfc-0*" + str(int(partes[1])) + r"\b", linea) and not cambia_solo_fase:
+                hall.append(_hallazgo("AVISO", "rev_sin_rfc", rel(d["ruta"]),
+                                      f"La fila {rv} del control de revisiones no cita la rfc-{int(partes[1]):03d}: "
+                                      "la Rev 00.n (último dígito en cero) solo nace de la rfc-n."))
+            elif len(partes) == 3 and int(partes[2]) >= 1 and not cambia_solo_fase \
+                    and not re.search(r"\bREV-\d+|avance de fase", linea, re.IGNORECASE):
+                hall.append(_hallazgo("AVISO", "rev_sin_comentario", rel(d["ruta"]),
+                                      f"La fila {rv} del control de revisiones no cita ningún REV-nnn (ni «Avance de fase»): "
+                                      "cada unidad del último dígito corresponde a un comentario incorporado."))
+        if partes[0] == "00" and len(partes) >= 2:
+            previa = numeros
+
+
+def _verificar_coherencia_revision(docs, vigente, lme, rel, hall):
+    """(a) Coherencia de la revisión entre nombre de archivo, cabecera, título, control de revisiones y LME."""
     for cod, lista in sorted(docs.items()):
         for d in lista:
             if d["anexo"] or d["ext"] != "md" or d["rev"] != vigente[cod]:
                 continue
             rev_tabla, rev_titulo, rev_ctrl, filas_ctrl = _cabecera(_leer(d["ruta"]))
-            previa = None
-            for rv, linea in filas_ctrl:
-                partes, fase = _partes_rev(rv)
-                numeros = partes[:3]
-                cambia_solo_fase = previa is not None and numeros == previa and fase is not None
-                if partes[0] == "00" and len(partes) >= 2:
-                    if int(partes[1]) >= 1 and (len(partes) < 3 or int(partes[2]) == 0) \
-                            and not re.search(r"rfc-0*" + str(int(partes[1])) + r"\b", linea) and not cambia_solo_fase:
-                        hall.append(_hallazgo("AVISO", "rev_sin_rfc", rel(d["ruta"]),
-                                              f"La fila {rv} del control de revisiones no cita la rfc-{int(partes[1]):03d}: "
-                                              "la Rev 00.n (último dígito en cero) solo nace de la rfc-n."))
-                    elif len(partes) == 3 and int(partes[2]) >= 1 and not cambia_solo_fase \
-                            and not re.search(r"\bREV-\d+|avance de fase", linea, re.IGNORECASE):
-                        hall.append(_hallazgo("AVISO", "rev_sin_comentario", rel(d["ruta"]),
-                                              f"La fila {rv} del control de revisiones no cita ningún REV-nnn (ni «Avance de fase»): "
-                                              "cada unidad del último dígito corresponde a un comentario incorporado."))
-                if partes[0] == "00" and len(partes) >= 2:
-                    previa = numeros
+            _verificar_filas_control(d, filas_ctrl, rel, hall)
             for etiqueta, valor in (("fila «Revisión» de la cabecera", rev_tabla), ("título", rev_titulo),
                                     ("última fila de «Control de revisiones»", rev_ctrl)):
                 if valor is not None and valor != d["rev"]:
@@ -663,23 +666,29 @@ def verificar_proyecto(raiz, citas_todos=False):
         if lme is not None and cod not in lme:
             hall.append(_hallazgo("AVISO", "lme", rel(docs[cod][0]["ruta"]),
                                   f"{cod} tiene archivo pero no figura en la LME (no existe oficialmente)."))
-    # Pliego modular (tipo PG): su «archivo» es la carpeta Technical_Specs; el código y la revisión del conjunto
-    # figuran en 00_Index_and_Control.md (TECHNICAL_SPECIFICATIONS_GUIDE.md). Su coherencia interna la verifica specification_verifier.py (CAL-011).
-    pliegos = _indices_pliego(archivos)
-    if lme is not None:
-        for cod, e in sorted(lme.items()):
-            aplica_no = e["aplica"].upper().startswith("NO")
-            if cod in pliegos:
-                if e["rev"] is not None and pliegos[cod] is not None and e["rev"] != pliegos[cod] and not aplica_no:
-                    hall.append(_hallazgo("ERROR", "revision", "deliverables.md",
-                                          f"La LME ({e['id']}) dice Rev {e['rev']} para el pliego {cod} pero su "
-                                          f"00_Index_and_Control.md dice Rev {pliegos[cod]}."))
-                continue
-            if cod not in docs and e["rev"] is not None and not aplica_no:
-                hall.append(_hallazgo("AVISO", "lme", "deliverables.md",
-                                      f"La LME ({e['id']}) indica Rev {e['rev']} para {cod} pero no hay archivo en el proyecto."))
 
-    # (b) citas Rev entre documentos
+
+def _verificar_pliegos_lme(lme, docs, archivos, hall):
+    """Pliego modular (tipo PG): su «archivo» es la carpeta Technical_Specs; el código y la revisión del conjunto
+    figuran en 00_Index_and_Control.md (TECHNICAL_SPECIFICATIONS_GUIDE.md). Su coherencia interna la verifica specification_verifier.py (CAL-011)."""
+    pliegos = _indices_pliego(archivos)
+    if lme is None:
+        return
+    for cod, e in sorted(lme.items()):
+        aplica_no = e["aplica"].upper().startswith("NO")
+        if cod in pliegos:
+            if e["rev"] is not None and pliegos[cod] is not None and e["rev"] != pliegos[cod] and not aplica_no:
+                hall.append(_hallazgo("ERROR", "revision", "deliverables.md",
+                                      f"La LME ({e['id']}) dice Rev {e['rev']} para el pliego {cod} pero su "
+                                      f"00_Index_and_Control.md dice Rev {pliegos[cod]}."))
+            continue
+        if cod not in docs and e["rev"] is not None and not aplica_no:
+            hall.append(_hallazgo("AVISO", "lme", "deliverables.md",
+                                  f"La LME ({e['id']}) indica Rev {e['rev']} para {cod} pero no hay archivo en el proyecto."))
+
+
+def _verificar_citas(docs, vigente, md, citas_todos, rel, hall):
+    """(b) Citas «CÓDIGO Rev x» entre documentos frente a la revisión vigente. Devuelve cuántas citas se revisaron."""
     sufijo = defaultdict(set)
     for cod in docs:
         sufijo[cod.split("-", 2)[2]].add(cod)
@@ -717,12 +726,14 @@ def verificar_proyecto(raiz, citas_todos=False):
                 if not ok:
                     hall.append(_hallazgo("ERROR", "cita_rev", f"{rel(p)}:{n}",
                                           f"Cita {cod} Rev {m.group('rev')} pero la revisión vigente es {vig}."))
+    return n_citas
 
-    # (c) marcas y (d) IDs
+
+def _marcas_e_ids(md, archivos_md, rel, hall):
+    """(c) Marcas abiertas por documento y (d) IDs citados que no existen. Devuelve (marcas, ids definidos, ids inexistentes)."""
     marcas = {}
     definidos = defaultdict(set)
     citados = defaultdict(lambda: defaultdict(set))    # id -> archivos
-    archivos_md = {p: _leer(p) for p in md}
     for p, txt in archivos_md.items():
         for linea in txt.splitlines():
             m = re.match(r"^\|\s*`?((?:" + "|".join(TIPOS_ID) + r")-\d{1,4})`?\s*\|", linea)
@@ -758,7 +769,11 @@ def verificar_proyecto(raiz, citas_todos=False):
     for i, fs in inexistentes.items():
         hall.append(_hallazgo("ERROR", "id_inexistente", ", ".join(fs[:3]) + (" ..." if len(fs) > 3 else ""),
                               f"{i} se cita pero no existe en ningún registro del proyecto."))
-    # (f) formato Markdown compatible con Pandoc (RG-20): no se verifican los archivos del framework ni Technical_Specs
+    return marcas, definidos, inexistentes
+
+
+def _verificar_formato(md, raiz, archivos_md, rel, hall):
+    """(f) Formato Markdown compatible con Pandoc (RG-20): no se verifican los archivos del framework ni Technical_Specs. Devuelve cuántos archivos se revisaron."""
     n_formato = 0
     for p in md:
         nombre = os.path.basename(p)
@@ -769,7 +784,11 @@ def verificar_proyecto(raiz, citas_todos=False):
         n_formato += 1
         for sev, cat, linea, msg in comprobar_formato_pandoc(archivos_md[p]):
             hall.append(_hallazgo(sev, cat, f"{rel(p)}:{linea}", msg))
-    # (g) confidencialidad económica (RG-21): .md del proyecto (no del framework) y el registro y actas de entrada
+    return n_formato
+
+
+def _verificar_confidencialidad(md, raiz, archivos_md, definidos, rel, hall):
+    """(g) Confidencialidad económica (RG-21): .md del proyecto (no del framework) y el registro y actas de entrada. Devuelve cuántos hallazgos hubo."""
     candidatos = []
     for p in md:
         nombre = os.path.basename(p)
@@ -792,7 +811,11 @@ def verificar_proyecto(raiz, citas_todos=False):
                 msg = f"La excepción cita {dec}, que no existe en los registros. " + msg
             n_econ += 1
             hall.append(_hallazgo(sev, cat, f"{rel(p)}:{linea}", msg))
-    # (h) Consistencia charter técnico ↔ charter ejecutivo (A3-19 / A3-20)
+    return n_econ
+
+
+def _verificar_charter(raiz, hall):
+    """(h) Consistencia charter técnico ↔ charter ejecutivo (A3-19 / A3-20). Devuelve cuántos hallazgos hubo."""
     p_ch = os.path.join(raiz, "02_PROJECT", "project-charter.md")
     p_ex = os.path.join(raiz, "02_PROJECT", "project-charter-executive.md")
     n_charter = 0
@@ -802,6 +825,30 @@ def verificar_proyecto(raiz, citas_todos=False):
         for sev, cat, msg in comprobar_charter_ejecutivo(t_ch, t_ex) + comprobar_pdf_ejecutivo(p_ex, t_ex, aprobado):
             n_charter += 1
             hall.append(_hallazgo(sev, cat, "02_PROJECT/project-charter-executive.md", msg))
+    return n_charter
+
+
+def verificar_proyecto(raiz, citas_todos=False):
+    """Recorre la carpeta del proyecto y devuelve un dict con hallazgos, marcas y resumen."""
+    if not os.path.isdir(raiz):
+        raise ValueError(f"No existe la carpeta del proyecto: {raiz}")
+    raiz = os.path.abspath(raiz)
+    rel = lambda p: os.path.relpath(p, raiz).replace(os.sep, "/")
+    hall = []
+    lme, nota_lme = _parsear_lme(raiz)
+
+    archivos = list(_recorrer(raiz))
+    md = [p for p in archivos if p.lower().endswith(".md")]
+    docs = _agrupar_documentos(archivos, rel, hall)
+    vigente = _revisiones_vigentes(docs, rel, hall)
+    _verificar_coherencia_revision(docs, vigente, lme, rel, hall)
+    _verificar_pliegos_lme(lme, docs, archivos, hall)
+    n_citas = _verificar_citas(docs, vigente, md, citas_todos, rel, hall)
+    archivos_md = {p: _leer(p) for p in md}
+    marcas, definidos, inexistentes = _marcas_e_ids(md, archivos_md, rel, hall)
+    n_formato = _verificar_formato(md, raiz, archivos_md, rel, hall)
+    n_econ = _verificar_confidencialidad(md, raiz, archivos_md, definidos, rel, hall)
+    n_charter = _verificar_charter(raiz, hall)
     hall.sort(key=lambda h: (h["severidad"] != "ERROR", h["categoria"], h["archivo"]))
     n_err = sum(1 for h in hall if h["severidad"] == "ERROR")
     return {

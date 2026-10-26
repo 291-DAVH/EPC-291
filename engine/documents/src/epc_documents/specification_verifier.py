@@ -247,15 +247,8 @@ def listar(carpeta):
     return caps, otros
 
 
-def verificar_pliego(carpeta):
-    """Verifica la carpeta de un pliego modular y devuelve un dict con hallazgos, capítulos y resumen."""
-    if not os.path.isdir(carpeta):
-        raise ValueError(f"No existe la carpeta del pliego: {carpeta}")
-    carpeta = os.path.abspath(carpeta)
-    hall = []
-    caps, otros = listar(carpeta)
-
-    # (a) estructura y numeración
+def _verificar_estructura(carpeta, caps, otros, hall):
+    """(a) Estructura y numeración. Devuelve (ruta del índice, si existe, {número: capítulo})."""
     ruta_indice = os.path.join(carpeta, INDICE)
     indice_existe = os.path.isfile(ruta_indice)
     if not indice_existe:
@@ -280,125 +273,154 @@ def verificar_pliego(carpeta):
             hall.append(_hallazgo("AVISO", "numeracion", fn, None,
                                   f"El nombre del capítulo {n:02d} difiere del estándar ({n:02d}_{CAPITULOS_ESTANDAR[n]}.md)."))
         capitulos[n] = {"archivo": fn, "ruta": os.path.join(carpeta, fn), "nombre": nombre}
+    return ruta_indice, indice_existe, capitulos
 
-    # índice
-    cod_ind = rev_ind = None
-    if indice_existe:
-        li = _lineas(_leer(ruta_indice))
-        cod_ind, lc, rev_ind, lr, _ = _cabecera(li)
-        if cod_ind is None:
-            hall.append(_hallazgo("ERROR", "encabezado", INDICE, None, "El índice no declara el código del pliego."))
-        elif _tipo_codigo(cod_ind) != "PG":
-            hall.append(_hallazgo("AVISO", "encabezado", INDICE, lc, f"El código {cod_ind} no es de tipo PG (pliego técnico)."))
-        if rev_ind is None:
-            hall.append(_hallazgo("ERROR", "encabezado", INDICE, None, "El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML)."))
-        for sev, cat, linea, msg in comprobar_formato_pandoc(_leer(ruta_indice)):
-            hall.append(_hallazgo(sev, cat, INDICE, linea, msg))
 
-    # análisis por capítulo
-    textos = {}
-    resumen_caps = []
-    for n, c in sorted(capitulos.items()):
-        fn = c["archivo"]
-        texto = _leer(c["ruta"])
-        todas = [(i, l) for i, l in enumerate(texto.splitlines(), 1)]
-        lin = _lineas(texto)
-        textos[n] = lin
-        cod, lcod, rev, lrev, estado = _cabecera(todas)
-        no_aplica = any(RE_NOAPLICA.search(l) for _, l in lin)
-        # (b) encabezado
-        if cod is None:
-            hall.append(_hallazgo("ERROR", "encabezado", fn, None, "El encabezado no declara el código del pliego."))
-        else:
-            if _tipo_codigo(cod) != "PG":
-                hall.append(_hallazgo("AVISO", "encabezado", fn, lcod, f"El código {cod} no es de tipo PG (pliego técnico)."))
-            if cod_ind and cod != cod_ind:
-                hall.append(_hallazgo("ERROR", "encabezado", fn, lcod, f"El código {cod} difiere del del índice ({cod_ind})."))
-        if rev is None:
-            hall.append(_hallazgo("ERROR", "encabezado", fn, None, "El encabezado no declara la revisión (fila «Revisión»)."))
-        elif rev_ind and rev != rev_ind:
-            hall.append(_hallazgo("ERROR", "encabezado", fn, lrev, f"La revisión {rev} difiere de la del índice ({rev_ind}): el pliego tiene una sola revisión."))
-        if not any(RE_PREGUNTA.search(l) for _, l in lin[:60]):
-            hall.append(_hallazgo("ERROR", "encabezado", fn, None, "Falta la línea «Pregunta que responde»."))
-        if not no_aplica and not any(RE_PENDIENTES.match(l.strip()) for _, l in lin):
-            hall.append(_hallazgo("AVISO", "estructura", fn, None, "Falta la sección «Pendientes y supuestos»."))
-        # (i) no aplica
-        if no_aplica and not RE_DEC.search("\n".join(l for _, l in lin)):
-            ln = next(i for i, l in lin if RE_NOAPLICA.search(l))
-            hall.append(_hallazgo("ERROR", "no_aplica", fn, ln, "Capítulo «No aplica a este proyecto» sin una DEC-nnn que lo justifique."))
-        # (g) vacío
-        palabras = _palabras_contenido(lin)
-        vacio = (not no_aplica) and palabras < MIN_PALABRAS_CONTENIDO
-        if vacio:
-            hall.append(_hallazgo("AVISO", "vacio", fn, None, f"Capítulo vacío o con solo la plantilla ({palabras} palabras de contenido)."))
-        marcas = {"DEFINIR": 0, "VERIFICAR": 0}
-        for _, l in lin:
-            for m in RE_MARCA.finditer(l):
-                marcas[m.group(1)] += 1
-        # (c) y (d) obligaciones
-        marcadas = set()
-        for i, l in lin:
-            if l.strip().startswith(("#", ">")):
-                continue
-            for rx in RE_OBLIGACION:
-                m = rx.search(l)
-                if m:
-                    marcadas.add(i)
-                    if n in CAP_ERROR:
-                        hall.append(_hallazgo("ERROR", "obligacion", fn, i, f"Frase de obligación del Contratista («{m.group(0)}») en un capítulo donde corresponde a 04 o 10."))
-                    elif n in CAP_AVISO:
-                        hall.append(_hallazgo("AVISO", "obligacion", fn, i, f"Frase de obligación del Contratista («{m.group(0)}»): verifique que describe el método del ensayo y que la obligación contractual está en 04 o 10."))
-                    break
-        if n == 5:
-            for i, l in lin:
-                if i in marcadas or l.strip().startswith(("#", ">")):
-                    continue
-                m = RE_SUJETO_PROCESO.search(l)
-                if m:
-                    hall.append(_hallazgo("AVISO", "sujeto", fn, i, f"Requisitos de diseño con sujeto de proceso («{m.group(0)}»): redacte con el resultado como sujeto (la instalación, la solución, el sistema)."))
-        # (e) normativa repetida fuera de 03
-        if n != 3:
-            lineas_norma = []
-            for i, l in lin:
-                if l.strip().startswith(("#", ">")):
-                    continue
-                cuenta = sum(len(rx.findall(l)) for rx in RE_NORMA)
-                lineas_norma += [i] * cuenta
-            if lineas_norma:
-                muestra = ", ".join(str(x) for x in sorted(set(lineas_norma))[:8])
-                hall.append(_hallazgo("AVISO", "normativa", fn, min(lineas_norma),
-                                      f"{len(lineas_norma)} referencia(s) normativa(s) genéricas fuera del capítulo 03 (líneas {muestra}): cite el NOR-nnn en lugar de reescribir la norma."))
-        # (h) comercial
-        for i, l in lin:
-            if l.strip().startswith(">"):
-                continue
-            for rx in RE_COMERCIAL:
-                m = rx.search(l)
-                if m:
-                    hall.append(_hallazgo("AVISO", "comercial", fn, i, f"Posible precio o condición comercial («{m.group(0)}»): el pliego no los contiene (RG-05)."))
-                    break
-        # (j) referencias hacia adelante (por número o por nombre)
-        lineas_adelante = set()
-        for i, l in lin:
-            if l.strip().startswith(("|", "#", ">")):
-                continue
-            for m in RE_REF_CAP.finditer(l):
-                destino = int(m.group(1) or m.group(2))
-                if destino > n:
-                    lineas_adelante.add(i)
-                    hall.append(_hallazgo("AVISO", "referencia_adelante", fn, i, f"Referencia hacia adelante al capítulo {destino:02d}: un capítulo no anticipa capítulos posteriores."))
-            for m in RE_REF_CAP_NOMBRE.finditer(l):
-                destino = _NUMERO_POR_NOMBRE[m.group(1).lower()]
-                if destino > n:
-                    lineas_adelante.add(i)
-                    hall.append(_hallazgo("AVISO", "referencia_adelante", fn, i, f"Referencia hacia adelante al capítulo «{m.group(1)}»: un capítulo no anticipa capítulos posteriores."))
-        # (k) formato Markdown compatible con Pandoc (RG-20)
-        for sev, cat, linea, msg in comprobar_formato_pandoc(texto, omitir_lineas_ref=lineas_adelante):
-            hall.append(_hallazgo(sev, cat, fn, linea, msg))
-        resumen_caps.append({"numero": n, "archivo": fn, "estado": estado, "revision": rev, "palabras": palabras,
-                             "vacio": vacio, "no_aplica": no_aplica, "marcas": marcas})
+def _verificar_indice(ruta_indice, hall):
+    """Código y revisión que declara el índice del pliego. Devuelve (código, revisión)."""
+    li = _lineas(_leer(ruta_indice))
+    cod_ind, lc, rev_ind, lr, _ = _cabecera(li)
+    if cod_ind is None:
+        hall.append(_hallazgo("ERROR", "encabezado", INDICE, None, "El índice no declara el código del pliego."))
+    elif _tipo_codigo(cod_ind) != "PG":
+        hall.append(_hallazgo("AVISO", "encabezado", INDICE, lc, f"El código {cod_ind} no es de tipo PG (pliego técnico)."))
+    if rev_ind is None:
+        hall.append(_hallazgo("ERROR", "encabezado", INDICE, None, "El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML)."))
+    for sev, cat, linea, msg in comprobar_formato_pandoc(_leer(ruta_indice)):
+        hall.append(_hallazgo(sev, cat, INDICE, linea, msg))
+    return cod_ind, rev_ind
 
-    # (f) párrafos casi duplicados entre capítulos distintos
+
+def _verificar_encabezado(fn, cod, lcod, rev, lrev, cod_ind, rev_ind, hall):
+    """(b) Encabezado del capítulo: código y revisión propios frente a los del índice."""
+    if cod is None:
+        hall.append(_hallazgo("ERROR", "encabezado", fn, None, "El encabezado no declara el código del pliego."))
+    else:
+        if _tipo_codigo(cod) != "PG":
+            hall.append(_hallazgo("AVISO", "encabezado", fn, lcod, f"El código {cod} no es de tipo PG (pliego técnico)."))
+        if cod_ind and cod != cod_ind:
+            hall.append(_hallazgo("ERROR", "encabezado", fn, lcod, f"El código {cod} difiere del del índice ({cod_ind})."))
+    if rev is None:
+        hall.append(_hallazgo("ERROR", "encabezado", fn, None, "El encabezado no declara la revisión (fila «Revisión»)."))
+    elif rev_ind and rev != rev_ind:
+        hall.append(_hallazgo("ERROR", "encabezado", fn, lrev, f"La revisión {rev} difiere de la del índice ({rev_ind}): el pliego tiene una sola revisión."))
+
+
+def _verificar_obligaciones(n, fn, lin, hall):
+    """(c) y (d) Frases de obligación del Contratista fuera de los capítulos 04 y 10. Devuelve las líneas marcadas."""
+    marcadas = set()
+    for i, l in lin:
+        if l.strip().startswith(("#", ">")):
+            continue
+        for rx in RE_OBLIGACION:
+            m = rx.search(l)
+            if m:
+                marcadas.add(i)
+                if n in CAP_ERROR:
+                    hall.append(_hallazgo("ERROR", "obligacion", fn, i, f"Frase de obligación del Contratista («{m.group(0)}») en un capítulo donde corresponde a 04 o 10."))
+                elif n in CAP_AVISO:
+                    hall.append(_hallazgo("AVISO", "obligacion", fn, i, f"Frase de obligación del Contratista («{m.group(0)}»): verifique que describe el método del ensayo y que la obligación contractual está en 04 o 10."))
+                break
+    return marcadas
+
+
+def _verificar_sujeto(fn, lin, marcadas, hall):
+    """Capítulo 05: requisitos de diseño con sujeto de proceso."""
+    for i, l in lin:
+        if i in marcadas or l.strip().startswith(("#", ">")):
+            continue
+        m = RE_SUJETO_PROCESO.search(l)
+        if m:
+            hall.append(_hallazgo("AVISO", "sujeto", fn, i, f"Requisitos de diseño con sujeto de proceso («{m.group(0)}»): redacte con el resultado como sujeto (la instalación, la solución, el sistema)."))
+
+
+def _verificar_normativa(fn, lin, hall):
+    """(e) Normativa genérica repetida fuera del capítulo 03."""
+    lineas_norma = []
+    for i, l in lin:
+        if l.strip().startswith(("#", ">")):
+            continue
+        cuenta = sum(len(rx.findall(l)) for rx in RE_NORMA)
+        lineas_norma += [i] * cuenta
+    if lineas_norma:
+        muestra = ", ".join(str(x) for x in sorted(set(lineas_norma))[:8])
+        hall.append(_hallazgo("AVISO", "normativa", fn, min(lineas_norma),
+                              f"{len(lineas_norma)} referencia(s) normativa(s) genéricas fuera del capítulo 03 (líneas {muestra}): cite el NOR-nnn en lugar de reescribir la norma."))
+
+
+def _verificar_comercial(fn, lin, hall):
+    """(h) Precios o condiciones comerciales."""
+    for i, l in lin:
+        if l.strip().startswith(">"):
+            continue
+        for rx in RE_COMERCIAL:
+            m = rx.search(l)
+            if m:
+                hall.append(_hallazgo("AVISO", "comercial", fn, i, f"Posible precio o condición comercial («{m.group(0)}»): el pliego no los contiene (RG-05)."))
+                break
+
+
+def _verificar_referencias_adelante(n, fn, lin, hall):
+    """(j) Referencias hacia adelante, por número o por nombre. Devuelve las líneas con referencia."""
+    lineas_adelante = set()
+    for i, l in lin:
+        if l.strip().startswith(("|", "#", ">")):
+            continue
+        for m in RE_REF_CAP.finditer(l):
+            destino = int(m.group(1) or m.group(2))
+            if destino > n:
+                lineas_adelante.add(i)
+                hall.append(_hallazgo("AVISO", "referencia_adelante", fn, i, f"Referencia hacia adelante al capítulo {destino:02d}: un capítulo no anticipa capítulos posteriores."))
+        for m in RE_REF_CAP_NOMBRE.finditer(l):
+            destino = _NUMERO_POR_NOMBRE[m.group(1).lower()]
+            if destino > n:
+                lineas_adelante.add(i)
+                hall.append(_hallazgo("AVISO", "referencia_adelante", fn, i, f"Referencia hacia adelante al capítulo «{m.group(1)}»: un capítulo no anticipa capítulos posteriores."))
+    return lineas_adelante
+
+
+def _verificar_capitulo(n, c, cod_ind, rev_ind, hall):
+    """Todas las comprobaciones de un capítulo. Devuelve (sus líneas, su resumen)."""
+    fn = c["archivo"]
+    texto = _leer(c["ruta"])
+    todas = [(i, l) for i, l in enumerate(texto.splitlines(), 1)]
+    lin = _lineas(texto)
+    cod, lcod, rev, lrev, estado = _cabecera(todas)
+    no_aplica = any(RE_NOAPLICA.search(l) for _, l in lin)
+    _verificar_encabezado(fn, cod, lcod, rev, lrev, cod_ind, rev_ind, hall)
+    if not any(RE_PREGUNTA.search(l) for _, l in lin[:60]):
+        hall.append(_hallazgo("ERROR", "encabezado", fn, None, "Falta la línea «Pregunta que responde»."))
+    if not no_aplica and not any(RE_PENDIENTES.match(l.strip()) for _, l in lin):
+        hall.append(_hallazgo("AVISO", "estructura", fn, None, "Falta la sección «Pendientes y supuestos»."))
+    # (i) no aplica
+    if no_aplica and not RE_DEC.search("\n".join(l for _, l in lin)):
+        ln = next(i for i, l in lin if RE_NOAPLICA.search(l))
+        hall.append(_hallazgo("ERROR", "no_aplica", fn, ln, "Capítulo «No aplica a este proyecto» sin una DEC-nnn que lo justifique."))
+    # (g) vacío
+    palabras = _palabras_contenido(lin)
+    vacio = (not no_aplica) and palabras < MIN_PALABRAS_CONTENIDO
+    if vacio:
+        hall.append(_hallazgo("AVISO", "vacio", fn, None, f"Capítulo vacío o con solo la plantilla ({palabras} palabras de contenido)."))
+    marcas = {"DEFINIR": 0, "VERIFICAR": 0}
+    for _, l in lin:
+        for m in RE_MARCA.finditer(l):
+            marcas[m.group(1)] += 1
+    marcadas = _verificar_obligaciones(n, fn, lin, hall)
+    if n == 5:
+        _verificar_sujeto(fn, lin, marcadas, hall)
+    if n != 3:
+        _verificar_normativa(fn, lin, hall)
+    _verificar_comercial(fn, lin, hall)
+    lineas_adelante = _verificar_referencias_adelante(n, fn, lin, hall)
+    # (k) formato Markdown compatible con Pandoc (RG-20)
+    for sev, cat, linea, msg in comprobar_formato_pandoc(texto, omitir_lineas_ref=lineas_adelante):
+        hall.append(_hallazgo(sev, cat, fn, linea, msg))
+    return lin, {"numero": n, "archivo": fn, "estado": estado, "revision": rev, "palabras": palabras,
+                 "vacio": vacio, "no_aplica": no_aplica, "marcas": marcas}
+
+
+def _verificar_duplicados(textos, capitulos, hall):
+    """(f) Párrafos casi duplicados entre capítulos distintos."""
     pares = []
     for n, lin in sorted(textos.items()):
         for ini, txt in _parrafos(lin):
@@ -419,6 +441,26 @@ def verificar_pliego(carpeta):
                 vistos.add((nb, lb))
                 hall.append(_hallazgo("AVISO", "duplicado", capitulos[nb]["archivo"], lb,
                                       f"Párrafo casi idéntico (similitud {sim:.2f}) al de {capitulos[na]['archivo']}, línea {la}: cada dato se define una sola vez."))
+
+
+def verificar_pliego(carpeta):
+    """Verifica la carpeta de un pliego modular y devuelve un dict con hallazgos, capítulos y resumen."""
+    if not os.path.isdir(carpeta):
+        raise ValueError(f"No existe la carpeta del pliego: {carpeta}")
+    carpeta = os.path.abspath(carpeta)
+    hall = []
+    caps, otros = listar(carpeta)
+    ruta_indice, indice_existe, capitulos = _verificar_estructura(carpeta, caps, otros, hall)
+    cod_ind = rev_ind = None
+    if indice_existe:
+        cod_ind, rev_ind = _verificar_indice(ruta_indice, hall)
+
+    textos = {}
+    resumen_caps = []
+    for n, c in sorted(capitulos.items()):
+        textos[n], resumen = _verificar_capitulo(n, c, cod_ind, rev_ind, hall)
+        resumen_caps.append(resumen)
+    _verificar_duplicados(textos, capitulos, hall)
 
     hall.sort(key=lambda h: (h["severidad"] != "ERROR", h["archivo"], h["linea"] or 0, h["categoria"]))
     n_err = sum(1 for h in hall if h["severidad"] == "ERROR")

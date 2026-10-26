@@ -46,7 +46,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "1248467341ad7b61"
+      "hash": "5ffc3aa957035daf"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -127,7 +127,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "98db346919dce29a"
+      "hash": "f4f18f1d5c511fe3"
     },
     "procurement": {
       "version": "0.1.0",
@@ -173,7 +173,7 @@
       "engine": [
         "documents"
       ],
-      "hash": "fda11f42c72a8c1f"
+      "hash": "7320b3d4805d4db6"
     },
     "standard-ingest": {
       "version": "0.1.0",
