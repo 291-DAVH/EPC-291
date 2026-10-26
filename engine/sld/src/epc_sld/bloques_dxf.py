@@ -12,10 +12,8 @@ import os, re
 from lxml import etree
 import ezdxf
 from ezdxf.addons import importer
+from epc_dxf import layers as _L
 
-CAPA_SIMBOLO = '291-E-DIAGRAMA'
-CAPA_TEXTO = '291-E-TEXTOS'
-_ORIG = {'SIMBOLO': CAPA_SIMBOLO, 'ROTULO': CAPA_TEXTO, '0': CAPA_SIMBOLO}
 
 
 def _comp(a, b):
@@ -82,7 +80,7 @@ def insertar(dxf_path, lib, instancias, alto_mm):
     # capas de los bloques -> capas del SLD (colores, alturas y estilos de texto: los del plugin, sin cambios)
     for nombre in nombres:
         for e in doc.blocks.get(nombre):
-            e.dxf.layer = _ORIG.get(e.dxf.layer, CAPA_SIMBOLO)
+            e.dxf.layer = {'SIMBOLO': _L.name('sld.diagram'), 'ROTULO': _L.name('sld.text'), '0': _L.name('sld.diagram')}.get(e.dxf.layer, _L.name('sld.diagram'))
     for capa in ('SIMBOLO', 'ROTULO'):
         if capa in doc.layers:
             try:
@@ -92,10 +90,10 @@ def insertar(dxf_path, lib, instancias, alto_mm):
     for i in instancias:
         k = i['k']
         ref = msp.add_blockref(i['sid'].upper(), (i['X'], alto_mm - i['Y']),
-                               dxfattribs={'layer': CAPA_SIMBOLO, 'xscale': k, 'yscale': k, 'zscale': k})
+                               dxfattribs={'layer': _L.name('sld.diagram'), 'xscale': k, 'yscale': k, 'zscale': k})
         tags = [a.dxf.tag for a in doc.blocks.get(i['sid'].upper()).query('ATTDEF')]
         ref.add_auto_attribs({t: i['valores'].get(t, '') for t in tags})
         for a in ref.attribs:
-            a.dxf.layer = CAPA_TEXTO
+            a.dxf.layer = _L.name('sld.text')
     doc.saveas(dxf_path)
     return len(instancias), len(sids)

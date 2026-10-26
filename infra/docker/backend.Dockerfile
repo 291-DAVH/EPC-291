@@ -14,7 +14,7 @@ COPY database ./database
 COPY tools ./tools
 
 RUN pip install --no-cache-dir \
-      -e engine/calc -e engine/rules -e engine/standards -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents \
+      -e engine/calc -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents \
       -e "backend[analysis]" -r database/requirements.txt
 
 RUN useradd --create-home epc && mkdir -p /data/projects && chown -R epc /data

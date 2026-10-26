@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-dxf"
+version = "0.1.0"
+description = "EPC-291 DXF output: the catalog of layers (name, colour, line weight...) every drawing is delivered with"
+requires-python = ">=3.10"
+dependencies = ["ezdxf"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+epc_dxf = ["data/*.json"]

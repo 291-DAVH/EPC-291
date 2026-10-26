@@ -58,6 +58,7 @@
   "engine": [
     "calc",
     "drawing",
+    "dxf",
     "mld",
     "sld",
     "symbols",

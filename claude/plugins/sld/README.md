@@ -29,9 +29,9 @@ This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing`
 
 | | |
 |---|---|
-| Incluye (motor) | `calc`, `sld`, `symbols`, `titleblock` |
+| Incluye (motor) | `calc`, `dxf`, `sld`, `symbols`, `titleblock` |
 | Es dueño de | `sld` |
-| Necesita (plugins) | `aea-calc`, `iec-symbols`, `iram-titleblock` |
+| Necesita (plugins) | `aea-calc`, `dxf-output`, `iec-symbols`, `iram-titleblock` |
 | Lo necesitan | `board-design`, `mld` |
 | Paquetes de Python | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
 | Si lo modificas, revisa | plugins `board-design`, `mld`; módulos del backend — |

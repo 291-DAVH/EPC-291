@@ -1,25 +1,22 @@
-"""Capas estándar del SLD (prefijo 291-<disciplina>-<tipo>).
+"""Capas del SLD y del MLD: cada entidad va al rol de capa que le toca (nombre, color y grosor: catálogo de epc_dxf).
 
 Todos los DXF del SLD llevan exactamente la misma tabla de capas, con su estado:
 color, tipo de línea, encendida/apagada, congelada y bloqueada.
 Asignación por región (mm sobre lámina A1 841 x 594):
-  - rótulo IRAM (x >= 648 y y >= 500) y logos       -> 291-G-ROTULO
-  - marco / zona útil de la lámina (cerca del borde) -> 291-A-LAMINA
-  - resto de textos y columna de referencias/cálculos -> 291-E-TEXTOS
-  - resto de líneas del diagrama (símbolos y conductores) -> 291-E-DIAGRAMA
+  - rótulo IRAM (x >= 648 y y >= 500) y logos       -> sld.titleblock
+  - marco / zona útil de la lámina (cerca del borde) -> sld.sheet
+  - resto de textos y columna de referencias/cálculos -> sld.text
+  - resto de líneas del diagrama (símbolos y conductores) -> sld.diagram
   Pendiente: separar símbolos de conductores (requiere etiquetar el SVG).
 """
 import math
 import ezdxf
 import xml.etree.ElementTree as ET
 
-# nombre: (color ACI, encendida, congelada, bloqueada)
-CAPAS = {
-    '291-E-DIAGRAMA': (5, True, False, False),
-    '291-E-TEXTOS':   (7, True, False, False),
-    '291-G-ROTULO':   (7, True, False, False),
-    '291-A-LAMINA':   (8, True, False, False),
-}
+from epc_dxf import layers as _L
+
+# Las capas no se escriben aquí: el catálogo (epc_dxf.layers) dice cómo se llama y cómo se ve cada rol.
+ROLES = ('sld.diagram', 'sld.text', 'sld.titleblock', 'sld.sheet')
 ANTIGUAS = ('LINEAS', 'TEXTO', 'LOGOS')
 RX, RY = 648.0, 500.0          # esquina del rótulo (mm)
 BORDE = 35.0                   # distancia al borde de la lámina para considerarlo marco
@@ -175,7 +172,7 @@ def colorear(svg_path, dxf_path):
                 doc.linetypes.add(nombre, pattern=[sum(abs(x) for x in segs)] + segs)
                 tipos_dash[clave] = nombre
             ent.dxf.linetype = tipos_dash[clave]
-        if ent.dxf.layer.startswith(('291-G-', '291-A-')):   # rótulo y marco: quedan con el color de su capa
+        if ent.dxf.layer in {_L.name('sld.titleblock'), _L.name('sld.sheet')}:   # rótulo y marco: quedan con el color de su capa
             continue
         _color(ent, color)
         if tipo == 'LINE' and ancho:
@@ -184,7 +181,7 @@ def colorear(svg_path, dxf_path):
     msp = doc.modelspace()
     for col, bucles in rellenos:
         for exterior, interiores in S._area_relleno(bucles):
-            h = msp.add_hatch(color=7, dxfattribs={'layer': '291-G-ROTULO' if col == (0, 0, 0) else '291-E-DIAGRAMA'})
+            h = msp.add_hatch(color=7, dxfattribs={'layer': _L.name('sld.titleblock') if col == (0, 0, 0) else _L.name('sld.diagram')})
             if col != (0, 0, 0): h.dxf.true_color = rgb2int(col)
             h.paths.add_polyline_path([(x, alto_mm - y) for x, y in exterior], is_closed=True)
             for hueco in interiores:
@@ -285,34 +282,27 @@ def _separar_textos(textos, pasadas=60):
 
 def aplicar(dxf_path):
     doc = ezdxf.readfile(dxf_path)
-    for nombre, (color, on, frozen, locked) in CAPAS.items():
-        if nombre not in doc.layers:
-            doc.layers.add(nombre)
-        lay = doc.layers.get(nombre)
-        lay.color = color
-        lay.linetype = 'Continuous'
-        lay.on = on
-        lay.is_frozen = frozen
-        lay.is_locked = locked
+    cat = _L.load()
+    diagrama, textos, rotulo, lamina = (_L.apply(doc, r, cat) for r in ROLES)
     for e in doc.modelspace():
         t = e.dxftype()
         if t not in ('LINE', 'LWPOLYLINE', 'TEXT', 'HATCH'):
             continue
         pts = _puntos(e) if t != 'HATCH' else []
         if t == 'HATCH':                       # relleno de logos
-            e.dxf.layer = '291-G-ROTULO'; continue
+            e.dxf.layer = rotulo; continue
         if t == 'TEXT':
             x, y = pts[0]
-            e.dxf.layer = '291-G-ROTULO' if _en_rotulo(x, y) else '291-E-TEXTOS'
+            e.dxf.layer = rotulo if _en_rotulo(x, y) else textos
             continue
         if pts and all(_en_rotulo(x, y) for x, y in pts):
-            e.dxf.layer = '291-G-ROTULO'
+            e.dxf.layer = rotulo
         elif _en_marco(pts):
-            e.dxf.layer = '291-A-LAMINA'
+            e.dxf.layer = lamina
         elif pts and all(x >= RX for x, _ in pts):
-            e.dxf.layer = '291-E-TEXTOS'
+            e.dxf.layer = textos
         else:
-            e.dxf.layer = '291-E-DIAGRAMA'
+            e.dxf.layer = diagrama
     for nombre in ANTIGUAS:
         if nombre in doc.layers:
             try:
@@ -320,4 +310,4 @@ def aplicar(dxf_path):
             except Exception:
                 pass
     doc.saveas(dxf_path)
-    return sorted(CAPAS)
+    return sorted(_L.name(r, cat) for r in ROLES)

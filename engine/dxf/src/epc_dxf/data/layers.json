@@ -1,0 +1,285 @@
+{
+ "schema_version": "1.0",
+ "layers": {
+  "sld.diagram": {
+   "name": "291-E-DIAGRAMA",
+   "color": 5,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Símbolos y conductores del unifilar y el multifilar",
+    "en": "Symbols and conductors of the single-line and multi-line"
+   }
+  },
+  "sld.text": {
+   "name": "291-E-TEXTOS",
+   "color": 7,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Textos del diagrama, referencias y cálculos",
+    "en": "Diagram texts, references and calculations"
+   }
+  },
+  "sld.titleblock": {
+   "name": "291-G-ROTULO",
+   "color": 7,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Rótulo IRAM y logos",
+    "en": "IRAM title block and logos"
+   }
+  },
+  "sld.sheet": {
+   "name": "291-A-LAMINA",
+   "color": 8,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Marco y zona útil de la lámina",
+    "en": "Sheet frame and drawing area"
+   }
+  },
+  "plan.ELEC-CABLE": {
+   "name": "ELEC-CABLE",
+   "color": 1,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cables (plano)",
+    "en": "Cables (plan)"
+   }
+  },
+  "plan.ELEC-CANAL": {
+   "name": "ELEC-CANAL",
+   "color": 2,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Canales y cañerías (plano)",
+    "en": "Conduits (plan)"
+   }
+  },
+  "plan.ELEC-BANDEJA": {
+   "name": "ELEC-BANDEJA",
+   "color": 3,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Bandejas (plano)",
+    "en": "Trays (plan)"
+   }
+  },
+  "plan.ELEC-CRUCE": {
+   "name": "ELEC-CRUCE",
+   "color": 4,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cruces (plano)",
+    "en": "Crossings (plan)"
+   }
+  },
+  "plan.ELEC-CAMARA": {
+   "name": "ELEC-CAMARA",
+   "color": 5,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cámaras eléctricas (plano)",
+    "en": "Electrical chambers (plan)"
+   }
+  },
+  "plan.ELEC-CAJA": {
+   "name": "ELEC-CAJA",
+   "color": 6,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cajas (plano)",
+    "en": "Boxes (plan)"
+   }
+  },
+  "plan.ELEC-TABLERO": {
+   "name": "ELEC-TABLERO",
+   "color": 7,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Tableros (plano)",
+    "en": "Boards (plan)"
+   }
+  },
+  "plan.ELEC-LUM": {
+   "name": "ELEC-LUM",
+   "color": 40,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Luminarias (plano)",
+    "en": "Luminaires (plan)"
+   }
+  },
+  "plan.ELEC-TUG": {
+   "name": "ELEC-TUG",
+   "color": 30,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Tomacorrientes de uso general (plano)",
+    "en": "General-use sockets (plan)"
+   }
+  },
+  "plan.ELEC-TUE": {
+   "name": "ELEC-TUE",
+   "color": 50,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Tomacorrientes de uso especial (plano)",
+    "en": "Special-use sockets (plan)"
+   }
+  },
+  "plan.ELEC-HVAC": {
+   "name": "ELEC-HVAC",
+   "color": 150,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Climatización (plano)",
+    "en": "HVAC (plan)"
+   }
+  },
+  "plan.SAN-CLOACA": {
+   "name": "SAN-CLOACA",
+   "color": 3,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cañerías cloacales (plano)",
+    "en": "Sewer pipes (plan)"
+   }
+  },
+  "plan.SAN-CAMARA": {
+   "name": "SAN-CAMARA",
+   "color": 5,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cámaras de inspección (plano)",
+    "en": "Inspection chambers (plan)"
+   }
+  },
+  "plan.SAN-BOCA": {
+   "name": "SAN-BOCA",
+   "color": 4,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Bocas de registro (plano)",
+    "en": "Manholes (plan)"
+   }
+  },
+  "plan.PLAN-TAG": {
+   "name": "PLAN-TAG",
+   "color": 7,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Etiquetas del plano",
+    "en": "Plan tags"
+   }
+  },
+  "plan.PLAN-NODO": {
+   "name": "PLAN-NODO",
+   "color": 8,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Nodos de unión del plano",
+    "en": "Plan junction nodes"
+   }
+  }
+ }
+}

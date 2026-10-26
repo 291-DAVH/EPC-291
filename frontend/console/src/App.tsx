@@ -9,6 +9,7 @@ import Checker from "./features/checker/Checker";
 import ProjectFiles from "./features/project-files/ProjectFiles";
 import Planning from "./features/planning/Planning";
 import Identity from "./features/identity/Identity";
+import Layers from "./features/layers/Layers";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },
@@ -19,6 +20,7 @@ const NAV: NavItem[] = [
   { to: "/planning", key: "nav.planning", icon: "▥" },
   { to: "/files", key: "nav.projects", icon: "▤" },
   { to: "/identity", key: "nav.identity", icon: "☺" },
+  { to: "/layers", key: "nav.layers", icon: "▦" },
   { to: "/norms", key: "nav.norms", icon: "§" },
 ];
 const REVIEWER_NAV: NavItem[] = [{ to: "/norms", key: "nav.norms", icon: "§" }];
@@ -52,6 +54,7 @@ export default function App() {
           <Route path="/planning" element={<Planning />} />
           <Route path="/files" element={<ProjectFiles />} />
           <Route path="/identity" element={<Identity />} />
+          <Route path="/layers" element={<Layers />} />
           <Route path="/norms" element={<Norms />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

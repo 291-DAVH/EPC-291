@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 from epc.core import clock
+from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.identity import public as identity
@@ -207,7 +208,7 @@ def generate(d: Path, level: str, version: str = "") -> dict:
     if out.exists():
         shutil.rmtree(out)
     try:
-        result = jobs.run(_document(level, saved, version or saved.get("dxf_version", "")), out)
+        result = jobs.run(_document(level, saved, version or saved.get("dxf_version", "")), out, layers_file=settings.layers_file)
     except core.PlanError as e:
         raise Invalid({"drawing": str(e)})
     dxf = out / result["files"]["dxf"]
