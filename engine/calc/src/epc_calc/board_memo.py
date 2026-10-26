@@ -26,10 +26,10 @@ LIMITACIONES
 NORMA DE REFERENCIA
     AEA 90364-4-41, 4-43, 7-771 ; IEC 60898-1, IEC 60947-2, IEC 60364-5-53 ; AEA 90909-1.  [VERIFICAR]
 """
-import math
 from typing import Dict, List, Optional
 
 from epc_calc import aea_protection as PR
+from epc_calc import fmt
 
 __version__ = "0.1.0"
 
@@ -54,21 +54,15 @@ NORMA_MARCO = (
 
 # ---------------------------------------------------------------- formato
 def p1(x) -> str:
-    return "Pendiente" if x is None else f"{x:.1f}".replace(".", ",")
+    return "Pendiente" if x is None else fmt.p1(x)
 
 
 def sig2(x) -> str:
-    if x is None:
-        return "Pendiente"
-    if not x:
-        return "0"
-    d = 1 - int(math.floor(math.log10(abs(x))))
-    v = round(x, d)
-    return (f"{v:.0f}" if d <= 0 else f"{v:.{d}f}").replace(".", ",")
+    return "Pendiente" if x is None else fmt.sig2(x)
 
 
 def mm(x) -> str:
-    return "Pendiente" if x is None else f"{x:g}".replace(".", ",")
+    return "Pendiente" if x is None else fmt.mm(x)
 
 
 def ok(b: Optional[bool]) -> str:

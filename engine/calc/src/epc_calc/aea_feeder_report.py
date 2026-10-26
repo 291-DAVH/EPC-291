@@ -14,6 +14,7 @@ from epc_calc import aea_conductors as CO
 from epc_calc import aea_pipeline as P
 from epc_calc import aea_voltage_drop as VD
 from epc_calc import short_circuit as SC
+from epc_calc.fmt import mm as _mm, p1 as _p1, sig2 as _sig2
 from epc_calc import voltage_drop as VDG
 
 NORMA_MARCO = (
@@ -23,23 +24,6 @@ NORMA_MARCO = (
     "AEA 90909-1: cálculo de cortocircuito",
     "IEC 60364: referencia de instalaciones de baja tensión",
 )
-
-
-def _p1(x):
-    return f"{x:.1f}".replace(".", ",")
-
-
-def _sig2(x):
-    if not x:
-        return "0"
-    d = 1 - int(math.floor(math.log10(abs(x))))
-    v = round(x, d)
-    return (f"{v:.0f}" if d <= 0 else f"{v:.{d}f}").replace(".", ",")
-
-
-def _mm(x):
-    """Sección en mm² con su valor exacto (sin redondeo)."""
-    return f"{x:g}".replace(".", ",")
 
 
 def _cumple(ok):
