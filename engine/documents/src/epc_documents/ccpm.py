@@ -757,73 +757,74 @@ def _avisos_paquetes(todas, orden_todas):
     return adv
 
 
-def _plan_paquetes(m, p, cal):
-    """Plan de paquetes: orden por dependencias, fechas y cuello de botella de la revisión.
+def _fechas_paquete(ids, todas, cal, ps, pe):
+    """Fechas de un paquete: inicio y fin, entrega al usuario (fin de la elaboración), revisión del usuario y los días de cada fase.
 
-    Devuelve (plan, advertencias); plan es None si ninguna tarea declara `paquete`.
-    """
-    todas, ps, pe = m["todas"], p["plan_s"], p["plan_e"]
-    miembros = defaultdict(list)
-    for i in m["orden_todas"]:
+    Devuelve (ini, fin, idx, entrega, rev_ini, rev_fin, dias_ela, dias_rev); `idx` son los índices de inicio de las tareas no hechas."""
+    ini, fin, idx = [], [], []
+    entrega, rev_ini, rev_fin = [], [], []
+    dias_rev = dias_ela = 0
+    for i in ids:
         t = todas[i]
-        if t["paquete"] and t["estado"] != "excluida":
-            miembros[t["paquete"]].append(i)
-    if not miembros:
-        return None, []
-    adv = []
-    info = {}
-    for pq, ids in miembros.items():
-        ini, fin, idx = [], [], []
-        entrega, rev_ini, rev_fin = [], [], []
-        dias_rev = dias_ela = 0
-        for i in ids:
-            t = todas[i]
-            if t["estado"] == "hecha":
-                d_i, d_f, k = t["inicio_real"], t["fin_real"], None
-            else:
-                d_i, d_f, k = cal.fecha(ps[i]), cal.fecha(pe[i] - 1), ps[i]
-                idx.append(k)
-            if d_i:
-                ini.append(d_i)
-            if d_f:
-                fin.append(d_f)
-            if t["fase"] == "elaborar":
-                dias_ela += t["agr"]
-                if d_f:
-                    entrega.append(d_f)
-            elif t["fase"] == "revisar":
-                dias_rev += t["agr"]
-                if d_i:
-                    rev_ini.append(d_i)
-                if d_f:
-                    rev_fin.append(d_f)
-        dep = set()
-        for i in ids:
-            for q in todas[i].get("preds_lista_original", todas[i]["preds_lista"]):
-                tq = todas.get(q)
-                if tq and tq["estado"] != "excluida" and tq["paquete"] and tq["paquete"] != pq:
-                    dep.add(tq["paquete"])
-        if all(todas[i]["estado"] == "hecha" for i in ids):
-            estado = "hecho"
-        elif any(i in m["afectadas"] for i in ids):
-            estado = "bloqueado"
+        if t["estado"] == "hecha":
+            d_i, d_f = t["inicio_real"], t["fin_real"]
         else:
-            estado = "pendiente"
-        en_cad = [i for i in p["ids_cadena"] if i in ids]
-        info[pq] = {
-            "id": pq,
-            "tareas": sorted(ids, key=lambda i: (ps[i] if todas[i]["estado"] != "hecha" else -1, m["clave"].get(i, _clave_natural(i)))),
-            "depende_de": sorted(dep, key=_clave_natural),
-            "inicio": _iso(min(ini)) if ini else None,
-            "fin": _iso(max(fin)) if fin else None,
-            "entrega_al_usuario": _iso(max(entrega)) if entrega else None,
-            "inicio_revision": _iso(min(rev_ini)) if rev_ini else None,
-            "fin_revision": _iso(max(rev_fin)) if rev_fin else None,
-            "dias_elaboracion": dias_ela, "dias_revision_usuario": dias_rev,
-            "estado": estado, "tareas_en_cadena_critica": en_cad,
-            "_k": min(idx) if idx else -1,
-        }
-    # Orden topológico (Kahn) con prioridad por inicio y luego por id natural.
+            d_i, d_f = cal.fecha(ps[i]), cal.fecha(pe[i] - 1)
+            idx.append(ps[i])
+        if d_i:
+            ini.append(d_i)
+        if d_f:
+            fin.append(d_f)
+        if t["fase"] == "elaborar":
+            dias_ela += t["agr"]
+            if d_f:
+                entrega.append(d_f)
+        elif t["fase"] == "revisar":
+            dias_rev += t["agr"]
+            if d_i:
+                rev_ini.append(d_i)
+            if d_f:
+                rev_fin.append(d_f)
+    return ini, fin, idx, entrega, rev_ini, rev_fin, dias_ela, dias_rev
+
+
+def _dependencias_paquete(pq, ids, todas):
+    dep = set()
+    for i in ids:
+        for q in todas[i].get("preds_lista_original", todas[i]["preds_lista"]):
+            tq = todas.get(q)
+            if tq and tq["estado"] != "excluida" and tq["paquete"] and tq["paquete"] != pq:
+                dep.add(tq["paquete"])
+    return dep
+
+
+def _info_paquete(pq, ids, m, p, cal):
+    todas, ps, pe = m["todas"], p["plan_s"], p["plan_e"]
+    ini, fin, idx, entrega, rev_ini, rev_fin, dias_ela, dias_rev = _fechas_paquete(ids, todas, cal, ps, pe)
+    dep = _dependencias_paquete(pq, ids, todas)
+    if all(todas[i]["estado"] == "hecha" for i in ids):
+        estado = "hecho"
+    elif any(i in m["afectadas"] for i in ids):
+        estado = "bloqueado"
+    else:
+        estado = "pendiente"
+    return {
+        "id": pq,
+        "tareas": sorted(ids, key=lambda i: (ps[i] if todas[i]["estado"] != "hecha" else -1, m["clave"].get(i, _clave_natural(i)))),
+        "depende_de": sorted(dep, key=_clave_natural),
+        "inicio": _iso(min(ini)) if ini else None,
+        "fin": _iso(max(fin)) if fin else None,
+        "entrega_al_usuario": _iso(max(entrega)) if entrega else None,
+        "inicio_revision": _iso(min(rev_ini)) if rev_ini else None,
+        "fin_revision": _iso(max(rev_fin)) if rev_fin else None,
+        "dias_elaboracion": dias_ela, "dias_revision_usuario": dias_rev,
+        "estado": estado, "tareas_en_cadena_critica": [i for i in p["ids_cadena"] if i in ids],
+        "_k": min(idx) if idx else -1,
+    }
+
+
+def _ordenar_paquetes(info, adv):
+    """Orden topológico (Kahn) con prioridad por inicio y luego por id natural; los paquetes en ciclo van al final con un aviso."""
     grado = {pq: len([d for d in info[pq]["depende_de"] if d in info]) for pq in info}
     suc = defaultdict(list)
     for pq in info:
@@ -845,23 +846,46 @@ def _plan_paquetes(m, p, cal):
         adv.append("Dependencias circulares entre paquetes (cada uno espera a otro): " + ", ".join(resto)
                    + ". Revisar las predecesoras de sus tareas.")
         orden += resto
-    paquetes = []
-    for n, pq in enumerate(orden, 1):
-        d = info[pq]
-        d.pop("_k")
-        d["orden"] = n
-        paquetes.append(d)
-    cad = p["ids_cadena"]
-    dias_cad = sum(todas[i]["agr"] for i in cad)
-    rev_cad = [i for i in cad if todas[i]["fase"] == "revisar"]
+    return orden
+
+
+def _cuello_de_botella(todas, ids_cadena, adv):
+    """Parte de la cadena crítica que es revisión del usuario; avisa si es la mitad o más."""
+    dias_cad = sum(todas[i]["agr"] for i in ids_cadena)
+    rev_cad = [i for i in ids_cadena if todas[i]["fase"] == "revisar"]
     dias_rev_cad = sum(todas[i]["agr"] for i in rev_cad)
-    cuello = {"tareas_cadena": len(cad), "tareas_revision_en_cadena": len(rev_cad),
+    cuello = {"tareas_cadena": len(ids_cadena), "tareas_revision_en_cadena": len(rev_cad),
               "dias_cadena": dias_cad, "dias_revision_en_cadena": dias_rev_cad,
               "porcentaje_revision_en_cadena": round(dias_rev_cad / dias_cad, 4) if dias_cad else 0.0}
     if rev_cad and dias_cad and dias_rev_cad / dias_cad >= 0.5:
         adv.append(f"Cuello de botella: la revisión del usuario ocupa {dias_rev_cad} de los {dias_cad} día(s) "
                    "hábil(es) de la cadena crítica (" + ", ".join(rev_cad) + "). El ritmo del proyecto lo "
                    "fija la revisión; acortar la elaboración no adelanta la fecha.")
+    return cuello
+
+
+def _plan_paquetes(m, p, cal):
+    """Plan de paquetes: orden por dependencias, fechas y cuello de botella de la revisión.
+
+    Devuelve (plan, advertencias); plan es None si ninguna tarea declara `paquete`.
+    """
+    todas = m["todas"]
+    miembros = defaultdict(list)
+    for i in m["orden_todas"]:
+        t = todas[i]
+        if t["paquete"] and t["estado"] != "excluida":
+            miembros[t["paquete"]].append(i)
+    if not miembros:
+        return None, []
+    adv = []
+    info = {pq: _info_paquete(pq, ids, m, p, cal) for pq, ids in miembros.items()}
+    paquetes = []
+    for n, pq in enumerate(_ordenar_paquetes(info, adv), 1):
+        d = info[pq]
+        d.pop("_k")
+        d["orden"] = n
+        paquetes.append(d)
+    cuello = _cuello_de_botella(todas, p["ids_cadena"], adv)
     return {"paquetes": paquetes, "cuello_de_botella": cuello}, adv
 
 
@@ -1097,6 +1121,200 @@ def _iso(d):
     return d.isoformat()
 
 
+def _roles_tareas(m, p):
+    """Rol de cada tarea en el plan (cadena crítica, alimentación, fuera de cadena) y la ruta de alimentación a la que pertenece."""
+    rol, ruta_de = {}, {}
+    for i in p["ids_cadena"]:
+        rol[i] = "cadena_critica"
+    for r in p["rutas"]:
+        for i in r["tareas"]:
+            rol[i] = "alimentacion"
+            ruta_de[i] = r["id"]
+    for i in m["orden"]:
+        rol.setdefault(i, "fuera_de_cadena")
+    return rol, ruta_de
+
+
+def _tareas_salida(m, p, cal, rol, ruta_de):
+    ps, pe, clave, T = p["plan_s"], p["plan_e"], m["clave"], m["tareas"]
+    out = []
+    for i in sorted(m["orden"], key=lambda i: (ps[i], clave[i])):
+        t = T[i]
+        out.append({
+            "id": i, "nombre": t["nombre"], "recurso": t["recurso"], "tipo_recurso": t["tipo"],
+            "predecesores": list(t["preds_lista"]),
+            "dur_segura": t["seg"], "dur_agresiva": t["agr"],
+            "fecha_no_antes_de": _iso(t["no_antes"]) if t["no_antes"] else None,
+            "inicio": _iso(cal.fecha(ps[i])), "fin": _iso(cal.fecha(pe[i] - 1)),
+            "inicio_dia": ps[i] + 1, "fin_dia": pe[i],
+            "inicio_temprano": _iso(cal.fecha(p["start"][i])),
+            "fin_temprano": _iso(cal.fecha(p["end"][i] - 1)),
+            "rol": rol[i], "buffer_alimentacion": ruta_de.get(i),
+            "estado": t["estado"], "cumplible": i not in m["afectadas"],
+            "paquete": t["paquete"], "fase_paquete": t["fase"],
+        })
+    return out
+
+
+def _cadena_salida(m, p, cal):
+    ps, pe, T = p["plan_s"], p["plan_e"], m["tareas"]
+    out = []
+    for k, e in enumerate(p["cadena"], 1):
+        i = e["id"]
+        out.append({
+            "orden": k, "id": i, "nombre": T[i]["nombre"], "tipo_recurso": T[i]["tipo"],
+            "dur_agresiva": T[i]["agr"], "dur_segura": T[i]["seg"],
+            "inicio": _iso(cal.fecha(ps[i])), "fin": _iso(cal.fecha(pe[i] - 1)),
+            "inicio_dia": ps[i] + 1, "fin_dia": pe[i],
+            "vinculo_con_anterior": e["vinculo"], "predecesor": e["predecesor"],
+            "alternativas": e["alternativas"],
+            "desfase_por_buffer_alimentacion": p["retrasos"].get(i, 0),
+        })
+    return out
+
+
+def _avisos_cadena(m, p, fin_cadena_idx, adv):
+    """Advertencias sobre la cadena: recursos externos, tareas sin unir a la cadena y tareas que terminan después de ella."""
+    ids_cadena, T, pe = p["ids_cadena"], m["tareas"], p["plan_e"]
+    if any(T[i]["tipo"] == "externo" for i in ids_cadena):
+        adv.append("La cadena crítica incluye tareas de recurso externo ("
+                   + ", ".join(i for i in ids_cadena if T[i]["tipo"] == "externo")
+                   + "): su cumplimiento depende de terceros; gestionarlas con prioridad.")
+    no_unidas = [i for i in m["orden"] if i not in p["asignadas"] and (m["preds"][i] or m["succ"][i])]
+    if no_unidas:
+        adv.append("Tareas que no pertenecen a la cadena ni a una ruta de alimentación (no se unen a "
+                   "la cadena crítica; sin buffer): " + ", ".join(no_unidas) + ".")
+    tarde = [i for i in m["orden"] if pe[i] > fin_cadena_idx]
+    if tarde:
+        adv.append("Tareas que terminan después del fin de la cadena crítica: " + ", ".join(tarde)
+                   + ". Revisar la red.")
+
+
+def _buffers_salida(p, cal, fin_cadena_idx, fin_proy_idx, fecha_fin_proy):
+    """(buffers de alimentación, buffer de proyecto) con sus fechas."""
+    ps, pb = p["plan_s"], p["pb"]
+    fb_out = []
+    for r in p["rutas"]:
+        js = ps[r["se_une_a"]]
+        ini = max(0, js - r["tam"])
+        fb_out.append({
+            "id": r["id"], "tipo": "alimentacion", "tareas_protegidas": list(r["tareas"]),
+            "se_une_a": r["se_une_a"], "tipo_vinculo_union": r["via"], "tamano_dias": r["tam"],
+            "inicio": _iso(cal.fecha(ini)), "fin": _iso(cal.fecha(js - 1)),
+            "inicio_dia": ini + 1, "fin_dia": js, "calculo": r["detalle"],
+        })
+    buffer_proyecto = {
+        "id": "BP", "tipo": "proyecto", "tareas_protegidas": list(p["ids_cadena"]), "tamano_dias": pb,
+        "inicio": _iso(cal.fecha(fin_cadena_idx)), "fin": _iso(fecha_fin_proy),
+        "inicio_dia": fin_cadena_idx + 1, "fin_dia": fin_proy_idx, "calculo": p["det_pb"],
+    }
+    return fb_out, buffer_proyecto
+
+
+def _hitos_salida(m, p, cal, fecha_fin_proy, fin_cumplible):
+    """Hitos frente al fin de proyecto (o al fin de su tarea), con el efecto de los bloqueos (H-040)."""
+    pe, ultima_cadena = p["plan_e"], p["ids_cadena"][-1]
+    hitos_out = []
+    for h in m["hitos"]:
+        if h["tarea"] is None or h["tarea"] == ultima_cadena:
+            ref, comp = fecha_fin_proy, "fin de proyecto (con buffer)"
+        else:
+            ref, comp = cal.fecha(pe[h["tarea"]] - 1), "fin de la tarea (sin buffer)"
+        marg = cal.dias_habiles_entre(ref, h["fecha"])
+        hitos_out.append({
+            "nombre": h["nombre"], "fecha": _iso(h["fecha"]), "tarea": h["tarea"],
+            "comparado_con": comp, "fecha_comparada": _iso(ref),
+            "holgura_dias_habiles": marg, "estado": "CUMPLE" if marg >= 0 else "NO CUMPLE",
+        })
+    # Bloqueos (H-040): el fin del proyecto no es cumplible si la última tarea de la cadena
+    # es una tarea bloqueada o depende de una.
+    for h in hitos_out:
+        if h["tarea"] is None or h["tarea"] == ultima_cadena:
+            afect = not fin_cumplible
+        else:
+            afect = h["tarea"] in m["afectadas"]
+        h["cumplible"] = not afect
+        if afect:
+            h["estado"] = "NO CUMPLIBLE (bloqueo)"
+    return hitos_out
+
+
+def _limite_salida(m, cal, fin_cadena_idx, fin_proy_idx, pb, fecha_fin_cadena, fecha_fin_proy, fin_cumplible, adv):
+    """Comparación con la fecha límite contractual (None si no hay). Agrega a `adv` la alerta cuando no cabe."""
+    if m["limite"] is None:
+        return None
+    L = m["limite"]
+    disponibles = cal.contar_hasta(L)
+    if fin_proy_idx <= disponibles:
+        limite_out = {
+            "fecha_limite": _iso(L), "fin_con_buffer": _iso(fecha_fin_proy), "cumple": fin_cumplible,
+            "cumple_por_fechas": True, "cumplible": fin_cumplible,
+            "holgura_dias_habiles": disponibles - fin_proy_idx, "deficit_dias_habiles": 0,
+            "buffer_que_cabe_dias": pb, "buffer_propuesto_dias": pb,
+            "alerta": None,
+        }
+    else:
+        deficit = fin_proy_idx - disponibles
+        cabe = max(0, disponibles - fin_cadena_idx)
+        if disponibles < fin_cadena_idx:
+            alerta = (f"ALERTA: la cadena crítica sola (sin buffer) termina el {_iso(fecha_fin_cadena)}, "
+                      f"{fin_cadena_idx - disponibles} día(s) hábil(es) después del límite contractual "
+                      f"{_iso(L)}; no cabe ningún buffer. Hay que reducir alcance, agregar recursos "
+                      "o renegociar la fecha.")
+        else:
+            alerta = (f"ALERTA: el fin con buffer ({_iso(fecha_fin_proy)}) supera el límite contractual "
+                      f"{_iso(L)} en {deficit} día(s) hábil(es). Solo caben {cabe} día(s) de buffer de "
+                      f"proyecto de los {pb} calculados ({round(100 * cabe / pb)} %).")
+        limite_out = {
+            "fecha_limite": _iso(L), "fin_con_buffer": _iso(fecha_fin_proy), "cumple": False,
+            "cumple_por_fechas": False, "cumplible": fin_cumplible,
+            "holgura_dias_habiles": -deficit, "deficit_dias_habiles": deficit,
+            "buffer_que_cabe_dias": cabe, "buffer_propuesto_dias": pb, "alerta": alerta,
+        }
+        adv.append(alerta)
+    if not fin_cumplible:
+        limite_out["alerta_bloqueo"] = ("El fin de proyecto depende de tareas bloqueadas ("
+                                        + ", ".join(m["bloqueadas"]) + "): no se cuenta como cumplible "
+                                        "hasta resolver el bloqueo.")
+    return limite_out
+
+
+def _resumen_salida(m, cal, fin_cadena_idx, fin_proy_idx, fecha_fin_cadena, fecha_fin_proy, suma_cadena, pb, fin_cumplible, plan_paquetes):
+    return {
+        "inicio_solicitado": _iso(m["inicio"]), "inicio_efectivo": _iso(cal.base),
+        "fin_cadena": _iso(fecha_fin_cadena), "dias_habiles_hasta_fin_cadena": fin_cadena_idx,
+        "suma_dur_agresivas_cadena": suma_cadena,
+        "buffer_proyecto_dias": pb, "metodo_buffer": m["metodo"],
+        "fin_proyecto": _iso(fecha_fin_proy), "dias_habiles_hasta_fin_proyecto": fin_proy_idx,
+        "cantidad_tareas": len(m["orden"]),
+        "desde": _iso(m["desde"]) if m["desde"] else None, "lote": m["lote"],
+        "tareas_hechas": list(m["hechas"]), "tareas_excluidas": list(m["excluidas"]),
+        "tareas_bloqueadas": list(m["bloqueadas"]),
+        "tareas_afectadas_por_bloqueo": [i for i in m["orden"] if i in m["afectadas"]],
+        "fin_proyecto_cumplible": fin_cumplible,
+        "cantidad_paquetes": len(plan_paquetes["paquetes"]) if plan_paquetes else 0,
+    }
+
+
+def _fuera_de_calculo_salida(m):
+    return [
+        {"id": i, "nombre": m["todas"][i]["nombre"], "estado": m["todas"][i]["estado"],
+         "inicio_real": _iso(m["todas"][i]["inicio_real"]) if m["todas"][i]["inicio_real"] else None,
+         "fin_real": _iso(m["todas"][i]["fin_real"]) if m["todas"][i]["fin_real"] else None,
+         "motivo": m["todas"][i]["motivo"]}
+        for i in m["orden_todas"] if m["todas"][i]["estado"] in ("hecha", "excluida")]
+
+
+def _entrada_tareas_salida(m):
+    return [
+        {"id": i, "entregable": m["todas"][i]["entregable"], "nombre": m["todas"][i]["nombre"],
+         "paquete": m["todas"][i]["paquete"],
+         "recurso": m["todas"][i]["recurso"], "dur_segura": m["todas"][i]["seg"],
+         "dur_agresiva": m["todas"][i]["agr"],
+         "predecesores": list(m["todas"][i].get("preds_lista_original", m["todas"][i]["preds_lista"])),
+         "estado": m["todas"][i]["estado"]} for i in m["orden_todas"]]
+
+
 def calcular_ccpm(datos, desde=None, lote=None):
     """Calcula el cronograma CCPM a partir de un dict. Devuelve un dict serializable a JSON.
 
@@ -1111,149 +1329,23 @@ def calcular_ccpm(datos, desde=None, lote=None):
     p = _planificar(m)
     cal, T = m["cal"], m["tareas"]
     adv = list(m["advertencias"]) + p["adv"]
-    clave = m["clave"]
 
-    cadena, ids_cadena = p["cadena"], p["ids_cadena"]
-    ps, pe = p["plan_s"], p["plan_e"]
-    fin_cadena_idx = pe[ids_cadena[-1]]           # exclusivo = días hábiles desde el inicio
+    ids_cadena = p["ids_cadena"]
+    fin_cadena_idx = p["plan_e"][ids_cadena[-1]]           # exclusivo = días hábiles desde el inicio
     pb = p["pb"]
     fin_proy_idx = fin_cadena_idx + pb
     fecha_fin_cadena = cal.fecha(fin_cadena_idx - 1)
     fecha_fin_proy = cal.fecha(fin_proy_idx - 1)
 
-    rol, ruta_de = {}, {}
-    for i in ids_cadena:
-        rol[i] = "cadena_critica"
-    for r in p["rutas"]:
-        for i in r["tareas"]:
-            rol[i] = "alimentacion"
-            ruta_de[i] = r["id"]
-    for i in m["orden"]:
-        rol.setdefault(i, "fuera_de_cadena")
-
-    tareas_out = []
-    for i in sorted(m["orden"], key=lambda i: (ps[i], clave[i])):
-        t = T[i]
-        tareas_out.append({
-            "id": i, "nombre": t["nombre"], "recurso": t["recurso"], "tipo_recurso": t["tipo"],
-            "predecesores": list(t["preds_lista"]),
-            "dur_segura": t["seg"], "dur_agresiva": t["agr"],
-            "fecha_no_antes_de": _iso(t["no_antes"]) if t["no_antes"] else None,
-            "inicio": _iso(cal.fecha(ps[i])), "fin": _iso(cal.fecha(pe[i] - 1)),
-            "inicio_dia": ps[i] + 1, "fin_dia": pe[i],
-            "inicio_temprano": _iso(cal.fecha(p["start"][i])),
-            "fin_temprano": _iso(cal.fecha(p["end"][i] - 1)),
-            "rol": rol[i], "buffer_alimentacion": ruta_de.get(i),
-            "estado": t["estado"], "cumplible": i not in m["afectadas"],
-            "paquete": t["paquete"], "fase_paquete": t["fase"],
-        })
-
-    cadena_out = []
-    for k, e in enumerate(cadena, 1):
-        i = e["id"]
-        cadena_out.append({
-            "orden": k, "id": i, "nombre": T[i]["nombre"], "tipo_recurso": T[i]["tipo"],
-            "dur_agresiva": T[i]["agr"], "dur_segura": T[i]["seg"],
-            "inicio": _iso(cal.fecha(ps[i])), "fin": _iso(cal.fecha(pe[i] - 1)),
-            "inicio_dia": ps[i] + 1, "fin_dia": pe[i],
-            "vinculo_con_anterior": e["vinculo"], "predecesor": e["predecesor"],
-            "alternativas": e["alternativas"],
-            "desfase_por_buffer_alimentacion": p["retrasos"].get(i, 0),
-        })
+    rol, ruta_de = _roles_tareas(m, p)
+    tareas_out = _tareas_salida(m, p, cal, rol, ruta_de)
+    cadena_out = _cadena_salida(m, p, cal)
     suma_cadena = sum(T[i]["agr"] for i in ids_cadena)
-
-    if any(T[i]["tipo"] == "externo" for i in ids_cadena):
-        adv.append("La cadena crítica incluye tareas de recurso externo ("
-                   + ", ".join(i for i in ids_cadena if T[i]["tipo"] == "externo")
-                   + "): su cumplimiento depende de terceros; gestionarlas con prioridad.")
-    no_unidas = [i for i in m["orden"] if i not in p["asignadas"] and (m["preds"][i] or m["succ"][i])]
-    if no_unidas:
-        adv.append("Tareas que no pertenecen a la cadena ni a una ruta de alimentación (no se unen a "
-                   "la cadena crítica; sin buffer): " + ", ".join(no_unidas) + ".")
-    tarde = [i for i in m["orden"] if pe[i] > fin_cadena_idx]
-    if tarde:
-        adv.append("Tareas que terminan después del fin de la cadena crítica: " + ", ".join(tarde)
-                   + ". Revisar la red.")
-
-    fb_out = []
-    for r in p["rutas"]:
-        js = ps[r["se_une_a"]]
-        ini = max(0, js - r["tam"])
-        fb_out.append({
-            "id": r["id"], "tipo": "alimentacion", "tareas_protegidas": list(r["tareas"]),
-            "se_une_a": r["se_une_a"], "tipo_vinculo_union": r["via"], "tamano_dias": r["tam"],
-            "inicio": _iso(cal.fecha(ini)), "fin": _iso(cal.fecha(js - 1)),
-            "inicio_dia": ini + 1, "fin_dia": js, "calculo": r["detalle"],
-        })
-    buffer_proyecto = {
-        "id": "BP", "tipo": "proyecto", "tareas_protegidas": list(ids_cadena), "tamano_dias": pb,
-        "inicio": _iso(cal.fecha(fin_cadena_idx)), "fin": _iso(fecha_fin_proy),
-        "inicio_dia": fin_cadena_idx + 1, "fin_dia": fin_proy_idx, "calculo": p["det_pb"],
-    }
-
-    # Hitos
-    ultima_cadena = ids_cadena[-1]
-    hitos_out = []
-    for h in m["hitos"]:
-        if h["tarea"] is None or h["tarea"] == ultima_cadena:
-            ref, comp = fecha_fin_proy, "fin de proyecto (con buffer)"
-        else:
-            ref, comp = cal.fecha(pe[h["tarea"]] - 1), "fin de la tarea (sin buffer)"
-        marg = cal.dias_habiles_entre(ref, h["fecha"])
-        hitos_out.append({
-            "nombre": h["nombre"], "fecha": _iso(h["fecha"]), "tarea": h["tarea"],
-            "comparado_con": comp, "fecha_comparada": _iso(ref),
-            "holgura_dias_habiles": marg, "estado": "CUMPLE" if marg >= 0 else "NO CUMPLE",
-        })
-
-    # Bloqueos (H-040): el fin del proyecto no es cumplible si la última tarea de la cadena
-    # es una tarea bloqueada o depende de una.
-    fin_cumplible = ultima_cadena not in m["afectadas"]
-    for h in hitos_out:
-        if h["tarea"] is None or h["tarea"] == ultima_cadena:
-            afect = not fin_cumplible
-        else:
-            afect = h["tarea"] in m["afectadas"]
-        h["cumplible"] = not afect
-        if afect:
-            h["estado"] = "NO CUMPLIBLE (bloqueo)"
-
-    # Fecha límite contractual
-    limite_out = None
-    if m["limite"] is not None:
-        L = m["limite"]
-        disponibles = cal.contar_hasta(L)
-        if fin_proy_idx <= disponibles:
-            limite_out = {
-                "fecha_limite": _iso(L), "fin_con_buffer": _iso(fecha_fin_proy), "cumple": fin_cumplible,
-                "cumple_por_fechas": True, "cumplible": fin_cumplible,
-                "holgura_dias_habiles": disponibles - fin_proy_idx, "deficit_dias_habiles": 0,
-                "buffer_que_cabe_dias": pb, "buffer_propuesto_dias": pb,
-                "alerta": None,
-            }
-        else:
-            deficit = fin_proy_idx - disponibles
-            cabe = max(0, disponibles - fin_cadena_idx)
-            if disponibles < fin_cadena_idx:
-                alerta = (f"ALERTA: la cadena crítica sola (sin buffer) termina el {_iso(fecha_fin_cadena)}, "
-                          f"{fin_cadena_idx - disponibles} día(s) hábil(es) después del límite contractual "
-                          f"{_iso(L)}; no cabe ningún buffer. Hay que reducir alcance, agregar recursos "
-                          "o renegociar la fecha.")
-            else:
-                alerta = (f"ALERTA: el fin con buffer ({_iso(fecha_fin_proy)}) supera el límite contractual "
-                          f"{_iso(L)} en {deficit} día(s) hábil(es). Solo caben {cabe} día(s) de buffer de "
-                          f"proyecto de los {pb} calculados ({round(100 * cabe / pb)} %).")
-            limite_out = {
-                "fecha_limite": _iso(L), "fin_con_buffer": _iso(fecha_fin_proy), "cumple": False,
-                "cumple_por_fechas": False, "cumplible": fin_cumplible,
-                "holgura_dias_habiles": -deficit, "deficit_dias_habiles": deficit,
-                "buffer_que_cabe_dias": cabe, "buffer_propuesto_dias": pb, "alerta": alerta,
-            }
-            adv.append(alerta)
-        if not fin_cumplible:
-            limite_out["alerta_bloqueo"] = ("El fin de proyecto depende de tareas bloqueadas ("
-                                            + ", ".join(m["bloqueadas"]) + "): no se cuenta como cumplible "
-                                            "hasta resolver el bloqueo.")
+    _avisos_cadena(m, p, fin_cadena_idx, adv)
+    fb_out, buffer_proyecto = _buffers_salida(p, cal, fin_cadena_idx, fin_proy_idx, fecha_fin_proy)
+    fin_cumplible = ids_cadena[-1] not in m["afectadas"]
+    hitos_out = _hitos_salida(m, p, cal, fecha_fin_proy, fin_cumplible)
+    limite_out = _limite_salida(m, cal, fin_cadena_idx, fin_proy_idx, pb, fecha_fin_cadena, fecha_fin_proy, fin_cumplible, adv)
 
     seguimiento = _seguimiento(m, p, cal, fecha_fin_cadena, pb, limite_out, adv)
     plan_paquetes, adv_pq = _plan_paquetes(m, p, cal)
@@ -1264,35 +1356,11 @@ def calcular_ccpm(datos, desde=None, lote=None):
     }
     return {
         "version": VERSION,
-        "resumen": {
-            "inicio_solicitado": _iso(m["inicio"]), "inicio_efectivo": _iso(cal.base),
-            "fin_cadena": _iso(fecha_fin_cadena), "dias_habiles_hasta_fin_cadena": fin_cadena_idx,
-            "suma_dur_agresivas_cadena": suma_cadena,
-            "buffer_proyecto_dias": pb, "metodo_buffer": m["metodo"],
-            "fin_proyecto": _iso(fecha_fin_proy), "dias_habiles_hasta_fin_proyecto": fin_proy_idx,
-            "cantidad_tareas": len(m["orden"]),
-            "desde": _iso(m["desde"]) if m["desde"] else None, "lote": m["lote"],
-            "tareas_hechas": list(m["hechas"]), "tareas_excluidas": list(m["excluidas"]),
-            "tareas_bloqueadas": list(m["bloqueadas"]),
-            "tareas_afectadas_por_bloqueo": [i for i in m["orden"] if i in m["afectadas"]],
-            "fin_proyecto_cumplible": fin_cumplible,
-            "cantidad_paquetes": len(plan_paquetes["paquetes"]) if plan_paquetes else 0,
-        },
-        "tareas_fuera_de_calculo": [
-            {"id": i, "nombre": m["todas"][i]["nombre"], "estado": m["todas"][i]["estado"],
-             "inicio_real": _iso(m["todas"][i]["inicio_real"]) if m["todas"][i]["inicio_real"] else None,
-             "fin_real": _iso(m["todas"][i]["fin_real"]) if m["todas"][i]["fin_real"] else None,
-             "motivo": m["todas"][i]["motivo"]}
-            for i in m["orden_todas"] if m["todas"][i]["estado"] in ("hecha", "excluida")],
+        "resumen": _resumen_salida(m, cal, fin_cadena_idx, fin_proy_idx, fecha_fin_cadena, fecha_fin_proy, suma_cadena, pb, fin_cumplible, plan_paquetes),
+        "tareas_fuera_de_calculo": _fuera_de_calculo_salida(m),
         "seguimiento": seguimiento,
         "plan_paquetes": plan_paquetes,
-        "entrada_tareas": [
-            {"id": i, "entregable": m["todas"][i]["entregable"], "nombre": m["todas"][i]["nombre"],
-             "paquete": m["todas"][i]["paquete"],
-             "recurso": m["todas"][i]["recurso"], "dur_segura": m["todas"][i]["seg"],
-             "dur_agresiva": m["todas"][i]["agr"],
-             "predecesores": list(m["todas"][i].get("preds_lista_original", m["todas"][i]["preds_lista"])),
-             "estado": m["todas"][i]["estado"]} for i in m["orden_todas"]],
+        "entrada_tareas": _entrada_tareas_salida(m),
         "calendario": cal_info,
         "tareas": tareas_out,
         "cadena_critica": {"eslabones": cadena_out, "suma_dur_agresivas": suma_cadena,
@@ -1523,76 +1591,89 @@ def _md_plan_paquetes(res, titulo):
     return L
 
 
-def generar_markdown(res):
-    """Genera el informe en Markdown (español) a partir del resultado de calcular_ccpm."""
+def _md_resumen(res):
     r = res["resumen"]
-    L = ["# Cronograma por Cadena Crítica (CCPM)", ""]
-    L += ["## Resumen", "", "| Concepto | Valor |", "|---|---|",
-          f"| Inicio solicitado | {_fecha_md(r['inicio_solicitado'])} |",
-          f"| Inicio efectivo (primer día hábil) | {_fecha_md(r['inicio_efectivo'])} |",
-          f"| Fin de la cadena crítica | {_fecha_md(r['fin_cadena'])} (día hábil {r['dias_habiles_hasta_fin_cadena']}) |",
-          f"| Buffer de proyecto | {r['buffer_proyecto_dias']} día(s) hábil(es), método {r['metodo_buffer']} |",
-          f"| **Fin de proyecto (cadena + buffer)** | **{_fecha_md(r['fin_proyecto'])}** (día hábil {r['dias_habiles_hasta_fin_proyecto']}) |",
-          f"| Días laborables | {', '.join(res['calendario']['dias_laborables'])} |",
-          f"| Feriados | {', '.join(res['calendario']['feriados']) or 'ninguno'} |",
-          f"| Tareas | {r['cantidad_tareas']} |", ""]
+    return ["## Resumen", "", "| Concepto | Valor |", "|---|---|",
+            f"| Inicio solicitado | {_fecha_md(r['inicio_solicitado'])} |",
+            f"| Inicio efectivo (primer día hábil) | {_fecha_md(r['inicio_efectivo'])} |",
+            f"| Fin de la cadena crítica | {_fecha_md(r['fin_cadena'])} (día hábil {r['dias_habiles_hasta_fin_cadena']}) |",
+            f"| Buffer de proyecto | {r['buffer_proyecto_dias']} día(s) hábil(es), método {r['metodo_buffer']} |",
+            f"| **Fin de proyecto (cadena + buffer)** | **{_fecha_md(r['fin_proyecto'])}** (día hábil {r['dias_habiles_hasta_fin_proyecto']}) |",
+            f"| Días laborables | {', '.join(res['calendario']['dias_laborables'])} |",
+            f"| Feriados | {', '.join(res['calendario']['feriados']) or 'ninguno'} |",
+            f"| Tareas | {r['cantidad_tareas']} |", ""]
 
-    L += ["## Cronograma por tarea", "",
-          "Fechas con duraciones agresivas. Las tareas de rutas de alimentación están reprogramadas "
-          "lo más tarde posible sin consumir su buffer (fechas tempranas en el JSON).", "",
-          "| Id | Tarea | Recurso | Tipo | Predecesores | Dur. segura | Dur. agresiva | Inicio | Fin | Rol |",
-          "|---|---|---|---|---|---:|---:|---|---|---|"]
+
+def _md_tareas(res):
+    L = ["## Cronograma por tarea", "",
+         "Fechas con duraciones agresivas. Las tareas de rutas de alimentación están reprogramadas "
+         "lo más tarde posible sin consumir su buffer (fechas tempranas en el JSON).", "",
+         "| Id | Tarea | Recurso | Tipo | Predecesores | Dur. segura | Dur. agresiva | Inicio | Fin | Rol |",
+         "|---|---|---|---|---|---:|---:|---|---|---|"]
     for t in res["tareas"]:
         rol = _ROL_TXT[t["rol"]] + (f" ({t['buffer_alimentacion']})" if t["buffer_alimentacion"] else "")
         L.append(f"| {_esc(t['id'])} | {_esc(t['nombre'])} | {_esc(t['recurso'] or '-')} | {t['tipo_recurso']} | "
                  f"{_esc(', '.join(t['predecesores']) or '-')} | {t['dur_segura']} | {t['dur_agresiva']} | "
                  f"{_fecha_md(t['inicio'])} | {_fecha_md(t['fin'])} | {rol} |")
     L.append("")
+    return L
 
+
+def _md_estado_tareas(res):
+    r = res["resumen"]
     fuera = res.get("tareas_fuera_de_calculo") or []
-    if fuera or r["tareas_bloqueadas"] or r["desde"] or r["lote"]:
-        L += ["## Estado de las tareas", ""]
-        if r["desde"]:
-            L.append(f"Replanificado desde {_fecha_md(r['desde'])}: las tareas hechas no se reprograman.")
-        if r["lote"]:
-            L.append(f"Cadena de la entrega parcial {_esc(r['lote'])}: las tareas de otras entregas parciales están excluidas.")
-        if r["tareas_bloqueadas"]:
-            L.append("**BLOQUEADAS (no cumplibles):** " + ", ".join(r["tareas_bloqueadas"])
-                     + ". Afectadas por el bloqueo: " + (", ".join(r["tareas_afectadas_por_bloqueo"]) or "-") + ".")
+    if not (fuera or r["tareas_bloqueadas"] or r["desde"] or r["lote"]):
+        return []
+    L = ["## Estado de las tareas", ""]
+    if r["desde"]:
+        L.append(f"Replanificado desde {_fecha_md(r['desde'])}: las tareas hechas no se reprograman.")
+    if r["lote"]:
+        L.append(f"Cadena de la entrega parcial {_esc(r['lote'])}: las tareas de otras entregas parciales están excluidas.")
+    if r["tareas_bloqueadas"]:
+        L.append("**BLOQUEADAS (no cumplibles):** " + ", ".join(r["tareas_bloqueadas"])
+                 + ". Afectadas por el bloqueo: " + (", ".join(r["tareas_afectadas_por_bloqueo"]) or "-") + ".")
+    L.append("")
+    if fuera:
+        L += ["| Id | Tarea | Estado | Inicio real | Fin real | Motivo |", "|---|---|---|---|---|---|"]
+        for f in fuera:
+            L.append(f"| {_esc(f['id'])} | {_esc(f['nombre'])} | {f['estado']} | "
+                     f"{_fecha_md(f['inicio_real'])} | {_fecha_md(f['fin_real'])} | {_esc(f['motivo'] or '-')} |")
         L.append("")
-        if fuera:
-            L += ["| Id | Tarea | Estado | Inicio real | Fin real | Motivo |", "|---|---|---|---|---|---|"]
-            for f in fuera:
-                L.append(f"| {_esc(f['id'])} | {_esc(f['nombre'])} | {f['estado']} | "
-                         f"{_fecha_md(f['inicio_real'])} | {_fecha_md(f['fin_real'])} | {_esc(f['motivo'] or '-')} |")
-            L.append("")
+    return L
 
+
+def _notas_eslabon(e):
+    notas = []
+    if e["predecesor"]:
+        notas.append(f"depende de {e['predecesor']}")
+    if e["alternativas"]:
+        notas.append("empate con " + ", ".join(f"{a['id']} ({a['vinculo']})" for a in e["alternativas"]))
+    if e["desfase_por_buffer_alimentacion"]:
+        notas.append(f"desfasada {e['desfase_por_buffer_alimentacion']} día(s) por buffer de alimentación")
+    if e["tipo_recurso"] == "externo":
+        notas.append("recurso externo")
+    return notas
+
+
+def _md_cadena(res):
     cc = res["cadena_critica"]
-    L += ["## Cadena crítica", "",
-          f"Suma de duraciones agresivas: {cc['suma_dur_agresivas']} día(s) hábil(es). "
-          f"Fin de cadena: {_fecha_md(cc['fin'])}.", "",
-          "| Orden | Id | Tarea | Inicio | Fin | Dur. agresiva | Vínculo con el anterior | Notas |",
-          "|---:|---|---|---|---|---:|---|---|"]
+    L = ["## Cadena crítica", "",
+         f"Suma de duraciones agresivas: {cc['suma_dur_agresivas']} día(s) hábil(es). "
+         f"Fin de cadena: {_fecha_md(cc['fin'])}.", "",
+         "| Orden | Id | Tarea | Inicio | Fin | Dur. agresiva | Vínculo con el anterior | Notas |",
+         "|---:|---|---|---|---|---:|---|---|"]
     for e in cc["eslabones"]:
-        notas = []
-        if e["predecesor"]:
-            notas.append(f"depende de {e['predecesor']}")
-        if e["alternativas"]:
-            notas.append("empate con " + ", ".join(f"{a['id']} ({a['vinculo']})" for a in e["alternativas"]))
-        if e["desfase_por_buffer_alimentacion"]:
-            notas.append(f"desfasada {e['desfase_por_buffer_alimentacion']} día(s) por buffer de alimentación")
-        if e["tipo_recurso"] == "externo":
-            notas.append("recurso externo")
         L.append(f"| {e['orden']} | {_esc(e['id'])} | {_esc(e['nombre'])} | {_fecha_md(e['inicio'])} | "
                  f"{_fecha_md(e['fin'])} | {e['dur_agresiva']} | {e['vinculo_con_anterior']} | "
-                 f"{_esc('; '.join(notas) or '-')} |")
+                 f"{_esc('; '.join(_notas_eslabon(e)) or '-')} |")
     L.append("")
+    return L
 
-    L += _md_plan_paquetes(res, "## Plan de paquetes")
 
-    L += ["## Buffers", "",
-          "| Buffer | Tipo | Protege | Se inserta antes de | Tamaño (días hábiles) | Inicio | Fin | Cálculo |",
-          "|---|---|---|---|---:|---|---|---|"]
+def _md_buffers(res):
+    L = ["## Buffers", "",
+         "| Buffer | Tipo | Protege | Se inserta antes de | Tamaño (días hábiles) | Inicio | Fin | Cálculo |",
+         "|---|---|---|---|---:|---|---|---|"]
     bp = res["buffers"]["proyecto"]
     L.append(f"| {bp['id']} | Proyecto | {_esc(', '.join(bp['tareas_protegidas']))} | fin del proyecto | "
              f"{bp['tamano_dias']} | {_fecha_md(bp['inicio'])} | {_fecha_md(bp['fin'])} | {_calculo_txt(bp['calculo'])} |")
@@ -1603,8 +1684,11 @@ def generar_markdown(res):
     if not res["buffers"]["alimentacion"]:
         L += ["", "No hay rutas de alimentación (no se detectaron rutas no críticas que se unan a la cadena)."]
     L.append("")
+    return L
 
-    L += ["## Hitos", ""]
+
+def _md_hitos(res):
+    L = ["## Hitos", ""]
     if res["hitos"]:
         L += ["| Hito | Fecha | Tarea | Comparado con | Fecha comparada | Holgura (días hábiles) | Estado |",
               "|---|---|---|---|---|---:|---|"]
@@ -1615,18 +1699,25 @@ def generar_markdown(res):
     else:
         L.append("Sin hitos definidos.")
     L.append("")
+    return L
 
+
+def _md_plazo(res):
     pi = res.get("plazo_horas")
-    if pi:
-        L += ["## Plazo en horas hábiles", "", "| Concepto | Valor |", "|---|---|",
-              f"| Tipo de plazo | {pi['tipo']} |",
-              f"| Plazo | {_fmt(pi['plazo_horas'])} h hábiles ({_fmt(pi['dias_habiles_equivalentes'])} día(s) hábil(es) a {_fmt(pi['horas_por_dia'])} h por día) |",
-              f"| Esfuerzo de tareas internas (agresivo / seguro) | {_fmt(pi['esfuerzo_agresivo_horas'])} h / {_fmt(pi['esfuerzo_seguro_horas'])} h |"]
-        if pi["tipo"] == "esfuerzo":
-            L.append(f"| Déficit de esfuerzo | {_fmt(pi['deficit_esfuerzo_horas'])} h |")
-        L.append("")
+    if not pi:
+        return []
+    L = ["## Plazo en horas hábiles", "", "| Concepto | Valor |", "|---|---|",
+         f"| Tipo de plazo | {pi['tipo']} |",
+         f"| Plazo | {_fmt(pi['plazo_horas'])} h hábiles ({_fmt(pi['dias_habiles_equivalentes'])} día(s) hábil(es) a {_fmt(pi['horas_por_dia'])} h por día) |",
+         f"| Esfuerzo de tareas internas (agresivo / seguro) | {_fmt(pi['esfuerzo_agresivo_horas'])} h / {_fmt(pi['esfuerzo_seguro_horas'])} h |"]
+    if pi["tipo"] == "esfuerzo":
+        L.append(f"| Déficit de esfuerzo | {_fmt(pi['deficit_esfuerzo_horas'])} h |")
+    L.append("")
+    return L
 
-    L += ["## Comparación con la fecha límite contractual", ""]
+
+def _md_limite(res):
+    L = ["## Comparación con la fecha límite contractual", ""]
     fl = res["fecha_limite"]
     if fl is None:
         L.append("No se definió fecha límite contractual.")
@@ -1644,32 +1735,52 @@ def generar_markdown(res):
         if fl.get("alerta_bloqueo"):
             L += ["", f"> {fl['alerta_bloqueo']}"]
     L.append("")
+    return L
 
+
+def _md_seguimiento(res):
     sg = res.get("seguimiento")
-    if sg:
-        L += ["## Seguimiento (sección D)", "", "| Concepto | Valor |", "|---|---|",
-              f"| Avance de la cadena | {('%s %%' % _fmt(round(100 * sg['avance_cadena'], 1))) if sg['avance_cadena'] is not None else 'no calculado (falta base.cadena)'} |",
-              f"| Retraso proyectado (días hábiles) | {sg['retraso_proyectado_dias_habiles'] if sg['retraso_proyectado_dias_habiles'] is not None else 'no calculado (falta base.fin_cadena)'} |",
-              f"| Consumo del buffer | {sg['consumo']['texto'] if sg['consumo'] else '-'} |", ""]
+    if not sg:
+        return []
+    return ["## Seguimiento (sección D)", "", "| Concepto | Valor |", "|---|---|",
+            f"| Avance de la cadena | {('%s %%' % _fmt(round(100 * sg['avance_cadena'], 1))) if sg['avance_cadena'] is not None else 'no calculado (falta base.cadena)'} |",
+            f"| Retraso proyectado (días hábiles) | {sg['retraso_proyectado_dias_habiles'] if sg['retraso_proyectado_dias_habiles'] is not None else 'no calculado (falta base.fin_cadena)'} |",
+            f"| Consumo del buffer | {sg['consumo']['texto'] if sg['consumo'] else '-'} |", ""]
 
+
+def _md_semaforo(res):
     p = res["semaforo"]["parametros"]
-    L += ["## Gestión de buffers (zonas de seguimiento)", "",
-          "Estado = VERDE si consumo <= "
-          f"{_fmt(p['verde_pendiente'])} x avance + {_fmt(p['verde_ordenada'])}; ROJO si consumo >= "
-          f"{_fmt(p['rojo_pendiente'])} x avance + {_fmt(p['rojo_ordenada'])}; AMARILLO en medio. "
-          "**Umbrales por defecto, a validar** con datos reales. Función: `estado_buffer(avance, consumo, params)`.", "",
-          "| Avance de la cadena | Consumo máximo en VERDE | Consumo mínimo en ROJO |", "|---:|---:|---:|"]
+    L = ["## Gestión de buffers (zonas de seguimiento)", "",
+         "Estado = VERDE si consumo <= "
+         f"{_fmt(p['verde_pendiente'])} x avance + {_fmt(p['verde_ordenada'])}; ROJO si consumo >= "
+         f"{_fmt(p['rojo_pendiente'])} x avance + {_fmt(p['rojo_ordenada'])}; AMARILLO en medio. "
+         "**Umbrales por defecto, a validar** con datos reales. Función: `estado_buffer(avance, consumo, params)`.", "",
+         "| Avance de la cadena | Consumo máximo en VERDE | Consumo mínimo en ROJO |", "|---:|---:|---:|"]
     for av in (0.0, 0.25, 0.5, 0.75, 1.0):
         L.append(f"| {int(av * 100)} % | {_fmt(round(p['verde_pendiente'] * av + p['verde_ordenada'], 4))} | "
                  f"{_fmt(round(p['rojo_pendiente'] * av + p['rojo_ordenada'], 4))} |")
     L.append("")
+    return L
 
-    L += ["## Advertencias", ""]
+
+def _md_advertencias(res):
+    L = ["## Advertencias", ""]
     if res["advertencias"]:
         L += [f"- {a}" for a in res["advertencias"]]
     else:
         L.append("Sin advertencias.")
     L.append("")
+    return L
+
+
+def generar_markdown(res):
+    """Genera el informe en Markdown (español) a partir del resultado de calcular_ccpm."""
+    L = ["# Cronograma por Cadena Crítica (CCPM)", ""]
+    for seccion in (_md_resumen, _md_tareas, _md_estado_tareas, _md_cadena):
+        L += seccion(res)
+    L += _md_plan_paquetes(res, "## Plan de paquetes")
+    for seccion in (_md_buffers, _md_hitos, _md_plazo, _md_limite, _md_seguimiento, _md_semaforo, _md_advertencias):
+        L += seccion(res)
     return "\n".join(L)
 
 
