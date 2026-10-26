@@ -13,7 +13,7 @@ from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-EXEMPT_PARTS = ("/tests/fixtures/", "/node_modules/", "/dist/")
+EXEMPT_PARTS = ("/tests/fixtures/", "/node_modules/", "/dist/", "/incoming/")      # incoming/: modules that stand alone carry a copy of the contract and the prompt by design
 MIN_BYTES = 200
 ALLOWED = [
     ({"engine/drawing/src/epc_drawing/titleblock/assets/client-logo-DAVH.svg", "engine/drawing/src/epc_drawing/titleblock/assets/provider-logo-DAVH.svg",
