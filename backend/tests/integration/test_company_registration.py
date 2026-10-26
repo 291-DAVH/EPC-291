@@ -4,7 +4,7 @@ import unittest
 
 from epc.core import mail
 from epc.core.config import settings
-from epc.modules.identity import countries, service
+from epc.modules.identity import countries, registration
 from tests.integration.test_identity_api import PW, Base
 
 FORM = {"country": "AR", "org_name": "Metal SRL", "tax_id": "30-70308853-4", "street": "Av. San Martín", "number": "1234", "locality": "Mendoza", "region": "Mendoza", "postal_code": "M5500",
@@ -20,7 +20,7 @@ class Registration(Base):
 
     def tearDown(self):
         mail.set_transport(None)
-        service.CODE_ATTEMPTS, service.RESEND_SECONDS = 5, 60
+        registration.CODE_ATTEMPTS, registration.RESEND_SECONDS = 5, 60
         super().tearDown()
 
     def form(self, **over):
@@ -106,7 +106,7 @@ class TestRegistration(Registration):
         self.assertEqual(again.status_code, 409)
 
     def test_wrong_codes_are_limited_and_codes_can_be_asked_again_but_not_forever(self):
-        service.RESEND_SECONDS = 0
+        registration.RESEND_SECONDS = 0
         c, r = self.start()
         rid = r.json()["registration"]
         self.assertEqual(c.post("/api/auth/company/resend", json={"registration": rid}).status_code, 200)
