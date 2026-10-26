@@ -1,4 +1,4 @@
-"""Runs on its own: python -m unittest discover -s tests -t .   (needs only the folder, no backend, no network)"""
+"""The plan-drawing engine (epc_plan): graph, tags, schedule, levels, networks and the DXF. Pure: no backend, no network."""
 import copy
 import json
 import sys
@@ -6,15 +6,17 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
+HERE = Path(__file__).resolve().parent
+SRC = HERE.parent / "src"
+PKG = SRC / "epc_plan"
+sys.path.insert(0, str(SRC))
 
 import ezdxf   # noqa: E402
 from epc_plan import core, dxfout, jobs   # noqa: E402
 
 
 def load(name):
-    return json.loads((ROOT / "fixtures" / name).read_text(encoding="utf-8"))
+    return json.loads((HERE / "fixtures" / "plan" / name).read_text(encoding="utf-8"))
 
 
 def drawing(nodes=(), lines=(), **extra):
@@ -45,13 +47,13 @@ class TestSample(unittest.TestCase):
         self.assertEqual(doc, before)
 
     def test_the_output_has_the_fields_of_its_schema(self):
-        schema = json.loads((ROOT / "schema" / "output.schema.json").read_text(encoding="utf-8"))
+        schema = json.loads((PKG / "schema" / "output.schema.json").read_text(encoding="utf-8"))
         out = core.process(load("input.json"))
         for k in schema["required"]:
             self.assertIn(k, out)
 
     def test_nothing_imports_the_backend(self):
-        for f in (ROOT / "src").rglob("*.py"):
+        for f in PKG.rglob("*.py"):
             self.assertNotRegex(f.read_text(encoding="utf-8"), r"^\s*(from|import)\s+epc\b", f.name)
 
 

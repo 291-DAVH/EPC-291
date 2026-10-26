@@ -29,6 +29,7 @@ from epc.modules.registers import api as registers_api
 from epc.modules.reporting import api as reporting_api
 from epc.modules.requirements import api as requirements_api
 from epc.modules.schedule import api as schedule_api
+from epc.modules.layout import api as layout_api
 from epc.modules.sld import api as sld_api
 from epc.modules.wbs import api as wbs_api
 
@@ -63,7 +64,7 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     app.include_router(masterdata_api.parties_router)             # who issues and who signs each project (staff)
     app.include_router(registers_api.observations)               # customer-surface routes of the registers module
