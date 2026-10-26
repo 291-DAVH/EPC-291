@@ -158,8 +158,8 @@ class TestSchedule(unittest.TestCase):
     def test_counts_lengths_and_the_route_of_each_circuit(self):
         out = core.process(load("input.json"))
         sch = out["schedule"]
-        self.assertEqual(sch["nodes"], {"CM": 1, "CP": 1, "TB": 1})
-        self.assertEqual(sch["lines"]["BN"], {"lines": 1, "stretches": 2, "length_m": 40.0})
+        self.assertEqual({k: n for k, n in sch["nodes"].items() if n}, {"CM": 1, "CP": 1, "TB": 1, "LU": 1, "TG": 1, "HV": 1})
+        self.assertEqual(sch["lines"]["BN"], {"lines": 1, "stretches": 4, "length_m": 40.0})
         self.assertEqual(sch["circuit_routes"]["C-01"]["length_m"], 60.0)
         self.assertEqual(sch["total_length_m"], round(sum(s["length_m"] for s in out["stretches"]), 4))
 
@@ -278,6 +278,62 @@ class TestCircuitRoutes(unittest.TestCase):
         self.assertTrue(any("there is no way from" in w for w in out["warnings"]))
 
 
+class TestLoads(unittest.TestCase):
+    """Luminaires, sockets and HVAC units are placed, assigned to a circuit, and the circuit is routed from its origin to all of them."""
+
+    def tree(self, circuits, loads, extra_nodes=(), extra_lines=()):
+        nodes = [node("A", "TB", 0, 0), *loads, *extra_nodes]
+        lines = [line("trunk", "BN", [[0, 0], [300, 0]]), line("branch", "BN", [[100, 0], [100, 100]]), *extra_lines]
+        return core.process(drawing(nodes, lines, circuits=circuits))
+
+    LOADS = [node("a", "LU", 100, 100, circuit="C-01"), node("b", "TG", 200, 0, circuit="C-01"), node("c", "HV", 300, 0, circuit="C-01")]
+
+    def test_a_circuit_reaches_all_its_loads_and_the_shared_trunk_counts_once(self):
+        out = self.tree([{"tag": "C-01", "from": "A"}], self.LOADS)
+        route = out["circuits"]["C-01"]
+        self.assertEqual((route["found"], route["loads"], route["length_m"]), (True, 3, 40.0))
+        self.assertEqual(route["distance_to_load_m"], {"LU-001": 20.0, "TG-001": 20.0, "HV-001": 30.0})
+
+    def test_the_loads_are_counted_per_circuit_and_kind(self):
+        out = self.tree([{"tag": "C-01", "from": "A"}], self.LOADS)
+        self.assertEqual(out["schedule"]["loads"]["by_circuit"], {"C-01": {"LU": 1, "TG": 1, "HV": 1}})
+        self.assertEqual(out["schedule"]["loads"]["unassigned"], [])
+        self.assertEqual({n["id"]: n.get("circuit") for n in out["nodes"] if n["placed"]}["a"], "C-01")
+
+    def test_loads_without_a_circuit_are_listed_and_warned(self):
+        out = self.tree([], [node("a", "LU", 100, 100), node("b", "TE", 200, 0)])
+        self.assertEqual(out["schedule"]["loads"]["unassigned"], ["LU-001", "TE-001"])
+        self.assertTrue(any("2 load(s) have no circuit yet" in w for w in out["warnings"]))
+
+    def test_the_loads_of_a_circuit_nobody_routed_are_warned(self):
+        out = self.tree([], self.LOADS)
+        self.assertTrue(any("loads of circuit C-01 are not routed" in w for w in out["warnings"]))
+
+    def test_a_load_apart_from_the_network_is_reported_and_the_rest_is_routed(self):
+        far = node("z", "LU", 0, 900, circuit="C-01")
+        out = self.tree([{"tag": "C-01", "from": "A"}], [*self.LOADS, far])
+        route = out["circuits"]["C-01"]
+        self.assertFalse(route["found"])
+        self.assertEqual(route["unreached"], ["LU-002"])
+        self.assertEqual(route["length_m"], 40.0)
+
+    def test_a_destination_node_and_loads_can_be_combined(self):
+        out = self.tree([{"tag": "C-01", "from": "A", "to": "c"}], [node("a", "LU", 100, 100, circuit="C-01"), node("c", "TB", 300, 0)])
+        self.assertEqual(out["circuits"]["C-01"]["length_m"], 40.0)
+
+    def test_a_circuit_without_destination_or_loads_is_reported(self):
+        out = self.tree([{"tag": "C-01", "from": "A"}], [])
+        self.assertEqual(out["circuits"], {})
+        self.assertTrue(any("no destination node and no loads" in w for w in out["warnings"]))
+
+    def test_a_conduit_to_the_loads_of_one_circuit_is_blocked_for_another(self):
+        nodes = [node("A", "TB", 0, 0), node("p", "LU", 100, 0, circuit="C-01"), node("q", "LU", 100, 0 + 0, circuit="C-02")]
+        out = core.process(drawing(nodes[:2] + [node("B", "TB", 0, 100)], [line("cn", "CN", [[0, 0], [100, 0]]), line("cn2", "CN", [[0, 100], [100, 0]])],
+                                   circuits=[{"tag": "C-01", "from": "A"}, {"tag": "C-02", "from": "A"}]))
+        self.assertTrue(out["circuits"]["C-01"]["found"])
+        self.assertEqual(out["circuits"].get("C-02"), None)
+
+
 class TestDxf(unittest.TestCase):
     def make(self, doc, version=""):
         d = tempfile.TemporaryDirectory()
@@ -296,9 +352,9 @@ class TestDxf(unittest.TestCase):
         kinds = [e.dxftype() for e in dxf.modelspace()]
         self.assertEqual(kinds.count("LWPOLYLINE"), len(result["stretches"]))
         self.assertEqual(kinds.count("TEXT"), len(result["stretches"]))
-        self.assertEqual(kinds.count("INSERT"), 3)
+        self.assertEqual(kinds.count("INSERT"), 6)
         tags = {a.dxf.text for e in dxf.modelspace().query("INSERT") for a in e.attribs}
-        self.assertEqual(tags, {"TB-001", "CM-001", "CP-001"})
+        self.assertEqual(tags, {"TB-001", "CM-001", "CP-001", "LU-001", "TG-001", "HV-001"})
         self.assertEqual(dxf.units, 6)
 
     def test_every_offered_version_writes_a_file_that_reads_back(self):

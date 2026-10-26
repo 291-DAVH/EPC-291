@@ -2,7 +2,7 @@
  *  Coordinates are the units of the view (the pixels of the plan, y down); the engine turns them into metres. */
 export type Pt = [number, number];
 export interface Scale { p1: Pt; p2: Pt; distance_m: number }
-export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; attrs?: Record<string, unknown> }
+export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DLine { id: string; kind: string; points: Pt[]; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DCircuit { tag: string; from: string; to: string; via?: string[]; ternas: number }
 export interface Drawing {
@@ -123,3 +123,42 @@ export const updateCircuit = (d: Drawing, index: number, patch: Partial<DCircuit
 export const removeCircuit = (d: Drawing, index: number): Drawing => ({ ...d, circuits: d.circuits.filter((_, i) => i !== index) });
 /** The board circuits not yet routed on this drawing (a circuit is routed once; its parallel cables are its ternas). */
 export const freeCircuits = (d: Drawing, all: string[]): string[] => all.filter((t) => !d.circuits.some((c) => c.tag === t));
+
+/** Selection of several elements at once: a box, a kind, or Shift-click. Only nodes and whole lines inside a box are taken. */
+export const sameRef = (a: Ref, b: Ref) => a.type === b.type && a.id === b.id;
+export const toggle = (sel: Ref[], ref: Ref): Ref[] => (sel.some((r) => sameRef(r, ref)) ? sel.filter((r) => !sameRef(r, ref)) : [...sel, ref]);
+export const merge = (sel: Ref[], more: Ref[]): Ref[] => [...sel, ...more.filter((m) => !sel.some((r) => sameRef(r, m)))];
+
+export function inBox(d: Drawing, a: Pt, b: Pt): Ref[] {
+  const [x0, x1] = [Math.min(a[0], b[0]), Math.max(a[0], b[0])];
+  const [y0, y1] = [Math.min(a[1], b[1]), Math.max(a[1], b[1])];
+  const inside = (p: Pt) => p[0] >= x0 && p[0] <= x1 && p[1] >= y0 && p[1] <= y1;
+  return [
+    ...d.nodes.filter((n) => inside([n.x, n.y])).map((n): Ref => ({ type: "node", id: n.id })),
+    ...d.lines.filter((l) => l.points.every(inside)).map((l): Ref => ({ type: "line", id: l.id })),
+  ];
+}
+
+export const ofKind = (d: Drawing, kind: string): Ref[] => d.nodes.filter((n) => n.kind === kind).map((n): Ref => ({ type: "node", id: n.id }));
+
+export function removeMany(d: Drawing, refs: Ref[]): Drawing {
+  return refs.reduce((acc, r) => remove(acc, r), d);
+}
+
+/** Give the loads in the selection (luminaires, sockets, HVAC...: the kinds in `loadKinds`) a circuit of the board, or none with an empty tag. Returns the drawing and how many were changed. */
+export function assignCircuit(d: Drawing, refs: Ref[], tag: string, loadKinds: Set<string>): { drawing: Drawing; changed: number } {
+  const ids = new Set(refs.filter((r) => r.type === "node").map((r) => r.id));
+  let changed = 0;
+  const nodes = d.nodes.map((n) => {
+    if (!ids.has(n.id) || !loadKinds.has(n.kind)) return n;
+    changed++;
+    const { circuit: _old, ...rest } = n;
+    return tag ? { ...rest, circuit: tag } : rest;
+  });
+  return { drawing: { ...d, nodes }, changed };
+}
+
+/** How many loads each circuit has in this drawing. */
+export function loadsOf(d: Drawing, tag: string, loadKinds: Set<string>): number {
+  return d.nodes.filter((n) => n.circuit === tag && loadKinds.has(n.kind)).length;
+}

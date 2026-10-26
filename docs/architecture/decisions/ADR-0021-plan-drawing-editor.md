@@ -15,6 +15,8 @@ Status: Accepted (direction; to be built in phases). Date: 2026-10-26. Refines A
 
 10. **Circuits over the drawing (owner, 2026-10-26).** A circuit is not drawn cable by cable: the person chooses a circuit of the board (a reference), its origin node, its destination node and its number of parallel cables (ternas), and the program routes it by the shortest way over the drawn stretches. A **conduit (and a road crossing) takes a single circuit**: once a circuit uses it, it is blocked for the others (its ternas may share it); a **tray takes several circuits and several ternas**. Each stretch records what it carries and how many cables; a circuit with no free way is reported, not forced.
 
+11. **Loads (owner, 2026-10-26).** Luminaires (LU), general-use sockets (TG, TUG), special-use sockets (TE, TUE) and HVAC units (HV) are nodes that can be placed on the plan and given a circuit of the board. They can be selected together (a box, Shift-click, or all of one kind) and assigned to a circuit at once. A circuit with loads is routed from its origin node to every one of them (the shared trunk counted once, the distance to each load reported); loads without a circuit are listed with a warning.
+
 ## Consequences
 - (+) One model feeds the schedules, the DXF and the PDF; the cable data stays in one place.
 - (-) The line-to-graph conversion needs clear rules for junctions and crossings and a visible way to correct them.

@@ -22,7 +22,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [err, setErr] = useState("");
   const [version, setVersion] = useState("");
   const [busy, setBusy] = useState(false);
-  const [selected, setSelected] = useState<Ref | null>(null);
+  const [selection, setSelection] = useState<Ref[]>([]);
   const [focus, setFocus] = useState("");               // the circuit whose route is highlighted
   const [stale, setStale] = useState(false);          // the drawing changed after the files were made
   const timer = useRef<number | null>(null);
@@ -33,7 +33,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   useEffect(() => {
     if (!level) { setLv(null); setDrawing(blank()); setDerived(null); return; }
     let live = true;
-    api<LevelView>(`${root}/${level}`).then((v) => { if (live) { setLv(v); setDrawing(v.drawing); setDerived(v.result); setSelected(null); setFocus(""); setState("idle"); setStale(false); setErr(""); } }).catch((x) => live && setErr(errorText(x)));
+    api<LevelView>(`${root}/${level}`).then((v) => { if (live) { setLv(v); setDrawing(v.drawing); setDerived(v.result); setSelection([]); setFocus(""); setState("idle"); setStale(false); setErr(""); } }).catch((x) => live && setErr(errorText(x)));
     return () => { live = false; };
   }, [level, root]);
 
@@ -119,11 +119,11 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
 
           <PlanEditor drawing={drawing} onChange={change} derived={d?.ready ? d : null} profile={profile} lang={lang} readOnly={!canWrite}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} t={tl}
-            selected={selected} onSelect={setSelected} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} />
+            selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} />
 
           <div className="grid" style={{ gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))" }}>
-            <Properties drawing={drawing} selected={selected} derived={d?.ready ? d : null} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!canWrite} onChange={change} onSelect={setSelected} t={tl} />
-            <Circuits drawing={drawing} derived={d?.ready ? d : null} boardCircuits={ov.data.circuits} readOnly={!canWrite} focus={focus} onFocus={setFocus} onChange={change} t={tl} />
+            <Properties drawing={drawing} selection={selection} derived={d?.ready ? d : null} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!canWrite} onChange={change} onSelect={setSelection} t={tl} />
+            <Circuits drawing={drawing} derived={d?.ready ? d : null} boardCircuits={ov.data.circuits} profile={profile} onSelect={setSelection} readOnly={!canWrite} focus={focus} onFocus={setFocus} onChange={change} t={tl} />
           </div>
 
           <div className="card">
