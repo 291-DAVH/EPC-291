@@ -64,6 +64,7 @@ from epc_calc import aea_voltage_drop as VD
 from epc_calc import current_and_loads as CL
 from epc_calc import short_circuit as SC
 from epc_calc import voltage_drop as VDG
+from epc_calc.topology import MOTOR_TOPOLOGIES
 
 __version__ = "0.2.0"
 
@@ -79,7 +80,7 @@ C_MAX_BT = 1.05      # AEA 90909-0, tolerancia 6 %
 C_MIN_BT = 0.95
 K_MAGNETICO_C = 10   # disparo magnético máximo de la curva C [× In]
 DU_ACUM_MAX_PCT = 5.0
-TOPOLOGIAS_MOTOR = {"dol", "dol_ol", "star_delta", "softstarter", "vfd", "dol_rcd"}
+TOPOLOGIAS_MOTOR = MOTOR_TOPOLOGIES
 CADENAS = {  # TOPOLOGY -> (cadena con MCB, cadena con MCCB)
     "dol": ("MCB > KM", "MCCB > KM"),
     "dol_ol": ("MCB > KM > OL", "MCCB > KM > OL"),

@@ -30,6 +30,7 @@ from typing import Dict, List, Optional
 
 from epc_calc import aea_protection as PR
 from epc_calc import fmt
+from epc_calc.topology import MOTOR_TOPOLOGIES
 
 __version__ = "0.1.0"
 
@@ -41,7 +42,7 @@ RATIO_TERMICO = 1.6
 RCD_KINDS = ("rccb", "rcbo")
 KIND_ES = {"tray_perforated": "Bandeja perforada / escalera", "tray_solid": "Bandeja no perforada", "conduit_air": "Caño o ducto a la vista / embutido",
            "chamber": "Cámara de pase (aire)", "buried_direct": "Directamente enterrado", "buried_duct": "Caño o ducto enterrado", "road_crossing": "Cruce bajo calzada (caño enterrado)"}
-MOTORES = {"dol", "dol_ol", "star_delta", "softstarter", "vfd", "dol_rcd"}
+MOTORES = MOTOR_TOPOLOGIES
 
 NORMA_MARCO = (
     "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
