@@ -163,33 +163,66 @@ export function loadsOf(d: Drawing, tag: string, loadKinds: Set<string>): number
   return d.nodes.filter((n) => n.circuit === tag && loadKinds.has(n.kind)).length;
 }
 
-/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points; the points of other lines that sit on a moved node follow it, so the network stays joined. */
+const EPS = 1e-6;
+const same = (a: Pt, b: Pt) => Math.abs(a[0] - b[0]) < EPS && Math.abs(a[1] - b[1]) < EPS;
+type Jump = { from: Pt; to: Pt };
+const dest = (jumps: Jump[], p: Pt): Pt => jumps.find((j) => same(j.from, p))?.to ?? p;
+
+/** Move the end of a line to `to` keeping it straight: when the last segment was horizontal or vertical it stays so (the neighbouring vertex slides with it, or an elbow is added when the neighbour is the other end). */
+export function pullEnd(points: Pt[], end: 0 | 1, to: Pt): Pt[] {
+  const i = end === 0 ? 0 : points.length - 1, j = end === 0 ? 1 : i - 1;
+  const p = points[i], q = points[j];
+  const out = points.slice();
+  const axis: number = Math.abs(p[1] - q[1]) < EPS && Math.abs(p[0] - q[0]) > EPS ? 1 : Math.abs(p[0] - q[0]) < EPS && Math.abs(p[1] - q[1]) > EPS ? 0 : -1;   // the coordinate that is shared by the end and its neighbour
+  if (axis < 0 || Math.abs(to[axis] - p[axis]) < EPS) { out[i] = to; return out; }
+  const other = 1 - axis;
+  if (Math.abs(to[other] - q[other]) < EPS) { out[i] = to; return out; }
+  if (points.length > 2) { out[j] = axis === 1 ? [q[0], to[1]] : [to[0], q[1]]; out[i] = to; return out; }
+  const elbow: Pt = axis === 1 ? [to[0], q[1]] : [q[0], to[1]];
+  return end === 0 ? [to, elbow, q] : [q, elbow, to];
+}
+
+/** The lines (but `except`) and nodes that sit on the points that moved follow them, so the network stays joined and straight. */
+function reattach(d: Drawing, jumps: Jump[], except: Set<string>): Drawing {
+  const dx = (a: Pt, b: Pt): Pt => [b[0] - a[0], b[1] - a[1]];
+  const follow = (l: DLine): DLine => {
+    const n = l.points.length, first = l.points[0], last = l.points[n - 1];
+    const f = dest(jumps, first), e = dest(jumps, last);
+    const df = dx(first, f), de = dx(last, e);
+    if (same(f, first) && same(e, last)) return { ...l, points: l.points.map((p) => dest(jumps, p)) };
+    if (!same(f, first) && !same(e, last) && same(df, de)) return { ...l, points: l.points.map((p) => [p[0] + df[0], p[1] + df[1]] as Pt) };     // both ends moved together: the line travels as it is
+    let pts = l.points.map((p, k) => (k === 0 || k === n - 1 ? p : dest(jumps, p)));
+    if (!same(f, first)) pts = pullEnd(pts, 0, f);
+    if (!same(e, last)) pts = pullEnd(pts, 1, e);
+    return { ...l, points: pts };
+  };
+  return {
+    ...d,
+    nodes: d.nodes.map((n) => { const q = dest(jumps, [n.x, n.y]); return same(q, [n.x, n.y]) ? n : { ...n, x: q[0], y: q[1] }; }),
+    lines: d.lines.map((l) => (except.has(l.id) ? l : follow(l))),
+  };
+}
+
+/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points and the nodes on it. The cables that end on something moved stay joined to it and straight. */
 export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
   if (!dx && !dy) return d;
   const nodeIds = new Set(refs.filter((r) => r.type === "node").map((r) => r.id));
   const lineIds = new Set(refs.filter((r) => r.type === "line").map((r) => r.id));
-  const moved = d.nodes.filter((n) => nodeIds.has(n.id));
   const shift = (p: Pt): Pt => [p[0] + dx, p[1] + dy];
-  const follows = (p: Pt) => moved.some((n) => Math.abs(n.x - p[0]) < 1e-6 && Math.abs(n.y - p[1]) < 1e-6);
-  return {
-    ...d,
-    nodes: d.nodes.map((n) => (nodeIds.has(n.id) ? { ...n, x: n.x + dx, y: n.y + dy } : n)),
-    lines: d.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : { ...l, points: l.points.map((p) => (follows(p) ? shift(p) : p)) })),
-  };
+  const jumps: Jump[] = [
+    ...d.nodes.filter((n) => nodeIds.has(n.id)).map((n): Jump => ({ from: [n.x, n.y], to: [n.x + dx, n.y + dy] })),
+    ...d.lines.filter((l) => lineIds.has(l.id)).flatMap((l) => l.points.map((p): Jump => ({ from: p, to: shift(p) }))),
+  ];
+  const r = reattach(d, jumps, lineIds);
+  return { ...r, lines: r.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : l)) };
 }
 
-/** Move some points of one line by their own deltas; the nodes and the points of other lines sitting on a moved point follow it, so the network stays joined. */
+/** Move some points of one line; what sits on them follows (see `reattach`). */
 function movePoints(d: Drawing, lineId: string, moves: { i: number; to: Pt }[]): Drawing {
   const line = d.lines.find((l) => l.id === lineId);
   if (!line) return d;
-  const at = (a: Pt, b: Pt) => Math.abs(a[0] - b[0]) < 1e-6 && Math.abs(a[1] - b[1]) < 1e-6;
-  const jumps = moves.map((m) => ({ from: line.points[m.i], to: m.to }));
-  const dest = (p: Pt): Pt => jumps.find((j) => at(j.from, p))?.to ?? p;
-  return {
-    ...d,
-    nodes: d.nodes.map((n) => { const q = dest([n.x, n.y]); return q[0] === n.x && q[1] === n.y ? n : { ...n, x: q[0], y: q[1] }; }),
-    lines: d.lines.map((l) => (l.id === lineId ? { ...l, points: l.points.map((p, i) => moves.find((m) => m.i === i)?.to ?? p) } : { ...l, points: l.points.map(dest) })),
-  };
+  const r = reattach(d, moves.map((m) => ({ from: line.points[m.i], to: m.to })), new Set([lineId]));
+  return { ...r, lines: r.lines.map((l) => (l.id === lineId ? { ...l, points: l.points.map((p, i) => moves.find((m) => m.i === i)?.to ?? p) } : l)) };
 }
 
 /** Stretch the end of a line along its own direction: the end goes to the closest point of the axis of its last segment, so the line stays straight (orthogonal when it was). */
