@@ -126,9 +126,9 @@ Si un paso resulta más riesgoso de lo previsto, se marca **DESCARTADO** aquí c
 | A7 | `core/text.py` `slugify(text, max_len, default)` con las variantes como argumentos | K3 | `test_identity_units`, integración | idem | Bajo |
 | A8 | `core/hashing.py` (`sha256_file`, `sha256_json`) | K4 | integración | idem | Bajo |
 | A9 | `core/lang.py` `pick(lang, meta)` | K5 | integración | idem | Bajo |
-| A10 | `core/packages.py` `zip_with_index` | K7 | `test_deliverable_package_api`, `test_issuing_api` | idem | Medio: el orden de archivos del ZIP debe ser el mismo |
-| A11 | `core/errors.get_or_404` solo para el patrón «buscar en lista» (se revisan los 57 `raise NotFound`) | varios | integración | idem | Medio: se descartan los casos con mensaje distinto |
-| A12 | Frontend: `JSON_HEADERS` y `errorText` en `api.ts`; `useApi(...).reload` reemplaza los contadores `rev` | F-1–F-3 | Vitest + `tsc` + build | `web-tests`, `web-types`, `web-build` | Bajo |
+| A10 | **DESCARTADO.** Los dos constructores de ZIP (`deliverables:131-139`, `issuing:197-209`) difieren en columnas, en el manejo de errores y en que `issuing` agrega el PDF y limpia el archivo temporal; lo común son ~6 líneas. Abstraerlo exigiría callbacks y costaría más de lo que quita. | — | — | — | Motivo: costo > beneficio |
+| A11 | **HECHO.** `core.errors.first_or_404` aplicado a 14 sitios con el patrón exacto `next(..., None)` + `raise NotFound`; los que tienen condiciones extra o mensajes dinámicos quedan como estaban. | varios `service.py` | integración | tests | Bajo |
+| A12 | **PARCIAL.** A12a hecho: `JSON_HEADERS` (12 archivos) y `errorText` (3 copias idénticas; la de Norms tiene otro formato y se queda). **A12b DESCARTADO:** reemplazar los 20+ contadores `rev` por `reload()` cambia las URLs pedidas (`?r=`) y se reparte en pantallas sin test de comportamiento (ver F-4); el beneficio es solo estético. | `api.ts` y 12 pantallas | Vitest + `tsc` + build | `web-tests`, `web-types`, `web-build` | Bajo |
 
 ### Fase B — abstracciones
 
