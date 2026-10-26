@@ -10,7 +10,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "64c812b1de19fc3e"
+      "hash": "9711091e228cb1db"
     },
     "board-design": {
       "version": "0.2.1",
@@ -33,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "0aee626d2a9f0c67"
+      "hash": "e0493cee6bf4a186"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -75,7 +75,7 @@
       "engine": [
         "symbols"
       ],
-      "hash": "06aef09582aa034e"
+      "hash": "7c44aa5f5faf1c40"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -120,7 +120,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "53e2a2b8a8846578"
+      "hash": "05b6b9a3bdb05786"
     },
     "plan-drawing": {
       "version": "0.1.0",
@@ -182,7 +182,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "aa59ee6f93393142"
+      "hash": "c206dce5f651aa48"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -214,7 +214,7 @@
         "rules",
         "standards"
       ],
-      "hash": "887b1c7415d53379"
+      "hash": "9655d9d6dd214191"
     }
   },
   "skills": {

@@ -15,14 +15,20 @@ def _roots(detalle: Dict[str, dict]) -> List[str]:
     return [t for t, d in detalle.items() if not d.get("padre") or d["padre"] not in detalle]
 
 
+DIFFERENTIAL_SYMBOLS = ("lv_rccb", "lv_rcbo")
+
+
+def _own_differential(tag: str, detalle: Dict[str, dict]) -> bool:
+    """Whether the devices the standard solution gave this circuit include a differential."""
+    return any(item["symbol"] in DIFFERENTIAL_SYMBOLS for item in detalle[tag]["cadena"])
+
+
 def _has_differential(tag: str, detalle: Dict[str, dict]) -> bool:
-    if detalle[tag]["kind"] == "rcbo":
-        return True
-    parent = detalle[tag].get("padre")
-    while parent and parent in detalle:
-        if detalle[parent]["kind"] == "rccb":
+    """A circuit is protected by a differential of its own or by one of the groups above it."""
+    while tag and tag in detalle:
+        if _own_differential(tag, detalle):
             return True
-        parent = detalle[parent].get("padre")
+        tag = detalle[tag].get("padre")
     return False
 
 

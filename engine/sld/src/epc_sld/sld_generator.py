@@ -98,48 +98,11 @@ for t in ORDER:
     pc, dt_ = PRE[t], DET[t]
     R[t] = dict(Ib=pc['Ib'], P=dt_['p_kw'], In=pc['In'], icu=pc['icu'], S=pc['S'], PE=dt_['pe_mm2'], N=dt_['neutro_mm2'], dv=dt_['du_propia_pct'], lim=dt_['limite_pct'],
                 motor=dt_['topologia'] in TOPOLOGIAS_MOTOR, ph=dt_['fases'], fp=dt_['fp'], L=dt_['largo_m'], parent=bool(KIDS[t]), kind=dt_['kind'], disp=pc['disp'])
-RCD = f"{FIG['rcd_ma']:g} mA"
 
 # ---------- cadenas de símbolos ----------
-def mcb(pol, In, icu): return ('lv_mcb', {'poles': pol, 'curve_rating': f'C{In}', 'breaking_capacity': f'{icu} kA'})
 def chain(t):
-    c = C[t]; r = R[t]; ph = r['ph']; In = r['In']; icu = r['icu']; pol3 = '3P' if ph == 3 else '1P'
-    if KIDS[t]:
-        return [('lv_rccb', {'poles': '4P' if ph == 3 else '2P', 'rated_current': f'{In} A', 'sensitivity': RCD})]
-    el = []
-    if r['motor']:
-        topo = c['topo']; big = In >= 63
-        if topo == 'dol':
-            el = [('lv_mcb', {'poles': '3P MPCB', 'curve_rating': f'MA {In}', 'breaking_capacity': f'{icu} kA'}), ('lv_contactor', {'tag': 'KM1'})]
-        elif topo == 'dol_ol':
-            el = [mcb(pol3, In, icu), ('lv_contactor', {'tag': 'KM1'}), ('lv_thermal_overload', {'tag': 'OL'})]
-        elif topo == 'star_delta':
-            el = [('lv_mccb_basic', {'tag': t}) if big else mcb(pol3, In, icu), ('lv_contactor', {'tag': 'KM1'}),
-                  ('lv_contactor', {'tag': 'KM2 Y'}), ('lv_contactor', {'tag': 'KM3 D'}), ('lv_thermal_overload', {'tag': 'OL'})]
-        elif topo == 'softstarter':
-            el = [('lv_mccb_basic', {'tag': t}) if big else mcb(pol3, In, icu), ('lv_soft_starter', {'tag': 'SS'})]
-        elif topo == 'vfd':
-            el = [mcb(pol3, In, icu), ('lv_vfd', {'rated_current': f'{In} A'})]
-        elif topo == 'dol_rcd':
-            el = [('lv_rcbo', {'poles': pol3, 'curve_rating': f'C{In}', 'sensitivity': RCD, 'breaking_capacity': f'{icu} kA', 'tag': t}),
-                  ('lv_contactor', {'tag': 'KM1'})]
-        else:
-            el = [mcb(pol3, In, icu)]
-    else:
-        k = r['kind']                                       # lo decidió el cálculo (auto -> mcb o mccb)
-        if k == 'mccb_motorized':
-            el = [('lv_mccb_motorized', {'rated_current': f'{In} A', 'breaking_capacity': f'{icu} kA'})]
-        elif k == 'mccb':
-            el = [('lv_mccb_basic', {'tag': t})]
-        elif k == 'rcbo':
-            el = [('lv_rcbo', {'poles': '1P+N' if ph == 1 else '3P+N', 'curve_rating': f'C{In}', 'sensitivity': RCD, 'breaking_capacity': f'{icu} kA', 'tag': t})]
-        elif k == 'rccb':
-            el = [('lv_rccb', {'poles': '2P' if ph == 1 else '4P', 'rated_current': f'{In} A', 'sensitivity': RCD})]
-        else:
-            el = [mcb(pol3, In, icu)]
-    if 'UPS' in c['desc'].upper():
-        el.append(('lv_ups', {'tag': t}))
-    return el
+    """Los símbolos del circuito, en el orden en que se dibujan: los elige el cálculo (solución estándar de epc_calc); aquí solo se les da lugar."""
+    return [(it['symbol'], {**({'poles': it['label']} if it['label'] else {}), **it['slots']}) for it in DET[t]['cadena']]
 def load_of(t):
     r = R[t]
     if r['motor']:

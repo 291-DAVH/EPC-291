@@ -55,3 +55,23 @@ def save_layers(body: LayersIn):
 @router.delete("/layers")
 def reset_layers():
     return service.reset_layers()
+
+
+class SolutionsIn(BaseModel):
+    solutions: Dict[str, Dict[str, Any]]
+    add_ons: Dict[str, Dict[str, Any]] = {}
+
+
+@router.get("/solutions")
+def solutions():
+    return service.solutions()
+
+
+@router.put("/solutions")
+def save_solutions(body: SolutionsIn):
+    return service.save_solutions(body.model_dump())
+
+
+@router.delete("/solutions")
+def reset_solutions():
+    return service.reset_solutions()

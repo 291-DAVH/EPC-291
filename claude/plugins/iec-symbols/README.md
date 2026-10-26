@@ -31,7 +31,7 @@ This plugin is packaging only. The code lives in `engine/drawing` and is copied 
 | Necesita (plugins) | — |
 | Lo necesitan | `mld`, `sld` |
 | Paquetes de Python | — |
-| Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`; módulos del backend — |
+| Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`; módulos del backend `backend.admin` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

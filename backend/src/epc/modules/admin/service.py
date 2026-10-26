@@ -64,3 +64,30 @@ def save_layers(changes: dict) -> dict:
 def reset_layers() -> dict:
     repository.reset_layers()
     return layers()
+
+
+# ---------------------------------------------------------------- standard solutions (global document)
+def solutions() -> dict:
+    """The document of standard solutions in force (default + the MASTER's changes), the default one, what changed and what the editor offers."""
+    from epc_calc import solutions as S
+    doc = S.load(settings.solutions_file)
+    changed = S.override_of(doc)
+    return {"solutions": doc.get("solutions", {}), "add_ons": doc.get("add_ons", {}), "default": S.defaults(),
+            "changed": sorted({*(changed.get("solutions") or {}), *(changed.get("add_ons") or {})}),
+            "symbols": repository.sld_symbols(), "options": {"conditions": list(S.CONDITIONS), "phases": list(S.PHASES), "ranges": list(S.RANGES), "item_keys": list(S.ITEM_KEYS)}}
+
+
+def save_solutions(body: dict) -> dict:
+    """Store the document the MASTER sent (solutions and add-ons by id); only what differs from the default one is kept. A document that would leave a circuit without a solution is refused."""
+    from epc_calc import solutions as S
+    doc = {"solutions": body.get("solutions") or {}, "add_ons": body.get("add_ons") or {}}
+    errors = S.validate(doc, [s["id"] for s in repository.sld_symbols()])
+    if errors:
+        raise Invalid(errors)
+    repository.save_solutions_override(S.override_of(doc))
+    return solutions()
+
+
+def reset_solutions() -> dict:
+    repository.reset_solutions()
+    return solutions()

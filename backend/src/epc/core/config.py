@@ -65,6 +65,11 @@ class Settings:
         """The catalog of DXF layers the MASTER edits (global; a project's own file will win over it later)."""
         return self.data_dir / "global" / "drawing-layers.json"
 
+    @property
+    def solutions_file(self) -> Path:
+        """The document of standard solutions the MASTER edits (global; the company's and the project's own will win over it later)."""
+        return self.data_dir / "global" / "standard-solutions.json"
+
     @classmethod
     def from_env(cls, repo: Optional[Path] = None) -> "Settings":
         repo = repo or _find_repo()

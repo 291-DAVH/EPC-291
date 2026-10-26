@@ -141,45 +141,9 @@ def poles_of(c: dict, has_kids: bool) -> int:
     return 2 if ph.startswith("1") else 3
 
 
-def device_chain(c: dict, in_a: float, icu: float, n: int, has_kids: bool, tag: str) -> List[tuple]:
-    """Cadena vertical de símbolos MLD del circuito: [(base_id, slots, n_polos)] (misma lógica que el unifilar)."""
-    topo = str(c.get("topology") or "single").lower()
-    kind = str(c.get("kind") or "auto").lower()
-    big = in_a >= 63
-    mcb = ("lv_mcb", {"curve_rating": f"C{in_a:g}", "breaking_capacity": f"{icu:g} kA"}, n)
-    if has_kids:
-        return [("lv_rccb", {"rated_current": f"{in_a:g} A", "sensitivity": "30 mA"}, n)]
-    el: List[tuple] = []
-    if topo in MOTOR_TOPO:
-        km = ("lv_contactor", {"tag": "KM1"}, 3)
-        ol = ("lv_thermal_overload", {"tag": "OL"}, 3)
-        head = ("lv_mccb_basic", {"tag": tag}, 3) if big else ("lv_mcb", {"curve_rating": f"C{in_a:g}", "breaking_capacity": f"{icu:g} kA"}, 3)
-        if topo == "dol":
-            el = [("lv_mcb", {"curve_rating": f"MA {in_a:g}", "breaking_capacity": f"{icu:g} kA"}, 3), km]
-        elif topo == "dol_ol":
-            el = [head, km, ol]
-        elif topo == "star_delta":
-            el = [head, km, ("lv_contactor", {"tag": "KM2 Y"}, 3), ("lv_contactor", {"tag": "KM3 D"}, 3), ol]
-        elif topo == "softstarter":
-            el = [head, ("lv_soft_starter", {"tag": "SS"}, 3)]
-        elif topo == "vfd":
-            el = [head, ("lv_vfd", {"tag": "VFD", "rated_current": f"{in_a:g} A"}, 3)]
-        else:                                           # dol_rcd
-            el = [("lv_rcbo", {"curve_rating": f"C{in_a:g}", "sensitivity": "30 mA", "breaking_capacity": f"{icu:g} kA", "tag": tag}, 4), km]
-    else:
-        if kind == "mccb_motorized":
-            el = [("lv_mccb_motorized", {"rated_current": f"{in_a:g} A", "breaking_capacity": f"{icu:g} kA"}, n)]
-        elif kind == "mccb" or (kind == "auto" and in_a > 63):
-            el = [("lv_mccb_basic", {"tag": tag}, n)]
-        elif kind == "rcbo":
-            el = [("lv_rcbo", {"curve_rating": f"C{in_a:g}", "sensitivity": "30 mA", "breaking_capacity": f"{icu:g} kA", "tag": tag}, 2 if n == 2 else 4)]
-        elif kind == "rccb":
-            el = [("lv_rccb", {"rated_current": f"{in_a:g} A", "sensitivity": "30 mA"}, 2 if n == 2 else 4)]
-        else:
-            el = [mcb]
-    if "UPS" in str(c.get("description") or "").upper():
-        el.append(("lv_ups", {"tag": tag}, 3))
-    return el
+def chain_of(cadena: List[dict], n: int) -> List[tuple]:
+    """[(base_id, slots, n_polos)] de la cadena que eligió el cálculo (solución estándar de epc_calc); un dispositivo sin polos propios toma los `n` del circuito."""
+    return [(it["symbol"], dict(it["slots"]), it["poles"] or n) for it in cadena]
 
 
 class Generator:
@@ -272,7 +236,7 @@ class Generator:
             xi = x0 + i * PITCH
             sh.line(xi, bus[name], xi, top_y)
             sh.dot(xi, bus[name])
-        chain = device_chain(c, r["In"], r["icu"], n, has_kids, t)
+        chain = chain_of(self.detail[t]["cadena"], n)
         y = top_y
         prev_n = n
         for k, (base, slots, pn) in enumerate(chain):

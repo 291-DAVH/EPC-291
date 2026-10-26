@@ -1,6 +1,6 @@
 # ADR-0023: Drawings as services; DXF layer catalog; standard solutions
 
-Status: accepted (direction). Done: the DXF layer catalog, the deliverable service with semantic roles and the title block service. Date: 2026-10-26.
+Status: accepted. Done: the DXF layer catalog, the deliverable service with semantic roles, the title block service and the standard solutions. Date: 2026-10-26.
 
 ## Context
 After ADR-0022 the drawing engine is a set of packages, but three things still tie the diagrams to each other and to the way they were first built:
@@ -8,11 +8,15 @@ the single-line (`epc_sld`) and multi-line (`epc_mld`) each decide which protect
 and the layers of the DXF were names written in the code, assigned by where an entity sits on the sheet.
 
 ## Decisions
-1. **Standard solutions, a document the MASTER maintains.** The rule "a lighting circuit takes a differential plus a thermal-magnetic breaker, in the quantity needed" is a design decision, not drawing.
-   It lives in the calculation, driven by the project's criteria (for example the differential sensitivity), as a catalog of standard solutions (type of load or circuit -> devices, ratings rule, quantity rule)
-   in a global JSON the MASTER edits in the console; later a project may override it. The calculation result lists the devices of each circuit.
-2. **Symbol assembler.** A step between the calculation and the diagrams turns those devices into a neutral JSON of symbols (ids, poles, slots, texts). The single-line and the multi-line only read it and know how to lay it out.
-   The three copies of the protection chain (`aea_pipeline._dispositivo`, `sld_generator.chain`, `mld_generator.device_chain`) become one.
+1. **Standard solutions, a document the MASTER maintains (done).** The rule "a lighting circuit takes a differential plus a thermal-magnetic breaker, in the quantity needed" is a design decision, not drawing. It lives in the
+   calculation: `epc_calc.solutions` reads a document (`data/standard-solutions.json`) of solutions, each with the conditions it applies under (topology, kind, phase, type, group, motor, In range, text), its priority and the chain of
+   symbols that builds the circuit. Placeholders take the facts of the circuit and the project's criteria (`{in_a:g}`, `{icu_ka:g}`, `{rcd_ma:g}`, `{tag}`), so the differential sensitivity is no longer fixed at 30 mA in the drawings.
+   Sources, the later winning solution by solution: the default document, the global file the MASTER edits (console tab "Soluciones estándar", `<data>/global/standard-solutions.json`, passed in `EPC_SOLUTIONS_JSON`), and later the
+   company's and the project's own files (`load` already takes extra files; a solution can be replaced, added, switched off or removed with `null`). A document must keep one solution with an empty `when` for any circuit.
+   The default document reproduces what the diagrams drew, plus a ready-made, switched-off solution "lighting: differential + breaker" the MASTER can turn on.
+2. **Symbol assembler (done).** The assembler does not make symbols (the library does): it names which symbols build each circuit, in order, with their poles and slot texts. It is the same resolution step in the calculation:
+   the detail of every circuit carries `cadena` (the chain) and `solucion` (which one won), and the table text (`disp`) comes from it. The single-line and the multi-line only read `cadena` and lay it out. The three copies of the
+   protection chain (`aea_pipeline._dispositivo`, `sld_generator.chain`, `mld_generator.device_chain`) became one. The differential check of the board follows the chain (a circuit is protected when its own devices or a group above include one).
 3. **Title block as a service (done).** A diagram asks `epc_titleblock.service.render` for its sheets with a JSON request (formats, name and fields of each sheet, the project's common fields, logos) and receives the filled sheets;
    `project_request` turns the platform's title block data into the common part. No Excel, no subprocess; the single-line and the multi-line get the project's request in `EPC_TITLEBLOCK_JSON`. `epc_sld.deps`, the Excel template
    and `titleblocks_generator` are gone, and `epc_mld` no longer imports `epc_sld` (the layers contract puts them side by side). Visible result: the three fields the Excel template carried as demo data (type of drawing,
@@ -31,5 +35,5 @@ and the layers of the DXF were names written in the code, assigned by where an e
 
 ## Consequences
 Each piece installs and changes alone; the map `docs/architecture/DEPENDENCIAS.md` says what a change touches. Defaults are identical to what was delivered before (golden outputs unchanged);
-only what the MASTER edits changes a drawing. Steps 1-2 are future work: the assembler with the standard-solutions document (steps 3, 4 and 5 are done).
+only what the MASTER edits changes a drawing. All steps are done; what remains is the project's and the company's own copies of the two documents (layer catalog and standard solutions), which the loaders already accept.
 The entity-level line weights the single-line takes from its SVG still win over the layer's weight; letting the layer govern is a decision for a later step now that every element has a role.

@@ -1,0 +1,646 @@
+{
+ "schema_version": "1.0",
+ "solutions": {
+  "group-differential": {
+   "name": {
+    "es": "Grupo con diferencial",
+    "en": "Group behind a differential"
+   },
+   "enabled": true,
+   "priority": 100,
+   "when": {
+    "has_children": true
+   },
+   "chain": [
+    {
+     "symbol": "lv_rccb",
+     "short": "RCCB",
+     "poles": {
+      "1F": 2,
+      "3F": 4,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "2P",
+      "3F": "4P",
+      "3F+N": "4P"
+     },
+     "slots": {
+      "rated_current": "{in_a:g} A",
+      "sensitivity": "{rcd_ma:g} mA"
+     }
+    }
+   ],
+   "disp": "RCCB {poles_label} {in_a:g} A {rcd_ma:g} mA"
+  },
+  "motor-dol": {
+   "name": {
+    "es": "Motor arranque directo",
+    "en": "Motor, direct on line"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "dol"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": 3,
+     "label": {
+      "*": "3P MPCB"
+     },
+     "slots": {
+      "curve_rating": "MA {in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     },
+     "if": {
+      "in_a": {
+       "le": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     },
+     "if": {
+      "in_a": {
+       "gt": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM1"
+     }
+    }
+   ]
+  },
+  "motor-dol-ol": {
+   "name": {
+    "es": "Motor con relé térmico",
+    "en": "Motor with thermal overload"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "dol_ol"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": 3,
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     },
+     "if": {
+      "in_a": {
+       "le": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     },
+     "if": {
+      "in_a": {
+       "gt": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM1"
+     }
+    },
+    {
+     "symbol": "lv_thermal_overload",
+     "short": "OL",
+     "poles": 3,
+     "slots": {
+      "tag": "OL"
+     }
+    }
+   ]
+  },
+  "motor-star-delta": {
+   "name": {
+    "es": "Motor estrella-triángulo",
+    "en": "Motor, star-delta"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "star_delta"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": 3,
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     },
+     "if": {
+      "in_a": {
+       "le": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     },
+     "if": {
+      "in_a": {
+       "gt": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM1"
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM2 Y"
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM3 D"
+     }
+    },
+    {
+     "symbol": "lv_thermal_overload",
+     "short": "OL",
+     "poles": 3,
+     "slots": {
+      "tag": "OL"
+     }
+    }
+   ]
+  },
+  "motor-softstarter": {
+   "name": {
+    "es": "Motor con arrancador suave",
+    "en": "Motor with soft starter"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "softstarter"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": 3,
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     },
+     "if": {
+      "in_a": {
+       "le": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     },
+     "if": {
+      "in_a": {
+       "gt": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_soft_starter",
+     "short": "SS",
+     "poles": 3,
+     "slots": {
+      "tag": "SS"
+     }
+    }
+   ]
+  },
+  "motor-vfd": {
+   "name": {
+    "es": "Motor con variador",
+    "en": "Motor with frequency drive"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "vfd"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": 3,
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     },
+     "if": {
+      "in_a": {
+       "le": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     },
+     "if": {
+      "in_a": {
+       "gt": 63
+      }
+     }
+    },
+    {
+     "symbol": "lv_vfd",
+     "short": "VFD",
+     "poles": 3,
+     "slots": {
+      "tag": "VFD",
+      "rated_current": "{in_a:g} A"
+     }
+    }
+   ]
+  },
+  "motor-dol-rcd": {
+   "name": {
+    "es": "Motor con diferencial",
+    "en": "Motor with differential"
+   },
+   "enabled": true,
+   "priority": 90,
+   "when": {
+    "topology": [
+     "dol_rcd"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_rcbo",
+     "short": "RCBO",
+     "poles": 4,
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "sensitivity": "{rcd_ma:g} mA",
+      "breaking_capacity": "{icu_ka:g} kA",
+      "tag": "{tag}"
+     }
+    },
+    {
+     "symbol": "lv_contactor",
+     "short": "KM",
+     "poles": 3,
+     "slots": {
+      "tag": "KM1"
+     }
+    }
+   ]
+  },
+  "feeder-mccb-motorized": {
+   "name": {
+    "es": "Alimentador MCCB motorizado",
+    "en": "Motorized MCCB feeder"
+   },
+   "enabled": true,
+   "priority": 50,
+   "when": {
+    "kind": [
+     "mccb_motorized"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mccb_motorized",
+     "short": "MCCB M",
+     "poles": {
+      "1F": 2,
+      "3F": 3,
+      "3F+N": 4
+     },
+     "slots": {
+      "rated_current": "{in_a:g} A",
+      "breaking_capacity": "{icu_ka:g} kA"
+     }
+    }
+   ]
+  },
+  "feeder-mccb": {
+   "name": {
+    "es": "Interruptor en caja moldeada",
+    "en": "Moulded-case breaker"
+   },
+   "enabled": true,
+   "priority": 50,
+   "when": {
+    "kind": [
+     "mccb"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": {
+      "1F": 2,
+      "3F": 3,
+      "3F+N": 4
+     },
+     "slots": {
+      "tag": "{tag}"
+     }
+    }
+   ]
+  },
+  "auto-mccb": {
+   "name": {
+    "es": "Automático por corriente: caja moldeada",
+    "en": "Automatic by current: moulded case"
+   },
+   "enabled": true,
+   "priority": 50,
+   "when": {
+    "kind": [
+     "auto"
+    ],
+    "in_a": {
+     "gt": 63
+    }
+   },
+   "chain": [
+    {
+     "symbol": "lv_mccb_basic",
+     "short": "MCCB",
+     "poles": {
+      "1F": 2,
+      "3F": 3,
+      "3F+N": 4
+     },
+     "slots": {
+      "tag": "{tag}"
+     }
+    }
+   ]
+  },
+  "circuit-rcbo": {
+   "name": {
+    "es": "Termomagnética con diferencial",
+    "en": "Breaker with differential (RCBO)"
+   },
+   "enabled": true,
+   "priority": 50,
+   "when": {
+    "kind": [
+     "rcbo"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_rcbo",
+     "short": "RCBO",
+     "poles": {
+      "1F": 2,
+      "3F": 4,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "1P+N",
+      "3F": "3P+N",
+      "3F+N": "3P+N"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "sensitivity": "{rcd_ma:g} mA",
+      "breaking_capacity": "{icu_ka:g} kA",
+      "tag": "{tag}"
+     }
+    }
+   ]
+  },
+  "circuit-rccb": {
+   "name": {
+    "es": "Diferencial",
+    "en": "Differential (RCCB)"
+   },
+   "enabled": true,
+   "priority": 50,
+   "when": {
+    "kind": [
+     "rccb"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_rccb",
+     "short": "RCCB",
+     "poles": {
+      "1F": 2,
+      "3F": 4,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "2P",
+      "3F": "4P",
+      "3F+N": "4P"
+     },
+     "slots": {
+      "rated_current": "{in_a:g} A",
+      "sensitivity": "{rcd_ma:g} mA"
+     }
+    }
+   ],
+   "disp": "RCCB {poles_label} {in_a:g} A {rcd_ma:g} mA"
+  },
+  "circuit-mcb": {
+   "name": {
+    "es": "Termomagnética",
+    "en": "Miniature breaker"
+   },
+   "enabled": true,
+   "priority": 10,
+   "when": {},
+   "chain": [
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": {
+      "1F": 2,
+      "3F": 3,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     }
+    }
+   ]
+  },
+  "lighting-differential-mcb": {
+   "name": {
+    "es": "Iluminación: diferencial + termomagnética",
+    "en": "Lighting: differential + breaker"
+   },
+   "enabled": false,
+   "priority": 60,
+   "when": {
+    "type": [
+     "iluminacion"
+    ],
+    "has_children": false,
+    "kind": [
+     "auto"
+    ]
+   },
+   "chain": [
+    {
+     "symbol": "lv_rccb",
+     "short": "RCCB",
+     "poles": {
+      "1F": 2,
+      "3F": 4,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "2P",
+      "3F": "4P",
+      "3F+N": "4P"
+     },
+     "slots": {
+      "rated_current": "{in_a:g} A",
+      "sensitivity": "{rcd_ma:g} mA"
+     }
+    },
+    {
+     "symbol": "lv_mcb",
+     "short": "MCB",
+     "poles": {
+      "1F": 2,
+      "3F": 3,
+      "3F+N": 4
+     },
+     "label": {
+      "1F": "1P",
+      "3F": "3P",
+      "3F+N": "3P"
+     },
+     "slots": {
+      "curve_rating": "C{in_a:g}",
+      "breaking_capacity": "{icu_ka:g} kA"
+     }
+    }
+   ],
+   "disp": "RCCB > MCB ({in_a:g} A)"
+  }
+ },
+ "add_ons": {
+  "ups": {
+   "name": {
+    "es": "Con UPS",
+    "en": "With UPS"
+   },
+   "enabled": true,
+   "when": {
+    "text_contains": [
+     "ups"
+    ],
+    "has_children": false
+   },
+   "chain": [
+    {
+     "symbol": "lv_ups",
+     "short": "UPS",
+     "poles": 3,
+     "slots": {
+      "tag": "{tag}"
+     }
+    }
+   ]
+  }
+ }
+}
