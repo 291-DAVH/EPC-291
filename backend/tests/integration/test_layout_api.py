@@ -138,6 +138,15 @@ class TestLayout(unittest.TestCase):
         path.write_text(_json.dumps(data), encoding="utf-8")
         self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["circuits"], [])
 
+    def test_loads_assigned_to_a_circuit_are_routed_from_its_origin(self):
+        drawing = {**DRAWING, "nodes": [*DRAWING["nodes"], {"id": "n3", "kind": "LU", "x": 100, "y": 0, "circuit": "C-01"}, {"id": "n4", "kind": "TG", "x": 150, "y": 0, "circuit": "C-01"},
+                                          {"id": "n5", "kind": "HV", "x": 50, "y": 0}], "circuits": [{"tag": "C-01", "from": "n1", "ternas": 1}]}
+        res = self.c.put(f"{self.base}/L0", json=drawing).json()["result"]
+        route = res["circuits"]["C-01"]
+        self.assertEqual((route["found"], route["loads"], route["length_m"]), (True, 2, 15.0))
+        self.assertEqual(res["schedule"]["loads"], {"by_circuit": {"C-01": {"LU": 1, "TG": 1}}, "unassigned": ["HV-001"]})
+        self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["nodes"][2]["circuit"], "C-01")
+
     def test_generate_needs_a_drawing_and_a_scale(self):
         self.assertEqual(self.c.post(f"{self.base}/L0/generate").status_code, 404)
         self.c.put(f"{self.base}/L0", json={**DRAWING, "scale": None})

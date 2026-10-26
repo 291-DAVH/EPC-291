@@ -16,6 +16,7 @@ class NodeIn(BaseModel):
     x: float
     y: float
     tag: str = ""
+    circuit: str = ""                       # a load (luminaire, socket, HVAC...) belongs to a circuit of the board: a reference, never created here
     attrs: Dict[str, Any] = {}
 
 

@@ -967,4 +967,13 @@ export const es = {
     "layout.circuits.route": "Recorrido",
     "layout.circuits.cable": "de cable",
     "layout.circuits.noRoute": "Sin camino libre",
+    "layout.tool.box": "Selección múltiple",
+    "layout.hint.box": "Arrastra un recuadro sobre lo que quieres seleccionar; Shift suma a lo ya seleccionado.",
+    "layout.sel.byKind": "Seleccionar todas:",
+    "layout.sel.selected": "seleccionados",
+    "layout.sel.ignored": "sin circuito posible",
+    "layout.sel.assign": "Circuito",
+    "layout.sel.clear": "Quitar circuito",
+    "layout.sel.none": "Deseleccionar",
+    "layout.circuits.loads": "Cargas",
 } as const;

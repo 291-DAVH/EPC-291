@@ -49,9 +49,9 @@ def _legs(c: Dict[str, Any]) -> List[str]:
     return [c["from"], *c.get("via", []), c["to"]]
 
 
-def _route_one(adj, c, usable) -> Optional[List[int]]:
+def _walk(adj, stops: List[str], usable) -> Optional[List[int]]:
+    """The stretches of the way that goes through the stops in order; None when one leg has no way."""
     path: List[int] = []
-    stops = _legs(c)
     for a, b in zip(stops, stops[1:]):
         leg = [] if a == b else _shortest(adj, a, b, usable)
         if leg is None:
@@ -60,45 +60,100 @@ def _route_one(adj, c, usable) -> Optional[List[int]]:
     return path
 
 
-def _problem(circuit: Dict[str, Any], ids: Set[str], seen: Set[str]) -> Optional[str]:
+def _targets(c: Dict[str, Any], loads: Dict[str, List[str]]) -> List[List[str]]:
+    """The ways to find for a circuit: one to its destination node (through the nodes it must pass), and one to each of its loads (luminaires, sockets, HVAC...)."""
+    ways = [_legs(c)] if c.get("to") else []
+    return ways + [[c["from"], n] for n in loads.get(c["tag"], [])]
+
+
+def _node_problem(circuit: Dict[str, Any], ids: Set[str], ways: List[List[str]]) -> Optional[str]:
+    tag = circuit["tag"]
+    if not circuit.get("from") or circuit["from"] not in ids:
+        return f"circuit {tag}: the origin node is not chosen or no longer exists"
+    if not ways:
+        return f"circuit {tag}: it has no destination node and no loads assigned"
+    missing = [n for way in ways for n in way if n not in ids]
+    if missing:
+        return f"circuit {tag}: the node {missing[0]} no longer exists"
+    if circuit.get("to") == circuit["from"]:
+        return f"circuit {tag}: the origin and the destination are the same node"
+    return None
+
+
+def _problem(circuit: Dict[str, Any], ids: Set[str], seen: Set[str], ways: List[List[str]]) -> Optional[str]:
     if not circuit.get("tag"):
         return "a circuit has no tag: choose one of the board's circuits"
     if circuit["tag"] in seen:
         return f"circuit {circuit['tag']} is defined twice: the second definition is ignored"
-    missing = [n for n in _legs(circuit) if n not in ids]
-    if missing:
-        return f"circuit {circuit['tag']}: the node {missing[0]} no longer exists"
-    if circuit["from"] == circuit["to"]:
-        return f"circuit {circuit['tag']}: the origin and the destination are the same node"
-    return None
+    return _node_problem(circuit, ids, ways)
 
 
-def route_circuits(gnodes, stretches, circuits: List[Dict[str, Any]], single_kinds: Set[str], warnings: List[str]) -> Dict[str, Dict[str, Any]]:
-    """Route every circuit in the order given. Records on each stretch the circuits it carries (`carries`) and returns the route of each circuit by tag."""
+def _tree(adj, ways: List[List[str]], free, stretches) -> Tuple[List[int], Dict[str, float], List[str]]:
+    """The stretches that reach every target (the shared trunk counted once), the length of the way to each, and the targets with no way."""
+    used: List[int] = []
+    reach: Dict[str, float] = {}
+    lost: List[str] = []
+    for way in ways:
+        path = _walk(adj, way, free)
+        if path is None:
+            lost.append(way[-1])
+            continue
+        used += [si for si in path if si not in used]
+        reach[way[-1]] = round(sum(stretches[si]["length_m"] for si in path), 4)
+    return used, reach, lost
+
+
+def _no_way(tag: str, tag_of, ways, adj) -> str:
+    """Why a circuit has loads or a destination it cannot reach: nothing connects them, or the only ways go through a conduit another circuit uses."""
+    apart = [w for w in ways if _walk(adj, w, lambda si: True) is None]
+    if apart:
+        return f"circuit {tag}: there is no way from {tag_of[apart[0][0]]} to {', '.join(tag_of[w[-1]] for w in apart)} over the drawn stretches"
+    return f"circuit {tag}: every way to its loads goes through a conduit that another circuit already uses"
+
+
+def _record(tag: str, ternas: int, used: List[int], stretches) -> Dict[str, Any]:
+    for si in used:
+        stretches[si].setdefault("carries", []).append({"circuit": tag, "ternas": ternas})
+    length = round(sum(stretches[si]["length_m"] for si in used), 4)
+    return {"stretches": [stretches[si]["tag"] for si in used], "lines": list(dict.fromkeys(stretches[si]["line"] for si in used)), "length_m": length, "cable_length_m": round(length * ternas, 4)}
+
+
+def _loads_by_circuit(gnodes, load_kinds: Set[str]) -> Dict[str, List[str]]:
+    loads: Dict[str, List[str]] = {}
+    for g in sorted(gnodes, key=lambda g: g["tag"] or ""):
+        if g.get("circuit") and g["kind"] in load_kinds:
+            loads.setdefault(g["circuit"], []).append(g["id"])
+    return loads
+
+
+def _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, loads, warnings) -> Dict[str, Any]:
+    """The route of one circuit: the stretches that reach all its targets (marked as taken by it), the lengths and what could not be reached."""
+    tag, ternas = c["tag"], max(1, int(c.get("ternas") or 1))
+    free = lambda si: not (stretches[si]["kind"] in single_kinds and taken[si] - {tag})           # noqa: E731 - a conduit used by another circuit is blocked
+    used, reach, lost = _tree(adj, ways, free, stretches)
+    for si in used:
+        taken[si].add(tag)
+    if lost:
+        warnings.append(_no_way(tag, tag_of, ways, adj))
+    mine = loads.get(tag, [])
+    return {"found": not lost, "from": c["from"], "to": c.get("to", ""), "ternas": ternas, "loads": len(mine), "unreached": [tag_of[n] for n in lost],
+            "distance_to_load_m": {tag_of[n]: d for n, d in reach.items() if n in mine}, **_record(tag, ternas, used, stretches)}
+
+
+def route_circuits(gnodes, stretches, circuits: List[Dict[str, Any]], single_kinds: Set[str], load_kinds: Set[str], warnings: List[str]) -> Dict[str, Dict[str, Any]]:
+    """Route every circuit in the order given: from its origin to its destination node and to each load assigned to it. Records on each stretch the circuits it carries
+    (`carries`) and returns the route of each circuit by tag."""
     ids = {g["id"] for g in gnodes}
     tag_of = {g["id"]: g["tag"] for g in gnodes}
+    loads = _loads_by_circuit(gnodes, load_kinds)
     adj = _adjacency(stretches)
     taken: Dict[int, Set[str]] = {i: ({s["circuit"]} if s.get("circuit") else set()) for i, s in enumerate(stretches)}
     routes: Dict[str, Dict[str, Any]] = {}
     for c in circuits:
-        problem = _problem(c, ids, set(routes))
+        ways = _targets(c, loads)
+        problem = _problem(c, ids, set(routes), ways)
         if problem:
             warnings.append(problem)
             continue
-        tag = c["tag"]
-        free = lambda si: not (stretches[si]["kind"] in single_kinds and taken[si] - {tag})           # noqa: E731 - a conduit used by another circuit is blocked
-        path = _route_one(adj, c, free)
-        ternas = max(1, int(c.get("ternas") or 1))
-        if path is None:
-            reachable = _route_one(adj, c, lambda si: True) is not None
-            warnings.append(f"circuit {tag}: " + ("every way from {} to {} goes through a conduit that another circuit already uses".format(tag_of[c["from"]], tag_of[c["to"]]) if reachable
-                                                     else f"there is no way from {tag_of[c['from']]} to {tag_of[c['to']]} over the drawn stretches"))
-            routes[tag] = {"found": False, "from": c["from"], "to": c["to"], "ternas": ternas, "stretches": [], "lines": [], "length_m": 0.0, "cable_length_m": 0.0}
-            continue
-        for si in path:
-            taken[si].add(tag)
-            stretches[si].setdefault("carries", []).append({"circuit": tag, "ternas": ternas})
-        length = round(sum(stretches[si]["length_m"] for si in path), 4)
-        routes[tag] = {"found": True, "from": c["from"], "to": c["to"], "ternas": ternas, "stretches": [stretches[si]["tag"] for si in path],
-                       "lines": list(dict.fromkeys(stretches[si]["line"] for si in path)), "length_m": length, "cable_length_m": round(length * ternas, 4)}
+        routes[c["tag"]] = _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, loads, warnings)
     return routes

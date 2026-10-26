@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, metresPerUnit, ortho, pick, Pt, redo, Ref, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
-export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean }
+export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean; carga?: boolean }
 export interface Profile { id: string; name: { es: string; en: string }; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string> }
 export interface DerivedNode { id: string; tag: string; kind: string; placed: boolean; x_m: number; y_m: number }
 export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null; carries?: { circuit: string; ternas: number }[]; cables?: number }
@@ -13,34 +13,41 @@ export interface Derived {
   schedule?: { lines: Record<string, { lines: number; stretches: number; length_m: number }>; nodes: Record<string, number>; circuit_routes: Record<string, { stretches: string[]; length_m: number }>; containers: { tag: string; kind: string; circuits: string[]; cables: number }[]; length_by_line_m: Record<string, number>; total_length_m: number };
   network?: { invert_m: Record<string, number>; validated: boolean; rule: string } | null;
 }
-type Tool = "select" | "scale" | "origin" | "node" | "line" | "erase";
+type Tool = "select" | "box" | "scale" | "origin" | "node" | "line" | "erase";
 interface View { x: number; y: number; w: number; h: number }
 
 const PALETTE = ["#1f77b4", "#d62728", "#2ca02c", "#9467bd", "#ff7f0e", "#17becf"];
 const NODE_PX = 9;
+const CIRCUIT_PALETTE = ["#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4", "#008080", "#9a6324", "#800000", "#808000", "#000075"];
 
 export interface Props {
   drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null;
-  readOnly?: boolean; t: (key: string) => string; selected: Ref | null; onSelect: (r: Ref | null) => void; highlight?: string[];
+  readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[];
 }
 
 function Sym({ id, x, y, s, color, sel }: { id: string; x: number; y: number; s: number; color: string; sel: boolean }) {
   const common = { fill: "#fff", stroke: sel ? "#d62728" : color, strokeWidth: sel ? 3 : 1.6, vectorEffect: "non-scaling-stroke" as const };
   const r = s / 2;
+  if (id === "luminaria") return <g><circle cx={x} cy={y} r={r} {...common} /><line x1={x - r * 0.7} y1={y - r * 0.7} x2={x + r * 0.7} y2={y + r * 0.7} {...common} /><line x1={x - r * 0.7} y1={y + r * 0.7} x2={x + r * 0.7} y2={y - r * 0.7} {...common} /></g>;
+  if (id === "tomacorriente" || id === "tomacorriente_especial") {
+    return <g><circle cx={x} cy={y} r={r} {...common} /><line x1={x - r} y1={y} x2={x + r} y2={y} {...common} /><line x1={x} y1={y} x2={x} y2={y - r} {...common} />{id === "tomacorriente_especial" && <circle cx={x} cy={y + r * 0.45} r={r * 0.25} {...common} />}</g>;
+  }
+  if (id === "hvac") return <g><rect x={x - r} y={y - r} width={s} height={s} {...common} /><circle cx={x} cy={y} r={r * 0.55} {...common} /><line x1={x - r * 0.4} y1={y - r * 0.4} x2={x + r * 0.4} y2={y + r * 0.4} {...common} /></g>;
   if (id === "boca_registro") return <g><circle cx={x} cy={y} r={r} {...common} /><circle cx={x} cy={y} r={r * 0.4} {...common} /></g>;
   if (id === "caja_pase") return <g><rect x={x - r} y={y - r} width={s} height={s} {...common} /><circle cx={x} cy={y} r={r * 0.5} {...common} /></g>;
   if (id === "tablero") return <g><rect x={x - r} y={y - r * 0.6} width={s} height={s * 0.6} {...common} /><line x1={x - r} y1={y} x2={x + r} y2={y} {...common} /></g>;
   return <g><rect x={x - r} y={y - r} width={s} height={s} {...common} /><line x1={x - r} y1={y - r} x2={x + r} y2={y + r} {...common} /><line x1={x - r} y1={y + r} x2={x + r} y2={y - r} {...common} /></g>;
 }
 
-export default function PlanEditor({ drawing, onChange, derived, profile, lang, underlayUrl, readOnly, t, selected, onSelect, highlight = [] }: Props) {
+export default function PlanEditor({ drawing, onChange, derived, profile, lang, underlayUrl, readOnly, t, selection, onSelect, highlight = [] }: Props) {
   const [tool, setTool] = useState<Tool>("select");
   const [kindId, setKindId] = useState("");
   const [draft, setDraft] = useState<Pt[]>([]);
   const [hover, setHover] = useState<Pt | null>(null);
   const [scalePts, setScalePts] = useState<Pt[]>([]);
   const [scaleText, setScaleText] = useState("");
-  const setSelected = onSelect;
+  const isSel = (ref: Ref) => selection.some((r) => sameRef(r, ref));
+  const [marquee, setMarquee] = useState<{ a: Pt; b: Pt } | null>(null);
   const [hist, setHist] = useState<History>({ past: [], future: [] });
   const [img, setImg] = useState<{ w: number; h: number } | null>(null);
   const scaleInput = useRef<HTMLInputElement>(null);
@@ -55,6 +62,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const kindOf = (id: string) => [...lineKinds, ...nodeKinds].find((k) => k.id === id);
   const colorOf = (id: string) => PALETTE[Math.max(0, lineKinds.findIndex((k) => k.id === id)) % PALETTE.length];
   const k = metresPerUnit(drawing);
+  const circuitColor = (tag: string) => { const i = drawing.circuits.findIndex((c) => c.tag === tag); return i < 0 ? "#999" : CIRCUIT_PALETTE[i % CIRCUIT_PALETTE.length]; };
 
   useEffect(() => {                                    // the plan underlay: its size sets the first view
     if (!underlayUrl) { setImg(null); return; }
@@ -84,7 +92,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const doUndo = () => { const r = undo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const doRedo = () => { const r = redo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const finishLine = () => { if (draft.length >= 2 && kindId) apply(addLine(drawing, kindId, draft)); setDraft([]); };
-  const cancel = () => { setDraft([]); setScalePts([]); setSelected(null); };
+  const cancel = () => { setDraft([]); setScalePts([]); setMarquee(null); onSelect([]); };
 
   const choose = (next: Tool) => { cancel(); setTool(next); };
   const confirmScale = () => {
@@ -97,11 +105,12 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       pan.current = { sx: e.clientX, sy: e.clientY, v: view, u: upp() };                      // the middle button, or an empty spot with the select tool, drags the view
       (e.target as Element).setPointerCapture?.(e.pointerId);
     }
-    if (e.button !== 0 || (readOnly && tool !== "select")) return;
+    if (e.button !== 0 || (readOnly && tool !== "select" && tool !== "box")) return;
     const raw = toView(e);
     const tol = 8 * upp();
-    if (tool === "select") setSelected(pick(drawing, raw, tol));
-    else if (tool === "erase") { const hit = pick(drawing, raw, tol); if (hit) { apply(remove(drawing, hit)); setSelected(null); } }
+    if (tool === "select") { const hit = pick(drawing, raw, tol); onSelect(hit ? (e.shiftKey ? toggle(selection, hit) : [hit]) : e.shiftKey ? selection : []); }
+    else if (tool === "box") { setMarquee({ a: raw, b: raw }); (e.target as Element).setPointerCapture?.(e.pointerId); }
+    else if (tool === "erase") { const hit = pick(drawing, raw, tol); if (hit) { apply(removeMany(drawing, [hit])); onSelect([]); } }
     else if (tool === "origin") { apply(setOrigin(drawing, raw)); setTool("select"); }
     else if (tool === "scale") { if (scalePts.length < 2) setScalePts([...scalePts, snap(drawing, raw, tol)]); }
     else if (tool === "node" && kindId) apply(addNode(drawing, kindId, snap(drawing, raw, tol)));
@@ -118,11 +127,15 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       return;
     }
     const raw = toView(e);
+    if (marquee) setMarquee({ a: marquee.a, b: raw });
     let p = snap(drawing, raw, 8 * upp());
     if (tool === "line" && e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
     setHover(p);
   };
-  const onUp = () => { pan.current = null; };
+  const onUp = (e: React.PointerEvent) => {
+    pan.current = null;
+    if (marquee) { const found = inBox(drawing, marquee.a, marquee.b); onSelect(e.shiftKey ? merge(selection, found) : found); setMarquee(null); }
+  };
   const onWheel = (e: React.WheelEvent) => {
     const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
     const at = toView(e);
@@ -133,7 +146,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); doRedo(); return; }
     if (e.key === "Escape") cancel();
     else if (e.key === "Enter") finishLine();
-    else if ((e.key === "Delete" || e.key === "Backspace") && selected && !readOnly) { apply(remove(drawing, selected)); setSelected(null); }
+    else if ((e.key === "Delete" || e.key === "Backspace") && selection.length > 0 && !readOnly) { apply(removeMany(drawing, selection)); onSelect([]); }
     else if (profile?.shortcuts[e.key.toLowerCase()]) {
       const id = profile.shortcuts[e.key.toLowerCase()];
       if (nodeKinds.some((n) => n.id === id)) { cancel(); setTool("node"); setKindId(id); } else if (lineKinds.some((l) => l.id === id)) { cancel(); setTool("line"); setKindId(id); }
@@ -149,10 +162,10 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const polyline = (pts: Pt[]) => pts.map((p) => p.join(",")).join(" ");
   const mid = (l: DLine): Pt => { const a = l.points[0], b = l.points[l.points.length - 1]; return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; };
   const tools: { id: Tool; key: string; write: boolean }[] = [
-    { id: "select", key: "layout.tool.select", write: false }, { id: "scale", key: "layout.tool.scale", write: true }, { id: "origin", key: "layout.tool.origin", write: true },
+    { id: "select", key: "layout.tool.select", write: false }, { id: "box", key: "layout.tool.box", write: false }, { id: "scale", key: "layout.tool.scale", write: true }, { id: "origin", key: "layout.tool.origin", write: true },
     { id: "node", key: "layout.tool.node", write: true }, { id: "line", key: "layout.tool.line", write: true }, { id: "erase", key: "layout.tool.erase", write: true },
   ];
-  const hint = { select: "", scale: "layout.hint.scale", origin: "layout.hint.origin", node: "layout.hint.node", line: "layout.hint.line", erase: "layout.hint.erase" }[tool];
+  const hint = { select: "", box: "layout.hint.box", scale: "layout.hint.scale", origin: "layout.hint.origin", node: "layout.hint.node", line: "layout.hint.line", erase: "layout.hint.erase" }[tool];
 
   return (
     <div className="card" tabIndex={0} onKeyDown={onKey} style={{ outline: "none" }}>
@@ -183,7 +196,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
             <text x={(drawing.scale.p1[0] + drawing.scale.p2[0]) / 2} y={(drawing.scale.p1[1] + drawing.scale.p2[1]) / 2 - 4 * u} fontSize={11 * u} fill="#ff7f0e" stroke="none">{drawing.scale.distance_m} m</text></g>}
           {scalePts.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r={4 * u} fill="#ff7f0e" />)}
           {drawing.lines.map((l) => {
-            const sel = selected?.type === "line" && selected.id === l.id;
+            const sel = isSel({ type: "line", id: l.id });
             const lit = highlight.includes(l.id);
             return <g key={l.id}>{lit && <polyline points={polyline(l.points)} fill="none" stroke="#ff2bd6" strokeOpacity={0.45} strokeWidth={9} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />}<polyline points={polyline(l.points)} fill="none" stroke={sel ? "var(--bad, #d62728)" : colorOf(l.kind)} strokeWidth={sel ? 4 : 2.2} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
               {lineTag[l.id] && <text x={mid(l)[0]} y={mid(l)[1] - 5 * u} fontSize={11 * u} textAnchor="middle" fill={colorOf(l.kind)} stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{lineTag[l.id]}</text>}</g>;
@@ -191,12 +204,14 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
           {draft.length > 0 && <polyline points={polyline([...draft, ...(hover ? [hover] : [])])} fill="none" stroke={colorOf(kindId)} strokeWidth={2} strokeDasharray="5 4" vectorEffect="non-scaling-stroke" />}
           {auto.map((n) => { const p = autoPos(n); return <circle key={n.id} cx={p[0]} cy={p[1]} r={(n.kind === "J" ? 3.5 : 4.5) * u} fill={n.kind === "J" ? "#555" : "none"} stroke={n.kind === "J" ? "#555" : "#d62728"} strokeWidth={1.5} vectorEffect="non-scaling-stroke"><title>{n.tag}</title></circle>; })}
           {drawing.nodes.map((n) => {
-            const sel = selected?.type === "node" && selected.id === n.id;
+            const sel = isSel({ type: "node", id: n.id });
             const sym = kindOf(n.kind)?.simbolo_2d ?? "camara";
             return <g key={n.id}><Sym id={sym} x={n.x} y={n.y} s={NODE_PX * 2 * u} color="#222" sel={sel} />
-              <text x={n.x + NODE_PX * 1.2 * u} y={n.y - NODE_PX * 1.2 * u} fontSize={11 * u} fill="#222" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{nodeTag[n.id] ?? n.id}</text>
+              {n.circuit && <circle cx={n.x} cy={n.y} r={NODE_PX * 1.5 * u} fill="none" stroke={circuitColor(n.circuit)} strokeWidth={3} vectorEffect="non-scaling-stroke" />}
+              <text x={n.x + NODE_PX * 1.2 * u} y={n.y - NODE_PX * 1.2 * u} fontSize={11 * u} fill="#222" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{nodeTag[n.id] ?? n.id}{n.circuit ? ` · ${n.circuit}` : ""}</text>
               {drawing.outlet === n.id && <circle cx={n.x} cy={n.y} r={NODE_PX * 1.6 * u} fill="none" stroke="#2ca02c" strokeWidth={2} vectorEffect="non-scaling-stroke" />}</g>;
           })}
+          {marquee && <rect x={Math.min(marquee.a[0], marquee.b[0])} y={Math.min(marquee.a[1], marquee.b[1])} width={Math.abs(marquee.a[0] - marquee.b[0])} height={Math.abs(marquee.a[1] - marquee.b[1])} fill="#4363d8" fillOpacity={0.12} stroke="#4363d8" strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />}
           <g stroke="#2ca02c" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.origin[0] - 10 * u} y1={drawing.origin[1]} x2={drawing.origin[0] + 10 * u} y2={drawing.origin[1]} vectorEffect="non-scaling-stroke" />
             <line x1={drawing.origin[0]} y1={drawing.origin[1] - 10 * u} x2={drawing.origin[0]} y2={drawing.origin[1] + 10 * u} vectorEffect="non-scaling-stroke" />
             <text x={drawing.origin[0] + 12 * u} y={drawing.origin[1] - 4 * u} fontSize={11 * u} fill="#2ca02c" stroke="none">0,0</text></g>

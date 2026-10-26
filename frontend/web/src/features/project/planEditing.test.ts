@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, blank, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -95,5 +95,30 @@ describe("plan editing rules", () => {
     expect(d.circuits).toEqual([{ tag: "C-01", from: "n1", to: "n2", ternas: 2 }]);
     expect(freeCircuits(d, ["C-01", "C-02"])).toEqual(["C-02"]);
     expect(removeCircuit(d, 0).circuits).toEqual([]);
+  });
+
+  it("selects by box, by kind, and toggles or merges selections", () => {
+    let d = addNode(addNode(addNode(blank(), "LU", [10, 10]), "LU", [200, 200]), "TG", [20, 20]);
+    d = addLine(d, "BN", [[5, 5], [30, 5]]);
+    expect(inBox(d, [0, 0], [40, 40])).toEqual([{ type: "node", id: "n1" }, { type: "node", id: "n3" }, { type: "line", id: "l1" }]);
+    expect(inBox(d, [40, 40], [0, 0]).length).toBe(3);
+    expect(ofKind(d, "LU")).toEqual([{ type: "node", id: "n1" }, { type: "node", id: "n2" }]);
+    expect(toggle([{ type: "node", id: "n1" }], { type: "node", id: "n1" })).toEqual([]);
+    expect(merge([{ type: "node", id: "n1" }], [{ type: "node", id: "n1" }, { type: "node", id: "n2" }]).length).toBe(2);
+    expect(removeMany(d, [{ type: "node", id: "n1" }, { type: "line", id: "l1" }]).nodes.length).toBe(2);
+  });
+
+  it("assigns the selected loads to a circuit and ignores what is not a load", () => {
+    const loads = new Set(["LU", "TG"]);
+    let d = addNode(addNode(addNode(blank(), "LU", [0, 0]), "TG", [1, 1]), "CM", [2, 2]);
+    const all = d.nodes.map((n) => ({ type: "node" as const, id: n.id }));
+    const r = assignCircuit(d, all, "C-05", loads);
+    expect(r.changed).toBe(2);
+    expect(r.drawing.nodes.map((n) => n.circuit)).toEqual(["C-05", "C-05", undefined]);
+    expect(loadsOf(r.drawing, "C-05", loads)).toBe(2);
+    const cleared = assignCircuit(r.drawing, all, "", loads);
+    expect(cleared.drawing.nodes.every((n) => n.circuit === undefined)).toBe(true);
+    d = r.drawing;
+    expect(d.nodes[2].circuit).toBeUndefined();
   });
 });

@@ -189,7 +189,7 @@ class _Graph:
 
     def __init__(self, nodes: List[Dict[str, Any]], tol: float):
         self.tol = tol
-        self.nodes: List[Dict[str, Any]] = [{"id": n["id"], "kind": n.get("kind"), "x": n["x"], "y": n["y"], "placed": True, "attrs": n.get("attrs", {}), "tag": n.get("tag")} for n in nodes]
+        self.nodes: List[Dict[str, Any]] = [{"id": n["id"], "kind": n.get("kind"), "x": n["x"], "y": n["y"], "placed": True, "attrs": n.get("attrs", {}), "tag": n.get("tag"), "circuit": n.get("circuit")} for n in nodes]
 
     def near(self, p) -> Optional[Dict[str, Any]]:
         best = None
@@ -200,7 +200,7 @@ class _Graph:
         return best[1] if best else None
 
     def add(self, p, kind: str) -> Dict[str, Any]:
-        g = {"id": f"auto:{kind}{sum(1 for x in self.nodes if x['kind'] == kind) + 1}", "kind": kind, "x": p[0], "y": p[1], "placed": False, "attrs": {}, "tag": None}
+        g = {"id": f"auto:{kind}{sum(1 for x in self.nodes if x['kind'] == kind) + 1}", "kind": kind, "x": p[0], "y": p[1], "placed": False, "attrs": {}, "tag": None, "circuit": None}
         self.nodes.append(g)
         return g
 
@@ -397,7 +397,7 @@ def _read_nodes(doc, node_kinds, profile_id: str, origin, k: float) -> List[Dict
         if n.get("kind") not in node_kinds:
             raise PlanError(f"node {n.get('id', '?')}: kind {n.get('kind')!r} does not exist in the discipline {profile_id}")
         x, y = to_world((n["x"], n["y"]), origin, k)
-        nodes.append({"id": n["id"], "kind": n["kind"], "x": x, "y": y, "attrs": n.get("attrs", {}), "tag": n.get("tag")})
+        nodes.append({"id": n["id"], "kind": n["kind"], "x": x, "y": y, "attrs": n.get("attrs", {}), "tag": n.get("tag"), "circuit": n.get("circuit")})
     return nodes
 
 
@@ -480,6 +480,8 @@ def _node_json(x) -> Dict[str, Any]:
     out = {"id": x["id"], "tag": x["tag"], "kind": x["kind"], "placed": x["placed"], "x_m": round(x["x"], 4), "y_m": round(x["y"], 4), "attrs": x["attrs"]}
     if "distance_to_outlet_m" in x:
         out["distance_to_outlet_m"] = x["distance_to_outlet_m"]
+    if x.get("circuit"):
+        out["circuit"] = x["circuit"]
     return out
 
 
@@ -513,12 +515,12 @@ def process(document: Dict[str, Any], params: Dict[str, Any] = PARAMS, rules: Op
 
     gnodes, stretches, warnings = build_graph(nodes, lines, params["geometry"]["snap_tolerance_m"])
     line_tag = _assign_tags(gnodes, lines, stretches, node_kinds, line_kinds, params, warnings)
-    routes = routing.route_circuits(gnodes, stretches, _read_circuits(doc), {k for k, v in line_kinds.items() if v.get("un_solo_circuito")}, warnings)
+    routes, loads = _route(doc, gnodes, stretches, line_kinds, node_kinds, warnings)
     flow = _network(doc, gnodes, stretches, profile["id"], rules, warnings)
     return {
         "schema_version": "1.0", "plan": {"id": plan.get("id", ""), "level": level, "level_number": level_number, "metres_per_unit": k, "origin": list(origin)},
         "discipline": profile["id"], "nodes": [_node_json(x) for x in gnodes], "stretches": [_stretch_json(s) for s in stretches],
-        "schedule": _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds), "circuits": routes, "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
+        "schedule": {**_schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds), "loads": loads}, "circuits": routes, "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
     }
 
 
@@ -539,6 +541,33 @@ def _circuit_routes(stretches) -> Dict[str, Dict[str, Any]]:
             r["stretches"].append(s["tag"])
             r["length_m"] = round(r["length_m"] + s["length_m"], 4)
     return dict(sorted(routes.items()))
+
+
+def _route(doc, gnodes, stretches, line_kinds, node_kinds, warnings):
+    """The circuits routed over the drawing and the loads placed on it."""
+    circuits = _read_circuits(doc)
+    load_kinds = {k for k, v in node_kinds.items() if v.get("carga")}
+    routes = routing.route_circuits(gnodes, stretches, circuits, {k for k, v in line_kinds.items() if v.get("un_solo_circuito")}, load_kinds, warnings)
+    return routes, _loads(gnodes, load_kinds, {c["tag"] for c in circuits}, warnings)
+
+
+def _loads(gnodes, load_kinds, routed: set, warnings: List[str]) -> Dict[str, Any]:
+    """The loads placed (luminaires, sockets, HVAC...): how many of each kind per circuit, and the ones that have no circuit yet."""
+    by_circuit: Dict[str, Dict[str, int]] = {}
+    free: List[str] = []
+    for g in gnodes:
+        if not g["placed"] or g["kind"] not in load_kinds:
+            continue
+        if g.get("circuit"):
+            kinds = by_circuit.setdefault(g["circuit"], {})
+            kinds[g["kind"]] = kinds.get(g["kind"], 0) + 1
+        else:
+            free.append(g["tag"])
+    if free:
+        warnings.append(f"{len(free)} load(s) have no circuit yet: {', '.join(free[:8])}{' ...' if len(free) > 8 else ''}")
+    for tag in sorted(set(by_circuit) - routed):
+        warnings.append(f"the loads of circuit {tag} are not routed: add the circuit with its origin node")
+    return {"by_circuit": dict(sorted(by_circuit.items())), "unassigned": free}
 
 
 def _containers(stretches) -> List[Dict[str, Any]]:
