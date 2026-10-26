@@ -20,6 +20,7 @@ Checks
   intake            customer-input pipeline tests
   sld-smoke         single-line diagram generated from the example through the engine, no warnings
   frontend-boundaries, web-types, web-build   frontend rules, TypeScript type-check of web+console (and build unless --fast)
+  web-tests         Vitest characterization tests of the shared UI and the screens
   marketplace       plugins assembled in Claude Code's layout, validated with `claude plugin validate --strict`
 The engine packages are put on PYTHONPATH, so no installation is needed. Exit code 0 only when every check passes.
 """
@@ -118,6 +119,7 @@ def main():
         npm = "npm.cmd" if os.name == "nt" else "npm"
         run("frontend-boundaries", [py, str(REPO / "tools" / "ci" / "check_frontend_boundaries.py")], REPO)
         run("web-types", [npm, "run", "typecheck"], WEB)
+        run("web-tests", [npm, "run", "test"], WEB)
         if not a.fast:
             run("web-build", [npm, "run", "build"], WEB)
 
