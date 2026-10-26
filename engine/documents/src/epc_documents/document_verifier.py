@@ -458,92 +458,122 @@ def _nivel_o_none(s):
     return int(m.group(0)) if m else None
 
 
-def comprobar_charter_ejecutivo(txt_charter, txt_ejec):
-    """Contrasta el charter técnico con el ejecutivo. Devuelve [(severidad, categoria, mensaje)]."""
-    h = []
-    def err(msg, sev="ERROR"):
-        h.append((sev, "charter_ejecutivo", msg))
-    k = txt_charter.find("# REGISTRO DEL PROYECTO")
-    reg = txt_charter[k:] if k >= 0 else txt_charter
-    k2 = txt_ejec.find("# LIENZO EJECUTIVO")
-    lienzo = txt_ejec[k2:] if k2 >= 0 else txt_ejec
-    # encabezado
+def _hallazgo_charter(h, msg, sev="ERROR"):
+    h.append((sev, "charter_ejecutivo", msg))
+
+
+def _comparar_cabecera(txt_charter, lienzo, h):
+    """Encabezado: versión, fecha, estado y proyecto del charter técnico frente a los del ejecutivo."""
     cab_c = _campos_cabecera(txt_charter)
     cab_e = _campos_lienzo(lienzo)
     ver_c = _norm_ver(cab_c.get("versión de la línea base"))
     ver_e = _norm_ver(cab_e.get("versión"))
     if ver_c != ver_e:
-        err(f"Versión distinta: charter técnico «{ver_c}», ejecutivo «{ver_e}».")
+        _hallazgo_charter(h, f"Versión distinta: charter técnico «{ver_c}», ejecutivo «{ver_e}».")
     if cab_c.get("fecha", "") != cab_e.get("fecha", ""):
-        err(f"Fecha distinta: charter técnico «{cab_c.get('fecha', '')}», ejecutivo «{cab_e.get('fecha', '')}».")
+        _hallazgo_charter(h, f"Fecha distinta: charter técnico «{cab_c.get('fecha', '')}», ejecutivo «{cab_e.get('fecha', '')}».")
     est_c = cab_c.get("estado", "").upper()
     est_e = cab_e.get("estado", "").upper()
     if est_c != est_e:
-        err(f"Estado distinto: charter técnico «{est_c}», ejecutivo «{est_e}».")
+        _hallazgo_charter(h, f"Estado distinto: charter técnico «{est_c}», ejecutivo «{est_e}».")
     pr_c, cod_c, pr_e = cab_c.get("proyecto", ""), cab_c.get("código de proyecto", ""), cab_e.get("proyecto", "")
     if "[DEFINIR]" not in pr_c + pr_e + cod_c and not any(x and x.lower() in pr_e.lower() for x in (pr_c, cod_c)):
-        err(f"El proyecto del ejecutivo («{pr_e}») no coincide con el del charter técnico («{pr_c}» / «{cod_c}»).", "AVISO")
-    # IDs
+        _hallazgo_charter(h, f"El proyecto del ejecutivo («{pr_e}») no coincide con el del charter técnico («{pr_c}» / «{cod_c}»).", "AVISO")
+
+
+def _comparar_ids_charter(reg, lienzo, h):
+    """Los IDs (ALD, EXC, CAC, SUP, RIE, PQ) del charter técnico están todos en el ejecutivo y viceversa."""
     ic, ie = _ids_charter(reg), _ids_charter(lienzo)
     for t in TIPOS_charter:
         falta = [i for i in ic[t] if i not in ie[t]]
         sobra = [i for i in ie[t] if i not in ic[t]]
         if falta:
-            err(f"El ejecutivo no incluye {', '.join(falta)} del charter técnico.")
+            _hallazgo_charter(h, f"El ejecutivo no incluye {', '.join(falta)} del charter técnico.")
         if sobra:
-            err(f"El ejecutivo cita {', '.join(sobra)}, que no figura en el charter técnico.")
-    # riesgos: probabilidad, impacto y nivel
-    def riesgos(filas, tecnico):
-        out = {}
-        for f in filas:
-            m = RE_ID_charter.search(f[0]) if f else None
-            if not m or m.group(1) != "RIE":
-                continue
-            rid = f"RIE-{m.group(2).zfill(3)}"
-            out[rid] = tuple(_nivel_o_none(x) for x in (f[2:5] if tecnico else f[1:4]) ) if len(f) >= (5 if tecnico else 4) else (None,) * 3
-        return out
-    rc = riesgos(_filas(_seccion(reg, r"^3\.8\b")), True)
-    re_ = riesgos(_filas(_seccion(lienzo, r"^Riesgos$")), False)
+            _hallazgo_charter(h, f"El ejecutivo cita {', '.join(sobra)}, que no figura en el charter técnico.")
+
+
+def _riesgos_charter(filas, tecnico):
+    out = {}
+    for f in filas:
+        m = RE_ID_charter.search(f[0]) if f else None
+        if not m or m.group(1) != "RIE":
+            continue
+        rid = f"RIE-{m.group(2).zfill(3)}"
+        out[rid] = tuple(_nivel_o_none(x) for x in (f[2:5] if tecnico else f[1:4])) if len(f) >= (5 if tecnico else 4) else (None,) * 3
+    return out
+
+
+def _comparar_riesgos_charter(reg, lienzo, h):
+    """Riesgos: probabilidad, impacto y nivel iguales en ambos charters y nivel = probabilidad × impacto."""
+    rc = _riesgos_charter(_filas(_seccion(reg, r"^3\.8\b")), True)
+    re_ = _riesgos_charter(_filas(_seccion(lienzo, r"^Riesgos$")), False)
     for rid in sorted(set(rc) & set(re_)):
         if rc[rid] != re_[rid]:
-            err(f"{rid}: prob./impacto/nivel distintos (técnico {rc[rid]}, ejecutivo {re_[rid]}).")
+            _hallazgo_charter(h, f"{rid}: prob./impacto/nivel distintos (técnico {rc[rid]}, ejecutivo {re_[rid]}).")
     for nom, d in (("técnico", rc), ("ejecutivo", re_)):
         for rid, (p, i, n) in sorted(d.items()):
             if None not in (p, i, n) and p * i != n:
-                err(f"{rid} ({nom}): el nivel {n} no es prob. × impacto ({p} × {i}).", "AVISO")
-    # paquetes: orden y dependencias
-    def paquetes(filas):
-        out = []
-        for f in filas:
-            m = re.search(r"PQ-\d+", f[1]) if len(f) > 1 else None
-            if m:
-                out.append((m.group(0), tuple(sorted(set(re.findall(r"PQ-\d+", f[-1]))))))
-        return out
-    pc = paquetes(_filas(_seccion(reg, r"^7\.")))
-    pe = paquetes(_filas(_seccion(lienzo, r"^Desglose del trabajo$")))
+                _hallazgo_charter(h, f"{rid} ({nom}): el nivel {n} no es prob. × impacto ({p} × {i}).", "AVISO")
+
+
+def _paquetes_charter(filas):
+    out = []
+    for f in filas:
+        m = re.search(r"PQ-\d+", f[1]) if len(f) > 1 else None
+        if m:
+            out.append((m.group(0), tuple(sorted(set(re.findall(r"PQ-\d+", f[-1]))))))
+    return out
+
+
+def _comparar_paquetes_charter(reg, lienzo, h):
+    """Paquetes: mismo orden y mismas dependencias."""
+    pc = _paquetes_charter(_filas(_seccion(reg, r"^7\.")))
+    pe = _paquetes_charter(_filas(_seccion(lienzo, r"^Desglose del trabajo$")))
     if [p for p, _ in pc] != [p for p, _ in pe]:
-        err(f"Orden de paquetes distinto: técnico {[p for p, _ in pc]}, ejecutivo {[p for p, _ in pe]}.")
+        _hallazgo_charter(h, f"Orden de paquetes distinto: técnico {[p for p, _ in pc]}, ejecutivo {[p for p, _ in pe]}.")
     else:
         for (p, dc), (_, de) in zip(pc, pe):
             if dc != de:
-                err(f"{p}: dependencias distintas (técnico {list(dc)}, ejecutivo {list(de)}).")
-    # hitos: mismas fechas
+                _hallazgo_charter(h, f"{p}: dependencias distintas (técnico {list(dc)}, ejecutivo {list(de)}).")
+
+
+def _comparar_hitos_charter(reg, lienzo, h):
+    """Hitos: las mismas fechas."""
     sec_h_c = _seccion(reg, r"^4\.2\b") or ""
     fc = {x for f in _filas(sec_h_c) for x in RE_FECHA_ISO.findall(" ".join(f))}
     fe = set(RE_FECHA_ISO.findall(_limpio(_seccion(lienzo, r"^Hitos$") or "")))
     if fc != fe:
-        err(f"Fechas de hitos distintas: solo en técnico {sorted(fc - fe)}, solo en ejecutivo {sorted(fe - fc)}.")
-    # costo
+        _hallazgo_charter(h, f"Fechas de hitos distintas: solo en técnico {sorted(fc - fe)}, solo en ejecutivo {sorted(fe - fc)}.")
+
+
+def _comparar_costo_charter(reg, lienzo, h):
+    """Costo y presupuesto: «A definir por el cliente» mientras esté [DEFINIR]; si no, el mismo importe con la DEC que lo autoriza."""
     costo = _limpio(_seccion(reg, r"^4\.1\b") or "")
     pres = _limpio(_seccion(lienzo, r"^Presupuesto$") or "")
     if "[DEFINIR]" in costo:
         if not ("a definir por el cliente" in pres.lower() or "[DEFINIR]" in pres):
-            err(f"El costo del charter técnico está [DEFINIR] y el ejecutivo dice «{pres}» (debe decir «A definir por el cliente.»).")
+            _hallazgo_charter(h, f"El costo del charter técnico está [DEFINIR] y el ejecutivo dice «{pres}» (debe decir «A definir por el cliente.»).")
     else:
         if costo and pres and pres not in costo and costo not in pres:
-            err(f"El presupuesto del ejecutivo («{pres}») no es el costo del charter técnico («{costo}»).")
+            _hallazgo_charter(h, f"El presupuesto del ejecutivo («{pres}») no es el costo del charter técnico («{costo}»).")
         if costo and not re.search(r"DEC-\d+", costo):
-            err("El costo del charter técnico no cita la DEC-nnn que lo autoriza.", "AVISO")
+            _hallazgo_charter(h, "El costo del charter técnico no cita la DEC-nnn que lo autoriza.", "AVISO")
+
+
+def comprobar_charter_ejecutivo(txt_charter, txt_ejec):
+    """Contrasta el charter técnico con el ejecutivo. Devuelve [(severidad, categoria, mensaje)]."""
+    h = []
+    k = txt_charter.find("# REGISTRO DEL PROYECTO")
+    reg = txt_charter[k:] if k >= 0 else txt_charter
+    k2 = txt_ejec.find("# LIENZO EJECUTIVO")
+    lienzo = txt_ejec[k2:] if k2 >= 0 else txt_ejec
+    _comparar_cabecera(txt_charter, lienzo, h)
+    _comparar_ids_charter(reg, lienzo, h)
+    _comparar_riesgos_charter(reg, lienzo, h)
+    _comparar_paquetes_charter(reg, lienzo, h)
+    _comparar_hitos_charter(reg, lienzo, h)
+    _comparar_costo_charter(reg, lienzo, h)
     return h
 
 
