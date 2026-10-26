@@ -127,11 +127,11 @@
      "SECTION": 6,
      "STYLE": 3,
      "TABLE": 9,
-     "TEXT": 212,
+     "TEXT": 213,
      "VPORT": 1
     },
-    "lines": 31392,
-    "sha256": "5b01ad4a0372415271c1f2aa6860c6bd7ef61b62a55b767bb4e416abdc695993"
+    "lines": 31430,
+    "sha256": "e7b5cd820ae4c31972805f2f82f27b7645759ac21a3b0a1d97bd4e113e519a9f"
    },
    "SLD_T1_H1.svg": {
     "elements": {
@@ -142,12 +142,12 @@
      "polygon": 3,
      "rect": 14,
      "svg": 1,
-     "text": 218,
+     "text": 219,
      "title": 1,
      "tspan": 4
     },
-    "lines": 1022,
-    "sha256": "c4e0f955c0eb7e753183780afa0a8f3f884735b79ca19050cbd0f3b77b27a3ce"
+    "lines": 1023,
+    "sha256": "59ee084f205a9405d009d42cbea57a86c13b5e699def90c1a9e8a5f59689e552"
    },
    "SLD_T1_H1_calculo.json": {
     "lines": 49,
@@ -393,12 +393,12 @@
     "sha256": "8f6ba4a8520c626329a050469b469a666f02870558fad637b71bb1b39007e66a"
    },
    "T1_dimensionado_detalle.json": {
-    "lines": 794,
-    "sha256": "41b05c30647eed606e1dc1732a37d12b2854cc0fa1ca8007dc1fbe215cd1af80"
+    "lines": 1209,
+    "sha256": "e7879e1e28d235b208eb4ddba7d7d9596f91a81fe0c5355d0720454d2722e6e0"
    },
    "T1_entregable.json": {
     "lines": 184,
-    "sha256": "6cac6dd81ccbd1d709bef3e5ec8523aa8cfb9cc4aaedd936498b3dbada39f66b"
+    "sha256": "b4f9e2d0d8db6c2c9f7060ace11bd8a07a4a7a1fcaacd3e7204928c91ebe9a6c"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -442,11 +442,11 @@
      "SECTION": 6,
      "STYLE": 3,
      "TABLE": 9,
-     "TEXT": 234,
+     "TEXT": 235,
      "VPORT": 1
     },
-    "lines": 36000,
-    "sha256": "ebed43f1ede5e657598d49a07f10684ab57b9fd2d13ca70049dde1c215cdbd56"
+    "lines": 36038,
+    "sha256": "fc1399fb1d653aa3e2281ba2b110433a82047f934f92a42eb42d8ad58eea8580"
    },
    "SLD_T1_H1.svg": {
     "elements": {
@@ -457,12 +457,12 @@
      "polygon": 3,
      "rect": 24,
      "svg": 1,
-     "text": 240,
+     "text": 241,
      "title": 1,
      "tspan": 4
     },
-    "lines": 1204,
-    "sha256": "86527504222cffb98fb40b033dd94559d07dcd9bebf1d8252cca5a3ba5f41a86"
+    "lines": 1205,
+    "sha256": "cfdfba2d98c4b62b874444f341fbb280c282be1b9d91208b319beac221a8d9fd"
    },
    "SLD_T1_H1_calculo.json": {
     "lines": 65,
@@ -655,12 +655,12 @@
     "sha256": "8f6ba4a8520c626329a050469b469a666f02870558fad637b71bb1b39007e66a"
    },
    "T1_dimensionado_detalle.json": {
-    "lines": 794,
-    "sha256": "980dd59498094ee93704278dc1d6c66b8ea4bd6676ca42b088dc6128fb24fef8"
+    "lines": 1209,
+    "sha256": "75c6445ec324be237903217941aea797d34421a43acd835f80142484af1458fd"
    },
    "T1_entregable.json": {
     "lines": 106,
-    "sha256": "e59d7b91f13356f5201cccf76283ef1dc2f88609b9d221a29f6fabd682c2e1fd"
+    "sha256": "9b12fe6ee6c4085d447aaf42d95f3b9dc192b1f73f22c07969815f18ed0d85e1"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -860,8 +860,8 @@
     "sha256": "07e6eecd13f4168fd59c91e7fdcab4c97294f2fdba4edfe635cf0830441018e7"
    },
    "T1_dimensionado_detalle.json": {
-    "lines": 134,
-    "sha256": "00f9afdac5627c9c9a8c6b946e132446d727d627189beac7e8b04e669e905c04"
+    "lines": 203,
+    "sha256": "aa3da73833316a599962fbe8dfc1ed31c75d35daf2eb8a4482b82cd7b9a930a3"
    },
    "T1_entregable.json": {
     "lines": 80,

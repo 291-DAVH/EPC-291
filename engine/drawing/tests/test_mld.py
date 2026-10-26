@@ -29,9 +29,14 @@ class TestPoles(unittest.TestCase):
 
     def test_poles_and_chains(self):
         self.assertEqual((M.poles_of({"phase": "3F"}, False), M.poles_of({"phase": "1F"}, False), M.poles_of({"phase": "3F"}, True), M.poles_of({"phase": "3F+N"}, False)), (3, 2, 4, 4))
-        chain = M.device_chain({"topology": "dol_ol"}, 16, 25, 3, False, "M-01")
-        self.assertEqual([b for b, _, _ in chain], ["lv_mcb", "lv_contactor", "lv_thermal_overload"])
-        self.assertEqual([b for b, _, _ in M.device_chain({"topology": "single", "kind": "auto"}, 100, 25, 3, False, "C")], ["lv_mccb_basic"])
+        from epc_calc import solutions as S
+
+        def chain(topology, kind, in_a, phase="3F"):
+            f = S.facts("C", "", "", topology, kind, phase, "seccional", in_a, in_a * 0.8, 25, 30, False, topology != "single")
+            return M.chain_of(S.resolve(f)["chain"], M.poles_of({"phase": phase}, False))
+        self.assertEqual([b for b, _, _ in chain("dol_ol", "auto", 16)], ["lv_mcb", "lv_contactor", "lv_thermal_overload"])
+        self.assertEqual([b for b, _, _ in chain("single", "auto", 100)], ["lv_mccb_basic"])
+        self.assertEqual([(b, n) for b, _, n in chain("single", "rcbo", 16, "1F")], [("lv_rcbo", 2)])             # the poles come from the solution, by phase
 
 
 class TestGenerate(unittest.TestCase):

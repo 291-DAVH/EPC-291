@@ -13,4 +13,4 @@ dependencies = ["openpyxl>=3.1"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-epc_calc = ["*.json", "rules/*.json", "templates/*.md"]
+epc_calc = ["*.json", "rules/*.json", "templates/*.md", "data/*.json"]

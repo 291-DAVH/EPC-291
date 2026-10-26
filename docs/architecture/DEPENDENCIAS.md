@@ -8,7 +8,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 
 | Unidad | Usa | Lo usan | Impacto si la modificas |
 |---|---|---|---|
-| `calc` | — | `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
+| `calc` | — | `backend.admin`, `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
 | `drawing` | `calc`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
 | `dxf` | — | `backend.admin`, `drawing`, `mld`, `plan`, `sld`, `titleblock` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `plan`, `sld`, `titleblock` |
@@ -17,14 +17,14 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
 | `sld` | `calc`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `standards` | `calc` | — | — |
-| `symbols` | — | `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
+| `symbols` | — | `backend.admin`, `mld`, `sld` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
 | `titleblock` | `dxf` | `drawing`, `mld`, `sld` | `backend.app`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld` |
 
 ## Módulos del backend
 
 | Módulo | Usa | Lo usan |
 |---|---|---|
-| `backend.admin` | `backend.core`, `backend.deliverables`, `backend.knowledge`, `backend.projects`, `dxf` | `backend.app` |
+| `backend.admin` | `backend.core`, `backend.deliverables`, `backend.knowledge`, `backend.projects`, `calc`, `dxf`, `symbols` | `backend.app` |
 | `backend.app` | `backend.admin`, `backend.backlog`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` | — |
 | `backend.backlog` | `backend.core`, `backend.projects`, `backend.wbs` | `backend.app`, `backend.reporting` |
 | `backend.core` | — | `backend.admin`, `backend.app`, `backend.backlog`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |

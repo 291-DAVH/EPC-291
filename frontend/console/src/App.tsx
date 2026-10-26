@@ -10,6 +10,7 @@ import ProjectFiles from "./features/project-files/ProjectFiles";
 import Planning from "./features/planning/Planning";
 import Identity from "./features/identity/Identity";
 import Layers from "./features/layers/Layers";
+import Solutions from "./features/solutions/Solutions";
 
 const NAV: NavItem[] = [
   { to: "/", key: "nav.dashboard", icon: "◈", end: true },
@@ -21,6 +22,7 @@ const NAV: NavItem[] = [
   { to: "/files", key: "nav.projects", icon: "▤" },
   { to: "/identity", key: "nav.identity", icon: "☺" },
   { to: "/layers", key: "nav.layers", icon: "▦" },
+  { to: "/solutions", key: "nav.solutions", icon: "⚙" },
   { to: "/norms", key: "nav.norms", icon: "§" },
 ];
 const REVIEWER_NAV: NavItem[] = [{ to: "/norms", key: "nav.norms", icon: "§" }];
@@ -55,6 +57,7 @@ export default function App() {
           <Route path="/files" element={<ProjectFiles />} />
           <Route path="/identity" element={<Identity />} />
           <Route path="/layers" element={<Layers />} />
+          <Route path="/solutions" element={<Solutions />} />
           <Route path="/norms" element={<Norms />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

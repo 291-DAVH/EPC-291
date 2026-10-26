@@ -62,6 +62,27 @@
   "detalle": {
    "C-02": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-02"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.557,
     "du_propia_pct": 0.557,
@@ -89,11 +110,24 @@
     "ruta_limitante": null,
     "s_termica_mm2": 6,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    },
    "G-02": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "4P",
+      "poles": 4,
+      "short": "RCCB",
+      "slots": {
+       "rated_current": "25 A",
+       "sensitivity": "30 mA"
+      },
+      "symbol": "lv_rccb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.0,
     "du_propia_pct": 0.0,
@@ -121,11 +155,24 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "group-differential",
     "tipo": "seccional",
     "topologia": "single"
    },
    "G-02-A": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.849,
     "du_propia_pct": 2.849,
@@ -153,11 +200,24 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    },
    "G-02-B": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C10"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.332,
     "du_propia_pct": 1.332,
@@ -185,11 +245,24 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    },
    "L-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.797,
     "du_propia_pct": 1.797,
@@ -217,11 +290,33 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 1.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    },
    "M-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.301,
     "du_propia_pct": 1.301,
@@ -249,11 +344,23 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    },
    "TG": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "TG"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -281,6 +388,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -294,7 +402,7 @@
     "In": 80,
     "S": 35,
     "dU": 0.58,
-    "disp": "MCCB (80 A)",
+    "disp": "RCCB 4P 80 A 30 mA",
     "icu": 25
    },
    "SUB-A": {
@@ -317,6 +425,18 @@
   "detalle": {
    "SUB": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "4P",
+      "poles": 4,
+      "short": "RCCB",
+      "slots": {
+       "rated_current": "80 A",
+       "sensitivity": "30 mA"
+      },
+      "symbol": "lv_rccb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.579,
     "du_propia_pct": 0.579,
@@ -344,11 +464,34 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "group-differential",
     "tipo": "seccional",
     "topologia": "single"
    },
    "SUB-A": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.657,
     "du_propia_pct": 1.078,
@@ -376,11 +519,59 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    },
    "SUB-B": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "SUB-B"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.703,
     "du_propia_pct": 1.124,
@@ -408,6 +599,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -428,6 +620,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -455,6 +658,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -475,6 +679,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -502,6 +717,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -522,6 +738,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.723,
     "du_propia_pct": 1.723,
@@ -549,6 +776,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -569,6 +797,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -596,6 +835,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -616,6 +856,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -643,6 +894,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -663,6 +915,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.965,
     "du_propia_pct": 0.965,
@@ -690,6 +953,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "auto-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -710,6 +974,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.863,
     "du_propia_pct": 0.863,
@@ -737,6 +1012,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "auto-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -757,6 +1033,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.716,
     "du_propia_pct": 2.716,
@@ -784,6 +1071,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "auto-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -804,6 +1092,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.965,
     "du_propia_pct": 0.965,
@@ -831,6 +1130,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "auto-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -851,6 +1151,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.965,
     "du_propia_pct": 0.965,
@@ -878,6 +1189,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "auto-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -898,6 +1210,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.797,
     "du_propia_pct": 1.797,
@@ -925,6 +1249,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 1.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    }
@@ -945,6 +1270,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.913,
     "du_propia_pct": 1.913,
@@ -972,6 +1309,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 1.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    }
@@ -992,6 +1330,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.006,
     "du_propia_pct": 2.006,
@@ -1019,6 +1369,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 16,
     "seccion_min_mm2": 1.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    }
@@ -1039,6 +1390,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.797,
     "du_propia_pct": 1.797,
@@ -1066,6 +1429,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 1.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    }
@@ -1086,6 +1450,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.141,
     "du_propia_pct": 1.141,
@@ -1113,6 +1489,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "iluminacion",
     "topologia": "single"
    }
@@ -1133,6 +1510,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.301,
     "du_propia_pct": 1.301,
@@ -1160,6 +1558,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    }
@@ -1180,6 +1579,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.22,
     "du_propia_pct": 2.22,
@@ -1207,6 +1627,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    }
@@ -1227,6 +1648,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.584,
     "du_propia_pct": 0.584,
@@ -1254,6 +1696,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 16,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    }
@@ -1274,6 +1717,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.301,
     "du_propia_pct": 1.301,
@@ -1301,6 +1765,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    }
@@ -1321,6 +1786,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P MPCB",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "MA 20"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.301,
     "du_propia_pct": 1.301,
@@ -1348,6 +1834,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-dol",
     "tipo": "motor",
     "topologia": "dol"
    }
@@ -1368,6 +1855,53 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.124,
     "du_propia_pct": 1.124,
@@ -1395,6 +1929,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -1415,6 +1950,53 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.623,
     "du_propia_pct": 1.623,
@@ -1442,6 +2024,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 25,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -1462,6 +2045,53 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.932,
     "du_propia_pct": 1.932,
@@ -1489,6 +2119,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -1509,6 +2140,53 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.124,
     "du_propia_pct": 1.124,
@@ -1536,6 +2214,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -1556,6 +2235,53 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM1"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM2 Y"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "KM",
+      "slots": {
+       "tag": "KM3 D"
+      },
+      "symbol": "lv_contactor"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "OL",
+      "slots": {
+       "tag": "OL"
+      },
+      "symbol": "lv_thermal_overload"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.124,
     "du_propia_pct": 1.124,
@@ -1583,6 +2309,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-star-delta",
     "tipo": "motor",
     "topologia": "star_delta"
    }
@@ -1603,6 +2330,28 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.078,
     "du_propia_pct": 1.078,
@@ -1630,6 +2379,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    }
@@ -1650,6 +2400,28 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.148,
     "du_propia_pct": 1.148,
@@ -1677,6 +2449,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    }
@@ -1697,6 +2470,28 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.484,
     "du_propia_pct": 0.484,
@@ -1724,6 +2519,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 16,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    }
@@ -1744,6 +2540,28 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.078,
     "du_propia_pct": 1.078,
@@ -1771,6 +2589,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    }
@@ -1791,6 +2610,28 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C25"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "VFD",
+      "slots": {
+       "rated_current": "25 A",
+       "tag": "VFD"
+      },
+      "symbol": "lv_vfd"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.078,
     "du_propia_pct": 1.078,
@@ -1818,6 +2659,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 2.5,
+    "solucion": "motor-vfd",
     "tipo": "motor",
     "topologia": "vfd"
    }
@@ -1838,6 +2680,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.849,
     "du_propia_pct": 2.849,
@@ -1865,6 +2719,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -1885,6 +2740,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.893,
     "du_propia_pct": 1.893,
@@ -1912,6 +2779,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -1932,6 +2800,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.796,
     "du_propia_pct": 0.796,
@@ -1959,6 +2839,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 16,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -1979,6 +2860,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 2.849,
     "du_propia_pct": 2.849,
@@ -2006,6 +2899,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 2.5,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2026,6 +2920,18 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "1P",
+      "poles": 2,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C13"
+      },
+      "symbol": "lv_mcb"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 1.191,
     "du_propia_pct": 1.191,
@@ -2053,6 +2959,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 4,
     "seccion_min_mm2": 4.0,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2073,6 +2980,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.557,
     "du_propia_pct": 0.557,
@@ -2100,6 +3028,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 6,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2120,6 +3049,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.593,
     "du_propia_pct": 0.593,
@@ -2147,6 +3097,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 6,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2167,6 +3118,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.372,
     "du_propia_pct": 0.372,
@@ -2194,6 +3166,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 16,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2214,6 +3187,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.557,
     "du_propia_pct": 0.557,
@@ -2241,6 +3235,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 6,
     "seccion_min_mm2": 2.5,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2261,6 +3256,27 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": "3P",
+      "poles": 3,
+      "short": "MCB",
+      "slots": {
+       "breaking_capacity": "25 kA",
+       "curve_rating": "C32"
+      },
+      "symbol": "lv_mcb"
+     },
+     {
+      "label": null,
+      "poles": 3,
+      "short": "UPS",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_ups"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.557,
     "du_propia_pct": 0.557,
@@ -2288,6 +3304,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 6,
     "seccion_min_mm2": 4.0,
+    "solucion": "circuit-mcb",
     "tipo": "tomacorrientes",
     "topologia": "single"
    }
@@ -2310,6 +3327,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": false,
     "du_acum_pct": 0.0,
     "du_propia_pct": 0.0,
@@ -2337,6 +3365,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": null,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2357,6 +3386,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -2384,6 +3424,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2406,6 +3447,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": false,
     "du_acum_pct": 0.0,
     "du_propia_pct": 0.0,
@@ -2433,6 +3485,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": null,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2455,6 +3508,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": false,
     "du_acum_pct": 0.0,
     "du_propia_pct": 0.0,
@@ -2482,6 +3546,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": null,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2502,6 +3567,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.688,
     "du_propia_pct": 0.688,
@@ -2529,6 +3605,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 185,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2549,6 +3626,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.649,
     "du_propia_pct": 0.649,
@@ -2576,6 +3664,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 120,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2596,6 +3685,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -2623,6 +3723,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2643,6 +3744,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -2670,6 +3782,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2690,6 +3803,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -2717,6 +3841,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2737,6 +3862,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -2764,6 +3900,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2784,6 +3921,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -2811,6 +3959,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2831,6 +3980,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -2858,6 +4018,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2878,6 +4039,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -2905,6 +4077,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2925,6 +4098,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -2952,6 +4136,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -2972,6 +4157,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -2999,6 +4195,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3019,6 +4216,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -3046,6 +4254,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3066,6 +4275,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -3093,6 +4313,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3113,6 +4334,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -3140,6 +4372,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3160,6 +4393,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -3187,6 +4431,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3207,6 +4452,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -3234,6 +4490,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3254,6 +4511,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -3281,6 +4549,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 95,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3301,6 +4570,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -3328,6 +4608,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3348,6 +4629,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -3375,6 +4667,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3395,6 +4688,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -3422,6 +4726,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3442,6 +4747,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -3469,6 +4785,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 70,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3489,6 +4806,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -3516,6 +4844,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3536,6 +4865,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -3563,6 +4903,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3583,6 +4924,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -3610,6 +4962,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 35,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3630,6 +4983,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.986,
     "du_propia_pct": 0.986,
@@ -3657,6 +5021,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 50,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3677,6 +5042,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.782,
     "du_propia_pct": 0.782,
@@ -3704,6 +5080,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 25,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3724,6 +5101,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.875,
     "du_propia_pct": 0.875,
@@ -3751,6 +5139,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 25,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3771,6 +5160,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.825,
     "du_propia_pct": 0.825,
@@ -3798,6 +5198,7 @@
     "ruta_limitante": null,
     "s_termica_mm2": 25,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3820,6 +5221,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.918,
     "du_propia_pct": 0.918,
@@ -3899,6 +5311,7 @@
     "ruta_limitante": 1,
     "s_termica_mm2": 185,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -3921,6 +5334,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": true,
     "du_acum_pct": 0.954,
     "du_propia_pct": 0.954,
@@ -4000,6 +5424,7 @@
     "ruta_limitante": 1,
     "s_termica_mm2": 185,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -4022,6 +5447,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "pvc",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": false,
     "du_acum_pct": 1.059,
     "du_propia_pct": 1.059,
@@ -4101,6 +5537,7 @@
     "ruta_limitante": 2,
     "s_termica_mm2": 185,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }
@@ -4123,6 +5560,17 @@
   "detalle": {
    "C-01": {
     "aislacion": "xlpe",
+    "cadena": [
+     {
+      "label": null,
+      "poles": 3,
+      "short": "MCCB",
+      "slots": {
+       "tag": "C-01"
+      },
+      "symbol": "lv_mccb_basic"
+     }
+    ],
     "cumple": false,
     "du_acum_pct": 1.1,
     "du_propia_pct": 1.1,
@@ -4202,6 +5650,7 @@
     "ruta_limitante": 2,
     "s_termica_mm2": 185,
     "seccion_min_mm2": 2.5,
+    "solucion": "feeder-mccb",
     "tipo": "seccional",
     "topologia": "single"
    }

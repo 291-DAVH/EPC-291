@@ -76,3 +76,25 @@ def save_layers_override(catalog: dict) -> None:
 
 def reset_layers() -> None:
     settings.layers_file.unlink(missing_ok=True)
+
+
+def solutions_override() -> dict:
+    """What the MASTER changed in the document of standard solutions (only the differences with the default one)."""
+    return read_json(settings.solutions_file, {})
+
+
+def save_solutions_override(override: dict) -> None:
+    from epc.core.fsutil import write_json
+    write_json(settings.solutions_file, {"schema_version": "1.0", **override})
+
+
+def reset_solutions() -> None:
+    settings.solutions_file.unlink(missing_ok=True)
+
+
+def sld_symbols() -> list:
+    """The symbols of the single-line library a solution may name: id, names and the text slots each one has (the engine owns the library)."""
+    import json
+    from epc_symbols import library_dir
+    catalog = json.loads((library_dir("sld-lv-symbol") / "_catalog.json").read_text(encoding="utf-8-sig"))["symbols"]
+    return [{"id": s["id"], "name": {"es": s.get("name_es", ""), "en": s.get("name_en", "")}, "slots": [{"key": x["key"], "example": x.get("example", "")} for x in s.get("label_slots") or []]} for s in catalog]

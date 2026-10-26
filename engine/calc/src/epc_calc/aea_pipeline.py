@@ -63,6 +63,7 @@ from epc_calc import aea_export as EX
 from epc_calc import aea_voltage_drop as VD
 from epc_calc import current_and_loads as CL
 from epc_calc import short_circuit as SC
+from epc_calc import solutions as SOL
 from epc_calc import voltage_drop as VDG
 from epc_calc.topology import MOTOR_TOPOLOGIES
 
@@ -81,16 +82,6 @@ C_MIN_BT = 0.95
 K_MAGNETICO_C = 10   # disparo magnético máximo de la curva C [× In]
 DU_ACUM_MAX_PCT = 5.0
 TOPOLOGIAS_MOTOR = MOTOR_TOPOLOGIES
-CADENAS = {  # TOPOLOGY -> (cadena con MCB, cadena con MCCB)
-    "dol": ("MCB > KM", "MCCB > KM"),
-    "dol_ol": ("MCB > KM > OL", "MCCB > KM > OL"),
-    "star_delta": ("MCB > KM > KM > KM > OL", "MCCB > KM > KM > KM > OL"),
-    "softstarter": ("MCB > SS", "MCCB > SS"),
-    "vfd": ("MCB > VFD", "MCCB > VFD"),
-    "dol_rcd": ("RCBO > KM", "RCBO > KM"),
-}
-
-
 # ---------------------------------------------------------------- lector xlsx (stdlib)
 _NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
        "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
@@ -268,22 +259,12 @@ _LIMITE = {"seccional": "seccional", "motor": "motor_regimen",
            "iluminacion": "iluminacion", "tomacorrientes": "tomacorrientes"}
 
 
-def _dispositivo(c, in_a, fases, sens_ma=30):
-    top = str(c.get("TOPOLOGY") or "single").strip().lower()
-    kind = str(c.get("KIND") or "auto").strip().lower()
-    notas = str(c.get("NOTAS") or "").lower()
-    if top in CADENAS:
-        cad = CADENAS[top][0 if in_a <= IN_MAX_MCB_A else 1]
-        return f"{cad} ({in_a} A)"
-    if kind == "rccb":
-        return f"RCCB {4 if fases == 3 else 2}P {in_a} A {sens_ma:g} mA"
-    if kind == "auto":
-        kind = "mcb" if in_a <= IN_MAX_MCB_A else "mccb"
-    nombre = {"mcb": "MCB", "mccb": "MCCB", "mccb_motorized": "MCCB M", "rcbo": "RCBO"}.get(kind, kind.upper())
-    base = f"{nombre} ({in_a} A)"
-    if "ups" in notas:
-        return f"{nombre} > UPS ({in_a} A)"
-    return base
+def _solucion(c, tag, top, tipo, in_a, i_b, icu, sens_ma, hay_hijos, documento):
+    """La solución estándar del circuito (epc_calc.solutions): la cadena de dispositivos y su texto; el documento lo mantiene el MASTER."""
+    kind = str(c.get("KIND") or "auto").strip().lower() or "auto"
+    f = SOL.facts(tag, str(c.get("DESCRIPCION") or ""), str(c.get("NOTAS") or ""), top, kind, str(c.get("FASE") or "3F").strip().upper(), tipo, in_a, i_b, icu, sens_ma,
+                  hay_hijos, top in TOPOLOGIAS_MOTOR)
+    return SOL.resolve(f, documento)
 
 
 _MATERIAL = {"cobre": "cu", "cu": "cu", "aluminio": "al", "al": "al"}
@@ -342,9 +323,10 @@ def _completar_detalle(detalle, resultado, ib, hijos, por_tag, u_linea, fp_def):
         d["neutro_mm2"] = CO.neutral_section(s) if s else None
 
 
-def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C, criterios=None, detalle=None):
+def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C, criterios=None, detalle=None, soluciones=None):
     """Dimensiona todos los circuitos. Devuelve (datos_json, avisos) con `datos_json` listo para `aea_export`."""
     limites, smin_tab, mat_def, ais_def, sens_rcd = resolver_criterios(criterios)
+    documento = SOL.resolve_doc(soluciones)          # soluciones estándar: el documento por defecto, el global del MASTER y lo que se pase
     inst = resolver_instalacion(criterios)
     u = float(tablero.get("TENSION_V", 380))
     icc = float(tablero.get("ICC_KA", 10))
@@ -469,14 +451,15 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
                               "verificar disparo magnético (curva) o acortar/ensanchar el cable")
         if ruta:
             avisos.extend(f"{tag}: {a}" for a in (r_ok["avisos"] if r_ok else []) + AR.route_warnings(ruta))
-        resultado[tag] = EX.circuito_json(in_a, i_b, icu, elegida, du_acum[tag], _dispositivo(c, in_a, fases, sens_rcd))
+        sol = _solucion(c, tag, top, tipo, in_a, i_b, icu, sens_rcd, bool(hijos[tag]), documento)
+        resultado[tag] = EX.circuito_json(in_a, i_b, icu, elegida, du_acum[tag], sol["disp"])
         if detalle is not None:
             detalle[tag] = {"tipo": tipo, "limite_pct": limite, "du_propia_pct": round(du_prop, 3), "du_acum_pct": round(du_acum[tag], 3),
                             "iz_a": iz_ok, "seccion_min_mm2": smin, "material": par["material"], "aislacion": par["aislacion"], "metodo": par["metodo"],
                             "cumple": bool(elegida is not None and iz_ok is not None and du_prop <= limite and du_acum[tag] <= DU_ACUM_MAX_PCT),
                             "s_termica_mm2": s_termica, "icc_min_a": None if i_min is None else round(i_min, 1), "largo_m": largo, "fases": fases, "fp": fp,
                             "ruta": r_ok["tramos"] if r_ok else [], "ruta_limitante": r_ok["limitante"] + 1 if r_ok else None, "instalacion": inst,
-                            "in_a": in_a, "ib_a": round(i_b, 3), "padre": padre, "kind": kind if kind and kind != "auto" else ("mcb" if in_a <= IN_MAX_MCB_A else "mccb"), "topologia": top}
+                            "solucion": sol["solution"], "cadena": sol["chain"], "in_a": in_a, "ib_a": round(i_b, 3), "padre": padre, "kind": kind if kind and kind != "auto" else ("mcb" if in_a <= IN_MAX_MCB_A else "mccb"), "topologia": top}
         for h in hijos[tag]:
             _procesar(h)
 

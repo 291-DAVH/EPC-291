@@ -177,6 +177,15 @@ export interface CriteriaView {
 export interface LayerAttrs { name: string; color: number; lineweight: number | null; linetype: string; on: boolean; frozen: boolean; locked: boolean; plot: boolean; description?: { es?: string; en?: string } }
 export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; changed: string[]; options: { lineweights: number[]; linetypes: string[] } }
 
+/* ---- standard solutions (global document the MASTER edits) ---- */
+export interface SolutionWhen { topology?: string[]; kind?: string[]; phase?: string[]; type?: string[]; has_children?: boolean; motor?: boolean; in_a?: Record<string, number>; text_contains?: string[] }
+export interface SolutionItem { symbol: string; short?: string; poles?: number | Record<string, number>; label?: string | Record<string, string>; slots?: Record<string, string>; if?: SolutionWhen; count?: number | string }
+export interface Solution { name?: { es?: string; en?: string }; enabled?: boolean; priority?: number; when: SolutionWhen; chain: SolutionItem[]; disp?: string }
+export interface SolutionsView {
+  solutions: Record<string, Solution>; add_ons: Record<string, Solution>; default: { solutions: Record<string, Solution>; add_ons: Record<string, Solution> }; changed: string[];
+  symbols: { id: string; name: { es: string; en: string }; slots: { key: string; example: string }[] }[]; options: { conditions: string[]; phases: string[]; ranges: string[]; item_keys: string[] };
+}
+
 /* ---- single-line diagram input ---- */
 export interface SldBoard { name: string; voltage_v: number; system: string; icc_ka: number; fp_default: number; frequency_hz: number; project: string; feeder_length_m: number; supplied_from: string; supply_tag: string }
 export interface SldSegment { kind: string; length_m: number; label: string; ambient_c: number | null; soil_c: number | null; rho_kmw: number | null; circuits: number; depth_m: number | null }
