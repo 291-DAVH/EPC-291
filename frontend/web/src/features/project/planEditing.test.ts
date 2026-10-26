@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, assignCircuit, blank, circuitFor, joinCircuit, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, circuitFor, connectEnds, joinCircuit, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -174,5 +174,17 @@ describe("plan editing rules", () => {
     expect(e.lines[1].circuit).toBe("C-01");
     expect(e.nodes.find((n) => n.id === "n3")?.circuit).toBe("C-01");
     expect(e.nodes.find((n) => n.id === "n1")?.circuit).toBeUndefined();
+  });
+
+  it("completes a short cable and trims one that goes past, up to the tolerance", () => {
+    let d = addLine(blank(), "CA", [[0, 100], [200, 100]]);
+    const short = connectEnds(addLine(d, "CA", [[100, 0], [100, 85]]), "l2", 25);
+    expect(short.lines[1].points).toEqual([[100, 0], [100, 100]]);
+    const over = connectEnds(addLine(d, "CA", [[100, 0], [100, 118]]), "l2", 25);
+    expect(over.lines[1].points).toEqual([[100, 0], [100, 100]]);
+    const far = addLine(d, "CA", [[100, 0], [100, 40]]);
+    expect(connectEnds(far, "l2", 25)).toBe(far);
+    const toNode = connectEnds(addLine(addNode(d, "LU", [100, 160]), "CA", [[100, 100], [100, 150]]), "l2", 25);
+    expect(toNode.lines[1].points).toEqual([[100, 100], [100, 160]]);
   });
 });

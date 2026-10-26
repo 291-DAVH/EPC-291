@@ -274,3 +274,39 @@ export function joinCircuit(d: Drawing, tag: string, loadKinds: Set<string>): Dr
     nodes: d.nodes.map((n) => (!n.circuit && loadKinds.has(n.kind) && ends.some((p) => same(p, [n.x, n.y])) ? { ...n, circuit: tag } : n)),
   };
 }
+
+/** The sketch is rough: each end of a line is completed when it falls short of another line or node, and trimmed when it goes past, within `tol`. A line is extended or cut along its own direction until it touches the other line (a T junction), or joined to a node that is close. */
+export function connectEnds(d: Drawing, lineId: string, tol: number): Drawing {
+  let cur = d;
+  for (const end of [0, 1] as const) {
+    const l = cur.lines.find((x) => x.id === lineId);
+    if (!l || l.points.length < 2) return cur;
+    const i = end === 0 ? 0 : l.points.length - 1, A = l.points[end === 0 ? 1 : i - 1], E = l.points[i];
+    const len = Math.hypot(E[0] - A[0], E[1] - A[1]);
+    if (len < EPS) continue;
+    const next = nearestHit(cur, lineId, A, E, len, tol);
+    if (next) cur = { ...cur, lines: cur.lines.map((x) => (x.id === lineId ? { ...x, points: pullEnd(x.points, end, next) } : x)) };
+  }
+  return cur;
+}
+
+function nearestHit(d: Drawing, lineId: string, A: Pt, E: Pt, len: number, tol: number): Pt | null {
+  const node = d.nodes.map((n) => ({ p: [n.x, n.y] as Pt, k: Math.hypot(n.x - E[0], n.y - E[1]) })).filter((c) => c.k <= tol).sort((a, b) => a.k - b.k)[0];
+  if (node) return same(node.p, E) ? null : node.p;
+  const u: Pt = [(E[0] - A[0]) / len, (E[1] - A[1]) / len];
+  let best: { t: number; gap: number } | null = null;
+  for (const o of d.lines) {
+    if (o.id === lineId) continue;
+    for (let k = 0; k + 1 < o.points.length; k++) {
+      const a = o.points[k], v: Pt = [o.points[k + 1][0] - a[0], o.points[k + 1][1] - a[1]];
+      const den = u[0] * v[1] - u[1] * v[0];
+      if (Math.abs(den) < EPS) continue;                                               // parallel: it never meets
+      const w: Pt = [a[0] - A[0], a[1] - A[1]];
+      const t = (w[0] * v[1] - w[1] * v[0]) / den, s = (w[0] * u[1] - w[1] * u[0]) / den;
+      if (t <= EPS || s < -0.02 || s > 1.02) continue;
+      const gap = Math.abs(t - len);
+      if (gap <= tol && (!best || gap < best.gap)) best = { t, gap };
+    }
+  }
+  return best && best.gap > EPS ? [A[0] + u[0] * best.t, A[1] + u[1] * best.t] : null;
+}

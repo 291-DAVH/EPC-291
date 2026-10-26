@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, connectEnds, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
@@ -101,8 +101,9 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const doRedo = () => { const r = redo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const finishLine = () => {
     if (draft.length >= 2 && kindId) {
-      const tag = circuitFor(drawing, selection, draft[0]);                              // from a load or cable of a circuit: the new cable extends that circuit
       let next = addLine(drawing, kindId, draft);
+      next = connectEnds(next, next.lines[next.lines.length - 1].id, 25 * upp());      // a sketch: the ends are completed or trimmed to touch what is near
+      const tag = circuitFor(next, selection, next.lines[next.lines.length - 1].points[0]);   // from a load or cable of a circuit: the new cable extends that circuit
       if (tag) { next = joinCircuit(next, tag, new Set(nodeKinds.filter((n) => n.carga).map((n) => n.id))); onSelect([{ type: "line", id: next.lines[next.lines.length - 1].id }]); }
       apply(next);
     }
