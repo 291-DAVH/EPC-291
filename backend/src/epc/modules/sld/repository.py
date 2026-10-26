@@ -22,6 +22,14 @@ def pkg(d: Path) -> Path:
     return d / "workspace" / "02-engineering" / DISCIPLINE / PACKAGE
 
 
+def solutions_digest() -> str:
+    """A short fingerprint of the document of standard solutions in force: the default one plus the MASTER's changes."""
+    import hashlib
+    import json
+    from epc_calc import solutions
+    return hashlib.sha256(json.dumps(solutions.load(settings.solutions_file), sort_keys=True).encode("utf-8")).hexdigest()[:12]
+
+
 def route_kinds() -> List[str]:
     from epc_calc import aea_route                                     # the engine owns the kinds of installation (single source)
     return list(aea_route.KINDS)

@@ -215,12 +215,17 @@ class Generator:
         self.phase_n += 1
         return p
 
-    def conductors(self, n: int) -> List[str]:
+    def single_phase(self, bus: Dict[str, float]) -> str:
+        """The phase of a single-phase circuit: the next one in turn, or the only one its group brings when the group is itself single-phase."""
+        phase = self.next_phase()
+        return phase if phase in bus else next(name for name in bus if name != "N")
+
+    def conductors(self, n: int, bus: Dict[str, float]) -> List[str]:
         if n == 4:
             return ["L1", "L2", "L3", "N"]
         if n == 3:
             return ["L1", "L2", "L3"]
-        return [self.next_phase(), "N"] if n == 2 else [self.next_phase()]
+        return [self.single_phase(bus), "N"] if n == 2 else [self.single_phase(bus)]
 
     def layout(self, t: str, x_left: float, y_top: float, bus: Dict[str, float]):
         """Dibuja el circuito t (y sus hijos) en la columna que empieza en x_left, colgando de las barras `bus` (nombre -> y)."""
@@ -230,7 +235,7 @@ class Generator:
         n = poles_of(c, has_kids)
         w = self.width(t)
         x0 = x_left + (w - COL_GAP - (n - 1) * PITCH) / 2                       # eje del primer polo
-        names = self.conductors(n)
+        names = self.conductors(n, bus)
         top_y = y_top
         for i, name in enumerate(names):                                        # bajada de cada conductor desde su barra
             xi = x0 + i * PITCH

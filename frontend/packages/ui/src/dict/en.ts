@@ -1053,4 +1053,12 @@ export const en = {
     "solutions.item.add": "symbol",
     "solutions.disp": "Text in the table",
     "solutions.dispAuto": "automatic: short names and current",
+    "solutions.group.groups": "Rules of differential groups",
+    "solutions.groups.help": "Puts the circuits that have no differential of their own behind one, as many as are needed. A circuit with its own differential or in a group made by hand is left alone.",
+    "solutions.groups.which": "Which circuits it takes",
+    "solutions.groups.by": "Split by",
+    "solutions.groups.maxCircuits": "Circuits per differential (max.)",
+    "solutions.groups.maxIb": "Current per differential (A, max.)",
+    "solutions.groups.tag": "Group name ({n} = number)",
+    "solutions.groups.description": "Description ({n}, {type}, {phase})",
 } as const;

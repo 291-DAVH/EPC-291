@@ -1053,4 +1053,12 @@ export const es = {
     "solutions.item.add": "símbolo",
     "solutions.disp": "Texto en la tabla",
     "solutions.dispAuto": "automático: abreviaturas y corriente",
+    "solutions.group.groups": "Reglas de grupos de diferenciales",
+    "solutions.groups.help": "Pone detrás de un diferencial los circuitos que no tienen uno propio, los que hagan falta. Un circuito con diferencial propio o con grupo armado a mano no se toca.",
+    "solutions.groups.which": "Qué circuitos toma",
+    "solutions.groups.by": "Separar por",
+    "solutions.groups.maxCircuits": "Circuitos por diferencial (máx.)",
+    "solutions.groups.maxIb": "Corriente por diferencial (A, máx.)",
+    "solutions.groups.tag": "Nombre del grupo ({n} = número)",
+    "solutions.groups.description": "Descripción ({n}, {type}, {phase})",
 } as const;
