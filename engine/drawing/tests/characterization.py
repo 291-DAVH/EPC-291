@@ -51,11 +51,12 @@ CASES = {"small_sld_mld": (SMALL, None, 18, ("sld", "mld")), "big_paginated_sld_
 
 JULIAN = re.compile(r"^\d{7}\.\d+$")
 GUID = re.compile(r"^\{[0-9A-Fa-f-]{36}\}$")
+TODAY = re.compile(r"\b\d{2}/\d{2}/\d{4}\b")        # the title block prints the day the drawing was made
 STAMP = re.compile(r"@ \d{4}-\d{2}-\d{2}T[\d:.]+\+\d\d:\d\d")
 
 
 def normalize(name, raw):
-    text = raw.decode("utf-8", errors="replace").replace("\r\n", "\n")
+    text = TODAY.sub("DD/MM/YYYY", raw.decode("utf-8", errors="replace").replace("\r\n", "\n"))
     if name.endswith(".dxf"):
         text = "\n".join("JULIAN" if JULIAN.match(ln) else "{GUID}" if GUID.match(ln) else STAMP.sub("@ STAMP", ln) for ln in text.split("\n"))
     return text
