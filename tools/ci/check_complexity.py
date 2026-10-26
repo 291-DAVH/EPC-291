@@ -2,7 +2,7 @@
 """Cyclomatic-complexity ratchet over the production Python code.
 
   python tools/ci/check_complexity.py            # check against tools/ci/complexity_baseline.json
-  python tools/ci/check_complexity.py --update   # rewrite the baseline from the code as it is now
+  python tools/ci/check_complexity.py --update   # rewrite the baseline from the code as it is now (refused if the complexity above MAX_NEW grows; --force overrides)
   python tools/ci/check_complexity.py --report   # print the most complex functions
 
 The baseline maps a function's qualified name (module path + name, without line numbers) to its complexity. A function may not become MORE complex than its
@@ -33,8 +33,9 @@ def measure():
     result = {}
     for rel in sources():
         try:
-            blocks = cc_visit((REPO / rel).read_text(encoding="utf-8", errors="replace"))
-        except SyntaxError:
+            blocks = cc_visit((REPO / rel).read_text(encoding="utf-8-sig", errors="replace"))         # utf-8-sig: several modules start with a byte order mark
+        except SyntaxError as e:
+            print(f"not measured: {rel} ({e.msg})", file=sys.stderr)
             continue
         for b in blocks:
             if b.__class__.__name__ == "Class":
@@ -45,6 +46,11 @@ def measure():
     return result
 
 
+def _excess(values: dict) -> int:
+    """How much complexity there is above MAX_NEW, summed over the functions: what a refactoring is meant to lower (splitting adds a little overhead below it)."""
+    return sum(v - MAX_NEW for v in values.values() if v > MAX_NEW)
+
+
 def _name(key: str) -> str:
     return key.split("::", 1)[1]
 
@@ -52,12 +58,17 @@ def _name(key: str) -> str:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--update", action="store_true")
+    ap.add_argument("--force", action="store_true", help="with --update: accept a baseline with more complexity above MAX_NEW than the current one")
     ap.add_argument("--report", action="store_true")
     a = ap.parse_args(argv)
     now = measure()
     if a.update:
+        before = _excess(json.loads(BASELINE.read_text(encoding="utf-8"))) if BASELINE.is_file() else None
+        if before is not None and _excess(now) > before and not a.force:
+            print(f"refused: the complexity above {MAX_NEW} would grow from {before} to {_excess(now)}; the baseline is refreshed after a refactoring that lowers it (--force for new code)")
+            return 1
         BASELINE.write_text(json.dumps(dict(sorted(now.items())), indent=0, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"baseline written: {len(now)} functions, {sum(1 for v in now.values() if v > MAX_NEW)} above {MAX_NEW}")
+        print(f"baseline written: {len(now)} functions, {sum(1 for v in now.values() if v > MAX_NEW)} above {MAX_NEW}, complexity above {MAX_NEW}: {_excess(now)}")
         return 0
     if a.report:
         for k, v in sorted(now.items(), key=lambda kv: -kv[1])[:40]:
