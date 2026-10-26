@@ -64,3 +64,7 @@ El PRD es coherente con la dirección ya decidida y mejora el ADR-0020 en tres p
 5. Indicar el programa CAD destino y su versión.
 
 Sin esas cinco respuestas, el trabajo de la fase 1 puede empezar por lo que no depende de ellas: el modelo de datos, el perfil eléctrico, el generador de DXF desde el modelo y su prueba con `ezdxf`.
+
+## Decisiones del dueño (26/10/2026)
+
+Quedaron registradas en `docs/architecture/decisions/ADR-0021-plan-drawing-editor.md`: SVG solo en pantalla y DXF en la fase 1; la Línea referencia los circuitos; niveles L0, L1…LN hacia arriba y L-1…L-N hacia abajo; permisos del proyecto; redes dibujadas como líneas y convertidas a grafo; pendientes calculadas por el programa con las normas; contenedores derivados si se referencian entre sí; punto 0,0 definido por el usuario con un botón; versión de DXF elegible, la más reciente por defecto.

@@ -28,7 +28,7 @@ class TestEngineAdapter(unittest.TestCase):
         self.assertEqual(engine.tail(subprocess.CompletedProcess([], 1, "  only out \n", ""), 100), "only out")
 
     def test_the_real_process_runs_when_no_runner_is_set(self):
-        res = engine.run_module("json.tool", [], timeout=30)
+        res = engine.run_module("site", ["--user-base"], timeout=30)
         self.assertEqual(type(res), subprocess.CompletedProcess)
 
 
