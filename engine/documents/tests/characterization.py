@@ -416,7 +416,7 @@ def _outcome(data, **kw):
         res = ccpm.calcular_ccpm(json.loads(json.dumps(data)), **kw)
     except Exception as e:                                 # noqa: BLE001 - the type and the message are the behaviour
         return f"{type(e).__name__}: {e}"
-    return {"sha": digest(res), "warnings": len(res.get("advertencias", []))}
+    return {"sha": digest(res), "warnings": len(res.get("advertencias", [])), "markdown": digest(ccpm.generar_markdown(res)), "sections": digest(ccpm.generar_md_secciones(res))}
 
 
 def ccpm_matrix():
