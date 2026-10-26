@@ -24,6 +24,7 @@ from typing import Dict, List, Optional, Tuple
 
 from epc.core.config import settings
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound, TooManyRequests, Unauthorized
+from epc.core.text import slugify
 from epc.modules.identity import repository as repo
 from epc.modules.identity import oauth, permissions
 from epc.modules.identity.oauth import OAuthError
@@ -102,7 +103,7 @@ def _check_username(raw: Optional[str], exclude=None) -> Optional[str]:
 
 
 def _slug(name: str) -> str:
-    base = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:40] or "org"
+    base = slugify(name, 40, "org")
     slug, n = base, 1
     while repo.org_by_slug(slug):
         n += 1

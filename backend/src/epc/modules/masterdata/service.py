@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from epc.core.errors import Conflict, Invalid, NotFound, TooLarge
+from epc.core.text import slugify
 from epc.modules.masterdata import repository
 from epc.modules.identity import public as identity
 from epc.modules.masterdata.models import ClientIn, IssuerIn, OrganizationIn, PersonIn
@@ -65,7 +66,7 @@ def _account_company() -> dict:
 
 
 def _slug_id(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:32] or "emisor"
+    return slugify(text, 32, "emisor")
 
 
 def issuers() -> List[dict]:

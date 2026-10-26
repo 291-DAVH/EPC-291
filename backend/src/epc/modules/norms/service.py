@@ -7,11 +7,11 @@ The reviewer corrects values, never the structure of the data: tables keep their
 import copy
 import hashlib
 import json
-import re
 from typing import Dict, List, Optional, Tuple
 
 from epc.core import clock
 from epc.core.errors import Conflict, Invalid, NotFound
+from epc.core.text import slugify
 from epc.modules.identity import public as identity
 from epc.modules.norms import repository
 
@@ -22,7 +22,7 @@ EDITABLE = {"rule": ["tema", "regla", "tipo", "parametros", "aplica_a", "fuente"
 
 
 def slug(s: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
+    return slugify(s)
 
 
 def sha(value) -> str:

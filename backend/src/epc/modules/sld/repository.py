@@ -1,5 +1,4 @@
 """Files of the SLD feature inside workspace/02-engineering/electrical/<package>/ (src = input, build = scratch, drawings/calc = outputs)."""
-import re
 import shutil
 import subprocess
 import sys
@@ -8,6 +7,7 @@ from typing import Dict, List, Optional
 
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
+from epc.core.text import slugify
 
 # Excel column <-> form field names, used to turn the plugin's example workbook into form data
 BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "system"), ("ICC_KA", "icc_ka"), ("FP_DEFAULT", "fp_default"),
@@ -43,7 +43,7 @@ def boards_dir(d: Path) -> Path:
 
 
 def slug(name: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")[:40]
+    return slugify(name, 40)
 
 
 def input_file(d: Path, bid: str) -> Path:
