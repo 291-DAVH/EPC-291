@@ -65,7 +65,8 @@ def separar(svg_texto, lib):
     return etree.tostring(raiz, encoding='unicode'), instancias
 
 
-def insertar(dxf_path, lib, instancias, alto_mm):
+def insertar(dxf_path, lib, instancias, alto_mm, catalog=None):
+    cat = _L.resolve(catalog)
     doc = ezdxf.readfile(dxf_path)
     msp = doc.modelspace()
     sids = sorted({i['sid'] for i in instancias})
@@ -80,7 +81,7 @@ def insertar(dxf_path, lib, instancias, alto_mm):
     # capas de los bloques -> capas del SLD (colores, alturas y estilos de texto: los del plugin, sin cambios)
     for nombre in nombres:
         for e in doc.blocks.get(nombre):
-            e.dxf.layer = {'SIMBOLO': _L.name('sld.diagram'), 'ROTULO': _L.name('sld.text'), '0': _L.name('sld.diagram')}.get(e.dxf.layer, _L.name('sld.diagram'))
+            e.dxf.layer = {'SIMBOLO': _L.name('sld.diagram', cat), 'ROTULO': _L.name('sld.text', cat), '0': _L.name('sld.diagram', cat)}.get(e.dxf.layer, _L.name('sld.diagram', cat))
     for capa in ('SIMBOLO', 'ROTULO'):
         if capa in doc.layers:
             try:
@@ -90,10 +91,10 @@ def insertar(dxf_path, lib, instancias, alto_mm):
     for i in instancias:
         k = i['k']
         ref = msp.add_blockref(i['sid'].upper(), (i['X'], alto_mm - i['Y']),
-                               dxfattribs={'layer': _L.name('sld.diagram'), 'xscale': k, 'yscale': k, 'zscale': k})
+                               dxfattribs={'layer': _L.name('sld.diagram', cat), 'xscale': k, 'yscale': k, 'zscale': k})
         tags = [a.dxf.tag for a in doc.blocks.get(i['sid'].upper()).query('ATTDEF')]
         ref.add_auto_attribs({t: i['valores'].get(t, '') for t in tags})
         for a in ref.attribs:
-            a.dxf.layer = _L.name('sld.text')
+            a.dxf.layer = _L.name('sld.text', cat)
     doc.saveas(dxf_path)
     return len(instancias), len(sids)

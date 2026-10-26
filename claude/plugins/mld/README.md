@@ -29,7 +29,7 @@ This plugin is packaging only. The code lives in `engine/calc`, `engine/drawing`
 |---|---|
 | Incluye (motor) | `calc`, `dxf`, `mld`, `sld`, `symbols`, `titleblock` |
 | Es dueño de | `mld` |
-| Necesita (plugins) | `aea-calc`, `iec-symbols`, `sld` |
+| Necesita (plugins) | `aea-calc`, `dxf-output`, `iec-symbols`, `sld` |
 | Lo necesitan | `board-design` |
 | Paquetes de Python | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
 | Si lo modificas, revisa | plugins `board-design`; módulos del backend — |

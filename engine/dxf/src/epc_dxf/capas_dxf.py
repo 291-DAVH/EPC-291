@@ -10,6 +10,7 @@ Asignación por región (mm sobre lámina A1 841 x 594):
   Pendiente: separar símbolos de conductores (requiere etiquetar el SVG).
 """
 import math
+import os
 import ezdxf
 import xml.etree.ElementTree as ET
 
@@ -49,7 +50,21 @@ def _color_svg(e):
     return (int(c.red), int(c.green), int(c.blue))
 
 
-def colorear(svg_path, dxf_path):
+def _catalogo(catalog):
+    return _L.resolve(catalog)
+
+
+def _formato_a3(a3):
+    return (os.environ.get('SLD_FORMATO', 'A1') == 'A3') if a3 is None else a3
+
+
+def _poner_rol(ent, extra, cat):
+    """El rol del elemento en el SVG (`data-layer`) manda sobre la zona de la lámina: la entidad va a la capa que el catálogo da a ese rol."""
+    if extra.get('role'):
+        ent.dxf.layer = _L.name(extra['role'], cat)
+
+
+def colorear(svg_path, dxf_path, catalog=None, a3=None):
     """Restituye color y grosor del trazo del SVG en las entidades del DXF.
 
     El convertidor del plugin no conserva el color (todo queda con el color de la capa).
@@ -58,16 +73,17 @@ def colorear(svg_path, dxf_path):
     contorno en capa LOGOS) no se tocan.
     """
     import sys as _sys
+    cat = _catalogo(catalog)
     from ezdxf.colors import rgb2int
     from svgelements import SVG, Circle, Ellipse, Path, Polygon, Rect, Shape, SimpleLine, Text
-    from epc_titleblock import svg_to_dxf as S
+    from epc_dxf import svg_to_dxf as S
     svg = SVG.parse(svg_path, reify=True)
     elementos = list(svg.elements())
     formas = [e for e in elementos if isinstance(e, Shape) and not isinstance(e, Text)]
     _, omitir = S._logos(svg_path, formas)
     # secuencia esperada de entidades: (tipo, color, grosor_mm) o None para logos
     import os as _os
-    a3 = _os.environ.get('SLD_FORMATO', 'A1') == 'A3'
+    a3 = _formato_a3(a3)
     # A3: el texto del rótulo del plugin está fuera de <g id="dibujo">; el del diagrama y la tabla, dentro.
     # Se empareja cada texto del SVG con su nodo XML en orden (mismo texto), así no depende de la posición.
     fuera = {}
@@ -109,9 +125,9 @@ def colorear(svg_path, dxf_path):
                     else:   # proporcional al SVG: altura de mayúscula = 0,716 · tamaño de fuente efectivo
                         sc = math.sqrt(abs(e.transform.determinant)) / S.PX_POR_MM
                         altura = max(1.0, round(FACTOR_TEXTO * 0.716 * float(e.font_size or 2.0) * sc, 2))
-                    esperado.append(('TEXT', col_txt, altura, {'bold': negrita, 'pos': None if fuera.get(idx, False) else (px, py)}))
+                    esperado.append(('TEXT', col_txt, altura, {'bold': negrita, 'pos': None if fuera.get(idx, False) else (px, py), 'role': e.values.get('data-layer')}))
                 else:
-                    esperado.append(('TEXT', None if es_rotulo else col_txt, None, {'bold': negrita and not es_rotulo}))
+                    esperado.append(('TEXT', None if es_rotulo else col_txt, None, {'bold': negrita and not es_rotulo, 'role': e.values.get('data-layer')}))
             continue
         if not isinstance(e, (SimpleLine, Rect, Polygon, Circle, Ellipse, Path)):
             continue
@@ -132,7 +148,7 @@ def colorear(svg_path, dxf_path):
             patron = [v * ancho / sw0 for v in nums]
         polis = S._polilineas(e)
         for _ in polis:
-            esperado.append(('LINE', _color_svg(e), ancho, {'dash': patron}))
+            esperado.append(('LINE', _color_svg(e), ancho, {'dash': patron, 'role': e.values.get('data-layer')}))
         col_rell = S._relleno(e)
         if col_rell and col_rell != (255, 255, 255):
             bucles = [pts for pts, cerr in polis if cerr and len(pts) > 2]
@@ -151,6 +167,7 @@ def colorear(svg_path, dxf_path):
         else: ent.dxf.true_color = rgb2int(col)
     textos_diagrama = []
     for ent, (tipo, color, ancho, extra) in zip(ents, esperado):
+        _poner_rol(ent, extra, cat)
         if tipo == 'TEXT':
             if extra.get('bold'): ent.dxf.style = 'ARIAL_BOLD'
             if extra.get('pos'):   # el convertidor del plugin corre textos del diagrama (lógica de rótulo): vuelven a su posición del SVG
@@ -172,7 +189,7 @@ def colorear(svg_path, dxf_path):
                 doc.linetypes.add(nombre, pattern=[sum(abs(x) for x in segs)] + segs)
                 tipos_dash[clave] = nombre
             ent.dxf.linetype = tipos_dash[clave]
-        if ent.dxf.layer in {_L.name('sld.titleblock'), _L.name('sld.sheet')}:   # rótulo y marco: quedan con el color de su capa
+        if ent.dxf.layer in {_L.name('sld.titleblock', cat), _L.name('sld.sheet', cat)}:   # rótulo y marco: quedan con el color de su capa
             continue
         _color(ent, color)
         if tipo == 'LINE' and ancho:
@@ -181,7 +198,7 @@ def colorear(svg_path, dxf_path):
     msp = doc.modelspace()
     for col, bucles in rellenos:
         for exterior, interiores in S._area_relleno(bucles):
-            h = msp.add_hatch(color=7, dxfattribs={'layer': _L.name('sld.titleblock') if col == (0, 0, 0) else _L.name('sld.diagram')})
+            h = msp.add_hatch(color=7, dxfattribs={'layer': _L.name('sld.titleblock', cat) if col == (0, 0, 0) else _L.name('sld.diagram', cat)})
             if col != (0, 0, 0): h.dxf.true_color = rgb2int(col)
             h.paths.add_polyline_path([(x, alto_mm - y) for x, y in exterior], is_closed=True)
             for hueco in interiores:
@@ -280,9 +297,9 @@ def _separar_textos(textos, pasadas=60):
             break
 
 
-def aplicar(dxf_path):
+def aplicar(dxf_path, catalog=None):
     doc = ezdxf.readfile(dxf_path)
-    cat = _L.load()
+    cat = _catalogo(catalog)
     diagrama, textos, rotulo, lamina = (_L.apply(doc, r, cat) for r in ROLES)
     for e in doc.modelspace():
         t = e.dxftype()

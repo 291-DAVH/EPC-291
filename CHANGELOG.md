@@ -5,6 +5,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ## [Unreleased]
 
 ### Changed
+- Deliverable service (`epc_dxf`): the single-line and the multi-line hand over their SVG and get the DXF; SVG elements carry a semantic role (`data-layer`) that decides their layer, instead of their position on the sheet; every board design writes the index of its delivery package (`<name>_entregable.json`). The converters moved from `epc_titleblock` and `epc_sld` to `epc_dxf`. In the DXF the title block is now entirely in its layer and the table is annotation.
 - The drawing engine is split into independent packages (`epc_symbols`, `epc_titleblock`, `epc_sld`, `epc_mld`, `epc_plan`, `epc_drawing`) with enforced layers (ADR-0022). Plugins are regenerated from the code: they declare only what they own, and `engine`, `requires` and Python packages are derived; new plugin `plan-drawing`. Skills the platform now does were removed. The dependency map is `docs/architecture/DEPENDENCIAS.md`.
 - The single-line and multi-line diagrams only draw: every number they show (power, PE and neutral sections, main bar, feeder, checks, notes) comes from the calculation engine. The feeder shows "Pendiente" when there is no upstream board instead of an invented section.
 

@@ -11,9 +11,9 @@ The default catalog travels with the package; the global file the MASTER edits (
 | Incluye (motor) | `dxf` |
 | Es dueño de | `dxf` |
 | Necesita (plugins) | — |
-| Lo necesitan | `plan-drawing`, `sld` |
-| Paquetes de Python | `ezdxf` |
-| Si lo modificas, revisa | plugins `board-design`, `mld`, `plan-drawing`, `sld`; módulos del backend `backend.admin` |
+| Lo necesitan | `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld` |
+| Paquetes de Python | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` |
+| Si lo modificas, revisa | plugins `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld`; módulos del backend `backend.admin` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

@@ -7,7 +7,7 @@ name = "epc-dxf"
 version = "0.1.0"
 description = "EPC-291 DXF output: the catalog of layers (name, colour, line weight...) every drawing is delivered with"
 requires-python = ">=3.10"
-dependencies = ["ezdxf"]
+dependencies = ["ezdxf", "lxml", "shapely", "svgelements", "vtracer"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

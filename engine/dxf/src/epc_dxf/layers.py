@@ -51,9 +51,14 @@ def override_of(catalog: Dict[str, dict]) -> Dict[str, dict]:
     return out
 
 
+def resolve(catalog: Optional[Dict[str, dict]] = None) -> Dict[str, dict]:
+    """The catalog given, or the one in force (default, global file) when none is given."""
+    return catalog if catalog is not None else load()
+
+
 def get(role: str, catalog: Optional[Dict[str, dict]] = None) -> dict:
     """The attributes of a role; a role the catalog does not know gets plain defaults under the role's own name."""
-    cat = catalog if catalog is not None else load()
+    cat = resolve(catalog)
     return {**BLANK, "name": role.split(".", 1)[-1], **cat.get(role, {})}
 
 
@@ -75,19 +80,25 @@ def apply(doc, role: str, catalog: Optional[Dict[str, dict]] = None) -> str:
     return a["name"]
 
 
-def _problems(role: str, a: dict) -> Iterable[str]:
+def _name_problems(role: str, a: dict) -> Iterable[str]:
     n = str(a.get("name", "")).strip()
     if not n or len(n) > 255 or any(c in n for c in FORBIDDEN_IN_NAME):
         yield f"{role}.name: required, up to 255 characters, none of {FORBIDDEN_IN_NAME}"
+
+
+def _look_problems(role: str, a: dict) -> Iterable[str]:
     if not isinstance(a.get("color"), int) or isinstance(a.get("color"), bool) or not 1 <= a["color"] <= 255:
         yield f"{role}.color: a whole number from 1 to 255 (AutoCAD colour index)"
     if a.get("lineweight") is not None and a.get("lineweight") not in LINEWEIGHTS:
         yield f"{role}.lineweight: empty (standard) or one of {', '.join(str(x) for x in LINEWEIGHTS)} mm"
     if a.get("linetype") not in LINETYPES:
         yield f"{role}.linetype: one of {', '.join(LINETYPES)}"
-    for f in FLAGS:
-        if not isinstance(a.get(f), bool):
-            yield f"{role}.{f}: true or false"
+
+
+def _problems(role: str, a: dict) -> Iterable[str]:
+    yield from _name_problems(role, a)
+    yield from _look_problems(role, a)
+    yield from (f"{role}.{f}: true or false" for f in FLAGS if not isinstance(a.get(f), bool))
 
 
 def validate(catalog: Dict[str, dict]) -> Dict[str, str]:

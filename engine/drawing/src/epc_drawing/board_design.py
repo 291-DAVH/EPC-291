@@ -178,6 +178,14 @@ def calc_note(res: dict) -> str:
             f"motores {lim['motor']:g} %; {mat}, aislación {cond['aislacion'].upper()}.")
 
 
+def _package_index(out: Path, name: str, error) -> None:
+    """The index of the delivery package: every sheet of the single-line and the multi-line with its DXF and the layers it uses (epc_dxf)."""
+    from epc_dxf import package
+    svgs = sorted(out.glob(f"SLD_{name}*.svg")) + sorted(out.glob(f"MLD_{name}*.svg"))
+    if svgs and error is None:
+        package.describe(svgs, out, name)
+
+
 def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None, logos: Optional[Dict[str, Path]] = None, maxl: int = 18,
            diagrams=("sld",)) -> dict:
     out_dir = Path(out_dir)
@@ -234,6 +242,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
         log += [ln for ln in (run.stdout.splitlines() + run.stderr.splitlines()) if ln.startswith(("OK", "AVISO"))]
         if run.returncode != 0:
             error = (run.stderr or run.stdout).strip()[-600:]
+    _package_index(out, name, error)
     summary = {"name": name, "ok": error is None, "avisos": avisos, "log": log, "limites_pct": res["limites"], "conductor": res["conductor"],
                "circuits": len(res["datos"]), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"], "error": error}
     (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
