@@ -48,6 +48,7 @@ NORMA DE REFERENCIA (por designación)
 """
 
 import math
+from epc_calc._validate import nonneg as _nonneg, pos as _pos
 
 __version__ = "0.1.0"
 
@@ -57,20 +58,6 @@ EXP_Q = 1.85            # [VERIFICAR]
 EXP_D = 4.87            # [VERIFICAR]
 RHO_AGUA = 1000.0       # kg/m³ (aprox.)
 G = 9.80665             # m/s²  [VERIFICAR]
-
-
-def _pos(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor <= 0:
-        raise ValueError(f"{nombre} debe ser > 0 (recibido: {valor})")
-
-
-def _nonneg(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor < 0:
-        raise ValueError(f"{nombre} debe ser ≥ 0 (recibido: {valor})")
 
 
 def perdida_unitaria_bar_m(q_lmin, d_mm, c):

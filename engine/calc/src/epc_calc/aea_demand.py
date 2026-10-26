@@ -37,6 +37,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-771 (2006) §8 (grados), §9 (DPMS), §13; AEA 90364-7-770 (2017) §7 (grados), §8 (DPMS); IEC 60364-5-52 (paralelo).  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -57,13 +58,6 @@ _GRADOS_771 = {
     "local": ((300, "minimo", 6.7), (2000, "medio", 10.0), (5000, "elevado", 14.5), (math.inf, "superior", None)),
 }
 _CONJUNTOS_771_III = ((26, 0.5, 0.4), (15.5, 0.6, 0.5), (5, 0.8, 0.6), (2, 0.9, 0.7))  # n mín; (Mín/Medio, Elev/Sup)
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def grade_electrification_771(tipo, superficie_m2):

@@ -38,25 +38,12 @@ NORMA DE REFERENCIA (por designación)
 """
 
 import math
+from epc_calc._validate import nonneg as _nonneg, pos as _pos
 
 __version__ = "0.1.0"
 
 RHO_AIRE = 1.2    # kg/m³  [VERIFICAR]
 CP_AIRE = 1.006   # kJ/(kg·K)  [VERIFICAR]
-
-
-def _pos(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor <= 0:
-        raise ValueError(f"{nombre} debe ser > 0 (recibido: {valor})")
-
-
-def _nonneg(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor < 0:
-        raise ValueError(f"{nombre} debe ser ≥ 0 (recibido: {valor})")
 
 
 def m3h_a_ls(m3h):

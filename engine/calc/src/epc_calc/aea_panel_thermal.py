@@ -27,6 +27,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-770 Anexo B; AEA 90364-7-771 §20.4.2 / Anexo H.3.  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -35,13 +36,6 @@ K_CABLEADO = 0.2            # +20 % por conexiones y cableado
 _K_CIRCUITOS = ((10, 0.5), (6, 0.6), (4, 0.7), (2, 0.8))
 _PD_POLO = ((10, 3.0), (16, 3.5), (25, 4.5), (32, 6.0), (40, 7.5), (50, 9.0), (63, 13.0), (100, 15.0), (125, 20.0))
 _PDC_DIF = ((25, 500), (40, 500), (63, 630), (80, 800), (100, 1000))
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def current_nominal_equivalent(i_ne_a, ke=K_E):
