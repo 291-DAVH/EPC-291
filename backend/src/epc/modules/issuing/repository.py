@@ -1,11 +1,10 @@
 """Files of the issuing step: deliverables/transmittals/TR-nnn.json and the stamped copies, plus helpers that run the engine exporters."""
 import json
 import re
-import subprocess
-import sys
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from epc.core import engine
 from epc.core.fsutil import read_json, write_json
 from epc.core.hashing import sha256_file as sha256
 
@@ -58,10 +57,9 @@ def engine_version() -> str:
 
 def stamp_dxf(src: Path, dst: Path, props: Dict[str, str]) -> None:
     """Delivered DXF = copy of the master with the issue data written in its header (master untouched), via the engine exporter."""
-    res = subprocess.run([sys.executable, "-m", "epc_drawing.export.stamp", str(src), str(dst)] + [f"{k}={v}" for k, v in props.items()],
-                         capture_output=True, text=True, timeout=300)
+    res = engine.run_module("epc_drawing.export.stamp", [src, dst] + [f"{k}={v}" for k, v in props.items()], timeout=300)
     if res.returncode != 0:
-        raise RuntimeError(f"could not stamp {src.name}: {(res.stderr or res.stdout).strip()[-300:]}")
+        raise RuntimeError(f"could not stamp {src.name}: {engine.tail(res, 300)}")
 
 
 def render_transmittal_pdf(data: dict, dst: Path) -> None:
@@ -70,12 +68,12 @@ def render_transmittal_pdf(data: dict, dst: Path) -> None:
     with tempfile.TemporaryDirectory() as tmp:
         src = Path(tmp) / "transmittal.json"
         src.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-        res = subprocess.run([sys.executable, "-m", "epc_drawing.export.transmittal_pdf", str(src), str(dst)], capture_output=True, text=True, timeout=120)
+        res = engine.run_module("epc_drawing.export.transmittal_pdf", [src, dst], timeout=120)
     if res.returncode != 0:
-        raise RuntimeError(f"could not render the transmittal document: {(res.stderr or res.stdout).strip()[-300:]}")
+        raise RuntimeError(f"could not render the transmittal document: {engine.tail(res, 300)}")
 
 
 def render_pdf(dxf: Path, dst: Path) -> None:
-    res = subprocess.run([sys.executable, "-m", "epc_drawing.export.pdf", str(dxf), str(dst)], capture_output=True, text=True, timeout=300)
+    res = engine.run_module("epc_drawing.export.pdf", [dxf, dst], timeout=300)
     if res.returncode != 0:
-        raise RuntimeError(f"could not render the PDF of {dxf.name}: {(res.stderr or res.stdout).strip()[-300:]}")
+        raise RuntimeError(f"could not render the PDF of {dxf.name}: {engine.tail(res, 300)}")

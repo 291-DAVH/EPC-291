@@ -23,7 +23,7 @@ SECTIONS = (1.5, 2.5, 6, 16, 35, 70, 120, 240, 300)
 
 def ampacity():
     out = {}
-    for method, ins, mat, phases, agrup, t_amb in itertools.product(AMP.METODOS, AMP.AISLACIONES, AMP.MATERIALES, (1, 3), (1, 4), (40.0, 55.0)):
+    for method, ins, mat, phases, agrup, t_amb in itertools.product(AMP.METODOS, AMP.AISLACIONES, AMP.MATERIALES, (1, 3), (1, 2, 3, 4, 8), (40.0, 55.0)):
         row = {"AISLACION": ins, "MATERIAL": mat, "METODO": method, "AGRUP_CIRCUITOS": agrup, "TEMP_AMBIENTE_C": t_amb, "TEMP_SUELO_C": 30.0, "RESIST_TERMICA_KMW": 1.5}
         p = AMP.parametros(row)
         cell = {}

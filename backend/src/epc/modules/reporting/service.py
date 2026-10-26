@@ -8,9 +8,10 @@ import datetime as dt
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from epc.core import lang as lang_mod
+from epc.core import methodology
 from epc.core.errors import Conflict, Failure, Invalid, first_or_404
 from epc.core.fsutil import safe_file, today
-from epc.core import lang as lang_mod
 from epc.modules.backlog import public as backlog
 from epc.modules.deliverables import public as deliverables
 from epc.modules.identity import public as identity
@@ -31,7 +32,7 @@ def _lang(meta: dict, lang: Optional[str]) -> str:
 
 
 def _catalog(meta: dict) -> dict:
-    cat = repository.catalog(meta.get("methodology") or "pm2")
+    cat = repository.catalog(methodology.of(meta))
     if not cat:
         raise Conflict({"methodology": "this methodology has no report catalog"})
     return cat
@@ -61,9 +62,9 @@ def overview(d: Path, lang: Optional[str] = None) -> dict:
     meta = projects.read_meta(d)
     lg = _lang(meta, lang)
     items = repository.generated(d)
-    cat = repository.catalog(meta.get("methodology") or "pm2")
+    cat = repository.catalog(methodology.of(meta))
     if not cat:                                                     # a methodology without a report catalog: say so, keep the reports already generated
-        return {"methodology": meta.get("methodology") or "pm2", "available": False, "language": lg, "types": [], "reports": sorted(items, key=lambda r: (r["date"], r["id"]), reverse=True)}
+        return {"methodology": methodology.of(meta), "available": False, "language": lg, "types": [], "reports": sorted(items, key=lambda r: (r["date"], r["id"]), reverse=True)}
     types = []
     for t in cat["types"]:
         prev = _of_type(items, t["id"])

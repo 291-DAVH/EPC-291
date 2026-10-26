@@ -21,7 +21,7 @@ class TestCoreCharacterization(unittest.TestCase):
         self.assertEqual(C.protection(), GOLDEN["protection"])
 
     def test_the_grid_has_the_shape_it_claims(self):
-        self.assertEqual(len(GOLDEN["ampacity"]), 8 * 2 * 2 * 2 * 2 * 2)
+        self.assertEqual(len(GOLDEN["ampacity"]), 8 * 2 * 2 * 2 * 5 * 2)
         self.assertTrue(any("error" in str(v) for row in GOLDEN["ampacity"].values() for v in row["iz"].values()))     # combinations without a table are part of the behaviour
         self.assertTrue(any("NO CUMPLE" in f for r in GOLDEN["feeder_reports"].values() for f in r.get("files", {}).values()))
         self.assertTrue(any("CUMPLE" in f for r in GOLDEN["feeder_reports"].values() for f in r.get("files", {}).values()))

@@ -40,6 +40,86 @@
 },
 "r90": 0.532265
 },
+"B1|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
 "B1|pvc|al|1f|g4|40C": {
 "factors": {
 "f_agrup": 0.65,
@@ -63,6 +143,46 @@
 "B1|pvc|al|1f|g4|55C": {
 "factors": {
 "f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.7
@@ -120,6 +240,86 @@
 },
 "r90": 0.532265
 },
+"B1|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
 "B1|pvc|al|3f|g4|40C": {
 "factors": {
 "f_agrup": 0.65,
@@ -143,6 +343,46 @@
 "B1|pvc|al|3f|g4|55C": {
 "factors": {
 "f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.7
@@ -200,6 +440,86 @@
 },
 "r90": 0.320662
 },
+"B1|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.0,
+"120": 187.2,
+"16": 52.8,
+"2.5": 16.8,
+"240": 278.4,
+"300": 318.4,
+"35": 87.2,
+"6": 28.8,
+"70": 133.6
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.4,
+"120": 131.04,
+"16": 36.96,
+"2.5": 11.76,
+"240": 194.88,
+"300": 222.88,
+"35": 61.04,
+"6": 20.16,
+"70": 93.52
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.5,
+"120": 163.8,
+"16": 46.2,
+"2.5": 14.7,
+"240": 243.6,
+"300": 278.6,
+"35": 76.3,
+"6": 25.2,
+"70": 116.9
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.35,
+"120": 114.66,
+"16": 32.34,
+"2.5": 10.29,
+"240": 170.52,
+"300": 195.02,
+"35": 53.41,
+"6": 17.64,
+"70": 81.83
+},
+"r90": 0.320662
+},
 "B1|pvc|cu|1f|g4|40C": {
 "factors": {
 "f_agrup": 0.65,
@@ -237,6 +557,46 @@
 "35": 49.595,
 "6": 16.38,
 "70": 75.985
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 7.8,
+"120": 121.68,
+"16": 34.32,
+"2.5": 10.92,
+"240": 180.96,
+"300": 206.96,
+"35": 56.68,
+"6": 18.72,
+"70": 86.84
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 5.46,
+"120": 85.176,
+"16": 24.024,
+"2.5": 7.644,
+"240": 126.672,
+"300": 144.872,
+"35": 39.676,
+"6": 13.104,
+"70": 60.788
 },
 "r90": 0.320662
 },
@@ -280,6 +640,86 @@
 },
 "r90": 0.320662
 },
+"B1|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.2,
+"120": 166.4,
+"16": 47.2,
+"2.5": 14.4,
+"240": 240.8,
+"300": 274.4,
+"35": 76.8,
+"6": 25.6,
+"70": 119.2
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.84,
+"120": 116.48,
+"16": 33.04,
+"2.5": 10.08,
+"240": 168.56,
+"300": 192.08,
+"35": 53.76,
+"6": 17.92,
+"70": 83.44
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.8,
+"120": 145.6,
+"16": 41.3,
+"2.5": 12.6,
+"240": 210.7,
+"300": 240.1,
+"35": 67.2,
+"6": 22.4,
+"70": 104.3
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.86,
+"120": 101.92,
+"16": 28.91,
+"2.5": 8.82,
+"240": 147.49,
+"300": 168.07,
+"35": 47.04,
+"6": 15.68,
+"70": 73.01
+},
+"r90": 0.320662
+},
 "B1|pvc|cu|3f|g4|40C": {
 "factors": {
 "f_agrup": 0.65,
@@ -320,6 +760,46 @@
 },
 "r90": 0.320662
 },
+"B1|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 7.28,
+"120": 108.16,
+"16": 30.68,
+"2.5": 9.36,
+"240": 156.52,
+"300": 178.36,
+"35": 49.92,
+"6": 16.64,
+"70": 77.48
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 5.096,
+"120": 75.712,
+"16": 21.476,
+"2.5": 6.552,
+"240": 109.564,
+"300": 124.852,
+"35": 34.944,
+"6": 11.648,
+"70": 54.236
+},
+"r90": 0.320662
+},
 "B1|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -343,6 +823,86 @@
 "B1|xlpe|al|1f|g1|55C": {
 "factors": {
 "f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.84
@@ -400,6 +960,46 @@
 },
 "r90": 0.56797
 },
+"B1|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
 "B1|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -423,6 +1023,86 @@
 "B1|xlpe|al|3f|g1|55C": {
 "factors": {
 "f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.84
@@ -480,6 +1160,46 @@
 },
 "r90": 0.56797
 },
+"B1|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
 "B1|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -503,6 +1223,86 @@
 "B1|xlpe|cu|1f|g1|55C": {
 "factors": {
 "f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.84
@@ -560,6 +1360,46 @@
 },
 "r90": 0.341727
 },
+"B1|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
 "B1|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -583,6 +1423,86 @@
 "B1|xlpe|cu|3f|g1|55C": {
 "factors": {
 "f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
 "f_clase": 1.0,
 "f_suelo": 1.0,
 "f_temp": 0.84
@@ -640,6 +1560,46 @@
 },
 "r90": 0.341727
 },
+"B1|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
 "B2|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -677,6 +1637,86 @@
 "35": 52.5,
 "6": "invalid",
 "70": 79.8
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 125.6,
+"16": 37.6,
+"2.5": "invalid",
+"240": 187.2,
+"300": 214.4,
+"35": 60.0,
+"6": "invalid",
+"70": 91.2
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 87.92,
+"16": 26.32,
+"2.5": "invalid",
+"240": 131.04,
+"300": 150.08,
+"35": 42.0,
+"6": "invalid",
+"70": 63.84
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 109.9,
+"16": 32.9,
+"2.5": "invalid",
+"240": 163.8,
+"300": 187.6,
+"35": 52.5,
+"6": "invalid",
+"70": 79.8
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 76.93,
+"16": 23.03,
+"2.5": "invalid",
+"240": 114.66,
+"300": 131.32,
+"35": 36.75,
+"6": "invalid",
+"70": 55.86
 },
 "r90": 0.532265
 },
@@ -720,6 +1760,46 @@
 },
 "r90": 0.532265
 },
+"B2|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 81.64,
+"16": 24.44,
+"2.5": "invalid",
+"240": 121.68,
+"300": 139.36,
+"35": 39.0,
+"6": "invalid",
+"70": 59.28
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 57.148,
+"16": 17.108,
+"2.5": "invalid",
+"240": 85.176,
+"300": 97.552,
+"35": 27.3,
+"6": "invalid",
+"70": 41.496
+},
+"r90": 0.532265
+},
 "B2|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -757,6 +1837,86 @@
 "35": 46.9,
 "6": "invalid",
 "70": 70.7
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 111.2,
+"16": 33.6,
+"2.5": "invalid",
+"240": 161.6,
+"300": 184.8,
+"35": 53.6,
+"6": "invalid",
+"70": 80.8
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 77.84,
+"16": 23.52,
+"2.5": "invalid",
+"240": 113.12,
+"300": 129.36,
+"35": 37.52,
+"6": "invalid",
+"70": 56.56
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 97.3,
+"16": 29.4,
+"2.5": "invalid",
+"240": 141.4,
+"300": 161.7,
+"35": 46.9,
+"6": "invalid",
+"70": 70.7
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 68.11,
+"16": 20.58,
+"2.5": "invalid",
+"240": 98.98,
+"300": 113.19,
+"35": 32.83,
+"6": "invalid",
+"70": 49.49
 },
 "r90": 0.532265
 },
@@ -800,6 +1960,46 @@
 },
 "r90": 0.532265
 },
+"B2|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 72.28,
+"16": 21.84,
+"2.5": "invalid",
+"240": 105.04,
+"300": 120.12,
+"35": 34.84,
+"6": "invalid",
+"70": 52.52
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 50.596,
+"16": 15.288,
+"2.5": "invalid",
+"240": 73.528,
+"300": 84.084,
+"35": 24.388,
+"6": "invalid",
+"70": 36.764
+},
+"r90": 0.532265
+},
 "B2|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -837,6 +2037,86 @@
 "35": 67.9,
 "6": 23.1,
 "70": 102.2
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.2,
+"120": 161.6,
+"16": 48.0,
+"2.5": 16.0,
+"240": 239.2,
+"300": 274.4,
+"35": 77.6,
+"6": 26.4,
+"70": 116.8
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.84,
+"120": 113.12,
+"16": 33.6,
+"2.5": 11.2,
+"240": 167.44,
+"300": 192.08,
+"35": 54.32,
+"6": 18.48,
+"70": 81.76
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.8,
+"120": 141.4,
+"16": 42.0,
+"2.5": 14.0,
+"240": 209.3,
+"300": 240.1,
+"35": 67.9,
+"6": 23.1,
+"70": 102.2
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.86,
+"120": 98.98,
+"16": 29.4,
+"2.5": 9.8,
+"240": 146.51,
+"300": 168.07,
+"35": 47.53,
+"6": 16.17,
+"70": 71.54
 },
 "r90": 0.320662
 },
@@ -880,6 +2160,46 @@
 },
 "r90": 0.320662
 },
+"B2|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 7.28,
+"120": 105.04,
+"16": 31.2,
+"2.5": 10.4,
+"240": 155.48,
+"300": 178.36,
+"35": 50.44,
+"6": 17.16,
+"70": 75.92
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 5.096,
+"120": 73.528,
+"16": 21.84,
+"2.5": 7.28,
+"240": 108.836,
+"300": 124.852,
+"35": 35.308,
+"6": 12.012,
+"70": 53.144
+},
+"r90": 0.320662
+},
 "B2|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -917,6 +2237,86 @@
 "35": 60.2,
 "6": 21.0,
 "70": 91.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.4,
+"120": 143.2,
+"16": 43.2,
+"2.5": 13.6,
+"240": 206.4,
+"300": 236.0,
+"35": 68.8,
+"6": 24.0,
+"70": 104.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.28,
+"120": 100.24,
+"16": 30.24,
+"2.5": 9.52,
+"240": 144.48,
+"300": 165.2,
+"35": 48.16,
+"6": 16.8,
+"70": 72.8
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.1,
+"120": 125.3,
+"16": 37.8,
+"2.5": 11.9,
+"240": 180.6,
+"300": 206.5,
+"35": 60.2,
+"6": 21.0,
+"70": 91.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.37,
+"120": 87.71,
+"16": 26.46,
+"2.5": 8.33,
+"240": 126.42,
+"300": 144.55,
+"35": 42.14,
+"6": 14.7,
+"70": 63.7
 },
 "r90": 0.320662
 },
@@ -960,6 +2360,46 @@
 },
 "r90": 0.320662
 },
+"B2|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 6.76,
+"120": 93.08,
+"16": 28.08,
+"2.5": 8.84,
+"240": 134.16,
+"300": 153.4,
+"35": 44.72,
+"6": 15.6,
+"70": 67.6
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 4.732,
+"120": 65.156,
+"16": 19.656,
+"2.5": 6.188,
+"240": 93.912,
+"300": 107.38,
+"35": 31.304,
+"6": 10.92,
+"70": 47.32
+},
+"r90": 0.320662
+},
 "B2|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -997,6 +2437,86 @@
 "35": 88.2,
 "6": "invalid",
 "70": 133.56
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 176.0,
+"16": 52.8,
+"2.5": "invalid",
+"240": 260.8,
+"300": 302.4,
+"35": 84.0,
+"6": "invalid",
+"70": 127.2
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 147.84,
+"16": 44.352,
+"2.5": "invalid",
+"240": 219.072,
+"300": 254.016,
+"35": 70.56,
+"6": "invalid",
+"70": 106.848
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 154.0,
+"16": 46.2,
+"2.5": "invalid",
+"240": 228.2,
+"300": 264.6,
+"35": 73.5,
+"6": "invalid",
+"70": 111.3
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 129.36,
+"16": 38.808,
+"2.5": "invalid",
+"240": 191.688,
+"300": 222.264,
+"35": 61.74,
+"6": "invalid",
+"70": 93.492
 },
 "r90": 0.56797
 },
@@ -1040,6 +2560,46 @@
 },
 "r90": 0.56797
 },
+"B2|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 114.4,
+"16": 34.32,
+"2.5": "invalid",
+"240": 169.52,
+"300": 196.56,
+"35": 54.6,
+"6": "invalid",
+"70": 82.68
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 96.096,
+"16": 28.8288,
+"2.5": "invalid",
+"240": 142.3968,
+"300": 165.1104,
+"35": 45.864,
+"6": "invalid",
+"70": 69.4512
+},
+"r90": 0.56797
+},
 "B2|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1077,6 +2637,86 @@
 "35": 78.96,
 "6": "invalid",
 "70": 119.28
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.6,
+"16": 46.4,
+"2.5": "invalid",
+"240": 231.2,
+"300": 264.8,
+"35": 75.2,
+"6": "invalid",
+"70": 113.6
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 132.384,
+"16": 38.976,
+"2.5": "invalid",
+"240": 194.208,
+"300": 222.432,
+"35": 63.168,
+"6": "invalid",
+"70": 95.424
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 137.9,
+"16": 40.6,
+"2.5": "invalid",
+"240": 202.3,
+"300": 231.7,
+"35": 65.8,
+"6": "invalid",
+"70": 99.4
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 115.836,
+"16": 34.104,
+"2.5": "invalid",
+"240": 169.932,
+"300": 194.628,
+"35": 55.272,
+"6": "invalid",
+"70": 83.496
 },
 "r90": 0.56797
 },
@@ -1120,6 +2760,46 @@
 },
 "r90": 0.56797
 },
+"B2|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 102.44,
+"16": 30.16,
+"2.5": "invalid",
+"240": 150.28,
+"300": 172.12,
+"35": 48.88,
+"6": "invalid",
+"70": 73.84
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 86.0496,
+"16": 25.3344,
+"2.5": "invalid",
+"240": 126.2352,
+"300": 144.5808,
+"35": 41.0592,
+"6": "invalid",
+"70": 62.0256
+},
+"r90": 0.56797
+},
 "B2|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1157,6 +2837,86 @@
 "35": 111.72,
 "6": 38.64,
 "70": 168.84
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.0,
+"120": 222.4,
+"16": 66.4,
+"2.5": 21.6,
+"240": 334.4,
+"300": 387.2,
+"35": 106.4,
+"6": 36.8,
+"70": 160.8
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 13.44,
+"120": 186.816,
+"16": 55.776,
+"2.5": 18.144,
+"240": 280.896,
+"300": 325.248,
+"35": 89.376,
+"6": 30.912,
+"70": 135.072
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.0,
+"120": 194.6,
+"16": 58.1,
+"2.5": 18.9,
+"240": 292.6,
+"300": 338.8,
+"35": 93.1,
+"6": 32.2,
+"70": 140.7
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 11.76,
+"120": 163.464,
+"16": 48.804,
+"2.5": 15.876,
+"240": 245.784,
+"300": 284.592,
+"35": 78.204,
+"6": 27.048,
+"70": 118.188
 },
 "r90": 0.341727
 },
@@ -1200,6 +2960,46 @@
 },
 "r90": 0.341727
 },
+"B2|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.4,
+"120": 144.56,
+"16": 43.16,
+"2.5": 14.04,
+"240": 217.36,
+"300": 251.68,
+"35": 69.16,
+"6": 23.92,
+"70": 104.52
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 8.736,
+"120": 121.4304,
+"16": 36.2544,
+"2.5": 11.7936,
+"240": 182.5824,
+"300": 211.4112,
+"35": 58.0944,
+"6": 20.0928,
+"70": 87.7968
+},
+"r90": 0.341727
+},
 "B2|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1237,6 +3037,86 @@
 "35": 97.44,
 "6": 33.6,
 "70": 148.68
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.4,
+"120": 195.2,
+"16": 58.4,
+"2.5": 19.2,
+"240": 289.6,
+"300": 331.2,
+"35": 92.8,
+"6": 32.0,
+"70": 141.6
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.8,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 12.096,
+"120": 163.968,
+"16": 49.056,
+"2.5": 16.128,
+"240": 243.264,
+"300": 278.208,
+"35": 77.952,
+"6": 26.88,
+"70": 118.944
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.6,
+"120": 170.8,
+"16": 51.1,
+"2.5": 16.8,
+"240": 253.4,
+"300": 289.8,
+"35": 81.2,
+"6": 28.0,
+"70": 123.9
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 10.584,
+"120": 143.472,
+"16": 42.924,
+"2.5": 14.112,
+"240": 212.856,
+"300": 243.432,
+"35": 68.208,
+"6": 23.52,
+"70": 104.076
 },
 "r90": 0.341727
 },
@@ -1280,6 +3160,46 @@
 },
 "r90": 0.341727
 },
+"B2|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.36,
+"120": 126.88,
+"16": 37.96,
+"2.5": 12.48,
+"240": 188.24,
+"300": 215.28,
+"35": 60.32,
+"6": 20.8,
+"70": 92.04
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.52,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 7.8624,
+"120": 106.5792,
+"16": 31.8864,
+"2.5": 10.4832,
+"240": 158.1216,
+"300": 180.8352,
+"35": 50.6688,
+"6": 17.472,
+"70": 77.3136
+},
+"r90": 0.341727
+},
 "C|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1317,6 +3237,86 @@
 "35": 63.0,
 "6": "invalid",
 "70": 97.3
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 167.45,
+"16": 48.45,
+"2.5": "invalid",
+"240": 260.1,
+"300": 300.05,
+"35": 76.5,
+"6": "invalid",
+"70": 118.15
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 117.215,
+"16": 33.915,
+"2.5": "invalid",
+"240": 182.07,
+"300": 210.035,
+"35": 53.55,
+"6": "invalid",
+"70": 82.705
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 155.63,
+"16": 45.03,
+"2.5": "invalid",
+"240": 241.74,
+"300": 278.87,
+"35": 71.1,
+"6": "invalid",
+"70": 109.81
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 108.941,
+"16": 31.521,
+"2.5": "invalid",
+"240": 169.218,
+"300": 195.209,
+"35": 49.77,
+"6": "invalid",
+"70": 76.867
 },
 "r90": 0.532265
 },
@@ -1360,6 +3360,46 @@
 },
 "r90": 0.532265
 },
+"C|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 139.87,
+"16": 40.47,
+"2.5": "invalid",
+"240": 217.26,
+"300": 250.63,
+"35": 63.9,
+"6": "invalid",
+"70": 98.69
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 97.909,
+"16": 28.329,
+"2.5": "invalid",
+"240": 152.082,
+"300": 175.441,
+"35": 44.73,
+"6": "invalid",
+"70": 69.083
+},
+"r90": 0.532265
+},
 "C|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1397,6 +3437,86 @@
 "35": 54.6,
 "6": "invalid",
 "70": 85.4
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 145.35,
+"16": 43.35,
+"2.5": "invalid",
+"240": 225.25,
+"300": 259.25,
+"35": 66.3,
+"6": "invalid",
+"70": 103.7
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 101.745,
+"16": 30.345,
+"2.5": "invalid",
+"240": 157.675,
+"300": 181.475,
+"35": 46.41,
+"6": "invalid",
+"70": 72.59
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 135.09,
+"16": 40.29,
+"2.5": "invalid",
+"240": 209.35,
+"300": 240.95,
+"35": 61.62,
+"6": "invalid",
+"70": 96.38
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 94.563,
+"16": 28.203,
+"2.5": "invalid",
+"240": 146.545,
+"300": 168.665,
+"35": 43.134,
+"6": "invalid",
+"70": 67.466
 },
 "r90": 0.532265
 },
@@ -1440,6 +3560,46 @@
 },
 "r90": 0.532265
 },
+"C|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 121.41,
+"16": 36.21,
+"2.5": "invalid",
+"240": 188.15,
+"300": 216.55,
+"35": 55.38,
+"6": "invalid",
+"70": 86.62
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 84.987,
+"16": 25.347,
+"2.5": "invalid",
+"240": 131.705,
+"300": 151.585,
+"35": 38.766,
+"6": "invalid",
+"70": 60.634
+},
+"r90": 0.532265
+},
 "C|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1477,6 +3637,86 @@
 "35": 84.0,
 "6": 28.0,
 "70": 129.5
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.45,
+"120": 221.0,
+"16": 62.9,
+"2.5": 19.55,
+"240": 340.85,
+"300": 391.85,
+"35": 102.0,
+"6": 34.0,
+"70": 157.25
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 10.115,
+"120": 154.7,
+"16": 44.03,
+"2.5": 13.685,
+"240": 238.595,
+"300": 274.295,
+"35": 71.4,
+"6": 23.8,
+"70": 110.075
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.43,
+"120": 205.4,
+"16": 58.46,
+"2.5": 18.17,
+"240": 316.79,
+"300": 364.19,
+"35": 94.8,
+"6": 31.6,
+"70": 146.15
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.401,
+"120": 143.78,
+"16": 40.922,
+"2.5": 12.719,
+"240": 221.753,
+"300": 254.933,
+"35": 66.36,
+"6": 22.12,
+"70": 102.305
 },
 "r90": 0.320662
 },
@@ -1520,6 +3760,46 @@
 },
 "r90": 0.320662
 },
+"C|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.07,
+"120": 184.6,
+"16": 52.54,
+"2.5": 16.33,
+"240": 284.71,
+"300": 327.31,
+"35": 85.2,
+"6": 28.4,
+"70": 131.35
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.449,
+"120": 129.22,
+"16": 36.778,
+"2.5": 11.431,
+"240": 199.297,
+"300": 229.117,
+"35": 59.64,
+"6": 19.88,
+"70": 91.945
+},
+"r90": 0.320662
+},
 "C|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1557,6 +3837,86 @@
 "35": 72.8,
 "6": 25.2,
 "70": 112.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.75,
+"120": 191.25,
+"16": 56.1,
+"2.5": 17.85,
+"240": 298.35,
+"300": 343.4,
+"35": 88.4,
+"6": 30.6,
+"70": 136.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.925,
+"120": 133.875,
+"16": 39.27,
+"2.5": 12.495,
+"240": 208.845,
+"300": 240.38,
+"35": 61.88,
+"6": 21.42,
+"70": 95.2
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.85,
+"120": 177.75,
+"16": 52.14,
+"2.5": 16.59,
+"240": 277.29,
+"300": 319.16,
+"35": 82.16,
+"6": 28.44,
+"70": 126.4
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.295,
+"120": 124.425,
+"16": 36.498,
+"2.5": 11.613,
+"240": 194.103,
+"300": 223.412,
+"35": 57.512,
+"6": 19.908,
+"70": 88.48
 },
 "r90": 0.320662
 },
@@ -1600,6 +3960,46 @@
 },
 "r90": 0.320662
 },
+"C|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.65,
+"120": 159.75,
+"16": 46.86,
+"2.5": 14.91,
+"240": 249.21,
+"300": 286.84,
+"35": 73.84,
+"6": 25.56,
+"70": 113.6
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.455,
+"120": 111.825,
+"16": 32.802,
+"2.5": 10.437,
+"240": 174.447,
+"300": 200.788,
+"35": 51.688,
+"6": 17.892,
+"70": 79.52
+},
+"r90": 0.320662
+},
 "C|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1637,6 +4037,86 @@
 "35": 96.6,
 "6": "invalid",
 "70": 151.2
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 216.75,
+"16": 64.6,
+"2.5": "invalid",
+"240": 339.15,
+"300": 392.7,
+"35": 97.75,
+"6": "invalid",
+"70": 153.0
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 182.07,
+"16": 54.264,
+"2.5": "invalid",
+"240": 284.886,
+"300": 329.868,
+"35": 82.11,
+"6": "invalid",
+"70": 128.52
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 201.45,
+"16": 60.04,
+"2.5": "invalid",
+"240": 315.21,
+"300": 364.98,
+"35": 90.85,
+"6": "invalid",
+"70": 142.2
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 169.218,
+"16": 50.4336,
+"2.5": "invalid",
+"240": 264.7764,
+"300": 306.5832,
+"35": 76.314,
+"6": "invalid",
+"70": 119.448
 },
 "r90": 0.56797
 },
@@ -1680,6 +4160,46 @@
 },
 "r90": 0.56797
 },
+"C|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 181.05,
+"16": 53.96,
+"2.5": "invalid",
+"240": 283.29,
+"300": 328.02,
+"35": 81.65,
+"6": "invalid",
+"70": 127.8
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 152.082,
+"16": 45.3264,
+"2.5": "invalid",
+"240": 237.9636,
+"300": 275.5368,
+"35": 68.586,
+"6": "invalid",
+"70": 107.352
+},
+"r90": 0.56797
+},
 "C|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1717,6 +4237,86 @@
 "35": 85.68,
 "6": "invalid",
 "70": 132.72
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 189.55,
+"16": 58.65,
+"2.5": "invalid",
+"240": 295.8,
+"300": 340.0,
+"35": 86.7,
+"6": "invalid",
+"70": 134.3
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 159.222,
+"16": 49.266,
+"2.5": "invalid",
+"240": 248.472,
+"300": 285.6,
+"35": 72.828,
+"6": "invalid",
+"70": 112.812
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 176.17,
+"16": 54.51,
+"2.5": "invalid",
+"240": 274.92,
+"300": 316.0,
+"35": 80.58,
+"6": "invalid",
+"70": 124.82
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 147.9828,
+"16": 45.7884,
+"2.5": "invalid",
+"240": 230.9328,
+"300": 265.44,
+"35": 67.6872,
+"6": "invalid",
+"70": 104.8488
 },
 "r90": 0.56797
 },
@@ -1760,6 +4360,46 @@
 },
 "r90": 0.56797
 },
+"C|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 158.33,
+"16": 48.99,
+"2.5": "invalid",
+"240": 247.08,
+"300": 284.0,
+"35": 72.42,
+"6": "invalid",
+"70": 112.18
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 132.9972,
+"16": 41.1516,
+"2.5": "invalid",
+"240": 207.5472,
+"300": 238.56,
+"35": 60.8328,
+"6": "invalid",
+"70": 94.2312
+},
+"r90": 0.56797
+},
 "C|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1797,6 +4437,86 @@
 "35": 131.04,
 "6": 44.52,
 "70": 205.8
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.7,
+"120": 295.8,
+"16": 82.45,
+"2.5": 25.5,
+"240": 463.25,
+"300": 536.35,
+"35": 132.6,
+"6": 45.05,
+"70": 208.25
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 15.708,
+"120": 248.472,
+"16": 69.258,
+"2.5": 21.42,
+"240": 389.13,
+"300": 450.534,
+"35": 111.384,
+"6": 37.842,
+"70": 174.93
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.38,
+"120": 274.92,
+"16": 76.63,
+"2.5": 23.7,
+"240": 430.55,
+"300": 498.49,
+"35": 123.24,
+"6": 41.87,
+"70": 193.55
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 14.5992,
+"120": 230.9328,
+"16": 64.3692,
+"2.5": 19.908,
+"240": 361.662,
+"300": 418.7316,
+"35": 103.5216,
+"6": 35.1708,
+"70": 162.582
 },
 "r90": 0.341727
 },
@@ -1840,6 +4560,46 @@
 },
 "r90": 0.341727
 },
+"C|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.62,
+"120": 247.08,
+"16": 68.87,
+"2.5": 21.3,
+"240": 386.95,
+"300": 448.01,
+"35": 110.76,
+"6": 37.63,
+"70": 173.95
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 13.1208,
+"120": 207.5472,
+"16": 57.8508,
+"2.5": 17.892,
+"240": 325.038,
+"300": 376.3284,
+"35": 93.0384,
+"6": 31.6092,
+"70": 146.118
+},
+"r90": 0.341727
+},
 "C|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1877,6 +4637,86 @@
 "35": 112.56,
 "6": 39.48,
 "70": 174.72
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.0,
+"120": 249.05,
+"16": 73.95,
+"2.5": 22.95,
+"240": 386.75,
+"300": 445.4,
+"35": 113.9,
+"6": 39.95,
+"70": 176.8
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 14.28,
+"120": 209.202,
+"16": 62.118,
+"2.5": 19.278,
+"240": 324.87,
+"300": 374.136,
+"35": 95.676,
+"6": 33.558,
+"70": 148.512
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.8,
+"120": 231.47,
+"16": 68.73,
+"2.5": 21.33,
+"240": 359.45,
+"300": 413.96,
+"35": 105.86,
+"6": 37.13,
+"70": 164.32
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.79,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 13.272,
+"120": 194.4348,
+"16": 57.7332,
+"2.5": 17.9172,
+"240": 301.938,
+"300": 347.7264,
+"35": 88.9224,
+"6": 31.1892,
+"70": 138.0288
 },
 "r90": 0.341727
 },
@@ -1920,6 +4760,46 @@
 },
 "r90": 0.341727
 },
+"C|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.2,
+"120": 208.03,
+"16": 61.77,
+"2.5": 19.17,
+"240": 323.05,
+"300": 372.04,
+"35": 95.14,
+"6": 33.37,
+"70": 147.68
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.71,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 11.928,
+"120": 174.7452,
+"16": 51.8868,
+"2.5": 16.1028,
+"240": 271.362,
+"300": 312.5136,
+"35": 79.9176,
+"6": 28.0308,
+"70": 124.0512
+},
+"r90": 0.341727
+},
 "D1|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -1957,6 +4837,86 @@
 "35": 92.6652,
 "6": "invalid",
 "70": 137.2494
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.5308,
+"16": 52.0149,
+"2.5": "invalid",
+"240": 231.0948,
+"300": 260.8176,
+"35": 78.7654,
+"6": "invalid",
+"70": 116.662
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.5308,
+"16": 52.0149,
+"2.5": "invalid",
+"240": 231.0948,
+"300": 260.8176,
+"35": 78.7654,
+"6": "invalid",
+"70": 116.662
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 138.9978,
+"16": 45.8955,
+"2.5": "invalid",
+"240": 203.9072,
+"300": 230.1332,
+"35": 69.4989,
+"6": "invalid",
+"70": 102.937
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 138.9978,
+"16": 45.8955,
+"2.5": "invalid",
+"240": 203.9072,
+"300": 230.1332,
+"35": 69.4989,
+"6": "invalid",
+"70": 102.937
 },
 "r90": 0.532265
 },
@@ -2000,6 +4960,46 @@
 },
 "r90": 0.532265
 },
+"D1|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 111.1982,
+"16": 36.7164,
+"2.5": "invalid",
+"240": 163.1257,
+"300": 184.1065,
+"35": 55.5991,
+"6": "invalid",
+"70": 82.3496
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 111.1982,
+"16": 36.7164,
+"2.5": "invalid",
+"240": 163.1257,
+"300": 184.1065,
+"35": 55.5991,
+"6": "invalid",
+"70": 82.3496
+},
+"r90": 0.532265
+},
 "D1|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2037,6 +5037,86 @@
 "35": 78.678,
 "6": "invalid",
 "70": 114.5202
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 130.7803,
+"16": 43.0981,
+"2.5": "invalid",
+"240": 191.7121,
+"300": 216.2334,
+"35": 66.8763,
+"6": "invalid",
+"70": 97.3422
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 130.7803,
+"16": 43.0981,
+"2.5": "invalid",
+"240": 191.7121,
+"300": 216.2334,
+"35": 66.8763,
+"6": "invalid",
+"70": 97.3422
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 115.3944,
+"16": 38.0277,
+"2.5": "invalid",
+"240": 169.1577,
+"300": 190.7942,
+"35": 59.0085,
+"6": "invalid",
+"70": 85.8901
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 115.3944,
+"16": 38.0277,
+"2.5": "invalid",
+"240": 169.1577,
+"300": 190.7942,
+"35": 59.0085,
+"6": "invalid",
+"70": 85.8901
 },
 "r90": 0.532265
 },
@@ -2080,6 +5160,46 @@
 },
 "r90": 0.532265
 },
+"D1|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 92.3155,
+"16": 30.4222,
+"2.5": "invalid",
+"240": 135.3262,
+"300": 152.6353,
+"35": 47.2068,
+"6": "invalid",
+"70": 68.7121
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 92.3155,
+"16": 30.4222,
+"2.5": "invalid",
+"240": 135.3262,
+"300": 152.6353,
+"35": 47.2068,
+"6": "invalid",
+"70": 68.7121
+},
+"r90": 0.532265
+},
 "D1|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2117,6 +5237,86 @@
 "35": 122.388,
 "6": 46.3326,
 "70": 179.211
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.5768,
+"120": 205.0873,
+"16": 67.6194,
+"2.5": 24.5213,
+"240": 300.9434,
+"300": 339.583,
+"35": 104.0298,
+"6": 39.3827,
+"70": 152.3294
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.5768,
+"120": 205.0873,
+"16": 67.6194,
+"2.5": 24.5213,
+"240": 300.9434,
+"300": 339.583,
+"35": 104.0298,
+"6": 39.3827,
+"70": 152.3294
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.3912,
+"120": 180.9594,
+"16": 59.6641,
+"2.5": 21.6364,
+"240": 265.5383,
+"300": 299.632,
+"35": 91.791,
+"6": 34.7494,
+"70": 134.4083
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.3912,
+"120": 180.9594,
+"16": 59.6641,
+"2.5": 21.6364,
+"240": 265.5383,
+"300": 299.632,
+"35": 91.791,
+"6": 34.7494,
+"70": 134.4083
 },
 "r90": 0.320662
 },
@@ -2160,6 +5360,46 @@
 },
 "r90": 0.320662
 },
+"D1|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.113,
+"120": 144.7675,
+"16": 47.7313,
+"2.5": 17.3092,
+"240": 212.4306,
+"300": 239.7056,
+"35": 73.4328,
+"6": 27.7996,
+"70": 107.5266
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.113,
+"120": 144.7675,
+"16": 47.7313,
+"2.5": 17.3092,
+"240": 212.4306,
+"300": 239.7056,
+"35": 73.4328,
+"6": 27.7996,
+"70": 107.5266
+},
+"r90": 0.320662
+},
 "D1|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2197,6 +5437,86 @@
 "35": 100.533,
 "6": 38.4648,
 "70": 147.7398
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.8614,
+"120": 169.42,
+"16": 55.7302,
+"2.5": 20.0629,
+"240": 247.4423,
+"300": 280.1374,
+"35": 85.4531,
+"6": 32.6951,
+"70": 125.5788
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.8614,
+"120": 169.42,
+"16": 55.7302,
+"2.5": 20.0629,
+"240": 247.4423,
+"300": 280.1374,
+"35": 85.4531,
+"6": 32.6951,
+"70": 125.5788
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.113,
+"120": 149.4882,
+"16": 49.1737,
+"2.5": 17.7025,
+"240": 218.3314,
+"300": 247.18,
+"35": 75.3997,
+"6": 28.8486,
+"70": 110.8049
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.113,
+"120": 149.4882,
+"16": 49.1737,
+"2.5": 17.7025,
+"240": 218.3314,
+"300": 247.18,
+"35": 75.3997,
+"6": 28.8486,
+"70": 110.8049
 },
 "r90": 0.320662
 },
@@ -2240,6 +5560,46 @@
 },
 "r90": 0.320662
 },
+"D1|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.4904,
+"120": 119.5906,
+"16": 39.339,
+"2.5": 14.162,
+"240": 174.6652,
+"300": 197.744,
+"35": 60.3198,
+"6": 23.0789,
+"70": 88.6439
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 10.4904,
+"120": 119.5906,
+"16": 39.339,
+"2.5": 14.162,
+"240": 174.6652,
+"300": 197.744,
+"35": 60.3198,
+"6": 23.0789,
+"70": 88.6439
+},
+"r90": 0.320662
+},
 "D1|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2277,6 +5637,86 @@
 "35": 114.5667,
 "6": "invalid",
 "70": 166.8885
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 190.9295,
+"16": 63.6432,
+"2.5": "invalid",
+"240": 279.8765,
+"300": 315.9154,
+"35": 97.3817,
+"6": "invalid",
+"70": 141.8552
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 190.9295,
+"16": 63.6432,
+"2.5": "invalid",
+"240": 279.8765,
+"300": 315.9154,
+"35": 97.3817,
+"6": "invalid",
+"70": 141.8552
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 168.4672,
+"16": 56.1557,
+"2.5": "invalid",
+"240": 246.9499,
+"300": 278.7489,
+"35": 85.925,
+"6": "invalid",
+"70": 125.1664
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 168.4672,
+"16": 56.1557,
+"2.5": "invalid",
+"240": 246.9499,
+"300": 278.7489,
+"35": 85.925,
+"6": "invalid",
+"70": 125.1664
 },
 "r90": 0.56797
 },
@@ -2320,6 +5760,46 @@
 },
 "r90": 0.56797
 },
+"D1|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.7737,
+"16": 44.9246,
+"2.5": "invalid",
+"240": 197.5599,
+"300": 222.9991,
+"35": 68.74,
+"6": "invalid",
+"70": 100.1331
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.7737,
+"16": 44.9246,
+"2.5": "invalid",
+"240": 197.5599,
+"300": 222.9991,
+"35": 68.74,
+"6": "invalid",
+"70": 100.1331
+},
+"r90": 0.56797
+},
 "D1|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2357,6 +5837,86 @@
 "35": 95.6226,
 "6": "invalid",
 "70": 140.7276
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 161.7916,
+"16": 52.9082,
+"2.5": "invalid",
+"240": 236.1698,
+"300": 267.608,
+"35": 81.2792,
+"6": "invalid",
+"70": 119.6185
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 161.7916,
+"16": 52.9082,
+"2.5": "invalid",
+"240": 236.1698,
+"300": 267.608,
+"35": 81.2792,
+"6": "invalid",
+"70": 119.6185
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 142.7573,
+"16": 46.6837,
+"2.5": "invalid",
+"240": 208.3851,
+"300": 236.1247,
+"35": 71.7169,
+"6": "invalid",
+"70": 105.5457
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 142.7573,
+"16": 46.6837,
+"2.5": "invalid",
+"240": 208.3851,
+"300": 236.1247,
+"35": 71.7169,
+"6": "invalid",
+"70": 105.5457
 },
 "r90": 0.56797
 },
@@ -2400,6 +5960,46 @@
 },
 "r90": 0.56797
 },
+"D1|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 114.2059,
+"16": 37.3469,
+"2.5": "invalid",
+"240": 166.7081,
+"300": 188.8997,
+"35": 57.3736,
+"6": "invalid",
+"70": 84.4366
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 114.2059,
+"16": 37.3469,
+"2.5": "invalid",
+"240": 166.7081,
+"300": 188.8997,
+"35": 57.3736,
+"6": "invalid",
+"70": 84.4366
+},
+"r90": 0.56797
+},
 "D1|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2437,6 +6037,86 @@
 "35": 148.8465,
 "6": 56.8323,
 "70": 217.4061
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 22.2368,
+"120": 249.2051,
+"16": 81.2792,
+"2.5": 29.9046,
+"240": 364.2229,
+"300": 411.7635,
+"35": 126.5195,
+"6": 48.3075,
+"70": 184.7952
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 22.2368,
+"120": 249.2051,
+"16": 81.2792,
+"2.5": 29.9046,
+"240": 364.2229,
+"300": 411.7635,
+"35": 126.5195,
+"6": 48.3075,
+"70": 184.7952
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.6207,
+"120": 219.8869,
+"16": 71.7169,
+"2.5": 26.3864,
+"240": 321.3731,
+"300": 363.3208,
+"35": 111.6349,
+"6": 42.6242,
+"70": 163.0546
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.6207,
+"120": 219.8869,
+"16": 71.7169,
+"2.5": 26.3864,
+"240": 321.3731,
+"300": 363.3208,
+"35": 111.6349,
+"6": 42.6242,
+"70": 163.0546
 },
 "r90": 0.341727
 },
@@ -2480,6 +6160,46 @@
 },
 "r90": 0.341727
 },
+"D1|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.6965,
+"120": 175.9095,
+"16": 57.3736,
+"2.5": 21.1091,
+"240": 257.0985,
+"300": 290.6566,
+"35": 89.3079,
+"6": 34.0994,
+"70": 130.4437
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.6965,
+"120": 175.9095,
+"16": 57.3736,
+"2.5": 21.1091,
+"240": 257.0985,
+"300": 290.6566,
+"35": 89.3079,
+"6": 34.0994,
+"70": 130.4437
+},
+"r90": 0.341727
+},
 "D1|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2517,6 +6237,86 @@
 "35": 124.4898,
 "6": 46.9092,
 "70": 182.2242
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.1696,
+"120": 208.5655,
+"16": 68.2439,
+"2.5": 25.3039,
+"240": 305.1804,
+"300": 344.2865,
+"35": 105.8163,
+"6": 39.8728,
+"70": 154.8906
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.85,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.1696,
+"120": 208.5655,
+"16": 68.2439,
+"2.5": 25.3039,
+"240": 305.1804,
+"300": 344.2865,
+"35": 105.8163,
+"6": 39.8728,
+"70": 154.8906
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.9144,
+"120": 184.0284,
+"16": 60.2152,
+"2.5": 22.327,
+"240": 269.2769,
+"300": 303.7822,
+"35": 93.3674,
+"6": 35.1819,
+"70": 136.6681
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.9144,
+"120": 184.0284,
+"16": 60.2152,
+"2.5": 22.327,
+"240": 269.2769,
+"300": 303.7822,
+"35": 93.3674,
+"6": 35.1819,
+"70": 136.6681
 },
 "r90": 0.341727
 },
@@ -2560,6 +6360,46 @@
 },
 "r90": 0.341727
 },
+"D1|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.5315,
+"120": 147.2227,
+"16": 48.1721,
+"2.5": 17.8616,
+"240": 215.4215,
+"300": 243.0257,
+"35": 74.6939,
+"6": 28.1455,
+"70": 109.3345
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.5315,
+"120": 147.2227,
+"16": 48.1721,
+"2.5": 17.8616,
+"240": 215.4215,
+"300": 243.0257,
+"35": 74.6939,
+"6": 28.1455,
+"70": 109.3345
+},
+"r90": 0.341727
+},
 "D2|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2597,6 +6437,86 @@
 "35": 107.066,
 "6": "invalid",
 "70": 158.202
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 162.996,
+"16": 51.5355,
+"2.5": "invalid",
+"240": 241.4977,
+"300": 273.8572,
+"35": 80.2995,
+"6": "invalid",
+"70": 118.6515
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 162.996,
+"16": 51.5355,
+"2.5": "invalid",
+"240": 241.4977,
+"300": 273.8572,
+"35": 80.2995,
+"6": "invalid",
+"70": 118.6515
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 141.2632,
+"16": 44.6641,
+"2.5": "invalid",
+"240": 209.298,
+"300": 237.343,
+"35": 69.5929,
+"6": "invalid",
+"70": 102.8313
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 141.2632,
+"16": 44.6641,
+"2.5": "invalid",
+"240": 209.298,
+"300": 237.343,
+"35": 69.5929,
+"6": "invalid",
+"70": 102.8313
 },
 "r90": 0.532265
 },
@@ -2640,6 +6560,46 @@
 },
 "r90": 0.532265
 },
+"D2|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 108.664,
+"16": 34.357,
+"2.5": "invalid",
+"240": 160.9985,
+"300": 182.5715,
+"35": 53.533,
+"6": "invalid",
+"70": 79.101
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 108.664,
+"16": 34.357,
+"2.5": "invalid",
+"240": 160.9985,
+"300": 182.5715,
+"35": 53.533,
+"6": "invalid",
+"70": 79.101
+},
+"r90": 0.532265
+},
 "D2|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2677,6 +6637,86 @@
 "35": 90.287,
 "6": "invalid",
 "70": 134.232
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 138.4267,
+"16": 43.7452,
+"2.5": "invalid",
+"240": 204.3442,
+"300": 231.3105,
+"35": 67.7152,
+"6": "invalid",
+"70": 100.674
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 138.4267,
+"16": 43.7452,
+"2.5": "invalid",
+"240": 204.3442,
+"300": 231.3105,
+"35": 67.7152,
+"6": "invalid",
+"70": 100.674
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 119.9698,
+"16": 37.9125,
+"2.5": "invalid",
+"240": 177.0983,
+"300": 200.4691,
+"35": 58.6865,
+"6": "invalid",
+"70": 87.2508
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 119.9698,
+"16": 37.9125,
+"2.5": "invalid",
+"240": 177.0983,
+"300": 200.4691,
+"35": 58.6865,
+"6": "invalid",
+"70": 87.2508
 },
 "r90": 0.532265
 },
@@ -2720,6 +6760,46 @@
 },
 "r90": 0.532265
 },
+"D2|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 92.2845,
+"16": 29.1635,
+"2.5": "invalid",
+"240": 136.2295,
+"300": 154.207,
+"35": 45.1435,
+"6": "invalid",
+"70": 67.116
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 92.2845,
+"16": 29.1635,
+"2.5": "invalid",
+"240": 136.2295,
+"300": 154.207,
+"35": 45.1435,
+"6": "invalid",
+"70": 67.116
+},
+"r90": 0.532265
+},
 "D2|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2757,6 +6837,86 @@
 "35": 138.227,
 "6": 51.935,
 "70": 202.946
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.3782,
+"120": 209.7375,
+"16": 67.116,
+"2.5": 23.3707,
+"240": 311.0107,
+"300": 351.7597,
+"35": 103.6702,
+"6": 38.9512,
+"70": 152.2095
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.3782,
+"120": 209.7375,
+"16": 67.116,
+"2.5": 23.3707,
+"240": 311.0107,
+"300": 351.7597,
+"35": 103.6702,
+"6": 38.9512,
+"70": 152.2095
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.0611,
+"120": 181.7725,
+"16": 58.1672,
+"2.5": 20.2546,
+"240": 269.5426,
+"300": 304.8585,
+"35": 89.8475,
+"6": 33.7577,
+"70": 131.9149
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.0611,
+"120": 181.7725,
+"16": 58.1672,
+"2.5": 20.2546,
+"240": 269.5426,
+"300": 304.8585,
+"35": 89.8475,
+"6": 33.7577,
+"70": 131.9149
 },
 "r90": 0.320662
 },
@@ -2800,6 +6960,46 @@
 },
 "r90": 0.320662
 },
+"D2|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.5855,
+"120": 139.825,
+"16": 44.744,
+"2.5": 15.5805,
+"240": 207.3405,
+"300": 234.5065,
+"35": 69.1135,
+"6": 25.9675,
+"70": 101.473
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.5855,
+"120": 139.825,
+"16": 44.744,
+"2.5": 15.5805,
+"240": 207.3405,
+"300": 234.5065,
+"35": 69.1135,
+"6": 25.9675,
+"70": 101.473
+},
+"r90": 0.320662
+},
 "D2|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2837,6 +7037,86 @@
 "35": 117.453,
 "6": 43.945,
 "70": 168.589
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.9812,
+"120": 173.7825,
+"16": 56.9287,
+"2.5": 20.3745,
+"240": 256.479,
+"300": 290.037,
+"35": 88.0897,
+"6": 32.9587,
+"70": 126.4417
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.9812,
+"120": 173.7825,
+"16": 56.9287,
+"2.5": 20.3745,
+"240": 256.479,
+"300": 290.037,
+"35": 88.0897,
+"6": 32.9587,
+"70": 126.4417
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.9837,
+"120": 150.6115,
+"16": 49.3382,
+"2.5": 17.6579,
+"240": 222.2818,
+"300": 251.3654,
+"35": 76.3444,
+"6": 28.5642,
+"70": 109.5828
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.9837,
+"120": 150.6115,
+"16": 49.3382,
+"2.5": 17.6579,
+"240": 222.2818,
+"300": 251.3654,
+"35": 76.3444,
+"6": 28.5642,
+"70": 109.5828
 },
 "r90": 0.320662
 },
@@ -2880,6 +7160,46 @@
 },
 "r90": 0.320662
 },
+"D2|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.9875,
+"120": 115.855,
+"16": 37.9525,
+"2.5": 13.583,
+"240": 170.986,
+"300": 193.358,
+"35": 58.7265,
+"6": 21.9725,
+"70": 84.2945
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.9875,
+"120": 115.855,
+"16": 37.9525,
+"2.5": 13.583,
+"240": 170.986,
+"300": 193.358,
+"35": 58.7265,
+"6": 21.9725,
+"70": 84.2945
+},
+"r90": 0.320662
+},
 "D2|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2917,6 +7237,86 @@
 "35": 134.3935,
 "6": "invalid",
 "70": 197.0555
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 201.5902,
+"16": 64.311,
+"2.5": "invalid",
+"240": 299.2935,
+"300": 338.2511,
+"35": 100.7951,
+"6": "invalid",
+"70": 147.7916
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 201.5902,
+"16": 64.311,
+"2.5": "invalid",
+"240": 299.2935,
+"300": 338.2511,
+"35": 100.7951,
+"6": "invalid",
+"70": 147.7916
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 174.7116,
+"16": 55.7362,
+"2.5": "invalid",
+"240": 259.3877,
+"300": 293.151,
+"35": 87.3558,
+"6": "invalid",
+"70": 128.0861
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 174.7116,
+"16": 55.7362,
+"2.5": "invalid",
+"240": 259.3877,
+"300": 293.151,
+"35": 87.3558,
+"6": "invalid",
+"70": 128.0861
 },
 "r90": 0.56797
 },
@@ -2960,6 +7360,46 @@
 },
 "r90": 0.56797
 },
+"D2|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.3935,
+"16": 42.874,
+"2.5": "invalid",
+"240": 199.529,
+"300": 225.5008,
+"35": 67.1967,
+"6": "invalid",
+"70": 98.5277
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.3935,
+"16": 42.874,
+"2.5": "invalid",
+"240": 199.529,
+"300": 225.5008,
+"35": 67.1967,
+"6": "invalid",
+"70": 98.5277
+},
+"r90": 0.56797
+},
 "D2|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -2997,6 +7437,86 @@
 "35": 112.9565,
 "6": "invalid",
 "70": 163.251
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 168.198,
+"16": 54.417,
+"2.5": "invalid",
+"240": 249.2051,
+"300": 281.979,
+"35": 84.7174,
+"6": "invalid",
+"70": 122.4382
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 168.198,
+"16": 54.417,
+"2.5": "invalid",
+"240": 249.2051,
+"300": 281.979,
+"35": 84.7174,
+"6": "invalid",
+"70": 122.4382
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 145.7716,
+"16": 47.1614,
+"2.5": "invalid",
+"240": 215.9778,
+"300": 244.3818,
+"35": 73.4217,
+"6": "invalid",
+"70": 106.1132
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 145.7716,
+"16": 47.1614,
+"2.5": "invalid",
+"240": 215.9778,
+"300": 244.3818,
+"35": 73.4217,
+"6": "invalid",
+"70": 106.1132
 },
 "r90": 0.56797
 },
@@ -3040,6 +7560,46 @@
 },
 "r90": 0.56797
 },
+"D2|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 112.132,
+"16": 36.278,
+"2.5": "invalid",
+"240": 166.1368,
+"300": 187.986,
+"35": 56.4783,
+"6": "invalid",
+"70": 81.6255
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 112.132,
+"16": 36.278,
+"2.5": "invalid",
+"240": 166.1368,
+"300": 187.986,
+"35": 56.4783,
+"6": "invalid",
+"70": 81.6255
+},
+"r90": 0.56797
+},
 "D2|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3077,6 +7637,86 @@
 "35": 173.145,
 "6": 62.662,
 "70": 253.1215
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.0248,
+"120": 259.7175,
+"16": 83.4806,
+"2.5": 28.4453,
+"240": 385.2476,
+"300": 435.336,
+"35": 129.8588,
+"6": 46.9965,
+"70": 189.8411
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.0248,
+"120": 259.7175,
+"16": 83.4806,
+"2.5": 28.4453,
+"240": 385.2476,
+"300": 435.336,
+"35": 129.8588,
+"6": 46.9965,
+"70": 189.8411
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.2215,
+"120": 225.0885,
+"16": 72.3499,
+"2.5": 24.6526,
+"240": 333.8813,
+"300": 377.2912,
+"35": 112.5443,
+"6": 40.7303,
+"70": 164.529
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.2215,
+"120": 225.0885,
+"16": 72.3499,
+"2.5": 24.6526,
+"240": 333.8813,
+"300": 377.2912,
+"35": 112.5443,
+"6": 40.7303,
+"70": 164.529
 },
 "r90": 0.341727
 },
@@ -3120,6 +7760,46 @@
 },
 "r90": 0.341727
 },
+"D2|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.0165,
+"120": 173.145,
+"16": 55.6538,
+"2.5": 18.9635,
+"240": 256.8317,
+"300": 290.224,
+"35": 86.5725,
+"6": 31.331,
+"70": 126.5607
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.0165,
+"120": 173.145,
+"16": 55.6538,
+"2.5": 18.9635,
+"240": 256.8317,
+"300": 290.224,
+"35": 86.5725,
+"6": 31.331,
+"70": 126.5607
+},
+"r90": 0.341727
+},
 "D2|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3157,6 +7837,86 @@
 "35": 145.9365,
 "6": 52.768,
 "70": 211.072
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.9329,
+"120": 217.0496,
+"16": 69.8764,
+"2.5": 24.1166,
+"240": 320.9366,
+"300": 362.3678,
+"35": 109.4524,
+"6": 39.576,
+"70": 158.304
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.9329,
+"120": 217.0496,
+"16": 69.8764,
+"2.5": 24.1166,
+"240": 320.9366,
+"300": 362.3678,
+"35": 109.4524,
+"6": 39.576,
+"70": 158.304
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.5418,
+"120": 188.1097,
+"16": 60.5595,
+"2.5": 20.9011,
+"240": 278.1451,
+"300": 314.0521,
+"35": 94.8587,
+"6": 34.2992,
+"70": 137.1968
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.5418,
+"120": 188.1097,
+"16": 60.5595,
+"2.5": 20.9011,
+"240": 278.1451,
+"300": 314.0521,
+"35": 94.8587,
+"6": 34.2992,
+"70": 137.1968
 },
 "r90": 0.341727
 },
@@ -3200,6 +7960,46 @@
 },
 "r90": 0.341727
 },
+"D2|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.9552,
+"120": 144.6997,
+"16": 46.5842,
+"2.5": 16.0778,
+"240": 213.9578,
+"300": 241.5785,
+"35": 72.9682,
+"6": 26.384,
+"70": 105.536
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.5,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.9552,
+"120": 144.6997,
+"16": 46.5842,
+"2.5": 16.0778,
+"240": 213.9578,
+"300": 241.5785,
+"35": 72.9682,
+"6": 26.384,
+"70": 105.536
+},
+"r90": 0.341727
+},
 "E|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3237,6 +8037,86 @@
 "35": 67.9,
 "6": "invalid",
 "70": 105.7
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 186.56,
+"16": 56.32,
+"2.5": "invalid",
+"240": 291.28,
+"300": 336.16,
+"35": 85.36,
+"6": "invalid",
+"70": 132.88
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 130.592,
+"16": 39.424,
+"2.5": "invalid",
+"240": 203.896,
+"300": 235.312,
+"35": 59.752,
+"6": "invalid",
+"70": 93.016
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 173.84,
+"16": 52.48,
+"2.5": "invalid",
+"240": 271.42,
+"300": 313.24,
+"35": 79.54,
+"6": "invalid",
+"70": 123.82
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 121.688,
+"16": 36.736,
+"2.5": "invalid",
+"240": 189.994,
+"300": 219.268,
+"35": 55.678,
+"6": "invalid",
+"70": 86.674
 },
 "r90": 0.532265
 },
@@ -3280,6 +8160,46 @@
 },
 "r90": 0.532265
 },
+"E|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 152.64,
+"16": 46.08,
+"2.5": "invalid",
+"240": 238.32,
+"300": 275.04,
+"35": 69.84,
+"6": "invalid",
+"70": 108.72
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 106.848,
+"16": 32.256,
+"2.5": "invalid",
+"240": 166.824,
+"300": 192.528,
+"35": 48.888,
+"6": "invalid",
+"70": 76.104
+},
+"r90": 0.532265
+},
 "E|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3317,6 +8237,86 @@
 "35": 58.8,
 "6": "invalid",
 "70": 91.7
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 161.92,
+"16": 46.64,
+"2.5": "invalid",
+"240": 252.56,
+"300": 291.28,
+"35": 73.92,
+"6": "invalid",
+"70": 115.28
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 113.344,
+"16": 32.648,
+"2.5": "invalid",
+"240": 176.792,
+"300": 203.896,
+"35": 51.744,
+"6": "invalid",
+"70": 80.696
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 150.88,
+"16": 43.46,
+"2.5": "invalid",
+"240": 235.34,
+"300": 271.42,
+"35": 68.88,
+"6": "invalid",
+"70": 107.42
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 105.616,
+"16": 30.422,
+"2.5": "invalid",
+"240": 164.738,
+"300": 189.994,
+"35": 48.216,
+"6": "invalid",
+"70": 75.194
 },
 "r90": 0.532265
 },
@@ -3360,6 +8360,46 @@
 },
 "r90": 0.532265
 },
+"E|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 132.48,
+"16": 38.16,
+"2.5": "invalid",
+"240": 206.64,
+"300": 238.32,
+"35": 60.48,
+"6": "invalid",
+"70": 94.32
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 92.736,
+"16": 26.712,
+"2.5": "invalid",
+"240": 144.648,
+"300": 166.824,
+"35": 42.336,
+"6": "invalid",
+"70": 66.024
+},
+"r90": 0.532265
+},
 "E|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3397,6 +8437,86 @@
 "35": 90.3,
 "6": 30.8,
 "70": 141.4
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.72,
+"120": 250.8,
+"16": 72.16,
+"2.5": 22.88,
+"240": 393.36,
+"300": 454.08,
+"35": 113.52,
+"6": 38.72,
+"70": 177.76
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 11.704,
+"120": 175.56,
+"16": 50.512,
+"2.5": 16.016,
+"240": 275.352,
+"300": 317.856,
+"35": 79.464,
+"6": 27.104,
+"70": 124.432
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.58,
+"120": 233.7,
+"16": 67.24,
+"2.5": 21.32,
+"240": 366.54,
+"300": 423.12,
+"35": 105.78,
+"6": 36.08,
+"70": 165.64
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 10.906,
+"120": 163.59,
+"16": 47.068,
+"2.5": 14.924,
+"240": 256.578,
+"300": 296.184,
+"35": 74.046,
+"6": 25.256,
+"70": 115.948
 },
 "r90": 0.320662
 },
@@ -3440,6 +8560,46 @@
 },
 "r90": 0.320662
 },
+"E|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.68,
+"120": 205.2,
+"16": 59.04,
+"2.5": 18.72,
+"240": 321.84,
+"300": 371.52,
+"35": 92.88,
+"6": 31.68,
+"70": 145.44
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.576,
+"120": 143.64,
+"16": 41.328,
+"2.5": 13.104,
+"240": 225.288,
+"300": 260.064,
+"35": 65.016,
+"6": 22.176,
+"70": 101.808
+},
+"r90": 0.320662
+},
 "E|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3477,6 +8637,86 @@
 "35": 77.0,
 "6": 25.9,
 "70": 119.7
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.08,
+"120": 211.2,
+"16": 61.6,
+"2.5": 19.36,
+"240": 329.12,
+"300": 380.16,
+"35": 96.8,
+"6": 32.56,
+"70": 150.48
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.856,
+"120": 147.84,
+"16": 43.12,
+"2.5": 13.552,
+"240": 230.384,
+"300": 266.112,
+"35": 67.76,
+"6": 22.792,
+"70": 105.336
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.12,
+"120": 196.8,
+"16": 57.4,
+"2.5": 18.04,
+"240": 306.68,
+"300": 354.24,
+"35": 90.2,
+"6": 30.34,
+"70": 140.22
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.184,
+"120": 137.76,
+"16": 40.18,
+"2.5": 12.628,
+"240": 214.676,
+"300": 247.968,
+"35": 63.14,
+"6": 21.238,
+"70": 98.154
 },
 "r90": 0.320662
 },
@@ -3520,6 +8760,46 @@
 },
 "r90": 0.320662
 },
+"E|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.52,
+"120": 172.8,
+"16": 50.4,
+"2.5": 15.84,
+"240": 269.28,
+"300": 311.04,
+"35": 79.2,
+"6": 26.64,
+"70": 123.12
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.064,
+"120": 120.96,
+"16": 35.28,
+"2.5": 11.088,
+"240": 188.496,
+"300": 217.728,
+"35": 55.44,
+"6": 18.648,
+"70": 86.184
+},
+"r90": 0.320662
+},
 "E|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3557,6 +8837,86 @@
 "35": 103.32,
 "6": "invalid",
 "70": 161.28
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 240.24,
+"16": 73.04,
+"2.5": "invalid",
+"240": 376.64,
+"300": 434.72,
+"35": 108.24,
+"6": "invalid",
+"70": 168.96
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 201.8016,
+"16": 61.3536,
+"2.5": "invalid",
+"240": 316.3776,
+"300": 365.1648,
+"35": 90.9216,
+"6": "invalid",
+"70": 141.9264
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 223.86,
+"16": 68.06,
+"2.5": "invalid",
+"240": 350.96,
+"300": 405.08,
+"35": 100.86,
+"6": "invalid",
+"70": 157.44
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 188.0424,
+"16": 57.1704,
+"2.5": "invalid",
+"240": 294.8064,
+"300": 340.2672,
+"35": 84.7224,
+"6": "invalid",
+"70": 132.2496
 },
 "r90": 0.56797
 },
@@ -3600,6 +8960,46 @@
 },
 "r90": 0.56797
 },
+"E|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 196.56,
+"16": 59.76,
+"2.5": "invalid",
+"240": 308.16,
+"300": 355.68,
+"35": 88.56,
+"6": "invalid",
+"70": 138.24
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 165.1104,
+"16": 50.1984,
+"2.5": "invalid",
+"240": 258.8544,
+"300": 298.7712,
+"35": 74.3904,
+"6": "invalid",
+"70": 116.1216
+},
+"r90": 0.56797
+},
 "E|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3637,6 +9037,86 @@
 "35": 91.56,
 "6": "invalid",
 "70": 142.8
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 210.32,
+"16": 61.6,
+"2.5": "invalid",
+"240": 327.36,
+"300": 377.52,
+"35": 95.92,
+"6": "invalid",
+"70": 149.6
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 176.6688,
+"16": 51.744,
+"2.5": "invalid",
+"240": 274.9824,
+"300": 317.1168,
+"35": 80.5728,
+"6": "invalid",
+"70": 125.664
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 195.98,
+"16": 57.4,
+"2.5": "invalid",
+"240": 305.04,
+"300": 351.78,
+"35": 89.38,
+"6": "invalid",
+"70": 139.4
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 164.6232,
+"16": 48.216,
+"2.5": "invalid",
+"240": 256.2336,
+"300": 295.4952,
+"35": 75.0792,
+"6": "invalid",
+"70": 117.096
 },
 "r90": 0.56797
 },
@@ -3680,6 +9160,46 @@
 },
 "r90": 0.56797
 },
+"E|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 172.08,
+"16": 50.4,
+"2.5": "invalid",
+"240": 267.84,
+"300": 308.88,
+"35": 78.48,
+"6": "invalid",
+"70": 122.4
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 144.5472,
+"16": 42.336,
+"2.5": "invalid",
+"240": 224.9856,
+"300": 259.4592,
+"35": 65.9232,
+"6": "invalid",
+"70": 102.816
+},
+"r90": 0.56797
+},
 "E|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3717,6 +9237,86 @@
 "35": 141.12,
 "6": 47.88,
 "70": 220.92
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.12,
+"120": 328.24,
+"16": 92.4,
+"2.5": 29.04,
+"240": 513.04,
+"300": 593.12,
+"35": 147.84,
+"6": 50.16,
+"70": 231.44
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 17.7408,
+"120": 275.7216,
+"16": 77.616,
+"2.5": 24.3936,
+"240": 430.9536,
+"300": 498.2208,
+"35": 124.1856,
+"6": 42.1344,
+"70": 194.4096
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.68,
+"120": 305.86,
+"16": 86.1,
+"2.5": 27.06,
+"240": 478.06,
+"300": 552.68,
+"35": 137.76,
+"6": 46.74,
+"70": 215.66
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 16.5312,
+"120": 256.9224,
+"16": 72.324,
+"2.5": 22.7304,
+"240": 401.5704,
+"300": 464.2512,
+"35": 115.7184,
+"6": 39.2616,
+"70": 181.1544
 },
 "r90": 0.341727
 },
@@ -3760,6 +9360,46 @@
 },
 "r90": 0.341727
 },
+"E|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.28,
+"120": 268.56,
+"16": 75.6,
+"2.5": 23.76,
+"240": 419.76,
+"300": 485.28,
+"35": 120.96,
+"6": 41.04,
+"70": 189.36
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 14.5152,
+"120": 225.5904,
+"16": 63.504,
+"2.5": 19.9584,
+"240": 352.5984,
+"300": 407.6352,
+"35": 101.6064,
+"6": 34.4736,
+"70": 159.0624
+},
+"r90": 0.341727
+},
 "E|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3797,6 +9437,86 @@
 "35": 120.96,
 "6": 41.16,
 "70": 188.16
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.48,
+"120": 277.2,
+"16": 80.08,
+"2.5": 25.52,
+"240": 431.2,
+"300": 497.2,
+"35": 126.72,
+"6": 43.12,
+"70": 197.12
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 15.5232,
+"120": 232.848,
+"16": 67.2672,
+"2.5": 21.4368,
+"240": 362.208,
+"300": 417.648,
+"35": 106.4448,
+"6": 36.2208,
+"70": 165.5808
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.22,
+"120": 258.3,
+"16": 74.62,
+"2.5": 23.78,
+"240": 401.8,
+"300": 463.3,
+"35": 118.08,
+"6": 40.18,
+"70": 183.68
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 14.4648,
+"120": 216.972,
+"16": 62.6808,
+"2.5": 19.9752,
+"240": 337.512,
+"300": 389.172,
+"35": 99.1872,
+"6": 33.7512,
+"70": 154.2912
 },
 "r90": 0.341727
 },
@@ -3840,6 +9560,46 @@
 },
 "r90": 0.341727
 },
+"E|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.12,
+"120": 226.8,
+"16": 65.52,
+"2.5": 20.88,
+"240": 352.8,
+"300": 406.8,
+"35": 103.68,
+"6": 35.28,
+"70": 161.28
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 12.7008,
+"120": 190.512,
+"16": 55.0368,
+"2.5": 17.5392,
+"240": 296.352,
+"300": 341.712,
+"35": 87.0912,
+"6": 29.6352,
+"70": 135.4752
+},
+"r90": 0.341727
+},
 "F|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3877,6 +9637,86 @@
 "35": 74.2,
 "6": "invalid",
 "70": 116.9
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 209.44,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 329.12,
+"300": 380.16,
+"35": 93.28,
+"6": "invalid",
+"70": 146.96
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 146.608,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 230.384,
+"300": 266.112,
+"35": 65.296,
+"6": "invalid",
+"70": 102.872
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 195.16,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 306.68,
+"300": 354.24,
+"35": 86.92,
+"6": "invalid",
+"70": 136.94
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 136.612,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 214.676,
+"300": 247.968,
+"35": 60.844,
+"6": "invalid",
+"70": 95.858
 },
 "r90": 0.532265
 },
@@ -3920,6 +9760,46 @@
 },
 "r90": 0.532265
 },
+"F|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 171.36,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 269.28,
+"300": 311.04,
+"35": 76.32,
+"6": "invalid",
+"70": 120.24
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 119.952,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 188.496,
+"300": 217.728,
+"35": 53.424,
+"6": "invalid",
+"70": 84.168
+},
+"r90": 0.532265
+},
 "F|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -3957,6 +9837,86 @@
 "35": 63.7,
 "6": "invalid",
 "70": 100.8
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 181.28,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 286.88,
+"300": 332.64,
+"35": 80.08,
+"6": "invalid",
+"70": 126.72
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 126.896,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 200.816,
+"300": 232.848,
+"35": 56.056,
+"6": "invalid",
+"70": 88.704
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 168.92,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 267.32,
+"300": 309.96,
+"35": 74.62,
+"6": "invalid",
+"70": 118.08
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 118.244,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 187.124,
+"300": 216.972,
+"35": 52.234,
+"6": "invalid",
+"70": 82.656
 },
 "r90": 0.532265
 },
@@ -4000,6 +9960,46 @@
 },
 "r90": 0.532265
 },
+"F|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 148.32,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 234.72,
+"300": 272.16,
+"35": 65.52,
+"6": "invalid",
+"70": 103.68
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 103.824,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 164.304,
+"300": 190.512,
+"35": 45.864,
+"6": "invalid",
+"70": 72.576
+},
+"r90": 0.532265
+},
 "F|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4037,6 +10037,86 @@
 "35": 98.7,
 "6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
 "70": 152.6
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 269.28,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 418.0,
+"300": 481.36,
+"35": 124.08,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 191.84
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 188.496,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 292.6,
+"300": 336.952,
+"35": 86.856,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 134.288
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 250.92,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 389.5,
+"300": 448.54,
+"35": 115.62,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 178.76
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 175.644,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 272.65,
+"300": 313.978,
+"35": 80.934,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 125.132
 },
 "r90": 0.320662
 },
@@ -4080,6 +10160,46 @@
 },
 "r90": 0.320662
 },
+"F|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 220.32,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 342.0,
+"300": 393.84,
+"35": 101.52,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 156.96
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 154.224,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 239.4,
+"300": 275.688,
+"35": 71.064,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 109.872
+},
+"r90": 0.320662
+},
 "F|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4117,6 +10237,86 @@
 "35": 83.3,
 "6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
 "70": 131.6
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 235.84,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 371.36,
+"300": 429.44,
+"35": 104.72,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 165.44
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 165.088,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 259.952,
+"300": 300.608,
+"35": 73.304,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 115.808
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 219.76,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 346.04,
+"300": 400.16,
+"35": 97.58,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 154.16
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 153.832,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 242.228,
+"300": 280.112,
+"35": 68.306,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 107.912
 },
 "r90": 0.320662
 },
@@ -4160,6 +10360,46 @@
 },
 "r90": 0.320662
 },
+"F|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 192.96,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 303.84,
+"300": 351.36,
+"35": 85.68,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 135.36
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 135.072,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 212.688,
+"300": 245.952,
+"35": 59.976,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 94.752
+},
+"r90": 0.320662
+},
 "F|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4197,6 +10437,86 @@
 "35": 115.08,
 "6": "invalid",
 "70": 181.44
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 270.16,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 424.16,
+"300": 491.04,
+"35": 120.56,
+"6": "invalid",
+"70": 190.08
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 226.9344,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 356.2944,
+"300": 412.4736,
+"35": 101.2704,
+"6": "invalid",
+"70": 159.6672
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 251.74,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 395.24,
+"300": 457.56,
+"35": 112.34,
+"6": "invalid",
+"70": 177.12
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 211.4616,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 332.0016,
+"300": 384.3504,
+"35": 94.3656,
+"6": "invalid",
+"70": 148.7808
 },
 "r90": 0.56797
 },
@@ -4240,6 +10560,46 @@
 },
 "r90": 0.56797
 },
+"F|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 221.04,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 347.04,
+"300": 401.76,
+"35": 98.64,
+"6": "invalid",
+"70": 155.52
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 185.6736,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 291.5136,
+"300": 337.4784,
+"35": 82.8576,
+"6": "invalid",
+"70": 130.6368
+},
+"r90": 0.56797
+},
 "F|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4277,6 +10637,86 @@
 "35": 98.28,
 "6": "invalid",
 "70": 157.08
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 236.72,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 377.52,
+"300": 438.24,
+"35": 102.96,
+"6": "invalid",
+"70": 164.56
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 198.8448,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 317.1168,
+"300": 368.1216,
+"35": 86.4864,
+"6": "invalid",
+"70": 138.2304
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 220.58,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 351.78,
+"300": 408.36,
+"35": 95.94,
+"6": "invalid",
+"70": 153.34
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 185.2872,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 295.4952,
+"300": 343.0224,
+"35": 80.5896,
+"6": "invalid",
+"70": 128.8056
 },
 "r90": 0.56797
 },
@@ -4320,6 +10760,46 @@
 },
 "r90": 0.56797
 },
+"F|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 193.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 308.88,
+"300": 358.56,
+"35": 84.24,
+"6": "invalid",
+"70": 134.64
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 162.6912,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 259.4592,
+"300": 301.1904,
+"35": 70.7616,
+"6": "invalid",
+"70": 113.0976
+},
+"r90": 0.56797
+},
 "F|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4357,6 +10837,86 @@
 "35": 152.88,
 "6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
 "70": 236.88
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 350.24,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 543.84,
+"300": 627.44,
+"35": 160.16,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 248.16
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 294.2016,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 456.8256,
+"300": 527.0496,
+"35": 134.5344,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 208.4544
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 326.36,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 506.76,
+"300": 584.66,
+"35": 149.24,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 231.24
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 274.1424,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 425.6784,
+"300": 491.1144,
+"35": 125.3616,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 194.2416
 },
 "r90": 0.341727
 },
@@ -4400,6 +10960,46 @@
 },
 "r90": 0.341727
 },
+"F|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 286.56,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 444.96,
+"300": 513.36,
+"35": 131.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 203.04
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 240.7104,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 373.7664,
+"300": 431.2224,
+"35": 110.0736,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 170.5536
+},
+"r90": 0.341727
+},
 "F|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4437,6 +11037,86 @@
 "35": 129.36,
 "6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
 "70": 204.96
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 307.12,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 485.76,
+"300": 563.2,
+"35": 135.52,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 214.72
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 0.88,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 257.9808,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 408.0384,
+"300": 473.088,
+"35": 113.8368,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 180.3648
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 286.18,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 452.64,
+"300": 524.8,
+"35": 126.28,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 200.08
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 0.82,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 240.3912,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 380.2176,
+"300": 440.832,
+"35": 106.0752,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 168.0672
 },
 "r90": 0.341727
 },
@@ -4480,6 +11160,46 @@
 },
 "r90": 0.341727
 },
+"F|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 251.28,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 397.44,
+"300": 460.8,
+"35": 110.88,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 175.68
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 0.72,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 211.0752,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 333.8496,
+"300": 387.072,
+"35": 93.1392,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 147.5712
+},
+"r90": 0.341727
+},
 "G|pvc|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4501,6 +11221,86 @@
 "r90": 0.532265
 },
 "G|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4560,6 +11360,46 @@
 },
 "r90": 0.532265
 },
+"G|pvc|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
 "G|pvc|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4581,6 +11421,86 @@
 "r90": 0.532265
 },
 "G|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4640,6 +11560,46 @@
 },
 "r90": 0.532265
 },
+"G|pvc|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
 "G|pvc|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4661,6 +11621,86 @@
 "r90": 0.320662
 },
 "G|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4720,6 +11760,46 @@
 },
 "r90": 0.320662
 },
+"G|pvc|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
 "G|pvc|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4741,6 +11821,86 @@
 "r90": 0.320662
 },
 "G|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4800,6 +11960,46 @@
 },
 "r90": 0.320662
 },
+"G|pvc|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
 "G|xlpe|al|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4821,6 +12021,86 @@
 "r90": 0.56797
 },
 "G|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4880,6 +12160,46 @@
 },
 "r90": 0.56797
 },
+"G|xlpe|al|1f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
 "G|xlpe|al|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4901,6 +12221,86 @@
 "r90": 0.56797
 },
 "G|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -4960,6 +12360,46 @@
 },
 "r90": 0.56797
 },
+"G|xlpe|al|3f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
 "G|xlpe|cu|1f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -4981,6 +12421,86 @@
 "r90": 0.341727
 },
 "G|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g3|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,
@@ -5040,6 +12560,46 @@
 },
 "r90": 0.341727
 },
+"G|xlpe|cu|1f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g8|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
 "G|xlpe|cu|3f|g1|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -5080,6 +12640,86 @@
 },
 "r90": 0.341727
 },
+"G|xlpe|cu|3f|g2|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g2|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g3|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g3|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
 "G|xlpe|cu|3f|g4|40C": {
 "factors": {
 "f_agrup": 1.0,
@@ -5101,6 +12741,46 @@
 "r90": 0.341727
 },
 "G|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g8|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g8|55C": {
 "factors": {
 "f_agrup": 1.0,
 "f_clase": 1.0,

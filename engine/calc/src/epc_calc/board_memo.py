@@ -29,7 +29,7 @@ NORMA DE REFERENCIA
 from typing import Dict, List, Optional
 
 from epc_calc import aea_protection as PR
-from epc_calc import fmt
+from epc_calc import fmt, policy
 from epc_calc.topology import MOTOR_TOPOLOGIES
 
 __version__ = "0.1.0"
@@ -82,7 +82,8 @@ def curve_band(in_a: float, letter: str) -> Dict[str, List[List[float]]]:
     """Banda de disparo [A, s] (mínimo y máximo) según IEC 60898-1 (MCB) o IEC 60947-2 (MCCB), puntos para un gráfico log-log."""
     kmin, kmax = K_MAG[letter]
     mccb = letter == "MCCB"
-    f_no, f_si = (1.05, 1.30) if mccb else (1.13, 1.45)
+    family = "mccb" if mccb else "mcb"
+    f_no, f_si = policy.K1_NO_DISPARO[family], policy.K2_CONVENCIONAL[family]
     t_conv = 3600 if in_a <= 63 else 7200
     t_255 = 60 if in_a <= 32 else 120
     mx = [[f_si * in_a, t_conv], [2.55 * in_a, t_255], [kmax * in_a, 0.1], [kmax * in_a, 0.01]]
@@ -123,7 +124,7 @@ def _circuit(tag: str, circ: Dict[str, dict], dat: dict, det: dict, board: dict,
     k2 = PR.K2_CONVENCIONAL["mccb" if kind == "mccb" else "mcb"]
     i2 = k2 * in_a
     sobrecarga = bool(iz is not None and ib <= in_a <= iz)
-    coordinacion = bool(iz is not None and i2 <= 1.45 * iz)
+    coordinacion = bool(iz is not None and i2 <= policy.K_MAX_I2_IZ * iz)
     disparo = None if icc_min is None else icc_min >= kmax * in_a
     icu_ok = dat["icu"] * 1000 >= icc_a
     cable_ok = bool(d["cumple"])

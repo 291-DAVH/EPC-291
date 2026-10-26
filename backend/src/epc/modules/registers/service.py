@@ -8,9 +8,10 @@ from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
 from epc.core import clock, ids
+from epc.core import lang as lang_mod
+from epc.core import methodology
 from epc.core.errors import Conflict, Forbidden, Invalid, first_or_404
 from epc.core.fsutil import today
-from epc.core import lang as lang_mod
 from epc.modules.identity import public as identity
 from epc.modules.projects import public as projects
 from epc.modules.registers import repository
@@ -20,7 +21,7 @@ TEXT_MAX, LONGTEXT_MAX = 300, 4000
 
 def _defs(d: Path) -> dict:
     meta = projects.read_meta(d)
-    defs = repository.definitions(meta.get("methodology") or "pm2")
+    defs = repository.definitions(methodology.of(meta))
     if not defs:
         raise Conflict({"methodology": "this methodology has no registers"})
     return defs
@@ -48,9 +49,9 @@ def _view_field(f: dict, lang: str) -> dict:
 def view(d: Path, lang: Optional[str] = None) -> dict:
     lg = _lang(d, lang)
     meta = projects.read_meta(d)
-    defs = repository.definitions(meta.get("methodology") or "pm2")
+    defs = repository.definitions(methodology.of(meta))
     if not defs:                                                    # a methodology without registers (for example one that is not available yet): say so, do not fail
-        return {"methodology": meta.get("methodology") or "pm2", "available": False, "language": lg, "registers": []}
+        return {"methodology": methodology.of(meta), "available": False, "language": lg, "registers": []}
     regs = []
     for r in defs["registers"]:
         items = repository.load(d, r["id"])

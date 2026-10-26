@@ -24,9 +24,10 @@ LIMITACIONES
 NORMA DE REFERENCIA
     AEA 90364-4-41 (§41.3), 90364-4-43, 90364-7-771.18 y IT 90909-1.  [VERIFICAR]
 """
+from epc_calc.policy import K2_CONVENCIONAL, K_MAX_I2_IZ
+
 __version__ = "0.1.0"
 
-K2_CONVENCIONAL = {"mcb": 1.45, "mccb": 1.30, "fusible_gg": 1.60}
 
 
 def i2_convencional(in_a, tipo="mcb"):
@@ -40,7 +41,7 @@ def i2_convencional(in_a, tipo="mcb"):
 
 def in_max_por_iz(iz_a, tipo="mcb"):
     """In máxima que cumple In ≤ Iz e I2 ≤ 1,45·Iz [A]."""
-    return min(iz_a, 1.45 * iz_a / K2_CONVENCIONAL[tipo])
+    return min(iz_a, K_MAX_I2_IZ * iz_a / K2_CONVENCIONAL[tipo])
 
 
 def verifica_tn(zs_ohm, ia_a, u0_v=230.0):

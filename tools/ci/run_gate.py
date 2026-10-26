@@ -65,12 +65,20 @@ def cov_env(env=None):
     return dict(env or {}, COVERAGE_FILE=str(COV_DIR / ".coverage"))
 
 
+def keep_failure(name, ok, out):
+    """The summary shows three lines of a failed check; its whole output is kept in .cov/ for diagnosis."""
+    if not ok:
+        COV_DIR.mkdir(exist_ok=True)
+        (COV_DIR / f"failed-{name}.txt").write_text(out, encoding="utf-8")
+
+
 def run(name, cmd, cwd, must_not_contain=None, env=None):
     t0 = time.time()
     p = subprocess.run(cmd, cwd=str(cwd), capture_output=True, text=True, env=dict(os.environ, **(env or {})))
     out = (p.stdout or "") + (p.stderr or "")
     ok = p.returncode == 0 and not (must_not_contain and must_not_contain in out)
     RESULTS.append((name, ok, round(time.time() - t0, 1), out.strip().splitlines()[-3:] if not ok else []))
+    keep_failure(name, ok, out)
     return ok
 
 
