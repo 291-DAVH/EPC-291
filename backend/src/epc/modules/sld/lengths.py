@@ -24,24 +24,25 @@ def plan_lengths(d: Path) -> Dict[str, dict]:
     return _PLAN(d) if _PLAN else {}
 
 
+def _source(c: dict, plan: Optional[dict]) -> tuple:
+    """(used, reason): the plan when it measured the circuit completely and the circuit does not ask for its data, the data otherwise."""
+    if c.get("route"):
+        return "data", "route"                                            # a real route (tramos) is data and owns the length
+    if (c.get("length_source") or "auto") == "data":
+        return "data", ""
+    if plan and plan.get("usable"):
+        return "plan", ""
+    return "data", (plan or {}).get("reason") or "not_drawn"
+
+
 def choose(c: dict, plan: Optional[dict]) -> dict:
     """What is used for one circuit and why: the source, both lengths (None when not available) and whether it is measured by moments."""
     want = c.get("length_source") or "auto"
-    data_m = float(c.get("length_m") or 0)
-    usable = bool(plan and plan.get("usable"))
-    plan_m = plan.get("moment_length_m") if plan else None
-    reason = ""
-    if c.get("route"):
-        used, reason = "data", "route"                                    # a real route (tramos) is data and owns the length
-    elif want == "data":
-        used = "data"
-    elif usable:
-        used = "plan"
-    else:
-        used, reason = "data", (plan or {}).get("reason") or "not_drawn"
-    return {"setting": want, "used": used, "data_m": data_m, "plan_m": plan_m, "plan_max_m": (plan or {}).get("max_distance_m"), "plan_total_m": (plan or {}).get("length_m"),
-            "levels": (plan or {}).get("levels", []), "moments": used == "plan" and (plan or {}).get("loads_n", 0) >= 2, "reason": reason,
-            "fallback": want == "plan" and used == "data" and reason not in ("route",)}
+    used, reason = _source(c, plan)
+    plan = plan or {}
+    return {"setting": want, "used": used, "data_m": float(c.get("length_m") or 0), "plan_m": plan.get("moment_length_m"), "plan_max_m": plan.get("max_distance_m"),
+            "plan_total_m": plan.get("length_m"), "levels": plan.get("levels", []), "moments": used == "plan" and plan.get("loads_n", 0) >= 2, "reason": reason,
+            "fallback": want == "plan" and used == "data" and reason != "route"}
 
 
 def info(d: Path, circuits: list) -> Dict[str, dict]:

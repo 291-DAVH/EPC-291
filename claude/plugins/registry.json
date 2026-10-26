@@ -15,7 +15,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "00f225d47d34cdc0"
+      "hash": "adaebce677195221"
     },
     "board-design": {
       "version": "0.2.1",
@@ -35,7 +35,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "793f4c6ec938f459"
+      "hash": "60e3f2f09de4adb4"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -68,7 +68,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "85d69a78750cb678"
+      "hash": "a2f82d31aa39dd48"
     },
     "intake-analysis": {
       "version": "0.1.0",
@@ -93,7 +93,7 @@
       "engine": [
         "drawing"
       ],
-      "hash": "3a76c19206fa7d00"
+      "hash": "86243ef29df85b23"
     },
     "mld": {
       "version": "0.2.2",
@@ -112,7 +112,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "33060e469da3cb83"
+      "hash": "564a3bac75facba1"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -158,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "8424cad42fe2e2a0"
+      "hash": "6747553f349698ed"
     },
     "spec-writer": {
       "version": "0.1.0",

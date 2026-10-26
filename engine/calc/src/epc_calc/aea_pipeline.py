@@ -279,7 +279,7 @@ def _dispositivo(c, in_a, fases, sens_ma=30):
         return f"RCCB {4 if fases == 3 else 2}P {in_a} A {sens_ma:g} mA"
     if kind == "auto":
         kind = "mcb" if in_a <= IN_MAX_MCB_A else "mccb"
-    nombre = {"mcb": "MCB", "mccb": "MCCB", "rcbo": "RCBO"}.get(kind, kind.upper())
+    nombre = {"mcb": "MCB", "mccb": "MCCB", "mccb_motorized": "MCCB M", "rcbo": "RCBO"}.get(kind, kind.upper())
     base = f"{nombre} ({in_a} A)"
     if "ups" in notas:
         return f"{nombre} > UPS ({in_a} A)"
@@ -317,6 +317,29 @@ def resolver_instalacion(criterios=None):
     """Condiciones de instalación del proyecto (criterios de diseño): temperatura ambiente, temperatura del suelo y resistividad térmica del terreno."""
     cr = criterios or {}
     return {"t_amb": float(cr.get("ambient_temp_c", 40.0)), "t_suelo": float(cr.get("soil_temp_c", 25.0)), "rho": float(cr.get("soil_resistivity_kmw", 1.0))}
+
+
+def _completar_detalle(detalle, resultado, ib, hijos, por_tag, u_linea, fp_def):
+    """Lo que los dibujos necesitan y no deben calcular: la potencia activa de cada circuito (la de un padre es la suma de sus hijos) y las secciones de PE y neutro."""
+    if detalle is None:
+        return
+    potencia = {}
+
+    def _p(tag):
+        if tag not in potencia:
+            if hijos[tag] and por_tag[tag].get("CARGA") in (None, ""):
+                potencia[tag] = sum(_p(h) for h in hijos[tag])
+            else:
+                fases = _fases(por_tag[tag])
+                u_f = u_linea if fases == 3 else u_linea / math.sqrt(3)
+                potencia[tag] = (math.sqrt(3) if fases == 3 else 1.0) * u_f * ib[tag] * _num_opt(por_tag[tag].get("FP"), fp_def) / 1000.0
+        return potencia[tag]
+
+    for tag, d in detalle.items():
+        s = resultado[tag].get("S")
+        d["p_kw"] = round(_p(tag), 4)
+        d["pe_mm2"] = CO.pe_section(s) if s else None
+        d["neutro_mm2"] = CO.neutral_section(s) if s else None
 
 
 def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0, k_magnetico=K_MAGNETICO_C, criterios=None, detalle=None):
@@ -460,6 +483,7 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
     for c in circuitos:
         if not str(c.get("PARENT_TAG") or "").strip():
             _procesar(c["TAG"])
+    _completar_detalle(detalle, resultado, ib, hijos, por_tag, u, fp_def)
     datos = {c["TAG"]: resultado[c["TAG"]] for c in circuitos}   # orden del Excel
     avisos += EX.validate_calculation(datos)["avisos"]
     return datos, avisos
