@@ -1,0 +1,858 @@
+{
+ "big_paginated_sld_mld": {
+  "circuits": 24,
+  "files": {
+   "MLD_T1_H1.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 84,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 635,
+     "LTYPE": 5,
+     "LWPOLYLINE": 228,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 384,
+     "VPORT": 1
+    },
+    "lines": 68098,
+    "sha256": "9ce7e8255b1b35e58f78715dcf42ab7befaed6436234789ddfb1d2105047b81e"
+   },
+   "MLD_T1_H1.svg": {
+    "elements": {
+     "circle": 33,
+     "g": 138,
+     "line": 635,
+     "path": 140,
+     "polygon": 3,
+     "rect": 53,
+     "svg": 1,
+     "text": 387,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 1536,
+    "sha256": "efe2c74bb458c74809cb4e167d383449212c101d7cbb800cdb2f275da5fd93bd"
+   },
+   "MLD_T1_H2.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 105,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 476,
+     "LTYPE": 5,
+     "LWPOLYLINE": 191,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 285,
+     "VPORT": 1
+    },
+    "lines": 60258,
+    "sha256": "50f292b555c085edc2492d173836bd004b29b778145561d1c805e98e3a0d215c"
+   },
+   "MLD_T1_H2.svg": {
+    "elements": {
+     "circle": 42,
+     "g": 78,
+     "line": 476,
+     "path": 129,
+     "polygon": 3,
+     "rect": 18,
+     "svg": 1,
+     "text": 288,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 1164,
+    "sha256": "ff01152b94826416d2292d46f889554d33899ad9422bdef451016a7ed22af7f5"
+   },
+   "SLD_T1_H1.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 26,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 319,
+     "LTYPE": 6,
+     "LWPOLYLINE": 123,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 214,
+     "VPORT": 1
+    },
+    "lines": 31510,
+    "sha256": "fceffa9b15e4dc9277868f55d21a4712d11e08209e3bf951b4a5ecd2d04136a5"
+   },
+   "SLD_T1_H1.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 167,
+     "line": 319,
+     "path": 105,
+     "polygon": 3,
+     "rect": 14,
+     "svg": 1,
+     "text": 217,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 1021,
+    "sha256": "2f3323f1719b43ee36dd0b15cb47c4245da691825021a1512174f9645e79fd97"
+   },
+   "SLD_T1_H1_calculo.json": {
+    "lines": 49,
+    "sha256": "64fe9c8075b0ad2d49a8a7e45f72b12eb8120d6693e79ae5880fc005061fac92"
+   },
+   "SLD_T1_H2.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 18,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 309,
+     "LTYPE": 6,
+     "LWPOLYLINE": 106,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 181,
+     "VPORT": 1
+    },
+    "lines": 26512,
+    "sha256": "4c96a0beda87920d851936398e18e3c7595262794cf139830b81a3f4636bdea6"
+   },
+   "SLD_T1_H2.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 114,
+     "line": 309,
+     "path": 78,
+     "polygon": 3,
+     "rect": 24,
+     "svg": 1,
+     "text": 184,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 882,
+    "sha256": "a661b9d5a4241dbada6afd8f44292777ca8c0fe033b6386212b06bf76f98a24b"
+   },
+   "SLD_T1_H2_calculo.json": {
+    "lines": 41,
+    "sha256": "5bfd10e284ac9baa542f48d3473c6753e8923e2656b64663f30a8e414b6b2d4e"
+   },
+   "SLD_T1_H3.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 23,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 286,
+     "LTYPE": 6,
+     "LWPOLYLINE": 107,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 179,
+     "VPORT": 1
+    },
+    "lines": 24910,
+    "sha256": "c1fd867b3f4902393d9e174fcdc972050e72d1a7760bce78d2bc89f76351af93"
+   },
+   "SLD_T1_H3.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 119,
+     "line": 286,
+     "path": 87,
+     "polygon": 3,
+     "rect": 16,
+     "svg": 1,
+     "text": 182,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 873,
+    "sha256": "6c98c5a7d41d6842dcc23adebe4698f3827bcdddc4f215725d9801f4ecc50816"
+   },
+   "SLD_T1_H3_calculo.json": {
+    "lines": 57,
+    "sha256": "c8a5e4ede00901da7564ed6329225a7b8ab62e0f8413493810932241cb075f40"
+   },
+   "SLD_T1_H4.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 26,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 277,
+     "LTYPE": 6,
+     "LWPOLYLINE": 108,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 171,
+     "VPORT": 1
+    },
+    "lines": 25824,
+    "sha256": "1a685097900b2982a2c102d731d123c3c26a00aa58829a717ed0f576550e8aeb"
+   },
+   "SLD_T1_H4.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 127,
+     "line": 277,
+     "path": 89,
+     "polygon": 3,
+     "rect": 15,
+     "svg": 1,
+     "text": 174,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 883,
+    "sha256": "f8630bfaa1fff84db92e42115917017d3d6d4f1b0b834acaca64fc1d266ea67f"
+   },
+   "SLD_T1_H4_calculo.json": {
+    "lines": 49,
+    "sha256": "02f676873357a8e2dd562874d686b4e5018832e2a14a9b4f27ecb6415680bebc"
+   },
+   "SLD_T1_TABLA.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 1,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 104,
+     "LTYPE": 3,
+     "LWPOLYLINE": 9,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 376,
+     "VPORT": 1
+    },
+    "lines": 20384,
+    "sha256": "968e7db599a6a1bfbe5b1a780846ac74a3ddb8192e631cf8d7f8624da0d0bc18"
+   },
+   "SLD_T1_TABLA.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 14,
+     "line": 104,
+     "polygon": 3,
+     "rect": 5,
+     "svg": 1,
+     "text": 379,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 520,
+    "sha256": "7d8ccbee74b2643126b059c0cc486a2ec6127d1fa307afc306bb6f96fa07bd33"
+   },
+   "SLD_T1_TABLA_calculo.json": {
+    "lines": 193,
+    "sha256": "f593f7d6aab755ac2ce556cc77ef44399d542b5092233421933b74d2250ea9ec"
+   },
+   "T1_MC.md": {
+    "lines": 141,
+    "sha256": "168ad7bd92e517aeace9d47d0981fd364d9a5c188a778f3d5c50fff7d2b6d006"
+   },
+   "T1_MC.pdf": {
+    "pdf_pages": 4,
+    "starts_with_pdf": true
+   },
+   "T1_SP.md": {
+    "lines": 22,
+    "sha256": "bbfbdec0b10737063e3838c98bae796e327b621be04b749aac96faf518e907f3"
+   },
+   "T1_SP.pdf": {
+    "pdf_pages": 1,
+    "starts_with_pdf": true
+   },
+   "T1_criterios.json": {
+    "lines": 13,
+    "sha256": "e3fb0ff80513ae3b472ef1890d090756edf1f6d8b30639776378307a512955ad"
+   },
+   "T1_dimensionado.json": {
+    "lines": 194,
+    "sha256": "5b0689feff4a81379043ee7cd418f4d19af535dc3174d0159ccd9fe0986618de"
+   },
+   "T1_dimensionado_detalle.json": {
+    "lines": 722,
+    "sha256": "e8c14a5db7853135b750c0eb5b171205c5c3aa21aa9539a78a6c88101166701d"
+   },
+   "T1_memoria.json": {
+    "lines": 2252,
+    "sha256": "412b832a25f06deb9813d4a7bed77772df08a84c85c4a8c6c8f9d64470bc8e30"
+   },
+   "summary.json": {
+    "lines": 48,
+    "sha256": "0cb8d5243808026cf331b1f5c6bb732441c9894c74c793bc669d7b6dc1b19b19"
+   }
+  },
+  "non_compliant": [],
+  "ok": true
+ },
+ "big_tight_criteria_sld": {
+  "circuits": 24,
+  "files": {
+   "SLD_T1_H1.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 30,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 378,
+     "LTYPE": 6,
+     "LWPOLYLINE": 142,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 236,
+     "VPORT": 1
+    },
+    "lines": 36122,
+    "sha256": "285df0ac698ae7b043a919f215d6ec2b6dcbfd53a04906e9003f4f8bf14f3957"
+   },
+   "SLD_T1_H1.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 201,
+     "line": 378,
+     "path": 114,
+     "polygon": 3,
+     "rect": 24,
+     "svg": 1,
+     "text": 239,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 1203,
+    "sha256": "84b153831b0e0423e0a3e24f2da4d36cd4f47f28146fc996f95200ef8eef81a6"
+   },
+   "SLD_T1_H1_calculo.json": {
+    "lines": 65,
+    "sha256": "c19075314decf6f58ebae2230d525f5413c916ba730fc66c2a38837565db10ad"
+   },
+   "SLD_T1_H2.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 31,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 319,
+     "LTYPE": 6,
+     "LWPOLYLINE": 126,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 203,
+     "VPORT": 1
+    },
+    "lines": 29074,
+    "sha256": "254809079a93cfc5efd823c7febe690455a8e56071fd29e605dd84e98ce5861b"
+   },
+   "SLD_T1_H2.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 157,
+     "line": 319,
+     "path": 102,
+     "polygon": 3,
+     "rect": 20,
+     "svg": 1,
+     "text": 206,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 1051,
+    "sha256": "1b7ccb27ac115acc7b1850d40edc4e8a99116e7d3d915ffd378d258009f47185"
+   },
+   "SLD_T1_H2_calculo.json": {
+    "lines": 73,
+    "sha256": "2a07a7c0b0fb246e845e9ed3e9b3d9d196ec80b10bd521b73ba8cb853c2d5117"
+   },
+   "SLD_T1_H3.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 30,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 289,
+     "LTYPE": 6,
+     "LWPOLYLINE": 116,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 178,
+     "VPORT": 1
+    },
+    "lines": 27434,
+    "sha256": "14543e0d81bf208001ef9dfe0adaf0fc7fa8231b0aa021546e59f27a7d2837f1"
+   },
+   "SLD_T1_H3.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 144,
+     "line": 289,
+     "path": 96,
+     "polygon": 3,
+     "rect": 16,
+     "svg": 1,
+     "text": 181,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 955,
+    "sha256": "6e397fc0918cd79c8499cfda41d546d776fe71dcb05300040d28af62d8e270f0"
+   },
+   "SLD_T1_H3_calculo.json": {
+    "lines": 57,
+    "sha256": "6aeeae7d365e8577bf4000f1f7f87b2e4e134b53efce74fd5b240c10e8c3e32b"
+   },
+   "SLD_T1_TABLA.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 1,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 104,
+     "LTYPE": 3,
+     "LWPOLYLINE": 9,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 376,
+     "VPORT": 1
+    },
+    "lines": 20384,
+    "sha256": "acc0e0e8131fcc371cefd839e662952727614821b0a5d432bb0f678dd7c9acb9"
+   },
+   "SLD_T1_TABLA.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 14,
+     "line": 104,
+     "polygon": 3,
+     "rect": 5,
+     "svg": 1,
+     "text": 379,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 520,
+    "sha256": "f95b15fad0171249f70f4df819a4a4b591e284a97f6bc995944efa4e04e15dcd"
+   },
+   "SLD_T1_TABLA_calculo.json": {
+    "lines": 193,
+    "sha256": "f593f7d6aab755ac2ce556cc77ef44399d542b5092233421933b74d2250ea9ec"
+   },
+   "T1_MC.md": {
+    "lines": 141,
+    "sha256": "d33ac4f9d2ea7350752e8413dd6428b460a45dce0d0036ac1c557200757830d5"
+   },
+   "T1_MC.pdf": {
+    "pdf_pages": 4,
+    "starts_with_pdf": true
+   },
+   "T1_SP.md": {
+    "lines": 22,
+    "sha256": "06c940dd1aecdefba970139f6bc05182ff512703cda82354bb239cd410e9686c"
+   },
+   "T1_SP.pdf": {
+    "pdf_pages": 1,
+    "starts_with_pdf": true
+   },
+   "T1_criterios.json": {
+    "lines": 16,
+    "sha256": "bb4c4208273f245bfce322a50a9523222a753a7ce2689ad3caa883bc7141dcd5"
+   },
+   "T1_dimensionado.json": {
+    "lines": 194,
+    "sha256": "5b0689feff4a81379043ee7cd418f4d19af535dc3174d0159ccd9fe0986618de"
+   },
+   "T1_dimensionado_detalle.json": {
+    "lines": 722,
+    "sha256": "ecf97ec2dd57ec48ec3331a00d7221622704a4dc5da5c32ac3c3469a465932b7"
+   },
+   "T1_memoria.json": {
+    "lines": 2252,
+    "sha256": "4db5cc8dc0a3b72e84e5ee6e5dba1bade77906ffcb286159e73e1c3b4101f55d"
+   },
+   "summary.json": {
+    "lines": 43,
+    "sha256": "e467fe42babec354fe3046a55fcec7d4c60520a32cc5ec1cd52c51c094410bf1"
+   }
+  },
+  "non_compliant": [],
+  "ok": true
+ },
+ "small_sld_mld": {
+  "circuits": 4,
+  "files": {
+   "MLD_T1.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 27,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 235,
+     "LTYPE": 5,
+     "LWPOLYLINE": 73,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 177,
+     "VPORT": 1
+    },
+    "lines": 29578,
+    "sha256": "7d45a2a6cbe2012e43f1d3b13a402bf5f50e31a300ebd35305dfe3e13376d3e3"
+   },
+   "MLD_T1.svg": {
+    "elements": {
+     "circle": 18,
+     "g": 46,
+     "line": 235,
+     "path": 28,
+     "polygon": 3,
+     "rect": 25,
+     "svg": 1,
+     "text": 180,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 590,
+    "sha256": "b553120f60299f4ae3e912863eb46f2e2b89215ffaaca71bbded9947ce222c42"
+   },
+   "SLD_T1.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 12,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 266,
+     "LTYPE": 6,
+     "LWPOLYLINE": 88,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 166,
+     "VPORT": 1
+    },
+    "lines": 22892,
+    "sha256": "1272fd5562bc89df32308ef3b1423e9af8c6e429635010e088397fdd57163559"
+   },
+   "SLD_T1.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 88,
+     "line": 267,
+     "path": 68,
+     "polygon": 3,
+     "rect": 16,
+     "svg": 1,
+     "text": 169,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 727,
+    "sha256": "439a364f88d3bee6708e10db7829848a9775f63e5391aa212c8538f9f53db744"
+   },
+   "SLD_T1_TABLA.dxf": {
+    "entities": {
+     "ACDBDICTIONARYWDFLT": 1,
+     "ACDBPLACEHOLDER": 1,
+     "APPID": 3,
+     "BLOCK": 2,
+     "BLOCK_RECORD": 2,
+     "CLASS": 15,
+     "DICTIONARY": 12,
+     "DICTIONARYVAR": 2,
+     "DIMSTYLE": 1,
+     "ENDBLK": 2,
+     "ENDSEC": 6,
+     "ENDTAB": 9,
+     "EOF": 1,
+     "HATCH": 1,
+     "LAYER": 6,
+     "LAYOUT": 2,
+     "LINE": 84,
+     "LTYPE": 3,
+     "LWPOLYLINE": 9,
+     "MATERIAL": 3,
+     "MLEADERSTYLE": 1,
+     "MLINESTYLE": 1,
+     "SECTION": 6,
+     "STYLE": 3,
+     "TABLE": 9,
+     "TEXT": 136,
+     "VPORT": 1
+    },
+    "lines": 11184,
+    "sha256": "8fa96bd8b604b1cb28a567dc65ab3e27fa7ea8f0b43b087c358d95f35d3c14cb"
+   },
+   "SLD_T1_TABLA.svg": {
+    "elements": {
+     "circle": 2,
+     "g": 14,
+     "line": 84,
+     "polygon": 3,
+     "rect": 5,
+     "svg": 1,
+     "text": 139,
+     "title": 1,
+     "tspan": 4
+    },
+    "lines": 260,
+    "sha256": "af550ff10e9690854e57531cfeab05da758c8c7e32e9585daef89576f722a616"
+   },
+   "SLD_T1_TABLA_calculo.json": {
+    "lines": 33,
+    "sha256": "134db65222deea5b6a1ec575a0971b1b1fa3194cfbe8c4f3dc22ecb773575cc4"
+   },
+   "SLD_T1_calculo.json": {
+    "lines": 33,
+    "sha256": "134db65222deea5b6a1ec575a0971b1b1fa3194cfbe8c4f3dc22ecb773575cc4"
+   },
+   "T1_MC.md": {
+    "lines": 84,
+    "sha256": "fc5727fa523c1591086b68b3ae904c9dfe7603a8412ad3aa8c7df89878fa66f8"
+   },
+   "T1_MC.pdf": {
+    "pdf_pages": 2,
+    "starts_with_pdf": true
+   },
+   "T1_SP.md": {
+    "lines": 21,
+    "sha256": "581216612dfa2f3c834a338e2f8c2fb8dff2206422265cb51e7011e04317e6d3"
+   },
+   "T1_SP.pdf": {
+    "pdf_pages": 1,
+    "starts_with_pdf": true
+   },
+   "T1_criterios.json": {
+    "lines": 13,
+    "sha256": "e3fb0ff80513ae3b472ef1890d090756edf1f6d8b30639776378307a512955ad"
+   },
+   "T1_dimensionado.json": {
+    "lines": 34,
+    "sha256": "07e6eecd13f4168fd59c91e7fdcab4c97294f2fdba4edfe635cf0830441018e7"
+   },
+   "T1_dimensionado_detalle.json": {
+    "lines": 122,
+    "sha256": "104cd9e059c9f926f2cd369247743a57a2fe9783178e0aa28a4751ba3091f256"
+   },
+   "T1_memoria.json": {
+    "lines": 436,
+    "sha256": "28bfa7b1e2baf3c1b4541e6079d82845ef1aec49a9a1c8f5ce49b66f74e71ced"
+   },
+   "summary.json": {
+    "lines": 43,
+    "sha256": "c34576dd2377214fe81a5f54434c18893ce0efe2dbf0eda6fcc3df7dcc93f22c"
+   }
+  },
+  "non_compliant": [],
+  "ok": true
+ }
+}
