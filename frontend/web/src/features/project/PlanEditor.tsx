@@ -193,7 +193,6 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
           <g stroke="#2ca02c" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.origin[0] - 10 * u} y1={drawing.origin[1]} x2={drawing.origin[0] + 10 * u} y2={drawing.origin[1]} vectorEffect="non-scaling-stroke" />
             <line x1={drawing.origin[0]} y1={drawing.origin[1] - 10 * u} x2={drawing.origin[0]} y2={drawing.origin[1] + 10 * u} vectorEffect="non-scaling-stroke" />
             <text x={drawing.origin[0] + 12 * u} y={drawing.origin[1] - 4 * u} fontSize={11 * u} fill="#2ca02c" stroke="none">0,0</text></g>
-          {hover && (tool === "node" || tool === "line" || tool === "scale") && <circle cx={hover[0]} cy={hover[1]} r={3 * u} fill="none" stroke="#999" vectorEffect="non-scaling-stroke" />}
         </svg>
       </div>
     </div>
