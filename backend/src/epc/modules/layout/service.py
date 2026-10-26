@@ -106,30 +106,47 @@ def remove(d: Path, level: str) -> dict:
 
 
 # ---------------------------------------------------------------- the plan underlay
+def _raster_ext(data: bytes) -> Optional[str]:
+    return next((e for magic, e in RASTER.items() if data.startswith(magic)), None)
+
+
+def _from_dxf(data: bytes) -> Tuple[bytes, str]:
+    try:
+        return _engine()[3].dxf_to_svg(data).encode("utf-8"), ".svg"
+    except ValueError as e:
+        raise Invalid({"file": str(e)})
+
+
+def _from_pdf(data: bytes) -> Tuple[bytes, str]:
+    with tempfile.TemporaryDirectory() as tmp:
+        png = repository.pdf_to_png(data, Path(tmp))
+    if png is None:
+        raise Invalid({"file": "this server cannot open a PDF as a plan: export the plan as an image (PNG or JPG) or as a DXF"})
+    return png, ".png"
+
+
+def _underlay_content(name: str, data: bytes) -> Tuple[bytes, str]:
+    """What is stored for an uploaded plan and its extension: images and SVG as they come (shown only through <img>), a DXF as an SVG view, a PDF as an image."""
+    lower = (name or "").lower()
+    ext = _raster_ext(data)
+    if ext:
+        return data, ext
+    if lower.endswith(".svg") and b"<svg" in data[:4096].lower():
+        return data, ".svg"
+    if lower.endswith(".dxf"):
+        return _from_dxf(data)
+    if lower.endswith(".pdf") or data.startswith(b"%PDF"):
+        return _from_pdf(data)
+    raise Invalid({"file": "use a PNG or JPG image, an SVG, a DXF or a PDF"})
+
+
 def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
     level = _level(level)
-    _, _, _, underlay = _engine()
     if not data:
         raise Invalid({"file": "the file is empty"})
     if len(data) > MAX_UPLOAD:
         raise Invalid({"file": f"the file is too big (up to {MAX_UPLOAD // (1024 * 1024)} MB)"})
-    lower = (name or "").lower()
-    ext = next((e for magic, e in RASTER.items() if data.startswith(magic)), None)
-    if ext is None and lower.endswith(".svg") and b"<svg" in data[:4096].lower():
-        ext = ".svg"
-    if ext is None and lower.endswith(".dxf"):
-        try:
-            data, ext = underlay.dxf_to_svg(data).encode("utf-8"), ".svg"
-        except ValueError as e:
-            raise Invalid({"file": str(e)})
-    if ext is None and (lower.endswith(".pdf") or data.startswith(b"%PDF")):
-        with tempfile.TemporaryDirectory() as tmp:
-            png = repository.pdf_to_png(data, Path(tmp))
-        if png is None:
-            raise Invalid({"file": "this server cannot open a PDF as a plan: export the plan as an image (PNG or JPG) or as a DXF"})
-        data, ext = png, ".png"
-    if ext is None:
-        raise Invalid({"file": "use a PNG or JPG image, an SVG, a DXF or a PDF"})
+    data, ext = _underlay_content(name, data)
     repository.save_underlay(d, level, ext, data)
     identity.audit_event("layout_underlay", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"kind": ext.lstrip(".")})
     return view(d, level)

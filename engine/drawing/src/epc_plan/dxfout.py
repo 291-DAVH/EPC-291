@@ -30,6 +30,57 @@ def _symbol_prims(symbol_id: str, size: float, scale: float) -> List[Dict[str, A
     return out
 
 
+def _define_block(doc, sid: str, size: float, scale: float, height: float) -> str:
+    """The block of a symbol (one per symbol used), with an attribute that holds the tag. Returns its name."""
+    name = f"SYM_{sid.upper()}"
+    if name in doc.blocks:
+        return name
+    blk = doc.blocks.new(name=name)
+    for p in _symbol_prims(sid, size, scale):
+        if p["t"] == "poly":
+            blk.add_lwpolyline(p["pts"], close=True)
+        elif p["t"] == "line":
+            blk.add_line(p["a"], p["b"])
+        else:
+            blk.add_circle((0, 0), p["r"])
+    blk.add_attdef("TAG", (size * scale * 0.6, size * scale * 0.6), height=height)
+    return name
+
+
+def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float) -> int:
+    """Placed nodes as block insertions with their tag, junctions as small circles. Returns how many entities were added."""
+    count = 0
+    for n in result["nodes"]:
+        at = (n["x_m"] * scale, n["y_m"] * scale)
+        if n["placed"]:
+            kind = node_kinds[n["kind"]]
+            block = _define_block(doc, kind["simbolo_2d"], cfg["node_symbol_size_m"], scale, height)
+            msp.add_blockref(block, at, dxfattribs={"layer": kind["capa_dxf"]}).add_auto_attribs({"TAG": n["tag"]})
+            count += 1
+        elif n["kind"] == "J":
+            msp.add_circle(at, 0.05 * scale, dxfattribs={"layer": cfg["junction_layer"]})
+            count += 1
+    return count
+
+
+def _label_position(pts):
+    """Middle of a polyline (by vertex count) and the angle of its ends, turned so the text is never upside down."""
+    half = len(pts) // 2
+    mid = pts[half] if len(pts) % 2 else ((pts[half - 1][0] + pts[half][0]) / 2, (pts[half - 1][1] + pts[half][1]) / 2)
+    a, b = pts[0], pts[-1]
+    angle = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+    return mid, angle + 180 if (angle > 90 or angle < -90) else angle
+
+
+def _add_stretches(msp, result, line_kinds, cfg, scale: float, height: float) -> int:
+    for s in result["stretches"]:
+        pts = [(x * scale, y * scale) for x, y in s["points_m"]]
+        msp.add_lwpolyline(pts, dxfattribs={"layer": line_kinds[s["kind"]]["capa_dxf"]})
+        mid, angle = _label_position(pts)
+        msp.add_text(s["tag"], height=height, rotation=angle, dxfattribs={"layer": cfg["tag_layer"]}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
+    return 2 * len(result["stretches"])
+
+
 def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dict[str, Any] = core.PARAMS) -> List[str]:
     """Write the DXF of a result to `path`; returns the warnings (audit findings, read-back differences)."""
     cfg = params["dxf"]
@@ -42,53 +93,15 @@ def write_dxf(result: Dict[str, Any], path: Path, version: str = "", params: Dic
     doc = ezdxf.new(dxfversion=version, setup=True)
     doc.units = code
     msp = doc.modelspace()
-    warnings: List[str] = []
-
-    layers = {k["capa_dxf"] for k in list(line_kinds.values()) + list(node_kinds.values())} | {cfg["tag_layer"], cfg["junction_layer"]}
-    for name in sorted(layers):
+    for name in sorted({k["capa_dxf"] for k in list(line_kinds.values()) + list(node_kinds.values())} | {cfg["tag_layer"], cfg["junction_layer"]}):
         doc.layers.add(name)
     height = cfg["text_height_m"] * scale
-    size = cfg["node_symbol_size_m"]
-
-    blocks = set()
-    for n in result["nodes"]:
-        if not n["placed"]:
-            continue
-        kind = node_kinds[n["kind"]]
-        sid = kind["simbolo_2d"]
-        if sid not in blocks:
-            blocks.add(sid)
-            blk = doc.blocks.new(name=f"SYM_{sid.upper()}")
-            for p in _symbol_prims(sid, size, scale):
-                if p["t"] == "poly":
-                    blk.add_lwpolyline(p["pts"], close=True)
-                elif p["t"] == "line":
-                    blk.add_line(p["a"], p["b"])
-                else:
-                    blk.add_circle((0, 0), p["r"])
-            blk.add_attdef("TAG", (size * scale * 0.6, size * scale * 0.6), height=height)
-        ref = msp.add_blockref(f"SYM_{sid.upper()}", (n["x_m"] * scale, n["y_m"] * scale), dxfattribs={"layer": kind["capa_dxf"]})
-        ref.add_auto_attribs({"TAG": n["tag"]})
-    for n in result["nodes"]:
-        if not n["placed"] and n["kind"] == "J":
-            msp.add_circle((n["x_m"] * scale, n["y_m"] * scale), 0.05 * scale, dxfattribs={"layer": cfg["junction_layer"]})
-
-    for s in result["stretches"]:
-        pts = [(x * scale, y * scale) for x, y in s["points_m"]]
-        msp.add_lwpolyline(pts, dxfattribs={"layer": line_kinds[s["kind"]]["capa_dxf"]})
-        mid = pts[len(pts) // 2] if len(pts) % 2 else ((pts[len(pts) // 2 - 1][0] + pts[len(pts) // 2][0]) / 2, (pts[len(pts) // 2 - 1][1] + pts[len(pts) // 2][1]) / 2)
-        a, b = pts[0], pts[-1]
-        angle = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
-        if angle > 90 or angle < -90:
-            angle += 180
-        msp.add_text(s["tag"], height=height, rotation=angle, dxfattribs={"layer": cfg["tag_layer"]}).set_placement(mid, align=ezdxf.enums.TextEntityAlignment.BOTTOM_CENTER)
+    expected = _add_nodes(doc, msp, result, node_kinds, cfg, scale, height) + _add_stretches(msp, result, line_kinds, cfg, scale, height)
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    auditor = doc.audit()
-    warnings += [f"DXF audit: {e.message}" for e in auditor.errors]
+    warnings = [f"DXF audit: {e.message}" for e in doc.audit().errors]
     doc.saveas(str(path))
-    back = ezdxf.readfile(str(path))
-    expected = len(result["stretches"]) + sum(1 for n in result["nodes"] if n["placed"]) + sum(1 for n in result["nodes"] if not n["placed"] and n["kind"] == "J") + len(result["stretches"])
-    if len(back.modelspace()) != expected:
-        warnings.append(f"DXF read back has {len(back.modelspace())} entities, expected {expected}")
+    back = len(ezdxf.readfile(str(path)).modelspace())
+    if back != expected:
+        warnings.append(f"DXF read back has {back} entities, expected {expected}")
     return warnings

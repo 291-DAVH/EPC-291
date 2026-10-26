@@ -1,13 +1,13 @@
 {
  "backend": {
-  "statements": 5669,
-  "covered": 5385,
-  "percent": 94.99
+  "statements": 6049,
+  "covered": 5752,
+  "percent": 95.09
  },
  "engine-calc": {
-  "statements": 2671,
-  "covered": 2214,
-  "percent": 82.89
+  "statements": 2597,
+  "covered": 2163,
+  "percent": 83.29
  },
  "engine-rules": {
   "statements": 206,
@@ -20,13 +20,13 @@
   "percent": 35.9
  },
  "engine-drawing": {
-  "statements": 2594,
-  "covered": 1190,
-  "percent": 45.88
+  "statements": 3142,
+  "covered": 1674,
+  "percent": 53.28
  },
  "engine-documents": {
-  "statements": 2885,
-  "covered": 2205,
-  "percent": 76.43
+  "statements": 3052,
+  "covered": 2431,
+  "percent": 79.65
  }
 }

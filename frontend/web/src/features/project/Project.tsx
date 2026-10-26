@@ -5,6 +5,7 @@ import AnalysisPanel from "./AnalysisPanel";
 import Deliverables from "./Deliverables";
 import Engineering from "./Engineering";
 import Inputs from "./Inputs";
+import Layout from "./Layout";
 import Observations from "./Observations";
 import Overview from "./Overview";
 import Plan from "./Plan";
@@ -69,6 +70,7 @@ export default function Project() {
       {tab === "plan" && <Plan base={base} />}
       {tab === "registers" && <Registers client={client} code={code} />}
       {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
+      {tab === "layout" && <Layout client={client} code={code} canWrite={can("workspace", "write")} />}
       {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "observations" && <Observations base={base} can={can} />}
       {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}

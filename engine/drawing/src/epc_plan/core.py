@@ -181,84 +181,119 @@ def _check_document(doc: Dict[str, Any], params) -> None:
             raise PlanError(f"line {ln.get('id', '?')} has too many points (up to {lim['max_points_per_line']})")
 
 
+class _Graph:
+    """The nodes of the drawing (placed ones first) and the tolerance within which a point counts as being at a node."""
+
+    def __init__(self, nodes: List[Dict[str, Any]], tol: float):
+        self.tol = tol
+        self.nodes: List[Dict[str, Any]] = [{"id": n["id"], "kind": n.get("kind"), "x": n["x"], "y": n["y"], "placed": True, "attrs": n.get("attrs", {}), "tag": n.get("tag")} for n in nodes]
+
+    def near(self, p) -> Optional[Dict[str, Any]]:
+        best = None
+        for g in self.nodes:
+            d = _dist(p, (g["x"], g["y"]))
+            if d <= self.tol and (best is None or d < best[0]):
+                best = (d, g)
+        return best[1] if best else None
+
+    def add(self, p, kind: str) -> Dict[str, Any]:
+        g = {"id": f"auto:{kind}{sum(1 for x in self.nodes if x['kind'] == kind) + 1}", "kind": kind, "x": p[0], "y": p[1], "placed": False, "attrs": {}, "tag": None}
+        self.nodes.append(g)
+        return g
+
+
+def _on_another_line(lines, own, end, tol) -> Optional[Tuple[float, float]]:
+    """The point of another line the end lies on (a T), or None."""
+    for other in lines:
+        if other is own:
+            continue
+        s, d = _locate(other["points"], end)
+        if d <= tol:
+            return _point_at(other["points"], s)
+    return None
+
+
+def _join_line_ends(graph: _Graph, lines, warnings: List[str]) -> None:
+    """Every line end connects to a node, to another line (a junction is made there) or stays free (and is reported)."""
+    for ln in lines:
+        for end in (ln["points"][0], ln["points"][-1]):
+            if graph.near(end):
+                continue
+            joined = _on_another_line(lines, ln, end, graph.tol)
+            if joined is not None:
+                graph.add(joined, "J")
+            else:
+                graph.add(end, "E")
+                warnings.append(f"line {ln['id']} has a free end at ({end[0]:.2f}, {end[1]:.2f}) m")
+
+
+def _cuts(graph: _Graph, pts) -> List[Tuple[float, Dict[str, Any]]]:
+    """The nodes that lie on a polyline, in order along it (a node is listed once in a row)."""
+    found = []
+    for g in graph.nodes:
+        s, d = _locate(pts, (g["x"], g["y"]))
+        if d <= graph.tol:
+            found.append((s, g))
+    found.sort(key=lambda c: (c[0], c[1]["id"]))
+    merged: List[Tuple[float, Dict[str, Any]]] = []
+    for s, g in found:
+        if not (merged and merged[-1][1] is g):
+            merged.append((s, g))
+    return merged
+
+
+def _stretches_of(ln, cuts) -> List[Dict[str, Any]]:
+    out = []
+    for (s0, g0), (s1, g1) in zip(cuts, cuts[1:]):
+        if g0 is g1 or s1 - s0 < 1e-9:
+            continue
+        geom = _slice(ln["points"], s0, s1)
+        out.append({"line": ln["id"], "kind": ln["kind"], "from": g0["id"], "to": g1["id"], "points": geom, "length_m": _polyline_length(geom), "attrs": ln.get("attrs", {}), "circuit": ln.get("circuit")})
+    return out
+
+
+def _cut_lines(graph: _Graph, lines, warnings: List[str]) -> List[Dict[str, Any]]:
+    """Every line is cut where a node lies on it; each piece between two nodes is a stretch."""
+    stretches: List[Dict[str, Any]] = []
+    for ln in lines:
+        cuts = _cuts(graph, ln["points"])
+        if len(cuts) < 2:
+            warnings.append(f"line {ln['id']} does not reach two nodes")
+            continue
+        stretches += _stretches_of(ln, cuts)
+        if _polyline_length(ln["points"]) <= 0:
+            warnings.append(f"line {ln['id']} has no length")
+    return stretches
+
+
+def _crossings_between(la, lb):
+    for a in range(len(la["points"]) - 1):
+        for b in range(len(lb["points"]) - 1):
+            p = _crossing(la["points"][a], la["points"][a + 1], lb["points"][b], lb["points"][b + 1])
+            if p:
+                yield p
+
+
+def _report_crossings(graph: _Graph, lines, warnings: List[str]) -> None:
+    """Two lines that only cross are not connected: the person has to place a node, and a warning says so."""
+    for i, la in enumerate(lines):
+        for lb in lines[i + 1:]:
+            for p in _crossings_between(la, lb):
+                if not graph.near(p):
+                    warnings.append(f"lines {la['id']} and {lb['id']} cross at ({p[0]:.2f}, {p[1]:.2f}) m without a node: they are not connected")
+
+
 def build_graph(nodes: List[Dict[str, Any]], lines: List[Dict[str, Any]], tol: float) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[str]]:
     """Join placed nodes and drawn lines into a graph, all in metres.
 
     A line end that lies on another line (a *T*) or on a placed node connects there; a placed node lying on a line splits it. Two lines that only cross are
     NOT connected: the person must place a node. Returns (graph nodes, stretches, warnings)."""
     warnings: List[str] = []
-    gnodes: List[Dict[str, Any]] = [{"id": n["id"], "kind": n.get("kind"), "x": n["x"], "y": n["y"], "placed": True, "attrs": n.get("attrs", {}), "tag": n.get("tag")} for n in nodes]
-
-    def node_near(p) -> Optional[Dict[str, Any]]:
-        best = None
-        for g in gnodes:
-            d = _dist(p, (g["x"], g["y"]))
-            if d <= tol and (best is None or d < best[0]):
-                best = (d, g)
-        return best[1] if best else None
-
-    def new_node(p, kind) -> Dict[str, Any]:
-        g = {"id": f"auto:{kind}{sum(1 for x in gnodes if x['kind'] == kind) + 1}", "kind": kind, "x": p[0], "y": p[1], "placed": False, "attrs": {}, "tag": None}
-        gnodes.append(g)
-        return g
-
-    # 1. every line end connects to a node, to another line (T) or stays free
-    for ln in lines:
-        for end in (ln["points"][0], ln["points"][-1]):
-            if node_near(end):
-                continue
-            joined = None
-            for other in lines:
-                if other is ln:
-                    continue
-                s, d = _locate(other["points"], end)
-                if d <= tol:
-                    joined = _point_at(other["points"], s)
-                    break
-            if joined is not None:
-                new_node(joined, "J")
-            else:
-                new_node(end, "E")
-                warnings.append(f"line {ln['id']} has a free end at ({end[0]:.2f}, {end[1]:.2f}) m")
-
-    # 2. every line is cut where a node lies on it
-    stretches: List[Dict[str, Any]] = []
-    for ln in lines:
-        pts = ln["points"]
-        total = _polyline_length(pts)
-        cuts: List[Tuple[float, Dict[str, Any]]] = []
-        for g in gnodes:
-            s, d = _locate(pts, (g["x"], g["y"]))
-            if d <= tol:
-                cuts.append((s, g))
-        cuts.sort(key=lambda c: (c[0], c[1]["id"]))
-        merged: List[Tuple[float, Dict[str, Any]]] = []
-        for s, g in cuts:
-            if merged and merged[-1][1] is g:
-                continue
-            merged.append((s, g))
-        if len(merged) < 2:
-            warnings.append(f"line {ln['id']} does not reach two nodes")
-            continue
-        for k in range(len(merged) - 1):
-            (s0, g0), (s1, g1) = merged[k], merged[k + 1]
-            if g0 is g1 or s1 - s0 < 1e-9:
-                continue
-            geom = _slice(pts, s0, s1)
-            stretches.append({"line": ln["id"], "kind": ln["kind"], "from": g0["id"], "to": g1["id"], "points": geom, "length_m": _polyline_length(geom), "attrs": ln.get("attrs", {}),
-                              "circuit": ln.get("circuit")})
-        if total <= 0:
-            warnings.append(f"line {ln['id']} has no length")
-
-    # 3. crossings that are not connections
-    for i, la in enumerate(lines):
-        for lb in lines[i + 1:]:
-            for a in range(len(la["points"]) - 1):
-                for b in range(len(lb["points"]) - 1):
-                    p = _crossing(la["points"][a], la["points"][a + 1], lb["points"][b], lb["points"][b + 1])
-                    if p and not node_near(p):
-                        warnings.append(f"lines {la['id']} and {lb['id']} cross at ({p[0]:.2f}, {p[1]:.2f}) m without a node: they are not connected")
-    return gnodes, stretches, warnings
+    graph = _Graph(nodes, tol)
+    _join_line_ends(graph, lines, warnings)
+    stretches = _cut_lines(graph, lines, warnings)
+    _report_crossings(graph, lines, warnings)
+    return graph.nodes, stretches, warnings
 
 
 def _point_at(points, s: float) -> Tuple[float, float]:
@@ -273,38 +308,41 @@ def _point_at(points, s: float) -> Tuple[float, float]:
 
 
 # ---------------------------------------------------------------- flow and invert levels
-def orient_from_outlet(gnodes, stretches, outlet: str, warnings: List[str]) -> Dict[str, Dict[str, Any]]:
-    """Walk the network from its outlet: every stretch gets the node it drains to and the node it comes from, and every node its distance to the outlet."""
-    ids = {g["id"] for g in gnodes}
-    if outlet not in ids:
-        raise PlanError(f"the outlet {outlet!r} is not a node of the drawing")
+def _walk_from(outlet: str, stretches, ids) -> Tuple[Dict[str, Dict[str, Any]], set]:
+    """Breadth-first from the outlet: the distance of every node to it and the stretch it was reached by (that stretch drains toward the outlet)."""
     adj: Dict[str, List[Tuple[str, Dict[str, Any]]]] = {i: [] for i in ids}
     for s in stretches:
         adj[s["from"]].append((s["to"], s))
         adj[s["to"]].append((s["from"], s))
     info: Dict[str, Dict[str, Any]] = {outlet: {"distance_m": 0.0, "stretch": None}}
-    queue = [outlet]
-    seen_stretch = set()
+    queue, reached = [outlet], set()
     while queue:
         cur = queue.pop(0)
         for nxt, st in sorted(adj[cur], key=lambda e: (e[0], e[1]["line"])):
-            key = id(st)
             if nxt not in info:
                 info[nxt] = {"distance_m": info[cur]["distance_m"] + st["length_m"], "stretch": st}
                 st["flows_to"], st["flows_from"] = cur, nxt
-                seen_stretch.add(key)
+                reached.add(id(st))
                 queue.append(nxt)
+    return info, reached
+
+
+def orient_from_outlet(gnodes, stretches, outlet: str, warnings: List[str]) -> Dict[str, Dict[str, Any]]:
+    """Walk the network from its outlet: every stretch gets the node it drains to and the node it comes from, and every node its distance to the outlet."""
+    ids = {g["id"] for g in gnodes}
+    if outlet not in ids:
+        raise PlanError(f"the outlet {outlet!r} is not a node of the drawing")
+    info, reached = _walk_from(outlet, stretches, ids)
     for st in stretches:
-        if id(st) not in seen_stretch:
-            if st["from"] in info and st["to"] in info:
-                warnings.append(f"stretch {st['line']} ({st['from']}-{st['to']}) closes a loop: a network with a single outlet has none")
+        if id(st) not in reached and st["from"] in info and st["to"] in info:
+            warnings.append(f"stretch {st['line']} ({st['from']}-{st['to']}) closes a loop: a network with a single outlet has none")
     for i in sorted(ids - set(info)):
         warnings.append(f"node {i} is not connected to the outlet {outlet}")
     return info
 
 
-def derive_inverts(gnodes, stretches, info, outlet: str, outlet_invert_m: float, profile_id: str, rules: List[Dict[str, Any]], warnings: List[str]) -> Optional[Dict[str, Any]]:
-    """Invert level of every node: the outlet's, rising upstream by the slope the rule gives for the diameter of the stretch. Without a usable rule nothing is invented."""
+def _slope_table(rules: List[Dict[str, Any]], profile_id: str, warnings: List[str]) -> Optional[Tuple[Dict[str, Any], Dict[int, float]]]:
+    """The rule that gives the minimum slope for the discipline and its usable rows; None (with a warning) when there is none: nothing is invented."""
     rule = next((r for r in rules if r.get("topic") == "min_slope" and r.get("applies_to") == profile_id), None)
     if rule is None:
         warnings.append("no minimum-slope rule for this discipline: invert levels are not calculated")
@@ -313,74 +351,83 @@ def derive_inverts(gnodes, stretches, info, outlet: str, outlet_invert_m: float,
     if not table:
         warnings.append(f"the rule {rule['id']} has no slope values yet: invert levels are not calculated")
         return None
-    status = rule.get("status", "pending")
-    if status != "approved":
-        warnings.append(f"the rule {rule['id']} is {status}: the invert levels are provisional")
+    if rule.get("status", "pending") != "approved":
+        warnings.append(f"the rule {rule['id']} is {rule.get('status', 'pending')}: the invert levels are provisional")
+    return rule, table
+
+
+def _slope_for(stretch, table: Dict[int, float]) -> Optional[float]:
+    """The slope for the diameter of a stretch: its own row, else the next bigger diameter that has one."""
+    diameter = (stretch.get("attrs") or {}).get("diameter_mm")
+    if diameter in table:
+        return table[diameter]
+    bigger = [d for d in sorted(table) if diameter is not None and d >= diameter]
+    return table[bigger[0]] if bigger else None
+
+
+def derive_inverts(gnodes, stretches, info, outlet: str, outlet_invert_m: float, profile_id: str, rules: List[Dict[str, Any]], warnings: List[str]) -> Optional[Dict[str, Any]]:
+    """Invert level of every node: the outlet's, rising upstream by the slope the rule gives for the diameter of the stretch. Without a usable rule nothing is invented."""
+    found = _slope_table(rules, profile_id, warnings)
+    if found is None:
+        return None
+    rule, table = found
     levels = {outlet: outlet_invert_m}
     for node_id in sorted(info, key=lambda i: (info[i]["distance_m"], i)):
         st = info[node_id]["stretch"]
         if st is None:
             continue
-        diameter = (st.get("attrs") or {}).get("diameter_mm")
-        slope = table.get(diameter)
-        if slope is None:
-            bigger = [d for d in sorted(table) if diameter is not None and d >= diameter]
-            slope = table[bigger[0]] if bigger else None
+        slope = _slope_for(st, table)
         if slope is None:
             warnings.append(f"stretch {st['line']} has no diameter with a slope rule: node {node_id} gets no invert level")
             continue
         st["slope_pct"] = slope
         if st["flows_to"] in levels:
             levels[node_id] = levels[st["flows_to"]] + slope / 100.0 * st["length_m"]
+    status = rule.get("status", "pending")
     return {"rule": rule["id"], "status": status, "validated": status == "approved", "invert_m": {k: round(v, 4) for k, v in sorted(levels.items())}}
 
 
 # ---------------------------------------------------------------- the whole job
-def process(document: Dict[str, Any], params: Dict[str, Any] = PARAMS, rules: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
-    """Takes the drawing document (schema/input.schema.json) and returns the result document (schema/output.schema.json). Never changes its input."""
-    doc = copy.deepcopy(document)
-    _check_document(doc, params)
-    rules = load_rules() if rules is None else rules
-    plan = doc.get("plan") or {}
-    level_number = parse_level(plan.get("level", params["levels"]["ground"]), params)
-    k = metres_per_unit(plan.get("scale") or {}, params)
-    origin = plan.get("origin", [0.0, 0.0])
-    profile = load_profile(doc.get("discipline", ""))
-    line_kinds, node_kinds = _kinds(profile)
-    warnings: List[str] = []
-
+def _read_nodes(doc, node_kinds, profile_id: str, origin, k: float) -> List[Dict[str, Any]]:
     nodes = []
     for n in doc.get("nodes", []):
         if n.get("kind") not in node_kinds:
-            raise PlanError(f"node {n.get('id', '?')}: kind {n.get('kind')!r} does not exist in the discipline {profile['id']}")
+            raise PlanError(f"node {n.get('id', '?')}: kind {n.get('kind')!r} does not exist in the discipline {profile_id}")
         x, y = to_world((n["x"], n["y"]), origin, k)
         nodes.append({"id": n["id"], "kind": n["kind"], "x": x, "y": y, "attrs": n.get("attrs", {}), "tag": n.get("tag")})
+    return nodes
+
+
+def _read_lines(doc, line_kinds, profile_id: str, origin, k: float) -> List[Dict[str, Any]]:
     lines = []
     for ln in doc.get("lines", []):
         if ln.get("kind") not in line_kinds:
-            raise PlanError(f"line {ln.get('id', '?')}: kind {ln.get('kind')!r} does not exist in the discipline {profile['id']}")
+            raise PlanError(f"line {ln.get('id', '?')}: kind {ln.get('kind')!r} does not exist in the discipline {profile_id}")
         lines.append({"id": ln["id"], "kind": ln["kind"], "points": [to_world(p, origin, k) for p in ln["points"]], "attrs": ln.get("attrs", {}), "tag": ln.get("tag"), "circuit": ln.get("circuit")})
+    return lines
+
+
+def _check_unique_ids(nodes, lines) -> None:
     ids = [x["id"] for x in nodes] + [x["id"] for x in lines]
     for dup in sorted({i for i in ids if ids.count(i) > 1}):
         raise PlanError(f"the id {dup!r} is used twice: ids must be unique")
 
-    gnodes, stretches, graph_warnings = build_graph(nodes, lines, params["geometry"]["snap_tolerance_m"])
-    warnings += graph_warnings
 
-    tagger = _Tagger(params, warnings)
-    for x in gnodes:                                   # given tags first, so the correlative never takes one the person wrote
+def _reserve_node_tags(gnodes, tagger) -> None:
+    for x in gnodes:
         if x["placed"] and x["tag"] and not tagger.reserve(x["tag"], f"node {x['id']}"):
             x["tag"] = None
-    for ln in lines:
-        if ln["tag"] and not tagger.reserve(ln["tag"], f"line {ln['id']}"):
-            ln["tag"] = None
+
+
+def _give_node_tags(gnodes, node_kinds, tagger, params) -> None:
     for x in gnodes:
         if not x["tag"]:
             prefix = node_kinds[x["kind"]]["prefijo_tag"] if x["placed"] else params["tags"]["junction_prefix" if x["kind"] == "J" else "end_prefix"]
             x["tag"] = tagger.give(prefix)
-    line_tag = {}
-    for ln in lines:
-        line_tag[ln["id"]] = ln["tag"] or tagger.give(line_kinds[ln["kind"]]["prefijo_tag"])
+
+
+def _tag_stretches(stretches, line_tag, separator: str) -> None:
+    """A line cut into several stretches gives them `<line tag><separator>1`, `...2`; a line with one stretch keeps its tag."""
     count: Dict[str, int] = {}
     for s in stretches:
         s["line_tag"] = line_tag[s["line"]]
@@ -388,48 +435,103 @@ def process(document: Dict[str, Any], params: Dict[str, Any] = PARAMS, rules: Op
     seen: Dict[str, int] = {}
     for s in stretches:
         seen[s["line"]] = seen.get(s["line"], 0) + 1
-        s["tag"] = s["line_tag"] if count[s["line"]] == 1 else f"{s['line_tag']}{params['tags']['stretch_separator']}{seen[s['line']]}"
+        s["tag"] = s["line_tag"] if count[s["line"]] == 1 else f"{s['line_tag']}{separator}{seen[s['line']]}"
         s["length_m"] = round(s["length_m"], 4)
 
-    flow = None
-    outlet = doc.get("outlet")
-    if outlet:
-        info = orient_from_outlet(gnodes, stretches, outlet, warnings)
-        inv = doc.get("outlet_invert_m")
-        if inv is not None:
-            flow = derive_inverts(gnodes, stretches, info, outlet, float(inv), profile["id"], rules, warnings)
-        else:
-            warnings.append("the outlet has no invert level: levels are not calculated")
-        for x in gnodes:
-            x["distance_to_outlet_m"] = round(info[x["id"]]["distance_m"], 4) if x["id"] in info else None
 
-    schedule = _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds)
-    for s in stretches:
-        s["points"] = [[round(p[0], 4), round(p[1], 4)] for p in s["points"]]
+def _assign_tags(gnodes, lines, stretches, node_kinds, line_kinds, params, warnings) -> Dict[str, str]:
+    """Tags of nodes, lines and stretches. Returns the tag of every line. Tags the person wrote are reserved first so the correlative never takes one."""
+    tagger = _Tagger(params, warnings)
+    _reserve_node_tags(gnodes, tagger)
+    for ln in lines:
+        if ln["tag"] and not tagger.reserve(ln["tag"], f"line {ln['id']}"):
+            ln["tag"] = None
+    _give_node_tags(gnodes, node_kinds, tagger, params)
+    line_tag = {ln["id"]: ln["tag"] or tagger.give(line_kinds[ln["kind"]]["prefijo_tag"]) for ln in lines}
+    _tag_stretches(stretches, line_tag, params["tags"]["stretch_separator"])
+    return line_tag
+
+
+def _network(doc, gnodes, stretches, profile_id: str, rules, warnings) -> Optional[Dict[str, Any]]:
+    """Orientation toward the outlet and invert levels, when the drawing names an outlet."""
+    outlet = doc.get("outlet")
+    if not outlet:
+        return None
+    info = orient_from_outlet(gnodes, stretches, outlet, warnings)
+    flow = None
+    if doc.get("outlet_invert_m") is not None:
+        flow = derive_inverts(gnodes, stretches, info, outlet, float(doc["outlet_invert_m"]), profile_id, rules, warnings)
+    else:
+        warnings.append("the outlet has no invert level: levels are not calculated")
+    for x in gnodes:
+        x["distance_to_outlet_m"] = round(info[x["id"]]["distance_m"], 4) if x["id"] in info else None
+    return flow
+
+
+def _node_json(x) -> Dict[str, Any]:
+    out = {"id": x["id"], "tag": x["tag"], "kind": x["kind"], "placed": x["placed"], "x_m": round(x["x"], 4), "y_m": round(x["y"], 4), "attrs": x["attrs"]}
+    if "distance_to_outlet_m" in x:
+        out["distance_to_outlet_m"] = x["distance_to_outlet_m"]
+    return out
+
+
+def _stretch_json(s) -> Dict[str, Any]:
+    out = {"tag": s["tag"], "line": s["line"], "line_tag": s["line_tag"], "kind": s["kind"], "from": s["from"], "to": s["to"], "length_m": s["length_m"],
+           "points_m": [[round(p[0], 4), round(p[1], 4)] for p in s["points"]], "attrs": s["attrs"], "circuit": s["circuit"]}
+    if "flows_to" in s:
+        out.update(flows_to=s["flows_to"], flows_from=s["flows_from"])
+    if "slope_pct" in s:
+        out["slope_pct"] = s["slope_pct"]
+    return out
+
+
+def process(document: Dict[str, Any], params: Dict[str, Any] = PARAMS, rules: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+    """Takes the drawing document (schema/input.schema.json) and returns the result document (schema/output.schema.json). Never changes its input."""
+    doc = copy.deepcopy(document)
+    _check_document(doc, params)
+    rules = load_rules() if rules is None else rules
+    plan = doc.get("plan") or {}
+    level = plan.get("level", params["levels"]["ground"])
+    level_number = parse_level(level, params)
+    k = metres_per_unit(plan.get("scale") or {}, params)
+    origin = plan.get("origin", [0.0, 0.0])
+    profile = load_profile(doc.get("discipline", ""))
+    line_kinds, node_kinds = _kinds(profile)
+    nodes = _read_nodes(doc, node_kinds, profile["id"], origin, k)
+    lines = _read_lines(doc, line_kinds, profile["id"], origin, k)
+    _check_unique_ids(nodes, lines)
+
+    gnodes, stretches, warnings = build_graph(nodes, lines, params["geometry"]["snap_tolerance_m"])
+    line_tag = _assign_tags(gnodes, lines, stretches, node_kinds, line_kinds, params, warnings)
+    flow = _network(doc, gnodes, stretches, profile["id"], rules, warnings)
     return {
-        "schema_version": "1.0", "plan": {"id": plan.get("id", ""), "level": plan.get("level", params["levels"]["ground"]), "level_number": level_number, "metres_per_unit": k, "origin": list(origin)},
-        "discipline": profile["id"],
-        "nodes": [{"id": x["id"], "tag": x["tag"], "kind": x["kind"], "placed": x["placed"], "x_m": round(x["x"], 4), "y_m": round(x["y"], 4), "attrs": x["attrs"],
-                   **({"distance_to_outlet_m": x["distance_to_outlet_m"]} if "distance_to_outlet_m" in x else {})} for x in gnodes],
-        "stretches": [{"tag": s["tag"], "line": s["line"], "line_tag": s["line_tag"], "kind": s["kind"], "from": s["from"], "to": s["to"], "length_m": s["length_m"], "points_m": s["points"], "attrs": s["attrs"],
-                       "circuit": s["circuit"], **({"flows_to": s["flows_to"], "flows_from": s["flows_from"]} if "flows_to" in s else {}), **({"slope_pct": s["slope_pct"]} if "slope_pct" in s else {})}
-                      for s in stretches],
-        "schedule": schedule, "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
+        "schema_version": "1.0", "plan": {"id": plan.get("id", ""), "level": level, "level_number": level_number, "metres_per_unit": k, "origin": list(origin)},
+        "discipline": profile["id"], "nodes": [_node_json(x) for x in gnodes], "stretches": [_stretch_json(s) for s in stretches],
+        "schedule": _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds), "network": flow, "rules_used": [flow["rule"]] if flow else [], "warnings": warnings,
     }
 
 
-def _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds) -> Dict[str, Any]:
-    by_kind: Dict[str, Dict[str, Any]] = {}
+def _kind_totals(stretches, line_kinds) -> Dict[str, Dict[str, Any]]:
+    out = {}
     for kid in line_kinds:
         sel = [s for s in stretches if s["kind"] == kid]
-        by_kind[kid] = {"lines": len({s["line"] for s in sel}), "stretches": len(sel), "length_m": round(sum(s["length_m"] for s in sel), 4)}
-    nodes: Dict[str, int] = {kid: sum(1 for g in gnodes if g["placed"] and g["kind"] == kid) for kid in node_kinds}
+        out[kid] = {"lines": len({s["line"] for s in sel}), "stretches": len(sel), "length_m": round(sum(s["length_m"] for s in sel), 4)}
+    return out
+
+
+def _circuit_routes(stretches) -> Dict[str, Dict[str, Any]]:
+    """The real route of every circuit a line references: its stretches and the total length."""
     routes: Dict[str, Dict[str, Any]] = {}
     for s in stretches:
         if s.get("circuit"):
             r = routes.setdefault(s["circuit"], {"stretches": [], "length_m": 0.0})
             r["stretches"].append(s["tag"])
             r["length_m"] = round(r["length_m"] + s["length_m"], 4)
+    return dict(sorted(routes.items()))
+
+
+def _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds) -> Dict[str, Any]:
+    nodes = {kid: sum(1 for g in gnodes if g["placed"] and g["kind"] == kid) for kid in node_kinds}
     per_line = {line_tag[ln["id"]]: round(sum(s["length_m"] for s in stretches if s["line"] == ln["id"]), 4) for ln in lines}
-    return {"lines": by_kind, "nodes": nodes, "circuit_routes": dict(sorted(routes.items())), "length_by_line_m": dict(sorted(per_line.items())),
+    return {"lines": _kind_totals(stretches, line_kinds), "nodes": nodes, "circuit_routes": _circuit_routes(stretches), "length_by_line_m": dict(sorted(per_line.items())),
             "total_length_m": round(sum(s["length_m"] for s in stretches), 4)}
