@@ -1,23 +1,12 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { en as enDict } from "./dict/en";
+import { es as esDict } from "./dict/es";
 import { I18nProvider, useI18n } from "./i18n";
 
-// The dictionary is not exported: its two blocks are read from the source, so a key added to one language and forgotten in the other is caught here.
-const SRC = readFileSync(resolve(process.cwd(), "packages/ui/src/i18n.tsx"), "utf-8");
-const START = SRC.indexOf("const dict = {");
-const EN_AT = SRC.indexOf("\n  en: {", START);
-const END = SRC.indexOf("} as const;", EN_AT);
-
-function block(from: number, to: number): Map<string, string> {
-  const out = new Map<string, string>();
-  const re = /^\s{4}"([^"]+)":\s*("(?:[^"\\]|\\.)*"),?\s*$/gm;
-  for (const m of SRC.slice(from, to).matchAll(re)) out.set(m[1], JSON.parse(m[2]));
-  return out;
-}
-const es = block(START, EN_AT);
-const en = block(EN_AT, END);
+// A key added to one language and forgotten in the other is caught here.
+const es = new Map<string, string>(Object.entries(esDict));
+const en = new Map<string, string>(Object.entries(enDict));
 const placeholders = (s: string) => (s.match(/\{[a-zA-Z0-9_]+\}/g) ?? []).sort();
 
 describe("i18n dictionary", () => {
