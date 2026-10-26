@@ -34,6 +34,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-771 §19.7 (Tabla 771.19.IV); AEA 90364-7-770 §15.6.  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -53,13 +54,6 @@ LIMITES_PCT = {
 }
 FRACCION_ILUM_771 = 0.66
 FRACCION_ILUM_770 = 2.0 / 3.0
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def drop_unit_table(seccion_mm2):

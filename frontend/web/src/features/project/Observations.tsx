@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ApiError, Badge, RegisterDef, RegisterRecord, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, JSON_HEADERS, RegisterDef, RegisterRecord, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
 const TONE: Record<string, "ok" | "warn" | "bad" | "accent" | undefined> = { critical: "bad", major: "warn", minor: "accent", info: undefined };
 
 /** Observations of inspections and audits on a project: inspectors and auditors write them, the customer's managers answer, the inspector closes. */
@@ -23,9 +22,9 @@ export default function Observations({ base, can }: { base: string; can: (subjec
   };
   const create = (e: FormEvent) => {
     e.preventDefault();
-    run(async () => { await api(`${base}/observations`, { method: "POST", headers: json, body: JSON.stringify(form) }); setForm({ ...form, title: "", description: "" }); });
+    run(async () => { await api(`${base}/observations`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(form) }); setForm({ ...form, title: "", description: "" }); });
   };
-  const patch = (id: string, body: object) => run(() => api(`${base}/observations/${id}`, { method: "PATCH", headers: json, body: JSON.stringify(body) }));
+  const patch = (id: string, body: object) => run(() => api(`${base}/observations/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(body) }));
   const select = (id: string, value: string, set: (v: string) => void) => (
     <label className="field"><span>{field(id).label}</span>
       <select value={value} onChange={(e) => set(e.target.value)}>{field(id).options!.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}</select>

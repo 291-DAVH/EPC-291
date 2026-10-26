@@ -4,6 +4,8 @@ To change a template edit the strings here; both languages follow the project lo
 """
 from typing import Dict, List
 
+from epc.core import lang as lang_mod
+
 EMISSION_NAMES = {
     "es": {"IFA": "Emitido para Aprobación", "IFC": "Emitido para Construcción", "AS-BUILT": "Conforme a Obra"},
     "en": {"IFA": "Issued for Approval", "IFC": "Issued for Construction", "AS-BUILT": "As-Built"},
@@ -58,7 +60,7 @@ T: Dict[str, Dict[str, str]] = {
 
 
 def lang_of(locale: str) -> str:
-    return "es" if (locale or "es").lower().startswith("es") else "en"
+    return lang_mod.from_locale(locale)
 
 
 def _disc(it: dict) -> str:

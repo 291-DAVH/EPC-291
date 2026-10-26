@@ -1,0 +1,3952 @@
+{
+ "board:groups": {
+  "avisos": [],
+  "datos": {
+   "C-02": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 6,
+    "dU": 0.56,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   },
+   "G-02": {
+    "Ib": 20.3,
+    "In": 25,
+    "S": 4,
+    "dU": 0.0,
+    "disp": "RCCB 4P 25 A 30 mA",
+    "icu": 25
+   },
+   "G-02-A": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 2.5,
+    "dU": 2.85,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   },
+   "G-02-B": {
+    "Ib": 9.1,
+    "In": 10,
+    "S": 2.5,
+    "dU": 1.33,
+    "disp": "MCB (10 A)",
+    "icu": 25
+   },
+   "L-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 10,
+    "dU": 1.8,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   },
+   "M-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 4,
+    "dU": 1.3,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   },
+   "TG": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-02": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.557,
+    "du_propia_pct": 0.557,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 3377.3,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 32.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 6,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   },
+   "G-02": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.0,
+    "du_propia_pct": 0.0,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 20.258,
+    "icc_min_a": null,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "rccb",
+    "largo_m": 0.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   },
+   "G-02-A": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 2.849,
+    "du_propia_pct": 2.849,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 326.1,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 21.0,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "G-02",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   },
+   "G-02-B": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.332,
+    "du_propia_pct": 1.332,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 9.116,
+    "icc_min_a": 558.6,
+    "in_a": 10,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 21.0,
+    "kind": "mcb",
+    "largo_m": 20.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "G-02",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   },
+   "L-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.797,
+    "du_propia_pct": 1.797,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 641.0,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 50.0,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 1.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   },
+   "M-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.301,
+    "du_propia_pct": 1.301,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 701.1,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   },
+   "TG": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 180.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "board:sub": {
+  "avisos": [],
+  "datos": {
+   "SUB": {
+    "Ib": 73.6,
+    "In": 80,
+    "S": 35,
+    "dU": 0.58,
+    "disp": "MCCB (80 A)",
+    "icu": 25
+   },
+   "SUB-A": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 4,
+    "dU": 1.66,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   },
+   "SUB-B": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 35,
+    "dU": 1.7,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "SUB": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.579,
+    "du_propia_pct": 0.579,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 73.618,
+    "icc_min_a": 6417.5,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 96.0,
+    "kind": "mccb",
+    "largo_m": 30.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   },
+   "SUB-A": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.657,
+    "du_propia_pct": 1.078,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 1087.5,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "SUB",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   },
+   "SUB-B": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.703,
+    "du_propia_pct": 1.124,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 2294.3,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 96.0,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "SUB",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:feeder_A:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 180.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_A:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 190.8,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_A:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 70,
+    "dU": 1.72,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.723,
+    "du_propia_pct": 1.723,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 4143.9,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 142.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 3.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_A:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 180.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_A:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 180.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_kw:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 151.9,
+    "In": 160,
+    "S": 240,
+    "dU": 0.96,
+    "disp": "MCCB (160 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.965,
+    "du_propia_pct": 0.965,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 151.934,
+    "icc_min_a": 8122.9,
+    "in_a": 160,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 301.0,
+    "kind": "mccb",
+    "largo_m": 120.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_kw:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 151.9,
+    "In": 160,
+    "S": 300,
+    "dU": 0.86,
+    "disp": "MCCB (160 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.863,
+    "du_propia_pct": 0.863,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 151.934,
+    "icc_min_a": 8693.3,
+    "in_a": 160,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 372.6,
+    "kind": "mccb",
+    "largo_m": 120.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_kw:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 151.9,
+    "In": 160,
+    "S": 120,
+    "dU": 2.72,
+    "disp": "MCCB (160 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 2.716,
+    "du_propia_pct": 2.716,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 151.934,
+    "icc_min_a": 3677.1,
+    "in_a": 160,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 197.0,
+    "kind": "mccb",
+    "largo_m": 120.0,
+    "limite_pct": 3.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_kw:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 151.9,
+    "In": 160,
+    "S": 240,
+    "dU": 0.96,
+    "disp": "MCCB (160 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.965,
+    "du_propia_pct": 0.965,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 151.934,
+    "icc_min_a": 8122.9,
+    "in_a": 160,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 301.0,
+    "kind": "mccb",
+    "largo_m": 120.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:feeder_kw:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 151.9,
+    "In": 160,
+    "S": 240,
+    "dU": 0.96,
+    "disp": "MCCB (160 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.965,
+    "du_propia_pct": 0.965,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 151.934,
+    "icc_min_a": 8122.9,
+    "in_a": 160,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 301.0,
+    "kind": "mccb",
+    "largo_m": 120.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:lighting:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 10,
+    "dU": 1.8,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.797,
+    "du_propia_pct": 1.797,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 641.0,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 50.0,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 1.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:lighting:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 10,
+    "dU": 1.91,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.913,
+    "du_propia_pct": 1.913,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 603.6,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 56.7,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 1.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:lighting:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 16,
+    "dU": 2.01,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 2.006,
+    "du_propia_pct": 2.006,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 576.7,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 66.0,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 16,
+    "seccion_min_mm2": 1.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:lighting:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 10,
+    "dU": 1.8,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.797,
+    "du_propia_pct": 1.797,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 641.0,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 50.0,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 1.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:lighting:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 21.3,
+    "In": 25,
+    "S": 16,
+    "dU": 1.14,
+    "disp": "MCB (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.141,
+    "du_propia_pct": 1.141,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 21.271,
+    "icc_min_a": 986.1,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 66.0,
+    "kind": "mcb",
+    "largo_m": 70.0,
+    "limite_pct": 1.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "iluminacion",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:motor_dol:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 4,
+    "dU": 1.3,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.301,
+    "du_propia_pct": 1.301,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 701.1,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   }
+  }
+ },
+ "kind:motor_dol:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 2.5,
+    "dU": 2.22,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 2.22,
+    "du_propia_pct": 2.22,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 415.5,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 21.6,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   }
+  }
+ },
+ "kind:motor_dol:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 16,
+    "dU": 0.58,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.584,
+    "du_propia_pct": 0.584,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 1510.9,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 58.0,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 16,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   }
+  }
+ },
+ "kind:motor_dol:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 4,
+    "dU": 1.3,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.301,
+    "du_propia_pct": 1.301,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 701.1,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   }
+  }
+ },
+ "kind:motor_dol:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 13.4,
+    "In": 20,
+    "S": 4,
+    "dU": 1.3,
+    "disp": "MCB > KM (20 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.301,
+    "du_propia_pct": 1.301,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 13.406,
+    "icc_min_a": 701.1,
+    "in_a": 20,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 45.0,
+    "limite_pct": 2.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "dol"
+   }
+  }
+ },
+ "kind:motor_sd:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 35,
+    "dU": 1.12,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.124,
+    "du_propia_pct": 1.124,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 3022.7,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 96.0,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:motor_sd:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 25,
+    "dU": 1.62,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.623,
+    "du_propia_pct": 1.623,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 2158.6,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 86.4,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 25,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:motor_sd:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 35,
+    "dU": 1.93,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.932,
+    "du_propia_pct": 1.932,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 1833.4,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 94.0,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:motor_sd:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 35,
+    "dU": 1.12,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.124,
+    "du_propia_pct": 1.124,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 3022.7,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 96.0,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:motor_sd:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 53.6,
+    "In": 80,
+    "S": 35,
+    "dU": 1.12,
+    "disp": "MCCB > KM > KM > KM > OL (80 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.124,
+    "du_propia_pct": 1.124,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 53.624,
+    "icc_min_a": 3022.7,
+    "in_a": 80,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 96.0,
+    "kind": "mccb",
+    "largo_m": 80.0,
+    "limite_pct": 2.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "star_delta"
+   }
+  }
+ },
+ "kind:motor_vfd:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 4,
+    "dU": 1.08,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.078,
+    "du_propia_pct": 1.078,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 1226.9,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   }
+  }
+ },
+ "kind:motor_vfd:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 4,
+    "dU": 1.15,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.148,
+    "du_propia_pct": 1.148,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 1155.7,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 28.8,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   }
+  }
+ },
+ "kind:motor_vfd:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 16,
+    "dU": 0.48,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.484,
+    "du_propia_pct": 0.484,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 2561.6,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 58.0,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 16,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   }
+  }
+ },
+ "kind:motor_vfd:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 4,
+    "dU": 1.08,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.078,
+    "du_propia_pct": 1.078,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 1226.9,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 5.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   }
+  }
+ },
+ "kind:motor_vfd:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 20.0,
+    "In": 25,
+    "S": 4,
+    "dU": 1.08,
+    "disp": "MCB > VFD (25 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.078,
+    "du_propia_pct": 1.078,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 19.994,
+    "icc_min_a": 1226.9,
+    "in_a": 25,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 25.0,
+    "kind": "mcb",
+    "largo_m": 25.0,
+    "limite_pct": 2.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 2.5,
+    "tipo": "motor",
+    "topologia": "vfd"
+   }
+  }
+ },
+ "kind:sockets:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 2.5,
+    "dU": 2.85,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 2.849,
+    "du_propia_pct": 2.849,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 326.1,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 21.0,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:sockets:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 4,
+    "dU": 1.89,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 1.893,
+    "du_propia_pct": 1.893,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 484.8,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 32.4,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:sockets:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 16,
+    "dU": 0.8,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.796,
+    "du_propia_pct": 0.796,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 1097.4,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 66.0,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 16,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:sockets:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 2.5,
+    "dU": 2.85,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 2.849,
+    "du_propia_pct": 2.849,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 326.1,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 21.0,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 2.5,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:sockets:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 11.1,
+    "In": 13,
+    "S": 6,
+    "dU": 1.19,
+    "disp": "MCB (13 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 1.191,
+    "du_propia_pct": 1.191,
+    "fases": 1,
+    "fp": 0.9,
+    "ib_a": 11.142,
+    "icc_min_a": 753.9,
+    "in_a": 13,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 36.0,
+    "kind": "mcb",
+    "largo_m": 35.0,
+    "limite_pct": 1.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 4,
+    "seccion_min_mm2": 4.0,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:ups:default": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 6,
+    "dU": 0.56,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.557,
+    "du_propia_pct": 0.557,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 3377.3,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 32.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 6,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:ups:hot": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 6,
+    "dU": 0.59,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.593,
+    "du_propia_pct": 0.593,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 3203.2,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 36.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 6,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:ups:loose": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 16,
+    "dU": 0.37,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.372,
+    "du_propia_pct": 0.372,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 4674.7,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 58.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 5.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 16,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:ups:pvc_cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 6,
+    "dU": 0.56,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.557,
+    "du_propia_pct": 0.557,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 3377.3,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 32.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 3.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 6,
+    "seccion_min_mm2": 2.5,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "kind:ups:tight": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 30.4,
+    "In": 32,
+    "S": 6,
+    "dU": 0.56,
+    "disp": "MCB > UPS (32 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.557,
+    "du_propia_pct": 0.557,
+    "fases": 3,
+    "fp": 0.9,
+    "ib_a": 30.387,
+    "icc_min_a": 3377.3,
+    "in_a": 32,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 32.0,
+    "kind": "mcb",
+    "largo_m": 12.0,
+    "limite_pct": 1.5,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 6,
+    "seccion_min_mm2": 4.0,
+    "tipo": "tomacorrientes",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B1:pvc:al": {
+  "avisos": [
+   "C-01: ninguna sección ≤ 300 mm² cumple Iz/caída (In 125 A, ΔU 0.00 %): usar paralelo [sección 300 mm² fuera de 771.16.I/pvc/al]"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 300,
+    "dU": 0.0,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": false,
+    "du_acum_pct": 0.0,
+    "du_propia_pct": 0.0,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 10549.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": null,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": null,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B1:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 144.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B1:xlpe:al": {
+  "avisos": [
+   "C-01: ninguna sección ≤ 300 mm² cumple Iz/caída (In 125 A, ΔU 0.00 %): usar paralelo [B1 con XLPE no tiene tabla en 771.16.I: use B2 o C]"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 300,
+    "dU": 0.0,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": false,
+    "du_acum_pct": 0.0,
+    "du_propia_pct": 0.0,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 10270.1,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": null,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": null,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B1:xlpe:cu": {
+  "avisos": [
+   "C-01: ninguna sección ≤ 300 mm² cumple Iz/caída (In 125 A, ΔU 0.00 %): usar paralelo [B1 con XLPE no tiene tabla en 771.16.I: use B2 o C]"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 300,
+    "dU": 0.0,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": false,
+    "du_acum_pct": 0.0,
+    "du_propia_pct": 0.0,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 12343.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": null,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": null,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B2:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 185,
+    "dU": 0.69,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.688,
+    "du_propia_pct": 0.688,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 8365.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 138.4,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 185,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B2:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.65,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.649,
+    "du_propia_pct": 0.649,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 8694.2,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 143.2,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 120,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B2:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 174.4,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:B2:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 169.6,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:C:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 145.35,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "C",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:C:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 164.9,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "C",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:C:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 219.3,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "C",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:C:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 215.05,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "C",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D1:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 149.6,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "D1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D1:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 170.85,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "D1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D1:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 202.3,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "D1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D1:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 203.15,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "D1",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D2:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 173.25,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "D2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D2:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 190.5,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "D2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D2:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 228.75,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "D2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:D2:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 231.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "D2",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:E:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 161.92,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "E",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 95,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:E:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 182.16,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "E",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:E:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 243.76,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "E",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:E:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 238.48,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "E",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:F:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 181.28,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "F",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 70,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:F:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 202.4,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "F",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:F:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 274.56,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "F",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:F:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 262.24,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "F",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 35,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:G:pvc:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 120,
+    "dU": 0.99,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.986,
+    "du_propia_pct": 0.986,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 6476.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 268.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "G",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 50,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:G:pvc:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.78,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.782,
+    "du_propia_pct": 0.782,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7660.0,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 297.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "G",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 25,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:G:xlpe:al": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 150,
+    "dU": 0.88,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.875,
+    "du_propia_pct": 0.875,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7073.8,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 408.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "al",
+    "metodo": "G",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 25,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "method:G:xlpe:cu": {
+  "avisos": [],
+  "datos": {
+   "C-01": {
+    "Ib": 120.0,
+    "In": 125,
+    "S": 95,
+    "dU": 0.82,
+    "disp": "MCCB (125 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.825,
+    "du_propia_pct": 0.825,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 120.0,
+    "icc_min_a": 7380.6,
+    "in_a": 125,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 391.0,
+    "kind": "mccb",
+    "largo_m": 60.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "G",
+    "padre": "",
+    "ruta": [],
+    "ruta_limitante": null,
+    "s_termica_mm2": 25,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "route:duct_crossing:default": {
+  "avisos": [
+   "C-01: tramo 2: profundidad 1 m mayor que la de las tablas (0.7 m): verificar el factor [VERIFICAR]"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 250.0,
+    "In": 250,
+    "S": 300,
+    "dU": 0.92,
+    "disp": "MCCB (250 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": true,
+    "du_acum_pct": 0.918,
+    "du_propia_pct": 0.918,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 250.0,
+    "icc_min_a": 11222.8,
+    "in_a": 250,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": 282.8,
+    "kind": "mccb",
+    "largo_m": 78.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [
+     {
+      "circuits": 3,
+      "depth_m": null,
+      "f_agrup": 0.75,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 282.8,
+      "kind": "buried_duct",
+      "label": "",
+      "length_m": 60.0,
+      "limitante": true,
+      "metodo": "D1",
+      "n": 1,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": 1.0,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 377.0,
+      "kind": "road_crossing",
+      "label": "",
+      "length_m": 8.0,
+      "limitante": false,
+      "metodo": "D1",
+      "n": 2,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 295.0,
+      "kind": "conduit_air",
+      "label": "",
+      "length_m": 10.0,
+      "limitante": false,
+      "metodo": "B2",
+      "n": 3,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     }
+    ],
+    "ruta_limitante": 1,
+    "s_termica_mm2": 185,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "route:duct_crossing:hot": {
+  "avisos": [
+   "C-01: tramo 2: profundidad 1 m mayor que la de las tablas (0.7 m): verificar el factor [VERIFICAR]"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 250.0,
+    "In": 250,
+    "S": 300,
+    "dU": 0.95,
+    "disp": "MCCB (250 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": true,
+    "du_acum_pct": 0.954,
+    "du_propia_pct": 0.954,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 250.0,
+    "icc_min_a": 10990.3,
+    "in_a": 250,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": 290.7,
+    "kind": "mccb",
+    "largo_m": 78.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [
+     {
+      "circuits": 3,
+      "depth_m": null,
+      "f_agrup": 0.75,
+      "f_suelo": 0.863,
+      "f_temp": 1.0,
+      "iz_a": 290.7,
+      "kind": "buried_duct",
+      "label": "",
+      "length_m": 60.0,
+      "limitante": true,
+      "metodo": "D1",
+      "n": 1,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": 1.0,
+      "f_agrup": 1.0,
+      "f_suelo": 0.863,
+      "f_temp": 1.0,
+      "iz_a": 387.6,
+      "kind": "road_crossing",
+      "label": "",
+      "length_m": 8.0,
+      "limitante": false,
+      "metodo": "D1",
+      "n": 2,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 0.9,
+      "iz_a": 372.6,
+      "kind": "conduit_air",
+      "label": "",
+      "length_m": 10.0,
+      "limitante": false,
+      "metodo": "B2",
+      "n": 3,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     }
+    ],
+    "ruta_limitante": 1,
+    "s_termica_mm2": 185,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "route:tray_buried_tray:default": {
+  "avisos": [
+   "C-01: ninguna sección ≤ 300 mm² cumple Iz/caída (In 250 A, ΔU 1.06 %): usar paralelo"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 250.0,
+    "In": 250,
+    "S": 300,
+    "dU": 1.06,
+    "disp": "MCCB (250 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "pvc",
+    "cumple": false,
+    "du_acum_pct": 1.059,
+    "du_propia_pct": 1.059,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 250.0,
+    "icc_min_a": 10457.8,
+    "in_a": 250,
+    "instalacion": {
+     "rho": 1.0,
+     "t_amb": 40.0,
+     "t_suelo": 25.0
+    },
+    "iz_a": null,
+    "kind": "mccb",
+    "largo_m": 90.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B1",
+    "padre": "",
+    "ruta": [
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 432.0,
+      "kind": "tray_perforated",
+      "label": "",
+      "length_m": 20.0,
+      "limitante": false,
+      "metodo": "E",
+      "n": 1,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 0.705,
+      "f_temp": 1.0,
+      "iz_a": 341.2,
+      "kind": "buried_direct",
+      "label": "",
+      "length_m": 40.0,
+      "limitante": true,
+      "metodo": "D2",
+      "n": 2,
+      "rho_kmw": 2.0,
+      "t_amb": 40.0,
+      "t_suelo": 30.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 432.0,
+      "kind": "tray_perforated",
+      "label": "",
+      "length_m": 30.0,
+      "limitante": false,
+      "metodo": "E",
+      "n": 3,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     }
+    ],
+    "ruta_limitante": 2,
+    "s_termica_mm2": 185,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ },
+ "route:tray_buried_tray:hot": {
+  "avisos": [
+   "C-01: ninguna sección ≤ 300 mm² cumple Iz/caída (In 250 A, ΔU 1.10 %): usar paralelo"
+  ],
+  "datos": {
+   "C-01": {
+    "Ib": 250.0,
+    "In": 250,
+    "S": 300,
+    "dU": 1.1,
+    "disp": "MCCB (250 A)",
+    "icu": 25
+   }
+  },
+  "detalle": {
+   "C-01": {
+    "aislacion": "xlpe",
+    "cumple": false,
+    "du_acum_pct": 1.1,
+    "du_propia_pct": 1.1,
+    "fases": 3,
+    "fp": 0.85,
+    "ib_a": 250.0,
+    "icc_min_a": 10228.3,
+    "in_a": 250,
+    "instalacion": {
+     "rho": 2.0,
+     "t_amb": 50.0,
+     "t_suelo": 30.0
+    },
+    "iz_a": null,
+    "kind": "mccb",
+    "largo_m": 90.0,
+    "limite_pct": 1.0,
+    "material": "cu",
+    "metodo": "B2",
+    "padre": "",
+    "ruta": [
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 0.9,
+      "iz_a": 508.5,
+      "kind": "tray_perforated",
+      "label": "",
+      "length_m": 20.0,
+      "limitante": false,
+      "metodo": "E",
+      "n": 1,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 0.728,
+      "f_temp": 1.0,
+      "iz_a": 426.3,
+      "kind": "buried_direct",
+      "label": "",
+      "length_m": 40.0,
+      "limitante": true,
+      "metodo": "D2",
+      "n": 2,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 0.9,
+      "iz_a": 508.5,
+      "kind": "tray_perforated",
+      "label": "",
+      "length_m": 30.0,
+      "limitante": false,
+      "metodo": "E",
+      "n": 3,
+      "rho_kmw": 2.0,
+      "t_amb": 50.0,
+      "t_suelo": 30.0
+     }
+    ],
+    "ruta_limitante": 2,
+    "s_termica_mm2": 185,
+    "seccion_min_mm2": 2.5,
+    "tipo": "seccional",
+    "topologia": "single"
+   }
+  }
+ }
+}

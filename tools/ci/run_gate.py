@@ -8,6 +8,8 @@ Checks
   skill-conflicts   duplicate / orphan skills (production rules)
   single-source     no two versioned files hold the same content (one source of truth per datum)
   dev-credentials   no development credential (the MASTER account) is versioned: it can never reach main
+  coverage          each area keeps at least its measured coverage (tools/ci/coverage_floor.json); the suites run under `coverage`
+  complexity        no function becomes more complex than its baseline; a new function stays at or below 10 (tools/ci/complexity_baseline.json)
   board             planning/BOARD.md is up to date
   api               API tests (user surface, role guard, uploads, project creation)
   engine-calc       LV calculation tests
@@ -18,6 +20,7 @@ Checks
   intake            customer-input pipeline tests
   sld-smoke         single-line diagram generated from the example through the engine, no warnings
   frontend-boundaries, web-types, web-build   frontend rules, TypeScript type-check of web+console (and build unless --fast)
+  web-tests         Vitest characterization tests of the shared UI and the screens
   marketplace       plugins assembled in Claude Code's layout, validated with `claude plugin validate --strict`
 The engine packages are put on PYTHONPATH, so no installation is needed. Exit code 0 only when every check passes.
 """
@@ -49,7 +52,17 @@ CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")
 WEB = first(REPO / "frontend")
 RESULTS = []
+COV_DIR = REPO / ".cov"
 ENGINE_ENV = {"PYTHONPATH": os.pathsep.join([str(ENGINE / a / "src") for a in AREAS if (ENGINE / a / "src").is_dir()] + [os.environ.get("PYTHONPATH", "")])}
+
+
+def covered(py, source):
+    """Prefix that runs a Python module under coverage (data pieces go to .cov/ and are combined by check_coverage.py)."""
+    return [py, "-m", "coverage", "run", "--parallel-mode", f"--source={source}", "-m"]
+
+
+def cov_env(env=None):
+    return dict(env or {}, COVERAGE_FILE=str(COV_DIR / ".coverage"))
 
 
 def run(name, cmd, cwd, must_not_contain=None, env=None):
@@ -67,6 +80,8 @@ def main():
     ap.add_argument("--no-web", action="store_true")
     a = ap.parse_args()
     py = str(PYTHON)
+    shutil.rmtree(COV_DIR, ignore_errors=True)
+    COV_DIR.mkdir(exist_ok=True)
 
     run("registry", [py, str(BUILD), "registry", "--check"], REPO)
     run("skill-conflicts", [py, str(CONFLICTS), "--env", "production"], REPO)
@@ -77,16 +92,18 @@ def main():
     run("ignored-sources", [py, str(REPO / "tools" / "ci" / "check_ignored_sources.py")], REPO)
     run("single-source", [py, str(REPO / "tools" / "ci" / "check_single_source.py")], REPO)
     run("dev-credentials", [py, str(REPO / "tools" / "ci" / "check_dev_credentials.py")], REPO)
+    run("complexity", [py, str(REPO / "tools" / "ci" / "check_complexity.py")], REPO)
     run("importlinter-config", [py, str(REPO / "tools" / "ci" / "gen_importlinter.py"), "--check"], REPO)
     run("backend-contracts", [py, "-c", "from importlinter.cli import lint_imports_command as m; m()", "--config", str(backend / ".importlinter")], backend, env=benv)
-    run("backend", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], backend, env=benv)
+    run("backend", covered(py, str(backend / "src" / "epc")) + ["unittest", "discover", "-s", "tests", "-t", "."], backend, env=cov_env(benv))
     if (REPO / "database" / "alembic.ini").exists():
         run("database", [py, "-m", "unittest", "discover", "-s", "tests", "-t", "."], REPO / "database")
     run("infra", [py, str(REPO / "tools" / "ci" / "check_infra.py")], REPO)
     for area in AREAS:
         d = ENGINE / area
         if (d / "tests").is_dir():
-            run(f"engine-{area}", [py, "-m", "unittest", "discover", "-s", "tests"], d, env=ENGINE_ENV)
+            run(f"engine-{area}", covered(py, str(d / "src")) + ["unittest", "discover", "-s", "tests"], d, env=cov_env(ENGINE_ENV))
+    run("coverage", [py, str(REPO / "tools" / "ci" / "check_coverage.py")], REPO)
     intake = PLUGINS / "intake-analysis" / "scripts"
     if intake.is_dir():
         run("intake", [py, "-m", "unittest", "test_intake"], intake)
@@ -102,6 +119,7 @@ def main():
         npm = "npm.cmd" if os.name == "nt" else "npm"
         run("frontend-boundaries", [py, str(REPO / "tools" / "ci" / "check_frontend_boundaries.py")], REPO)
         run("web-types", [npm, "run", "typecheck"], WEB)
+        run("web-tests", [npm, "run", "test"], WEB)
         if not a.fast:
             run("web-build", [npm, "run", "build"], WEB)
 

@@ -22,6 +22,8 @@ build/
 # the project skeleton keeps its (empty) build folders
 !management/templates/**/build/
 __pycache__/
+.cov/
+.coverage*
 *.pyc
 *.plugin
 .env

@@ -2,7 +2,8 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from epc.core.errors import Conflict, Invalid, NotFound, TooLarge
+from epc.core.errors import Conflict, Invalid, NotFound, TooLarge, first_or_404
+from epc.core.text import slugify
 from epc.modules.masterdata import repository
 from epc.modules.identity import public as identity
 from epc.modules.masterdata.models import ClientIn, IssuerIn, OrganizationIn, PersonIn
@@ -65,7 +66,7 @@ def _account_company() -> dict:
 
 
 def _slug_id(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:32] or "emisor"
+    return slugify(text, 32, "emisor")
 
 
 def issuers() -> List[dict]:
@@ -106,9 +107,7 @@ def update_issuer(iid: str, body: IssuerIn) -> dict:
     data["id"] = iid
     _validate_issuer(data)
     items = _issuer_items()
-    k = next((n for n, i in enumerate(items) if i["id"] == iid), None)
-    if k is None:
-        raise NotFound("issuer not found")
+    k = first_or_404((n for n, i in enumerate(items) if i["id"] == iid), "issuer not found")
     items[k] = data
     repository.save_list("issuers", items)
     return issuer(iid)
@@ -116,9 +115,7 @@ def update_issuer(iid: str, body: IssuerIn) -> dict:
 
 def make_default_issuer(iid: str) -> List[dict]:
     items = _issuer_items()
-    k = next((n for n, i in enumerate(items) if i["id"] == iid), None)
-    if k is None:
-        raise NotFound("issuer not found")
+    k = first_or_404((n for n, i in enumerate(items) if i["id"] == iid), "issuer not found")
     repository.save_list("issuers", [items[k]] + items[:k] + items[k + 1:])
     return issuers()
 
@@ -189,9 +186,7 @@ def update_client(cid: str, body: ClientIn) -> dict:
     data["id"] = cid.upper()
     _validate_client(data)
     items = repository.load_list("clients")
-    i = next((k for k, c in enumerate(items) if c["id"].upper() == cid.upper()), None)
-    if i is None:
-        raise NotFound("client not found")
+    i = first_or_404((k for k, c in enumerate(items) if c["id"].upper() == cid.upper()), "client not found")
     items[i] = data
     repository.save_list("clients", items)
     return client(cid)
@@ -235,9 +230,7 @@ def save_person(body: PersonIn, pid: Optional[str] = None) -> dict:
             data["id"] = f"{base}-{n}"
         items.append(data)
     else:
-        i = next((k for k, p in enumerate(items) if p["id"] == pid), None)
-        if i is None:
-            raise NotFound("person not found")
+        i = first_or_404((k for k, p in enumerate(items) if p["id"] == pid), "person not found")
         data["id"] = pid
         items[i] = data
     repository.save_list("people", items)

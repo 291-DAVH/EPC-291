@@ -1,14 +1,13 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
 import RouteEditor from "./RouteEditor";
-import { ApiError, Badge, BoardMemoView, BoardRow, CalcView, CalculationTable, Key, SldCircuit, SldData, SldStatus, SldView, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, BoardMemoView, BoardRow, CalculationTable, CalcView, JSON_HEADERS, Key, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
   length_m: 0, fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
 });
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
-const json = { "Content-Type": "application/json" };
 
 /** The boards of the project: each one has its own data, calculation and diagrams, and a project can start with one and add others later. */
 export default function SldInput({ client, code, onOpenFiles, onOpenParties }: { client: string; code: string; onOpenFiles: () => void; onOpenParties: () => void }) {
@@ -25,7 +24,7 @@ export default function SldInput({ client, code, onOpenFiles, onOpenParties }: {
   const id = boards.some((b) => b.id === cur) ? cur : boards[0]?.id ?? "";
   const add = async () => {
     try {
-      const v = await api<SldView>(`${base}/boards`, { method: "POST", headers: json, body: JSON.stringify({ name: form.name, supplied_from: form.from, supply_tag: form.tag }) });
+      const v = await api<SldView>(`${base}/boards`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ name: form.name, supplied_from: form.from, supply_tag: form.tag }) });
       setCur(v.board_id); setAdding(false); setForm({ name: "", from: "", tag: "" }); setErr(""); setTick((n) => n + 1);
     } catch (x) { setErr(x instanceof ApiError ? Object.values(x.fieldErrors).join(" · ") || String(x) : String(x)); }
   };
@@ -99,7 +98,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const fail = (x: unknown) => { if (x instanceof ApiError) setErrors(x.fieldErrors); else setErrors({ error: String(x) }); };
   const save = async (): Promise<boolean> => {
     try {
-      const v = await api<SldView>(`${base}?${q}`, { method: "PUT", headers: json, body: JSON.stringify(data) });
+      const v = await api<SldView>(`${base}?${q}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(data) });
       setErrors({}); setDirty(false); setMsg(t("sld.saved"));
       onSaved(v.board_id);
       return true;

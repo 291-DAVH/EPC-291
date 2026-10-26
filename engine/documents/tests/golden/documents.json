@@ -1,0 +1,2005 @@
+{
+ "canvas": {
+  "boxes": {
+   "closure": [
+    "Resumen del proyecto",
+    "Logros y beneficios realizados",
+    "Entregables finales",
+    "Variaciones acumuladas",
+    "Hitos del proyecto",
+    "Lecciones aprendidas clave",
+    "Presupuesto final",
+    "Reconocimientos",
+    "Aprobación formal"
+   ],
+   "phase": [
+    "Fase cerrada",
+    "Entregables completados",
+    "Entregables pendientes",
+    "Hitos cumplidos",
+    "Variaciones",
+    "Lecciones aprendidas",
+    "Riesgos pendientes",
+    "Criterios de aceptación",
+    "Aprobación"
+   ],
+   "planning": [
+    "Objetivo de la fase",
+    "Entregables de la fase",
+    "Criterios de aceptación",
+    "Hitos de planificación",
+    "Paquetes de trabajo",
+    "Equipo y recursos",
+    "Presupuesto y esfuerzo",
+    "Riesgos de planificación",
+    "Supuestos",
+    "Decisiones requeridas",
+    "Criterios de éxito de la fase"
+   ]
+  },
+  "html_planning_sha": "543b04ba72acbbecf860d0b71a13039f0bb3b47c30a8e740ade2311d1bba0254",
+  "parsed": {
+   "avisos": [
+    "Caja desconocida «Caja que no existe»: se ignora.",
+    "Falta la caja «Criterios de aceptación».",
+    "Falta la caja «Paquetes de trabajo».",
+    "Falta la caja «Equipo y recursos».",
+    "Falta la caja «Presupuesto y esfuerzo».",
+    "Falta la caja «Riesgos de planificación».",
+    "Falta la caja «Supuestos».",
+    "Falta la caja «Decisiones requeridas».",
+    "Falta la caja «Criterios de éxito de la fase»."
+   ],
+   "cajas": {
+    "Entregables de la fase": {
+     "lineas": [
+      "- Memoria de cálculo",
+      "- Planos unifilares",
+      "",
+      ""
+     ]
+    },
+    "Hitos de planificación": {
+     "lineas": [
+      "| Hito | Fecha |",
+      "|---|---|",
+      "| Kick-off | 2026-10-05 |",
+      "| Entrega IFA | 2026-11-20 |",
+      "",
+      ""
+     ]
+    },
+    "Objetivo de la fase": {
+     "lineas": [
+      "Definir el plan de trabajo.",
+      "",
+      ""
+     ]
+    }
+   },
+   "encabezado": {
+    "estado": "DRAFT",
+    "fase": "Planificación",
+    "fecha": "2026-10-20",
+    "proyecto": "Planta Acme",
+    "titulo": "LIENZO DE PLANIFICACIÓN",
+    "version": "1.2"
+   }
+  }
+ },
+ "ccpm": {
+  "example_ccpm.json:default": {
+   "keys": [
+    "advertencias",
+    "buffers",
+    "cadena_critica",
+    "calendario",
+    "entrada_tareas",
+    "fecha_limite",
+    "hitos",
+    "plan_paquetes",
+    "plazo_horas",
+    "resumen",
+    "seguimiento",
+    "semaforo",
+    "tareas",
+    "tareas_fuera_de_calculo",
+    "version"
+   ],
+   "markdown_lines": 82,
+   "markdown_sha": "078ee214555a834dcbfd18259c0884c1e818d566a8a3174bfdfacec8dc5a76fd",
+   "result_sha": "bbda1ac6db5491218f84a8b10c28bd8ce599d8c4a81ac1a5aee7fcdeb44793c2",
+   "sections_sha": "cbac11b79c0c5c44bdb23fc8e64759f46420033fa928f686e5ede7ad523e8ea1",
+   "summary": {
+    "plan_paquetes": null,
+    "plazo_horas": null,
+    "seguimiento": null,
+    "version": "1.4"
+   }
+  },
+  "example_ccpm.json:from_date": {
+   "keys": [
+    "advertencias",
+    "buffers",
+    "cadena_critica",
+    "calendario",
+    "entrada_tareas",
+    "fecha_limite",
+    "hitos",
+    "plan_paquetes",
+    "plazo_horas",
+    "resumen",
+    "seguimiento",
+    "semaforo",
+    "tareas",
+    "tareas_fuera_de_calculo",
+    "version"
+   ],
+   "markdown_lines": 91,
+   "markdown_sha": "602b9f598bb01fede472a8a43cdab4fcaa66c20cebfa864096a59d327d19479b",
+   "result_sha": "2205c3edce50815ecfcb6fcb06f8c4e3fa6dd596c269e894bc7f09604a7ecd17",
+   "sections_sha": "d6bfc15bbc86c287ff63a53df0ea4fbefd18199ba5ea3bc808931fb84fadb7f3",
+   "summary": {
+    "plan_paquetes": null,
+    "plazo_horas": null,
+    "seguimiento": null,
+    "version": "1.4"
+   }
+  },
+  "example_ccpm_packages.json:default": {
+   "keys": [
+    "advertencias",
+    "buffers",
+    "cadena_critica",
+    "calendario",
+    "entrada_tareas",
+    "fecha_limite",
+    "hitos",
+    "plan_paquetes",
+    "plazo_horas",
+    "resumen",
+    "seguimiento",
+    "semaforo",
+    "tareas",
+    "tareas_fuera_de_calculo",
+    "version"
+   ],
+   "markdown_lines": 96,
+   "markdown_sha": "0276ccc5a9e3c777b9448e48d6256e0756b82a326eb8fd0db1f481af912ff2c9",
+   "result_sha": "a5deeba1025f851622f3fc7497f2f1339392b2136fb6ff25f6a58a9d874dc7d6",
+   "sections_sha": "7ea0afd3182042ab64d829d24fb0b2abec19cc992cea7428dd7658adb2af84a4",
+   "summary": {
+    "plazo_horas": null,
+    "seguimiento": null,
+    "version": "1.4"
+   }
+  },
+  "example_ccpm_packages.json:from_date": {
+   "keys": [
+    "advertencias",
+    "buffers",
+    "cadena_critica",
+    "calendario",
+    "entrada_tareas",
+    "fecha_limite",
+    "hitos",
+    "plan_paquetes",
+    "plazo_horas",
+    "resumen",
+    "seguimiento",
+    "semaforo",
+    "tareas",
+    "tareas_fuera_de_calculo",
+    "version"
+   ],
+   "markdown_lines": 100,
+   "markdown_sha": "0a1058f8f0be8e39d92e01b522a50680095013a2b2f067bb29267b78db94934c",
+   "result_sha": "3e158f3b3469c72bbddaba0b76742b3947b0df5a0b85e82e12185c7c452f3b06",
+   "sections_sha": "72da6c8d77f436f993cc772a69d9b42198e03080b9b8a796d554f855a501a0eb",
+   "summary": {
+    "plazo_horas": null,
+    "seguimiento": null,
+    "version": "1.4"
+   }
+  },
+  "invalid": {
+   "cycle": "ValueError: Ciclo en la red de precedencias: T2 -> T1 -> T2",
+   "negative_duration": "ValueError: Tarea 'T1': dur_segura: debe ser >= 1, se recibió -3",
+   "no_start": "ValueError: Falta el campo obligatorio 'inicio' (fecha ISO)",
+   "no_tasks": "ValueError: tareas: debe ser una lista no vacía",
+   "not_a_dict": "ValueError: La entrada debe ser un objeto JSON (dict)",
+   "text_duration": "ValueError: Tarea 'T1': dur_segura: se esperaba un entero >= 1 (días hábiles), se recibió 'x'",
+   "unknown_predecessor": "ValueError: La tarea 'T1' referencia un predecesor inexistente: 'ZZZ'"
+  },
+  "tracking": {
+   "avance_entregable": [
+    0,
+    0.4,
+    0.6,
+    1.0,
+    "ValueError: Hitos desconocidos: zzz"
+   ],
+   "avance_global": [
+    "ValueError: No hay entregables aplicables para calcular el avance global",
+    0.4,
+    0.6666666667
+   ],
+   "consumo_buffer": [
+    {
+     "buffer_dias": 10,
+     "cadena_cabe": true,
+     "consumo": 0.0,
+     "consumo_pct": 0.0,
+     "retraso_dias_habiles": 0,
+     "texto": "Consumo 0 % (0 d / 10 d); zona VERDE.",
+     "zona": "VERDE"
+    },
+    {
+     "buffer_dias": 10,
+     "cadena_cabe": true,
+     "consumo": 0.3,
+     "consumo_pct": 30.0,
+     "retraso_dias_habiles": 3,
+     "texto": "Consumo 30 % (3 d / 10 d); zona VERDE.",
+     "zona": "VERDE"
+    },
+    {
+     "buffer_dias": 10,
+     "cadena_cabe": true,
+     "consumo": 1.0,
+     "consumo_pct": 100.0,
+     "retraso_dias_habiles": 10,
+     "texto": "Consumo 100 % (10 d / 10 d); zona ROJO.",
+     "zona": "ROJO"
+    },
+    {
+     "buffer_dias": 10,
+     "cadena_cabe": true,
+     "consumo": 1.5,
+     "consumo_pct": 150.0,
+     "retraso_dias_habiles": 15,
+     "texto": "Consumo 150 % (15 d / 10 d); zona ROJO.",
+     "zona": "ROJO"
+    },
+    {
+     "buffer_dias": 10,
+     "cadena_cabe": true,
+     "consumo": 0.0,
+     "consumo_pct": 0.0,
+     "retraso_dias_habiles": -2,
+     "texto": "Consumo 0 % (0 d / 10 d); zona VERDE.",
+     "zona": "VERDE"
+    },
+    {
+     "buffer_dias": 0,
+     "cadena_cabe": true,
+     "consumo": null,
+     "consumo_pct": null,
+     "retraso_dias_habiles": 4,
+     "texto": "Consumo indefinido (buffer 0 d / cadena cabe): retraso proyectado 4 día(s) hábil(es) frente al límite; zona ROJO.",
+     "zona": "ROJO"
+    }
+   ],
+   "estado_buffer": [
+    "VERDE",
+    "VERDE",
+    "AMARILLO",
+    "AMARILLO",
+    "ROJO",
+    "ROJO",
+    "ROJO",
+    "ValueError: consumo_buffer debe estar entre 0 y 1, se recibió 1.2",
+    "ValueError: avance_cadena debe estar entre 0 y 1, se recibió 30"
+   ]
+  }
+ },
+ "project": {
+  "clean": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 1 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 0 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\nSin hallazgos.\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 1,
+     "documentos_con_codigo": 2,
+     "errores": 0,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "format_checks": {
+   "confidential": [
+    [
+     "ERROR",
+     "confidencialidad_economica",
+     1,
+     "Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn.",
+     null
+    ]
+   ],
+   "pandoc": [],
+   "pandoc_bad": [
+    [
+     "ERROR",
+     "formato_vineta",
+     4,
+     "Viñeta con «*» («* item»): use siempre «- » (evita «* **NEGRITA**»)."
+    ]
+   ]
+  },
+  "old_lme_revision": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `deliverables.md` | La LME (ENT-001) dice Rev 00.1 para AB01-E-MC-001 pero el archivo vigente es Rev 00.2. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "deliverables.md",
+      "categoria": "revision",
+      "mensaje": "La LME (ENT-001) dice Rev 00.1 para AB01-E-MC-001 pero el archivo vigente es Rev 00.2.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "stale_citation": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 1 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | cita_rev | `02/AB01-E-MC-001_Rev00.2.md:15` | Cita AB01-E-MD-001 Rev 00.1 pero la revisión vigente es 00.2. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md:15",
+      "categoria": "cita_rev",
+      "mensaje": "Cita AB01-E-MD-001 Rev 00.1 pero la revisión vigente es 00.2.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 1,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "table_revision_differs": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `02/AB01-E-MC-001_Rev00.2.md` | fila «Revisión» de la cabecera dice 00.3 pero el nombre del archivo dice 00.2. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "revision",
+      "mensaje": "fila «Revisión» de la cabecera dice 00.3 pero el nombre del archivo dice 00.2.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "title_revision_differs": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `02/AB01-E-MC-001_Rev00.2.md` | título dice 00.1 pero el nombre del archivo dice 00.2. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "revision",
+      "mensaje": "título dice 00.1 pero el nombre del archivo dice 00.2.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "unknown_ids": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 3 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 3 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | id_inexistente | `02/AB01-E-MC-001_Rev00.2.md` | DEC-099 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MC-001_Rev00.2.md` | RIE-050 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MC-001_Rev00.2.md` | rfc-077 se cita pero no existe en ningún registro del proyecto. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "DEC-099 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "RIE-050 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "rfc-077 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 3,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 3,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  }
+ },
+ "specification": {
+  "clean": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 0 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\nSin hallazgos.\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 0,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "duplicated_text": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 0 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 28 | 0 | 0 | 0 | 1 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| AVISO | duplicado | `07_Precommissioning.md` | 14 | Párrafo casi idéntico (similitud 1.00) al de 01_Scope.md, línea 14: cada dato se define una sola vez. |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "07_Precommissioning.md",
+      "categoria": "duplicado",
+      "linea": 14,
+      "mensaje": "Párrafo casi idéntico (similitud 1.00) al de 01_Scope.md, línea 14: cada dato se define una sola vez.",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 1,
+     "capitulos": 10,
+     "errores": 0,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "extra_chapter": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 11 |\n| Errores | 0 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 11 | `11_Data_Sheet.md` | DRAFT | 14 | 0 | 0 | 0 | 1 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| AVISO | vacio | `11_Data_Sheet.md` | — | Capítulo vacío o con solo la plantilla (14 palabras de contenido). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "11_Data_Sheet.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 11,
+      "palabras": 14,
+      "revision": "00.1",
+      "vacio": true
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "11_Data_Sheet.md",
+      "categoria": "vacio",
+      "linea": null,
+      "mensaje": "Capítulo vacío o con solo la plantilla (14 palabras de contenido).",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 1,
+     "capitulos": 11,
+     "errores": 0,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "missing_05": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 9 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | numeracion | `05` | — | Falta el capítulo 05 (estándar: 05_Design_Requirements.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "05",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "Falta el capítulo 05 (estándar: 05_Design_Requirements.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda.",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 9,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "missing_last_three": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 7 |\n| Errores | 3 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | numeracion | `08` | — | Falta el capítulo 08 (estándar: 08_Commissioning.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n| ERROR | numeracion | `09` | — | Falta el capítulo 09 (estándar: 09_Technical_Documentation.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n| ERROR | numeracion | `10` | — | Falta el capítulo 10 (estándar: 10_Contractor_Responsibilities.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "08",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "Falta el capítulo 08 (estándar: 08_Commissioning.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "09",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "Falta el capítulo 09 (estándar: 09_Technical_Documentation.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "10",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "Falta el capítulo 10 (estándar: 10_Contractor_Responsibilities.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda.",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 7,
+     "errores": 3,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "no_pending": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 0 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 27 | 0 | 0 | 0 | 1 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| AVISO | estructura | `04_General_Execution_Conditions.md` | — | Falta la sección «Pendientes y supuestos». |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "categoria": "estructura",
+      "linea": null,
+      "mensaje": "Falta la sección «Pendientes y supuestos».",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 1,
+     "capitulos": 10,
+     "errores": 0,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "no_question": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 1 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `03_Regulatory_Framework.md` | — | Falta la línea «Pregunta que responde». |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "Falta la línea «Pregunta que responde».",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "wrong_code": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `02_Descriptive_Report.md` | 5 | El código ZZ99-G-PG-009 difiere del del índice (AB01-G-PG-001). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código ZZ99-G-PG-009 difiere del del índice (AB01-G-PG-001).",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "wrong_revision": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 1 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `06_Tests_and_Inspections.md` | 7 | La revisión 00.9 difiere de la del índice (00.1): el pliego tiene una sola revisión. |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.9",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "categoria": "encabezado",
+      "linea": 7,
+      "mensaje": "La revisión 00.9 difiere de la del índice (00.1): el pliego tiene una sola revisión.",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  }
+ }
+}

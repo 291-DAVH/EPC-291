@@ -1,0 +1,3824 @@
+{
+ "groups_tns": {
+  "mc_doc": {
+   "blocks": [
+    {
+     "text": "1. Objeto, alcance y marco normativo",
+     "type": "h"
+    },
+    {
+     "text": "Dimensionamiento de cables y protecciones de todos los circuitos del tablero TGBT-01, con análisis del diferencial y de la selectividad.",
+     "type": "p"
+    },
+    {
+     "items": [
+      "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
+      "AEA 90364-7-770 (ed. 2017): instalaciones en edificios",
+      "AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes",
+      "AEA 90909-1: cálculo de cortocircuito",
+      "IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores"
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "2. Datos generales",
+     "type": "h"
+    },
+    {
+     "rows": [
+      [
+       "Proyecto",
+       "PRJ-1"
+      ],
+      [
+       "Tensión",
+       "380,0 V"
+      ],
+      [
+       "Esquema de conexión a tierra",
+       "TN-S"
+      ],
+      [
+       "Icc en barras",
+       "25 kA"
+      ],
+      [
+       "Frecuencia",
+       "50 Hz"
+      ],
+      [
+       "Factor de potencia",
+       "0,85"
+      ],
+      [
+       "Conductor",
+       "cobre, aislación PVC"
+      ],
+      [
+       "Caída de tensión máxima",
+       "seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 %"
+      ],
+      [
+       "Sensibilidad del diferencial",
+       "30 mA"
+      ]
+     ],
+     "type": "kv"
+    },
+    {
+     "text": "3. Cables",
+     "type": "h"
+    },
+    {
+     "text": "3.1 Cable de acometida (alimenta al tablero)",
+     "type": "h"
+    },
+    {
+     "text": "Alimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).",
+     "type": "p"
+    },
+    {
+     "text": "3.2 Cableado interno y cableado externo de cada circuito",
+     "type": "h"
+    },
+    {
+     "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.1
+      ],
+      [
+       "Ib A",
+       0.07
+      ],
+      [
+       "In A",
+       0.07
+      ],
+      [
+       "S int. mm²",
+       0.09
+      ],
+      [
+       "S ext. mm²",
+       0.09
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.07
+      ],
+      [
+       "ΔU %",
+       0.08
+      ],
+      [
+       "ΔU acum. %",
+       0.1
+      ],
+      [
+       "Límite %",
+       0.08
+      ],
+      [
+       "Trans.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.1
+      ]
+     ],
+     "rows": [
+      [
+       "C-01",
+       "63",
+       "63",
+       "25",
+       "25",
+       "30",
+       "77",
+       "0,7",
+       "0,7",
+       "1,0",
+       "no",
+       "✓"
+      ],
+      [
+       "M-01",
+       "13",
+       "20",
+       "4",
+       "4",
+       "25",
+       "25",
+       "0,7",
+       "0,7",
+       "5,0",
+       "no",
+       "✓"
+      ],
+      [
+       "G-01",
+       "21",
+       "25",
+       "4",
+       "4",
+       "20",
+       "25",
+       "0,9",
+       "0,9",
+       "1,0",
+       "no",
+       "✓"
+      ],
+      [
+       "G-01-A",
+       "12",
+       "13",
+       "2,5",
+       "2,5",
+       "15",
+       "21",
+       "1,2",
+       "2,1",
+       "3,0",
+       "no",
+       "✓"
+      ],
+      [
+       "G-01-B",
+       "9,7",
+       "10",
+       "2,5",
+       "2,5",
+       "22",
+       "21",
+       "1,5",
+       "2,4",
+       "3,0",
+       "no",
+       "✓"
+      ],
+      [
+       "L-01",
+       "8,0",
+       "10",
+       "1,5",
+       "1,5",
+       "35",
+       "15",
+       "2,1",
+       "2,1",
+       "3,0",
+       "no",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "4. Protecciones",
+     "type": "h"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.09
+      ],
+      [
+       "Dispositivo",
+       0.2
+      ],
+      [
+       "Curva",
+       0.07
+      ],
+      [
+       "In A",
+       0.06
+      ],
+      [
+       "Icu kA",
+       0.07
+      ],
+      [
+       "Icc mín A",
+       0.1
+      ],
+      [
+       "k·In A",
+       0.08
+      ],
+      [
+       "Disparo",
+       0.08
+      ],
+      [
+       "Sobrec.",
+       0.08
+      ],
+      [
+       "I2 A",
+       0.07
+      ],
+      [
+       "Coord.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.08
+      ]
+     ],
+     "rows": [
+      [
+       "C-01",
+       "MCCB (63 A)",
+       "MCCB",
+       "63",
+       "25",
+       "5100",
+       "630",
+       "✓",
+       "✓",
+       "82",
+       "✓",
+       "✓"
+      ],
+      [
+       "M-01",
+       "MCB > KM (20 A)",
+       "D",
+       "20",
+       "25",
+       "1200",
+       "400",
+       "✓",
+       "✓",
+       "29",
+       "✓",
+       "✓"
+      ],
+      [
+       "G-01",
+       "RCCB 4P 25 A 30 mA",
+       "C",
+       "25",
+       "25",
+       "Pendiente",
+       "250",
+       "—",
+       "✓",
+       "36",
+       "✓",
+       "✓"
+      ],
+      [
+       "G-01-A",
+       "MCB (13 A)",
+       "C",
+       "13",
+       "25",
+       "410",
+       "130",
+       "✓",
+       "✓",
+       "19",
+       "✓",
+       "✓"
+      ],
+      [
+       "G-01-B",
+       "MCB (10 A)",
+       "C",
+       "10",
+       "25",
+       "330",
+       "100",
+       "✓",
+       "✓",
+       "14",
+       "✓",
+       "✓"
+      ],
+      [
+       "L-01",
+       "MCB (10 A)",
+       "C",
+       "10",
+       "25",
+       "200",
+       "100",
+       "✓",
+       "✓",
+       "14",
+       "✓",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Icc en barras 25 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.",
+     "type": "p"
+    },
+    {
+     "text": "5. Diferencial",
+     "type": "h"
+    },
+    {
+     "text": "Esquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.14
+      ],
+      [
+       "Diferencial en",
+       0.18
+      ],
+      [
+       "IΔn mA",
+       0.12
+      ],
+      [
+       "Tipo",
+       0.1
+      ],
+      [
+       "Zs máx Ω",
+       0.16
+      ],
+      [
+       "Ra máx TT Ω",
+       0.18
+      ],
+      [
+       "Cumple",
+       0.12
+      ]
+     ],
+     "rows": [
+      [
+       "G-01",
+       "G-01",
+       "30",
+       "A",
+       "7700",
+       "1700",
+       "✓"
+      ],
+      [
+       "G-01-A",
+       "G-01",
+       "30",
+       "A",
+       "7700",
+       "1700",
+       "✓"
+      ],
+      [
+       "G-01-B",
+       "G-01",
+       "30",
+       "A",
+       "7700",
+       "1700",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "6. Curvas y selectividad",
+     "type": "h"
+    },
+    {
+     "text": "Banda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.",
+     "type": "p"
+    },
+    {
+     "text": "No hay protecciones en serie dentro del tablero.",
+     "type": "p"
+    },
+    {
+     "text": "7. Conclusión y puntos a verificar",
+     "type": "h"
+    },
+    {
+     "text": "Resultado global: CUMPLE (6 de 6 circuitos cumplen).",
+     "type": "p"
+    },
+    {
+     "items": [
+      "1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido)."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "Supuestos",
+     "type": "h"
+    },
+    {
+     "items": [
+      "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+      "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+      "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+      "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Memoria de Cálculo · TGBT-01 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TGBT-01",
+   "title": "Memoria de Cálculo"
+  },
+  "mc_md": "# Memoria de Cálculo — Tablero TGBT-01\n\n## 1. Objeto, alcance y marco normativo\n\nDimensionamiento de cables y protecciones de todos los circuitos del tablero TGBT-01, con análisis del diferencial y de la selectividad.\n\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores\n\n## 2. Datos generales\n\n| Dato | Valor |\n|---|---|\n| Proyecto | PRJ-1 |\n| Tensión | 380,0 V |\n| Esquema de conexión a tierra | TN-S |\n| Icc en barras | 25 kA |\n| Frecuencia | 50 Hz |\n| Factor de potencia | 0,85 |\n| Conductor | cobre, aislación PVC |\n| Caída de tensión máxima | seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 % |\n| Sensibilidad del diferencial | 30 mA |\n\n## 3. Cables\n\n## 3.1 Cable de acometida (alimenta al tablero)\n\nAlimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).\n\n## 3.2 Cableado interno y cableado externo de cada circuito\n\nEl cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.\n\n| TAG | Ib A | In A | S int. mm² | S ext. mm² | Largo m | Iz A | ΔU % | ΔU acum. % | Límite % | Trans. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| C-01 | 63 | 63 | 25 | 25 | 30 | 77 | 0,7 | 0,7 | 1,0 | no | ✓ |\n| M-01 | 13 | 20 | 4 | 4 | 25 | 25 | 0,7 | 0,7 | 5,0 | no | ✓ |\n| G-01 | 21 | 25 | 4 | 4 | 20 | 25 | 0,9 | 0,9 | 1,0 | no | ✓ |\n| G-01-A | 12 | 13 | 2,5 | 2,5 | 15 | 21 | 1,2 | 2,1 | 3,0 | no | ✓ |\n| G-01-B | 9,7 | 10 | 2,5 | 2,5 | 22 | 21 | 1,5 | 2,4 | 3,0 | no | ✓ |\n| L-01 | 8,0 | 10 | 1,5 | 1,5 | 35 | 15 | 2,1 | 2,1 | 3,0 | no | ✓ |\n\n## 4. Protecciones\n\n| TAG | Dispositivo | Curva | In A | Icu kA | Icc mín A | k·In A | Disparo | Sobrec. | I2 A | Coord. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| C-01 | MCCB (63 A) | MCCB | 63 | 25 | 5100 | 630 | ✓ | ✓ | 82 | ✓ | ✓ |\n| M-01 | MCB > KM (20 A) | D | 20 | 25 | 1200 | 400 | ✓ | ✓ | 29 | ✓ | ✓ |\n| G-01 | RCCB 4P 25 A 30 mA | C | 25 | 25 | Pendiente | 250 | — | ✓ | 36 | ✓ | ✓ |\n| G-01-A | MCB (13 A) | C | 13 | 25 | 410 | 130 | ✓ | ✓ | 19 | ✓ | ✓ |\n| G-01-B | MCB (10 A) | C | 10 | 25 | 330 | 100 | ✓ | ✓ | 14 | ✓ | ✓ |\n| L-01 | MCB (10 A) | C | 10 | 25 | 200 | 100 | ✓ | ✓ | 14 | ✓ | ✓ |\n\nIcc en barras 25 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.\n\n## 5. Diferencial\n\nEsquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.\n\n| TAG | Diferencial en | IΔn mA | Tipo | Zs máx Ω | Ra máx TT Ω | Cumple |\n|---|---|---|---|---|---|---|\n| G-01 | G-01 | 30 | A | 7700 | 1700 | ✓ |\n| G-01-A | G-01 | 30 | A | 7700 | 1700 | ✓ |\n| G-01-B | G-01 | 30 | A | 7700 | 1700 | ✓ |\n\n## 6. Curvas y selectividad\n\nBanda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.\n\nNo hay protecciones en serie dentro del tablero.\n\n## 7. Conclusión y puntos a verificar\n\nResultado global: CUMPLE (6 de 6 circuitos cumplen).\n\n- 1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).\n\n## Supuestos\n\n- Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).\n- Icc en bornes de cada protección = Icc de barras del tablero (cota superior).\n- Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.\n- Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho.\n\n_Generado automáticamente a partir del cálculo del tablero._\n",
+  "memo": {
+   "acometida": {
+    "In": null,
+    "S_mm2": null,
+    "dato_faltante": true,
+    "desde": "Red / fuente externa al proyecto",
+    "disp": null,
+    "du_pct": null,
+    "length_m": 20.0,
+    "ruta": [],
+    "ruta_limitante": null,
+    "tag": ""
+   },
+   "board": {
+    "fp": 0.85,
+    "frequency_hz": 50.0,
+    "icc_ka": 25.0,
+    "name": "TGBT-01",
+    "project": "PRJ-1",
+    "system": "TN-S",
+    "voltage_v": 380.0
+   },
+   "circuits": [
+    {
+     "Ib": 63.0,
+     "In": 63,
+     "cumple": true,
+     "description": "ALIMENTADOR TS-1",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 25,
+      "cumple": true,
+      "du_acum_pct": 0.673,
+      "du_propia_pct": 0.673,
+      "iz_a": 77.0,
+      "length_m": 30.0,
+      "limite_pct": 1.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 25,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 63,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "MCCB",
+      "disp": "MCCB (63 A)",
+      "disparo_ok": true,
+      "i2_a": 81.9,
+      "icc_a": 25000.0,
+      "icc_min_a": 5100.1,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 77.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mccb",
+      "sobrecarga_ok": true
+     },
+     "tag": "C-01",
+     "tipo": "seccional",
+     "transicion": false
+    },
+    {
+     "Ib": 13.4,
+     "In": 20,
+     "cumple": true,
+     "description": "EXTRACTOR",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 4,
+      "cumple": true,
+      "du_acum_pct": 0.723,
+      "du_propia_pct": 0.723,
+      "iz_a": 25.0,
+      "length_m": 25.0,
+      "limite_pct": 5.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 4,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 20,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "D",
+      "disp": "MCB > KM (20 A)",
+      "disparo_ok": true,
+      "i2_a": 29.0,
+      "icc_a": 25000.0,
+      "icc_min_a": 1226.9,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 25.0,
+      "k_max": 20,
+      "k_min": 10,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "M-01",
+     "tipo": "motor",
+     "transicion": false
+    },
+    {
+     "Ib": 21.4,
+     "In": 25,
+     "cumple": true,
+     "description": "RCCB TOMAS",
+     "diferencial": {
+      "contacto_indirecto": true,
+      "cumple": true,
+      "esquema": "TN-S",
+      "idn_ma": 30.0,
+      "ra_max_tt_ohm": 1667.0,
+      "tag_rcd": "G-01",
+      "tipo": "A",
+      "zs_max_ohm": 7667.0
+     },
+     "externo": {
+      "S_mm2": 4,
+      "cumple": true,
+      "du_acum_pct": 0.925,
+      "du_propia_pct": 0.925,
+      "iz_a": 25.0,
+      "length_m": 20.0,
+      "limite_pct": 1.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 4,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 25,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "RCCB 4P 25 A 30 mA",
+      "disparo_ok": null,
+      "i2_a": 36.2,
+      "icc_a": 25000.0,
+      "icc_min_a": null,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 25.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "rccb",
+      "sobrecarga_ok": true
+     },
+     "tag": "G-01",
+     "tipo": "seccional",
+     "transicion": false
+    },
+    {
+     "Ib": 11.8,
+     "In": 13,
+     "cumple": true,
+     "description": "Tomas 1",
+     "diferencial": {
+      "contacto_indirecto": true,
+      "cumple": true,
+      "esquema": "TN-S",
+      "idn_ma": 30.0,
+      "ra_max_tt_ohm": 1667.0,
+      "tag_rcd": "G-01",
+      "tipo": "A",
+      "zs_max_ohm": 7667.0
+     },
+     "externo": {
+      "S_mm2": 2.5,
+      "cumple": true,
+      "du_acum_pct": 2.148,
+      "du_propia_pct": 1.223,
+      "iz_a": 21.0,
+      "length_m": 15.0,
+      "limite_pct": 3.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 2.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "G-01",
+     "proteccion": {
+      "In": 13,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "MCB (13 A)",
+      "disparo_ok": true,
+      "i2_a": 18.8,
+      "icc_a": 25000.0,
+      "icc_min_a": 412.7,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 21.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "G-01-A",
+     "tipo": "tomacorrientes",
+     "transicion": false
+    },
+    {
+     "Ib": 9.7,
+     "In": 10,
+     "cumple": true,
+     "description": "Tomas 2",
+     "diferencial": {
+      "contacto_indirecto": true,
+      "cumple": true,
+      "esquema": "TN-S",
+      "idn_ma": 30.0,
+      "ra_max_tt_ohm": 1667.0,
+      "tag_rcd": "G-01",
+      "tipo": "A",
+      "zs_max_ohm": 7667.0
+     },
+     "externo": {
+      "S_mm2": 2.5,
+      "cumple": true,
+      "du_acum_pct": 2.392,
+      "du_propia_pct": 1.467,
+      "iz_a": 21.0,
+      "length_m": 22.0,
+      "limite_pct": 3.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 2.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "G-01",
+     "proteccion": {
+      "In": 10,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "MCB (10 A)",
+      "disparo_ok": true,
+      "i2_a": 14.5,
+      "icc_a": 25000.0,
+      "icc_min_a": 331.2,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 21.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "G-01-B",
+     "tipo": "tomacorrientes",
+     "transicion": false
+    },
+    {
+     "Ib": 8.0,
+     "In": 10,
+     "cumple": true,
+     "description": "ILUMINACION",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 1.5,
+      "cumple": true,
+      "du_acum_pct": 2.092,
+      "du_propia_pct": 2.092,
+      "iz_a": 15.0,
+      "length_m": 35.0,
+      "limite_pct": 3.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 1.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 10,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "MCB (10 A)",
+      "disparo_ok": true,
+      "i2_a": 14.5,
+      "icc_a": 25000.0,
+      "icc_min_a": 202.0,
+      "icu_ka": 25,
+      "icu_ok": true,
+      "iz_a": 15.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "L-01",
+     "tipo": "iluminacion",
+     "transicion": false
+    }
+   ],
+   "criteria": {
+    "conductor": {
+     "aislacion": "pvc",
+     "material": "cu"
+    },
+    "curvas_k": {
+     "B": [
+      3,
+      5
+     ],
+     "C": [
+      5,
+      10
+     ],
+     "D": [
+      10,
+      20
+     ],
+     "MCCB": [
+      5,
+      10
+     ]
+    },
+    "limits_pct": {
+     "motor": 5.0,
+     "seccional": 1.0,
+     "terminal": 3.0
+    },
+    "rcd_ma": 30.0
+   },
+   "curvas": {
+    "C-01": {
+     "In": 63,
+     "curva": "MCCB",
+     "max": [
+      [
+       81.9,
+       3600
+      ],
+      [
+       160.6,
+       120
+      ],
+      [
+       630,
+       0.1
+      ],
+      [
+       630,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       66.2,
+       3600
+      ],
+      [
+       160.6,
+       1
+      ],
+      [
+       315,
+       0.1
+      ],
+      [
+       315,
+       0.01
+      ]
+     ]
+    },
+    "G-01": {
+     "In": 25,
+     "curva": "C",
+     "max": [
+      [
+       36.2,
+       3600
+      ],
+      [
+       63.7,
+       60
+      ],
+      [
+       250,
+       0.1
+      ],
+      [
+       250,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       28.2,
+       3600
+      ],
+      [
+       63.7,
+       1
+      ],
+      [
+       125,
+       0.1
+      ],
+      [
+       125,
+       0.01
+      ]
+     ]
+    },
+    "G-01-A": {
+     "In": 13,
+     "curva": "C",
+     "max": [
+      [
+       18.8,
+       3600
+      ],
+      [
+       33.1,
+       60
+      ],
+      [
+       130,
+       0.1
+      ],
+      [
+       130,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       14.7,
+       3600
+      ],
+      [
+       33.1,
+       1
+      ],
+      [
+       65,
+       0.1
+      ],
+      [
+       65,
+       0.01
+      ]
+     ]
+    },
+    "G-01-B": {
+     "In": 10,
+     "curva": "C",
+     "max": [
+      [
+       14.5,
+       3600
+      ],
+      [
+       25.5,
+       60
+      ],
+      [
+       100,
+       0.1
+      ],
+      [
+       100,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       11.3,
+       3600
+      ],
+      [
+       25.5,
+       1
+      ],
+      [
+       50,
+       0.1
+      ],
+      [
+       50,
+       0.01
+      ]
+     ]
+    },
+    "L-01": {
+     "In": 10,
+     "curva": "C",
+     "max": [
+      [
+       14.5,
+       3600
+      ],
+      [
+       25.5,
+       60
+      ],
+      [
+       100,
+       0.1
+      ],
+      [
+       100,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       11.3,
+       3600
+      ],
+      [
+       25.5,
+       1
+      ],
+      [
+       50,
+       0.1
+      ],
+      [
+       50,
+       0.01
+      ]
+     ]
+    },
+    "M-01": {
+     "In": 20,
+     "curva": "D",
+     "max": [
+      [
+       29.0,
+       3600
+      ],
+      [
+       51.0,
+       60
+      ],
+      [
+       400,
+       0.1
+      ],
+      [
+       400,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       22.6,
+       3600
+      ],
+      [
+       51.0,
+       1
+      ],
+      [
+       200,
+       0.1
+      ],
+      [
+       200,
+       0.01
+      ]
+     ]
+    }
+   },
+   "resumen": {
+    "circuits": 6,
+    "cumplen": 6,
+    "global": true,
+    "no_cumplen": 0,
+    "observaciones": [
+     "Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido)."
+    ],
+    "selectividad": {
+     "parcial": 0,
+     "revisar": 0,
+     "total": 0
+    },
+    "transiciones": 0
+   },
+   "schema_version": "1.0",
+   "selectividad": [],
+   "supuestos": [
+    "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+    "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+    "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+    "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+   ],
+   "validated": true
+  },
+  "sp_doc": {
+   "blocks": [
+    {
+     "columns": [
+      [
+       "Requisito normativo",
+       0.3
+      ],
+      [
+       "Dato técnico",
+       0.5
+      ],
+      [
+       "Resultado",
+       0.2
+      ]
+     ],
+     "rows": [
+      [
+       "Capacidad de conducción (Iz ≥ In)",
+       "Iz/In mínimo = 1,0",
+       "CUMPLE"
+      ],
+      [
+       "Caída de tensión",
+       "máxima acumulada 2,4 % (límites 1,0 / 3,0 / 5,0 %)",
+       "CUMPLE"
+      ],
+      [
+       "Cableado interno y externo",
+       "0 circuito(s) con cable de salida mayor al interno (bornera de transición)",
+       "—"
+      ],
+      [
+       "Poder de corte",
+       "Icu mínimo = 25 kA frente a Icc = 25 kA",
+       "CUMPLE"
+      ],
+      [
+       "Disparo magnético",
+       "Icc mínima = 200 A, curvas C, D, MCCB",
+       "CUMPLE"
+      ],
+      [
+       "Diferencial",
+       "3 circuito(s) con IΔn 30 mA, esquema TN-S",
+       "CUMPLE"
+      ],
+      [
+       "Selectividad",
+       "0 total, 0 parcial, 0 a revisar",
+       "CUMPLE"
+      ],
+      [
+       "Acometida",
+       "20 m; sección Pendiente",
+       "—"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Resultado global: CUMPLE",
+     "type": "p"
+    },
+    {
+     "text": "Observaciones",
+     "type": "h"
+    },
+    {
+     "items": [
+      "1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido)."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Síntesis de Proyecto · TGBT-01 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TGBT-01",
+   "title": "Síntesis de Proyecto"
+  },
+  "sp_md": "# Síntesis de Proyecto — Tablero TGBT-01\n\n| Requisito normativo | Dato técnico | Resultado |\n|---|---|---|\n| Capacidad de conducción (Iz ≥ In) | Iz/In mínimo = 1,0 | CUMPLE |\n| Caída de tensión | máxima acumulada 2,4 % (límites 1,0 / 3,0 / 5,0 %) | CUMPLE |\n| Cableado interno y externo | 0 circuito(s) con cable de salida mayor al interno (bornera de transición) | — |\n| Poder de corte | Icu mínimo = 25 kA frente a Icc = 25 kA | CUMPLE |\n| Disparo magnético | Icc mínima = 200 A, curvas C, D, MCCB | CUMPLE |\n| Diferencial | 3 circuito(s) con IΔn 30 mA, esquema TN-S | CUMPLE |\n| Selectividad | 0 total, 0 parcial, 0 a revisar | CUMPLE |\n| Acometida | 20 m; sección Pendiente | — |\n\nResultado global: CUMPLE\n\n## Observaciones\n\n- 1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).\n\n_Generado automáticamente a partir del cálculo del tablero._\n"
+ },
+ "it_system_unvalidated": {
+  "mc_doc": {
+   "blocks": [
+    {
+     "text": "Valores base sin validar contra las normas: confirmar antes de emitir.",
+     "type": "p"
+    },
+    {
+     "text": "1. Objeto, alcance y marco normativo",
+     "type": "h"
+    },
+    {
+     "text": "Dimensionamiento de cables y protecciones de todos los circuitos del tablero TS-IT, con análisis del diferencial y de la selectividad.",
+     "type": "p"
+    },
+    {
+     "items": [
+      "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
+      "AEA 90364-7-770 (ed. 2017): instalaciones en edificios",
+      "AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes",
+      "AEA 90909-1: cálculo de cortocircuito",
+      "IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores"
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "2. Datos generales",
+     "type": "h"
+    },
+    {
+     "rows": [
+      [
+       "Proyecto",
+       "PRJ-1"
+      ],
+      [
+       "Tensión",
+       "380,0 V"
+      ],
+      [
+       "Esquema de conexión a tierra",
+       "IT"
+      ],
+      [
+       "Icc en barras",
+       "10 kA"
+      ],
+      [
+       "Frecuencia",
+       "50 Hz"
+      ],
+      [
+       "Factor de potencia",
+       "0,85"
+      ],
+      [
+       "Conductor",
+       "cobre, aislación XLPE"
+      ],
+      [
+       "Caída de tensión máxima",
+       "seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 %"
+      ],
+      [
+       "Sensibilidad del diferencial",
+       "300 mA"
+      ]
+     ],
+     "type": "kv"
+    },
+    {
+     "text": "3. Cables",
+     "type": "h"
+    },
+    {
+     "text": "3.1 Cable de acometida (alimenta al tablero)",
+     "type": "h"
+    },
+    {
+     "text": "Alimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).",
+     "type": "p"
+    },
+    {
+     "text": "3.2 Cableado interno y cableado externo de cada circuito",
+     "type": "h"
+    },
+    {
+     "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.1
+      ],
+      [
+       "Ib A",
+       0.07
+      ],
+      [
+       "In A",
+       0.07
+      ],
+      [
+       "S int. mm²",
+       0.09
+      ],
+      [
+       "S ext. mm²",
+       0.09
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.07
+      ],
+      [
+       "ΔU %",
+       0.08
+      ],
+      [
+       "ΔU acum. %",
+       0.1
+      ],
+      [
+       "Límite %",
+       0.08
+      ],
+      [
+       "Trans.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.1
+      ]
+     ],
+     "rows": [
+      [
+       "C-VFD",
+       "20",
+       "25",
+       "4",
+       "4",
+       "40",
+       "32",
+       "1,8",
+       "1,8",
+       "5,0",
+       "no",
+       "✓"
+      ],
+      [
+       "C-RCD",
+       "9,8",
+       "13",
+       "2,5",
+       "2,5",
+       "30",
+       "24",
+       "1,1",
+       "1,1",
+       "5,0",
+       "no",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "4. Protecciones",
+     "type": "h"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.09
+      ],
+      [
+       "Dispositivo",
+       0.2
+      ],
+      [
+       "Curva",
+       0.07
+      ],
+      [
+       "In A",
+       0.06
+      ],
+      [
+       "Icu kA",
+       0.07
+      ],
+      [
+       "Icc mín A",
+       0.1
+      ],
+      [
+       "k·In A",
+       0.08
+      ],
+      [
+       "Disparo",
+       0.08
+      ],
+      [
+       "Sobrec.",
+       0.08
+      ],
+      [
+       "I2 A",
+       0.07
+      ],
+      [
+       "Coord.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.08
+      ]
+     ],
+     "rows": [
+      [
+       "C-VFD",
+       "MCB > VFD (25 A)",
+       "D",
+       "25",
+       "10",
+       "700",
+       "500",
+       "✓",
+       "✓",
+       "36",
+       "✓",
+       "✓"
+      ],
+      [
+       "C-RCD",
+       "RCBO > KM (13 A)",
+       "D",
+       "13",
+       "10",
+       "590",
+       "260",
+       "✓",
+       "✓",
+       "19",
+       "✓",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Icc en barras 10 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.",
+     "type": "p"
+    },
+    {
+     "text": "5. Diferencial",
+     "type": "h"
+    },
+    {
+     "text": "Esquema IT. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.14
+      ],
+      [
+       "Diferencial en",
+       0.18
+      ],
+      [
+       "IΔn mA",
+       0.12
+      ],
+      [
+       "Tipo",
+       0.1
+      ],
+      [
+       "Zs máx Ω",
+       0.16
+      ],
+      [
+       "Ra máx TT Ω",
+       0.18
+      ],
+      [
+       "Cumple",
+       0.12
+      ]
+     ],
+     "rows": [
+      [
+       "C-RCD",
+       "C-RCD",
+       "300",
+       "A",
+       "770",
+       "170",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "items": [
+      "IT: la primera falla no desconecta (monitor de aislación); la segunda falla se verifica con 2·Ia·Zs ≤ U."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "6. Curvas y selectividad",
+     "type": "h"
+    },
+    {
+     "text": "Banda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.",
+     "type": "p"
+    },
+    {
+     "text": "No hay protecciones en serie dentro del tablero.",
+     "type": "p"
+    },
+    {
+     "text": "7. Conclusión y puntos a verificar",
+     "type": "h"
+    },
+    {
+     "text": "Resultado global: CUMPLE (2 de 2 circuitos cumplen).",
+     "type": "p"
+    },
+    {
+     "items": [
+      "1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).",
+      "2. Valores base de criterios y tablas sin validar contra las normas: confirmar antes de emitir."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "Supuestos",
+     "type": "h"
+    },
+    {
+     "items": [
+      "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+      "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+      "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+      "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Memoria de Cálculo · TS-IT · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-IT",
+   "title": "Memoria de Cálculo"
+  },
+  "mc_md": "# Memoria de Cálculo — Tablero TS-IT\n\nValores base sin validar contra las normas: confirmar antes de emitir.\n\n## 1. Objeto, alcance y marco normativo\n\nDimensionamiento de cables y protecciones de todos los circuitos del tablero TS-IT, con análisis del diferencial y de la selectividad.\n\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores\n\n## 2. Datos generales\n\n| Dato | Valor |\n|---|---|\n| Proyecto | PRJ-1 |\n| Tensión | 380,0 V |\n| Esquema de conexión a tierra | IT |\n| Icc en barras | 10 kA |\n| Frecuencia | 50 Hz |\n| Factor de potencia | 0,85 |\n| Conductor | cobre, aislación XLPE |\n| Caída de tensión máxima | seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 % |\n| Sensibilidad del diferencial | 300 mA |\n\n## 3. Cables\n\n## 3.1 Cable de acometida (alimenta al tablero)\n\nAlimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).\n\n## 3.2 Cableado interno y cableado externo de cada circuito\n\nEl cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.\n\n| TAG | Ib A | In A | S int. mm² | S ext. mm² | Largo m | Iz A | ΔU % | ΔU acum. % | Límite % | Trans. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| C-VFD | 20 | 25 | 4 | 4 | 40 | 32 | 1,8 | 1,8 | 5,0 | no | ✓ |\n| C-RCD | 9,8 | 13 | 2,5 | 2,5 | 30 | 24 | 1,1 | 1,1 | 5,0 | no | ✓ |\n\n## 4. Protecciones\n\n| TAG | Dispositivo | Curva | In A | Icu kA | Icc mín A | k·In A | Disparo | Sobrec. | I2 A | Coord. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| C-VFD | MCB > VFD (25 A) | D | 25 | 10 | 700 | 500 | ✓ | ✓ | 36 | ✓ | ✓ |\n| C-RCD | RCBO > KM (13 A) | D | 13 | 10 | 590 | 260 | ✓ | ✓ | 19 | ✓ | ✓ |\n\nIcc en barras 10 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.\n\n## 5. Diferencial\n\nEsquema IT. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.\n\n| TAG | Diferencial en | IΔn mA | Tipo | Zs máx Ω | Ra máx TT Ω | Cumple |\n|---|---|---|---|---|---|---|\n| C-RCD | C-RCD | 300 | A | 770 | 170 | ✓ |\n\n- IT: la primera falla no desconecta (monitor de aislación); la segunda falla se verifica con 2·Ia·Zs ≤ U.\n\n## 6. Curvas y selectividad\n\nBanda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.\n\nNo hay protecciones en serie dentro del tablero.\n\n## 7. Conclusión y puntos a verificar\n\nResultado global: CUMPLE (2 de 2 circuitos cumplen).\n\n- 1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).\n- 2. Valores base de criterios y tablas sin validar contra las normas: confirmar antes de emitir.\n\n## Supuestos\n\n- Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).\n- Icc en bornes de cada protección = Icc de barras del tablero (cota superior).\n- Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.\n- Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho.\n\n_Generado automáticamente a partir del cálculo del tablero._\n",
+  "memo": {
+   "acometida": {
+    "In": null,
+    "S_mm2": null,
+    "dato_faltante": true,
+    "desde": "Red / fuente externa al proyecto",
+    "disp": null,
+    "du_pct": null,
+    "length_m": 20.0,
+    "ruta": [],
+    "ruta_limitante": null,
+    "tag": ""
+   },
+   "board": {
+    "fp": 0.85,
+    "frequency_hz": 50.0,
+    "icc_ka": 10.0,
+    "name": "TS-IT",
+    "project": "PRJ-1",
+    "system": "IT",
+    "voltage_v": 380.0
+   },
+   "circuits": [
+    {
+     "Ib": 20.0,
+     "In": 25,
+     "cumple": true,
+     "description": "VENTILADOR VFD",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 4,
+      "cumple": true,
+      "du_acum_pct": 1.837,
+      "du_propia_pct": 1.837,
+      "iz_a": 32.0,
+      "length_m": 40.0,
+      "limite_pct": 5.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 4,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 25,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "D",
+      "disp": "MCB > VFD (25 A)",
+      "disparo_ok": true,
+      "i2_a": 36.2,
+      "icc_a": 10000.0,
+      "icc_min_a": 699.1,
+      "icu_ka": 10,
+      "icu_ok": true,
+      "iz_a": 32.0,
+      "k_max": 20,
+      "k_min": 10,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "C-VFD",
+     "tipo": "motor",
+     "transicion": false
+    },
+    {
+     "Ib": 9.8,
+     "In": 13,
+     "cumple": true,
+     "description": "BOMBA CON DIFERENCIAL",
+     "diferencial": {
+      "contacto_indirecto": false,
+      "cumple": true,
+      "esquema": "IT",
+      "idn_ma": 300.0,
+      "nota": "IT: la primera falla no desconecta (monitor de aislación); la segunda falla se verifica con 2·Ia·Zs ≤ U.",
+      "ra_max_tt_ohm": 167.0,
+      "tag_rcd": "C-RCD",
+      "tipo": "A",
+      "zs_max_ohm": 767.0
+     },
+     "externo": {
+      "S_mm2": 2.5,
+      "cumple": true,
+      "du_acum_pct": 1.085,
+      "du_propia_pct": 1.085,
+      "iz_a": 24.0,
+      "length_m": 30.0,
+      "limite_pct": 5.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 2.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 13,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "D",
+      "disp": "RCBO > KM (13 A)",
+      "disparo_ok": true,
+      "i2_a": 18.8,
+      "icc_a": 10000.0,
+      "icc_min_a": 588.9,
+      "icu_ka": 10,
+      "icu_ok": true,
+      "iz_a": 24.0,
+      "k_max": 20,
+      "k_min": 10,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "C-RCD",
+     "tipo": "motor",
+     "transicion": false
+    }
+   ],
+   "criteria": {
+    "conductor": {
+     "aislacion": "xlpe",
+     "material": "cu"
+    },
+    "curvas_k": {
+     "B": [
+      3,
+      5
+     ],
+     "C": [
+      5,
+      10
+     ],
+     "D": [
+      10,
+      20
+     ],
+     "MCCB": [
+      5,
+      10
+     ]
+    },
+    "limits_pct": {
+     "motor": 5.0,
+     "seccional": 1.0,
+     "terminal": 3.0
+    },
+    "rcd_ma": 300.0
+   },
+   "curvas": {
+    "C-RCD": {
+     "In": 13,
+     "curva": "D",
+     "max": [
+      [
+       18.8,
+       3600
+      ],
+      [
+       33.1,
+       60
+      ],
+      [
+       260,
+       0.1
+      ],
+      [
+       260,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       14.7,
+       3600
+      ],
+      [
+       33.1,
+       1
+      ],
+      [
+       130,
+       0.1
+      ],
+      [
+       130,
+       0.01
+      ]
+     ]
+    },
+    "C-VFD": {
+     "In": 25,
+     "curva": "D",
+     "max": [
+      [
+       36.2,
+       3600
+      ],
+      [
+       63.7,
+       60
+      ],
+      [
+       500,
+       0.1
+      ],
+      [
+       500,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       28.2,
+       3600
+      ],
+      [
+       63.7,
+       1
+      ],
+      [
+       250,
+       0.1
+      ],
+      [
+       250,
+       0.01
+      ]
+     ]
+    }
+   },
+   "resumen": {
+    "circuits": 2,
+    "cumplen": 2,
+    "global": true,
+    "no_cumplen": 0,
+    "observaciones": [
+     "Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).",
+     "Valores base de criterios y tablas sin validar contra las normas: confirmar antes de emitir."
+    ],
+    "selectividad": {
+     "parcial": 0,
+     "revisar": 0,
+     "total": 0
+    },
+    "transiciones": 0
+   },
+   "schema_version": "1.0",
+   "selectividad": [],
+   "supuestos": [
+    "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+    "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+    "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+    "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+   ],
+   "validated": false
+  },
+  "sp_doc": {
+   "blocks": [
+    {
+     "columns": [
+      [
+       "Requisito normativo",
+       0.3
+      ],
+      [
+       "Dato técnico",
+       0.5
+      ],
+      [
+       "Resultado",
+       0.2
+      ]
+     ],
+     "rows": [
+      [
+       "Capacidad de conducción (Iz ≥ In)",
+       "Iz/In mínimo = 1,3",
+       "CUMPLE"
+      ],
+      [
+       "Caída de tensión",
+       "máxima acumulada 1,8 % (límites 1,0 / 3,0 / 5,0 %)",
+       "CUMPLE"
+      ],
+      [
+       "Cableado interno y externo",
+       "0 circuito(s) con cable de salida mayor al interno (bornera de transición)",
+       "—"
+      ],
+      [
+       "Poder de corte",
+       "Icu mínimo = 10 kA frente a Icc = 10 kA",
+       "CUMPLE"
+      ],
+      [
+       "Disparo magnético",
+       "Icc mínima = 590 A, curvas D",
+       "CUMPLE"
+      ],
+      [
+       "Diferencial",
+       "1 circuito(s) con IΔn 300 mA, esquema IT",
+       "CUMPLE"
+      ],
+      [
+       "Selectividad",
+       "0 total, 0 parcial, 0 a revisar",
+       "CUMPLE"
+      ],
+      [
+       "Acometida",
+       "20 m; sección Pendiente",
+       "—"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Resultado global: CUMPLE",
+     "type": "p"
+    },
+    {
+     "text": "Observaciones",
+     "type": "h"
+    },
+    {
+     "items": [
+      "1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).",
+      "2. Valores base de criterios y tablas sin validar contra las normas: confirmar antes de emitir."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Síntesis de Proyecto · TS-IT · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-IT",
+   "title": "Síntesis de Proyecto"
+  },
+  "sp_md": "# Síntesis de Proyecto — Tablero TS-IT\n\n| Requisito normativo | Dato técnico | Resultado |\n|---|---|---|\n| Capacidad de conducción (Iz ≥ In) | Iz/In mínimo = 1,3 | CUMPLE |\n| Caída de tensión | máxima acumulada 1,8 % (límites 1,0 / 3,0 / 5,0 %) | CUMPLE |\n| Cableado interno y externo | 0 circuito(s) con cable de salida mayor al interno (bornera de transición) | — |\n| Poder de corte | Icu mínimo = 10 kA frente a Icc = 10 kA | CUMPLE |\n| Disparo magnético | Icc mínima = 590 A, curvas D | CUMPLE |\n| Diferencial | 1 circuito(s) con IΔn 300 mA, esquema IT | CUMPLE |\n| Selectividad | 0 total, 0 parcial, 0 a revisar | CUMPLE |\n| Acometida | 20 m; sección Pendiente | — |\n\nResultado global: CUMPLE\n\n## Observaciones\n\n- 1. Acometida: cable y protección de cabecera Pendientes (no hay tablero superior definido).\n- 2. Valores base de criterios y tablas sin validar contra las normas: confirmar antes de emitir.\n\n_Generado automáticamente a partir del cálculo del tablero._\n"
+ },
+ "route_and_failures": {
+  "mc_doc": {
+   "blocks": [
+    {
+     "text": "1. Objeto, alcance y marco normativo",
+     "type": "h"
+    },
+    {
+     "text": "Dimensionamiento de cables y protecciones de todos los circuitos del tablero TS-3, con análisis del diferencial y de la selectividad.",
+     "type": "p"
+    },
+    {
+     "items": [
+      "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
+      "AEA 90364-7-770 (ed. 2017): instalaciones en edificios",
+      "AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes",
+      "AEA 90909-1: cálculo de cortocircuito",
+      "IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores"
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "2. Datos generales",
+     "type": "h"
+    },
+    {
+     "rows": [
+      [
+       "Proyecto",
+       "PRJ-1"
+      ],
+      [
+       "Tensión",
+       "380,0 V"
+      ],
+      [
+       "Esquema de conexión a tierra",
+       "TN-S"
+      ],
+      [
+       "Icc en barras",
+       "36 kA"
+      ],
+      [
+       "Frecuencia",
+       "50 Hz"
+      ],
+      [
+       "Factor de potencia",
+       "0,85"
+      ],
+      [
+       "Conductor",
+       "cobre, aislación PVC"
+      ],
+      [
+       "Caída de tensión máxima",
+       "seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 %"
+      ],
+      [
+       "Sensibilidad del diferencial",
+       "30 mA"
+      ]
+     ],
+     "type": "kv"
+    },
+    {
+     "text": "3. Cables",
+     "type": "h"
+    },
+    {
+     "text": "3.1 Cable de acometida (alimenta al tablero)",
+     "type": "h"
+    },
+    {
+     "text": "Alimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).",
+     "type": "p"
+    },
+    {
+     "text": "3.2 Cableado interno y cableado externo de cada circuito",
+     "type": "h"
+    },
+    {
+     "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.1
+      ],
+      [
+       "Ib A",
+       0.07
+      ],
+      [
+       "In A",
+       0.07
+      ],
+      [
+       "S int. mm²",
+       0.09
+      ],
+      [
+       "S ext. mm²",
+       0.09
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.07
+      ],
+      [
+       "ΔU %",
+       0.08
+      ],
+      [
+       "ΔU acum. %",
+       0.1
+      ],
+      [
+       "Límite %",
+       0.08
+      ],
+      [
+       "Trans.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.1
+      ]
+     ],
+     "rows": [
+      [
+       "F-01",
+       "250",
+       "250",
+       "185",
+       "300",
+       "120",
+       "280",
+       "1,4",
+       "1,4",
+       "1,0",
+       "sí",
+       "✗"
+      ],
+      [
+       "F-02",
+       "12",
+       "13",
+       "2,5",
+       "4",
+       "40",
+       "28",
+       "2,0",
+       "2,0",
+       "3,0",
+       "sí",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "3.3 Recorrido real de los cables de salida y capacidad por tramo",
+     "type": "h"
+    },
+    {
+     "text": "La capacidad de conducción del cable es la del tramo más desfavorable; la caída de tensión se calcula con la longitud total del recorrido.",
+     "type": "p"
+    },
+    {
+     "text": "Circuito F-01: 120 m en 4 tramo(s), sección 300 mm²; limita el tramo 3 (Cruce bajo calzada (caño enterrado)), Iz = 280 A.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "N",
+       0.05
+      ],
+      [
+       "Instalación",
+       0.27
+      ],
+      [
+       "Descripción",
+       0.17
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Método",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.08
+      ],
+      [
+       "f temp.",
+       0.08
+      ],
+      [
+       "f agrup.",
+       0.08
+      ],
+      [
+       "f suelo",
+       0.07
+      ],
+      [
+       "Limita",
+       0.06
+      ]
+     ],
+     "rows": [
+      [
+       "1",
+       "Bandeja perforada / escalera",
+       "—",
+       "20",
+       "E",
+       "430",
+       "1,00",
+       "1,00",
+       "1,00",
+       ""
+      ],
+      [
+       "2",
+       "Directamente enterrado",
+       "—",
+       "60",
+       "D2",
+       "300",
+       "1,00",
+       "1,00",
+       "0,63",
+       ""
+      ],
+      [
+       "3",
+       "Cruce bajo calzada (caño enterrado)",
+       "—",
+       "8,0",
+       "D1",
+       "280",
+       "1,00",
+       "0,75",
+       "1,00",
+       "✓"
+      ],
+      [
+       "4",
+       "Bandeja perforada / escalera",
+       "—",
+       "30",
+       "E",
+       "430",
+       "1,00",
+       "1,00",
+       "1,00",
+       ""
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "4. Protecciones",
+     "type": "h"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.09
+      ],
+      [
+       "Dispositivo",
+       0.2
+      ],
+      [
+       "Curva",
+       0.07
+      ],
+      [
+       "In A",
+       0.06
+      ],
+      [
+       "Icu kA",
+       0.07
+      ],
+      [
+       "Icc mín A",
+       0.1
+      ],
+      [
+       "k·In A",
+       0.08
+      ],
+      [
+       "Disparo",
+       0.08
+      ],
+      [
+       "Sobrec.",
+       0.08
+      ],
+      [
+       "I2 A",
+       0.07
+      ],
+      [
+       "Coord.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.08
+      ]
+     ],
+     "rows": [
+      [
+       "F-01",
+       "MCCB (250 A)",
+       "MCCB",
+       "250",
+       "36",
+       "10000",
+       "2500",
+       "✓",
+       "✗",
+       "320",
+       "✗",
+       "✗"
+      ],
+      [
+       "F-02",
+       "MCB (13 A)",
+       "C",
+       "13",
+       "36",
+       "460",
+       "130",
+       "✓",
+       "✓",
+       "19",
+       "✓",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Icc en barras 36 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.",
+     "type": "p"
+    },
+    {
+     "text": "5. Diferencial",
+     "type": "h"
+    },
+    {
+     "text": "Esquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.14
+      ],
+      [
+       "Diferencial en",
+       0.18
+      ],
+      [
+       "IΔn mA",
+       0.12
+      ],
+      [
+       "Tipo",
+       0.1
+      ],
+      [
+       "Zs máx Ω",
+       0.16
+      ],
+      [
+       "Ra máx TT Ω",
+       0.18
+      ],
+      [
+       "Cumple",
+       0.12
+      ]
+     ],
+     "rows": [
+      [
+       "F-02",
+       "—",
+       "Pendiente",
+       "—",
+       "Pendiente",
+       "Pendiente",
+       "✗"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "items": [
+      "Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "6. Curvas y selectividad",
+     "type": "h"
+    },
+    {
+     "text": "Banda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.",
+     "type": "p"
+    },
+    {
+     "text": "No hay protecciones en serie dentro del tablero.",
+     "type": "p"
+    },
+    {
+     "text": "7. Conclusión y puntos a verificar",
+     "type": "h"
+    },
+    {
+     "text": "Resultado global: NO CUMPLE (0 de 2 circuitos cumplen).",
+     "type": "p"
+    },
+    {
+     "items": [
+      "1. F-01: el cable de salida no cumple capacidad de conducción o caída de tensión (1,4 % acumulada).",
+      "2. F-02: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "3. Circuitos con cable de salida mayor al interno (bornera de transición): F-01, F-02."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "Supuestos",
+     "type": "h"
+    },
+    {
+     "items": [
+      "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+      "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+      "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+      "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Memoria de Cálculo · TS-3 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-3",
+   "title": "Memoria de Cálculo"
+  },
+  "mc_md": "# Memoria de Cálculo — Tablero TS-3\n\n## 1. Objeto, alcance y marco normativo\n\nDimensionamiento de cables y protecciones de todos los circuitos del tablero TS-3, con análisis del diferencial y de la selectividad.\n\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores\n\n## 2. Datos generales\n\n| Dato | Valor |\n|---|---|\n| Proyecto | PRJ-1 |\n| Tensión | 380,0 V |\n| Esquema de conexión a tierra | TN-S |\n| Icc en barras | 36 kA |\n| Frecuencia | 50 Hz |\n| Factor de potencia | 0,85 |\n| Conductor | cobre, aislación PVC |\n| Caída de tensión máxima | seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 % |\n| Sensibilidad del diferencial | 30 mA |\n\n## 3. Cables\n\n## 3.1 Cable de acometida (alimenta al tablero)\n\nAlimentación desde: Red / fuente externa al proyecto. Longitud de acometida: 20 m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior).\n\n## 3.2 Cableado interno y cableado externo de cada circuito\n\nEl cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.\n\n| TAG | Ib A | In A | S int. mm² | S ext. mm² | Largo m | Iz A | ΔU % | ΔU acum. % | Límite % | Trans. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| F-01 | 250 | 250 | 185 | 300 | 120 | 280 | 1,4 | 1,4 | 1,0 | sí | ✗ |\n| F-02 | 12 | 13 | 2,5 | 4 | 40 | 28 | 2,0 | 2,0 | 3,0 | sí | ✓ |\n\n## 3.3 Recorrido real de los cables de salida y capacidad por tramo\n\nLa capacidad de conducción del cable es la del tramo más desfavorable; la caída de tensión se calcula con la longitud total del recorrido.\n\nCircuito F-01: 120 m en 4 tramo(s), sección 300 mm²; limita el tramo 3 (Cruce bajo calzada (caño enterrado)), Iz = 280 A.\n\n| N | Instalación | Descripción | Largo m | Método | Iz A | f temp. | f agrup. | f suelo | Limita |\n|---|---|---|---|---|---|---|---|---|---|\n| 1 | Bandeja perforada / escalera | — | 20 | E | 430 | 1,00 | 1,00 | 1,00 |  |\n| 2 | Directamente enterrado | — | 60 | D2 | 300 | 1,00 | 1,00 | 0,63 |  |\n| 3 | Cruce bajo calzada (caño enterrado) | — | 8,0 | D1 | 280 | 1,00 | 0,75 | 1,00 | ✓ |\n| 4 | Bandeja perforada / escalera | — | 30 | E | 430 | 1,00 | 1,00 | 1,00 |  |\n\n## 4. Protecciones\n\n| TAG | Dispositivo | Curva | In A | Icu kA | Icc mín A | k·In A | Disparo | Sobrec. | I2 A | Coord. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| F-01 | MCCB (250 A) | MCCB | 250 | 36 | 10000 | 2500 | ✓ | ✗ | 320 | ✗ | ✗ |\n| F-02 | MCB (13 A) | C | 13 | 36 | 460 | 130 | ✓ | ✓ | 19 | ✓ | ✓ |\n\nIcc en barras 36 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.\n\n## 5. Diferencial\n\nEsquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.\n\n| TAG | Diferencial en | IΔn mA | Tipo | Zs máx Ω | Ra máx TT Ω | Cumple |\n|---|---|---|---|---|---|---|\n| F-02 | — | Pendiente | — | Pendiente | Pendiente | ✗ |\n\n- Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n\n## 6. Curvas y selectividad\n\nBanda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.\n\nNo hay protecciones en serie dentro del tablero.\n\n## 7. Conclusión y puntos a verificar\n\nResultado global: NO CUMPLE (0 de 2 circuitos cumplen).\n\n- 1. F-01: el cable de salida no cumple capacidad de conducción o caída de tensión (1,4 % acumulada).\n- 2. F-02: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n- 3. Circuitos con cable de salida mayor al interno (bornera de transición): F-01, F-02.\n\n## Supuestos\n\n- Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).\n- Icc en bornes de cada protección = Icc de barras del tablero (cota superior).\n- Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.\n- Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho.\n\n_Generado automáticamente a partir del cálculo del tablero._\n",
+  "memo": {
+   "acometida": {
+    "In": null,
+    "S_mm2": null,
+    "dato_faltante": true,
+    "desde": "Red / fuente externa al proyecto",
+    "disp": null,
+    "du_pct": null,
+    "length_m": 20.0,
+    "ruta": [],
+    "ruta_limitante": null,
+    "tag": ""
+   },
+   "board": {
+    "fp": 0.85,
+    "frequency_hz": 50.0,
+    "icc_ka": 36.0,
+    "name": "TS-3",
+    "project": "PRJ-1",
+    "system": "TN-S",
+    "voltage_v": 380.0
+   },
+   "circuits": [
+    {
+     "Ib": 250.0,
+     "In": 250,
+     "cumple": false,
+     "description": "ALIMENTADOR LARGO",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 300,
+      "cumple": false,
+      "du_acum_pct": 1.389,
+      "du_propia_pct": 1.389,
+      "iz_a": 282.8,
+      "length_m": 118.0,
+      "limite_pct": 1.0,
+      "ruta": [
+       {
+        "circuits": 1,
+        "depth_m": null,
+        "f_agrup": 1.0,
+        "f_suelo": 1.0,
+        "f_temp": 1.0,
+        "iz_a": 432.0,
+        "kind": "tray_perforated",
+        "label": "",
+        "length_m": 20.0,
+        "limitante": false,
+        "metodo": "E",
+        "n": 1,
+        "rho_kmw": 1.0,
+        "t_amb": 40.0,
+        "t_suelo": 25.0
+       },
+       {
+        "circuits": 1,
+        "depth_m": null,
+        "f_agrup": 1.0,
+        "f_suelo": 0.63,
+        "f_temp": 1.0,
+        "iz_a": 304.8,
+        "kind": "buried_direct",
+        "label": "",
+        "length_m": 60.0,
+        "limitante": false,
+        "metodo": "D2",
+        "n": 2,
+        "rho_kmw": 2.5,
+        "t_amb": 40.0,
+        "t_suelo": 30.0
+       },
+       {
+        "circuits": 3,
+        "depth_m": 1.0,
+        "f_agrup": 0.75,
+        "f_suelo": 1.0,
+        "f_temp": 1.0,
+        "iz_a": 282.8,
+        "kind": "road_crossing",
+        "label": "",
+        "length_m": 8.0,
+        "limitante": true,
+        "metodo": "D1",
+        "n": 3,
+        "rho_kmw": 1.0,
+        "t_amb": 40.0,
+        "t_suelo": 25.0
+       },
+       {
+        "circuits": 1,
+        "depth_m": null,
+        "f_agrup": 1.0,
+        "f_suelo": 1.0,
+        "f_temp": 1.0,
+        "iz_a": 432.0,
+        "kind": "tray_perforated",
+        "label": "",
+        "length_m": 30.0,
+        "limitante": false,
+        "metodo": "E",
+        "n": 4,
+        "rho_kmw": 1.0,
+        "t_amb": 40.0,
+        "t_suelo": 25.0
+       }
+      ],
+      "ruta_limitante": 3
+     },
+     "interno": {
+      "S_mm2": 185,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 250,
+      "coordinacion_ok": false,
+      "cumple": false,
+      "curva": "MCCB",
+      "disp": "MCCB (250 A)",
+      "disparo_ok": true,
+      "i2_a": 325.0,
+      "icc_a": 36000.0,
+      "icc_min_a": 10240.9,
+      "icu_ka": 36,
+      "icu_ok": true,
+      "iz_a": null,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mccb",
+      "sobrecarga_ok": false
+     },
+     "tag": "F-01",
+     "tipo": "seccional",
+     "transicion": true
+    },
+    {
+     "Ib": 11.8,
+     "In": 13,
+     "cumple": false,
+     "description": "TOMAS SIN DIFERENCIAL",
+     "diferencial": {
+      "contacto_indirecto": false,
+      "cumple": false,
+      "esquema": "TN-S",
+      "idn_ma": null,
+      "nota": "Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "ra_max_tt_ohm": null,
+      "tag_rcd": null,
+      "tipo": null,
+      "zs_max_ohm": null
+     },
+     "externo": {
+      "S_mm2": 4,
+      "cumple": true,
+      "du_acum_pct": 2.035,
+      "du_propia_pct": 2.035,
+      "iz_a": 28.0,
+      "length_m": 40.0,
+      "limite_pct": 3.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 2.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 13,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "MCB (13 A)",
+      "disparo_ok": true,
+      "i2_a": 18.8,
+      "icc_a": 36000.0,
+      "icc_min_a": 459.0,
+      "icu_ka": 36,
+      "icu_ok": true,
+      "iz_a": 28.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "F-02",
+     "tipo": "tomacorrientes",
+     "transicion": true
+    }
+   ],
+   "criteria": {
+    "conductor": {
+     "aislacion": "pvc",
+     "material": "cu"
+    },
+    "curvas_k": {
+     "B": [
+      3,
+      5
+     ],
+     "C": [
+      5,
+      10
+     ],
+     "D": [
+      10,
+      20
+     ],
+     "MCCB": [
+      5,
+      10
+     ]
+    },
+    "limits_pct": {
+     "motor": 5.0,
+     "seccional": 1.0,
+     "terminal": 3.0
+    },
+    "rcd_ma": 30.0
+   },
+   "curvas": {
+    "F-01": {
+     "In": 250,
+     "curva": "MCCB",
+     "max": [
+      [
+       325.0,
+       7200
+      ],
+      [
+       637.5,
+       120
+      ],
+      [
+       2500,
+       0.1
+      ],
+      [
+       2500,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       262.5,
+       7200
+      ],
+      [
+       637.5,
+       1
+      ],
+      [
+       1250,
+       0.1
+      ],
+      [
+       1250,
+       0.01
+      ]
+     ]
+    },
+    "F-02": {
+     "In": 13,
+     "curva": "C",
+     "max": [
+      [
+       18.8,
+       3600
+      ],
+      [
+       33.1,
+       60
+      ],
+      [
+       130,
+       0.1
+      ],
+      [
+       130,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       14.7,
+       3600
+      ],
+      [
+       33.1,
+       1
+      ],
+      [
+       65,
+       0.1
+      ],
+      [
+       65,
+       0.01
+      ]
+     ]
+    }
+   },
+   "resumen": {
+    "circuits": 2,
+    "cumplen": 0,
+    "global": false,
+    "no_cumplen": 2,
+    "observaciones": [
+     "F-01: el cable de salida no cumple capacidad de conducción o caída de tensión (1,4 % acumulada).",
+     "F-02: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+     "Circuitos con cable de salida mayor al interno (bornera de transición): F-01, F-02."
+    ],
+    "selectividad": {
+     "parcial": 0,
+     "revisar": 0,
+     "total": 0
+    },
+    "transiciones": 2
+   },
+   "schema_version": "1.0",
+   "selectividad": [],
+   "supuestos": [
+    "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+    "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+    "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+    "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+   ],
+   "validated": true
+  },
+  "sp_doc": {
+   "blocks": [
+    {
+     "columns": [
+      [
+       "Requisito normativo",
+       0.3
+      ],
+      [
+       "Dato técnico",
+       0.5
+      ],
+      [
+       "Resultado",
+       0.2
+      ]
+     ],
+     "rows": [
+      [
+       "Capacidad de conducción (Iz ≥ In)",
+       "Iz/In mínimo = 1,1",
+       "NO CUMPLE"
+      ],
+      [
+       "Caída de tensión",
+       "máxima acumulada 2,0 % (límites 1,0 / 3,0 / 5,0 %)",
+       "NO CUMPLE"
+      ],
+      [
+       "Cableado interno y externo",
+       "2 circuito(s) con cable de salida mayor al interno (bornera de transición)",
+       "—"
+      ],
+      [
+       "Poder de corte",
+       "Icu mínimo = 36 kA frente a Icc = 36 kA",
+       "CUMPLE"
+      ],
+      [
+       "Disparo magnético",
+       "Icc mínima = 460 A, curvas C, MCCB",
+       "CUMPLE"
+      ],
+      [
+       "Diferencial",
+       "sin diferencial, esquema TN-S",
+       "NO CUMPLE"
+      ],
+      [
+       "Selectividad",
+       "0 total, 0 parcial, 0 a revisar",
+       "CUMPLE"
+      ],
+      [
+       "Acometida",
+       "20 m; sección Pendiente",
+       "—"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Resultado global: NO CUMPLE",
+     "type": "p"
+    },
+    {
+     "text": "Observaciones",
+     "type": "h"
+    },
+    {
+     "items": [
+      "1. F-01: el cable de salida no cumple capacidad de conducción o caída de tensión (1,4 % acumulada).",
+      "2. F-02: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "3. Circuitos con cable de salida mayor al interno (bornera de transición): F-01, F-02."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Síntesis de Proyecto · TS-3 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-3",
+   "title": "Síntesis de Proyecto"
+  },
+  "sp_md": "# Síntesis de Proyecto — Tablero TS-3\n\n| Requisito normativo | Dato técnico | Resultado |\n|---|---|---|\n| Capacidad de conducción (Iz ≥ In) | Iz/In mínimo = 1,1 | NO CUMPLE |\n| Caída de tensión | máxima acumulada 2,0 % (límites 1,0 / 3,0 / 5,0 %) | NO CUMPLE |\n| Cableado interno y externo | 2 circuito(s) con cable de salida mayor al interno (bornera de transición) | — |\n| Poder de corte | Icu mínimo = 36 kA frente a Icc = 36 kA | CUMPLE |\n| Disparo magnético | Icc mínima = 460 A, curvas C, MCCB | CUMPLE |\n| Diferencial | sin diferencial, esquema TN-S | NO CUMPLE |\n| Selectividad | 0 total, 0 parcial, 0 a revisar | CUMPLE |\n| Acometida | 20 m; sección Pendiente | — |\n\nResultado global: NO CUMPLE\n\n## Observaciones\n\n- 1. F-01: el cable de salida no cumple capacidad de conducción o caída de tensión (1,4 % acumulada).\n- 2. F-02: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n- 3. Circuitos con cable de salida mayor al interno (bornera de transición): F-01, F-02.\n\n_Generado automáticamente a partir del cálculo del tablero._\n"
+ },
+ "with_upstream": {
+  "mc_doc": {
+   "blocks": [
+    {
+     "text": "1. Objeto, alcance y marco normativo",
+     "type": "h"
+    },
+    {
+     "text": "Dimensionamiento de cables y protecciones de todos los circuitos del tablero TS-2, con análisis del diferencial y de la selectividad.",
+     "type": "p"
+    },
+    {
+     "items": [
+      "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
+      "AEA 90364-7-770 (ed. 2017): instalaciones en edificios",
+      "AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes",
+      "AEA 90909-1: cálculo de cortocircuito",
+      "IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores"
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "2. Datos generales",
+     "type": "h"
+    },
+    {
+     "rows": [
+      [
+       "Proyecto",
+       "PRJ-1"
+      ],
+      [
+       "Tensión",
+       "380,0 V"
+      ],
+      [
+       "Esquema de conexión a tierra",
+       "TN-S"
+      ],
+      [
+       "Icc en barras",
+       "15 kA"
+      ],
+      [
+       "Frecuencia",
+       "50 Hz"
+      ],
+      [
+       "Factor de potencia",
+       "0,85"
+      ],
+      [
+       "Conductor",
+       "cobre, aislación PVC"
+      ],
+      [
+       "Caída de tensión máxima",
+       "seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 %"
+      ],
+      [
+       "Sensibilidad del diferencial",
+       "30 mA"
+      ]
+     ],
+     "type": "kv"
+    },
+    {
+     "text": "3. Cables",
+     "type": "h"
+    },
+    {
+     "text": "3.1 Cable de acometida (alimenta al tablero)",
+     "type": "h"
+    },
+    {
+     "text": "Alimentación desde el circuito C-01 de TGBT-01: 70 mm², 60 m, protección MCCB (160 A), caída de tensión 0,8 %.",
+     "type": "p"
+    },
+    {
+     "text": "Acometida: circuito C-01 de TGBT-01: 60 m en 2 tramo(s), sección 70 mm²; limita el tramo 1 (Bandeja perforada / escalera), Iz = 220 A.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "N",
+       0.05
+      ],
+      [
+       "Instalación",
+       0.27
+      ],
+      [
+       "Descripción",
+       0.17
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Método",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.08
+      ],
+      [
+       "f temp.",
+       0.08
+      ],
+      [
+       "f agrup.",
+       0.08
+      ],
+      [
+       "f suelo",
+       0.07
+      ],
+      [
+       "Limita",
+       0.06
+      ]
+     ],
+     "rows": [
+      [
+       "1",
+       "Bandeja perforada / escalera",
+       "Bandeja",
+       "40",
+       "E",
+       "220",
+       "1,00",
+       "1,00",
+       "1,00",
+       "✓"
+      ],
+      [
+       "2",
+       "Caño o ducto enterrado",
+       "—",
+       "20",
+       "D1",
+       "230",
+       "1,00",
+       "1,00",
+       "1,00",
+       ""
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "3.2 Cableado interno y cableado externo de cada circuito",
+     "type": "h"
+    },
+    {
+     "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.1
+      ],
+      [
+       "Ib A",
+       0.07
+      ],
+      [
+       "In A",
+       0.07
+      ],
+      [
+       "S int. mm²",
+       0.09
+      ],
+      [
+       "S ext. mm²",
+       0.09
+      ],
+      [
+       "Largo m",
+       0.08
+      ],
+      [
+       "Iz A",
+       0.07
+      ],
+      [
+       "ΔU %",
+       0.08
+      ],
+      [
+       "ΔU acum. %",
+       0.1
+      ],
+      [
+       "Límite %",
+       0.08
+      ],
+      [
+       "Trans.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.1
+      ]
+     ],
+     "rows": [
+      [
+       "S-01",
+       "100",
+       "100",
+       "50",
+       "50",
+       "20",
+       "120",
+       "0,4",
+       "0,4",
+       "1,0",
+       "no",
+       "✓"
+      ],
+      [
+       "S-02",
+       "39",
+       "50",
+       "16",
+       "16",
+       "50",
+       "59",
+       "1,1",
+       "1,1",
+       "5,0",
+       "no",
+       "✓"
+      ],
+      [
+       "S-03",
+       "16",
+       "20",
+       "2,5",
+       "4",
+       "30",
+       "28",
+       "2,1",
+       "2,1",
+       "3,0",
+       "sí",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "4. Protecciones",
+     "type": "h"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.09
+      ],
+      [
+       "Dispositivo",
+       0.2
+      ],
+      [
+       "Curva",
+       0.07
+      ],
+      [
+       "In A",
+       0.06
+      ],
+      [
+       "Icu kA",
+       0.07
+      ],
+      [
+       "Icc mín A",
+       0.1
+      ],
+      [
+       "k·In A",
+       0.08
+      ],
+      [
+       "Disparo",
+       0.08
+      ],
+      [
+       "Sobrec.",
+       0.08
+      ],
+      [
+       "I2 A",
+       0.07
+      ],
+      [
+       "Coord.",
+       0.07
+      ],
+      [
+       "Cumple",
+       0.08
+      ]
+     ],
+     "rows": [
+      [
+       "S-01",
+       "MCCB (100 A)",
+       "MCCB",
+       "100",
+       "15",
+       "7300",
+       "1000",
+       "✓",
+       "✓",
+       "130",
+       "✓",
+       "✓"
+      ],
+      [
+       "S-02",
+       "MCB > KM > KM > KM > OL (50 A)",
+       "D",
+       "50",
+       "15",
+       "2100",
+       "1000",
+       "✓",
+       "✓",
+       "72",
+       "✓",
+       "✓"
+      ],
+      [
+       "S-03",
+       "MCB (20 A)",
+       "C",
+       "20",
+       "15",
+       "580",
+       "200",
+       "✓",
+       "✓",
+       "29",
+       "✓",
+       "✓"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Icc en barras 15 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.",
+     "type": "p"
+    },
+    {
+     "text": "5. Diferencial",
+     "type": "h"
+    },
+    {
+     "text": "Esquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "TAG",
+       0.14
+      ],
+      [
+       "Diferencial en",
+       0.18
+      ],
+      [
+       "IΔn mA",
+       0.12
+      ],
+      [
+       "Tipo",
+       0.1
+      ],
+      [
+       "Zs máx Ω",
+       0.16
+      ],
+      [
+       "Ra máx TT Ω",
+       0.18
+      ],
+      [
+       "Cumple",
+       0.12
+      ]
+     ],
+     "rows": [
+      [
+       "S-03",
+       "—",
+       "Pendiente",
+       "—",
+       "Pendiente",
+       "Pendiente",
+       "✗"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "items": [
+      "Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "6. Curvas y selectividad",
+     "type": "h"
+    },
+    {
+     "text": "Banda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.",
+     "type": "p"
+    },
+    {
+     "columns": [
+      [
+       "Aguas arriba",
+       0.2
+      ],
+      [
+       "Aguas abajo",
+       0.15
+      ],
+      [
+       "In A",
+       0.12
+      ],
+      [
+       "Relación",
+       0.1
+      ],
+      [
+       "Selectiva hasta A",
+       0.15
+      ],
+      [
+       "Icc A",
+       0.13
+      ],
+      [
+       "Resultado",
+       0.15
+      ]
+     ],
+     "rows": [
+      [
+       "TGBT-01 · C-01",
+       "S-01",
+       "160 / 100",
+       "1,6",
+       "800",
+       "15000",
+       "parcial"
+      ],
+      [
+       "TGBT-01 · C-01",
+       "S-02",
+       "160 / 50",
+       "3,2",
+       "800",
+       "15000",
+       "parcial"
+      ],
+      [
+       "TGBT-01 · C-01",
+       "S-03",
+       "160 / 20",
+       "8,0",
+       "800",
+       "15000",
+       "parcial"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "7. Conclusión y puntos a verificar",
+     "type": "h"
+    },
+    {
+     "text": "Resultado global: NO CUMPLE (2 de 3 circuitos cumplen).",
+     "type": "p"
+    },
+    {
+     "items": [
+      "1. S-03: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "2. Circuitos con cable de salida mayor al interno (bornera de transición): S-03.",
+      "3. Selectividad parcial entre protecciones en serie: confirmar con las tablas del fabricante."
+     ],
+     "type": "bullets"
+    },
+    {
+     "text": "Supuestos",
+     "type": "h"
+    },
+    {
+     "items": [
+      "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+      "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+      "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+      "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Memoria de Cálculo · TS-2 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-2",
+   "title": "Memoria de Cálculo"
+  },
+  "mc_md": "# Memoria de Cálculo — Tablero TS-2\n\n## 1. Objeto, alcance y marco normativo\n\nDimensionamiento de cables y protecciones de todos los circuitos del tablero TS-2, con análisis del diferencial y de la selectividad.\n\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-4-41 y 4-43: protección contra contactos indirectos y contra sobrecorrientes\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60898-1 e IEC 60947-2: características de disparo de los interruptores\n\n## 2. Datos generales\n\n| Dato | Valor |\n|---|---|\n| Proyecto | PRJ-1 |\n| Tensión | 380,0 V |\n| Esquema de conexión a tierra | TN-S |\n| Icc en barras | 15 kA |\n| Frecuencia | 50 Hz |\n| Factor de potencia | 0,85 |\n| Conductor | cobre, aislación PVC |\n| Caída de tensión máxima | seccionales 1,0 %, iluminación y tomas 3,0 %, motores 5,0 % |\n| Sensibilidad del diferencial | 30 mA |\n\n## 3. Cables\n\n## 3.1 Cable de acometida (alimenta al tablero)\n\nAlimentación desde el circuito C-01 de TGBT-01: 70 mm², 60 m, protección MCCB (160 A), caída de tensión 0,8 %.\n\nAcometida: circuito C-01 de TGBT-01: 60 m en 2 tramo(s), sección 70 mm²; limita el tramo 1 (Bandeja perforada / escalera), Iz = 220 A.\n\n| N | Instalación | Descripción | Largo m | Método | Iz A | f temp. | f agrup. | f suelo | Limita |\n|---|---|---|---|---|---|---|---|---|---|\n| 1 | Bandeja perforada / escalera | Bandeja | 40 | E | 220 | 1,00 | 1,00 | 1,00 | ✓ |\n| 2 | Caño o ducto enterrado | — | 20 | D1 | 230 | 1,00 | 1,00 | 1,00 |  |\n\n## 3.2 Cableado interno y cableado externo de cada circuito\n\nEl cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; si resulta mayor que el interno, se indica la bornera de transición.\n\n| TAG | Ib A | In A | S int. mm² | S ext. mm² | Largo m | Iz A | ΔU % | ΔU acum. % | Límite % | Trans. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| S-01 | 100 | 100 | 50 | 50 | 20 | 120 | 0,4 | 0,4 | 1,0 | no | ✓ |\n| S-02 | 39 | 50 | 16 | 16 | 50 | 59 | 1,1 | 1,1 | 5,0 | no | ✓ |\n| S-03 | 16 | 20 | 2,5 | 4 | 30 | 28 | 2,1 | 2,1 | 3,0 | sí | ✓ |\n\n## 4. Protecciones\n\n| TAG | Dispositivo | Curva | In A | Icu kA | Icc mín A | k·In A | Disparo | Sobrec. | I2 A | Coord. | Cumple |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| S-01 | MCCB (100 A) | MCCB | 100 | 15 | 7300 | 1000 | ✓ | ✓ | 130 | ✓ | ✓ |\n| S-02 | MCB > KM > KM > KM > OL (50 A) | D | 50 | 15 | 2100 | 1000 | ✓ | ✓ | 72 | ✓ | ✓ |\n| S-03 | MCB (20 A) | C | 20 | 15 | 580 | 200 | ✓ | ✓ | 29 | ✓ | ✓ |\n\nIcc en barras 15 kA. Disparo: Icc mínima al final del circuito ≥ k·In (k = 5 curva B, 10 curva C, 20 curva D). Coordinación: I2 = k2·In ≤ 1,45·Iz.\n\n## 5. Diferencial\n\nEsquema TN-S. Zs máx = U0/IΔn con U0 = 230 V; en esquema TT, Ra máx = 50 V/IΔn.\n\n| TAG | Diferencial en | IΔn mA | Tipo | Zs máx Ω | Ra máx TT Ω | Cumple |\n|---|---|---|---|---|---|---|\n| S-03 | — | Pendiente | — | Pendiente | Pendiente | ✗ |\n\n- Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n\n## 6. Curvas y selectividad\n\nBanda de disparo normativa de cada protección (curvas en la aplicación) y análisis entre protecciones en serie.\n\n| Aguas arriba | Aguas abajo | In A | Relación | Selectiva hasta A | Icc A | Resultado |\n|---|---|---|---|---|---|---|\n| TGBT-01 · C-01 | S-01 | 160 / 100 | 1,6 | 800 | 15000 | parcial |\n| TGBT-01 · C-01 | S-02 | 160 / 50 | 3,2 | 800 | 15000 | parcial |\n| TGBT-01 · C-01 | S-03 | 160 / 20 | 8,0 | 800 | 15000 | parcial |\n\n## 7. Conclusión y puntos a verificar\n\nResultado global: NO CUMPLE (2 de 3 circuitos cumplen).\n\n- 1. S-03: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n- 2. Circuitos con cable de salida mayor al interno (bornera de transición): S-03.\n- 3. Selectividad parcial entre protecciones en serie: confirmar con las tablas del fabricante.\n\n## Supuestos\n\n- Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).\n- Icc en bornes de cada protección = Icc de barras del tablero (cota superior).\n- Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.\n- Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho.\n\n_Generado automáticamente a partir del cálculo del tablero._\n",
+  "memo": {
+   "acometida": {
+    "In": 160,
+    "S_mm2": 70,
+    "dato_faltante": false,
+    "desde": "TGBT-01",
+    "disp": "MCCB (160 A)",
+    "du_pct": 0.8,
+    "length_m": 60.0,
+    "ruta": [
+     {
+      "circuits": 1,
+      "depth_m": null,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 215.0,
+      "kind": "tray_perforated",
+      "label": "Bandeja",
+      "length_m": 40.0,
+      "limitante": true,
+      "metodo": "E",
+      "n": 1,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     },
+     {
+      "circuits": 1,
+      "depth_m": 0.7,
+      "f_agrup": 1.0,
+      "f_suelo": 1.0,
+      "f_temp": 1.0,
+      "iz_a": 230.0,
+      "kind": "buried_duct",
+      "label": "",
+      "length_m": 20.0,
+      "limitante": false,
+      "metodo": "D1",
+      "n": 2,
+      "rho_kmw": 1.0,
+      "t_amb": 40.0,
+      "t_suelo": 25.0
+     }
+    ],
+    "ruta_limitante": 1,
+    "tag": "C-01"
+   },
+   "board": {
+    "fp": 0.85,
+    "frequency_hz": 50.0,
+    "icc_ka": 15.0,
+    "name": "TS-2",
+    "project": "PRJ-1",
+    "system": "TN-S",
+    "voltage_v": 380.0
+   },
+   "circuits": [
+    {
+     "Ib": 100.0,
+     "In": 100,
+     "cumple": true,
+     "description": "ALIMENTADOR TABLERO",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 50,
+      "cumple": true,
+      "du_acum_pct": 0.397,
+      "du_propia_pct": 0.397,
+      "iz_a": 117.0,
+      "length_m": 20.0,
+      "limite_pct": 1.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 50,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 100,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "MCCB",
+      "disp": "MCCB (100 A)",
+      "disparo_ok": true,
+      "i2_a": 130.0,
+      "icc_a": 15000.0,
+      "icc_min_a": 7316.5,
+      "icu_ka": 15,
+      "icu_ok": true,
+      "iz_a": 117.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mccb",
+      "sobrecarga_ok": true
+     },
+     "tag": "S-01",
+     "tipo": "seccional",
+     "transicion": false
+    },
+    {
+     "Ib": 39.3,
+     "In": 50,
+     "cumple": true,
+     "description": "MOTOR",
+     "diferencial": null,
+     "externo": {
+      "S_mm2": 16,
+      "cumple": true,
+      "du_acum_pct": 1.086,
+      "du_propia_pct": 1.086,
+      "iz_a": 59.0,
+      "length_m": 50.0,
+      "limite_pct": 5.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 16,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 50,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "D",
+      "disp": "MCB > KM > KM > KM > OL (50 A)",
+      "disparo_ok": true,
+      "i2_a": 72.5,
+      "icc_a": 15000.0,
+      "icc_min_a": 2142.4,
+      "icu_ka": 15,
+      "icu_ok": true,
+      "iz_a": 59.0,
+      "k_max": 20,
+      "k_min": 10,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "S-02",
+     "tipo": "motor",
+     "transicion": false
+    },
+    {
+     "Ib": 16.1,
+     "In": 20,
+     "cumple": false,
+     "description": "TOMAS",
+     "diferencial": {
+      "contacto_indirecto": false,
+      "cumple": false,
+      "esquema": "TN-S",
+      "idn_ma": null,
+      "nota": "Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "ra_max_tt_ohm": null,
+      "tag_rcd": null,
+      "tipo": null,
+      "zs_max_ohm": null
+     },
+     "externo": {
+      "S_mm2": 4,
+      "cumple": true,
+      "du_acum_pct": 2.081,
+      "du_propia_pct": 2.081,
+      "iz_a": 28.0,
+      "length_m": 30.0,
+      "limite_pct": 3.0,
+      "ruta": [],
+      "ruta_limitante": null
+     },
+     "interno": {
+      "S_mm2": 2.5,
+      "criterio": "térmico: Iz ≥ In"
+     },
+     "parent": "",
+     "proteccion": {
+      "In": 20,
+      "coordinacion_ok": true,
+      "cumple": true,
+      "curva": "C",
+      "disp": "MCB (20 A)",
+      "disparo_ok": true,
+      "i2_a": 29.0,
+      "icc_a": 15000.0,
+      "icc_min_a": 576.2,
+      "icu_ka": 15,
+      "icu_ok": true,
+      "iz_a": 28.0,
+      "k_max": 10,
+      "k_min": 5,
+      "kind": "mcb",
+      "sobrecarga_ok": true
+     },
+     "tag": "S-03",
+     "tipo": "tomacorrientes",
+     "transicion": true
+    }
+   ],
+   "criteria": {
+    "conductor": {
+     "aislacion": "pvc",
+     "material": "cu"
+    },
+    "curvas_k": {
+     "B": [
+      3,
+      5
+     ],
+     "C": [
+      5,
+      10
+     ],
+     "D": [
+      10,
+      20
+     ],
+     "MCCB": [
+      5,
+      10
+     ]
+    },
+    "limits_pct": {
+     "motor": 5.0,
+     "seccional": 1.0,
+     "terminal": 3.0
+    },
+    "rcd_ma": 30.0
+   },
+   "curvas": {
+    "S-01": {
+     "In": 100,
+     "curva": "MCCB",
+     "max": [
+      [
+       130.0,
+       7200
+      ],
+      [
+       255.0,
+       120
+      ],
+      [
+       1000,
+       0.1
+      ],
+      [
+       1000,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       105.0,
+       7200
+      ],
+      [
+       255.0,
+       1
+      ],
+      [
+       500,
+       0.1
+      ],
+      [
+       500,
+       0.01
+      ]
+     ]
+    },
+    "S-02": {
+     "In": 50,
+     "curva": "D",
+     "max": [
+      [
+       72.5,
+       3600
+      ],
+      [
+       127.5,
+       120
+      ],
+      [
+       1000,
+       0.1
+      ],
+      [
+       1000,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       56.5,
+       3600
+      ],
+      [
+       127.5,
+       1
+      ],
+      [
+       500,
+       0.1
+      ],
+      [
+       500,
+       0.01
+      ]
+     ]
+    },
+    "S-03": {
+     "In": 20,
+     "curva": "C",
+     "max": [
+      [
+       29.0,
+       3600
+      ],
+      [
+       51.0,
+       60
+      ],
+      [
+       200,
+       0.1
+      ],
+      [
+       200,
+       0.01
+      ]
+     ],
+     "min": [
+      [
+       22.6,
+       3600
+      ],
+      [
+       51.0,
+       1
+      ],
+      [
+       100,
+       0.1
+      ],
+      [
+       100,
+       0.01
+      ]
+     ]
+    }
+   },
+   "resumen": {
+    "circuits": 3,
+    "cumplen": 2,
+    "global": false,
+    "no_cumplen": 1,
+    "observaciones": [
+     "S-03: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+     "Circuitos con cable de salida mayor al interno (bornera de transición): S-03.",
+     "Selectividad parcial entre protecciones en serie: confirmar con las tablas del fabricante."
+    ],
+    "selectividad": {
+     "parcial": 3,
+     "revisar": 0,
+     "total": 0
+    },
+    "transiciones": 1
+   },
+   "schema_version": "1.0",
+   "selectividad": [
+    {
+     "In_abajo": 100,
+     "In_arriba": 160,
+     "aguas_abajo": "S-01",
+     "aguas_arriba": "TGBT-01 · C-01",
+     "curva_abajo": "MCCB",
+     "curva_arriba": "MCCB",
+     "icc_a": 15000.0,
+     "is_a": 800,
+     "magnetica_total": false,
+     "nota": "Selectiva hasta 800 A; por encima intervienen ambas protecciones: confirmar con la tabla de selectividad del fabricante o usar disparo retardado.",
+     "relacion_termica": 1.6,
+     "resultado": "parcial",
+     "termica_ok": true
+    },
+    {
+     "In_abajo": 50,
+     "In_arriba": 160,
+     "aguas_abajo": "S-02",
+     "aguas_arriba": "TGBT-01 · C-01",
+     "curva_abajo": "D",
+     "curva_arriba": "MCCB",
+     "icc_a": 15000.0,
+     "is_a": 800,
+     "magnetica_total": false,
+     "nota": "Selectiva hasta 800 A; por encima intervienen ambas protecciones: confirmar con la tabla de selectividad del fabricante o usar disparo retardado.",
+     "relacion_termica": 3.2,
+     "resultado": "parcial",
+     "termica_ok": true
+    },
+    {
+     "In_abajo": 20,
+     "In_arriba": 160,
+     "aguas_abajo": "S-03",
+     "aguas_arriba": "TGBT-01 · C-01",
+     "curva_abajo": "C",
+     "curva_arriba": "MCCB",
+     "icc_a": 15000.0,
+     "is_a": 800,
+     "magnetica_total": false,
+     "nota": "Selectiva hasta 800 A; por encima intervienen ambas protecciones: confirmar con la tabla de selectividad del fabricante o usar disparo retardado.",
+     "relacion_termica": 8.0,
+     "resultado": "parcial",
+     "termica_ok": true
+    }
+   ],
+   "supuestos": [
+    "Curva adoptada: C en MCB/RCBO generales, D en motores protegidos con MCB, disparo 5–10·In en MCCB (ajustable).",
+    "Icc en bornes de cada protección = Icc de barras del tablero (cota superior).",
+    "Conductor de protección de la misma sección que la fase para el cálculo de Icc mínima.",
+    "Bandas de disparo según IEC 60898-1 / IEC 60947-2; el fabricante puede ser más estrecho."
+   ],
+   "validated": true
+  },
+  "sp_doc": {
+   "blocks": [
+    {
+     "columns": [
+      [
+       "Requisito normativo",
+       0.3
+      ],
+      [
+       "Dato técnico",
+       0.5
+      ],
+      [
+       "Resultado",
+       0.2
+      ]
+     ],
+     "rows": [
+      [
+       "Capacidad de conducción (Iz ≥ In)",
+       "Iz/In mínimo = 1,2",
+       "CUMPLE"
+      ],
+      [
+       "Caída de tensión",
+       "máxima acumulada 2,1 % (límites 1,0 / 3,0 / 5,0 %)",
+       "CUMPLE"
+      ],
+      [
+       "Cableado interno y externo",
+       "1 circuito(s) con cable de salida mayor al interno (bornera de transición)",
+       "—"
+      ],
+      [
+       "Poder de corte",
+       "Icu mínimo = 15 kA frente a Icc = 15 kA",
+       "CUMPLE"
+      ],
+      [
+       "Disparo magnético",
+       "Icc mínima = 580 A, curvas C, D, MCCB",
+       "CUMPLE"
+      ],
+      [
+       "Diferencial",
+       "sin diferencial, esquema TN-S",
+       "NO CUMPLE"
+      ],
+      [
+       "Selectividad",
+       "0 total, 3 parcial, 0 a revisar",
+       "CUMPLE"
+      ],
+      [
+       "Acometida",
+       "70 mm², 60 m",
+       "—"
+      ]
+     ],
+     "type": "table"
+    },
+    {
+     "text": "Resultado global: NO CUMPLE",
+     "type": "p"
+    },
+    {
+     "text": "Observaciones",
+     "type": "h"
+    },
+    {
+     "items": [
+      "1. S-03: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.",
+      "2. Circuitos con cable de salida mayor al interno (bornera de transición): S-03.",
+      "3. Selectividad parcial entre protecciones en serie: confirmar con las tablas del fabricante."
+     ],
+     "type": "bullets"
+    }
+   ],
+   "footer": "Síntesis de Proyecto · TS-2 · PRJ-1",
+   "page_label": "Página {n} de {total}",
+   "subtitle": "TS-2",
+   "title": "Síntesis de Proyecto"
+  },
+  "sp_md": "# Síntesis de Proyecto — Tablero TS-2\n\n| Requisito normativo | Dato técnico | Resultado |\n|---|---|---|\n| Capacidad de conducción (Iz ≥ In) | Iz/In mínimo = 1,2 | CUMPLE |\n| Caída de tensión | máxima acumulada 2,1 % (límites 1,0 / 3,0 / 5,0 %) | CUMPLE |\n| Cableado interno y externo | 1 circuito(s) con cable de salida mayor al interno (bornera de transición) | — |\n| Poder de corte | Icu mínimo = 15 kA frente a Icc = 15 kA | CUMPLE |\n| Disparo magnético | Icc mínima = 580 A, curvas C, D, MCCB | CUMPLE |\n| Diferencial | sin diferencial, esquema TN-S | NO CUMPLE |\n| Selectividad | 0 total, 3 parcial, 0 a revisar | CUMPLE |\n| Acometida | 70 mm², 60 m | — |\n\nResultado global: NO CUMPLE\n\n## Observaciones\n\n- 1. S-03: Tomacorrientes sin protección diferencial de alta sensibilidad: se requiere.\n- 2. Circuitos con cable de salida mayor al interno (bornera de transición): S-03.\n- 3. Selectividad parcial entre protecciones en serie: confirmar con las tablas del fabricante.\n\n_Generado automáticamente a partir del cálculo del tablero._\n"
+ }
+}

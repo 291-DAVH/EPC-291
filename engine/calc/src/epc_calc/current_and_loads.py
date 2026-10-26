@@ -47,30 +47,11 @@ NORMA DE REFERENCIA (por designación)
 """
 
 import math
+from epc_calc._validate import frac as _frac, nonneg as _nonneg, pos as _pos
 
 __version__ = "0.1.0"
 
 _RAIZ3 = math.sqrt(3.0)
-
-
-def _pos(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor <= 0:
-        raise ValueError(f"{nombre} debe ser > 0 (recibido: {valor})")
-
-
-def _nonneg(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor < 0:
-        raise ValueError(f"{nombre} debe ser ≥ 0 (recibido: {valor})")
-
-
-def _frac(valor, nombre):
-    _pos(valor, nombre)
-    if valor > 1:
-        raise ValueError(f"{nombre} debe estar en (0, 1] (recibido: {valor})")
 
 
 def corriente_monofasica(p_w, v_v, fp=1.0, eta=1.0):

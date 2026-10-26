@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-ALLOWED_PARTS = {"node_modules", ".venv", "__pycache__", "dist", ".import_linter_cache", ".pytest_cache", "_out", ".mypy_cache"}
+ALLOWED_PARTS = {"node_modules", ".venv", "__pycache__", "dist", ".import_linter_cache", ".pytest_cache", "_out", ".mypy_cache", ".cov"}
 ALLOWED_TOP = {"local", ".claude", "respuestas.md"}
 ALLOWED_SUFFIX = (".egg-info", ".pyc", ".bak", ".tmp", ".plugin")
 

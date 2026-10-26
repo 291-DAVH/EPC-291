@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Dict, Optional
 
-from epc.core.errors import Invalid, NotFound
+from epc.core import clock
+from epc.core.errors import Invalid, NotFound, first_or_404
 from epc.core.fsutil import is_inside
 from epc.modules.engineering import repository
 
@@ -98,7 +99,6 @@ def calculation_view(d: Path, rel: str) -> Dict:
 
 
 # ---- design criteria ----
-import datetime as dt
 import re
 
 from epc.core.config import settings
@@ -155,14 +155,12 @@ def criteria_view(d: Path, discipline: str) -> dict:
 
 
 def _spec(cat: dict, key: str) -> dict:
-    spec = next((s for s in cat["criteria"] if s["id"] == key), None)
-    if not spec:
-        raise NotFound("unknown criterion")
+    spec = first_or_404((s for s in cat["criteria"] if s["id"] == key), "unknown criterion")
     return spec
 
 
 def _now() -> str:
-    return dt.datetime.now().replace(microsecond=0).isoformat()
+    return clock.now_local()
 
 
 def set_criterion(d: Path, discipline: str, key: str, body) -> dict:

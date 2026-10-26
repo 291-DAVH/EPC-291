@@ -1,0 +1,5461 @@
+{
+"ampacity": {
+"B1|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: sección 120 mm² fuera de 771.16.I/pvc/al",
+"16": "error: sección 16 mm² fuera de 771.16.I/pvc/al",
+"2.5": "invalid",
+"240": "error: sección 240 mm² fuera de 771.16.I/pvc/al",
+"300": "error: sección 300 mm² fuera de 771.16.I/pvc/al",
+"35": "error: sección 35 mm² fuera de 771.16.I/pvc/al",
+"6": "invalid",
+"70": "error: sección 70 mm² fuera de 771.16.I/pvc/al"
+},
+"r90": 0.532265
+},
+"B1|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.0,
+"120": 234.0,
+"16": 66.0,
+"2.5": 21.0,
+"240": 348.0,
+"300": 398.0,
+"35": 109.0,
+"6": 36.0,
+"70": 167.0
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 10.5,
+"120": 163.8,
+"16": 46.2,
+"2.5": 14.7,
+"240": 243.6,
+"300": 278.6,
+"35": 76.3,
+"6": 25.2,
+"70": 116.9
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.75,
+"120": 152.1,
+"16": 42.9,
+"2.5": 13.65,
+"240": 226.2,
+"300": 258.7,
+"35": 70.85,
+"6": 23.4,
+"70": 108.55
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.825,
+"120": 106.47,
+"16": 30.03,
+"2.5": 9.555,
+"240": 158.34,
+"300": 181.09,
+"35": 49.595,
+"6": 16.38,
+"70": 75.985
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.0,
+"120": 208.0,
+"16": 59.0,
+"2.5": 18.0,
+"240": 301.0,
+"300": 343.0,
+"35": 96.0,
+"6": 32.0,
+"70": 149.0
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.8,
+"120": 145.6,
+"16": 41.3,
+"2.5": 12.6,
+"240": 210.7,
+"300": 240.1,
+"35": 67.2,
+"6": 22.4,
+"70": 104.3
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.1,
+"120": 135.2,
+"16": 38.35,
+"2.5": 11.7,
+"240": 195.65,
+"300": 222.95,
+"35": 62.4,
+"6": 20.8,
+"70": 96.85
+},
+"r90": 0.320662
+},
+"B1|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.37,
+"120": 94.64,
+"16": 26.845,
+"2.5": 8.19,
+"240": 136.955,
+"300": 156.065,
+"35": 43.68,
+"6": 14.56,
+"70": 67.795
+},
+"r90": 0.320662
+},
+"B1|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "invalid",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "invalid",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.56797
+},
+"B1|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B1|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"120": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"16": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"2.5": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"240": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"300": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"35": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"6": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"70": "error: B1 con XLPE no tiene tabla en 771.16.I: use B2 o C"
+},
+"r90": 0.341727
+},
+"B2|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.0,
+"16": 47.0,
+"2.5": "invalid",
+"240": 234.0,
+"300": 268.0,
+"35": 75.0,
+"6": "invalid",
+"70": 114.0
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 109.9,
+"16": 32.9,
+"2.5": "invalid",
+"240": 163.8,
+"300": 187.6,
+"35": 52.5,
+"6": "invalid",
+"70": 79.8
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 102.05,
+"16": 30.55,
+"2.5": "invalid",
+"240": 152.1,
+"300": 174.2,
+"35": 48.75,
+"6": "invalid",
+"70": 74.1
+},
+"r90": 0.532265
+},
+"B2|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 71.435,
+"16": 21.385,
+"2.5": "invalid",
+"240": 106.47,
+"300": 121.94,
+"35": 34.125,
+"6": "invalid",
+"70": 51.87
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 139.0,
+"16": 42.0,
+"2.5": "invalid",
+"240": 202.0,
+"300": 231.0,
+"35": 67.0,
+"6": "invalid",
+"70": 101.0
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 97.3,
+"16": 29.4,
+"2.5": "invalid",
+"240": 141.4,
+"300": 161.7,
+"35": 46.9,
+"6": "invalid",
+"70": 70.7
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 90.35,
+"16": 27.3,
+"2.5": "invalid",
+"240": 131.3,
+"300": 150.15,
+"35": 43.55,
+"6": "invalid",
+"70": 65.65
+},
+"r90": 0.532265
+},
+"B2|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 63.245,
+"16": 19.11,
+"2.5": "invalid",
+"240": 91.91,
+"300": 105.105,
+"35": 30.485,
+"6": "invalid",
+"70": 45.955
+},
+"r90": 0.532265
+},
+"B2|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.0,
+"120": 202.0,
+"16": 60.0,
+"2.5": 20.0,
+"240": 299.0,
+"300": 343.0,
+"35": 97.0,
+"6": 33.0,
+"70": 146.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.8,
+"120": 141.4,
+"16": 42.0,
+"2.5": 14.0,
+"240": 209.3,
+"300": 240.1,
+"35": 67.9,
+"6": 23.1,
+"70": 102.2
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 9.1,
+"120": 131.3,
+"16": 39.0,
+"2.5": 13.0,
+"240": 194.35,
+"300": 222.95,
+"35": 63.05,
+"6": 21.45,
+"70": 94.9
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 6.37,
+"120": 91.91,
+"16": 27.3,
+"2.5": 9.1,
+"240": 136.045,
+"300": 156.065,
+"35": 44.135,
+"6": 15.015,
+"70": 66.43
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.0,
+"120": 179.0,
+"16": 54.0,
+"2.5": 17.0,
+"240": 258.0,
+"300": 295.0,
+"35": 86.0,
+"6": 30.0,
+"70": 130.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 9.1,
+"120": 125.3,
+"16": 37.8,
+"2.5": 11.9,
+"240": 180.6,
+"300": 206.5,
+"35": 60.2,
+"6": 21.0,
+"70": 91.0
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 8.45,
+"120": 116.35,
+"16": 35.1,
+"2.5": 11.05,
+"240": 167.7,
+"300": 191.75,
+"35": 55.9,
+"6": 19.5,
+"70": 84.5
+},
+"r90": 0.320662
+},
+"B2|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 5.915,
+"120": 81.445,
+"16": 24.57,
+"2.5": 7.735,
+"240": 117.39,
+"300": 134.225,
+"35": 39.13,
+"6": 13.65,
+"70": 59.15
+},
+"r90": 0.320662
+},
+"B2|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 220.0,
+"16": 66.0,
+"2.5": "invalid",
+"240": 326.0,
+"300": 378.0,
+"35": 105.0,
+"6": "invalid",
+"70": 159.0
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 184.8,
+"16": 55.44,
+"2.5": "invalid",
+"240": 273.84,
+"300": 317.52,
+"35": 88.2,
+"6": "invalid",
+"70": 133.56
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 143.0,
+"16": 42.9,
+"2.5": "invalid",
+"240": 211.9,
+"300": 245.7,
+"35": 68.25,
+"6": "invalid",
+"70": 103.35
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 120.12,
+"16": 36.036,
+"2.5": "invalid",
+"240": 177.996,
+"300": 206.388,
+"35": 57.33,
+"6": "invalid",
+"70": 86.814
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 197.0,
+"16": 58.0,
+"2.5": "invalid",
+"240": 289.0,
+"300": 331.0,
+"35": 94.0,
+"6": "invalid",
+"70": 142.0
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 165.48,
+"16": 48.72,
+"2.5": "invalid",
+"240": 242.76,
+"300": 278.04,
+"35": 78.96,
+"6": "invalid",
+"70": 119.28
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 128.05,
+"16": 37.7,
+"2.5": "invalid",
+"240": 187.85,
+"300": 215.15,
+"35": 61.1,
+"6": "invalid",
+"70": 92.3
+},
+"r90": 0.56797
+},
+"B2|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 107.562,
+"16": 31.668,
+"2.5": "invalid",
+"240": 157.794,
+"300": 180.726,
+"35": 51.324,
+"6": "invalid",
+"70": 77.532
+},
+"r90": 0.56797
+},
+"B2|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 20.0,
+"120": 278.0,
+"16": 83.0,
+"2.5": 27.0,
+"240": 418.0,
+"300": 484.0,
+"35": 133.0,
+"6": 46.0,
+"70": 201.0
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 16.8,
+"120": 233.52,
+"16": 69.72,
+"2.5": 22.68,
+"240": 351.12,
+"300": 406.56,
+"35": 111.72,
+"6": 38.64,
+"70": 168.84
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.0,
+"120": 180.7,
+"16": 53.95,
+"2.5": 17.55,
+"240": 271.7,
+"300": 314.6,
+"35": 86.45,
+"6": 29.9,
+"70": 130.65
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 10.92,
+"120": 151.788,
+"16": 45.318,
+"2.5": 14.742,
+"240": 228.228,
+"300": 264.264,
+"35": 72.618,
+"6": 25.116,
+"70": 109.746
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.0,
+"120": 244.0,
+"16": 73.0,
+"2.5": 24.0,
+"240": 362.0,
+"300": 414.0,
+"35": 116.0,
+"6": 40.0,
+"70": 177.0
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 15.12,
+"120": 204.96,
+"16": 61.32,
+"2.5": 20.16,
+"240": 304.08,
+"300": 347.76,
+"35": 97.44,
+"6": 33.6,
+"70": 148.68
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.7,
+"120": 158.6,
+"16": 47.45,
+"2.5": 15.6,
+"240": 235.3,
+"300": 269.1,
+"35": 75.4,
+"6": 26.0,
+"70": 115.05
+},
+"r90": 0.341727
+},
+"B2|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.65,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 9.828,
+"120": 133.224,
+"16": 39.858,
+"2.5": 13.104,
+"240": 197.652,
+"300": 226.044,
+"35": 63.336,
+"6": 21.84,
+"70": 96.642
+},
+"r90": 0.341727
+},
+"C|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 197.0,
+"16": 57.0,
+"2.5": "invalid",
+"240": 306.0,
+"300": 353.0,
+"35": 90.0,
+"6": "invalid",
+"70": 139.0
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 137.9,
+"16": 39.9,
+"2.5": "invalid",
+"240": 214.2,
+"300": 247.1,
+"35": 63.0,
+"6": "invalid",
+"70": 97.3
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 147.75,
+"16": 42.75,
+"2.5": "invalid",
+"240": 229.5,
+"300": 264.75,
+"35": 67.5,
+"6": "invalid",
+"70": 104.25
+},
+"r90": 0.532265
+},
+"C|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 103.425,
+"16": 29.925,
+"2.5": "invalid",
+"240": 160.65,
+"300": 185.325,
+"35": 47.25,
+"6": "invalid",
+"70": 72.975
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 171.0,
+"16": 51.0,
+"2.5": "invalid",
+"240": 265.0,
+"300": 305.0,
+"35": 78.0,
+"6": "invalid",
+"70": 122.0
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 119.7,
+"16": 35.7,
+"2.5": "invalid",
+"240": 185.5,
+"300": 213.5,
+"35": 54.6,
+"6": "invalid",
+"70": 85.4
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 128.25,
+"16": 38.25,
+"2.5": "invalid",
+"240": 198.75,
+"300": 228.75,
+"35": 58.5,
+"6": "invalid",
+"70": 91.5
+},
+"r90": 0.532265
+},
+"C|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 89.775,
+"16": 26.775,
+"2.5": "invalid",
+"240": 139.125,
+"300": 160.125,
+"35": 40.95,
+"6": "invalid",
+"70": 64.05
+},
+"r90": 0.532265
+},
+"C|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.0,
+"120": 260.0,
+"16": 74.0,
+"2.5": 23.0,
+"240": 401.0,
+"300": 461.0,
+"35": 120.0,
+"6": 40.0,
+"70": 185.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 11.9,
+"120": 182.0,
+"16": 51.8,
+"2.5": 16.1,
+"240": 280.7,
+"300": 322.7,
+"35": 84.0,
+"6": 28.0,
+"70": 129.5
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.75,
+"120": 195.0,
+"16": 55.5,
+"2.5": 17.25,
+"240": 300.75,
+"300": 345.75,
+"35": 90.0,
+"6": 30.0,
+"70": 138.75
+},
+"r90": 0.320662
+},
+"C|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.925,
+"120": 136.5,
+"16": 38.85,
+"2.5": 12.075,
+"240": 210.525,
+"300": 242.025,
+"35": 63.0,
+"6": 21.0,
+"70": 97.125
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.0,
+"120": 225.0,
+"16": 66.0,
+"2.5": 21.0,
+"240": 351.0,
+"300": 404.0,
+"35": 104.0,
+"6": 36.0,
+"70": 160.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 10.5,
+"120": 157.5,
+"16": 46.2,
+"2.5": 14.7,
+"240": 245.7,
+"300": 282.8,
+"35": 72.8,
+"6": 25.2,
+"70": 112.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.25,
+"120": 168.75,
+"16": 49.5,
+"2.5": 15.75,
+"240": 263.25,
+"300": 303.0,
+"35": 78.0,
+"6": 27.0,
+"70": 120.0
+},
+"r90": 0.320662
+},
+"C|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 7.875,
+"120": 118.125,
+"16": 34.65,
+"2.5": 11.025,
+"240": 184.275,
+"300": 212.1,
+"35": 54.6,
+"6": 18.9,
+"70": 84.0
+},
+"r90": 0.320662
+},
+"C|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 255.0,
+"16": 76.0,
+"2.5": "invalid",
+"240": 399.0,
+"300": 462.0,
+"35": 115.0,
+"6": "invalid",
+"70": 180.0
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 214.2,
+"16": 63.84,
+"2.5": "invalid",
+"240": 335.16,
+"300": 388.08,
+"35": 96.6,
+"6": "invalid",
+"70": 151.2
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 191.25,
+"16": 57.0,
+"2.5": "invalid",
+"240": 299.25,
+"300": 346.5,
+"35": 86.25,
+"6": "invalid",
+"70": 135.0
+},
+"r90": 0.56797
+},
+"C|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 160.65,
+"16": 47.88,
+"2.5": "invalid",
+"240": 251.37,
+"300": 291.06,
+"35": 72.45,
+"6": "invalid",
+"70": 113.4
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 223.0,
+"16": 69.0,
+"2.5": "invalid",
+"240": 348.0,
+"300": 400.0,
+"35": 102.0,
+"6": "invalid",
+"70": 158.0
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.32,
+"16": 57.96,
+"2.5": "invalid",
+"240": 292.32,
+"300": 336.0,
+"35": 85.68,
+"6": "invalid",
+"70": 132.72
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 167.25,
+"16": 51.75,
+"2.5": "invalid",
+"240": 261.0,
+"300": 300.0,
+"35": 76.5,
+"6": "invalid",
+"70": 118.5
+},
+"r90": 0.56797
+},
+"C|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 140.49,
+"16": 43.47,
+"2.5": "invalid",
+"240": 219.24,
+"300": 252.0,
+"35": 64.26,
+"6": "invalid",
+"70": 99.54
+},
+"r90": 0.56797
+},
+"C|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 22.0,
+"120": 348.0,
+"16": 97.0,
+"2.5": 30.0,
+"240": 545.0,
+"300": 631.0,
+"35": 156.0,
+"6": 53.0,
+"70": 245.0
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 18.48,
+"120": 292.32,
+"16": 81.48,
+"2.5": 25.2,
+"240": 457.8,
+"300": 530.04,
+"35": 131.04,
+"6": 44.52,
+"70": 205.8
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.5,
+"120": 261.0,
+"16": 72.75,
+"2.5": 22.5,
+"240": 408.75,
+"300": 473.25,
+"35": 117.0,
+"6": 39.75,
+"70": 183.75
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 13.86,
+"120": 219.24,
+"16": 61.11,
+"2.5": 18.9,
+"240": 343.35,
+"300": 397.53,
+"35": 98.28,
+"6": 33.39,
+"70": 154.35
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 20.0,
+"120": 293.0,
+"16": 87.0,
+"2.5": 27.0,
+"240": 455.0,
+"300": 524.0,
+"35": 134.0,
+"6": 47.0,
+"70": 208.0
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 16.8,
+"120": 246.12,
+"16": 73.08,
+"2.5": 22.68,
+"240": 382.2,
+"300": 440.16,
+"35": 112.56,
+"6": 39.48,
+"70": 174.72
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.0,
+"120": 219.75,
+"16": 65.25,
+"2.5": 20.25,
+"240": 341.25,
+"300": 393.0,
+"35": 100.5,
+"6": 35.25,
+"70": 156.0
+},
+"r90": 0.341727
+},
+"C|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.75,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 12.6,
+"120": 184.59,
+"16": 54.81,
+"2.5": 17.01,
+"240": 286.65,
+"300": 330.12,
+"35": 84.42,
+"6": 29.61,
+"70": 131.04
+},
+"r90": 0.341727
+},
+"D1|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 185.3304,
+"16": 61.194,
+"2.5": "invalid",
+"240": 271.8762,
+"300": 306.8442,
+"35": 92.6652,
+"6": "invalid",
+"70": 137.2494
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 185.3304,
+"16": 61.194,
+"2.5": "invalid",
+"240": 271.8762,
+"300": 306.8442,
+"35": 92.6652,
+"6": "invalid",
+"70": 137.2494
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 129.7313,
+"16": 42.8358,
+"2.5": "invalid",
+"240": 190.3133,
+"300": 214.7909,
+"35": 64.8656,
+"6": "invalid",
+"70": 96.0746
+},
+"r90": 0.532265
+},
+"D1|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 129.7313,
+"16": 42.8358,
+"2.5": "invalid",
+"240": 190.3133,
+"300": 214.7909,
+"35": 64.8656,
+"6": "invalid",
+"70": 96.0746
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 153.8592,
+"16": 50.7036,
+"2.5": "invalid",
+"240": 225.5436,
+"300": 254.3922,
+"35": 78.678,
+"6": "invalid",
+"70": 114.5202
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 153.8592,
+"16": 50.7036,
+"2.5": "invalid",
+"240": 225.5436,
+"300": 254.3922,
+"35": 78.678,
+"6": "invalid",
+"70": 114.5202
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 107.7014,
+"16": 35.4925,
+"2.5": "invalid",
+"240": 157.8805,
+"300": 178.0745,
+"35": 55.0746,
+"6": "invalid",
+"70": 80.1641
+},
+"r90": 0.532265
+},
+"D1|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 107.7014,
+"16": 35.4925,
+"2.5": "invalid",
+"240": 157.8805,
+"300": 178.0745,
+"35": 55.0746,
+"6": "invalid",
+"70": 80.1641
+},
+"r90": 0.532265
+},
+"D1|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.855,
+"120": 241.2792,
+"16": 79.5522,
+"2.5": 28.8486,
+"240": 354.051,
+"300": 399.5094,
+"35": 122.388,
+"6": 46.3326,
+"70": 179.211
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.855,
+"120": 241.2792,
+"16": 79.5522,
+"2.5": 28.8486,
+"240": 354.051,
+"300": 399.5094,
+"35": 122.388,
+"6": 46.3326,
+"70": 179.211
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.2985,
+"120": 168.8954,
+"16": 55.6865,
+"2.5": 20.194,
+"240": 247.8357,
+"300": 279.6566,
+"35": 85.6716,
+"6": 32.4328,
+"70": 125.4477
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.2985,
+"120": 168.8954,
+"16": 55.6865,
+"2.5": 20.194,
+"240": 247.8357,
+"300": 279.6566,
+"35": 85.6716,
+"6": 32.4328,
+"70": 125.4477
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.484,
+"120": 199.3176,
+"16": 65.565,
+"2.5": 23.6034,
+"240": 291.1086,
+"300": 329.5734,
+"35": 100.533,
+"6": 38.4648,
+"70": 147.7398
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 17.484,
+"120": 199.3176,
+"16": 65.565,
+"2.5": 23.6034,
+"240": 291.1086,
+"300": 329.5734,
+"35": 100.533,
+"6": 38.4648,
+"70": 147.7398
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.2388,
+"120": 139.5223,
+"16": 45.8955,
+"2.5": 16.5224,
+"240": 203.776,
+"300": 230.7014,
+"35": 70.3731,
+"6": 26.9254,
+"70": 103.4179
+},
+"r90": 0.320662
+},
+"D1|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.8742,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.2388,
+"120": 139.5223,
+"16": 45.8955,
+"2.5": 16.5224,
+"240": 203.776,
+"300": 230.7014,
+"35": 70.3731,
+"6": 26.9254,
+"70": 103.4179
+},
+"r90": 0.320662
+},
+"D1|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 224.6229,
+"16": 74.8743,
+"2.5": "invalid",
+"240": 329.2665,
+"300": 371.6652,
+"35": 114.5667,
+"6": "invalid",
+"70": 166.8885
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 224.6229,
+"16": 74.8743,
+"2.5": "invalid",
+"240": 329.2665,
+"300": 371.6652,
+"35": 114.5667,
+"6": "invalid",
+"70": 166.8885
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.236,
+"16": 52.412,
+"2.5": "invalid",
+"240": 230.4865,
+"300": 260.1656,
+"35": 80.1967,
+"6": "invalid",
+"70": 116.822
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 157.236,
+"16": 52.412,
+"2.5": "invalid",
+"240": 230.4865,
+"300": 260.1656,
+"35": 80.1967,
+"6": "invalid",
+"70": 116.822
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 190.3431,
+"16": 62.2449,
+"2.5": "invalid",
+"240": 277.8468,
+"300": 314.8329,
+"35": 95.6226,
+"6": "invalid",
+"70": 140.7276
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 190.3431,
+"16": 62.2449,
+"2.5": "invalid",
+"240": 277.8468,
+"300": 314.8329,
+"35": 95.6226,
+"6": "invalid",
+"70": 140.7276
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 133.2402,
+"16": 43.5714,
+"2.5": "invalid",
+"240": 194.4928,
+"300": 220.383,
+"35": 66.9358,
+"6": "invalid",
+"70": 98.5093
+},
+"r90": 0.56797
+},
+"D1|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 133.2402,
+"16": 43.5714,
+"2.5": "invalid",
+"240": 194.4928,
+"300": 220.383,
+"35": 66.9358,
+"6": "invalid",
+"70": 98.5093
+},
+"r90": 0.56797
+},
+"D1|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 26.1609,
+"120": 293.1825,
+"16": 95.6226,
+"2.5": 35.1819,
+"240": 428.4975,
+"300": 484.4277,
+"35": 148.8465,
+"6": 56.8323,
+"70": 217.4061
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 26.1609,
+"120": 293.1825,
+"16": 95.6226,
+"2.5": 35.1819,
+"240": 428.4975,
+"300": 484.4277,
+"35": 148.8465,
+"6": 56.8323,
+"70": 217.4061
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.3126,
+"120": 205.2277,
+"16": 66.9358,
+"2.5": 24.6273,
+"240": 299.9483,
+"300": 339.0994,
+"35": 104.1925,
+"6": 39.7826,
+"70": 152.1843
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.3126,
+"120": 205.2277,
+"16": 66.9358,
+"2.5": 24.6273,
+"240": 299.9483,
+"300": 339.0994,
+"35": 104.1925,
+"6": 39.7826,
+"70": 152.1843
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 22.5525,
+"120": 245.3712,
+"16": 80.2869,
+"2.5": 29.7693,
+"240": 359.0358,
+"300": 405.0429,
+"35": 124.4898,
+"6": 46.9092,
+"70": 182.2242
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 22.5525,
+"120": 245.3712,
+"16": 80.2869,
+"2.5": 29.7693,
+"240": 359.0358,
+"300": 405.0429,
+"35": 124.4898,
+"6": 46.9092,
+"70": 182.2242
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.7867,
+"120": 171.7598,
+"16": 56.2008,
+"2.5": 20.8385,
+"240": 251.3251,
+"300": 283.53,
+"35": 87.1429,
+"6": 32.8364,
+"70": 127.5569
+},
+"r90": 0.341727
+},
+"D1|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.7,
+"f_clase": 1.0,
+"f_suelo": 0.9021,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 15.7867,
+"120": 171.7598,
+"16": 56.2008,
+"2.5": 20.8385,
+"240": 251.3251,
+"300": 283.53,
+"35": 87.1429,
+"6": 32.8364,
+"70": 127.5569
+},
+"r90": 0.341727
+},
+"D2|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 217.328,
+"16": 68.714,
+"2.5": "invalid",
+"240": 321.997,
+"300": 365.143,
+"35": 107.066,
+"6": "invalid",
+"70": 158.202
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 217.328,
+"16": 68.714,
+"2.5": "invalid",
+"240": 321.997,
+"300": 365.143,
+"35": 107.066,
+"6": "invalid",
+"70": 158.202
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 130.3968,
+"16": 41.2284,
+"2.5": "invalid",
+"240": 193.1982,
+"300": 219.0858,
+"35": 64.2396,
+"6": "invalid",
+"70": 94.9212
+},
+"r90": 0.532265
+},
+"D2|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 130.3968,
+"16": 41.2284,
+"2.5": "invalid",
+"240": 193.1982,
+"300": 219.0858,
+"35": 64.2396,
+"6": "invalid",
+"70": 94.9212
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 184.569,
+"16": 58.327,
+"2.5": "invalid",
+"240": 272.459,
+"300": 308.414,
+"35": 90.287,
+"6": "invalid",
+"70": 134.232
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 184.569,
+"16": 58.327,
+"2.5": "invalid",
+"240": 272.459,
+"300": 308.414,
+"35": 90.287,
+"6": "invalid",
+"70": 134.232
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 110.7414,
+"16": 34.9962,
+"2.5": "invalid",
+"240": 163.4754,
+"300": 185.0484,
+"35": 54.1722,
+"6": "invalid",
+"70": 80.5392
+},
+"r90": 0.532265
+},
+"D2|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 110.7414,
+"16": 34.9962,
+"2.5": "invalid",
+"240": 163.4754,
+"300": 185.0484,
+"35": 54.1722,
+"6": "invalid",
+"70": 80.5392
+},
+"r90": 0.532265
+},
+"D2|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 23.171,
+"120": 279.65,
+"16": 89.488,
+"2.5": 31.161,
+"240": 414.681,
+"300": 469.013,
+"35": 138.227,
+"6": 51.935,
+"70": 202.946
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 23.171,
+"120": 279.65,
+"16": 89.488,
+"2.5": 31.161,
+"240": 414.681,
+"300": 469.013,
+"35": 138.227,
+"6": 51.935,
+"70": 202.946
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.9026,
+"120": 167.79,
+"16": 53.6928,
+"2.5": 18.6966,
+"240": 248.8086,
+"300": 281.4078,
+"35": 82.9362,
+"6": 31.161,
+"70": 121.7676
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 13.9026,
+"120": 167.79,
+"16": 53.6928,
+"2.5": 18.6966,
+"240": 248.8086,
+"300": 281.4078,
+"35": 82.9362,
+"6": 31.161,
+"70": 121.7676
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.975,
+"120": 231.71,
+"16": 75.905,
+"2.5": 27.166,
+"240": 341.972,
+"300": 386.716,
+"35": 117.453,
+"6": 43.945,
+"70": 168.589
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.975,
+"120": 231.71,
+"16": 75.905,
+"2.5": 27.166,
+"240": 341.972,
+"300": 386.716,
+"35": 117.453,
+"6": 43.945,
+"70": 168.589
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.985,
+"120": 139.026,
+"16": 45.543,
+"2.5": 16.2996,
+"240": 205.1832,
+"300": 232.0296,
+"35": 70.4718,
+"6": 26.367,
+"70": 101.1534
+},
+"r90": 0.320662
+},
+"D2|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.799,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 11.985,
+"120": 139.026,
+"16": 45.543,
+"2.5": 16.2996,
+"240": 205.1832,
+"300": 232.0296,
+"35": 70.4718,
+"6": 26.367,
+"70": 101.1534
+},
+"r90": 0.320662
+},
+"D2|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.787,
+"16": 85.748,
+"2.5": "invalid",
+"240": 399.058,
+"300": 451.0015,
+"35": 134.3935,
+"6": "invalid",
+"70": 197.0555
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.787,
+"16": 85.748,
+"2.5": "invalid",
+"240": 399.058,
+"300": 451.0015,
+"35": 134.3935,
+"6": "invalid",
+"70": 197.0555
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 161.2722,
+"16": 51.4488,
+"2.5": "invalid",
+"240": 239.4348,
+"300": 270.6009,
+"35": 80.6361,
+"6": "invalid",
+"70": 118.2333
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 161.2722,
+"16": 51.4488,
+"2.5": "invalid",
+"240": 239.4348,
+"300": 270.6009,
+"35": 80.6361,
+"6": "invalid",
+"70": 118.2333
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 224.264,
+"16": 72.556,
+"2.5": "invalid",
+"240": 332.2735,
+"300": 375.972,
+"35": 112.9565,
+"6": "invalid",
+"70": 163.251
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 224.264,
+"16": 72.556,
+"2.5": "invalid",
+"240": 332.2735,
+"300": 375.972,
+"35": 112.9565,
+"6": "invalid",
+"70": 163.251
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.5584,
+"16": 43.5336,
+"2.5": "invalid",
+"240": 199.3641,
+"300": 225.5832,
+"35": 67.7739,
+"6": "invalid",
+"70": 97.9506
+},
+"r90": 0.56797
+},
+"D2|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 134.5584,
+"16": 43.5336,
+"2.5": "invalid",
+"240": 199.3641,
+"300": 225.5832,
+"35": 67.7739,
+"6": "invalid",
+"70": 97.9506
+},
+"r90": 0.56797
+},
+"D2|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 28.033,
+"120": 346.29,
+"16": 111.3075,
+"2.5": 37.927,
+"240": 513.6635,
+"300": 580.448,
+"35": 173.145,
+"6": 62.662,
+"70": 253.1215
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 28.033,
+"120": 346.29,
+"16": 111.3075,
+"2.5": 37.927,
+"240": 513.6635,
+"300": 580.448,
+"35": 173.145,
+"6": 62.662,
+"70": 253.1215
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.8198,
+"120": 207.774,
+"16": 66.7845,
+"2.5": 22.7562,
+"240": 308.1981,
+"300": 348.2688,
+"35": 103.887,
+"6": 37.5972,
+"70": 151.8729
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.8198,
+"120": 207.774,
+"16": 66.7845,
+"2.5": 22.7562,
+"240": 308.1981,
+"300": 348.2688,
+"35": 103.887,
+"6": 37.5972,
+"70": 151.8729
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 23.9105,
+"120": 289.3995,
+"16": 93.1685,
+"2.5": 32.1555,
+"240": 427.9155,
+"300": 483.157,
+"35": 145.9365,
+"6": 52.768,
+"70": 211.072
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 23.9105,
+"120": 289.3995,
+"16": 93.1685,
+"2.5": 32.1555,
+"240": 427.9155,
+"300": 483.157,
+"35": 145.9365,
+"6": 52.768,
+"70": 211.072
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.3463,
+"120": 173.6397,
+"16": 55.9011,
+"2.5": 19.2933,
+"240": 256.7493,
+"300": 289.8942,
+"35": 87.5619,
+"6": 31.6608,
+"70": 126.6432
+},
+"r90": 0.341727
+},
+"D2|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.6,
+"f_clase": 1.0,
+"f_suelo": 0.8245,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.3463,
+"120": 173.6397,
+"16": 55.9011,
+"2.5": 19.2933,
+"240": 256.7493,
+"300": 289.8942,
+"35": 87.5619,
+"6": 31.6608,
+"70": 126.6432
+},
+"r90": 0.341727
+},
+"E|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 212.0,
+"16": 64.0,
+"2.5": "invalid",
+"240": 331.0,
+"300": 382.0,
+"35": 97.0,
+"6": "invalid",
+"70": 151.0
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 148.4,
+"16": 44.8,
+"2.5": "invalid",
+"240": 231.7,
+"300": 267.4,
+"35": 67.9,
+"6": "invalid",
+"70": 105.7
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 163.24,
+"16": 49.28,
+"2.5": "invalid",
+"240": 254.87,
+"300": 294.14,
+"35": 74.69,
+"6": "invalid",
+"70": 116.27
+},
+"r90": 0.532265
+},
+"E|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 114.268,
+"16": 34.496,
+"2.5": "invalid",
+"240": 178.409,
+"300": 205.898,
+"35": 52.283,
+"6": "invalid",
+"70": 81.389
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 184.0,
+"16": 53.0,
+"2.5": "invalid",
+"240": 287.0,
+"300": 331.0,
+"35": 84.0,
+"6": "invalid",
+"70": 131.0
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 128.8,
+"16": 37.1,
+"2.5": "invalid",
+"240": 200.9,
+"300": 231.7,
+"35": 58.8,
+"6": "invalid",
+"70": 91.7
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 141.68,
+"16": 40.81,
+"2.5": "invalid",
+"240": 220.99,
+"300": 254.87,
+"35": 64.68,
+"6": "invalid",
+"70": 100.87
+},
+"r90": 0.532265
+},
+"E|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 99.176,
+"16": 28.567,
+"2.5": "invalid",
+"240": 154.693,
+"300": 178.409,
+"35": 45.276,
+"6": "invalid",
+"70": 70.609
+},
+"r90": 0.532265
+},
+"E|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 19.0,
+"120": 285.0,
+"16": 82.0,
+"2.5": 26.0,
+"240": 447.0,
+"300": 516.0,
+"35": 129.0,
+"6": 44.0,
+"70": 202.0
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 13.3,
+"120": 199.5,
+"16": 57.4,
+"2.5": 18.2,
+"240": 312.9,
+"300": 361.2,
+"35": 90.3,
+"6": 30.8,
+"70": 141.4
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 14.63,
+"120": 219.45,
+"16": 63.14,
+"2.5": 20.02,
+"240": 344.19,
+"300": 397.32,
+"35": 99.33,
+"6": 33.88,
+"70": 155.54
+},
+"r90": 0.320662
+},
+"E|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 10.241,
+"120": 153.615,
+"16": 44.198,
+"2.5": 14.014,
+"240": 240.933,
+"300": 278.124,
+"35": 69.531,
+"6": 23.716,
+"70": 108.878
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.0,
+"120": 240.0,
+"16": 70.0,
+"2.5": 22.0,
+"240": 374.0,
+"300": 432.0,
+"35": 110.0,
+"6": 37.0,
+"70": 171.0
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 11.2,
+"120": 168.0,
+"16": 49.0,
+"2.5": 15.4,
+"240": 261.8,
+"300": 302.4,
+"35": 77.0,
+"6": 25.9,
+"70": 119.7
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 12.32,
+"120": 184.8,
+"16": 53.9,
+"2.5": 16.94,
+"240": 287.98,
+"300": 332.64,
+"35": 84.7,
+"6": 28.49,
+"70": 131.67
+},
+"r90": 0.320662
+},
+"E|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": 8.624,
+"120": 129.36,
+"16": 37.73,
+"2.5": 11.858,
+"240": 201.586,
+"300": 232.848,
+"35": 59.29,
+"6": 19.943,
+"70": 92.169
+},
+"r90": 0.320662
+},
+"E|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 273.0,
+"16": 83.0,
+"2.5": "invalid",
+"240": 428.0,
+"300": 494.0,
+"35": 123.0,
+"6": "invalid",
+"70": 192.0
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 229.32,
+"16": 69.72,
+"2.5": "invalid",
+"240": 359.52,
+"300": 414.96,
+"35": 103.32,
+"6": "invalid",
+"70": 161.28
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 210.21,
+"16": 63.91,
+"2.5": "invalid",
+"240": 329.56,
+"300": 380.38,
+"35": 94.71,
+"6": "invalid",
+"70": 147.84
+},
+"r90": 0.56797
+},
+"E|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 176.5764,
+"16": 53.6844,
+"2.5": "invalid",
+"240": 276.8304,
+"300": 319.5192,
+"35": 79.5564,
+"6": "invalid",
+"70": 124.1856
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 239.0,
+"16": 70.0,
+"2.5": "invalid",
+"240": 372.0,
+"300": 429.0,
+"35": 109.0,
+"6": "invalid",
+"70": 170.0
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 200.76,
+"16": 58.8,
+"2.5": "invalid",
+"240": 312.48,
+"300": 360.36,
+"35": 91.56,
+"6": "invalid",
+"70": 142.8
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 184.03,
+"16": 53.9,
+"2.5": "invalid",
+"240": 286.44,
+"300": 330.33,
+"35": 83.93,
+"6": "invalid",
+"70": 130.9
+},
+"r90": 0.56797
+},
+"E|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 154.5852,
+"16": 45.276,
+"2.5": "invalid",
+"240": 240.6096,
+"300": 277.4772,
+"35": 70.5012,
+"6": "invalid",
+"70": 109.956
+},
+"r90": 0.56797
+},
+"E|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 24.0,
+"120": 373.0,
+"16": 105.0,
+"2.5": 33.0,
+"240": 583.0,
+"300": 674.0,
+"35": 168.0,
+"6": 57.0,
+"70": 263.0
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 20.16,
+"120": 313.32,
+"16": 88.2,
+"2.5": 27.72,
+"240": 489.72,
+"300": 566.16,
+"35": 141.12,
+"6": 47.88,
+"70": 220.92
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 18.48,
+"120": 287.21,
+"16": 80.85,
+"2.5": 25.41,
+"240": 448.91,
+"300": 518.98,
+"35": 129.36,
+"6": 43.89,
+"70": 202.51
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 15.5232,
+"120": 241.2564,
+"16": 67.914,
+"2.5": 21.3444,
+"240": 377.0844,
+"300": 435.9432,
+"35": 108.6624,
+"6": 36.8676,
+"70": 170.1084
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 21.0,
+"120": 315.0,
+"16": 91.0,
+"2.5": 29.0,
+"240": 490.0,
+"300": 565.0,
+"35": 144.0,
+"6": 49.0,
+"70": 224.0
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 17.64,
+"120": 264.6,
+"16": 76.44,
+"2.5": 24.36,
+"240": 411.6,
+"300": 474.6,
+"35": 120.96,
+"6": 41.16,
+"70": 188.16
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": 16.17,
+"120": 242.55,
+"16": 70.07,
+"2.5": 22.33,
+"240": 377.3,
+"300": 435.05,
+"35": 110.88,
+"6": 37.73,
+"70": 172.48
+},
+"r90": 0.341727
+},
+"E|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": 13.5828,
+"120": 203.742,
+"16": 58.8588,
+"2.5": 18.7572,
+"240": 316.932,
+"300": 365.442,
+"35": 93.1392,
+"6": 31.6932,
+"70": 144.8832
+},
+"r90": 0.341727
+},
+"F|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 238.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 374.0,
+"300": 432.0,
+"35": 106.0,
+"6": "invalid",
+"70": 167.0
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 166.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 261.8,
+"300": 302.4,
+"35": 74.2,
+"6": "invalid",
+"70": 116.9
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 183.26,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 287.98,
+"300": 332.64,
+"35": 81.62,
+"6": "invalid",
+"70": 128.59
+},
+"r90": 0.532265
+},
+"F|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 128.282,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 201.586,
+"300": 232.848,
+"35": 57.134,
+"6": "invalid",
+"70": 90.013
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 206.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 326.0,
+"300": 378.0,
+"35": 91.0,
+"6": "invalid",
+"70": 144.0
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 144.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 228.2,
+"300": 264.6,
+"35": 63.7,
+"6": "invalid",
+"70": 100.8
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 158.62,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 251.02,
+"300": 291.06,
+"35": 70.07,
+"6": "invalid",
+"70": 110.88
+},
+"r90": 0.532265
+},
+"F|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 111.034,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 175.714,
+"300": 203.742,
+"35": 49.049,
+"6": "invalid",
+"70": 77.616
+},
+"r90": 0.532265
+},
+"F|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 306.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 475.0,
+"300": 547.0,
+"35": 141.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 218.0
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 214.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 332.5,
+"300": 382.9,
+"35": 98.7,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 152.6
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 235.62,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 365.75,
+"300": 421.19,
+"35": 108.57,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 167.86
+},
+"r90": 0.320662
+},
+"F|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 164.934,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 256.025,
+"300": 294.833,
+"35": 75.999,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 117.502
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 422.0,
+"300": 488.0,
+"35": 119.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 188.0
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 295.4,
+"300": 341.6,
+"35": 83.3,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 131.6
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 206.36,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 324.94,
+"300": 375.76,
+"35": 91.63,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 144.76
+},
+"r90": 0.320662
+},
+"F|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 144.452,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 227.458,
+"300": 263.032,
+"35": 64.141,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 101.332
+},
+"r90": 0.320662
+},
+"F|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 307.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 482.0,
+"300": 558.0,
+"35": 137.0,
+"6": "invalid",
+"70": 216.0
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 257.88,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 404.88,
+"300": 468.72,
+"35": 115.08,
+"6": "invalid",
+"70": 181.44
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 236.39,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 371.14,
+"300": 429.66,
+"35": 105.49,
+"6": "invalid",
+"70": 166.32
+},
+"r90": 0.56797
+},
+"F|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 198.5676,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 311.7576,
+"300": 360.9144,
+"35": 88.6116,
+"6": "invalid",
+"70": 139.7088
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 269.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 429.0,
+"300": 498.0,
+"35": 117.0,
+"6": "invalid",
+"70": 187.0
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 225.96,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 360.36,
+"300": 418.32,
+"35": 98.28,
+"6": "invalid",
+"70": 157.08
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 207.13,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 330.33,
+"300": 383.46,
+"35": 90.09,
+"6": "invalid",
+"70": 143.99
+},
+"r90": 0.56797
+},
+"F|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 173.9892,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 277.4772,
+"300": 322.1064,
+"35": 75.6756,
+"6": "invalid",
+"70": 120.9516
+},
+"r90": 0.56797
+},
+"F|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 398.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 618.0,
+"300": 713.0,
+"35": 182.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 282.0
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 334.32,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 519.12,
+"300": 598.92,
+"35": 152.88,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 236.88
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 306.46,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 475.86,
+"300": 549.01,
+"35": 140.14,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 217.14
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 257.4264,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 399.7224,
+"300": 461.1684,
+"35": 117.7176,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 182.3976
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 349.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 552.0,
+"300": 640.0,
+"35": 154.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 244.0
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 293.16,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 463.68,
+"300": 537.6,
+"35": 129.36,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 204.96
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 268.73,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 425.04,
+"300": 492.8,
+"35": 118.58,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 187.88
+},
+"r90": 0.341727
+},
+"F|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 0.77,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 225.7332,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 357.0336,
+"300": 413.952,
+"35": 99.6072,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 157.8192
+},
+"r90": 0.341727
+},
+"G|pvc|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 268.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 419.0,
+"300": 485.0,
+"35": 121.0,
+"6": "invalid",
+"70": 189.0
+},
+"r90": 0.532265
+},
+"G|pvc|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "invalid",
+"120": 187.6,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/al",
+"2.5": "invalid",
+"240": 293.3,
+"300": 339.5,
+"35": 84.7,
+"6": "invalid",
+"70": 132.3
+},
+"r90": 0.532265
+},
+"G|pvc|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 345.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 535.0,
+"300": 617.0,
+"35": 157.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 244.0
+},
+"r90": 0.320662
+},
+"G|pvc|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.7
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/pvc/cu",
+"120": 241.5,
+"16": "error: sección 16 mm² fuera de 771.16.III/pvc/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/pvc/cu",
+"240": 374.5,
+"300": 431.9,
+"35": 109.9,
+"6": "error: sección 6 mm² fuera de 771.16.III/pvc/cu",
+"70": 170.8
+},
+"r90": 0.320662
+},
+"G|xlpe|al|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|1f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "invalid",
+"120": 352.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 556.0,
+"300": 644.0,
+"35": 157.0,
+"6": "invalid",
+"70": 247.0
+},
+"r90": 0.56797
+},
+"G|xlpe|al|3f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "invalid",
+"120": 295.68,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/al",
+"2.5": "invalid",
+"240": 467.04,
+"300": 540.96,
+"35": 131.88,
+"6": "invalid",
+"70": 207.48
+},
+"r90": 0.56797
+},
+"G|xlpe|cu|1f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|1f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g1|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g1|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g4|40C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 1.0
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 455.0,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 711.0,
+"300": 821.0,
+"35": 206.0,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 321.0
+},
+"r90": 0.341727
+},
+"G|xlpe|cu|3f|g4|55C": {
+"factors": {
+"f_agrup": 1.0,
+"f_clase": 1.0,
+"f_suelo": 1.0,
+"f_temp": 0.84
+},
+"iz": {
+"1.5": "error: sección 1.5 mm² fuera de 771.16.III/xlpe/cu",
+"120": 382.2,
+"16": "error: sección 16 mm² fuera de 771.16.III/xlpe/cu",
+"2.5": "error: sección 2.5 mm² fuera de 771.16.III/xlpe/cu",
+"240": 597.24,
+"300": 689.64,
+"35": 173.04,
+"6": "error: sección 6 mm² fuera de 771.16.III/xlpe/cu",
+"70": 269.64
+},
+"r90": 0.341727
+}
+},
+"feeder_reports": {
+"al_xlpe": {
+"error": "B1 con XLPE no tiene tabla en 771.16.I: use B2 o C",
+"warnings": [
+"C-05: ninguna sección ≤ 300 mm² cumple Iz/caída (In 400 A, ΔU 0.00 %): usar paralelo"
+]
+},
+"amps_3f": {
+"files": {
+"PROJ_MC.md": "# Memoria de Cálculo: alimentador principal C-01\n\n**Proyecto:** PROJ · **Circuito:** C-01 – ALIMENTADOR TD-PB\n\n## 1. Objeto y alcance\nDimensionar y verificar el alimentador principal del tablero. Los demás circuitos se documentan en el JSON de cálculo.\n\n## 2. Marco normativo\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-7-701 y 90364-7-722: locales de baño y alimentación de vehículos eléctricos\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60364: referencia de instalaciones de baja tensión\n\n## Etapa 1 – Datos genéricos\n| Parámetro | Valor |\n|---|---|\n| Tensión nominal U | 380 V |\n| Sistema de puesta a tierra | TN-S |\n| Icc en barras del tablero | 36 kA |\n| Factor de potencia | 0,85 |\n| Longitud del tendido | 40 m |\n| Tipo de cable | tetra_sep |\n| Aislación / material | PVC / CU |\n| Método de instalación | B1 · 1 terna(s) · 1 circuito(s) agrupados |\n| Temperatura de servicio | 70 °C |\n\n## Etapa 2 – Corriente de proyecto\nCarga declarada en amperes: Ib = 250 A (sin conversión).\n\n## Etapa 3 – Criterios de verificación\n- Capacidad: Iz ≥ In ≥ Ib.\n- Caída de tensión: ΔU ≤ 1,0 % (alimentador seccional).\n- Disparo magnético: Icc mínima al final del cable ≥ 10·In.\n- Sección mínima: S ≥ 2,5 mm².\n- Poder de corte: icu ≥ Icc en barras.\n\n## Etapa 4 – Selección de la sección\n- Sección elegida: S = 185 mm² de cobre (PVC, método B1); Iz = 260 A según tablas 771.16.\n- Resistencia a 70 °C: R = 0,1186 Ω/km; reactancia X = 0,08 Ω/km.\n- Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = 250 A y L = 40 m → ΔU = 0,7 %.\n- Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.\n\n## Etapa 5 – Verificaciones finales\n| Verificación | Valor | Requisito | Resultado |\n|---|---|---|---|\n| Capacidad de conducción | Iz = 260 A | Iz ≥ In = 250 A | CUMPLE |\n| Coordinación de sobrecarga | In = 250 A | In ≥ Ib = 250 A | CUMPLE |\n| Caída de tensión | 0,7 % | ≤ 1,0 % | CUMPLE |\n| Disparo magnético | Icc mín = 16000 A | ≥ 10·In = 2500 A | CUMPLE |\n| Sección mínima | S = 185 mm² | ≥ 2,5 mm² | CUMPLE |\n| Poder de corte | icu = 36 kA | ≥ Icc barras = 36 kA | CUMPLE |\n| PE y N (S_PE = S_N) | Pendiente | Pendiente | Pendiente |\n| Icc máxima y selectividad | Pendiente | Pendiente | Pendiente |\n\n**Resultado global:** CUMPLE (sujeto a las verificaciones pendientes).\n\n## Etapa 6 – Conclusión y puntos a verificar\nEl alimentador C-01 con cable de 185 mm² de cobre y protección MCCB (250 A) cumple las verificaciones calculadas.\nPuntos a verificar: Icc máxima, selectividad, conductores PE y N, y factores de agrupamiento y temperatura.\n",
+"PROJ_SP.md": "# Síntesis de Proyecto: C-01\n\n**Proyecto:** PROJ · **Alimentador principal:** C-01\n\n| Requisito normativo | Dato técnico |\n|---|---|\n| Capacidad de conducción (771) | Cu 185 mm², Iz 260 A ≥ In 250 A |\n| Caída de tensión (771.19) | ΔU 0,7 % ≤ 1,0 % |\n| Protección y poder de corte (90909-1) | MCCB (250 A), icu 36 kA ≥ Icc 36 kA |\n| Disparo magnético | Icc mín 16000 A ≥ 10·In |\n| Sección mínima (771.13) | S 185 mm² ≥ 2,5 mm² |\n\n**Resultado global:** CUMPLE\n\n**Observaciones**\n1. Pendiente: Icc máxima y selectividad.\n2. Pendiente: conductores PE y N.\n3. Factores de agrupamiento y temperatura no aplicados en esta versión.\n"
+},
+"warnings": []
+},
+"hp_motor": {
+"files": {
+"PROJ_MC.md": "# Memoria de Cálculo: alimentador principal C-04\n\n**Proyecto:** PROJ · **Circuito:** C-04 – ALIMENTADOR MOTOR\n\n## 1. Objeto y alcance\nDimensionar y verificar el alimentador principal del tablero. Los demás circuitos se documentan en el JSON de cálculo.\n\n## 2. Marco normativo\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-7-701 y 90364-7-722: locales de baño y alimentación de vehículos eléctricos\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60364: referencia de instalaciones de baja tensión\n\n## Etapa 1 – Datos genéricos\n| Parámetro | Valor |\n|---|---|\n| Tensión nominal U | 380 V |\n| Sistema de puesta a tierra | TN-S |\n| Icc en barras del tablero | 36 kA |\n| Factor de potencia | 0,85 |\n| Longitud del tendido | 60 m |\n| Tipo de cable | Pendiente |\n| Aislación / material | PVC / CU |\n| Método de instalación | B1 · 1 terna(s) · 1 circuito(s) agrupados |\n| Temperatura de servicio | 70 °C |\n\n## Etapa 2 – Corriente de proyecto\nIb = P / (√3 · U · cos φ) con P = 37000 HP, U = 380 V, cos φ = 0,85 → Ib = 72 A.\n\n## Etapa 3 – Criterios de verificación\n- Capacidad: Iz ≥ In ≥ Ib.\n- Caída de tensión: ΔU ≤ 1,0 % (alimentador seccional).\n- Disparo magnético: Icc mínima al final del cable ≥ 10·In.\n- Sección mínima: S ≥ 2,5 mm².\n- Poder de corte: icu ≥ Icc en barras.\n\n## Etapa 4 – Selección de la sección\n- Sección elegida: S = 50 mm² de cobre (PVC, método B1); Iz = 120 A según tablas 771.16.\n- Resistencia a 70 °C: R = 0,4630 Ω/km; reactancia X = 0,08 Ω/km.\n- Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = 72 A y L = 60 m → ΔU = 0,9 %.\n- Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.\n\n## Etapa 5 – Verificaciones finales\n| Verificación | Valor | Requisito | Resultado |\n|---|---|---|---|\n| Capacidad de conducción | Iz = 120 A | Iz ≥ In = 80 A | CUMPLE |\n| Coordinación de sobrecarga | In = 80 A | In ≥ Ib = 72 A | CUMPLE |\n| Caída de tensión | 0,9 % | ≤ 1,0 % | CUMPLE |\n| Disparo magnético | Icc mín = 5200 A | ≥ 10·In = 800 A | CUMPLE |\n| Sección mínima | S = 50 mm² | ≥ 2,5 mm² | CUMPLE |\n| Poder de corte | icu = 36 kA | ≥ Icc barras = 36 kA | CUMPLE |\n| PE y N (S_PE = S_N) | Pendiente | Pendiente | Pendiente |\n| Icc máxima y selectividad | Pendiente | Pendiente | Pendiente |\n\n**Resultado global:** CUMPLE (sujeto a las verificaciones pendientes).\n\n## Etapa 6 – Conclusión y puntos a verificar\nEl alimentador C-04 con cable de 50 mm² de cobre y protección MCCB (80 A) cumple las verificaciones calculadas.\nPuntos a verificar: Icc máxima, selectividad, conductores PE y N, y factores de agrupamiento y temperatura.\n",
+"PROJ_SP.md": "# Síntesis de Proyecto: C-04\n\n**Proyecto:** PROJ · **Alimentador principal:** C-04\n\n| Requisito normativo | Dato técnico |\n|---|---|\n| Capacidad de conducción (771) | Cu 50 mm², Iz 120 A ≥ In 80 A |\n| Caída de tensión (771.19) | ΔU 0,9 % ≤ 1,0 % |\n| Protección y poder de corte (90909-1) | MCCB (80 A), icu 36 kA ≥ Icc 36 kA |\n| Disparo magnético | Icc mín 5200 A ≥ 10·In |\n| Sección mínima (771.13) | S 50 mm² ≥ 2,5 mm² |\n\n**Resultado global:** CUMPLE\n\n**Observaciones**\n1. Pendiente: Icc máxima y selectividad.\n2. Pendiente: conductores PE y N.\n3. Factores de agrupamiento y temperatura no aplicados en esta versión.\n"
+},
+"warnings": []
+},
+"kva_1f": {
+"files": {
+"PROJ_MC.md": "# Memoria de Cálculo: alimentador principal C-03\n\n**Proyecto:** PROJ · **Circuito:** C-03 – ALIMENTADOR 1F\n\n## 1. Objeto y alcance\nDimensionar y verificar el alimentador principal del tablero. Los demás circuitos se documentan en el JSON de cálculo.\n\n## 2. Marco normativo\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-7-701 y 90364-7-722: locales de baño y alimentación de vehículos eléctricos\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60364: referencia de instalaciones de baja tensión\n\n## Etapa 1 – Datos genéricos\n| Parámetro | Valor |\n|---|---|\n| Tensión nominal U | 380 V |\n| Sistema de puesta a tierra | TN-S |\n| Icc en barras del tablero | 36 kA |\n| Factor de potencia | 0,85 |\n| Longitud del tendido | 25 m |\n| Tipo de cable | Pendiente |\n| Aislación / material | PVC / CU |\n| Método de instalación | B1 · 1 terna(s) · 1 circuito(s) agrupados |\n| Temperatura de servicio | 70 °C |\n\n## Etapa 2 – Corriente de proyecto\nIb = P / (U_f · cos φ) con P = 12000 VA, U = 380 V, cos φ = 0,85 → Ib = 55 A.\n\n## Etapa 3 – Criterios de verificación\n- Capacidad: Iz ≥ In ≥ Ib.\n- Caída de tensión: ΔU ≤ 1,0 % (alimentador seccional).\n- Disparo magnético: Icc mínima al final del cable ≥ 10·In.\n- Sección mínima: S ≥ 2,5 mm².\n- Poder de corte: icu ≥ Icc en barras.\n\n## Etapa 4 – Selección de la sección\n- Sección elegida: S = 25 mm² de cobre (PVC, método B1); Iz = 88 A según tablas 771.16.\n- Resistencia a 70 °C: R = 0,8699 Ω/km; reactancia X = 0,08 Ω/km.\n- Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = 55 A y L = 25 m → ΔU = 1,0 %.\n- Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.\n\n## Etapa 5 – Verificaciones finales\n| Verificación | Valor | Requisito | Resultado |\n|---|---|---|---|\n| Capacidad de conducción | Iz = 88 A | Iz ≥ In = 63 A | CUMPLE |\n| Coordinación de sobrecarga | In = 63 A | In ≥ Ib = 55 A | CUMPLE |\n| Caída de tensión | 1,0 % | ≤ 1,0 % | CUMPLE |\n| Disparo magnético | Icc mín = 3700 A | ≥ 10·In = 630 A | CUMPLE |\n| Sección mínima | S = 25 mm² | ≥ 2,5 mm² | CUMPLE |\n| Poder de corte | icu = 36 kA | ≥ Icc barras = 36 kA | CUMPLE |\n| PE y N (S_PE = S_N) | Pendiente | Pendiente | Pendiente |\n| Icc máxima y selectividad | Pendiente | Pendiente | Pendiente |\n\n**Resultado global:** CUMPLE (sujeto a las verificaciones pendientes).\n\n## Etapa 6 – Conclusión y puntos a verificar\nEl alimentador C-03 con cable de 25 mm² de cobre y protección MCCB (63 A) cumple las verificaciones calculadas.\nPuntos a verificar: Icc máxima, selectividad, conductores PE y N, y factores de agrupamiento y temperatura.\n",
+"PROJ_SP.md": "# Síntesis de Proyecto: C-03\n\n**Proyecto:** PROJ · **Alimentador principal:** C-03\n\n| Requisito normativo | Dato técnico |\n|---|---|\n| Capacidad de conducción (771) | Cu 25 mm², Iz 88 A ≥ In 63 A |\n| Caída de tensión (771.19) | ΔU 1,0 % ≤ 1,0 % |\n| Protección y poder de corte (90909-1) | MCCB (63 A), icu 36 kA ≥ Icc 36 kA |\n| Disparo magnético | Icc mín 3700 A ≥ 10·In |\n| Sección mínima (771.13) | S 25 mm² ≥ 2,5 mm² |\n\n**Resultado global:** CUMPLE\n\n**Observaciones**\n1. Pendiente: Icc máxima y selectividad.\n2. Pendiente: conductores PE y N.\n3. Factores de agrupamiento y temperatura no aplicados en esta versión.\n"
+},
+"warnings": []
+},
+"kw_3f": {
+"files": {
+"PROJ_MC.md": "# Memoria de Cálculo: alimentador principal C-02\n\n**Proyecto:** PROJ · **Circuito:** C-02 – ALIMENTADOR PLANTA\n\n## 1. Objeto y alcance\nDimensionar y verificar el alimentador principal del tablero. Los demás circuitos se documentan en el JSON de cálculo.\n\n## 2. Marco normativo\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-7-701 y 90364-7-722: locales de baño y alimentación de vehículos eléctricos\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60364: referencia de instalaciones de baja tensión\n\n## Etapa 1 – Datos genéricos\n| Parámetro | Valor |\n|---|---|\n| Tensión nominal U | 380 V |\n| Sistema de puesta a tierra | TN-S |\n| Icc en barras del tablero | 36 kA |\n| Factor de potencia | 0,90 |\n| Longitud del tendido | 90 m |\n| Tipo de cable | Pendiente |\n| Aislación / material | PVC / CU |\n| Método de instalación | B1 · 1 terna(s) · 1 circuito(s) agrupados |\n| Temperatura de servicio | 70 °C |\n\n## Etapa 2 – Corriente de proyecto\nIb = P / (√3 · U · cos φ) con P = 80000 W, U = 380 V, cos φ = 0,90 → Ib = 140 A.\n\n## Etapa 3 – Criterios de verificación\n- Capacidad: Iz ≥ In ≥ Ib.\n- Caída de tensión: ΔU ≤ 1,0 % (alimentador seccional).\n- Disparo magnético: Icc mínima al final del cable ≥ 10·In.\n- Sección mínima: S ≥ 2,5 mm².\n- Poder de corte: icu ≥ Icc en barras.\n\n## Etapa 4 – Selección de la sección\n- Sección elegida: S = 150 mm² de cobre (PVC, método B1); Iz = 230 A según tablas 771.16.\n- Resistencia a 70 °C: R = 0,1484 Ω/km; reactancia X = 0,08 Ω/km.\n- Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = 140 A y L = 90 m → ΔU = 0,9 %.\n- Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.\n\n## Etapa 5 – Verificaciones finales\n| Verificación | Valor | Requisito | Resultado |\n|---|---|---|---|\n| Capacidad de conducción | Iz = 230 A | Iz ≥ In = 160 A | CUMPLE |\n| Coordinación de sobrecarga | In = 160 A | In ≥ Ib = 140 A | CUMPLE |\n| Caída de tensión | 0,9 % | ≤ 1,0 % | CUMPLE |\n| Disparo magnético | Icc mín = 8600 A | ≥ 10·In = 1600 A | CUMPLE |\n| Sección mínima | S = 150 mm² | ≥ 2,5 mm² | CUMPLE |\n| Poder de corte | icu = 36 kA | ≥ Icc barras = 36 kA | CUMPLE |\n| PE y N (S_PE = S_N) | Pendiente | Pendiente | Pendiente |\n| Icc máxima y selectividad | Pendiente | Pendiente | Pendiente |\n\n**Resultado global:** CUMPLE (sujeto a las verificaciones pendientes).\n\n## Etapa 6 – Conclusión y puntos a verificar\nEl alimentador C-02 con cable de 150 mm² de cobre y protección MCCB (160 A) cumple las verificaciones calculadas.\nPuntos a verificar: Icc máxima, selectividad, conductores PE y N, y factores de agrupamiento y temperatura.\n",
+"PROJ_SP.md": "# Síntesis de Proyecto: C-02\n\n**Proyecto:** PROJ · **Alimentador principal:** C-02\n\n| Requisito normativo | Dato técnico |\n|---|---|\n| Capacidad de conducción (771) | Cu 150 mm², Iz 230 A ≥ In 160 A |\n| Caída de tensión (771.19) | ΔU 0,9 % ≤ 1,0 % |\n| Protección y poder de corte (90909-1) | MCCB (160 A), icu 36 kA ≥ Icc 36 kA |\n| Disparo magnético | Icc mín 8600 A ≥ 10·In |\n| Sección mínima (771.13) | S 150 mm² ≥ 2,5 mm² |\n\n**Resultado global:** CUMPLE\n\n**Observaciones**\n1. Pendiente: Icc máxima y selectividad.\n2. Pendiente: conductores PE y N.\n3. Factores de agrupamiento y temperatura no aplicados en esta versión.\n"
+},
+"warnings": []
+},
+"long_fail": {
+"files": {
+"PROJ_MC.md": "# Memoria de Cálculo: alimentador principal C-06\n\n**Proyecto:** PROJ · **Circuito:** C-06 – ALIMENTADOR LARGO\n\n## 1. Objeto y alcance\nDimensionar y verificar el alimentador principal del tablero. Los demás circuitos se documentan en el JSON de cálculo.\n\n## 2. Marco normativo\n- AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares\n- AEA 90364-7-770 (ed. 2017): instalaciones en edificios\n- AEA 90364-7-701 y 90364-7-722: locales de baño y alimentación de vehículos eléctricos\n- AEA 90909-1: cálculo de cortocircuito\n- IEC 60364: referencia de instalaciones de baja tensión\n\n## Etapa 1 – Datos genéricos\n| Parámetro | Valor |\n|---|---|\n| Tensión nominal U | 380 V |\n| Sistema de puesta a tierra | TN-S |\n| Icc en barras del tablero | 36 kA |\n| Factor de potencia | 0,85 |\n| Longitud del tendido | 900 m |\n| Tipo de cable | Pendiente |\n| Aislación / material | PVC / CU |\n| Método de instalación | B1 · 1 terna(s) · 1 circuito(s) agrupados |\n| Temperatura de servicio | 70 °C |\n\n## Etapa 2 – Corriente de proyecto\nCarga declarada en amperes: Ib = 300 A (sin conversión).\n\n## Etapa 3 – Criterios de verificación\n- Capacidad: Iz ≥ In ≥ Ib.\n- Caída de tensión: ΔU ≤ 1,0 % (alimentador seccional).\n- Disparo magnético: Icc mínima al final del cable ≥ 10·In.\n- Sección mínima: S ≥ 2,5 mm².\n- Poder de corte: icu ≥ Icc en barras.\n\n## Etapa 4 – Selección de la sección\n- Sección elegida: S = 300 mm² de cobre (PVC, método B1); Iz = 340 A según tablas 771.16.\n- Resistencia a 70 °C: R = 0,0719 Ω/km; reactancia X = 0,08 Ω/km.\n- Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = 300 A y L = 900 m → ΔU = 12,7 %.\n- Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.\n\n## Etapa 5 – Verificaciones finales\n| Verificación | Valor | Requisito | Resultado |\n|---|---|---|---|\n| Capacidad de conducción | Iz = 340 A | Iz ≥ In = 320 A | CUMPLE |\n| Coordinación de sobrecarga | In = 320 A | In ≥ Ib = 300 A | CUMPLE |\n| Caída de tensión | 12,7 % | ≤ 1,0 % | NO CUMPLE |\n| Disparo magnético | Icc mín = 1800 A | ≥ 10·In = 3200 A | NO CUMPLE |\n| Sección mínima | S = 300 mm² | ≥ 2,5 mm² | CUMPLE |\n| Poder de corte | icu = 36 kA | ≥ Icc barras = 36 kA | CUMPLE |\n| PE y N (S_PE = S_N) | Pendiente | Pendiente | Pendiente |\n| Icc máxima y selectividad | Pendiente | Pendiente | Pendiente |\n\n**Resultado global:** NO CUMPLE (sujeto a las verificaciones pendientes).\n\n## Etapa 6 – Conclusión y puntos a verificar\nEl alimentador C-06 con cable de 300 mm² de cobre y protección MCCB (315 A) no cumple las verificaciones calculadas.\nPuntos a verificar: Icc máxima, selectividad, conductores PE y N, y factores de agrupamiento y temperatura.\n",
+"PROJ_SP.md": "# Síntesis de Proyecto: C-06\n\n**Proyecto:** PROJ · **Alimentador principal:** C-06\n\n| Requisito normativo | Dato técnico |\n|---|---|\n| Capacidad de conducción (771) | Cu 300 mm², Iz 340 A ≥ In 320 A |\n| Caída de tensión (771.19) | ΔU 12,7 % ≤ 1,0 % |\n| Protección y poder de corte (90909-1) | MCCB (315 A), icu 36 kA ≥ Icc 36 kA |\n| Disparo magnético | Icc mín 1800 A ≥ 10·In |\n| Sección mínima (771.13) | S 300 mm² ≥ 2,5 mm² |\n\n**Resultado global:** NO CUMPLE\n\n**Observaciones**\n1. Pendiente: Icc máxima y selectividad.\n2. Pendiente: conductores PE y N.\n3. Factores de agrupamiento y temperatura no aplicados en esta versión.\n"
+},
+"warnings": [
+"C-06: ninguna sección ≤ 300 mm² cumple Iz/caída (In 315 A, ΔU 12.71 %): usar paralelo",
+"C-06: Icc mín al final 1784 A < 10·In (3150 A): verificar disparo magnético (curva) o acortar/ensanchar el cable",
+"C-06: dU 12.71 % > 5.0 %"
+]
+}
+},
+"protection": {
+"i2|fusible_gg|100": [
+160.0,
+108.75
+],
+"i2|fusible_gg|16": [
+25.6,
+17.4
+],
+"i2|fusible_gg|250": [
+400.0,
+271.875
+],
+"i2|fusible_gg|32": [
+51.2,
+34.8
+],
+"i2|fusible_gg|6": [
+9.6,
+6.525
+],
+"i2|fusible_gg|63": [
+100.8,
+68.5125
+],
+"i2|fusible_gg|630": [
+1008.0,
+685.125
+],
+"i2|mcb|100": [
+145.0,
+120.0
+],
+"i2|mcb|16": [
+23.2,
+19.2
+],
+"i2|mcb|250": [
+362.5,
+300.0
+],
+"i2|mcb|32": [
+46.4,
+38.4
+],
+"i2|mcb|6": [
+8.7,
+7.2
+],
+"i2|mcb|63": [
+91.35,
+75.6
+],
+"i2|mcb|630": [
+913.5,
+756.0
+],
+"i2|mccb|100": [
+130.0,
+120.0
+],
+"i2|mccb|16": [
+20.8,
+19.2
+],
+"i2|mccb|250": [
+325.0,
+300.0
+],
+"i2|mccb|32": [
+41.6,
+38.4
+],
+"i2|mccb|6": [
+7.8,
+7.2
+],
+"i2|mccb|63": [
+81.9,
+75.6
+],
+"i2|mccb|630": [
+819.0,
+756.0
+],
+"it|0.3|160|False": {
+"cumple": true,
+"dos_ia_zs_v": 96.0,
+"limite_v": 400.0
+},
+"it|0.3|160|True": {
+"cumple": true,
+"dos_ia_zs_v": 96.0,
+"limite_v": 230.0
+},
+"it|0.3|800|False": {
+"cumple": false,
+"dos_ia_zs_v": 480.0,
+"limite_v": 400.0
+},
+"it|0.3|800|True": {
+"cumple": false,
+"dos_ia_zs_v": 480.0,
+"limite_v": 230.0
+},
+"it|1.2|160|False": {
+"cumple": true,
+"dos_ia_zs_v": 384.0,
+"limite_v": 400.0
+},
+"it|1.2|160|True": {
+"cumple": false,
+"dos_ia_zs_v": 384.0,
+"limite_v": 230.0
+},
+"it|1.2|800|False": {
+"cumple": false,
+"dos_ia_zs_v": 1920.0,
+"limite_v": 400.0
+},
+"it|1.2|800|True": {
+"cumple": false,
+"dos_ia_zs_v": 1920.0,
+"limite_v": 230.0
+},
+"tn|0.2|160": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 32.0
+},
+"tn|0.2|30": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 6.0
+},
+"tn|0.2|3000": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 600.0
+},
+"tn|0.2|500": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 100.0
+},
+"tn|0.8|160": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 128.0
+},
+"tn|0.8|30": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 24.0
+},
+"tn|0.8|3000": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 2400.0
+},
+"tn|0.8|500": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 400.0
+},
+"tn|2.5|160": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 400.0
+},
+"tn|2.5|30": {
+"cumple": true,
+"limite_v": 230.0,
+"zs_ia_v": 75.0
+},
+"tn|2.5|3000": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 7500.0
+},
+"tn|2.5|500": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 1250.0
+},
+"tn|8.0|160": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 1280.0
+},
+"tn|8.0|30": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 240.0
+},
+"tn|8.0|3000": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 24000.0
+},
+"tn|8.0|500": {
+"cumple": false,
+"limite_v": 230.0,
+"zs_ia_v": 4000.0
+},
+"tt-if|1500.0|0.03": 0.153129,
+"tt-if|1500.0|0.3": 0.153129,
+"tt-if|1500.0|1.0": 0.153129,
+"tt-if|200.0|0.03": 1.138614,
+"tt-if|200.0|0.3": 1.138614,
+"tt-if|200.0|1.0": 1.138614,
+"tt-if|40.0|0.03": 5.47619,
+"tt-if|40.0|0.3": 5.47619,
+"tt-if|40.0|1.0": 5.47619,
+"tt-if|5.0|0.03": 32.857143,
+"tt-if|5.0|0.3": 32.857143,
+"tt-if|5.0|1.0": 32.857143,
+"tt|1500.0|0.03": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 45.0,
+"ra_max_ohm": 1666.666667
+},
+"tt|1500.0|0.3": {
+"cumple": false,
+"limite_v": 50.0,
+"ra_ia_v": 450.0,
+"ra_max_ohm": 166.666667
+},
+"tt|1500.0|1.0": {
+"cumple": false,
+"limite_v": 50.0,
+"ra_ia_v": 1500.0,
+"ra_max_ohm": 50.0
+},
+"tt|200.0|0.03": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 6.0,
+"ra_max_ohm": 1666.666667
+},
+"tt|200.0|0.3": {
+"cumple": false,
+"limite_v": 50.0,
+"ra_ia_v": 60.0,
+"ra_max_ohm": 166.666667
+},
+"tt|200.0|1.0": {
+"cumple": false,
+"limite_v": 50.0,
+"ra_ia_v": 200.0,
+"ra_max_ohm": 50.0
+},
+"tt|40.0|0.03": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 1.2,
+"ra_max_ohm": 1666.666667
+},
+"tt|40.0|0.3": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 12.0,
+"ra_max_ohm": 166.666667
+},
+"tt|40.0|1.0": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 40.0,
+"ra_max_ohm": 50.0
+},
+"tt|5.0|0.03": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 0.15,
+"ra_max_ohm": 1666.666667
+},
+"tt|5.0|0.3": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 1.5,
+"ra_max_ohm": 166.666667
+},
+"tt|5.0|1.0": {
+"cumple": true,
+"limite_v": 50.0,
+"ra_ia_v": 5.0,
+"ra_max_ohm": 50.0
+}
+}
+}

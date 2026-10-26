@@ -26,10 +26,11 @@ LIMITACIONES
 NORMA DE REFERENCIA
     AEA 90364-4-41, 4-43, 7-771 ; IEC 60898-1, IEC 60947-2, IEC 60364-5-53 ; AEA 90909-1.  [VERIFICAR]
 """
-import math
 from typing import Dict, List, Optional
 
 from epc_calc import aea_protection as PR
+from epc_calc import fmt
+from epc_calc.topology import MOTOR_TOPOLOGIES
 
 __version__ = "0.1.0"
 
@@ -41,7 +42,7 @@ RATIO_TERMICO = 1.6
 RCD_KINDS = ("rccb", "rcbo")
 KIND_ES = {"tray_perforated": "Bandeja perforada / escalera", "tray_solid": "Bandeja no perforada", "conduit_air": "Caño o ducto a la vista / embutido",
            "chamber": "Cámara de pase (aire)", "buried_direct": "Directamente enterrado", "buried_duct": "Caño o ducto enterrado", "road_crossing": "Cruce bajo calzada (caño enterrado)"}
-MOTORES = {"dol", "dol_ol", "star_delta", "softstarter", "vfd", "dol_rcd"}
+MOTORES = MOTOR_TOPOLOGIES
 
 NORMA_MARCO = (
     "AEA 90364-7-771 (ed. 2006): instalaciones en viviendas y similares",
@@ -54,21 +55,15 @@ NORMA_MARCO = (
 
 # ---------------------------------------------------------------- formato
 def p1(x) -> str:
-    return "Pendiente" if x is None else f"{x:.1f}".replace(".", ",")
+    return "Pendiente" if x is None else fmt.p1(x)
 
 
 def sig2(x) -> str:
-    if x is None:
-        return "Pendiente"
-    if not x:
-        return "0"
-    d = 1 - int(math.floor(math.log10(abs(x))))
-    v = round(x, d)
-    return (f"{v:.0f}" if d <= 0 else f"{v:.{d}f}").replace(".", ",")
+    return "Pendiente" if x is None else fmt.sig2(x)
 
 
 def mm(x) -> str:
-    return "Pendiente" if x is None else f"{x:g}".replace(".", ",")
+    return "Pendiente" if x is None else fmt.mm(x)
 
 
 def ok(b: Optional[bool]) -> str:

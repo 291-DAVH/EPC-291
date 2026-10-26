@@ -1,11 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ApiError, AuditEvent, Page, Project, State, StaffOrg, StaffUser, api, useApi, useI18n } from "@epc/ui";
+import { api, AuditEvent, errorText, JSON_HEADERS, Page, Project, StaffOrg, StaffUser, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
-
-function errorText(x: unknown): string {
-  return x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error";
-}
 
 interface Created { org: StaffOrg; invitation: { email: string; url: string } }
 
@@ -48,9 +43,9 @@ export default function Identity() {
                     <td className="small">{u.organizations.map((o) => `${o.name} (${o.role})`).join(", ")}{(u.platform_role === "inspector" || u.platform_role === "auditor") && orgs.data && <Assignments user={u} orgs={orgs.data} act={act} />}</td>
                     <td><span className={"badge " + (u.active ? "ok" : "bad")}>{t(u.active ? "org.active" : "org.inactive")}</span></td>
                     <td style={{ whiteSpace: "nowrap" }}>
-                      <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ active: !u.active }) }))}>{t(u.active ? "ident.disable" : "ident.enable")}</button>{" "}
-                      {(u.platform_role === "admin" || u.platform_role === "user") && <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: json, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>}{" "}
-                      <button onClick={() => { const pw = window.prompt(t("ident.pwPrompt")); if (pw) act(async () => { await api(`/identity/users/${u.id}/password`, { method: "PUT", headers: json, body: JSON.stringify({ password: pw }) }); window.alert(t("ident.pwDone")); }); }}>{t("ident.setPw")}</button>
+                      <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify({ active: !u.active }) }))}>{t(u.active ? "ident.disable" : "ident.enable")}</button>{" "}
+                      {(u.platform_role === "admin" || u.platform_role === "user") && <button onClick={() => act(() => api(`/identity/users/${u.id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify({ platform_role: u.platform_role === "admin" ? "user" : "admin" }) }))}>{t(u.platform_role === "admin" ? "ident.removeStaff" : "ident.makeStaff")}</button>}{" "}
+                      <button onClick={() => { const pw = window.prompt(t("ident.pwPrompt")); if (pw) act(async () => { await api(`/identity/users/${u.id}/password`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ password: pw }) }); window.alert(t("ident.pwDone")); }); }}>{t("ident.setPw")}</button>
                     </td>
                   </tr>
                 ))}
@@ -68,7 +63,7 @@ export default function Identity() {
                   <tr key={p.id}>
                     <td className="mono">{p.id} <span className="muted">· {p.name}</span></td>
                     <td>
-                      <select value={p.org || ""} onChange={(e) => act(() => api(`/projects/${p.id}/org`, { method: "PUT", headers: json, body: JSON.stringify({ org: e.target.value }) }))}>
+                      <select value={p.org || ""} onChange={(e) => act(() => api(`/projects/${p.id}/org`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ org: e.target.value }) }))}>
                         <option value="">{t("ident.unassigned")}</option>
                         {orgs.data!.map((o) => <option key={o.slug} value={o.slug}>{o.name}</option>)}
                       </select>
@@ -89,7 +84,7 @@ function OrgRow({ o, act }: { o: StaffOrg; act: (fn: () => Promise<unknown>) => 
   const [seats, setSeats] = useState(String(o.seats));
   const [note, setNote] = useState(o.validation_note);
   const [open, setOpen] = useState(o.validation === "pending");                  // a registration waiting for the team opens by itself
-  const patch = (body: object) => act(() => api(`/identity/orgs/${o.slug}`, { method: "PATCH", headers: json, body: JSON.stringify(body) }));
+  const patch = (body: object) => act(() => api(`/identity/orgs/${o.slug}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(body) }));
   const decide = (validation: string) => patch({ validation, validation_note: note });
   const a = o.address;
   const detail = o.kind === "company" && !!o.tax_id;
@@ -143,7 +138,7 @@ function NewOrg({ onDone }: { onDone: () => void }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      setRes(await api<Created>("/identity/orgs", { method: "POST", headers: json, body: JSON.stringify({ name, kind, seats: kind === "company" ? Number(seats) : 1, owner_email: email }) }));
+      setRes(await api<Created>("/identity/orgs", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ name, kind, seats: kind === "company" ? Number(seats) : 1, owner_email: email }) }));
       setName(""); setEmail(""); setErr(""); onDone();
     } catch (x) { setErr(errorText(x)); }
   };
@@ -186,7 +181,7 @@ function NewAccount({ onDone }: { onDone: () => void }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api("/identity/users", { method: "POST", headers: json, body: JSON.stringify({ email, name, password, platform_role: role }) });
+      await api("/identity/users", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ email, name, password, platform_role: role }) });
       setEmail(""); setName(""); setPassword(""); setMsg({ ok: true, text: t("ident.accountCreated") }); onDone();
     } catch (x) { setMsg({ ok: false, text: errorText(x) }); }
   };
@@ -221,7 +216,7 @@ function Assignments({ user, orgs, act }: { user: StaffUser; orgs: StaffOrg[]; a
         <div className="card" style={{ marginTop: 6 }}>
           {orgs.map((o) => <label key={o.slug} className="small" style={{ display: "block" }}><input type="checkbox" checked={sel.has(o.slug)} onChange={() => toggle(o.slug)} /> {o.name}</label>)}
           <div className="row" style={{ marginTop: 6 }}>
-            <button className="primary" onClick={() => { act(() => api(`/identity/users/${user.id}/assignments`, { method: "PUT", headers: json, body: JSON.stringify({ orgs: [...sel] }) })); setOpen(false); }}>{t("ident.save")}</button>
+            <button className="primary" onClick={() => { act(() => api(`/identity/users/${user.id}/assignments`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ orgs: [...sel] }) })); setOpen(false); }}>{t("ident.save")}</button>
           </div>
         </div>
       )}

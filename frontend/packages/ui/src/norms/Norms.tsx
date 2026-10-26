@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { ApiError, NormPoint, NormPointRow, NormUnit, api, useApi } from "../api";
+import { ApiError, JSON_HEADERS, NormPoint, NormPointRow, NormUnit, api, useApi } from "../api";
 import { Badge, Page, State } from "../components";
 import { useI18n } from "../i18n";
 
-const json = { "Content-Type": "application/json" };
 const STATUS_TONE: Record<string, "ok" | "bad" | "warn" | undefined> = { approved: "ok", rejected: "bad", stale: "warn", pending: undefined };
 
 function errorText(x: unknown): string {
@@ -137,7 +136,7 @@ function PointEditor({ unitId, pointKey, onChanged, onClose }: { unitId: string;
   const done = (text: string) => { setMsg({ ok: true, text }); setNote(""); setRev((n) => n + 1); onChanged(); };
   const run = async (fn: () => Promise<unknown>, ok: string) => { try { await fn(); done(ok); } catch (x) { setMsg({ ok: false, text: x instanceof Error && !(x instanceof ApiError) ? x.message : errorText(x) }); } };
   const dirty = JSON.stringify(draft) !== JSON.stringify(orig);
-  const save = (approve: boolean) => run(() => api(path, { method: "PUT", headers: json, body: JSON.stringify({ patch: toPatch(p, draft, orig), note, approve }) }), approve ? t("norms.savedApproved") : t("norms.saved"));
+  const save = (approve: boolean) => run(() => api(path, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ patch: toPatch(p, draft, orig), note, approve }) }), approve ? t("norms.savedApproved") : t("norms.saved"));
   const field = (k: string, label: string, wide = false, area = false, mono = false) => (
     <label className="field" style={wide ? { gridColumn: "1 / -1" } : undefined}>
       <span>{label}</span>
@@ -176,8 +175,8 @@ function PointEditor({ unitId, pointKey, onChanged, onClose }: { unitId: string;
       <div className="row" style={{ marginTop: 10 }}>
         {dirty && <button onClick={() => save(false)}>{t("norms.save")}</button>}
         {dirty ? <button className="primary" onClick={() => save(true)}>{t("norms.saveApprove")}</button>
-               : <button className="primary" onClick={() => run(() => api(`${path}/approve`, { method: "POST", headers: json, body: JSON.stringify({ note }) }), t("norms.approvedOk"))}>{t("norms.approve")}</button>}
-        <button onClick={() => note.trim() ? run(() => api(`${path}/reject`, { method: "POST", headers: json, body: JSON.stringify({ note }) }), t("norms.rejectedOk")) : setMsg({ ok: false, text: t("norms.needNote") })}>{t("norms.reject")}</button>
+               : <button className="primary" onClick={() => run(() => api(`${path}/approve`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ note }) }), t("norms.approvedOk"))}>{t("norms.approve")}</button>}
+        <button onClick={() => note.trim() ? run(() => api(`${path}/reject`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ note }) }), t("norms.rejectedOk")) : setMsg({ ok: false, text: t("norms.needNote") })}>{t("norms.reject")}</button>
       </div>
       {msg && <div className={"alert " + (msg.ok ? "ok" : "bad")} style={{ marginTop: 10 }}>{msg.text}</div>}
 

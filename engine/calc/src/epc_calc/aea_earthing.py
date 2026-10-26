@@ -27,6 +27,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-771 §3, §18, Anexo C.10 y C.II.  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -40,13 +41,6 @@ TIEMPOS_DESCONEXION_S = {
     "TT": ((120, 0.2, None), (230, 0.06, 0.2), (400, 0.01, 0.02)),
 }
 T_SECCIONAL_S = {"TT": 1.0, "TN": 5.0}
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def ra_maxima(i_dn_a):

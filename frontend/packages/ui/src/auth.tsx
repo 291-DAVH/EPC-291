@@ -1,9 +1,8 @@
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react";
-import { ApiError, Me, SocialProvider, api } from "./api";
+import { api, ApiError, JSON_HEADERS, Me, SocialProvider } from "./api";
 import CompanySignup from "./CompanySignup";
 import { Key, useI18n } from "./i18n";
 
-const json = { "Content-Type": "application/json" };
 
 interface InvitationInfo { email: string; role: string; org: string; kind: string; existing_account: boolean }
 
@@ -50,7 +49,7 @@ function SocialComplete({ onDone }: { onDone: (m: Me) => void }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault(); setErr("");
     try {
-      const m = await api<Me>("/auth/oauth/complete", { method: "POST", headers: json, body: JSON.stringify({ kind: "individual", username }) });
+      const m = await api<Me>("/auth/oauth/complete", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ kind: "individual", username }) });
       try { window.history.replaceState({}, "", "/"); } catch { /* ignore */ }
       onDone(m);
     } catch (x) { setErr(x instanceof ApiError ? Object.entries(x.fieldErrors).map(([k, v]) => `${k}: ${v}`).join(", ") || String(x.status) : "error"); }
@@ -125,7 +124,7 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
   useEffect(() => { api<SocialProvider[]>("/auth/providers").then(setProviders).catch(() => setProviders([])); }, []);
   useEffect(() => {
     if (!token) return;
-    api<InvitationInfo>("/auth/invitation", { method: "POST", headers: json, body: JSON.stringify({ token }) }).then(setInv).catch(() => setInvBad(true));
+    api<InvitationInfo>("/auth/invitation", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ token }) }).then(setInv).catch(() => setInvBad(true));
   }, [token]);
 
   const submit = async (e: FormEvent) => {
@@ -136,7 +135,7 @@ function AuthScreen({ me, onDone }: { me: Me; onDone: (m: Me) => void }) {
       let body: Record<string, unknown> = { login: email, password };
       if (token && inv) { path = "/auth/accept-invitation"; body = { token, name, password, username }; }
       else if (mode === "signup") { path = "/auth/signup"; body = { kind: "individual", name, email, password, username }; }
-      const m = await api<Me>(path, { method: "POST", headers: json, body: JSON.stringify(body) });
+      const m = await api<Me>(path, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) });
       if (token) clearInvite();
       try { window.history.replaceState({}, "", m.landing || "/"); } catch { /* ignore */ }      // each kind of account starts where its work is
       onDone(m);

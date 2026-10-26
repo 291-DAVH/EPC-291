@@ -25,6 +25,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-701 (2012); AEA 90364-7-722 (2018).  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -35,13 +36,6 @@ MAX_OUTLETS_LOAD_MULTIPLE = 8
 I_MIN_LOAD_MULTIPLE_TO = 10.0
 IDN_DIFERENCIAL_EV_MA = 30.0
 I_CC_DETECCION_MA = 6.0
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def induccion_conductor_t(i_a, distancia_m):

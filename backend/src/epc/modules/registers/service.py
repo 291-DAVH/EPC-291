@@ -7,8 +7,10 @@ import datetime as dt
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
-from epc.core.errors import Conflict, Forbidden, Invalid, NotFound
+from epc.core import clock, ids
+from epc.core.errors import Conflict, Forbidden, Invalid, first_or_404
 from epc.core.fsutil import today
+from epc.core import lang as lang_mod
 from epc.modules.identity import public as identity
 from epc.modules.projects import public as projects
 from epc.modules.registers import repository
@@ -25,16 +27,12 @@ def _defs(d: Path) -> dict:
 
 
 def _kind(d: Path, kind: str) -> dict:
-    r = next((x for x in _defs(d)["registers"] if x["id"] == kind), None)
-    if not r:
-        raise NotFound("register not found")
+    r = first_or_404((x for x in _defs(d)["registers"] if x["id"] == kind), "register not found")
     return r
 
 
 def _lang(d: Path, lang: Optional[str]) -> str:
-    if lang in ("es", "en"):
-        return lang
-    return "es" if (projects.read_meta(d).get("locale") or "es").lower().startswith("es") else "en"
+    return lang_mod.pick(lang, projects.read_meta(d).get("locale"))
 
 
 def _view_field(f: dict, lang: str) -> dict:
@@ -131,7 +129,7 @@ def _who() -> str:
 
 
 def _now() -> str:
-    return dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    return clock.now_aware()
 
 
 def _close_date(r: dict, rec: dict) -> None:
@@ -145,7 +143,7 @@ def create(d: Path, kind: str, data: dict) -> dict:
     rec.update({f["id"]: f["default"] for f in r["fields"] if "default" in f})
     rec.update(_clean(r, data, creating=True))
     all_items = repository.load(d, kind)
-    n = max((int(i["id"].split("-")[1]) for i in all_items), default=0) + 1
+    n = ids.max_seq(all_items) + 1
     _derive(r, rec)
     _close_date(r, rec)
     now, who = _now(), _who()
@@ -158,9 +156,7 @@ def create(d: Path, kind: str, data: dict) -> dict:
 def update(d: Path, kind: str, item_id: str, data: dict) -> dict:
     r = _kind(d, kind)
     all_items = repository.load(d, kind)
-    rec = next((i for i in all_items if i["id"] == item_id), None)
-    if rec is None:
-        raise NotFound("record not found")
+    rec = first_or_404((i for i in all_items if i["id"] == item_id), "record not found")
     clean = _clean(r, data, creating=False)
     changes = {k: [rec.get(k), v] for k, v in clean.items() if rec.get(k) != v}
     if not changes:
@@ -219,9 +215,7 @@ def update_observation(d: Path, item_id: str, data: dict) -> dict:
         extra = set(data) - {"response"}
         if extra:
             raise Forbidden("the customer can only answer an observation")
-        current = next((i for i in repository.load(d, "observation") if i["id"] == item_id), None)
-        if current is None:
-            raise NotFound("record not found")
+        current = first_or_404((i for i in repository.load(d, "observation") if i["id"] == item_id), "record not found")
         if current["status"] == "closed":
             raise Conflict({"status": "the observation is closed"})
         rec = update(d, "observation", item_id, {"response": data.get("response", ""), "status": "answered" if (data.get("response") or "").strip() else "open"})

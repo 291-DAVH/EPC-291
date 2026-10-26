@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { ApiError, Me, api } from "./api";
+import { api, ApiError, JSON_HEADERS, Me } from "./api";
 import { Markdown } from "./markdown";
 import { useI18n } from "./i18n";
 
@@ -10,7 +10,6 @@ interface Country {
   postal: { label: { es: string; en: string }; example: string };
 }
 interface Started { registration: string; email: string; expires_minutes: number }
-const json = { "Content-Type": "application/json" };
 
 const blank = { country: "", org_name: "", tax_id: "", street: "", number: "", locality: "", region: "", postal_code: "", contact_email: "", name: "", username: "", password: "" };
 
@@ -53,7 +52,7 @@ export default function CompanySignup({ onDone, onBack }: { onDone: (m: Me) => v
     e.preventDefault();
     setBusy(true); setGeneral(""); setErrors({});
     try {
-      const s = await api<Started>("/auth/company/register", { method: "POST", headers: json, body: JSON.stringify({ ...f, accept_terms: accept, terms_version: terms?.version ?? "", lang }) });
+      const s = await api<Started>("/auth/company/register", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ ...f, accept_terms: accept, terms_version: terms?.version ?? "", lang }) });
       setStarted(s); setWait(60); setCode("");
     } catch (x) { fail(x); } finally { setBusy(false); }
   };
@@ -62,7 +61,7 @@ export default function CompanySignup({ onDone, onBack }: { onDone: (m: Me) => v
     if (!started) return;
     setBusy(true); setGeneral(""); setErrors({});
     try {
-      const m = await api<Me>("/auth/company/verify", { method: "POST", headers: json, body: JSON.stringify({ registration: started.registration, code }) });
+      const m = await api<Me>("/auth/company/verify", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ registration: started.registration, code }) });
       try { window.history.replaceState({}, "", m.landing || "/"); } catch { /* ignore */ }
       onDone(m);
     } catch (x) {
@@ -71,7 +70,7 @@ export default function CompanySignup({ onDone, onBack }: { onDone: (m: Me) => v
   };
   const resend = async () => {
     if (!started) return;
-    try { await api("/auth/company/resend", { method: "POST", headers: json, body: JSON.stringify({ registration: started.registration }) }); setWait(60); setGeneral(t("co.resent")); }
+    try { await api("/auth/company/resend", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ registration: started.registration }) }); setWait(60); setGeneral(t("co.resent")); }
     catch (x) { fail(x); }
   };
 

@@ -8,8 +8,9 @@ import datetime as dt
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from epc.core.errors import Conflict, Failure, Invalid, NotFound
+from epc.core.errors import Conflict, Failure, Invalid, first_or_404
 from epc.core.fsutil import safe_file, today
+from epc.core import lang as lang_mod
 from epc.modules.backlog import public as backlog
 from epc.modules.deliverables import public as deliverables
 from epc.modules.identity import public as identity
@@ -23,11 +24,10 @@ from epc.modules.requirements import public as requirements
 from epc.modules.schedule import public as schedule
 from epc.modules.wbs import public as wbs
 
-LANGS = ("es", "en")
 
 
 def _lang(meta: dict, lang: Optional[str]) -> str:
-    return lang if lang in LANGS else ("es" if (meta.get("locale") or "es").lower().startswith("es") else "en")
+    return lang_mod.pick(lang, meta.get("locale"))
 
 
 def _catalog(meta: dict) -> dict:
@@ -127,9 +127,7 @@ def generate(d: Path, body: GenerateIn) -> dict:
 
 
 def _record(d: Path, rid: str) -> dict:
-    rec = next((r for r in repository.generated(d) if r["id"] == rid), None)
-    if not rec:
-        raise NotFound("report not found")
+    rec = first_or_404((r for r in repository.generated(d) if r["id"] == rid), "report not found")
     return rec
 
 
@@ -143,9 +141,7 @@ def file_for(d: Path, rid: str, fmt: str) -> Tuple[Path, str]:
 
 def publish(d: Path, rid: str) -> dict:
     items = repository.generated(d)
-    rec = next((r for r in items if r["id"] == rid), None)
-    if not rec:
-        raise NotFound("report not found")
+    rec = first_or_404((r for r in items if r["id"] == rid), "report not found")
     if rec.get("published"):
         raise Conflict({"published": f"already published as {rec['published']}"})
     cat = _catalog(projects.read_meta(d))

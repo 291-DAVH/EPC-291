@@ -5,13 +5,12 @@ A point is *pending* until someone approves it; approving stores who, when, a no
 The reviewer corrects values, never the structure of the data: tables keep their shape, rules keep their fields.
 """
 import copy
-import datetime as dt
-import hashlib
-import json
-import re
 from typing import Dict, List, Optional, Tuple
 
-from epc.core.errors import Conflict, Invalid, NotFound
+from epc.core import clock
+from epc.core.errors import Conflict, Invalid, NotFound, first_or_404
+from epc.core.text import slugify
+from epc.core.hashing import sha256_json
 from epc.modules.identity import public as identity
 from epc.modules.norms import repository
 
@@ -22,11 +21,11 @@ EDITABLE = {"rule": ["tema", "regla", "tipo", "parametros", "aplica_a", "fuente"
 
 
 def slug(s: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
+    return slugify(s)
 
 
 def sha(value) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+    return sha256_json(value)
 
 
 def _who() -> str:
@@ -35,7 +34,7 @@ def _who() -> str:
 
 
 def _now() -> str:
-    return dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    return clock.now_aware()
 
 
 # ---------------------------------------------------------------- points of each kind
@@ -86,9 +85,7 @@ def _unit(unit_id: str) -> dict:
 
 
 def _point(unit_id: str, key: str) -> dict:
-    p = next((p for p in _unit(unit_id)["points"] if p["key"] == key), None)
-    if not p:
-        raise NotFound("point not found")
+    p = first_or_404((p for p in _unit(unit_id)["points"] if p["key"] == key), "point not found")
     return p
 
 

@@ -1,9 +1,9 @@
 """Structured requirements derived from customer input. The analysis step writes them; people answer their open questions here."""
-import datetime as dt
 from pathlib import Path
 from typing import List
 
-from epc.core.errors import Invalid, NotFound
+from epc.core import clock
+from epc.core.errors import Invalid, NotFound, first_or_404
 from epc.modules.identity import public as identity
 from epc.modules.intake import public as intake
 from epc.modules.requirements import repository
@@ -32,15 +32,13 @@ def answer_question(d: Path, req_id: str, question: str, answer: str) -> dict:
     if len(answer) > MAX_ANSWER:
         raise Invalid({"answer": f"at most {MAX_ANSWER} characters"})
     reqs = repository.read_all(d)
-    req = next((r for r in reqs if r.get("id") == req_id), None)
-    if req is None:
-        raise NotFound("requirement not found")
+    req = first_or_404((r for r in reqs if r.get("id") == req_id), "requirement not found")
     if question not in req.get("open_questions", []):
         raise NotFound("question not found (already answered?)")
     who = identity.current_user()
     req["open_questions"] = [q for q in req["open_questions"] if q != question]
     req.setdefault("answered_questions", []).append({"question": question, "answer": answer, "by": who.get("name") or who.get("email") or "-",
-                                                      "by_email": who.get("email", ""), "at": dt.datetime.now().astimezone().isoformat(timespec="seconds")})
+                                                      "by_email": who.get("email", ""), "at": clock.now_aware()})
     if not req["open_questions"] and req.get("status") == "abierto":
         req["status"] = "definido"
     repository.write_all(d, reqs)

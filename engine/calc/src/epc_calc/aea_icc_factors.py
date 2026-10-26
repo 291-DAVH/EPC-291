@@ -38,6 +38,7 @@ NORMA DE REFERENCIA
     AEA IT 90909-1 (2005); AEA 90909-0 (IEC 60909-0).  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -45,13 +46,6 @@ C_MAX_RED = 1.10
 RIGIDO_MAX_U_RATIO = 1.4
 LIM_MOTORES_I_PCT = 5.0       # [108]
 LIM_MOTORES_SUMA_IRM_PCT = 1.0  # [110]
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def c_max_desde_tension(u_q_max, un):

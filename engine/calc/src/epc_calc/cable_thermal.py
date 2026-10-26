@@ -43,6 +43,7 @@ NORMA DE REFERENCIA (por designación)
 """
 
 import math
+from epc_calc._validate import pos as _pos
 
 __version__ = "0.1.0"
 
@@ -57,13 +58,6 @@ K_ADIABATICO = {
 T_ADIABATICO_MAX_S = 5.0
 #: Tiempo por debajo del cual debe usarse la integral de Joule del dispositivo (s). [VERIFICAR]
 T_CORTO_S = 0.1
-
-
-def _pos(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor <= 0:
-        raise ValueError(f"{nombre} debe ser > 0 (recibido: {valor})")
 
 
 def k_material(material, aislacion):

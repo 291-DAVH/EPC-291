@@ -31,6 +31,7 @@ NORMA DE REFERENCIA
     AEA 90364-7-771 §13, §16, §19, Anexo H; AEA 90364-7-770 §11.  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
@@ -72,13 +73,6 @@ X_CABLE_OHM_KM = 0.08      # reactancia típica de cable en cañería [Ω/km]  [
 
 # Tabla 771.16.XIII: (THD máx [%], factor, aplicado a)
 FACTORS_HARMONICS = ((15.0, 1.00, "linea"), (33.0, 0.86, "linea"), (45.0, 0.86, "neutro"), (math.inf, 1.00, "neutro"))
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def section_min_circuit(tipo):

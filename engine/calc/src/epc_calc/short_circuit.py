@@ -57,6 +57,7 @@ NORMA DE REFERENCIA (por designación)
 """
 
 import math
+from epc_calc._validate import nonneg as _nonneg, pos as _pos
 
 __version__ = "0.1.0"
 
@@ -72,20 +73,6 @@ WARNING_MOTORS = ("No incluye aporte de motores (usar aporte_motor() y sumar exp
 ADVERTENCIA_KAPPA = ("No incluye factor κ ni corriente de pico i_p (usar corriente_pico() explícitamente).")
 
 _RAIZ3 = math.sqrt(3.0)
-
-
-def _pos(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor <= 0:
-        raise ValueError(f"{nombre} debe ser > 0 (recibido: {valor})")
-
-
-def _nonneg(valor, nombre):
-    if not isinstance(valor, (int, float)) or isinstance(valor, bool) or not math.isfinite(valor):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {valor!r})")
-    if valor < 0:
-        raise ValueError(f"{nombre} debe ser ≥ 0 (recibido: {valor})")
 
 
 def factor_c(tolerancia_pct):

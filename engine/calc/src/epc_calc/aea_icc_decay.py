@@ -37,17 +37,11 @@ NORMA DE REFERENCIA
     AEA IT 90909-1 (2005) §2.4–2.8; AEA 90909-0.  [VERIFICAR]
 """
 import math
+from epc_calc._validate import num as _num
 
 __version__ = "0.1.0"
 
 U_FMAX = {("cilindrico", 1): 1.3, ("cilindrico", 2): 1.6, ("salientes", 1): 1.6, ("salientes", 2): 2.0}
-
-
-def _num(v, nombre, minimo=0.0, estricto=False):
-    if not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v):
-        raise ValueError(f"{nombre} debe ser un número finito (recibido: {v!r})")
-    if (estricto and v <= minimo) or (not estricto and v < minimo):
-        raise ValueError(f"{nombre} debe ser {'>' if estricto else '≥'} {minimo} (recibido: {v})")
 
 
 def kappa_exacto(r_ohm, x_ohm, pasos=20000):

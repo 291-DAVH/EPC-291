@@ -49,3 +49,10 @@ class TooManyRequests(DomainError):
 
 class Failure(DomainError):
     status = 500
+
+
+def first_or_404(items, message: str):
+    """The first element of `items` (typically a generator that filters a list); NotFound(message) when there is none."""
+    for x in items:
+        return x
+    raise NotFound(message)
