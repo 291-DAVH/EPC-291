@@ -10,6 +10,7 @@ from typing import Callable, Dict, List, Optional
 from epc.core import clock, ids
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound
 from epc.core.fsutil import today
+from epc.core import lang as lang_mod
 from epc.modules.identity import public as identity
 from epc.modules.projects import public as projects
 from epc.modules.registers import repository
@@ -33,9 +34,7 @@ def _kind(d: Path, kind: str) -> dict:
 
 
 def _lang(d: Path, lang: Optional[str]) -> str:
-    if lang in ("es", "en"):
-        return lang
-    return "es" if (projects.read_meta(d).get("locale") or "es").lower().startswith("es") else "en"
+    return lang_mod.pick(lang, projects.read_meta(d).get("locale"))
 
 
 def _view_field(f: dict, lang: str) -> dict:
