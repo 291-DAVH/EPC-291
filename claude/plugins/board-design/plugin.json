@@ -55,12 +55,7 @@
       "matplotlib"
     ]
   },
-  "skills": [
-    {
-      "id": "design-board",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "engine": [
     "calc",
     "drawing"

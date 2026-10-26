@@ -38,16 +38,7 @@
       "lxml"
     ]
   },
-  "skills": [
-    {
-      "id": "generate-titleblock-sheet",
-      "role": "owner"
-    },
-    {
-      "id": "generate-iram-sheet",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "legacy": {
     "name": "iram-titleblock-plugin",
     "source": "291_G_IRAM_Custom_TitleBlocks_Generator"

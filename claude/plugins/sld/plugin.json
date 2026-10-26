@@ -49,12 +49,7 @@
       "cairosvg"
     ]
   },
-  "skills": [
-    {
-      "id": "generate-sld",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "legacy": {
     "name": "sld-generator",
     "source": "sld-generator",

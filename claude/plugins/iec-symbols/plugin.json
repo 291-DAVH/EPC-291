@@ -33,12 +33,7 @@
     "optional": true,
     "note": "only for the tools/ build scripts"
   },
-  "skills": [
-    {
-      "id": "generate-electrical-symbol",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "legacy": {
     "name": "iec60617-symbol-generator",
     "source": "291_E_IEC60617_Symbols_Generator"

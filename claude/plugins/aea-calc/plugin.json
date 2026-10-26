@@ -44,24 +44,7 @@
       "openpyxl>=3.1"
     ]
   },
-  "skills": [
-    {
-      "id": "size-feeder",
-      "role": "owner"
-    },
-    {
-      "id": "dimension-installation",
-      "role": "owner"
-    },
-    {
-      "id": "write-calculation-memo",
-      "role": "owner"
-    },
-    {
-      "id": "write-memo-summary",
-      "role": "owner"
-    }
-  ],
+  "skills": [],
   "legacy": {
     "name": "aea90364-standard",
     "source": "elec-calc-generator",
