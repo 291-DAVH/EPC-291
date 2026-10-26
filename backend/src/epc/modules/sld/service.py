@@ -1,9 +1,9 @@
-import datetime as dt
 import re
 import threading
 from pathlib import Path
 from typing import Dict, Optional
 
+from epc.core import clock
 from epc.core.errors import Conflict, Invalid, NotFound
 from epc.core.fsutil import read_json
 from epc.modules.engineering import public as engineering
@@ -300,7 +300,7 @@ def _lock(d: Path, bid: str) -> threading.Lock:
 def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> None:
     prior = repository.load_status(d, bid)
     previous, previous_name = prior.get("outputs", []), prior.get("name")
-    st = {"state": "running", "name": name, "started": dt.datetime.now().replace(microsecond=0).isoformat(), "outputs": previous, "log": []}
+    st = {"state": "running", "name": name, "started": clock.now_local(), "outputs": previous, "log": []}
     repository.save_status(d, bid, st)
     try:
         work = repository.work_dir(d, bid)
@@ -324,7 +324,7 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
                       calculation={"limits_pct": summary.get("limites_pct"), "conductor": summary.get("conductor"), "non_compliant": summary.get("non_compliant", [])})
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status
         st.update(state="failed", error=str(exc)[:600])
-    st["finished"] = dt.datetime.now().replace(microsecond=0).isoformat()
+    st["finished"] = clock.now_local()
     repository.save_status(d, bid, st)
 
 

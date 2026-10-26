@@ -5,12 +5,12 @@ A point is *pending* until someone approves it; approving stores who, when, a no
 The reviewer corrects values, never the structure of the data: tables keep their shape, rules keep their fields.
 """
 import copy
-import datetime as dt
 import hashlib
 import json
 import re
 from typing import Dict, List, Optional, Tuple
 
+from epc.core import clock
 from epc.core.errors import Conflict, Invalid, NotFound
 from epc.modules.identity import public as identity
 from epc.modules.norms import repository
@@ -35,7 +35,7 @@ def _who() -> str:
 
 
 def _now() -> str:
-    return dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    return clock.now_aware()
 
 
 # ---------------------------------------------------------------- points of each kind

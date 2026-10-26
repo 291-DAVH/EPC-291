@@ -7,6 +7,7 @@ import datetime as dt
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
+from epc.core import clock
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound
 from epc.core.fsutil import today
 from epc.modules.identity import public as identity
@@ -131,7 +132,7 @@ def _who() -> str:
 
 
 def _now() -> str:
-    return dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    return clock.now_aware()
 
 
 def _close_date(r: dict, rec: dict) -> None:

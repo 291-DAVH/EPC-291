@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict, Optional
 
+from epc.core import clock
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.engineering import repository
@@ -98,7 +99,6 @@ def calculation_view(d: Path, rel: str) -> Dict:
 
 
 # ---- design criteria ----
-import datetime as dt
 import re
 
 from epc.core.config import settings
@@ -162,7 +162,7 @@ def _spec(cat: dict, key: str) -> dict:
 
 
 def _now() -> str:
-    return dt.datetime.now().replace(microsecond=0).isoformat()
+    return clock.now_local()
 
 
 def set_criterion(d: Path, discipline: str, key: str, body) -> dict:

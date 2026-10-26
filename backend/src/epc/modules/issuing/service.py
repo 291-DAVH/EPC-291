@@ -8,6 +8,7 @@ import zipfile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from epc.core import clock
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.deliverables import public as deliverables
@@ -74,7 +75,7 @@ def issue(d: Path, body: IssueIn) -> dict:
     number = repository.next_transmittal_number(d)
     tr_id = f"TR-{number:03d}"
     folder_rel = f"{body.emission}/{tr_id}_Rev{body.client_rev}"
-    created = dt.datetime.now().replace(microsecond=0).isoformat()
+    created = clock.now_local()
     plugins = repository.plugins_locked(d)
     engine = repository.engine_version()
     stamp = {"CLIENT_REV": f"Rev {body.client_rev}", "INTERNAL_REV": body.internal_rev, "TRANSMITTAL": tr_id, "EMISSION": EMISSIONS[body.emission],
@@ -137,7 +138,7 @@ def mark_sent(d: Path, tr_id: str) -> dict:
     deliverables.set_delivered(d, [t["deliverable_id"] for t in tr["items"]], today)
     tr.update(status="sent", sent_on=today)
     repository.save_transmittal(d, tr)
-    repository.write_ledger(d, {"event": "issue_sent", "at": dt.datetime.now().replace(microsecond=0).isoformat(), "transmittal": tr_id})
+    repository.write_ledger(d, {"event": "issue_sent", "at": clock.now_local(), "transmittal": tr_id})
     return tr
 
 

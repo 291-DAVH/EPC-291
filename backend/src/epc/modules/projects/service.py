@@ -1,8 +1,8 @@
 """Use cases of the projects module: create from the template, list, project tree for the admin console."""
-import datetime as dt
 from pathlib import Path
 from typing import Dict, List
 
+from epc.core import clock
 from epc.core.config import settings
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import SLUG, count_files, today
@@ -77,7 +77,7 @@ def create(p: NewProject) -> dict:
         raise Conflict({"project_code": "a project with this client and code already exists"})
     try:
         repository.copy_template(target)
-        created = dt.datetime.now().isoformat(timespec="seconds")
+        created = clock.now_local()
         meta = {"schema_version": "1.0", "client": p.client_name.strip(), "client_code": p.client_code, "project_code": p.project_code,
                 "project_name": p.project_name.strip(), "jurisdiction": p.jurisdiction, "locale": p.locale or jur["default_locale"],
                 "methodology": p.methodology, "disciplines": p.disciplines, "phase": p.phase, "engine_min_version": "0.1.0", "created": created}

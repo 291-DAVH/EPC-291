@@ -18,6 +18,7 @@ from argparse import Namespace
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
+from epc.core import clock
 from epc.core.config import settings
 from epc.core.errors import Conflict, Failure, Invalid
 from epc.core.fsutil import read_json, write_json
@@ -181,10 +182,9 @@ def analyze(d: Path, meta: dict) -> dict:
 
 def _log_usage(d: Path, usage: Dict[str, int], attempts: int, n_items: int, ok: bool) -> None:
     """Cost tracking (risk R-006): every call is recorded in the internal workspace, never shown to the customer."""
-    import datetime as dt
     f = d / "workspace" / "01-input" / "intake" / "analysis_usage.json"
     log = read_json(f, []) or []
-    log.append({"at": dt.datetime.now().isoformat(timespec="seconds"), "model": model(), "items": n_items, "attempts": attempts, "ok": ok, **usage})
+    log.append({"at": clock.now_local(), "model": model(), "items": n_items, "attempts": attempts, "ok": ok, **usage})
     write_json(f, log)
 
 
