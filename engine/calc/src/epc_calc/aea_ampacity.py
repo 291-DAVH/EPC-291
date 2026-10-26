@@ -129,22 +129,31 @@ def resistencia_ohm_km(s, material, temp_c):
     return R20_AL_OHM_KM[s] * (1.0 + ALFA["al"] * (temp_c - 20.0))
 
 
+def _fuente_b1(p, n):
+    if p["aislacion"] != "pvc":
+        raise ValueError("B1 con XLPE no tiene tabla en 771.16.I: use B2 o C")
+    return "771.16.I", None, f"{n}x"
+
+
+# Método de instalación -> (tabla, grupo, columna) de 771.16 según el número de conductores cargados n. Un método nuevo es una fila nueva.
+_FUENTES = {
+    "B1": _fuente_b1,
+    "B2": lambda p, n: ("771.16.III", "B2CE", f"B2_{n}x"),
+    "C": lambda p, n: ("771.16.III", "B2CE", f"C_{n}x"),
+    "E": lambda p, n: ("771.16.III", "B2CE", f"E_{n}x"),
+    "F": lambda p, n: ("771.16.III", "FG", "F_2x1x" if n == 2 else "F_3x1x_trebol"),
+    "G": lambda p, n: ("771.16.III", "FG", "G_3x1x_horizontal"),
+    "D1": lambda p, n: ("771.16.V", None, f"{n}x"),
+}
+
+
+def _fuente_d2(p, n):
+    return "771.16.VI", None, "c2_2x" if n == 2 else "c4_3x"
+
+
 def _fuente(p, cargados):
     """(tabla, grupo, columna) de 771.16 para el método de instalación."""
-    m, n = p["metodo"], cargados
-    if m == "B1":
-        if p["aislacion"] != "pvc":
-            raise ValueError("B1 con XLPE no tiene tabla en 771.16.I: use B2 o C")
-        return "771.16.I", None, f"{n}x"
-    if m in ("B2", "C", "E"):
-        return "771.16.III", "B2CE", f"{m}_{n}x"
-    if m == "F":
-        return "771.16.III", "FG", "F_2x1x" if n == 2 else "F_3x1x_trebol"
-    if m == "G":
-        return "771.16.III", "FG", "G_3x1x_horizontal"
-    if m == "D1":
-        return "771.16.V", None, f"{n}x"
-    return "771.16.VI", None, "c2_2x" if n == 2 else "c4_3x"
+    return _FUENTES.get(p["metodo"], _fuente_d2)(p, cargados)
 
 
 def iz_base(p, s, cargados):
@@ -155,6 +164,21 @@ def iz_base(p, s, cargados):
     return T.iz_tabla(tabla, p["aislacion"], p["material"], s, col, grupo)
 
 
+# Método de instalación -> factor de agrupamiento para n > 1 circuitos. El método G no agrupa (factor 1) y todo método no listado usa la tabla de enterrados D1.
+_AGRUPAMIENTO = {
+    "B1": lambda n, trifasico: T.factor_agrupamiento_canos(n, trifasico) if n <= 3 else T.factor_agrupamiento_aire("1", n),
+    "B2": lambda n, trifasico: T.factor_agrupamiento_canos(n, trifasico) if n <= 3 else T.factor_agrupamiento_aire("1", n),
+    "C": lambda n, trifasico: T.factor_agrupamiento_aire("2", n),
+    "E": lambda n, trifasico: T.factor_agrupamiento_aire("4", n),
+    "F": lambda n, trifasico: T.factor_agrupamiento_aire("4", n),
+    "D2": lambda n, trifasico: T.factor_agrupamiento_enterrado("c", n, 0),
+}
+
+
+def _agrupamiento_d1(n, trifasico):
+    return T.factor_agrupamiento_enterrado("d1", n, 0)
+
+
 def factores(p, trifasico=True):
     """Dict con f_clase, f_temp, f_agrup y f_suelo."""
     m, n = p["metodo"], p["agrup"]
@@ -162,18 +186,7 @@ def factores(p, trifasico=True):
     f_temp = 1.0 if enterrado else T.factor_temperatura_aire(p["aislacion"], p["t_amb"])
     f_suelo = (T.factor_temperatura_suelo(p["aislacion"], p["t_suelo"]) * T.factor_resistividad(m, p["rho"])
                if enterrado else 1.0)
-    if n <= 1 or m == "G":
-        f_agrup = 1.0
-    elif m in ("B1", "B2"):
-        f_agrup = T.factor_agrupamiento_canos(n, trifasico) if n <= 3 else T.factor_agrupamiento_aire("1", n)
-    elif m == "C":
-        f_agrup = T.factor_agrupamiento_aire("2", n)
-    elif m in ("E", "F"):
-        f_agrup = T.factor_agrupamiento_aire("4", n)
-    elif m == "D2":
-        f_agrup = T.factor_agrupamiento_enterrado("c", n, 0)
-    else:
-        f_agrup = T.factor_agrupamiento_enterrado("d1", n, 0)
+    f_agrup = 1.0 if n <= 1 or m == "G" else _AGRUPAMIENTO.get(m, _agrupamiento_d1)(n, trifasico)
     return {"f_clase": 0.95 if p["clase"] == 5 else 1.0, "f_temp": f_temp, "f_agrup": f_agrup, "f_suelo": f_suelo}
 
 
