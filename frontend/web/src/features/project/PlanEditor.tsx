@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, moveElements, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
@@ -89,6 +89,13 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     return [p.x, p.y];
   };
   const drag = useRef<{ start: Pt; base: Drawing; refs: Ref[]; moved: boolean } | null>(null);
+  const grip = useRef<{ line: string; end?: 0 | 1; seg?: number; start: Pt; base: Drawing; moved: boolean } | null>(null);
+  const grab = (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => {      // a handle of the selected line: stretch its end or push a segment sideways
+    if (e.button !== 0 || readOnly) return;
+    e.stopPropagation();
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+    grip.current = { ...g, start: toView(e), base: drawing, moved: false };
+  };
   const apply = (next: Drawing) => { setHist(commit(hist, drawing)); onChange(next); };
   const doUndo = () => { const r = undo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const doRedo = () => { const r = redo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
@@ -136,6 +143,12 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       return;
     }
     const raw = toView(e);
+    if (grip.current) {
+      const g = grip.current;
+      g.moved = true;
+      onChange(g.end !== undefined ? stretchEnd(g.base, g.line, g.end, snap(g.base, raw, 8 * upp())) : moveSegment(g.base, g.line, g.seg!, [raw[0] - g.start[0], raw[1] - g.start[1]]));
+      return;
+    }
     if (drag.current) {
       const g = drag.current;
       let d: Pt = [raw[0] - g.start[0], raw[1] - g.start[1]];
@@ -151,6 +164,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   };
   const onUp = (e: React.PointerEvent) => {
     pan.current = null;
+    if (grip.current) { if (grip.current.moved) setHist(commit(hist, grip.current.base)); grip.current = null; return; }
     if (drag.current) { if (drag.current.moved) setHist(commit(hist, drag.current.base)); drag.current = null; return; }
     if (marquee) { const found = inBox(drawing, marquee.a, marquee.b); onSelect(e.shiftKey ? merge(selection, found) : found); setMarquee(null); }
   };
@@ -229,6 +243,17 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
               <text x={n.x + NODE_PX * 1.2 * u} y={n.y - NODE_PX * 1.2 * u} fontSize={11 * u} fill="#222" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{nodeTag[n.id] ?? n.id}{n.circuit ? ` · ${n.circuit}` : ""}</text>
               {drawing.outlet === n.id && <circle cx={n.x} cy={n.y} r={NODE_PX * 1.6 * u} fill="none" stroke="#2ca02c" strokeWidth={2} vectorEffect="non-scaling-stroke" />}</g>;
           })}
+          {!readOnly && tool === "select" && selection.length === 1 && selection[0].type === "line" && (() => {
+            const l = drawing.lines.find((x) => x.id === selection[0].id);
+            if (!l) return null;
+            const h = 5 * u;
+            return <g>
+              {l.points.slice(0, -1).map((a, i) => { const b = l.points[i + 1], m: Pt = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+                return <rect key={`s${i}`} x={m[0] - h} y={m[1] - h} width={2 * h} height={2 * h} transform={`rotate(45 ${m[0]} ${m[1]})`} fill="#fff" stroke="#4363d8" strokeWidth={1.5} vectorEffect="non-scaling-stroke" style={{ cursor: "move" }} onPointerDown={(e) => grab(e, { line: l.id, seg: i })}><title>{t("layout.grip.segment")}</title></rect>; })}
+              {([0, 1] as const).map((end) => { const p = l.points[end === 0 ? 0 : l.points.length - 1];
+                return <rect key={`e${end}`} x={p[0] - h} y={p[1] - h} width={2 * h} height={2 * h} fill="#4363d8" stroke="#fff" strokeWidth={1} vectorEffect="non-scaling-stroke" style={{ cursor: "crosshair" }} onPointerDown={(e) => grab(e, { line: l.id, end })}><title>{t("layout.grip.end")}</title></rect>; })}
+            </g>;
+          })()}
           {marquee && <rect x={Math.min(marquee.a[0], marquee.b[0])} y={Math.min(marquee.a[1], marquee.b[1])} width={Math.abs(marquee.a[0] - marquee.b[0])} height={Math.abs(marquee.a[1] - marquee.b[1])} fill="#4363d8" fillOpacity={0.12} stroke="#4363d8" strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />}
           <g stroke="#2ca02c" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.origin[0] - 10 * u} y1={drawing.origin[1]} x2={drawing.origin[0] + 10 * u} y2={drawing.origin[1]} vectorEffect="non-scaling-stroke" />
             <line x1={drawing.origin[0]} y1={drawing.origin[1] - 10 * u} x2={drawing.origin[0]} y2={drawing.origin[1] + 10 * u} vectorEffect="non-scaling-stroke" />
