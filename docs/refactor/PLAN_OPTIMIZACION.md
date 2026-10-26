@@ -1,6 +1,6 @@
 # Plan de optimización del código con SOLID y patrones de diseño
 
-Estado: Etapa 2 (plan). Rama `refactor/solid`. Base: Etapa 0 (medición) y Etapa 1 (red de seguridad) cerradas con el gate en verde (26 verificaciones).
+Estado: **ejecutado** (ver `RESULTADOS.md`). Rama `refactor/solid`. Base: Etapa 0 (medición) y Etapa 1 (red de seguridad) cerradas con el gate en verde (26 verificaciones). Las filas de la sección 4 dicen lo que se hizo, lo que se redujo y lo que se descartó, con el motivo.
 Regla de oro: **ningún paso cambia el comportamiento**. Si un paso altera un resultado normativo, un dibujo o un documento, se detiene y se informa.
 
 ## 1. Línea base (medida con `tools/ci/collect_metrics.py`, ver `baseline.json`)
@@ -146,18 +146,20 @@ Si un paso resulta más riesgoso de lo previsto, se marca **DESCARTADO** aquí c
 | B10 | **HECHO.** `reporting/builders.py` → `texts.py` (textos y colores) + `render.py` (Markdown) + builders; `builders` reexporta los nombres anteriores. | `reporting/*` | `golden/reporting.json` | goldens idénticos | Bajo |
 | B11 | **HECHO.** `i18n.tsx` (1.834 líneas) → provider de 33 líneas + `dict/es.ts` y `dict/en.ts` (1.798 entradas en total, las mismas). El test del diccionario ahora importa ambos archivos. | `ui/src/i18n*` | `i18n.test.tsx` | Vitest + build | Bajo |
 | B12 | **DESCARTADO.** Los tres CRUD de `Data.tsx` no son iguales: `Issuers` captura errores al borrar y tiene «predeterminado», `Clients` y `People` no; los campos, claves de «vacío» y filas difieren. Un `useCrud` común quedaría lleno de opciones para reproducir cada diferencia, ahorraría ~30 de 244 líneas y no hay test de la pantalla (F-4). | — | — | — | Motivo: beneficio bajo, sin red de seguridad |
-| B13 | **HECHO.** `Project.tsx` (464 líneas) → `Project.tsx` (65) + `Overview`, `Deliverables`, `Inputs`, `AnalysisPanel`, `Requirements`, `Reports`, `Plan` y `tabs.ts`; funciones movidas sin cambios. | `web/src/features/project/*` | `tsc` + build | `web-types`, `web-build` | Bajo |
+| B13 | **HECHO.** `Project.tsx` (464 líneas) → `Project.tsx` (81) + `Overview`, `Deliverables`, `Inputs`, `AnalysisPanel`, `Requirements`, `Reports`, `Plan` y `tabs.ts`; funciones movidas sin cambios. | `web/src/features/project/*` | `tsc` + build | `web-types`, `web-build` | Bajo |
 
 ### Fase C — mayor riesgo
 
 | Id | Paso | Archivos | Tests | Verificación | Riesgo / mitigación |
 |---|---|---|---|---|---|
-| C1 | `sld_generator` → funciones puras + `main()`; sin efectos al importar; tablas a datos. **Los números no cambian** (la acometida propia sigue como está: F3) | `sld/sld_generator.py` | `drawings.json` byte a byte | goldens idénticos | Alto: se hace en subpasos con el golden en cada uno |
-| C2 | `sld_paginate` igual | `sld/sld_paginate.py` | `drawings.json` | idem | Alto |
-| C3 | `titleblock/*` igual | `titleblock/*` | `drawings.json` | idem | Alto |
-| C4 | `ccpm`: Extract Method sobre las funciones de CC > 40 | `ccpm.py` | `golden/documents.json` | idem | Medio |
-| C5 | `document_verifier` y `specification_verifier`: Extract Method | `*_verifier.py` | `golden/documents.json` | idem | Medio |
+| C1 | **DESCARTADO.** `sld_generator`, `sld_paginate` y `titleblock/*` corren en un subproceso: la cobertura no los mide y los tres dibujos dorados (`drawings.json`) fijan la salida completa pero no prueban que cada una de las ~76 ramas de `capas_dxf.colorear` (o de `svg_to_dxf.convertir`) se ejecute. Convertir un script de 594 líneas con estado global en funciones sin efectos al importar es una reescritura, no una extracción, y sin pruebas por rama podría cambiar un dibujo entregable sin que nada lo detecte. Queda como tarea propia (aislar el módulo de dibujo, ya anotada por el dueño), con su propia red de pruebas. | — | — | — | Motivo: sin red de seguridad por rama |
+| C2 | **DESCARTADO** por el mismo motivo que C1. | — | — | — | — |
+| C3 | **DESCARTADO** por el mismo motivo que C1. | — | — | — | — |
+| C4 | **HECHO** en dos pasos. C4a: `_validar` (CC 142) → 12 funciones (la mayor, 28); antes se fijaron sus ramas con una matriz de 2.661 entradas. C4b: `calcular_ccpm` (45), `generar_markdown` (45) y `_plan_paquetes` (57) → funciones por sección; la matriz también fija el Markdown de cada caso aceptado. | `ccpm.py` | `golden/documents.json` | goldens idénticos | Medio |
+| C5 | **HECHO.** `verificar_proyecto` (CC 130) y `verificar_pliego` (84) → una función por sección lettered ((a) revisiones … (h) charter; estructura, índice, encabezado, obligaciones, normativa, comercial, referencias, duplicados), con la misma secuencia de hallazgos. Antes se agregaron 24 variantes hasta que ambas quedaron sin línea sin cubrir. | `document_verifier`, `specification_verifier` | `golden/documents.json` + sus tests | goldens idénticos | Medio |
 | C6 | `management/workflow` vs `reporting`: unificar solo lo idéntico | `workflow.py`, `fwlib.py` | `test_workflow.py` **no corre** (F1) | — | **DESCARTADO de antemano**: los tests del workflow no son ejecutables en este layout (F1) y los vocabularios difieren (F8) |
+| C7 | **HECHO (adicional).** `sld/validation.validate` (CC 42) → comprobaciones de tablero, de cada circuito (tabla campo/permitidos/mensaje) y de ciclos. | `sld/validation.py` | `test_validation_units`, `test_sld_api` | tests | Bajo |
+| C8 | **HECHO (adicional).** `comprobar_charter_ejecutivo` (CC 46) → una comparación por sección del charter. | `document_verifier.py` | `golden/documents.json` | goldens idénticos | Bajo |
 
 ## 5. Descartados y límites declarados desde ahora
 

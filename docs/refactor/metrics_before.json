@@ -1,0 +1,200 @@
+{
+ "production_lines": {
+  "python": 29000,
+  "typescript": 6464
+ },
+ "files": {
+  "python": 243,
+  "typescript": 43
+ },
+ "files_over_300_lines": [
+  {
+   "file": "frontend/packages/ui/src/i18n.tsx",
+   "lines": 1834
+  },
+  {
+   "file": "engine/documents/src/epc_documents/ccpm.py",
+   "lines": 1706
+  },
+  {
+   "file": "backend/src/epc/modules/identity/service.py",
+   "lines": 1118
+  },
+  {
+   "file": "management/workflow/scripts/workflow.py",
+   "lines": 1001
+  },
+  {
+   "file": "engine/documents/src/epc_documents/document_verifier.py",
+   "lines": 889
+  },
+  {
+   "file": "tools/dev/skill_learn.py",
+   "lines": 725
+  },
+  {
+   "file": "engine/documents/src/epc_documents/charter_exporter.py",
+   "lines": 683
+  },
+  {
+   "file": "engine/documents/src/epc_documents/canvas_exporter.py",
+   "lines": 650
+  },
+  {
+   "file": "engine/drawing/src/epc_drawing/sld/sld_generator.py",
+   "lines": 594
+  },
+  {
+   "file": "management/workflow/scripts/fwlib.py",
+   "lines": 572
+  },
+  {
+   "file": "engine/calc/src/epc_calc/aea_pipeline.py",
+   "lines": 501
+  },
+  {
+   "file": "engine/documents/src/epc_documents/specification_verifier.py",
+   "lines": 493
+  },
+  {
+   "file": "engine/drawing/src/epc_drawing/titleblock/sheet_generator.py",
+   "lines": 471
+  },
+  {
+   "file": "frontend/web/src/features/project/Project.tsx",
+   "lines": 464
+  },
+  {
+   "file": "backend/src/epc/modules/reporting/builders.py",
+   "lines": 456
+  },
+  {
+   "file": "engine/drawing/src/epc_drawing/mld/mld_generator.py",
+   "lines": 439
+  },
+  {
+   "file": "tools/dev/seed_demo.py",
+   "lines": 423
+  },
+  {
+   "file": "engine/calc/src/epc_calc/board_memo.py",
+   "lines": 403
+  },
+  {
+   "file": "engine/drawing/src/epc_drawing/titleblock/svg_to_dxf.py",
+   "lines": 392
+  },
+  {
+   "file": "engine/calc/src/epc_calc/lighting.py",
+   "lines": 371
+  },
+  {
+   "file": "tools/dev/new_module.py",
+   "lines": 370
+  },
+  {
+   "file": "backend/src/epc/modules/identity/api.py",
+   "lines": 368
+  },
+  {
+   "file": "backend/src/epc/modules/sld/service.py",
+   "lines": 360
+  },
+  {
+   "file": "backend/src/epc/modules/norms/service.py",
+   "lines": 353
+  },
+  {
+   "file": "engine/drawing/src/epc_drawing/sld/capas_dxf.py",
+   "lines": 323
+  },
+  {
+   "file": "backend/src/epc/modules/identity/repository.py",
+   "lines": 306
+  }
+ ],
+ "longest_functions": [
+  {
+   "function": "engine/calc/src/epc_calc/aea_pipeline.py::calculate",
+   "lines": 142
+  },
+  {
+   "function": "engine/drawing/src/epc_drawing/sld/capas_dxf.py::colorear",
+   "lines": 141
+  },
+  {
+   "function": "tools/dev/seed_demo.py::build_project",
+   "lines": 105
+  },
+  {
+   "function": "engine/drawing/src/epc_drawing/titleblock/sheet_generator.py::dibujar_final",
+   "lines": 98
+  },
+  {
+   "function": "engine/drawing/src/epc_drawing/titleblock/svg_to_dxf.py::convertir",
+   "lines": 92
+  },
+  {
+   "function": "engine/drawing/src/epc_drawing/export/report_pdf.py::layout",
+   "lines": 90
+  },
+  {
+   "function": "tools/dev/skill_learn.py::_study_pdf",
+   "lines": 81
+  },
+  {
+   "function": "management/workflow/scripts/workflow.py::check_state",
+   "lines": 78
+  },
+  {
+   "function": "tools/dev/reconstruir_indices.py::main",
+   "lines": 75
+  },
+  {
+   "function": "tools/dev/skill_learn.py::_generate_index",
+   "lines": 74
+  },
+  {
+   "function": "management/workflow/scripts/workflow.py::progress_report",
+   "lines": 72
+  },
+  {
+   "function": "management/workflow/scripts/workflow.py::issue",
+   "lines": 72
+  },
+  {
+   "function": "tools/ci/check_skill_conflicts.py::main",
+   "lines": 70
+  },
+  {
+   "function": "engine/calc/src/epc_calc/board_memo.py::memoria_doc",
+   "lines": 70
+  },
+  {
+   "function": "engine/drawing/src/epc_drawing/export/transmittal_pdf.py::layout",
+   "lines": 69
+  }
+ ],
+ "complexity": {
+  "functions": 1605,
+  "above_10": 168,
+  "above_20": 52,
+  "above_30": 16,
+  "above_40": 12,
+  "max": 142,
+  "excess_over_10": 1822
+ },
+ "tests": {
+  "python": 708,
+  "frontend": 0
+ },
+ "coverage_percent": {
+  "backend": 94.06,
+  "engine-calc": 74.65,
+  "engine-rules": 77.18,
+  "engine-standards": 35.9,
+  "engine-drawing": 43.75,
+  "engine-documents": 69.91
+ },
+ "note": "Pre-refactoring commit 9908bc2 measured with the final tools (the first baseline.json did not measure six modules with a byte order mark)."
+}
