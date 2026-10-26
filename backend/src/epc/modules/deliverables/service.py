@@ -9,7 +9,7 @@ from typing import List, Optional, Tuple
 
 from epc.core import ids
 from epc.core.config import settings
-from epc.core.errors import Invalid, NotFound
+from epc.core.errors import Invalid, NotFound, first_or_404
 from epc.core.fsutil import is_inside, read_json, safe_file, today
 from epc.core.hashing import sha256_file
 from epc.modules.deliverables import repository
@@ -51,9 +51,7 @@ def file_for(d: Path, item_id: str, fmt: Optional[str] = None) -> Tuple[Path, st
     path = safe_file(base, item["file"])
     ext = path.suffix.lstrip(".").lower()
     if fmt and fmt.lower() != ext:
-        alt = next((s for s in _alternatives(base, item["file"]) if s.suffix.lstrip(".").lower() == fmt.lower()), None)
-        if not alt:
-            raise NotFound("format not available")
+        alt = first_or_404((s for s in _alternatives(base, item["file"]) if s.suffix.lstrip(".").lower() == fmt.lower()), "format not available")
         return alt, f"{item.get('code', item_id)}.{fmt.lower()}"
     return path, f"{item.get('code', item_id)}.{item.get('format', ext)}"
 

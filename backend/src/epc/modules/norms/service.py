@@ -8,7 +8,7 @@ import copy
 from typing import Dict, List, Optional, Tuple
 
 from epc.core import clock
-from epc.core.errors import Conflict, Invalid, NotFound
+from epc.core.errors import Conflict, Invalid, NotFound, first_or_404
 from epc.core.text import slugify
 from epc.core.hashing import sha256_json
 from epc.modules.identity import public as identity
@@ -85,9 +85,7 @@ def _unit(unit_id: str) -> dict:
 
 
 def _point(unit_id: str, key: str) -> dict:
-    p = next((p for p in _unit(unit_id)["points"] if p["key"] == key), None)
-    if not p:
-        raise NotFound("point not found")
+    p = first_or_404((p for p in _unit(unit_id)["points"] if p["key"] == key), "point not found")
     return p
 
 

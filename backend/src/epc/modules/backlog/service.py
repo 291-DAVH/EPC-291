@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict
 
 from epc.core import ids
-from epc.core.errors import Invalid, NotFound
+from epc.core.errors import Invalid, first_or_404
 from epc.core.fsutil import today
 from epc.modules.backlog import repository
 from epc.modules.backlog.models import ItemPatch, NewItem
@@ -49,9 +49,7 @@ def create(d: Path, body: NewItem) -> dict:
 
 def update(d: Path, item_id: str, body: ItemPatch) -> dict:
     items = repository.load(d)
-    item = next((i for i in items if i["id"] == item_id), None)
-    if not item:
-        raise NotFound("backlog item not found")
+    item = first_or_404((i for i in items if i["id"] == item_id), "backlog item not found")
     changes = {k: v for k, v in body.model_dump().items() if v is not None}
     errors = _check(d, changes)
     if errors:

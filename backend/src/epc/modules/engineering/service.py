@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, Optional
 
 from epc.core import clock
-from epc.core.errors import Invalid, NotFound
+from epc.core.errors import Invalid, NotFound, first_or_404
 from epc.core.fsutil import is_inside
 from epc.modules.engineering import repository
 
@@ -155,9 +155,7 @@ def criteria_view(d: Path, discipline: str) -> dict:
 
 
 def _spec(cat: dict, key: str) -> dict:
-    spec = next((s for s in cat["criteria"] if s["id"] == key), None)
-    if not spec:
-        raise NotFound("unknown criterion")
+    spec = first_or_404((s for s in cat["criteria"] if s["id"] == key), "unknown criterion")
     return spec
 
 
