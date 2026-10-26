@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, connectEnds, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, connectEnds, drawnJunctions, onDrawn, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
@@ -209,7 +209,8 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   const lineTag = useMemo(() => Object.fromEntries((derived?.stretches ?? []).map((s) => [s.line, s.line_tag])), [derived]);
   const auto = (derived?.nodes ?? []).filter((n) => !n.placed);
   const kr = derived?.plan?.metres_per_unit;
-  const autoPos = (n: DerivedNode): Pt => (kr ? [drawing.origin[0] + n.x_m / kr, drawing.origin[1] - n.y_m / kr] : [0, 0]);
+  const junctions = useMemo(() => drawnJunctions(drawing), [drawing]);
+  const autoPos = (n: DerivedNode): Pt => (kr ? onDrawn(junctions, [drawing.origin[0] + n.x_m / kr, drawing.origin[1] - n.y_m / kr], 0.25 / kr) : [0, 0]);   // on the drawing, however deep the zoom
   const u = upp();
   const polyline = (pts: Pt[]) => pts.map((p) => p.join(",")).join(" ");
   const mid = (l: DLine): Pt => { const a = l.points[0], b = l.points[l.points.length - 1]; return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; };

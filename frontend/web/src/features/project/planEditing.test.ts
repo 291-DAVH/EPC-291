@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCircuit, addLine, addNode, assignCircuit, blank, circuitFor, connectEnds, joinCircuit, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
+import { addCircuit, addLine, addNode, assignCircuit, blank, circuitFor, drawnJunctions, onDrawn, connectEnds, joinCircuit, moveElements, moveSegment, stretchEnd, inBox, loadsOf, merge, ofKind, removeMany, toggle, freeCircuits, parseAttr, removeCircuit, setAttr, updateCircuit, updateLine, commit, levelNumber, metresPerUnit, nextId, nextLevel, ortho, pick, redo, remove, setOrigin, setScale, snap, undo } from "./planEditing";
 
 describe("plan editing rules", () => {
   it("gives ids that are unique across nodes and lines", () => {
@@ -186,5 +186,13 @@ describe("plan editing rules", () => {
     expect(connectEnds(far, "l2", 25)).toBe(far);
     const toNode = connectEnds(addLine(addNode(d, "LU", [100, 160]), "CA", [[100, 100], [100, 150]]), "l2", 25);
     expect(toNode.lines[1].points).toEqual([[100, 100], [100, 160]]);
+  });
+
+  it("places the junction marker on the drawn crossing, not where the engine merged it", () => {
+    let d = addLine(blank(), "CA", [[0, 10], [100, 10]]);
+    d = addLine(d, "CA", [[40, 0], [40, 50]]);
+    const pts = drawnJunctions(d);
+    expect(onDrawn(pts, [41.5, 11], 5)).toEqual([40, 10]);
+    expect(onDrawn(pts, [70, 30], 5)).toEqual([70, 30]);
   });
 });
