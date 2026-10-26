@@ -5651,6 +5651,653 @@
   "example_ccpm_packages.json|top|tipo_plazo|9": "ValueError: tipo_plazo: debe ser 'transcurrido' o 'esfuerzo', se recibió '[]'"
  },
  "project": {
+  "charter_guide_only": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 1 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | id_inexistente | `02_PROJECT/project-charter.md` | ALD-001 se cita pero no existe en ningún registro del proyecto. |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02_PROJECT/project-charter.md` | 1 | 0 | 0 | 0 | 1 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 2 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02_PROJECT/project-charter.md",
+      "categoria": "id_inexistente",
+      "mensaje": "ALD-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {
+     "02_PROJECT/project-charter.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 0,
+      "SUPUESTO": 0,
+      "VERIFICAR": 0,
+      "total": 1
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 2,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 1
+    },
+    "version": "0.8.0"
+   }
+  },
+  "charter_pair": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 10 |\n| Avisos | 4 |\n| Marcas abiertas (total) | 1 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Versión distinta: charter técnico «1.2», ejecutivo «1.3». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye ALD-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye SUP-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo cita RIE-003, que no figura en el charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)). |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»). |\n| ERROR | id_inexistente | `02_PROJECT/project-charter.md` | ALD-001 se cita pero no existe en ningún registro del proyecto. |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1). |\n| AVISO | charter_ejecutivo_pdf | `02_PROJECT/project-charter-executive.md` | No existe PROJECT_charter_EXECUTIVE.pdf; generarlo con `python3 -B 98_LIBRARY/calculations/charter_exporter.py 02_PROJECT/project-charter-executive.md`. |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02_PROJECT/project-charter.md` | 1 | 0 | 0 | 0 | 1 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 3 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Versión distinta: charter técnico «1.2», ejecutivo «1.3».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye ALD-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye SUP-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo cita RIE-003, que no figura en el charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter.md",
+      "categoria": "id_inexistente",
+      "mensaje": "ALD-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo_pdf",
+      "mensaje": "No existe PROJECT_charter_EXECUTIVE.pdf; generarlo con `python3 -B 98_LIBRARY/calculations/charter_exporter.py 02_PROJECT/project-charter-executive.md`.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {
+     "02_PROJECT/project-charter.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 0,
+      "SUPUESTO": 0,
+      "VERIFICAR": 0,
+      "total": 1
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 3,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 4,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 10,
+     "hallazgos_charter_ejecutivo": 13,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 1
+    },
+    "version": "0.8.0"
+   }
+  },
+  "charter_pair_pdf_matching_seal": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 10 |\n| Avisos | 3 |\n| Marcas abiertas (total) | 1 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Versión distinta: charter técnico «1.2», ejecutivo «1.3». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye ALD-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye SUP-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo cita RIE-003, que no figura en el charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)). |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»). |\n| ERROR | id_inexistente | `02_PROJECT/project-charter.md` | ALD-001 se cita pero no existe en ningún registro del proyecto. |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1). |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02_PROJECT/project-charter.md` | 1 | 0 | 0 | 0 | 1 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 3 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Versión distinta: charter técnico «1.2», ejecutivo «1.3».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye ALD-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye SUP-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo cita RIE-003, que no figura en el charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter.md",
+      "categoria": "id_inexistente",
+      "mensaje": "ALD-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1).",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {
+     "02_PROJECT/project-charter.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 0,
+      "SUPUESTO": 0,
+      "VERIFICAR": 0,
+      "total": 1
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 3,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 3,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 10,
+     "hallazgos_charter_ejecutivo": 12,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 1
+    },
+    "version": "0.8.0"
+   }
+  },
+  "charter_pair_pdf_other_seal": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 12 |\n| Avisos | 3 |\n| Marcas abiertas (total) | 1 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Versión distinta: charter técnico «1.2», ejecutivo «1.3». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Estado distinto: charter técnico «DRAFT», ejecutivo «APROBADO». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye ALD-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye SUP-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo cita RIE-003, que no figura en el charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)). |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»). |\n| ERROR | charter_ejecutivo_pdf | `02_PROJECT/project-charter-executive.md` | El PDF del charter ejecutivo (sello 0123456789abcdef) no corresponde al .md vigente (sello 311ece7791842590); regenerarlo. |\n| ERROR | id_inexistente | `02_PROJECT/project-charter.md` | ALD-001 se cita pero no existe en ningún registro del proyecto. |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1). |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02_PROJECT/project-charter.md` | 1 | 0 | 0 | 0 | 1 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 3 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Versión distinta: charter técnico «1.2», ejecutivo «1.3».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Estado distinto: charter técnico «DRAFT», ejecutivo «APROBADO».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye ALD-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye SUP-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo cita RIE-003, que no figura en el charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo_pdf",
+      "mensaje": "El PDF del charter ejecutivo (sello 0123456789abcdef) no corresponde al .md vigente (sello 311ece7791842590); regenerarlo.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter.md",
+      "categoria": "id_inexistente",
+      "mensaje": "ALD-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1).",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {
+     "02_PROJECT/project-charter.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 0,
+      "SUPUESTO": 0,
+      "VERIFICAR": 0,
+      "total": 1
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 3,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 3,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 12,
+     "hallazgos_charter_ejecutivo": 14,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 1
+    },
+    "version": "0.8.0"
+   }
+  },
+  "charter_pair_pdf_without_seal": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 10 |\n| Avisos | 4 |\n| Marcas abiertas (total) | 1 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Versión distinta: charter técnico «1.2», ejecutivo «1.3». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21». |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye ALD-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo no incluye SUP-001 del charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El ejecutivo cita RIE-003, que no figura en el charter técnico. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)). |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30']. |\n| ERROR | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»). |\n| ERROR | id_inexistente | `02_PROJECT/project-charter.md` | ALD-001 se cita pero no existe en ningún registro del proyecto. |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3). |\n| AVISO | charter_ejecutivo | `02_PROJECT/project-charter-executive.md` | RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1). |\n| AVISO | charter_ejecutivo_pdf | `02_PROJECT/project-charter-executive.md` | El PDF del charter ejecutivo no lleva sello sha256; regenerarlo con charter_exporter.py. |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02_PROJECT/project-charter.md` | 1 | 0 | 0 | 0 | 1 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 3 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Versión distinta: charter técnico «1.2», ejecutivo «1.3».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fecha distinta: charter técnico «2026-10-20», ejecutivo «2026-10-21».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye ALD-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo no incluye SUP-001 del charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El ejecutivo cita RIE-003, que no figura en el charter técnico.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002: prob./impacto/nivel distintos (técnico (2, 3, 7), ejecutivo (3, 3, 8)).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Orden de paquetes distinto: técnico ['PQ-1', 'PQ-2'], ejecutivo ['PQ-2', 'PQ-1'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "Fechas de hitos distintas: solo en técnico ['2026-12-18'], solo en ejecutivo ['2026-12-30'].",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "El costo del charter técnico está [DEFINIR] y el ejecutivo dice «Costo: 100 USD» (debe decir «A definir por el cliente.»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter.md",
+      "categoria": "id_inexistente",
+      "mensaje": "ALD-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (técnico): el nivel 7 no es prob. × impacto (2 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-002 (ejecutivo): el nivel 8 no es prob. × impacto (3 × 3).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo",
+      "mensaje": "RIE-003 (ejecutivo): el nivel 2 no es prob. × impacto (1 × 1).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02_PROJECT/project-charter-executive.md",
+      "categoria": "charter_ejecutivo_pdf",
+      "mensaje": "El PDF del charter ejecutivo no lleva sello sha256; regenerarlo con charter_exporter.py.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {
+     "02_PROJECT/project-charter.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 0,
+      "SUPUESTO": 0,
+      "VERIFICAR": 0,
+      "total": 1
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 3,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 4,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 10,
+     "hallazgos_charter_ejecutivo": 13,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 1
+    },
+    "version": "0.8.0"
+   }
+  },
+  "citations": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 3 |\n| Citas «Rev» revisadas | 4 |\n| Archivos revisados en formato Pandoc | 3 |\n| Errores | 2 |\n| Avisos | 1 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | cita_rev | `02/AB01-E-MC-001_Rev00.2.md:15` | Cita AB01-E-MD-001 Rev 00.3 pero la revisión vigente es 00.2. |\n| ERROR | cita_rev | `02/AB01-E-MD-001_Rev00.2.md:15` | Cita AB01-E-MC-001 Rev 01 pero la revisión vigente es 00.2. |\n| AVISO | lme | `02/AB02-E-MD-001_Rev00.1.md` | AB02-E-MD-001 tiene archivo pero no figura en la LME (no existe oficialmente). |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2",
+     "AB02-E-MD-001": "00.1"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md:15",
+      "categoria": "cita_rev",
+      "mensaje": "Cita AB01-E-MD-001 Rev 00.3 pero la revisión vigente es 00.2.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:15",
+      "categoria": "cita_rev",
+      "mensaje": "Cita AB01-E-MC-001 Rev 01 pero la revisión vigente es 00.2.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB02-E-MD-001_Rev00.1.md",
+      "categoria": "lme",
+      "mensaje": "AB02-E-MD-001 tiene archivo pero no figura en la LME (no existe oficialmente).",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 3,
+     "archivos_md": 7,
+     "avisos": 1,
+     "citas_rev_revisadas": 4,
+     "documentos_con_codigo": 3,
+     "errores": 2,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
   "clean": {
    "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 1 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 0 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\nSin hallazgos.\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
    "result": {
@@ -5691,6 +6338,124 @@
     "version": "0.8.0"
    }
   },
+  "control_rows": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 3 |\n| Errores | 2 |\n| Avisos | 3 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | id_inexistente | `02/AB01-E-MC-001_Rev00.2.3.md` | REV-003 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | revision | `deliverables.md` | La LME (ENT-001) dice Rev 00.2 para AB01-E-MC-001 pero el archivo vigente es Rev 00.2.3. |\n| AVISO | rev_sin_comentario | `02/AB01-E-MC-001_Rev00.2.3.md` | La fila 00.2.1 del control de revisiones no cita ningún REV-nnn (ni «Avance de fase»): cada unidad del último dígito corresponde a un comentario incorporado. |\n| AVISO | rev_sin_rfc | `02/AB01-E-MC-001_Rev00.2.3.md` | La fila 00.1 del control de revisiones no cita la rfc-001: la Rev 00.n (último dígito en cero) solo nace de la rfc-n. |\n| AVISO | version_superada | `02/AB01-E-MC-001_Rev00.2.md` | Rev 00.2 de AB01-E-MC-001 fuera de 03_ENGINEERING/Archive; la vigente es 00.2.3. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2.3",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.3.md",
+      "categoria": "id_inexistente",
+      "mensaje": "REV-003 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "deliverables.md",
+      "categoria": "revision",
+      "mensaje": "La LME (ENT-001) dice Rev 00.2 para AB01-E-MC-001 pero el archivo vigente es Rev 00.2.3.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.3.md",
+      "categoria": "rev_sin_comentario",
+      "mensaje": "La fila 00.2.1 del control de revisiones no cita ningún REV-nnn (ni «Avance de fase»): cada unidad del último dígito corresponde a un comentario incorporado.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.3.md",
+      "categoria": "rev_sin_rfc",
+      "mensaje": "La fila 00.1 del control de revisiones no cita la rfc-001: la Rev 00.n (último dígito en cero) solo nace de la rfc-n.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.2.md",
+      "categoria": "version_superada",
+      "mensaje": "Rev 00.2 de AB01-E-MC-001 fuera de 03_ENGINEERING/Archive; la vigente es 00.2.3.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 3,
+     "archivos_md": 7,
+     "avisos": 3,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 2,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "draft_file": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 3 |\n| Errores | 0 |\n| Avisos | 1 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| AVISO | borrador_fuera_de_archivo | `02/AB01-E-MC-001_Rev00.1_draft-1.md` | Ya no existen borradores con la revisión fija: toda versión nueva es una revisión (00.0.1, 00.1…). Archivar el archivo en 03_ENGINEERING/Archive/<código>/ o renombrarlo. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.1_draft-1.md",
+      "categoria": "borrador_fuera_de_archivo",
+      "mensaje": "Ya no existen borradores con la revisión fija: toda versión nueva es una revisión (00.0.1, 00.1…). Archivar el archivo en 03_ENGINEERING/Archive/<código>/ o renombrarlo.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 3,
+     "archivos_md": 7,
+     "avisos": 1,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 0,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
   "format_checks": {
    "confidential": [
     [
@@ -5710,6 +6475,276 @@
      "Viñeta con «*» («* item»): use siempre «- » (evita «* **NEGRITA**»)."
     ]
    ]
+  },
+  "lme_with_specifications": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 1 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `deliverables.md` | La LME (ENT-004) dice Rev 00.3 para el pliego AB01-G-PG-001 pero su 00_Index_and_Control.md dice Rev 00.2. |\n| AVISO | lme | `deliverables.md` | La LME (ENT-005) indica Rev 00.1 para AB01-G-PG-002 pero no hay archivo en el proyecto. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "deliverables.md",
+      "categoria": "revision",
+      "mensaje": "La LME (ENT-004) dice Rev 00.3 para el pliego AB01-G-PG-001 pero su 00_Index_and_Control.md dice Rev 00.2.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "deliverables.md",
+      "categoria": "lme",
+      "mensaje": "La LME (ENT-005) indica Rev 00.1 para AB01-G-PG-002 pero no hay archivo en el proyecto.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 7,
+     "avisos": 1,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "marks_and_ranges": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 6 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 4 |\n| IDs citados que no existen | 6 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | DEC-003 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | DEC-004 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | PAR-007 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | RIE-001 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | RIE-002 se cita pero no existe en ningún registro del proyecto. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | RIE-003 se cita pero no existe en ningún registro del proyecto. |\n\n## Marcas abiertas por documento\n\n| Documento | `[DEFINIR]` | `[VERIFICAR]` | `[PENDIENTE INF-…]` | `[SUPUESTO …]` | Total |\n|---|---:|---:|---:|---:|---:|\n| `02/AB01-E-MD-001_Rev00.2.md` | 1 | 1 | 1 | 1 | 4 |\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "DEC-003 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "DEC-004 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "PAR-007 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "RIE-001 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "RIE-002 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "RIE-003 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     }
+    ],
+    "marcas_por_documento": {
+     "02/AB01-E-MD-001_Rev00.2.md": {
+      "DEFINIR": 1,
+      "PENDIENTE INF": 1,
+      "SUPUESTO": 1,
+      "VERIFICAR": 1,
+      "total": 4
+     }
+    },
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 0,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 6,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 6,
+     "marcas_abiertas_total": 4
+    },
+    "version": "0.8.0"
+   }
+  },
+  "missing_folder": "ValueError: No existe la carpeta del proyecto: C:\\Users\\DANIEL~1\\AppData\\Local\\Temp\\no_such_project_folder_xyz",
+  "money": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 5 |\n| Avisos | 1 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 1 |\n| Hallazgos de confidencialidad económica (RG-21) | 5 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | confidencialidad_economica | `01-input/_INPUT_REGISTER.md:3` | Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn. |\n| ERROR | confidencialidad_economica | `02/AB01-E-MD-001_Rev00.2.md:15` | Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn. |\n| ERROR | confidencialidad_economica | `02/AB01-E-MD-001_Rev00.2.md:16` | Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn. |\n| ERROR | confidencialidad_economica | `02/AB01-E-MD-001_Rev00.2.md:18` | La excepción cita DEC-099, que no existe en los registros. Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn. |\n| ERROR | id_inexistente | `02/AB01-E-MD-001_Rev00.2.md` | DEC-099 se cita pero no existe en ningún registro del proyecto. |\n| AVISO | confidencialidad_economica | `01-input/minutes/MINUTES-1.md:3` | Palabra de costo seguida de una cifra: revisar que no sea un dato económico del cliente (RG-21). |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "01-input/_INPUT_REGISTER.md:3",
+      "categoria": "confidencialidad_economica",
+      "mensaje": "Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:15",
+      "categoria": "confidencialidad_economica",
+      "mensaje": "Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:16",
+      "categoria": "confidencialidad_economica",
+      "mensaje": "Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:18",
+      "categoria": "confidencialidad_economica",
+      "mensaje": "La excepción cita DEC-099, que no existe en los registros. Cifra con moneda: los costos, precios y montos del cliente no se plasman en el proyecto (RG-21); quitarla o registrar la excepción pedida por el usuario como DEC-nnn.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md",
+      "categoria": "id_inexistente",
+      "mensaje": "DEC-099 se cita pero no existe en ningún registro del proyecto.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "01-input/minutes/MINUTES-1.md:3",
+      "categoria": "confidencialidad_economica",
+      "mensaje": "Palabra de costo seguida de una cifra: revisar que no sea un dato económico del cliente (RG-21).",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 6,
+     "avisos": 1,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 5,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 5,
+     "ids_inexistentes": 1,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "no_revision_row": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 3 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 3 |\n| Errores | 0 |\n| Avisos | 2 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| AVISO | lme | `02/AB01-E-PL-002_Rev00.1.md` | AB01-E-PL-002 tiene archivo pero no figura en la LME (no existe oficialmente). |\n| AVISO | revision | `02/AB01-E-PL-002_Rev00.1.md` | No se encontró la fila «Revisión» (ni `revision:` en el bloque YAML) en la cabecera (no se pudo comparar). |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2",
+     "AB01-E-PL-002": "00.1"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-PL-002_Rev00.1.md",
+      "categoria": "lme",
+      "mensaje": "AB01-E-PL-002 tiene archivo pero no figura en la LME (no existe oficialmente).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-PL-002_Rev00.1.md",
+      "categoria": "revision",
+      "mensaje": "No se encontró la fila «Revisión» (ni `revision:` en el bloque YAML) en la cabecera (no se pudo comparar).",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 3,
+     "archivos_md": 7,
+     "avisos": 2,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 3,
+     "errores": 0,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
   },
   "old_lme_revision": {
    "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 6 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `deliverables.md` | La LME (ENT-001) dice Rev 00.1 para AB01-E-MC-001 pero el archivo vigente es Rev 00.2. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
@@ -5750,6 +6785,149 @@
      "citas_rev_revisadas": 0,
      "documentos_con_codigo": 2,
      "errores": 1,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "pandoc_problems": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 8 |\n| Documentos con código | 2 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 2 |\n| Errores | 2 |\n| Avisos | 4 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | formato_titulo_numerado | `02/AB01-E-MD-001_Rev00.2.md:15` | Título con numeración manual («## 1. Capítulo»): escriba solo el texto; la numeración la aplica la plantilla Word. |\n| ERROR | formato_vineta | `02/AB01-E-MD-001_Rev00.2.md:17` | Viñeta con «*» («* viñeta»): use siempre «- » (evita «* **NEGRITA**»). |\n| AVISO | formato_lista_sin_blanco | `02/AB01-E-MD-001_Rev00.2.md:20` | La lista no tiene una línea en blanco antes: Pandoc puede unirla al párrafo anterior. |\n| AVISO | formato_referencia_numerica | `02/AB01-E-MD-001_Rev00.2.md:22` | Referencia por número («capítulo 3»): cite por nombre («ver el capítulo Marco Normativo»), porque Word renumera los títulos. |\n| AVISO | formato_salto_nivel | `02/AB01-E-MD-001_Rev00.2.md:24` | Salto de niveles de título: de ## a #### (falta ###). |\n| AVISO | formato_tabulador | `02/AB01-E-MD-001_Rev00.2.md:26` | 1 línea(s) con tabuladores (primera en 26): use espacios. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:15",
+      "categoria": "formato_titulo_numerado",
+      "mensaje": "Título con numeración manual («## 1. Capítulo»): escriba solo el texto; la numeración la aplica la plantilla Word.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:17",
+      "categoria": "formato_vineta",
+      "mensaje": "Viñeta con «*» («* viñeta»): use siempre «- » (evita «* **NEGRITA**»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:20",
+      "categoria": "formato_lista_sin_blanco",
+      "mensaje": "La lista no tiene una línea en blanco antes: Pandoc puede unirla al párrafo anterior.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:22",
+      "categoria": "formato_referencia_numerica",
+      "mensaje": "Referencia por número («capítulo 3»): cite por nombre («ver el capítulo Marco Normativo»), porque Word renumera los títulos.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:24",
+      "categoria": "formato_salto_nivel",
+      "mensaje": "Salto de niveles de título: de ## a #### (falta ###).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-MD-001_Rev00.2.md:26",
+      "categoria": "formato_tabulador",
+      "mensaje": "1 línea(s) con tabuladores (primera en 26): use espacios.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 2,
+     "archivos_md": 8,
+     "avisos": 4,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 2,
+     "errores": 2,
+     "hallazgos_charter_ejecutivo": 0,
+     "hallazgos_confidencialidad": 0,
+     "ids_inexistentes": 0,
+     "marcas_abiertas_total": 0
+    },
+    "version": "0.8.0"
+   }
+  },
+  "rev_00_and_annexes": {
+   "markdown": "# Verificación mecánica de documentos (CAL-010)\n\n> Ayuda de autocontrol. **No reemplaza la auditoría** (`project-audit.md`).\n\nCarpeta: `<ROOT>`\n\n| Indicador | Valor |\n|---|---|\n| Archivos .md revisados | 7 |\n| Documentos con código | 3 |\n| Citas «Rev» revisadas | 0 |\n| Archivos revisados en formato Pandoc | 3 |\n| Errores | 2 |\n| Avisos | 2 |\n| Marcas abiertas (total) | 0 |\n| IDs citados que no existen | 0 |\n| Hallazgos de confidencialidad económica (RG-21) | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Detalle |\n|---|---|---|---|\n| ERROR | revision | `02/AB01-E-MC-001_Rev00.1_annex_A.py` | El anexo es Rev 00.1 pero el documento AB01-E-MC-001 vigente es Rev 00.2. |\n| ERROR | revision | `02/AB01-E-PL-001_Rev00.md` | última fila de «Control de revisiones» dice 00.0 pero el nombre del archivo dice 00. |\n| AVISO | lme | `02/AB01-E-PL-001_Rev00.md` | AB01-E-PL-001 tiene archivo pero no figura en la LME (no existe oficialmente). |\n| AVISO | rev_00_en_editables | `02/AB01-E-PL-001_Rev00.md` | Rev 00 (sin punto) es la designación de entrega al cliente y solo existe en 07_DELIVERABLES; un editable lleva 00.0, 00.n, 01 o posterior. |\n\n## Marcas abiertas por documento\n\nSin marcas abiertas.\n\n## Registros encontrados\n\n| Tipo | IDs definidos |\n|---|---:|\n| DEC | 2 |\n| SUP | 1 |\n| INF | 1 |\n| REV | 0 |\n| rfc | 4 |\n| PAR | 0 |\n| ALD | 0 |\n| CAC | 0 |\n| NOR | 0 |\n| RIE | 0 |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: no reemplaza la auditoría (project-audit.md).",
+    "carpeta": "<ROOT>",
+    "documentos_vigentes": {
+     "AB01-E-MC-001": "00.2",
+     "AB01-E-MD-001": "00.2",
+     "AB01-E-PL-001": "00"
+    },
+    "hallazgos": [
+     {
+      "archivo": "02/AB01-E-MC-001_Rev00.1_annex_A.py",
+      "categoria": "revision",
+      "mensaje": "El anexo es Rev 00.1 pero el documento AB01-E-MC-001 vigente es Rev 00.2.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-PL-001_Rev00.md",
+      "categoria": "revision",
+      "mensaje": "última fila de «Control de revisiones» dice 00.0 pero el nombre del archivo dice 00.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02/AB01-E-PL-001_Rev00.md",
+      "categoria": "lme",
+      "mensaje": "AB01-E-PL-001 tiene archivo pero no figura en la LME (no existe oficialmente).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "02/AB01-E-PL-001_Rev00.md",
+      "categoria": "rev_00_en_editables",
+      "mensaje": "Rev 00 (sin punto) es la designación de entrega al cliente y solo existe en 07_DELIVERABLES; un editable lleva 00.0, 00.n, 01 o posterior.",
+      "severidad": "AVISO"
+     }
+    ],
+    "marcas_por_documento": {},
+    "modulo": "CAL-010",
+    "nota_lme": null,
+    "registros": {
+     "ALD": 0,
+     "CAC": 0,
+     "DEC": 2,
+     "INF": 1,
+     "NOR": 0,
+     "PAR": 0,
+     "REV": 0,
+     "RIE": 0,
+     "SUP": 1,
+     "rfc": 4
+    },
+    "resumen": {
+     "archivos_formato_revisados": 3,
+     "archivos_md": 7,
+     "avisos": 2,
+     "citas_rev_revisadas": 0,
+     "documentos_con_codigo": 3,
+     "errores": 2,
      "hallazgos_charter_ejecutivo": 0,
      "hallazgos_confidencialidad": 0,
      "ids_inexistentes": 0,
@@ -5960,6 +7138,172 @@
   }
  },
  "specification": {
+  "chapter_not_pg": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 1 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 1 | 1 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `02_Descriptive_Report.md` | 5 | El código AB01-G-MD-001 difiere del del índice (AB01-G-PG-001). |\n| AVISO | encabezado | `02_Descriptive_Report.md` | 5 | El código AB01-G-MD-001 no es de tipo PG (pliego técnico). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-MD-001 difiere del del índice (AB01-G-PG-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-MD-001 no es de tipo PG (pliego técnico).",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 1,
+     "capitulos": 10,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
   "clean": {
    "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 0 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\nSin hallazgos.\n",
    "result": {
@@ -6270,6 +7614,249 @@
     "version": "0.2.0"
    }
   },
+  "everything_wrong": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 5 |\n| Avisos | 8 |\n| Marcas `[DEFINIR]` abiertas | 1 |\n| Marcas `[VERIFICAR]` abiertas | 1 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 13 | 0 | 0 | 2 | 4 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 16 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 11 | 1 | 1 | 1 | 1 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 29 | 0 | 0 | 1 | 2 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 6 | 0 | 0 | 1 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 2 | 0 | 0 | 0 | 1 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `01_Scope.md` | — | Falta la línea «Pregunta que responde». |\n| ERROR | obligacion | `01_Scope.md` | 12 | Frase de obligación del Contratista («el Contratista deberá») en un capítulo donde corresponde a 04 o 10. |\n| ERROR | obligacion | `05_Design_Requirements.md` | 14 | Frase de obligación del Contratista («El Contratista deberá») en un capítulo donde corresponde a 04 o 10. |\n| ERROR | formato_vineta | `06_Tests_and_Inspections.md` | 17 | Viñeta con «*» («* viñeta»): use siempre «- » (evita «* **NEGRITA**»). |\n| ERROR | no_aplica | `08_Commissioning.md` | 14 | Capítulo «No aplica a este proyecto» sin una DEC-nnn que lo justifique. |\n| AVISO | estructura | `01_Scope.md` | — | Falta la sección «Pendientes y supuestos». |\n| AVISO | vacio | `01_Scope.md` | — | Capítulo vacío o con solo la plantilla (13 palabras de contenido). |\n| AVISO | comercial | `01_Scope.md` | 12 | Posible precio o condición comercial («USD»): el pliego no los contiene (RG-05). |\n| AVISO | referencia_adelante | `01_Scope.md` | 12 | Referencia hacia adelante al capítulo 09: un capítulo no anticipa capítulos posteriores. |\n| AVISO | vacio | `05_Design_Requirements.md` | — | Capítulo vacío o con solo la plantilla (11 palabras de contenido). |\n| AVISO | formato_tabulador | `06_Tests_and_Inspections.md` | 16 | 1 línea(s) con tabuladores (primera en 16): use espacios. |\n| AVISO | formato_h1_multiple | `06_Tests_and_Inspections.md` | 18 | Hay 2 títulos de nivel 1 (`#`, líneas 1, 18): un documento lleva un solo `#`; el resto son `##`, `###`… |\n| AVISO | vacio | `09_Technical_Documentation.md` | — | Capítulo vacío o con solo la plantilla (2 palabras de contenido). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 13,
+      "revision": "00.1",
+      "vacio": true
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 16,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 1,
+       "VERIFICAR": 1
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 11,
+      "revision": "00.1",
+      "vacio": true
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 29,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": true,
+      "numero": 8,
+      "palabras": 6,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 2,
+      "revision": "00.1",
+      "vacio": true
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "Falta la línea «Pregunta que responde».",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "obligacion",
+      "linea": 12,
+      "mensaje": "Frase de obligación del Contratista («el Contratista deberá») en un capítulo donde corresponde a 04 o 10.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "categoria": "obligacion",
+      "linea": 14,
+      "mensaje": "Frase de obligación del Contratista («El Contratista deberá») en un capítulo donde corresponde a 04 o 10.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "categoria": "formato_vineta",
+      "linea": 17,
+      "mensaje": "Viñeta con «*» («* viñeta»): use siempre «- » (evita «* **NEGRITA**»).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "categoria": "no_aplica",
+      "linea": 14,
+      "mensaje": "Capítulo «No aplica a este proyecto» sin una DEC-nnn que lo justifique.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "estructura",
+      "linea": null,
+      "mensaje": "Falta la sección «Pendientes y supuestos».",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "vacio",
+      "linea": null,
+      "mensaje": "Capítulo vacío o con solo la plantilla (13 palabras de contenido).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "comercial",
+      "linea": 12,
+      "mensaje": "Posible precio o condición comercial («USD»): el pliego no los contiene (RG-05).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "referencia_adelante",
+      "linea": 12,
+      "mensaje": "Referencia hacia adelante al capítulo 09: un capítulo no anticipa capítulos posteriores.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "categoria": "vacio",
+      "linea": null,
+      "mensaje": "Capítulo vacío o con solo la plantilla (11 palabras de contenido).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "categoria": "formato_tabulador",
+      "linea": 16,
+      "mensaje": "1 línea(s) con tabuladores (primera en 16): use espacios.",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "categoria": "formato_h1_multiple",
+      "linea": 18,
+      "mensaje": "Hay 2 títulos de nivel 1 (`#`, líneas 1, 18): un documento lleva un solo `#`; el resto son `##`, `###`…",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "categoria": "vacio",
+      "linea": null,
+      "mensaje": "Capítulo vacío o con solo la plantilla (2 palabras de contenido).",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 8,
+     "capitulos": 10,
+     "errores": 5,
+     "marcas_definir": 1,
+     "marcas_verificar": 1
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
   "extra_chapter": {
    "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 11 |\n| Errores | 0 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 11 | `11_Data_Sheet.md` | DRAFT | 14 | 0 | 0 | 0 | 1 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| AVISO | vacio | `11_Data_Sheet.md` | — | Capítulo vacío o con solo la plantilla (14 palabras de contenido). |\n",
    "result": {
@@ -6442,6 +8029,711 @@
     "version": "0.2.0"
    }
   },
+  "index_not_pg": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-MD-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 10 |\n| Avisos | 1 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 1 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 1 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 1 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 1 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 1 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 1 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `01_Scope.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `02_Descriptive_Report.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `03_Regulatory_Framework.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `04_General_Execution_Conditions.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `05_Design_Requirements.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `06_Tests_and_Inspections.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `07_Precommissioning.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `08_Commissioning.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `09_Technical_Documentation.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| ERROR | encabezado | `10_Contractor_Responsibilities.md` | 5 | El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001). |\n| AVISO | encabezado | `00_Index_and_Control.md` | 4 | El código AB01-G-MD-001 no es de tipo PG (pliego técnico). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-MD-001",
+    "hallazgos": [
+     {
+      "archivo": "01_Scope.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "categoria": "encabezado",
+      "linea": 5,
+      "mensaje": "El código AB01-G-PG-001 difiere del del índice (AB01-G-MD-001).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "00_Index_and_Control.md",
+      "categoria": "encabezado",
+      "linea": 4,
+      "mensaje": "El código AB01-G-MD-001 no es de tipo PG (pliego técnico).",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 1,
+     "capitulos": 10,
+     "errores": 10,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "index_table_form": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 0 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\nSin hallazgos.\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 0,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "index_without_code": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `—` · Revisión: `—`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 2 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `00_Index_and_Control.md` | — | El índice no declara el código del pliego. |\n| ERROR | encabezado | `00_Index_and_Control.md` | — | El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": null,
+    "hallazgos": [
+     {
+      "archivo": "00_Index_and_Control.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "El índice no declara el código del pliego.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "00_Index_and_Control.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML).",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 2,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": null,
+    "version": "0.2.0"
+   }
+  },
+  "index_without_revision": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `—`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `00_Index_and_Control.md` | — | El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "00_Index_and_Control.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "El índice no declara la revisión del pliego (fila «Revisión» o `revision:` del bloque YAML).",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 1,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": null,
+    "version": "0.2.0"
+   }
+  },
   "missing_05": {
    "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 9 |\n| Errores | 1 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | numeracion | `05` | — | Falta el capítulo 05 (estándar: 05_Design_Requirements.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n",
    "result": {
@@ -6588,6 +8880,7 @@
     "version": "0.2.0"
    }
   },
+  "missing_folder": "ValueError: No existe la carpeta del pliego: C:\\Users\\DANIEL~1\\AppData\\Local\\Temp\\no_such_spec_folder_xyz",
   "missing_last_three": {
    "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 7 |\n| Errores | 3 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 0 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | numeracion | `08` | — | Falta el capítulo 08 (estándar: 08_Commissioning.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n| ERROR | numeracion | `09` | — | Falta el capítulo 09 (estándar: 09_Technical_Documentation.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n| ERROR | numeracion | `10` | — | Falta el capítulo 10 (estándar: 10_Contractor_Responsibilities.md): la numeración debe ser contigua desde 01 y un capítulo que no aplica se conserva con su leyenda. |\n",
    "result": {
@@ -6719,6 +9012,352 @@
      "marcas_verificar": 0
     },
     "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "no_chapter_code": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `AB01-G-PG-001` · Revisión: `00.1`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 2 |\n| Avisos | 0 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 1 | 0 |\n| 03 | `03_Regulatory_Framework.md` | DRAFT | 32 | 0 | 0 | 1 | 0 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | encabezado | `02_Descriptive_Report.md` | — | El encabezado no declara el código del pliego. |\n| ERROR | encabezado | `03_Regulatory_Framework.md` | — | El encabezado no declara la revisión (fila «Revisión»). |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": null,
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": "AB01-G-PG-001",
+    "hallazgos": [
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "El encabezado no declara el código del pliego.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "03_Regulatory_Framework.md",
+      "categoria": "encabezado",
+      "linea": null,
+      "mensaje": "El encabezado no declara la revisión (fila «Revisión»).",
+      "severidad": "ERROR"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 0,
+     "capitulos": 10,
+     "errores": 2,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": "00.1",
+    "version": "0.2.0"
+   }
+  },
+  "no_index_and_stray_files": {
+   "markdown": "# Verificación mecánica del pliego (CAL-011)\n\n> Ayuda de autocontrol heurística. **No reemplaza el juicio del auditor** (`project-audit.md`, A4-13): si un texto responde otra pregunta que la de su capítulo es una decisión humana.\n\nCarpeta: `<ROOT>`\n\nPliego: `—` · Revisión: `—`\n\n| Indicador | Valor |\n|---|---|\n| Capítulos | 10 |\n| Errores | 2 |\n| Avisos | 2 |\n| Marcas `[DEFINIR]` abiertas | 0 |\n| Marcas `[VERIFICAR]` abiertas | 0 |\n\n## Capítulos\n\n| N.º | Archivo | Estado | Palabras | `[DEFINIR]` | `[VERIFICAR]` | Errores | Avisos |\n|---|---|---|---:|---:|---:|---:|---:|\n| 01 | `01_Scope.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 02 | `02_Descriptive_Report.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 03 | `03_Normativa_Aplicable.md` | DRAFT | 32 | 0 | 0 | 0 | 1 |\n| 04 | `04_General_Execution_Conditions.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n| 05 | `05_Design_Requirements.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 06 | `06_Tests_and_Inspections.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 07 | `07_Precommissioning.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 08 | `08_Commissioning.md` | DRAFT | 25 | 0 | 0 | 0 | 0 |\n| 09 | `09_Technical_Documentation.md` | DRAFT | 27 | 0 | 0 | 0 | 0 |\n| 10 | `10_Contractor_Responsibilities.md` | DRAFT | 28 | 0 | 0 | 0 | 0 |\n\n## Hallazgos\n\n| Severidad | Categoría | Archivo | Línea | Detalle |\n|---|---|---|---:|---|\n| ERROR | estructura | `00_Index_and_Control.md` | — | Falta 00_Index_and_Control.md (portada, lista de capítulos y control de revisiones). |\n| ERROR | numeracion | `03_Normativa_Aplicable.md, 03_Regulatory_Framework.md` | — | Número de capítulo 03 duplicado: 03_Normativa_Aplicable.md, 03_Regulatory_Framework.md. |\n| AVISO | numeracion | `03_Normativa_Aplicable.md` | — | El nombre del capítulo 03 difiere del estándar (03_Regulatory_Framework.md). |\n| AVISO | estructura | `notes.md` | — | Archivo .md fuera del patrón NN_Nombre.md (sin tildes ni espacios, número desde 01): no se trata como capítulo. |\n",
+   "result": {
+    "aviso": "Ayuda de autocontrol: heurística; no reemplaza el juicio del redactor ni la auditoría (project-audit.md, A4-13).",
+    "capitulos": [
+     {
+      "archivo": "01_Scope.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 1,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "02_Descriptive_Report.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 2,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "03_Normativa_Aplicable.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 3,
+      "palabras": 32,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "04_General_Execution_Conditions.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 4,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "05_Design_Requirements.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 5,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "06_Tests_and_Inspections.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 6,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "07_Precommissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 7,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "08_Commissioning.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 8,
+      "palabras": 25,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "09_Technical_Documentation.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 9,
+      "palabras": 27,
+      "revision": "00.1",
+      "vacio": false
+     },
+     {
+      "archivo": "10_Contractor_Responsibilities.md",
+      "estado": "DRAFT",
+      "marcas": {
+       "DEFINIR": 0,
+       "VERIFICAR": 0
+      },
+      "no_aplica": false,
+      "numero": 10,
+      "palabras": 28,
+      "revision": "00.1",
+      "vacio": false
+     }
+    ],
+    "carpeta": "<ROOT>",
+    "codigo_pliego": null,
+    "hallazgos": [
+     {
+      "archivo": "00_Index_and_Control.md",
+      "categoria": "estructura",
+      "linea": null,
+      "mensaje": "Falta 00_Index_and_Control.md (portada, lista de capítulos y control de revisiones).",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "03_Normativa_Aplicable.md, 03_Regulatory_Framework.md",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "Número de capítulo 03 duplicado: 03_Normativa_Aplicable.md, 03_Regulatory_Framework.md.",
+      "severidad": "ERROR"
+     },
+     {
+      "archivo": "03_Normativa_Aplicable.md",
+      "categoria": "numeracion",
+      "linea": null,
+      "mensaje": "El nombre del capítulo 03 difiere del estándar (03_Regulatory_Framework.md).",
+      "severidad": "AVISO"
+     },
+     {
+      "archivo": "notes.md",
+      "categoria": "estructura",
+      "linea": null,
+      "mensaje": "Archivo .md fuera del patrón NN_Nombre.md (sin tildes ni espacios, número desde 01): no se trata como capítulo.",
+      "severidad": "AVISO"
+     }
+    ],
+    "modulo": "CAL-011",
+    "resumen": {
+     "avisos": 2,
+     "capitulos": 10,
+     "errores": 2,
+     "marcas_definir": 0,
+     "marcas_verificar": 0
+    },
+    "revision_pliego": null,
     "version": "0.2.0"
    }
   },
