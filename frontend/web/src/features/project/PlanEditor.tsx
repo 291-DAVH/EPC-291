@@ -132,7 +132,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     else if (tool === "node" && kindId) apply(addNode(drawing, kindId, snap(drawing, raw, tol)));
     else if (tool === "line" && kindId) {
       let p = snap(drawing, raw, tol);
-      if (e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
+      if (!e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
       if (draft.length === 0 || dist(draft[draft.length - 1], p) > 1e-6) setDraft([...draft, p]);
     }
   };
@@ -159,7 +159,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     }
     if (marquee) setMarquee({ a: marquee.a, b: raw });
     let p = snap(drawing, raw, 8 * upp());
-    if (tool === "line" && e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
+    if (tool === "line" && !e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
     setHover(p);
   };
   const onUp = (e: React.PointerEvent) => {

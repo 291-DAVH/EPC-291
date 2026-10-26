@@ -127,10 +127,10 @@ describe("plan editing rules", () => {
     d = addLine(d, "BN", [[0, 0], [50, 0]]);
     const a = moveElements(d, [{ type: "node", id: "n1" }], 10, 5);
     expect(a.nodes[0]).toMatchObject({ x: 10, y: 5 });
-    expect(a.lines[0].points).toEqual([[10, 5], [50, 0]]);
+    expect(a.lines[0].points).toEqual([[10, 5], [10, 0], [50, 0]]);
     const b = moveElements(d, [{ type: "line", id: "l1" }], 3, 4);
     expect(b.lines[0].points).toEqual([[3, 4], [53, 4]]);
-    expect(b.nodes[0]).toMatchObject({ x: 0, y: 0 });
+    expect(b.nodes[0]).toMatchObject({ x: 3, y: 4 });
     expect(moveElements(d, [{ type: "node", id: "n1" }], 0, 0)).toBe(d);
   });
 
@@ -147,5 +147,16 @@ describe("plan editing rules", () => {
     const c = moveSegment(d, "l1", 0, [5, 30]);
     expect(c.lines[0].points[0]).toEqual([0, 30]);
     expect(c.lines[0].points[1]).toEqual([100, 30]);
+  });
+
+  it("keeps a cable between a board and a load straight when the load moves", () => {
+    let d = addNode(addNode(blank(), "TB", [0, 0]), "LU", [100, 0]);
+    d = addLine(d, "CA", [[0, 0], [100, 0]]);
+    const a = moveElements(d, [{ type: "node", id: "n2" }], 0, 40);
+    expect(a.lines[0].points).toEqual([[0, 0], [100, 0], [100, 40]]);
+    const b = moveElements(a, [{ type: "node", id: "n2" }], 30, 0);
+    expect(b.lines[0].points).toEqual([[0, 0], [130, 0], [130, 40]]);
+    const c = moveElements(d, [{ type: "node", id: "n1" }, { type: "node", id: "n2" }], 7, 9);
+    expect(c.lines[0].points).toEqual([[7, 9], [107, 9]]);
   });
 });
