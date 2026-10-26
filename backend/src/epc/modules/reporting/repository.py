@@ -1,11 +1,10 @@
 """Files of the reporting step: the methodology's report catalog, the generated reports and their log."""
 import json
-import subprocess
-import sys
 import tempfile
 from pathlib import Path
 from typing import List, Optional
 
+from epc.core import engine
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
 
@@ -39,6 +38,6 @@ def render_pdf(doc: dict, dst: Path) -> None:
     with tempfile.TemporaryDirectory() as tmp:
         src = Path(tmp) / "report.json"
         src.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
-        res = subprocess.run([sys.executable, "-m", "epc_drawing.export.report_pdf", str(src), str(dst)], capture_output=True, text=True, timeout=180)
+        res = engine.run_module("epc_drawing.export.report_pdf", [src, dst], timeout=180)
     if res.returncode != 0:
-        raise RuntimeError(f"could not render the report: {(res.stderr or res.stdout).strip()[-300:]}")
+        raise RuntimeError(f"could not render the report: {engine.tail(res, 300)}")

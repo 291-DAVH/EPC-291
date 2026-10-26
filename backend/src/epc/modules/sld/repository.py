@@ -1,10 +1,9 @@
 """Files of the SLD feature inside workspace/02-engineering/electrical/<package>/ (src = input, build = scratch, drawings/calc = outputs)."""
 import shutil
-import subprocess
-import sys
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from epc.core import engine
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
 from epc.core.text import slugify
@@ -115,11 +114,10 @@ def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[st
     work.mkdir(parents=True, exist_ok=True)
     write_json(work / "input.json", data)
     write_json(work / "criteria.json", criteria)
-    cmd = [sys.executable, "-m", "epc_drawing.board_design", "--input", str(work / "input.json"), "--criteria", str(work / "criteria.json"),
-           "--out", str(work), "--name", name, "--diagrams", diagrams]
+    args = ["--input", work / "input.json", "--criteria", work / "criteria.json", "--out", work, "--name", name, "--diagrams", diagrams]
     for k, p in logos.items():
-        cmd += ["--logo", f"{k}={p}"]
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=900)
+        args += ["--logo", f"{k}={p}"]
+    return engine.run_module("epc_drawing.board_design", args, timeout=900)
 
 
 def read_summary(work: Path) -> dict:
@@ -130,9 +128,9 @@ def render_pdfs(out: Path, name: str) -> List[str]:
     """PDF of every DXF produced (the deliverable rendering of the drawing), through the engine's exporter. Returns warnings, never raises."""
     warnings: List[str] = []
     for dxf in sorted(out.glob(f"{name}*.dxf")):
-        res = subprocess.run([sys.executable, "-m", "epc_drawing.export.pdf", str(dxf), str(dxf.with_suffix(".pdf"))], capture_output=True, text=True, timeout=300)
+        res = engine.run_module("epc_drawing.export.pdf", [dxf, dxf.with_suffix(".pdf")], timeout=300)
         if res.returncode != 0:
-            warnings.append(f"AVISO no se pudo generar el PDF de {dxf.name}: {(res.stderr or res.stdout).strip()[-200:]}")
+            warnings.append(f"AVISO no se pudo generar el PDF de {dxf.name}: {engine.tail(res, 200)}")
     return warnings
 
 
