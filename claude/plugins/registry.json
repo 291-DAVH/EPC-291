@@ -15,7 +15,7 @@
       "engine": [
         "calc"
       ],
-      "hash": "3b5f36808998f273"
+      "hash": "a401fa398e4861bb"
     },
     "board-design": {
       "version": "0.2.1",
@@ -35,7 +35,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "80e8d653bea31d09"
+      "hash": "1636223d85177ed5"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -112,7 +112,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "be974d386a6c0e8f"
+      "hash": "c8dd7dfbcf8f2771"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -158,7 +158,7 @@
         "calc",
         "drawing"
       ],
-      "hash": "4fbb2141dbb43708"
+      "hash": "7e3bbb08a5e71b2a"
     },
     "spec-writer": {
       "version": "0.1.0",

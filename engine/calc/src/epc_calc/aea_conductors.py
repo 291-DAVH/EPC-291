@@ -32,10 +32,10 @@ NORMA DE REFERENCIA
 """
 import math
 from epc_calc._validate import num as _num
+from epc_calc.policy import K_MAX_I2_IZ
 
 __version__ = "0.1.0"
 
-K_MAX_I2_IZ = 1.45
 
 # Tabla 771.13.I — secciones mínimas [mm²] (cobre)
 SECCIONES_MIN_MM2 = {
