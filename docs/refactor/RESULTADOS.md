@@ -87,7 +87,7 @@ Ninguna prueba de caracterización ni archivo dorado se modificó para que pase.
 - **Local:** el gate completo da 26/26 sobre el último commit.
 - **No se pudo verificar localmente:** los jobs `migrations-postgres` y las compilaciones Docker de GitHub Actions.
 - **Archivos dorados:** se generaron en Windows con Python 3.15; el CI de Linux usa 3.12. Los dorados de dibujo normalizan fechas, GUID y orden de objetos del DXF, y los PDF solo se comparan por cantidad de páginas.
-- **Un error intermitente:** en dos ejecuciones del gate el chequeo `backend` terminó con un error que no se repitió en seis ejecuciones posteriores (con y sin cobertura). No se pudo identificar la prueba; desde entonces el gate guarda la salida completa de un fallo en `.cov/` para diagnosticarlo si reaparece.
+- **El error intermitente del chequeo `backend` tenía causa conocida:** una prueba mía (`test_engine_adapter`) ejecutaba `python -m json.tool`, que espera datos por la entrada estándar y se colgaba cuando el gate la dejaba abierta. Se cambió por un módulo que termina solo; desde entonces no reapareció.
 - **Cobertura del código en subproceso:** `sld_generator`, `sld_paginate` y `titleblock/*` no entran en la cobertura; los dorados de dibujo los protegen de punta a punta.
 
 ## Defectos de comportamiento que quedan pendientes (no se tocaron)
