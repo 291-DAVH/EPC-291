@@ -4,6 +4,9 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 
+### Changed
+- The single-line and multi-line diagrams only draw: every number they show (power, PE and neutral sections, main bar, feeder, checks, notes) comes from the calculation engine. The feeder shows "Pendiente" when there is no upstream board instead of an invented section.
+
 ### Added
 - Self-contained modules: a contract (`docs/modules/MODULE-CONTRACT.md`), a generator (`tools/dev/new_module.py`) that creates a folder which runs, tests and demos on its own, and a prompt to start a focused chat. `incoming/` holds modules waiting to be integrated; `incoming/plan/` is the first one (the plan canvas, ADR-0020), with its specification started.
 - Company registration (ADR-0017): the country decides the fields; legal name, tax identifier (CUIT, RIF, RFC, NIT, RUT or CIF, checked with its own rule), fiscal address, the company's e-mail, the administrator's alias (optional) and password, acceptance of the terms, and a 6-digit code sent to the company's e-mail. The registration must be made by a validated person of the corporation and the team may contact the company to validate it: the console shows what the company declared and the team validates or rejects it, and the company sees a notice while it is pending. A company no longer registers with the simple form or with a provider. E-mail delivery through `EPC_SMTP_*` (outbox folder in development); migration 0006.

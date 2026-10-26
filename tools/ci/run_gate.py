@@ -119,9 +119,8 @@ def main():
     example = ENGINE / "drawing" / "examples" / "sld"
     if example.is_dir():
         out = Path(tempfile.mkdtemp(prefix="gate_sld_"))
-        shutil.copytree(example / "titleblock", out / "titleblock")          # the generator rewrites input-titleblocks.xlsx: use a copy
-        run("sld-smoke", [py, "-m", "epc_drawing.sld.sld_paginate", "default", str(example / "input_for_sld_V1.xlsx"), str(out / "out"), "SLD_V1", "default", "default"],
-            REPO, must_not_contain="AVISO", env=dict(ENGINE_ENV, SLD_ROTULO_DIR=str(out / "titleblock")))
+        run("sld-smoke", [py, "-m", "epc_drawing.board_design", "--xlsx", str(example / "input_for_sld_V1.xlsx"), "--out", str(out), "--name", "SLD_V1"],
+            REPO, must_not_contain="AVISO", env=ENGINE_ENV)
 
     if WEB and not a.no_web and (WEB / "node_modules").exists():
         npm = "npm.cmd" if os.name == "nt" else "npm"

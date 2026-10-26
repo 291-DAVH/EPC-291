@@ -12,25 +12,19 @@ from . import deps as VL
 
 LIB, XLSX, OUT, NAME, LAMINA, MODBLOCK = sys.argv[1:7]
 if LIB == 'default': LIB = VL.iec_lib()                     # símbolos: iec60617-symbol-generator
-from epc_calc import voltage_drop as VD                    # fórmulas: epc_calc
+from epc_calc.aea_pipeline import TOPOLOGIAS_MOTOR         # which topologies are motors (the choice of symbols); the numbers come from the calculation
 os.makedirs(OUT, exist_ok=True)
 CAT = {i['id']: i for i in json.load(open(os.path.join(LIB, '_catalog.json'), encoding='utf-8-sig'))['symbols']}
-SQ3 = math.sqrt(3)
-COMM = [6,10,13,16,20,25,32,40,50,63,80,100,125,160,200,250,320,400,500,630,800,1000,1250,1600,2000,2500,3200]
-ICU = [6,10,16,25,36,50,65,85,100]
-IZ3 = [(1.5,13),(2.5,17),(4,23),(6,30),(10,40),(16,54),(25,70),(35,86),(50,103),(70,130),(95,156),(120,179),(150,196),(185,222),(240,258),(300,295)]
-IZ2 = [(1.5,14),(2.5,20),(4,26),(6,33),(10,45),(16,60),(25,78),(35,97),(50,116),(70,146),(95,175),(120,202),(150,224),(185,256),(240,299),(300,343)]
-IZT = {1: IZ2, 3: IZ3}
-MOTOR_TOPO = {'dol','dol_ol','star_delta','softstarter','vfd','dol_rcd'}
-# Límites de caída de tensión [%] (criterios de diseño del proyecto): acometida/seccionales, circuitos terminales y motores. Sin criterios: 1 / 3 / 5.
-LIM_ACOM = float(os.environ.get('SLD_LIM_ACOMETIDA_PCT') or 1.0)
-LIM_TERM = float(os.environ.get('SLD_LIM_TERMINAL_PCT') or 3.0)
-LIM_MOTOR = float(os.environ.get('SLD_LIM_MOTOR_PCT') or 5.0)
-# Cálculo de epc_calc (aea_pipeline, con los criterios de diseño): si se entrega, manda sobre el cálculo simplificado de este generador.
-# SLD_CALC_JSON = {TAG: {In, Ib, icu, S, dU, disp}} (contrato de aea_export); SLD_CALC_DETAIL = {TAG: {limite_pct, du_propia_pct, ...}} (opcional).
-PRE = json.load(open(os.environ['SLD_CALC_JSON'], encoding='utf-8')) if os.environ.get('SLD_CALC_JSON') else {}
-DET = json.load(open(os.environ['SLD_CALC_DETAIL'], encoding='utf-8')) if os.environ.get('SLD_CALC_DETAIL') else {}
-CALC_NOTE = os.environ.get('SLD_CALC_NOTE', '')
+# El dibujo no calcula: todo número sale del cálculo de epc_calc (aea_pipeline y board_figures), que entrega board_design como archivos JSON.
+#   SLD_CALC_JSON    = {TAG: {In, Ib, icu, S, dU, disp}} (contrato de aea_export)
+#   SLD_CALC_DETAIL  = {TAG: {limite_pct, du_propia_pct, p_kw, pe_mm2, neutro_mm2, kind, ...}}
+#   SLD_FIGURES_JSON = cifras del tablero: barra, acometida, verificaciones y notas (board_figures)
+def _calculo(var):
+    f = os.environ.get(var)
+    if not f:
+        sys.exit(f'FALTA {var}: el unifilar solo dibuja; el cálculo lo entrega epc_calc (board_design.design)')
+    return json.load(open(f, encoding='utf-8'))
+PRE, DET, FIG = _calculo('SLD_CALC_JSON'), _calculo('SLD_CALC_DETAIL'), _calculo('SLD_FIGURES_JSON')
 PITCH, X0, YBAR, GAP = 68.0, 58.0, 85.0, 3.0
 BLUE, RED, GREEN, BLACK = '#0000ff', '#ff0000', '#139b48', '#000000'
 FONT = "Arial, Helvetica, sans-serif"
@@ -58,14 +52,6 @@ SIG = {
  'lv_busbar_node': ('BUS', 'Derivacion desde barra'),
  'lv_earth_pe': ('PE', 'Puesta a tierra / PE'),
 }
-STD = [1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240,300]
-def neutral(S): return S if S <= 16 else nxt(S/2, STD)
-def nxt(x, s): return next((v for v in s if v >= x - 1e-9), s[-1])
-def sect_for(i, ph=3):
-    tb = IZT[ph]; return next((s for s, iz in tb if iz >= i), tb[-1][0])
-def bigger(s, ph=3):
-    tb = IZT[ph]; return next((sec for sec, _ in tb if sec > s), tb[-1][0])
-
 # ---------- entrada ----------
 wb = openpyxl.load_workbook(XLSX, data_only=True)
 TB = {}
@@ -105,58 +91,20 @@ _nl = max(1, len([t for t in DRAWN if not KIDS[t]]))
 PITCH = min(68.0, (539.0 if _sub else 540.0) / _nl)   # hoja paginada: 40 mm reservados a la derecha de la barra para 'continua en hoja'
 PREV_H = os.environ.get('SLD_PREV', ''); NEXT_H = os.environ.get('SLD_NEXT', '')
 
-# ---------- cálculo (referencial, AEA 90364 / IEC 60364) ----------
-def ph_of(c): return 1 if c['fase'].startswith('1') else 3
-def vph(ph): return V / SQ3 if ph == 1 else V
-def dU(I, L, S, ph, fp):
-    if L <= 0 or I <= 0: return 0.0
-    r_km = 1000.0 / (56.0 * S)          # R Cu [Ω/km]
-    return VD.caida_tension(ph, I, L, r_km, 0.08, fp, vph(ph))['delta_u_pct']   # X = 0,08 Ω/km
+# ---------- cifras del cálculo (solo se leen) ----------
 R = {}
-def calc(t):
-    if t in R: return R[t]
-    c = C[t]; ph = ph_of(c); fp = c['fp'] or FPDEF
-    if KIDS[t]:
-        subs = [calc(k) for k in KIDS[t]]
-        Ib = sum(s['Ib'] for s in subs); P = sum(s['P'] for s in subs)
-        motor = False
-        In = nxt(max(Ib, 63), COMM)
-    else:
-        u = c['unit'].lower(); val = c['carga'] or 0.0
-        if u == 'a':
-            Ib = val; P = vph(ph)*Ib*fp*(SQ3 if ph == 3 else 1)/1000
-        elif u in ('va','kva','mva'):
-            S_ = val*{'va':0.001,'kva':1.0,'mva':1000.0}[u]
-            P = S_*fp; Ib = S_*1000/(vph(ph)*(SQ3 if ph == 3 else 1))
-        else:
-            kw = val*0.7457/(c['eff'] or 0.9) if u == 'hp' else val*{'w':0.001,'kw':1.0,'mw':1000.0}.get(u, 1.0)
-            P = kw; Ib = kw*1000/(vph(ph)*(SQ3 if ph == 3 else 1)*fp)
-        motor = c['topo'] in MOTOR_TOPO
-        In = nxt(max((1.25*Ib if motor else Ib), 6), COMM)
-    icu = nxt(ICC, ICU) if ICC <= 100 else 100
-    lim = LIM_MOTOR if motor else LIM_TERM
-    lighting = 'ILUM' in c['desc'].upper()
-    smin = 1.5 if lighting else 2.5
-    S = max(sect_for(In, ph), smin); L = c['L'] or 0.0
-    dv = dU(Ib, L, S, ph, fp)
-    while dv > lim and S < 300:
-        S = bigger(S, ph); dv = dU(Ib, L, S, ph, fp)
-    PE = max(2.5, S if S <= 16 else (16 if S <= 35 else S/2))
-    R[t] = dict(Ib=Ib, P=P, In=In, icu=icu, S=S, PE=PE, dv=dv, motor=motor, ph=ph, fp=fp, L=L, lim=lim, parent=bool(KIDS[t]))
-    if t in PRE:                                           # el cálculo de epc_calc (criterios de diseño) manda
-        pc, dt_ = PRE[t], DET.get(t, {})
-        S_ = pc['S']
-        R[t].update(In=pc['In'], Ib=pc['Ib'], icu=pc['icu'], S=S_, PE=max(2.5, S_ if S_ <= 16 else (16 if S_ <= 35 else S_/2)),
-                    dv=dt_.get('du_propia_pct', pc['dU']), lim=dt_.get('limite_pct', lim))
-    return R[t]
-for t in ORDER: calc(t)
+for t in ORDER:
+    pc, dt_ = PRE[t], DET[t]
+    R[t] = dict(Ib=pc['Ib'], P=dt_['p_kw'], In=pc['In'], icu=pc['icu'], S=pc['S'], PE=dt_['pe_mm2'], N=dt_['neutro_mm2'], dv=dt_['du_propia_pct'], lim=dt_['limite_pct'],
+                motor=dt_['topologia'] in TOPOLOGIAS_MOTOR, ph=dt_['fases'], fp=dt_['fp'], L=dt_['largo_m'], parent=bool(KIDS[t]), kind=dt_['kind'], disp=pc['disp'])
+RCD = f"{FIG['rcd_ma']:g} mA"
 
 # ---------- cadenas de símbolos ----------
 def mcb(pol, In, icu): return ('lv_mcb', {'poles': pol, 'curve_rating': f'C{In}', 'breaking_capacity': f'{icu} kA'})
 def chain(t):
     c = C[t]; r = R[t]; ph = r['ph']; In = r['In']; icu = r['icu']; pol3 = '3P' if ph == 3 else '1P'
     if KIDS[t]:
-        return [('lv_rccb', {'poles': '4P' if ph == 3 else '2P', 'rated_current': f'{In} A', 'sensitivity': '30 mA'})]
+        return [('lv_rccb', {'poles': '4P' if ph == 3 else '2P', 'rated_current': f'{In} A', 'sensitivity': RCD})]
     el = []
     if r['motor']:
         topo = c['topo']; big = In >= 63
@@ -172,20 +120,20 @@ def chain(t):
         elif topo == 'vfd':
             el = [mcb(pol3, In, icu), ('lv_vfd', {'rated_current': f'{In} A'})]
         elif topo == 'dol_rcd':
-            el = [('lv_rcbo', {'poles': pol3, 'curve_rating': f'C{In}', 'sensitivity': '30 mA', 'breaking_capacity': f'{icu} kA', 'tag': t}),
+            el = [('lv_rcbo', {'poles': pol3, 'curve_rating': f'C{In}', 'sensitivity': RCD, 'breaking_capacity': f'{icu} kA', 'tag': t}),
                   ('lv_contactor', {'tag': 'KM1'})]
         else:
             el = [mcb(pol3, In, icu)]
     else:
-        k = c['kind']
+        k = r['kind']                                       # lo decidió el cálculo (auto -> mcb o mccb)
         if k == 'mccb_motorized':
             el = [('lv_mccb_motorized', {'rated_current': f'{In} A', 'breaking_capacity': f'{icu} kA'})]
-        elif k == 'mccb' or (k == 'auto' and In > 63):
+        elif k == 'mccb':
             el = [('lv_mccb_basic', {'tag': t})]
         elif k == 'rcbo':
-            el = [('lv_rcbo', {'poles': '1P+N' if ph == 1 else '3P+N', 'curve_rating': f'C{In}', 'sensitivity': '30 mA', 'breaking_capacity': f'{icu} kA', 'tag': t})]
+            el = [('lv_rcbo', {'poles': '1P+N' if ph == 1 else '3P+N', 'curve_rating': f'C{In}', 'sensitivity': RCD, 'breaking_capacity': f'{icu} kA', 'tag': t})]
         elif k == 'rccb':
-            el = [('lv_rccb', {'poles': '2P' if ph == 1 else '4P', 'rated_current': f'{In} A', 'sensitivity': '30 mA'})]
+            el = [('lv_rccb', {'poles': '2P' if ph == 1 else '4P', 'rated_current': f'{In} A', 'sensitivity': RCD})]
         else:
             el = [mcb(pol3, In, icu)]
     if 'UPS' in c['desc'].upper():
@@ -196,10 +144,7 @@ def load_of(t):
     if r['motor']:
         return ('lv_motor_3ph', {'power_kw': f"{r['P']:.1f} kW", 'current': f"{r['Ib']:.1f} A", 'tag': t})
     return ('lv_load_box_kw', {'tag': t})
-def disp_of(t):
-    if KIDS[t]: return f"RCCB {'4P' if R[t]['ph']==3 else '2P'} {R[t]['In']} A 30 mA"
-    names = [SIG[s][0] for s, _ in chain(t)]
-    return ' > '.join(names) + f" ({R[t]['In']} A)"
+def disp_of(t): return R[t]['disp']
 
 # ---------- helpers SVG ----------
 D = []; USED = set(); LEAVES = []
@@ -313,39 +258,20 @@ BUS_START = 40.0 if PREV_H else XA   # hoja con barra que viene: la barra llega 
 line(BUS_START, YBAR, BUS_END, YBAR, BLUE, 0.7)
 if PREV_H: T(BUS_START, YBAR - 2, f"← VIENE DE HOJA {PREV_H}", bold=True)
 if NEXT_H: T(BUS_END, YBAR + 4.6, f"CONTINÚA EN HOJA {NEXT_H} →", anchor="end", bold=True)
-_bdp = nxt(sum(R[t]['Ib'] for t in ROOTS_ALL), COMM)
+_bdp = FIG['bar']['in_a']
 T(XA + 4, YBAR - 2, 'BUS', bold=True)                  # extremo izquierdo, una sola vez
 T(BUS_END, YBAR - 6, f"BARRA PRINCIPAL {_bdp} A · {V:.0f} V · {TB['SISTEMA']}", anchor='end')  # extremo derecho, sobre la barra
 T(BUS_END, YBAR - 2, f"Icc {ICC:g} kA · 3F+N", anchor='end')
-# ---------- acometida: dimensionado por carga total y caida maxima 1 % (inclusive) ----------
-LA = float(TB.get('LONG_ACOMETIDA_m') or 20)            # largo supuesto si no viene en TABLERO
-IB_TOT = sum(R[t]['Ib'] for t in ROOTS_ALL)                 # suma aritmetica de Ib de las raices
-IN_MAIN = _bdp                                           # In comercial de la barra = acometida
-IZ3D = dict(IZT[3])
-def pe_of(S): return S if S <= 16 else (16 if S <= 35 else max(2.5, S/2))
-SQ3_ = math.sqrt(3); SIN_ = math.sqrt(1 - FPDEF**2)
-cands = []
-for n_ in (1, 2, 3, 4):                                 # ternas en paralelo
-    for S_ in sorted(IZ3D):
-        if n_ * IZ3D[S_] < IN_MAIN: continue
-        R_ = 1000/(56*S_)/n_; X_ = 0.08/n_               # ohm/km con n ternas en paralelo
-        dU_ = SQ3_ * IB_TOT * (LA/1000) * (R_*FPDEF + X_*SIN_) / V * 100
-        if dU_ <= LIM_ACOM + 1e-9: cands.append((n_*S_, n_, S_, dU_))
-if not cands: print(f'AVISO: acometida no cumple {LIM_ACOM:g} % con n<=4', file=sys.stderr); cands = [(0, 4, 300, 99.0)]
-_, n_a, S_a, dU_a = min(cands, key=lambda c: (c[1], c[2]))   # menos ternas en paralelo, luego menor seccion
-N_a = neutral(S_a); PE_a = pe_of(S_a)
-form_a = (f"3x{S_a}/{N_a} mm² + PE {PE_a:g} mm²" if n_a == 1 else f"{n_a} x (3x{S_a}/{N_a} mm² + PE {PE_a:g} mm²)")
-ACOM = dict(n=n_a, S=S_a, N=N_a, PE=PE_a, dU=dU_a, L=LA, I=IB_TOT, In=IN_MAIN, txt=form_a)
-ACOM_TXT = (f"Acometida: {form_a} · L {LA:g} m · I {IB_TOT:.0f} A · ΔU {dU_a:.2f} % (máx. {LIM_ACOM:g} %)")
-# texto de la acometida, junto al cable de entrada (horizontal, sobre el Q-GRAL)
-T(XA + 6, 31.5, f"ACOMETIDA / {LA:g} m", size=FS_DES, bold=True)
-T(XA + 6, 31.5 + 3.0*_SP, f"{form_a} · XLPE/Cu IRAM 2178")
-T(XA + 6, 31.5 + 6.0*_SP, f"Acometida {V:.0f} V · In {IN_MAIN} A · Icc {ICC:g} kA · ΔU {dU_a:.2f} %")
+# texto de la acometida, junto al cable de entrada (horizontal, sobre el Q-GRAL): el cable y su protección vienen del tablero superior
+_ac = FIG['feeder']
+T(XA + 6, 31.5, f"ACOMETIDA / {_ac['length_m']:g} m", size=FS_DES, bold=True)
+T(XA + 6, 31.5 + 3.0*_SP, 'Seccion y proteccion: Pendiente (tablero superior)' if _ac['pending'] else f"{_ac['S_mm2']} mm² · XLPE/Cu IRAM 2178")
+T(XA + 6, 31.5 + 6.0*_SP, f"Barra {V:.0f} V · In {_bdp} A · Icc {ICC:g} kA" + ('' if _ac['pending'] or _ac['du_pct'] is None else f" · ΔU {_ac['du_pct']:.2f} %"))
 x = X0
 for t in ROOTS:
     layout(t, x, YBAR + 4.22, top=True); x += gw(t)
 def _leg_strings(t):
-    r = R[t]; S = r['S']; PE = r['PE']; N = neutral(S); tipo = C[t]['tipo']
+    r = R[t]; S = r['S']; PE = r['PE']; N = r['N']; tipo = C[t]['tipo']
     if r['ph'] == 1:
         l2 = f"2x{S} mm²" if tipo == 'tetra_inc' else f"2x{S} + PE {PE:g} mm²"
     elif tipo == 'unifilar':
@@ -420,10 +346,7 @@ SIN_TABLA = os.environ.get('SLD_SIN_TABLA', '') == '1'   # la tabla de cálculo 
 if SIN_TABLA: del D[_k_tab:]   # la tabla no va en las hojas del diagrama
 _k_ref = len(D)   # A3: marca de inicio de la columna de referencias
 # ---------- columna derecha (referencias, cálculos, verificación) ----------
-notes = ("Notas: calculo referencial para revision del diagrama (no reemplaza la memoria de calculo). "
-         "Ib segun CARGA/UNIDAD y FP; In comercial >= 1,25·Ib en motores y >= Ib en el resto; Icu >= Icc; "
-         "Iz segun AEA 90364-7-771 Tabla 771.16.III, metodo B2, PVC IRAM 2178, 40 C; caida de tension con X=0,08 Ω/km; "
-         f"limite {LIM_TERM:g} % ({LIM_MOTOR:g} % motores); PE segun AEA 90364 (S/2 si S>35 mm²)." + (f" {CALC_NOTE}" if CALC_NOTE else ""))
+notes = FIG['note']
 
 COMPACTO = os.environ.get('SLD_FORMATO', 'A1') == 'A3'   # A3: referencias en 3 columnas a 2 mm, junto al rótulo
 if COMPACTO:
@@ -449,17 +372,7 @@ y_refs_fin = y + LSR
 
 y = Y0
 T(XC, y, 'CALCULOS (referencial)', size=TIT, bold=True); y += 6
-roots_P = sum(R[t]['P'] for t in ROOTS_ALL); roots_Ib = sum(R[t]['Ib'] for t in ROOTS_ALL)
-calc_lines = [
-    f"Tension nominal {V:.0f} V · sistema {TB['SISTEMA']} · {int(TB.get('FRECUENCIA_HZ') or 50)} Hz",
-    f"Icc en barras {ICC:g} kA · FP por defecto {FPDEF:g}",
-    f"Potencia activa de circuitos raiz: {roots_P:.1f} kW",
-    f"Suma aritmetica de Ib de circuitos raiz: {roots_Ib:.0f} A",
-    ACOM_TXT,
-    "In >= 1,25·Ib (motores) o >= Ib (resto), serie comercial",
-    "Icu = Icc redondeada al comercial superior",
-    f"Iz AEA 771.16.III (B2); S por Iz >= In, ΔU <= {LIM_TERM:g} % ({LIM_MOTOR:g} % motores)",
-]
+calc_lines = FIG['lines']
 for ln in calc_lines:
     for w_ in textwrap.wrap(ln, WRAPC if COMPACTO else 80):
         T(XC, y, w_); y += LSC
@@ -467,29 +380,11 @@ for ln in calc_lines:
 y = Y0
 T(XV, y, 'VERIFICACION', size=TIT, bold=True); y += 6
 leaves = [t for t in ORDER if not KIDS[t] and t in DRAWN]
-dvmax = max((R[t]['dv'] for t in leaves), default=0.0)
-dv_ok = all(R[t]['dv'] <= R[t]['lim'] + 1e-9 for t in leaves)
-icu_ok = all(R[t]['icu'] >= ICC for t in ORDER)
-mot_ok = all(R[t]['In'] >= 1.25*R[t]['Ib'] - 1e-9 for t in ORDER if R[t]['motor'])
-def has_dif(t):
-    if C[t]['kind'] == 'rcbo': return True
-    p = C[t]['parent']
-    while p:
-        if C[p]['kind'] == 'rccb' or KIDS.get(p) and C[p]['kind'] == 'rccb': return True
-        p = C[p]['parent']
-    return False
-dif_pending = [t for t in leaves if R[t]['ph'] == 1 and not has_dif(t)]
-checks = [
-    ('Icu >= Icc en todos los dispositivos', icu_ok),
-    ('In >= Ib en todos los circuitos', True),
-    ('Iz del cable >= In (seccion por tabla)', True),
-    (f'ΔU maxima {dvmax:.2f} % (limite {LIM_TERM:g} % / {LIM_MOTOR:g} % motores)', dv_ok),
-    ('In >= 1,25·Ib en motores', mot_ok),
-    ('Diferencial 30 mA en circuitos 1F', not dif_pending),
-    (f"ΔU acometida {ACOM['dU']:.2f} % (limite {LIM_ACOM:g} %)", ACOM['dU'] <= LIM_ACOM + 1e-9),
-]
+dvmax = max((R[t]['dv'] for t in ORDER if not KIDS[t]), default=0.0)
+checks = [(c['text'], c['ok']) for c in FIG['checks']]
+dif_pending = FIG['differential_missing']
 for txt, ok in checks:
-    st = 'OK' if ok else 'REVISAR'
+    st = 'PENDIENTE' if ok is None else 'OK' if ok else 'REVISAR'
     wr = textwrap.wrap(txt, WRAP)
     for i, w_ in enumerate(wr):
         T(XV, y, w_ + (f'  [{st}]' if i == len(wr) - 1 else '')); y += LSC

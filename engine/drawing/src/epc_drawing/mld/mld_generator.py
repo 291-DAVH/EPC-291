@@ -326,27 +326,23 @@ class Generator:
         topo = str(c.get("topology") or "single").lower()
         motor_sid = pole_id("lv_motor_3ph", 3, sh.cat)
         if topo in MOTOR_TOPO and motor_sid and n == 3:
-            sh.place(motor_sid, {"tag": t, "rated_current": f"{r['Ib']:.1f} A", "power": f"{self.load_kw(c, r):.1f} kW"}, x0, y_out)
+            sh.place(motor_sid, {"tag": t, "rated_current": f"{r['Ib']:.1f} A", "power": f"{self.load_kw(t):.1f} kW"}, x0, y_out)
             tail = y_out + sh.bottom(motor_sid)
         else:
             sh.rect(x0 - 5, y_out, (n - 1) * PITCH + 10, 14, BLUE, 0.25)
             sh.text(x0 + (n - 1) * PITCH / 2, y_out + 6, t, anchor="middle", bold=True)
-            sh.text(x0 + (n - 1) * PITCH / 2, y_out + 10.5, f"{self.load_kw(c, r):.1f} kW · {r['Ib']:.1f} A", anchor="middle")
+            sh.text(x0 + (n - 1) * PITCH / 2, y_out + 10.5, f"{self.load_kw(t):.1f} kW · {r['Ib']:.1f} A", anchor="middle")
             tail = y_out + 14
         sh.text(x0 - 5, y_out + 34, str(c.get("destination") or c.get("description") or ""), size=FS_TXT)
 
     def cable_text(self, t: str, n: int) -> str:
         S = self.calc[t]["S"]
-        pe = max(2.5, S if S <= 16 else (16 if S <= 35 else S / 2))
+        pe = self.detail[t]["pe_mm2"]
         return f"{n}x{S:g} + PE {pe:g} mm²  XLPE/Cu IRAM 2178"
 
-    @staticmethod
-    def load_kw(c: dict, r: dict) -> float:
-        """kW aproximados desde Ib (referencial): para la leyenda de la carga."""
-        import math
-        ph = str(c.get("phase") or "3F").upper()
-        fp = float(c.get("fp") or 0.85)
-        return (math.sqrt(3) if ph.startswith("3") else 1.0) * 0.38 * r["Ib"] * fp * (1.0 if ph.startswith("3") else 0.58)
+    def load_kw(self, t: str) -> float:
+        """Potencia activa de la carga para su leyenda: la entrega el cálculo (el dibujo no calcula)."""
+        return self.detail[t]["p_kw"]
 
     # ---- lámina
     def build(self, out_dir: Path, name: str, maxw: float = XMAX - X0) -> List[dict]:

@@ -246,3 +246,35 @@ class TestIccMinima(unittest.TestCase):
         self.assertTrue([a for a in av if a.startswith("M-01: Icc mín al final 19")])
         _, av = P.calculate({"TENSION_V": 380, "ICC_KA": 0.3, "FP_DEFAULT": 0.85}, [base], k_magnetico=5)
         self.assertFalse([a for a in av if "Icc mín" in a])
+
+
+class TestCifrasParaDibujos(unittest.TestCase):
+    """Lo que los dibujos muestran sale del cálculo: potencia, PE y neutro por circuito y las cifras del tablero."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.det = {}
+        cls.datos, _ = P.calculate(TABLERO, CIRC, detalle=cls.det)
+
+    def test_the_power_of_a_circuit_follows_its_current_and_a_parent_adds_its_children(self):
+        self.assertAlmostEqual(self.det["M-01"]["p_kw"], 11.0, places=2)
+        self.assertAlmostEqual(self.det["L-01"]["p_kw"], 1.5, places=2)
+        self.assertAlmostEqual(self.det["G-02"]["p_kw"], self.det["G-02-A"]["p_kw"] + self.det["G-02-B"]["p_kw"], places=3)
+
+    def test_pe_and_neutral_sections_follow_the_rule_of_the_standard(self):
+        from epc_calc import aea_conductors as CO
+        self.assertEqual([CO.pe_section(s) for s in (1.5, 4, 16, 25, 35, 70)], [2.5, 4, 16, 16, 16, 35])
+        self.assertEqual([CO.neutral_section(s) for s in (4, 16, 35, 70, 300)], [4, 16, 25, 35, 150])
+        self.assertEqual((self.det["L-01"]["pe_mm2"], self.det["L-01"]["neutro_mm2"]), (2.5, 1.5))
+
+    def test_the_figures_of_the_board_report_the_bar_the_checks_and_a_pending_feeder(self):
+        from epc_calc import board_figures as F
+        board = {"icc_ka": 36, "voltage_v": 380, "fp_default": 0.85, "system": "TN-S", "frequency_hz": 50, "feeder_length_m": 20}
+        limits = {"seccional": 1.0, "terminal": 3.0, "motor": 5.0}
+        pending = F.build(board, self.datos, self.det, limits, 30, {"dato_faltante": True, "length_m": 20})
+        self.assertEqual((pending["bar"]["in_a"], pending["feeder"]["pending"], pending["feeder"]["ok"]), (100, True, None))
+        self.assertEqual(pending["differential_missing"], ["L-01"])            # the 1F lighting has no differential above it
+        self.assertEqual([c["ok"] for c in pending["checks"]], [True, True, True, True, True, False, None])
+        known = F.build(board, self.datos, self.det, limits, 30, {"dato_faltante": False, "length_m": 35, "S_mm2": 95, "du_pct": 0.4, "desde": "TGBT-0"})
+        self.assertEqual((known["feeder"]["S_mm2"], known["feeder"]["ok"], known["checks"][-1]["ok"]), (95, True, True))
+        self.assertIn("ΔU acometida 0.40 %", known["checks"][-1]["text"])

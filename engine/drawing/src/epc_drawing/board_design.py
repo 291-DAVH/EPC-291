@@ -70,6 +70,34 @@ def _flags(c: dict) -> dict:
     return {"MOMENTOS": True} if c.get("moments") else {}
 
 
+def _board_from_sheet(ws) -> dict:
+    values = {row[0]: row[1] for row in ws.iter_rows(values_only=True) if row and row[0]}
+    return {key: values[col] for col, key in BOARD_ROWS if values.get(col) is not None}
+
+
+def _is_circuit_row(r) -> bool:
+    return bool(r) and r[0] is not None and not str(r[0]).lower().startswith(("campo", "fila"))
+
+
+def _circuit_fields(row: dict) -> dict:
+    return {key: row[col] for col, key in CIRCUIT_COLS if row.get(col) is not None}
+
+
+def _circuits_from_sheet(ws) -> List[dict]:
+    rows = list(ws.iter_rows(values_only=True))
+    head = next(i for i, r in enumerate(rows) if r and r[0] == "TAG")
+    hdr = [str(h).strip() if h else "" for h in rows[head]]
+    named = [dict(zip(hdr, r)) for r in rows[head + 1:] if _is_circuit_row(r)]
+    return [_circuit_fields(row) for row in named]
+
+
+def read_excel(path) -> dict:
+    """The workbook of the plugin's example (sheets TABLERO and CIRCUITOS) as input data, the inverse of `write_excel`."""
+    import openpyxl
+    wb = openpyxl.load_workbook(path, data_only=True)
+    return {"board": _board_from_sheet(wb["TABLERO"]), "circuits": _circuits_from_sheet(wb["CIRCUITOS"])}
+
+
 def excel_rows(data: dict):
     """(tablero, circuitos) with the Excel column names that the plugin and aea_pipeline read."""
     tablero = {col: data["board"].get(key) for col, key in BOARD_ROWS}
@@ -187,8 +215,12 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     except Exception as exc:                               # noqa: BLE001 - the calculation stands; the PDF is reported as a warning
         avisos.append(f"no se pudo generar el PDF de la memoria: {exc}")
 
-    env = dict(os.environ, SLD_ROTULO_DIR=str(tb_dir), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_CALC_NOTE=calc_note(res),
-               SLD_LIM_ACOMETIDA_PCT=str(res["limites"]["seccional"]), SLD_LIM_TERMINAL_PCT=str(res["limites"]["terminal"]), SLD_LIM_MOTOR_PCT=str(res["limites"]["motor"]))
+    from epc_calc import board_figures as BF               # what the drawings show beyond each circuit: bar, feeder, checks and notes (the drawings only draw)
+    figures = BF.build(data["board"], res["datos"], res["detalle"], res["limites"], res["rcd_ma"], memo["acometida"])
+    figures["note"] += " " + calc_note(res)
+    figures_json = out / f"{name}_cifras.json"
+    figures_json.write_text(json.dumps(figures, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    env = dict(os.environ, SLD_ROTULO_DIR=str(tb_dir), SLD_CALC_JSON=str(calc_json), SLD_CALC_DETAIL=str(detail_json), SLD_FIGURES_JSON=str(figures_json))
     log, error = [], None
     if "sld" in diagrams:
         run = subprocess.run([sys.executable, "-m", "epc_drawing.sld.sld_paginate", "default", str(xlsx), str(out), f"SLD_{name}", "default", "default", str(maxl)],
@@ -208,10 +240,27 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     return summary
 
 
+def _load_input(a, ap):
+    """The board data and the design criteria the command line asks for: a project, a JSON file or the example workbook."""
+    if a.project:
+        pkg = Path(a.project) / "workspace" / "02-engineering" / "electrical" / "PQ-01"
+        data = json.loads((pkg / "src" / "sld-input.json").read_text(encoding="utf-8"))
+        criteria = resolve_criteria(Path(a.project))
+    elif a.xlsx:
+        data, criteria = read_excel(a.xlsx), None
+    elif a.input:
+        data = json.loads(Path(a.input).read_text(encoding="utf-8"))
+        criteria = json.loads(Path(a.criteria).read_text(encoding="utf-8")) if a.criteria else None
+    else:
+        ap.error("give --project, --input or --xlsx")
+    return data, criteria
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Criteria-driven calculation and single-line diagram of a board")
     ap.add_argument("--project", help="project folder: input from its saved SLD data and criteria from its design criteria (instead of --input/--criteria)")
     ap.add_argument("--input")
+    ap.add_argument("--xlsx", help="the plugin's example workbook as input (instead of --input)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--name", required=True)
     ap.add_argument("--criteria")
@@ -219,15 +268,7 @@ def main(argv=None) -> int:
     ap.add_argument("--maxl", type=int, default=18)
     ap.add_argument("--diagrams", default="sld", help="comma list: sld,mld (or none: calculation, memo and summary only)")
     a = ap.parse_args(argv)
-    if a.project:
-        pkg = Path(a.project) / "workspace" / "02-engineering" / "electrical" / "PQ-01"
-        data = json.loads((pkg / "src" / "sld-input.json").read_text(encoding="utf-8"))
-        criteria = resolve_criteria(Path(a.project))
-    elif a.input:
-        data = json.loads(Path(a.input).read_text(encoding="utf-8"))
-        criteria = json.loads(Path(a.criteria).read_text(encoding="utf-8")) if a.criteria else None
-    else:
-        ap.error("give --project or --input")
+    data, criteria = _load_input(a, ap)
     logos = {k: Path(v) for k, v in (x.split("=", 1) for x in a.logo)}
     s = design(data, Path(a.out), a.name, criteria, logos, a.maxl, tuple(x for x in a.diagrams.split(",") if x))
     for ln in s["log"] + s["avisos"]:

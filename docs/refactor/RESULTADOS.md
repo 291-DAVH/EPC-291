@@ -95,7 +95,7 @@ Ninguna prueba de caracterización ni archivo dorado se modificó para que pase.
 Son decisiones para después de la refactorización porque cambian resultados. Detalle y pruebas que los fijan en `FINDINGS.md`:
 
 - F2: el informe de alimentador no aplica «XLPE sin método = B2» (falla para aluminio XLPE; el cálculo sí lo aplica).
-- F3: `sld_generator` calcula por su cuenta la acometida y, sin el cálculo de `epc_calc`, todo el circuito con fórmulas simplificadas.
+- ~~F3: `sld_generator` calcula por su cuenta la acometida y el circuito.~~ **Resuelto** (rama `refactor/drawing-no-calc`): el unifilar y el multifilar solo dibujan; potencia, PE, neutro, barra, acometida, verificaciones y notas salen de `epc_calc` (`aea_pipeline` y `board_figures`). Cambios visibles: la acometida muestra «Pendiente» si no hay tablero superior (antes inventaba una sección), la barra usa la serie comercial del motor (315 A, no 320 A), la sensibilidad del diferencial sigue el criterio del proyecto y las verificaciones valen para todo el tablero en cada hoja.
 - F4: el analizador de IA fuerza una herramienta (`tool_choice`) que la API actual rechaza con el modelo por defecto.
 - F5: aislación por defecto PVC en el motor, XLPE en el catálogo de criterios.
 - F6: el informe de alimentador usa Ib para la caída de iluminación; el cálculo usa el 66 % al final de la línea.

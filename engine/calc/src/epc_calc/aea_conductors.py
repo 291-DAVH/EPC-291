@@ -91,6 +91,21 @@ def iz_admisible(seccion_mm2, cargados=3):
     return IZ_771_16_I[seccion_mm2][0 if cargados == 2 else 1]
 
 
+def pe_section(seccion_mm2):
+    """Sección del conductor de protección [mm²] (AEA 771.18.3): igual a la de fase hasta 16 mm², 16 mm² hasta 35 mm² y la mitad por encima; mínimo 2,5 mm²."""
+    _num(seccion_mm2, "seccion_mm2", 0.0, True)
+    s = seccion_mm2
+    return max(SECCIONES_MIN_MM2["pe"], s if s <= 16 else (16 if s <= 35 else s / 2))
+
+
+def neutral_section(seccion_mm2):
+    """Sección del neutro [mm²]: igual a la de fase hasta 16 mm²; por encima, la mitad llevada a la serie comercial."""
+    _num(seccion_mm2, "seccion_mm2", 0.0, True)
+    s = seccion_mm2
+    serie = sorted(IZ_771_16_I)
+    return s if s <= 16 else next((v for v in serie if v >= s / 2 - 1e-9), serie[-1])
+
+
 def resistencia_cu_ohm_km(seccion_mm2, temp_c=70.0):
     """R(θ) = R20·(1 + 0,00393·(θ − 20)) [Ω/km]; 70 °C = temperatura máxima del PVC en servicio."""
     if seccion_mm2 not in R20_CU_OHM_KM:
