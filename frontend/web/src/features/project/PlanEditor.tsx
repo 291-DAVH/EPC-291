@@ -168,7 +168,8 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     if (drag.current) { if (drag.current.moved) setHist(commit(hist, drag.current.base)); drag.current = null; return; }
     if (marquee) { const found = inBox(drawing, marquee.a, marquee.b); onSelect(e.shiftKey ? merge(selection, found) : found); setMarquee(null); }
   };
-  const onWheel = (e: React.WheelEvent) => {
+  const onWheel = (e: WheelEvent) => {
+    e.preventDefault();                                // zooming the canvas must not scroll the page
     const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
     const at = toView(e);
     setView({ x: at[0] - (at[0] - view.x) * factor, y: at[1] - (at[1] - view.y) * factor, w: view.w * factor, h: view.h * factor });
@@ -184,6 +185,16 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       if (nodeKinds.some((n) => n.id === id)) { cancel(); setTool("node"); setKindId(id); } else if (lineKinds.some((l) => l.id === id)) { cancel(); setTool("line"); setKindId(id); }
     }
   };
+
+  const wheel = useRef(onWheel);
+  wheel.current = onWheel;
+  useEffect(() => {                                    // React's own wheel handler is passive and cannot stop the page scroll: this one is native
+    const el = svgRef.current;
+    if (!el) return;
+    const h = (e: WheelEvent) => wheel.current(e);
+    el.addEventListener("wheel", h, { passive: false });
+    return () => el.removeEventListener("wheel", h);
+  }, []);
 
   const nodeTag = useMemo(() => Object.fromEntries((derived?.nodes ?? []).map((n) => [n.id, n.tag])), [derived]);
   const lineTag = useMemo(() => Object.fromEntries((derived?.stretches ?? []).map((s) => [s.line, s.line_tag])), [derived]);
@@ -222,7 +233,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       )}
       <div ref={box} style={{ border: "1px solid var(--line, #ccc)", background: "#fff", height: 560, overflow: "hidden", touchAction: "none" }}>
         <svg ref={svgRef} width="100%" height="100%" viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`} preserveAspectRatio="xMinYMin meet" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp}
-          onWheel={onWheel} onDoubleClick={finishLine} onContextMenu={(e) => e.preventDefault()} style={{ cursor: tool === "select" ? "default" : "crosshair", display: "block" }}>
+          onDoubleClick={finishLine} onContextMenu={(e) => e.preventDefault()} style={{ cursor: tool === "select" ? "default" : "crosshair", display: "block" }}>
           {underlayUrl && img && <image href={underlayUrl} x={0} y={0} width={img.w} height={img.h} />}
           {drawing.scale && <g stroke="#ff7f0e" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.scale.p1[0]} y1={drawing.scale.p1[1]} x2={drawing.scale.p2[0]} y2={drawing.scale.p2[1]} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />
             <text x={(drawing.scale.p1[0] + drawing.scale.p2[0]) / 2} y={(drawing.scale.p1[1] + drawing.scale.p2[1]) / 2 - 4 * u} fontSize={11 * u} fill="#ff7f0e" stroke="none">{drawing.scale.distance_m} m</text></g>}
