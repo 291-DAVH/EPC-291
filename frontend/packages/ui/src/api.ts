@@ -9,6 +9,13 @@ export class ApiError extends Error {
   }
 }
 
+export const JSON_HEADERS = { "Content-Type": "application/json" };
+
+/** A failed call as text for the person: the server's field messages, else the status. */
+export function errorText(x: unknown): string {
+  return x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error";
+}
+
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch("/api" + path, { credentials: "same-origin", ...init });
   if (r.status === 401 && !path.startsWith("/auth/")) window.dispatchEvent(new Event("epc-unauthorized"));      // the session ended: show the sign-in again

@@ -1,11 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ApiError, IdentitiesView, InvitationCreated, Me, OrgMember, OrgView, Page, SocialProvider, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, errorText, IdentitiesView, InvitationCreated, JSON_HEADERS, Me, OrgMember, OrgView, Page, SocialProvider, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
-
-function errorText(x: unknown): string {
-  return x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error";
-}
 
 /** The signed-in person: account data, password and, for the owner of the organization, the people who share the subscription. */
 export default function Account() {
@@ -47,7 +42,7 @@ function Alias({ current }: { current: string }) {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const save = async (e: FormEvent) => {
     e.preventDefault();
-    try { await api("/auth/username", { method: "PUT", headers: json, body: JSON.stringify({ username: value }) }); setMsg({ ok: true, text: t("acc.aliasSaved") }); }
+    try { await api("/auth/username", { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ username: value }) }); setMsg({ ok: true, text: t("acc.aliasSaved") }); }
     catch (x) { setMsg({ ok: false, text: errorText(x) }); }
   };
   return (
@@ -95,7 +90,7 @@ function Password({ needCurrent }: { needCurrent: boolean }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api("/auth/password", { method: "POST", headers: json, body: JSON.stringify({ current_password: cur, new_password: next }) });
+      await api("/auth/password", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ current_password: cur, new_password: next }) });
       setCur(""); setNext(""); setMsg({ ok: true, text: t("acc.pwChanged") });
     } catch (x) { setMsg({ ok: false, text: errorText(x) }); }
   };
@@ -130,11 +125,11 @@ function People({ meRole }: { meRole: "owner" | "admin" }) {
   const invite = (e: FormEvent) => {
     e.preventDefault();
     act(async () => {
-      setCreated(await api<InvitationCreated>("/app/org/invitations", { method: "POST", headers: json, body: JSON.stringify({ email, role }) }));
+      setCreated(await api<InvitationCreated>("/app/org/invitations", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ email, role }) }));
       setEmail(""); setCopied(false);
     });
   };
-  const patch = (m: OrgMember, body: object) => act(() => api(`/app/org/members/${m.user_id}`, { method: "PATCH", headers: json, body: JSON.stringify(body) }));
+  const patch = (m: OrgMember, body: object) => act(() => api(`/app/org/members/${m.user_id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(body) }));
   const copy = async (text: string) => { try { await navigator.clipboard.writeText(text); setCopied(true); } catch { /* the field stays selectable */ } };
   return (
     <div className="card">

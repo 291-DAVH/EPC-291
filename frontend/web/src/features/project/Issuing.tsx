@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { ApiError, Badge, IssuingView, Key, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, IssuingView, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
 
 /** Issue engineering outputs to the client: prepare a transmittal (stamped DXF + PDF + workbooks), then confirm it was sent. */
 export default function Issuing({ client, code, onOpenDeliverables }: { client: string; code: string; onOpenDeliverables: () => void }) {
@@ -27,7 +26,7 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
     if (pick.size === 0) { setErr({ items: t("issue.pickOne") }); return; }
     setBusy(true);
     try {
-      await api(base, { method: "POST", headers: json, body: JSON.stringify({ emission, client_rev: clientRev, internal_rev: internalRev, notes, items: [...pick].map((source) => ({ source })) }) });
+      await api(base, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ emission, client_rev: clientRev, internal_rev: internalRev, notes, items: [...pick].map((source) => ({ source })) }) });
       setPick(new Set()); setErr({}); setMsg(t("issue.prepared")); setRev((n) => n + 1);
     } catch (x) {
       setErr(x instanceof ApiError ? x.fieldErrors : { error: String(x) });

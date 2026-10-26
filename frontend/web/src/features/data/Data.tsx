@@ -1,8 +1,7 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
-import { ApiError, Badge, ClientRecord, IssuerRecord, Key, Me, Page, PersonRecord, State, api, useApi, useI18n } from "@epc/ui";
+import { api, Badge, ClientRecord, errorText, IssuerRecord, JSON_HEADERS, Key, Me, Page, PersonRecord, State, useApi, useI18n } from "@epc/ui";
 
 type Tab = "issuers" | "clients" | "people";
-const json = { "Content-Type": "application/json" };
 
 /** Information that does not change between projects, entered once (company, clients, people, logos). Admin/engineer role only. */
 export default function Data() {
@@ -27,10 +26,6 @@ export default function Data() {
 function Field({ label, children }: { label: Key; children: ReactNode }) {
   const { t } = useI18n();
   return <label className="field"><span>{t(label)}</span>{children}</label>;
-}
-
-function errorText(x: unknown): string {
-  return x instanceof ApiError ? Object.values(x.fieldErrors).join(", ") || String(x.status) : "error";
 }
 
 /** Logo of the company or of a client: preview, upload, remove. */
@@ -72,7 +67,7 @@ function Issuers({ write }: { write: boolean }) {
     e.preventDefault();
     if (!form) return;
     try {
-      await api(form.id ? `/data/issuers/${form.id}` : "/data/issuers", { method: form.id ? "PUT" : "POST", headers: json, body: JSON.stringify(form) });
+      await api(form.id ? `/data/issuers/${form.id}` : "/data/issuers", { method: form.id ? "PUT" : "POST", headers: JSON_HEADERS, body: JSON.stringify(form) });
       setForm(null); setErr(""); reload();
     } catch (x) { setErr(errorText(x)); }
   };
@@ -133,7 +128,7 @@ function Clients({ write }: { write: boolean }) {
     e.preventDefault();
     if (!form) return;
     try {
-      await api(editing ? `/data/clients/${editing}` : "/data/clients", { method: editing ? "PUT" : "POST", headers: json, body: JSON.stringify(form) });
+      await api(editing ? `/data/clients/${editing}` : "/data/clients", { method: editing ? "PUT" : "POST", headers: JSON_HEADERS, body: JSON.stringify(form) });
       setForm(null); setEditing(null); setErr(""); reload();
     } catch (x) { setErr(errorText(x)); }
   };
@@ -194,7 +189,7 @@ function People({ write }: { write: boolean }) {
     e.preventDefault();
     if (!form) return;
     try {
-      await api(editing ? `/data/people/${editing}` : "/data/people", { method: editing ? "PUT" : "POST", headers: json, body: JSON.stringify(form) });
+      await api(editing ? `/data/people/${editing}` : "/data/people", { method: editing ? "PUT" : "POST", headers: JSON_HEADERS, body: JSON.stringify(form) });
       setForm(null); setEditing(null); setErr(""); reload();
     } catch (x) { setErr(errorText(x)); }
   };

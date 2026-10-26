@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ApiError, Badge, RegisterDef, RegisterField, RegisterRecord, RegistersView, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, JSON_HEADERS, RegisterDef, RegisterField, RegisterRecord, RegistersView, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
 
 function optionLabel(f: RegisterField, v: unknown): string {
   return f.options?.find((o) => o.id === v)?.label ?? (v == null ? "" : String(v));
@@ -50,7 +49,7 @@ function Register({ base, def, onChanged, rev }: { base: string; def: RegisterDe
       if (form.id === null || v !== (list.data?.find((r) => r.id === form.id)?.[f.id] ?? "")) body[f.id] = v === "" ? null : v;
     }
     try {
-      await api(form.id ? `${base}/${def.id}/${form.id}` : `${base}/${def.id}`, { method: form.id ? "PATCH" : "POST", headers: json, body: JSON.stringify(body) });
+      await api(form.id ? `${base}/${def.id}/${form.id}` : `${base}/${def.id}`, { method: form.id ? "PATCH" : "POST", headers: JSON_HEADERS, body: JSON.stringify(body) });
       setForm(null); setErr({}); onChanged();
     } catch (x) { setErr(x instanceof ApiError ? x.fieldErrors : { error: String(x) }); }
   };

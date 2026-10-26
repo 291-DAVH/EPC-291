@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiError, Badge, Key, PartiesView, State, TeamRow, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, JSON_HEADERS, Key, PartiesView, State, TeamRow, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
 const ROLES: (keyof TeamRow)[] = ["drawn_by", "checked_by", "approved_by"];
 const FUNCTION: Record<keyof TeamRow, string> = { drawn_by: "designer", checked_by: "checker", approved_by: "approver" };           // who may be suggested for each
 
@@ -21,12 +20,12 @@ export default function Parties({ client, code }: { client: string; code: string
   const setCell = (disc: string, k: keyof TeamRow, val: string) => { setTeam({ ...team, [disc]: { ...team[disc], [k]: val } }); setDirty(true); setMsg(""); };
   const save = async () => {
     try {
-      await api(`/projects/${client}/${code}/parties`, { method: "PUT", headers: json, body: JSON.stringify({ issuer, team }) });
+      await api(`/projects/${client}/${code}/parties`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ issuer, team }) });
       setRev((n) => n + 1); setMsg(t("parties.saved"));
     } catch (x) { setMsg(x instanceof ApiError ? Object.values(x.fieldErrors).join(" · ") || String(x) : String(x)); }
   };
   const addClient = async () => {
-    try { await api("/data/clients", { method: "POST", headers: json, body: JSON.stringify({ id: d.client.id, name: d.client.name }) }); setRev((n) => n + 1); } catch (x) { setMsg(x instanceof ApiError ? Object.values(x.fieldErrors).join(" · ") : String(x)); }
+    try { await api("/data/clients", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ id: d.client.id, name: d.client.name }) }); setRev((n) => n + 1); } catch (x) { setMsg(x instanceof ApiError ? Object.values(x.fieldErrors).join(" · ") : String(x)); }
   };
   const chosen = d.issuers.find((i) => i.id === issuer);
   return (

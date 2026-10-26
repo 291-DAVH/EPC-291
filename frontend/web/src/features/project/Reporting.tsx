@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ApiError, Badge, GeneratedReport, ReportingView, State, api, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, GeneratedReport, JSON_HEADERS, ReportingView, State, useApi, useI18n } from "@epc/ui";
 
-const json = { "Content-Type": "application/json" };
 
 /** Management reports of the project's methodology (PM²): choose one, generate it from the project's data, review it, publish it to the client. Engineer only. */
 export default function Reporting({ client, code, onPublished }: { client: string; code: string; onPublished: () => void }) {
@@ -24,7 +23,7 @@ export default function Reporting({ client, code, onPublished }: { client: strin
     e.preventDefault();
     setBusy(true); setMsg(null);
     try {
-      const r = await api<GeneratedReport>(base, { method: "POST", headers: json, body: JSON.stringify({ type, period_start: from || null, period_end: to || null }) });
+      const r = await api<GeneratedReport>(base, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ type, period_start: from || null, period_end: to || null }) });
       setMsg({ ok: true, text: `${t("rep.generated")}: ${r.id}` }); setRev((n) => n + 1);
     } catch (x) { fail(x); } finally { setBusy(false); }
   };
