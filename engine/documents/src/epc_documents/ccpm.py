@@ -362,10 +362,8 @@ def _detectar_ciclo(ids, preds):
     return ciclo + [ciclo[0]]
 
 
-def _validar(datos, desde=None, lote=None):
-    if not isinstance(datos, dict):
-        raise ValueError("La entrada debe ser un objeto JSON (dict)")
-    adv = []
+def _leer_cabecera(datos, desde, adv):
+    """Campos generales de la entrada: fechas, calendario, horas por día, plazo, método de buffer. Agrega sus avisos a `adv`."""
     desconocidas = sorted(set(datos) - _CLAVES_ENTRADA)
     if desconocidas:
         adv.append("Claves de entrada no reconocidas (ignoradas): " + ", ".join(map(str, desconocidas)))
@@ -424,122 +422,139 @@ def _validar(datos, desde=None, lote=None):
     factor = datos.get("factor_buffer", 0.5)
     if isinstance(factor, bool) or not isinstance(factor, (int, float)) or not 0 < factor <= 1:
         raise ValueError(f"factor_buffer: debe ser un número en (0, 1], se recibió {factor!r}")
+    return {"inicio": inicio, "desde": desde, "cal": cal, "hpd": hpd, "tipo_plazo": tipo_plazo, "plazo_horas": plazo_horas,
+            "limite": limite, "metodo": metodo, "factor": factor}
 
-    tareas_raw = datos.get("tareas")
-    if not isinstance(tareas_raw, list) or not tareas_raw:
-        raise ValueError("tareas: debe ser una lista no vacía")
 
-    todas, orden_todas = {}, []
-    for k, t in enumerate(tareas_raw):
-        if not isinstance(t, dict):
-            raise ValueError(f"tareas[{k}]: debe ser un objeto")
-        if t.get("id") is None or str(t["id"]).strip() == "":
-            raise ValueError(f"tareas[{k}]: falta el campo 'id'")
-        tid = str(t["id"]).strip()
-        if tid in todas:
-            raise ValueError(f"Id de tarea duplicado: {tid!r}")
-        if t.get("dur_segura") is not None and t.get("dur_segura_h") is not None:
-            raise ValueError(f"Tarea {tid!r}: use 'dur_segura' (días) o 'dur_segura_h' (horas), no ambas")
-        if t.get("dur_agresiva") is not None and t.get("dur_agresiva_h") is not None:
-            raise ValueError(f"Tarea {tid!r}: use 'dur_agresiva' (días) o 'dur_agresiva_h' (horas), no ambas")
-        if "dur_segura" not in t and t.get("dur_segura_h") is None:
-            raise ValueError(f"Tarea {tid!r}: falta 'dur_segura'")
-        if t.get("dur_segura_h") is not None:
-            seg = _horas_a_dias(t["dur_segura_h"], f"Tarea {tid!r}: dur_segura_h", hpd)
-        else:
-            seg = _entero_positivo(t["dur_segura"], f"Tarea {tid!r}: dur_segura")
-        if t.get("dur_agresiva_h") is not None:
-            agr = _horas_a_dias(t["dur_agresiva_h"], f"Tarea {tid!r}: dur_agresiva_h", hpd)
-            if agr > seg:
-                raise ValueError(f"Tarea {tid!r}: dur_agresiva ({agr}) no puede superar a dur_segura ({seg})")
-        elif t.get("dur_agresiva") is None:
-            agr = max(1, -(-seg * (100 - RECORTE_AGRESIVO_PCT) // 100))   # ceil(70 % de la segura)
-        else:
-            agr = _entero_positivo(t["dur_agresiva"], f"Tarea {tid!r}: dur_agresiva")
-            if agr > seg:
-                raise ValueError(f"Tarea {tid!r}: dur_agresiva ({agr}) no puede superar a dur_segura ({seg})")
-        tipo = str(t.get("tipo_recurso", "interno")).strip().lower()
-        if tipo not in ("interno", "externo"):
-            raise ValueError(f"Tarea {tid!r}: tipo_recurso debe ser 'interno' o 'externo', se recibió {tipo!r}")
-        recurso = str(t.get("recurso") or "").strip()
-        preds_raw = t.get("predecesores") or []
-        if not isinstance(preds_raw, (list, tuple)):
-            raise ValueError(f"Tarea {tid!r}: predecesores debe ser una lista de ids")
-        preds_l = []
-        for p in preds_raw:
-            p = str(p).strip()
-            if p not in preds_l:
-                preds_l.append(p)
-        nb = t.get("fecha_no_antes_de")
-        nb = _parse_fecha(nb, f"Tarea {tid!r}: fecha_no_antes_de") if nb is not None else None
-        # Estado (H-033, H-040)
-        ir, fr = t.get("inicio_real"), t.get("fin_real")
-        ir = _parse_fecha(ir, f"Tarea {tid!r}: inicio_real") if ir is not None else None
-        fr = _parse_fecha(fr, f"Tarea {tid!r}: fin_real") if fr is not None else None
-        if ir and fr and fr < ir:
-            raise ValueError(f"Tarea {tid!r}: fin_real ({fr}) es anterior a inicio_real ({ir})")
-        est = t.get("estado")
-        if est is None:
-            est = "hecha" if fr is not None else "pendiente"
-        else:
-            est = _sin_acentos(str(est).strip().lower())
-            if est not in ESTADOS_TAREA:
-                raise ValueError(f"Tarea {tid!r}: estado debe ser uno de {', '.join(ESTADOS_TAREA)}, "
-                                 f"se recibió {t.get('estado')!r}")
-            if est != "hecha" and fr is not None:
-                raise ValueError(f"Tarea {tid!r}: tiene fin_real pero estado {est!r}; "
-                                 "una tarea con fin real es 'hecha'")
-        lt = t.get("lote")
-        lt = str(lt).strip() if lt not in (None, "") else None
-        pq = t.get("paquete")
-        pq = str(pq).strip() if pq not in (None, "") else None
-        fase = t.get("fase_paquete")
-        if fase in (None, ""):
-            fase = None
-        else:
-            fase = _sin_acentos(str(fase).strip().lower())
-            if fase not in FASES_PAQUETE:
-                raise ValueError(f"Tarea {tid!r}: fase_paquete debe ser una de {', '.join(FASES_PAQUETE)}, "
-                                 f"se recibió {t.get('fase_paquete')!r}")
-            if pq is None:
-                raise ValueError(f"Tarea {tid!r}: 'fase_paquete' requiere 'paquete'")
-        motivo = None
-        if lote is not None and lt is not None and lt != str(lote).strip() and est != "hecha":
-            est, motivo = "excluida", f"fuera de la entrega parcial {str(lote).strip()!r} (lote {lt!r})"
-        elif est == "excluida":
-            motivo = "excluida de la entrega parcial/alcance"
-        todas[tid] = {
-            "id": tid, "nombre": str(t.get("nombre") or tid), "recurso": recurso, "tipo": tipo,
-            "seg": seg, "agr": agr, "preds_lista": preds_l, "no_antes": nb,
-            "restringido": tipo == "interno" and recurso != "",
-            "min_idx": cal.indice_techo(nb) if nb else 0,
-            "estado": est, "inicio_real": ir, "fin_real": fr, "lote": lt, "motivo": motivo,
-            "entregable": str(t.get("entregable") or "").strip(),
-            "paquete": pq, "fase": fase,
-        }
-        orden_todas.append(tid)
-    plazo_info = None
-    if plazo_horas is not None:
-        activas = [todas[i] for i in orden_todas if todas[i]["estado"] not in ("excluida", "hecha")
-                   and todas[i]["tipo"] == "interno"]
-        esf_seg = sum(t["seg"] for t in activas) * hpd
-        esf_agr = sum(t["agr"] for t in activas) * hpd
-        plazo_info = {"tipo": tipo_plazo, "plazo_horas": plazo_horas, "horas_por_dia": hpd,
-                      "dias_habiles_equivalentes": max(1, _ceil(plazo_horas / hpd)),
-                      "esfuerzo_seguro_horas": esf_seg, "esfuerzo_agresivo_horas": esf_agr,
-                      "deficit_esfuerzo_horas": None}
-        if tipo_plazo == "esfuerzo":
-            deficit = esf_agr - plazo_horas
-            plazo_info["deficit_esfuerzo_horas"] = max(0.0, deficit)
-            if deficit > 0:
-                adv.append(f"Esfuerzo agresivo de las tareas internas ({esf_agr:g} h) supera el plazo de "
-                           f"{plazo_horas:g} h de esfuerzo: déficit de {deficit:g} h.")
-            elif esf_seg > plazo_horas:
-                adv.append(f"Esfuerzo seguro ({esf_seg:g} h) supera el plazo de {plazo_horas:g} h; "
-                           "solo cabe con las duraciones agresivas.")
-    if lote is not None and not any(todas[i]["lote"] == str(lote).strip() for i in orden_todas):
-        adv.append(f"Ninguna tarea declara lote {str(lote).strip()!r}: se calculó con todas las tareas.")
+def _duraciones_tarea(t, tid, hpd):
+    """(dur_segura, dur_agresiva) en días hábiles de una tarea, a partir de días u horas; la agresiva por defecto es el 70 % de la segura."""
+    if t.get("dur_segura") is not None and t.get("dur_segura_h") is not None:
+        raise ValueError(f"Tarea {tid!r}: use 'dur_segura' (días) o 'dur_segura_h' (horas), no ambas")
+    if t.get("dur_agresiva") is not None and t.get("dur_agresiva_h") is not None:
+        raise ValueError(f"Tarea {tid!r}: use 'dur_agresiva' (días) o 'dur_agresiva_h' (horas), no ambas")
+    if "dur_segura" not in t and t.get("dur_segura_h") is None:
+        raise ValueError(f"Tarea {tid!r}: falta 'dur_segura'")
+    if t.get("dur_segura_h") is not None:
+        seg = _horas_a_dias(t["dur_segura_h"], f"Tarea {tid!r}: dur_segura_h", hpd)
+    else:
+        seg = _entero_positivo(t["dur_segura"], f"Tarea {tid!r}: dur_segura")
+    if t.get("dur_agresiva_h") is not None:
+        agr = _horas_a_dias(t["dur_agresiva_h"], f"Tarea {tid!r}: dur_agresiva_h", hpd)
+        if agr > seg:
+            raise ValueError(f"Tarea {tid!r}: dur_agresiva ({agr}) no puede superar a dur_segura ({seg})")
+    elif t.get("dur_agresiva") is None:
+        agr = max(1, -(-seg * (100 - RECORTE_AGRESIVO_PCT) // 100))   # ceil(70 % de la segura)
+    else:
+        agr = _entero_positivo(t["dur_agresiva"], f"Tarea {tid!r}: dur_agresiva")
+        if agr > seg:
+            raise ValueError(f"Tarea {tid!r}: dur_agresiva ({agr}) no puede superar a dur_segura ({seg})")
+    return seg, agr
 
+
+def _estado_tarea(t, tid, fr):
+    """Estado de la tarea (H-033, H-040): el dado, o 'hecha' si tiene fin real y 'pendiente' si no."""
+    est = t.get("estado")
+    if est is None:
+        return "hecha" if fr is not None else "pendiente"
+    est = _sin_acentos(str(est).strip().lower())
+    if est not in ESTADOS_TAREA:
+        raise ValueError(f"Tarea {tid!r}: estado debe ser uno de {', '.join(ESTADOS_TAREA)}, "
+                         f"se recibió {t.get('estado')!r}")
+    if est != "hecha" and fr is not None:
+        raise ValueError(f"Tarea {tid!r}: tiene fin_real pero estado {est!r}; "
+                         "una tarea con fin real es 'hecha'")
+    return est
+
+
+def _fase_paquete(t, tid, pq):
+    fase = t.get("fase_paquete")
+    if fase in (None, ""):
+        return None
+    fase = _sin_acentos(str(fase).strip().lower())
+    if fase not in FASES_PAQUETE:
+        raise ValueError(f"Tarea {tid!r}: fase_paquete debe ser una de {', '.join(FASES_PAQUETE)}, "
+                         f"se recibió {t.get('fase_paquete')!r}")
+    if pq is None:
+        raise ValueError(f"Tarea {tid!r}: 'fase_paquete' requiere 'paquete'")
+    return fase
+
+
+def _leer_tarea(k, t, todas, cal, hpd, lote):
+    """Una tarea de la entrada validada y normalizada (el dict interno que usa el cálculo)."""
+    if not isinstance(t, dict):
+        raise ValueError(f"tareas[{k}]: debe ser un objeto")
+    if t.get("id") is None or str(t["id"]).strip() == "":
+        raise ValueError(f"tareas[{k}]: falta el campo 'id'")
+    tid = str(t["id"]).strip()
+    if tid in todas:
+        raise ValueError(f"Id de tarea duplicado: {tid!r}")
+    seg, agr = _duraciones_tarea(t, tid, hpd)
+    tipo = str(t.get("tipo_recurso", "interno")).strip().lower()
+    if tipo not in ("interno", "externo"):
+        raise ValueError(f"Tarea {tid!r}: tipo_recurso debe ser 'interno' o 'externo', se recibió {tipo!r}")
+    recurso = str(t.get("recurso") or "").strip()
+    preds_raw = t.get("predecesores") or []
+    if not isinstance(preds_raw, (list, tuple)):
+        raise ValueError(f"Tarea {tid!r}: predecesores debe ser una lista de ids")
+    preds_l = []
+    for p in preds_raw:
+        p = str(p).strip()
+        if p not in preds_l:
+            preds_l.append(p)
+    nb = t.get("fecha_no_antes_de")
+    nb = _parse_fecha(nb, f"Tarea {tid!r}: fecha_no_antes_de") if nb is not None else None
+    ir, fr = t.get("inicio_real"), t.get("fin_real")
+    ir = _parse_fecha(ir, f"Tarea {tid!r}: inicio_real") if ir is not None else None
+    fr = _parse_fecha(fr, f"Tarea {tid!r}: fin_real") if fr is not None else None
+    if ir and fr and fr < ir:
+        raise ValueError(f"Tarea {tid!r}: fin_real ({fr}) es anterior a inicio_real ({ir})")
+    est = _estado_tarea(t, tid, fr)
+    lt = t.get("lote")
+    lt = str(lt).strip() if lt not in (None, "") else None
+    pq = t.get("paquete")
+    pq = str(pq).strip() if pq not in (None, "") else None
+    fase = _fase_paquete(t, tid, pq)
+    motivo = None
+    if lote is not None and lt is not None and lt != str(lote).strip() and est != "hecha":
+        est, motivo = "excluida", f"fuera de la entrega parcial {str(lote).strip()!r} (lote {lt!r})"
+    elif est == "excluida":
+        motivo = "excluida de la entrega parcial/alcance"
+    return {
+        "id": tid, "nombre": str(t.get("nombre") or tid), "recurso": recurso, "tipo": tipo,
+        "seg": seg, "agr": agr, "preds_lista": preds_l, "no_antes": nb,
+        "restringido": tipo == "interno" and recurso != "",
+        "min_idx": cal.indice_techo(nb) if nb else 0,
+        "estado": est, "inicio_real": ir, "fin_real": fr, "lote": lt, "motivo": motivo,
+        "entregable": str(t.get("entregable") or "").strip(),
+        "paquete": pq, "fase": fase,
+    }
+
+
+def _info_plazo(todas, orden_todas, hpd, tipo_plazo, plazo_horas, adv):
+    """Resumen del plazo en horas frente al esfuerzo de las tareas internas activas (None si no hay plazo_horas)."""
+    if plazo_horas is None:
+        return None
+    activas = [todas[i] for i in orden_todas if todas[i]["estado"] not in ("excluida", "hecha")
+               and todas[i]["tipo"] == "interno"]
+    esf_seg = sum(t["seg"] for t in activas) * hpd
+    esf_agr = sum(t["agr"] for t in activas) * hpd
+    info = {"tipo": tipo_plazo, "plazo_horas": plazo_horas, "horas_por_dia": hpd,
+            "dias_habiles_equivalentes": max(1, _ceil(plazo_horas / hpd)),
+            "esfuerzo_seguro_horas": esf_seg, "esfuerzo_agresivo_horas": esf_agr,
+            "deficit_esfuerzo_horas": None}
+    if tipo_plazo == "esfuerzo":
+        deficit = esf_agr - plazo_horas
+        info["deficit_esfuerzo_horas"] = max(0.0, deficit)
+        if deficit > 0:
+            adv.append(f"Esfuerzo agresivo de las tareas internas ({esf_agr:g} h) supera el plazo de "
+                       f"{plazo_horas:g} h de esfuerzo: déficit de {deficit:g} h.")
+        elif esf_seg > plazo_horas:
+            adv.append(f"Esfuerzo seguro ({esf_seg:g} h) supera el plazo de {plazo_horas:g} h; "
+                       "solo cabe con las duraciones agresivas.")
+    return info
+
+
+def _verificar_precedencias(todas, orden_todas):
     for tid in orden_todas:
         for p in todas[tid]["preds_lista"]:
             if p not in todas:
@@ -550,16 +565,9 @@ def _validar(datos, desde=None, lote=None):
     if ciclo:
         raise ValueError("Ciclo en la red de precedencias: " + " -> ".join(ciclo))
 
-    adv.extend(_avisos_paquetes(todas, orden_todas))
 
-    # Tareas activas (entran en el cálculo): pendientes y bloqueadas.
-    hechas = [i for i in orden_todas if todas[i]["estado"] == "hecha"]
-    excluidas = [i for i in orden_todas if todas[i]["estado"] == "excluida"]
-    bloqueadas = [i for i in orden_todas if todas[i]["estado"] == "bloqueada"]
-    orden = [i for i in orden_todas if todas[i]["estado"] in ("pendiente", "bloqueada")]
-    if not orden:
-        raise ValueError("No quedan tareas pendientes ni bloqueadas para planificar "
-                         "(todas están hechas o excluidas)")
+def _red_activa(todas, orden, cal, adv):
+    """Tareas que entran en el cálculo, con sus predecesores ya hechos resueltos en `min_idx` y los excluidos descartados."""
     tareas = {i: todas[i] for i in orden}
     for tid in orden:
         tk = tareas[tid]
@@ -582,8 +590,11 @@ def _validar(datos, desde=None, lote=None):
     for i in orden:
         for p in tareas[i]["preds_lista"]:
             succ[p].append(i)
+    return tareas, preds, succ
 
-    # Tareas afectadas por bloqueo: bloqueadas y todas sus sucesoras.
+
+def _afectadas_por_bloqueo(bloqueadas, succ, adv):
+    """Tareas afectadas por bloqueo: bloqueadas y todas sus sucesoras."""
     afectadas, cola_b = set(), deque(bloqueadas)
     while cola_b:
         u = cola_b.popleft()
@@ -595,7 +606,10 @@ def _validar(datos, desde=None, lote=None):
         adv.append("Tareas BLOQUEADAS (se calculan con su duración pero NO se cuentan como cumplibles; "
                    "las que dependen de ellas tampoco): " + ", ".join(bloqueadas)
                    + ". Resolver el bloqueo o replanificar la entrega sin ellas.")
+    return afectadas
 
+
+def _leer_hitos(datos, todas, adv):
     hitos = []
     for k, h in enumerate(datos.get("hitos") or []):
         if not isinstance(h, dict):
@@ -614,8 +628,11 @@ def _validar(datos, desde=None, lote=None):
                 tarea = None
         hitos.append({"nombre": nombre, "fecha": _parse_fecha(h["fecha"], f"Hito {nombre!r}: fecha"),
                       "tarea": tarea})
+    return hitos
 
-    # Ruta restante (suma de duraciones agresivas hacia el final, incluida la propia tarea).
+
+def _ruta_restante(tareas, orden, preds, succ):
+    """Ruta restante (suma de duraciones agresivas hacia el final, incluida la propia tarea)."""
     ruta = {}
     grado = {i: len(succ[i]) for i in orden}
     cola = deque(i for i in orden if grado[i] == 0)
@@ -626,7 +643,10 @@ def _validar(datos, desde=None, lote=None):
             grado[p] -= 1
             if grado[p] == 0:
                 cola.append(p)
+    return ruta
 
+
+def _avisos_red(tareas, orden, preds, succ, adv):
     if len(orden) > 1:
         aisladas = [i for i in orden if not preds[i] and not succ[i]]
         if aisladas:
@@ -637,15 +657,53 @@ def _validar(datos, desde=None, lote=None):
         adv.append("Tareas internas sin 'recurso' (no se restringen por recurso único): "
                    + ", ".join(sin_recurso))
 
+
+def _validar(datos, desde=None, lote=None):
+    if not isinstance(datos, dict):
+        raise ValueError("La entrada debe ser un objeto JSON (dict)")
+    adv = []
+    cab = _leer_cabecera(datos, desde, adv)
+    cal, hpd = cab["cal"], cab["hpd"]
+
+    tareas_raw = datos.get("tareas")
+    if not isinstance(tareas_raw, list) or not tareas_raw:
+        raise ValueError("tareas: debe ser una lista no vacía")
+
+    todas, orden_todas = {}, []
+    for k, t in enumerate(tareas_raw):
+        tarea = _leer_tarea(k, t, todas, cal, hpd, lote)
+        todas[tarea["id"]] = tarea
+        orden_todas.append(tarea["id"])
+    plazo_info = _info_plazo(todas, orden_todas, hpd, cab["tipo_plazo"], cab["plazo_horas"], adv)
+    if lote is not None and not any(todas[i]["lote"] == str(lote).strip() for i in orden_todas):
+        adv.append(f"Ninguna tarea declara lote {str(lote).strip()!r}: se calculó con todas las tareas.")
+
+    _verificar_precedencias(todas, orden_todas)
+    adv.extend(_avisos_paquetes(todas, orden_todas))
+
+    # Tareas activas (entran en el cálculo): pendientes y bloqueadas.
+    hechas = [i for i in orden_todas if todas[i]["estado"] == "hecha"]
+    excluidas = [i for i in orden_todas if todas[i]["estado"] == "excluida"]
+    bloqueadas = [i for i in orden_todas if todas[i]["estado"] == "bloqueada"]
+    orden = [i for i in orden_todas if todas[i]["estado"] in ("pendiente", "bloqueada")]
+    if not orden:
+        raise ValueError("No quedan tareas pendientes ni bloqueadas para planificar "
+                         "(todas están hechas o excluidas)")
+    tareas, preds, succ = _red_activa(todas, orden, cal, adv)
+    afectadas = _afectadas_por_bloqueo(bloqueadas, succ, adv)
+    hitos = _leer_hitos(datos, todas, adv)
+    ruta = _ruta_restante(tareas, orden, preds, succ)
+    _avisos_red(tareas, orden, preds, succ, adv)
+
     base = datos.get("base")
     if base is not None and not isinstance(base, dict):
         raise ValueError("base: debe ser un objeto {fin_cadena, buffer_proyecto_dias, cadena}")
 
-    return {"inicio": inicio, "desde": desde, "lote": (str(lote).strip() if lote is not None else None),
+    return {"inicio": cab["inicio"], "desde": cab["desde"], "lote": (str(lote).strip() if lote is not None else None),
             "cal": cal, "tareas": tareas, "orden": orden, "todas": todas, "orden_todas": orden_todas,
             "hechas": hechas, "excluidas": excluidas, "bloqueadas": bloqueadas, "afectadas": afectadas,
             "preds": preds, "succ": succ, "ruta": ruta, "clave": {i: _clave_natural(i) for i in orden},
-            "hitos": hitos, "limite": limite, "plazo_info": plazo_info, "metodo": metodo, "factor": float(factor),
+            "hitos": hitos, "limite": cab["limite"], "plazo_info": plazo_info, "metodo": cab["metodo"], "factor": float(cab["factor"]),
             "base": base, "advertencias": adv}
 
 
