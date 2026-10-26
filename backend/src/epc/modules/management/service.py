@@ -7,6 +7,7 @@ import datetime as dt
 from pathlib import Path
 from typing import Tuple
 
+from epc.core import ids
 from epc.core.fsutil import is_inside, safe_file, today
 from epc.core.errors import NotFound
 from epc.modules.deliverables import public as deliverables
@@ -73,7 +74,7 @@ def publish_report(d: Path, source_pdf: Path, title: str, kind: str, date_iso: s
     """Make a generated report visible to the client: copy the PDF under deliverables/informes and add it to the reports index (id INF-nnn)."""
     import shutil
     items = repository.reports_index(d)
-    n = max((int(x["id"].split("-")[1]) for x in items if str(x.get("id", "")).startswith("INF-")), default=0) + 1
+    n = ids.max_seq(items, "INF-") + 1
     rid = f"INF-{n:03d}"
     dst = d / "deliverables" / "informes" / f"{rid}.pdf"
     dst.parent.mkdir(parents=True, exist_ok=True)

@@ -8,6 +8,7 @@ import zipfile
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+from epc.core import ids
 from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside, read_json, safe_file, today
@@ -145,7 +146,7 @@ def package_zip(d: Path, group: Optional[str] = None) -> Tuple[Path, str]:
 def add_items(d: Path, new: List[dict]) -> List[dict]:
     """Append deliverables (ids ENT-nnn are assigned here) and return them."""
     items = repository.read_items(d)
-    n = max((int(x["id"].split("-")[1]) for x in items if str(x.get("id", "")).startswith("ENT-")), default=0)
+    n = ids.max_seq(items, "ENT-")
     out = []
     for it in new:
         n += 1

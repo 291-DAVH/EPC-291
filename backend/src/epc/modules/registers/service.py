@@ -7,7 +7,7 @@ import datetime as dt
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
-from epc.core import clock
+from epc.core import clock, ids
 from epc.core.errors import Conflict, Forbidden, Invalid, NotFound
 from epc.core.fsutil import today
 from epc.modules.identity import public as identity
@@ -146,7 +146,7 @@ def create(d: Path, kind: str, data: dict) -> dict:
     rec.update({f["id"]: f["default"] for f in r["fields"] if "default" in f})
     rec.update(_clean(r, data, creating=True))
     all_items = repository.load(d, kind)
-    n = max((int(i["id"].split("-")[1]) for i in all_items), default=0) + 1
+    n = ids.max_seq(all_items) + 1
     _derive(r, rec)
     _close_date(r, rec)
     now, who = _now(), _who()

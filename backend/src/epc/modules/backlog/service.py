@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict
 
+from epc.core import ids
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import today
 from epc.modules.backlog import repository
@@ -40,7 +41,7 @@ def create(d: Path, body: NewItem) -> dict:
     if errors:
         raise Invalid(errors)
     items = repository.load(d)
-    n = max((int(i["id"].split("-")[1]) for i in items), default=0) + 1
+    n = ids.max_seq(items) + 1
     item = {"id": f"BL-{n:03d}", "status": "backlog", "created": today().isoformat(), **f, "title": f["title"].strip()}
     repository.save(d, items + [item])
     return item
