@@ -310,3 +310,27 @@ function nearestHit(d: Drawing, lineId: string, A: Pt, E: Pt, len: number, tol: 
   }
   return best && best.gap > EPS ? [A[0] + u[0] * best.t, A[1] + u[1] * best.t] : null;
 }
+
+/** Where lines join or cross as drawn: their points and the crossings of their segments. The engine merges what is within its tolerance, so its junction can sit a little off the drawing: markers are placed on these points instead. */
+export function drawnJunctions(d: Drawing): Pt[] {
+  const pts: Pt[] = d.lines.flatMap((l) => l.points);
+  const segs = d.lines.flatMap((l) => l.points.slice(0, -1).map((a, i): [Pt, Pt] => [a, l.points[i + 1]]));
+  for (let i = 0; i < segs.length; i++) {
+    for (let j = i + 1; j < segs.length; j++) {
+      const [a, b] = segs[i], [c, e] = segs[j];
+      const r: Pt = [b[0] - a[0], b[1] - a[1]], s: Pt = [e[0] - c[0], e[1] - c[1]];
+      const den = r[0] * s[1] - r[1] * s[0];
+      if (Math.abs(den) < EPS) continue;
+      const t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den;
+      if (t >= 0 && t <= 1 && u >= 0 && u <= 1) pts.push([a[0] + r[0] * t, a[1] + r[1] * t]);
+    }
+  }
+  return pts;
+}
+
+/** The drawn junction closest to `p` within `tol`, or `p` itself. */
+export function onDrawn(points: Pt[], p: Pt, tol: number): Pt {
+  let best = p, gap = tol;
+  for (const q of points) { const g = dist(p, q); if (g <= gap) { best = q; gap = g; } }
+  return best;
+}
