@@ -862,7 +862,6 @@ name = engine: board design -> multi-line -> single-line -> symbols, title block
 type = layers
 layers =
     epc_drawing
-    epc_mld
-    epc_sld
+    epc_mld | epc_sld
     epc_titleblock | epc_symbols | epc_plan | epc_calc
     epc_dxf

@@ -30,8 +30,8 @@ This plugin is packaging only. The code lives in `engine/drawing` and is copied 
 | Incluye (motor) | `dxf`, `titleblock` |
 | Es dueño de | `titleblock` |
 | Necesita (plugins) | `dxf-output` |
-| Lo necesitan | `sld` |
-| Paquetes de Python | `ezdxf`, `lxml`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
+| Lo necesitan | `board-design`, `mld`, `sld` |
+| Paquetes de Python | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` |
 | Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`; módulos del backend — |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.

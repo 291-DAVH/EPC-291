@@ -8,11 +8,11 @@ try:
     import cairosvg  # optional: only needed for PNG previews; requires the Cairo DLL on Windows
 except (ImportError, OSError):
     cairosvg = None
-from . import deps as VL
 from epc_dxf import roles as ROLES
+from epc_symbols import library_dir
 
 LIB, XLSX, OUT, NAME, LAMINA, MODBLOCK = sys.argv[1:7]
-if LIB == 'default': LIB = VL.iec_lib()                     # símbolos: iec60617-symbol-generator
+if LIB == 'default': LIB = str(library_dir('sld-lv-symbol'))       # símbolos: epc_symbols
 from epc_calc.aea_pipeline import TOPOLOGIAS_MOTOR         # which topologies are motors (the choice of symbols); the numbers come from the calculation
 os.makedirs(OUT, exist_ok=True)
 CAT = {i['id']: i for i in json.load(open(os.path.join(LIB, '_catalog.json'), encoding='utf-8-sig'))['symbols']}
@@ -415,24 +415,28 @@ if SOLO_TABLA:
 FORMATO = os.environ.get('SLD_FORMATO', 'A1')   # A1 (por defecto) o A3 (prueba: diagrama reducido a la zona útil A3)
 ESCALA_A3 = (0.46, 0.36)   # escala máxima del diagrama y tabla en A3 (la referencia se ajusta al espacio libre)
 today = datetime.date.today().strftime('%d/%m/%Y')
-if LAMINA == 'default':   # rótulo: plugin iram-titleblock-plugin; una fila del Excel por hoja
+if LAMINA == 'default':   # rótulo: se pide al servicio de epc_titleblock (los datos del proyecto vienen en EPC_TITLEBLOCK_JSON); sin Excel ni subprocesos
+    from epc_titleblock import service as TBS
+    _pedido = json.load(open(os.environ['EPC_TITLEBLOCK_JSON'], encoding='utf-8')) if os.environ.get('EPC_TITLEBLOCK_JSON') else {}
     _nombres = os.environ.get('SLD_NAMES', NAME).split(',')
-    VL.sincronizar(_nombres, {'Denominación (línea 1)': TB.get('NOMBRE_BASE'), 'Denominación (línea 2)': 'DIAGRAMA UNIFILAR BT',
-                              'Proyecto': TB.get('PROYECTO')})
-    LAMINA, MODBLOCK = VL.rotulo(_nombres.index(NAME), fmt=FORMATO)
-lam = open(LAMINA, encoding='utf-8').read()
+    _campos = {'denominacion': TB.get('NOMBRE_BASE'), 'denominacion_2': 'TABLA DE CÁLCULO DE CIRCUITOS' if NAME.endswith('_TABLA') else 'DIAGRAMA UNIFILAR BT',
+               'proyecto': TB.get('PROYECTO'), 'pagina': f'{_nombres.index(NAME) + 1} / {len(_nombres)}'}
+    _res = TBS.render({**_pedido, 'sheets': [{'name': NAME, 'format': FORMATO, 'fields': _campos}]})
+    for _w in _res['warnings']: print('AVISO', _w, file=sys.stderr)
+    lam, mod = _res['sheets'][0]['svg'], _res['sheets'][0]['modifications_block']
+else:
+    lam, mod = open(LAMINA, encoding='utf-8').read(), open(MODBLOCK, encoding='utf-8').read()
 lam = ROLES.tag_iram_sheet(lam)   # marco y rótulo de la plantilla IRAM, con su rol de capa
 vals = {'cliente': 'No indicado', 'denominacion': TB['NOMBRE'], 'denominacion_2': 'DIAGRAMA UNIFILAR BT',
         'empresa': '—', 'plano_n': str(TB.get('PROYECTO') or ''), 'plano_propio': NAME,
         'escala': 'S/E', 'emision': today, 'reemplaza': '—', 'notas': 'Referencial: ver columnas de calculo'}
 # campos del rótulo que el SLD no calcula (empresa, cliente, códigos...): en blanco, no quedan {clave} visibles
-_pend = set(re.findall(r'\{([a-z_0-9]+)\}', lam)) | set(re.findall(r'\{([a-z_0-9]+)\}', open(MODBLOCK, encoding='utf-8').read()))
+_pend = set(re.findall(r'\{([a-z_0-9]+)\}', lam)) | set(re.findall(r'\{([a-z_0-9]+)\}', mod))
 _vacios = sorted(k for k in _pend if k not in vals)
 for k in _vacios: vals[k] = ''
 if _vacios: print('AVISO rótulo sin datos del proyecto (quedan en blanco):', ', '.join(_vacios), file=sys.stderr)
 for k, v in vals.items():
     lam = lam.replace('{' + k + '}', xesc(v))
-mod = open(MODBLOCK, encoding='utf-8').read()
 inner = mod[mod.find('>', mod.find('<svg')) + 1: mod.rfind('</svg>')]
 for k, v in vals.items():
     inner = inner.replace('{' + k + '}', xesc(v))

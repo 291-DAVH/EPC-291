@@ -19,6 +19,7 @@
       "requires": {
         "aea-calc": "^1.8.0",
         "dxf-output": "^0.1.0",
+        "iram-titleblock": "^0.5.4",
         "mld": "^0.2.2",
         "sld": "^0.1.4"
       },
@@ -32,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "8c4e4f162d10ca65"
+      "hash": "0aee626d2a9f0c67"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -99,7 +100,7 @@
         "dxf",
         "titleblock"
       ],
-      "hash": "9a3bc8bf52515a09"
+      "hash": "a519361b11a03a6b"
     },
     "mld": {
       "version": "0.2.2",
@@ -109,18 +110,17 @@
         "aea-calc": "^1.8.0",
         "dxf-output": "^0.1.0",
         "iec-symbols": "^0.4.19",
-        "sld": "^0.1.4"
+        "iram-titleblock": "^0.5.4"
       },
       "skills": [],
       "engine": [
         "calc",
         "dxf",
         "mld",
-        "sld",
         "symbols",
         "titleblock"
       ],
-      "hash": "3d27f22f0e479b6d"
+      "hash": "53e2a2b8a8846578"
     },
     "plan-drawing": {
       "version": "0.1.0",
@@ -182,7 +182,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "c1c29ae5356fc001"
+      "hash": "aa59ee6f93393142"
     },
     "spec-writer": {
       "version": "0.1.0",

@@ -8,7 +8,7 @@ sus conductores (L1 L2 L3 N) a paso uniforme de 10 mm, con los símbolos MLD_LV 
 
 `data` = {"board": {...}, "circuits": [...], "titleblock": {...}} (el JSON del formulario); `calc` = {"datos": {TAG: {In, Ib, icu, S, dU, disp}},
 "detalle": {...}} (resultado de epc_calc.aea_pipeline). Devuelve la lista de hojas generadas (SVG y DXF).
-Rótulo y láminas: epc_sld.deps (mismo mecanismo que el unifilar; SLD_ROTULO_DIR apunta al Excel del rótulo).
+Rótulo y láminas: se piden al servicio de epc_titleblock (los datos del proyecto: EPC_TITLEBLOCK_JSON, o el rótulo del propio dato de entrada).
 """
 import datetime
 import json
@@ -21,7 +21,6 @@ from xml.sax.saxutils import escape as xesc
 
 from lxml import etree
 
-from epc_sld import deps as VL
 from epc_dxf.roles import tag_iram_sheet
 
 PITCH = 10.0                      # paso entre polos (mm), retícula de la biblioteca
@@ -352,8 +351,7 @@ class Generator:
         sheets = self.paginate(maxw)
         names = [name if len(sheets) == 1 else f"{name}_H{i}" for i in range(1, len(sheets) + 1)]
         tb = self.data.get("titleblock", {})
-        VL.sincronizar(names, {"Denominación (línea 1)": self.board.get("name"), "Denominación (línea 2)": "DIAGRAMA MULTIFILAR BT",
-                               "Proyecto": self.board.get("project")})
+        self.names = names                  # the sheets of this diagram: each one asks the title block service for its own
         made = []
         for i, (roots, nm) in enumerate(zip(sheets, names), 1):
             sh, _ = self.draw_sheet(roots, i, len(sheets))
@@ -364,9 +362,19 @@ class Generator:
             made.append({"name": nm, "svg": svg, "dxf": dxf})
         return made
 
+    def title_block_sheet(self, index: int, name: str) -> str:
+        """The IRAM sheet of this diagram with its title block filled in, asked to epc_titleblock (the project's data: EPC_TITLEBLOCK_JSON, else the title block of the input)."""
+        from epc_titleblock import service
+        file = os.environ.get("EPC_TITLEBLOCK_JSON")
+        request = json.loads(Path(file).read_text(encoding="utf-8")) if file else service.project_request(self.data.get("titleblock", {}))
+        fields = {"denominacion": self.board.get("name"), "denominacion_2": "DIAGRAMA MULTIFILAR BT", "proyecto": self.board.get("project"), "pagina": f"{index + 1} / {len(self.names)}"}
+        result = service.render({**request, "sheets": [{"name": name, "format": "A1", "fields": fields}]})
+        for w in result["warnings"]:
+            print("AVISO", w, file=sys.stderr)
+        return result["sheets"][0]["svg"]
+
     def write_sheet(self, sh: Sheet, index: int, name: str, out_dir: Path) -> tuple:
-        lam_path, mod_path = VL.rotulo(index, fmt="A1")
-        lam = tag_iram_sheet(Path(lam_path).read_text(encoding="utf-8"))
+        lam = tag_iram_sheet(self.title_block_sheet(index, name))
         today = datetime.date.today().strftime("%d/%m/%Y")
         vals = {"cliente": "No indicado", "denominacion": self.board.get("name", ""), "denominacion_2": "DIAGRAMA MULTIFILAR BT", "empresa": "—",
                 "plano_n": str(self.board.get("project") or ""), "plano_propio": name, "escala": "S/E", "emision": today, "reemplaza": "—",

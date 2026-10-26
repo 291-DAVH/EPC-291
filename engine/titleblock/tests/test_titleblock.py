@@ -28,7 +28,7 @@ class TestSheets(unittest.TestCase):
 
     def test_the_package_carries_its_templates_and_assets(self):
         base = SRC / "epc_titleblock"
-        self.assertTrue((base / "templates" / "input-titleblocks.xlsx").is_file())
+        self.assertFalse((base / "templates").exists())                              # no workbook any more: the title block is asked for with a JSON request
         self.assertTrue(any((base / "assets").glob("*-logo-*")))
 
 

@@ -5,7 +5,6 @@ from pathlib import Path
 
 from epc_drawing import board_design as B
 from epc_mld import mld_generator as M
-from epc_sld import deps
 
 
 def board(n_extra=0):
@@ -39,15 +38,8 @@ class TestGenerate(unittest.TestCase):
     def run_mld(self, data):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            tb = tmp / "titleblock"
-            B.prepare_titleblock(tb, data["titleblock"])
-            old = deps.ROTULO_DIR
-            deps.ROTULO_DIR = str(tb)                                              # never touch the example workbook
-            try:
-                made = M.generate(data, B.calculate(data, B.catalog_defaults()), tmp / "out", "MLD_TGBT-01")
-                return made, [Path(m["svg"]).read_text(encoding="utf-8") for m in made], [Path(m["dxf"]).exists() if m["dxf"] else False for m in made]
-            finally:
-                deps.ROTULO_DIR = old
+            made = M.generate(data, B.calculate(data, B.catalog_defaults()), tmp / "out", "MLD_TGBT-01")          # the title block comes from the input's own data
+            return made, [Path(m["svg"]).read_text(encoding="utf-8") for m in made], [Path(m["dxf"]).exists() if m["dxf"] else False for m in made]
 
     def test_one_sheet_with_symbols_per_pole_and_conductors(self):
         made, svgs, dxfs = self.run_mld(board())
