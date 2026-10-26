@@ -162,3 +162,18 @@ export function assignCircuit(d: Drawing, refs: Ref[], tag: string, loadKinds: S
 export function loadsOf(d: Drawing, tag: string, loadKinds: Set<string>): number {
   return d.nodes.filter((n) => n.circuit === tag && loadKinds.has(n.kind)).length;
 }
+
+/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points; the points of other lines that sit on a moved node follow it, so the network stays joined. */
+export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
+  if (!dx && !dy) return d;
+  const nodeIds = new Set(refs.filter((r) => r.type === "node").map((r) => r.id));
+  const lineIds = new Set(refs.filter((r) => r.type === "line").map((r) => r.id));
+  const moved = d.nodes.filter((n) => nodeIds.has(n.id));
+  const shift = (p: Pt): Pt => [p[0] + dx, p[1] + dy];
+  const follows = (p: Pt) => moved.some((n) => Math.abs(n.x - p[0]) < 1e-6 && Math.abs(n.y - p[1]) < 1e-6);
+  return {
+    ...d,
+    nodes: d.nodes.map((n) => (nodeIds.has(n.id) ? { ...n, x: n.x + dx, y: n.y + dy } : n)),
+    lines: d.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : { ...l, points: l.points.map((p) => (follows(p) ? shift(p) : p)) })),
+  };
+}

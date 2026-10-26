@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
+import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, merge, metresPerUnit, moveElements, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
@@ -88,6 +88,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     const p = pt.matrixTransform(m.inverse());
     return [p.x, p.y];
   };
+  const drag = useRef<{ start: Pt; base: Drawing; refs: Ref[]; moved: boolean } | null>(null);
   const apply = (next: Drawing) => { setHist(commit(hist, drawing)); onChange(next); };
   const doUndo = () => { const r = undo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
   const doRedo = () => { const r = redo(hist, drawing); setHist(r.h); if (r.d !== drawing) onChange(r.d); };
@@ -108,7 +109,15 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     if (e.button !== 0 || (readOnly && tool !== "select" && tool !== "box")) return;
     const raw = toView(e);
     const tol = 8 * upp();
-    if (tool === "select") { const hit = pick(drawing, raw, tol); onSelect(hit ? (e.shiftKey ? toggle(selection, hit) : [hit]) : e.shiftKey ? selection : []); }
+    if (tool === "select") {
+      const hit = pick(drawing, raw, tol);
+      onSelect(hit ? (e.shiftKey ? toggle(selection, hit) : isSel(hit) ? selection : [hit]) : e.shiftKey ? selection : []);
+      if (hit && !e.shiftKey && !readOnly) {                                                  // dragging a placed element moves it (the whole selection if it is part of it)
+        const refs = isSel(hit) ? selection : [hit];
+        drag.current = { start: raw, base: drawing, refs, moved: false };
+        (e.target as Element).setPointerCapture?.(e.pointerId);
+      }
+    }
     else if (tool === "box") { setMarquee({ a: raw, b: raw }); (e.target as Element).setPointerCapture?.(e.pointerId); }
     else if (tool === "erase") { const hit = pick(drawing, raw, tol); if (hit) { apply(removeMany(drawing, [hit])); onSelect([]); } }
     else if (tool === "origin") { apply(setOrigin(drawing, raw)); setTool("select"); }
@@ -127,6 +136,14 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
       return;
     }
     const raw = toView(e);
+    if (drag.current) {
+      const g = drag.current;
+      let d: Pt = [raw[0] - g.start[0], raw[1] - g.start[1]];
+      const only = g.refs.length === 1 && g.refs[0].type === "node" ? g.base.nodes.find((n) => n.id === g.refs[0].id) : undefined;
+      if (only) { const s = snap(g.base, raw, 8 * upp()); d = [s[0] - only.x, s[1] - only.y]; }          // a single node snaps onto nodes and line ends
+      if (g.moved || Math.hypot(d[0], d[1]) > 3 * upp()) { g.moved = true; onChange(moveElements(g.base, g.refs, d[0], d[1])); }
+      return;
+    }
     if (marquee) setMarquee({ a: marquee.a, b: raw });
     let p = snap(drawing, raw, 8 * upp());
     if (tool === "line" && e.shiftKey && draft.length > 0) p = ortho(draft[draft.length - 1], p);
@@ -134,6 +151,7 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
   };
   const onUp = (e: React.PointerEvent) => {
     pan.current = null;
+    if (drag.current) { if (drag.current.moved) setHist(commit(hist, drag.current.base)); drag.current = null; return; }
     if (marquee) { const found = inBox(drawing, marquee.a, marquee.b); onSelect(e.shiftKey ? merge(selection, found) : found); setMarquee(null); }
   };
   const onWheel = (e: React.WheelEvent) => {
