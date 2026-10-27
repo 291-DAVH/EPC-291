@@ -134,14 +134,16 @@ export function CoordBar({ hint, cursor, zoom, snap, stats, scale, commands, foc
   return (
     <div className="wb-hint">
       <CommandLine commands={commands} focusKey={focusKey} onDone={onDone} t={t} />
-      <span className="hint-text">{hint}</span>
-      {sel && <button className="hint-btn" onClick={onTable} title={t("plan.stat.open")}>{sel}</button>}
-      <span className="mono hint-right">
-        {cursor && <>X {cursor[0].toFixed(2)} · Y {cursor[1].toFixed(2)} m · </>}
-        {snap && <>{snap} · </>}
-        {Math.round(zoom * 100)}%
-        {scale === null ? <b style={{ color: "var(--bad)" }}> · {t("layout.notCalibrated")}</b> : <> · 1 u = {scale.toFixed(4)} m</>}
-      </span>
+      <div className="hint-row">
+        <span className="hint-text">{hint}</span>
+        {sel && <button className="hint-btn" onClick={onTable} title={t("plan.stat.open")}>{sel}</button>}
+        <span className="mono hint-right">
+          {cursor && <>X {cursor[0].toFixed(2)} · Y {cursor[1].toFixed(2)} m · </>}
+          {snap && <>{snap} · </>}
+          {Math.round(zoom * 100)}%
+          {scale === null ? <b style={{ color: "var(--bad)" }}> · {t("layout.notCalibrated")}</b> : <> · 1 u = {scale.toFixed(4)} m</>}
+        </span>
+      </div>
     </div>
   );
 }
