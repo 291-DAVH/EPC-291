@@ -1,13 +1,13 @@
 {
  "backend": {
-  "statements": 6049,
-  "covered": 5752,
-  "percent": 95.09
+  "statements": 7150,
+  "covered": 6821,
+  "percent": 95.4
  },
  "engine-calc": {
-  "statements": 2597,
-  "covered": 2163,
-  "percent": 83.29
+  "statements": 2927,
+  "covered": 2476,
+  "percent": 84.59
  },
  "engine-rules": {
   "statements": 206,
@@ -19,10 +19,45 @@
   "covered": 126,
   "percent": 35.9
  },
+ "engine-dxf": {
+  "statements": 838,
+  "covered": 509,
+  "percent": 60.74
+ },
+ "engine-symbols": {
+  "statements": 7,
+  "covered": 7,
+  "percent": 100.0
+ },
+ "engine-titleblock": {
+  "statements": 559,
+  "covered": 295,
+  "percent": 52.77
+ },
+ "engine-plan": {
+  "statements": 980,
+  "covered": 906,
+  "percent": 92.45
+ },
+ "engine-arch": {
+  "statements": 936,
+  "covered": 859,
+  "percent": 91.77
+ },
+ "engine-sld": {
+  "statements": 503,
+  "covered": 91,
+  "percent": 18.09
+ },
+ "engine-mld": {
+  "statements": 325,
+  "covered": 70,
+  "percent": 21.54
+ },
  "engine-drawing": {
-  "statements": 3142,
-  "covered": 1674,
-  "percent": 53.28
+  "statements": 505,
+  "covered": 435,
+  "percent": 86.14
  },
  "engine-documents": {
   "statements": 3052,
