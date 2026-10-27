@@ -50,6 +50,7 @@ class RoomIn(BaseModel):
 class DrawingIn(BaseModel):
     """What the person drew on one level of the project, in the units of the view (the pixels of the plan)."""
     discipline: str = "electrica_BT"
+    subdiscipline: str = Field("", max_length=40)   # what this plan draws within its discipline (lighting, sockets, MV distribution...): decides the kinds the editor offers
     plan_name: str = Field("", max_length=60)      # what the person calls this plan when a discipline has several on a level ("Iluminación", "Tomacorrientes")
     scale: Optional[Scale] = None
     origin: List[float] = [0.0, 0.0]        # the point 0,0 the person set

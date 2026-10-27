@@ -18,7 +18,8 @@ import { Icon } from "@epc/ui";
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
 export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean; carga?: boolean; vertical?: boolean; geom?: Record<string, number> }
 export type Prim = { t: "rect"; w: number; h: number } | { t: "circle"; r: number } | { t: "line"; a: [number, number]; b: [number, number] };
-export interface Profile { id: string; name: { es: string; en: string }; offered?: boolean; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string>; symbols?: Record<string, Prim[]> }
+export interface Subdiscipline { id: string; name: { es: string; en: string }; kinds: string[] }
+export interface Profile { id: string; name: { es: string; en: string }; offered?: boolean; subdisciplines?: Subdiscipline[]; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string>; symbols?: Record<string, Prim[]> }
 export interface DerivedNode { id: string; tag: string; kind: string; placed: boolean; x_m: number; y_m: number }
 export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null; carries?: { circuit: string; ternas: number }[]; cables?: number }
 export interface DerivedRoute { found: boolean; from: string; to: string; ternas: number; stretches: string[]; lines: string[]; length_m: number; cable_length_m: number; unreached?: string[] }
@@ -36,7 +37,7 @@ export interface Props {
   prefs?: [PlanPrefs, (p: Partial<PlanPrefs>) => void]; drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
-  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; boards?: BoardRef[]; onTool?: (tool: string) => void; roomRequest?: number;
+  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; boards?: BoardRef[]; onTool?: (tool: string) => void; allowedKinds?: string[]; roomRequest?: number;
   onNewPin?: (at_m: Pt) => void; onCopyLevels?: (clip: Clip) => void; onReserve?: (lineId: string) => void; onTemplateSave?: (name: string, clip: Clip) => void; pendingClip?: Clip | null; onClipUsed?: () => void;
 }
 
@@ -96,8 +97,9 @@ export default function PlanEditor(props: Props) {
   const drag = useRef<{ start: Pt; base: Drawing; refs: Ref[]; moved: boolean; alone: boolean } | null>(null);
   const grip = useRef<{ line: string; end?: 0 | 1; seg?: number; start: Pt; base: Drawing; moved: boolean } | null>(null);
 
-  const lineKinds = profile?.lines ?? [];
-  const nodeKinds = profile?.nodes ?? [];
+  const allowed = props.allowedKinds ? new Set(props.allowedKinds) : null;                       // the kinds this plan offers (its subdiscipline); the rest of the profile is still known
+  const lineKinds = (profile?.lines ?? []).filter((k) => !allowed || allowed.has(k.id));
+  const nodeKinds = (profile?.nodes ?? []).filter((k) => !allowed || allowed.has(k.id));
   const loadKinds = useMemo(() => new Set(nodeKinds.filter((n) => n.carga).map((n) => n.id)), [profile]);
   const boardKinds = useMemo(() => new Set(nodeKinds.filter((n) => n.atributos?.includes("tablero")).map((n) => n.id)), [profile]);
   const [boardAsk, setBoardAsk] = useState<{ nodeId: string; options: BoardRef[]; symbol: boolean } | null>(null);

@@ -4,6 +4,47 @@
     "es": "Comunicaciones",
     "en": "Communications"
   },
+  "subdisciplinas": [
+    {
+      "id": "datos",
+      "nombre": {
+        "es": "Datos y voz",
+        "en": "Data and voice"
+      },
+      "tipos": [
+        "RK",
+        "TD",
+        "BC",
+        "CD"
+      ]
+    },
+    {
+      "id": "cctv",
+      "nombre": {
+        "es": "Seguridad (CCTV)",
+        "en": "Security (CCTV)"
+      },
+      "tipos": [
+        "RK",
+        "CC",
+        "BC",
+        "CD"
+      ]
+    },
+    {
+      "id": "wifi",
+      "nombre": {
+        "es": "Redes inalámbricas",
+        "en": "Wireless"
+      },
+      "tipos": [
+        "RK",
+        "AP",
+        "BC",
+        "CD"
+      ]
+    }
+  ],
   "disciplina_proyecto": "telecom",
   "tramos": [
     {
@@ -78,6 +119,42 @@
         "z_m": 0.3,
         "ancho_m": 0.1,
         "alto_m": 0.1
+      }
+    },
+    {
+      "id": "CC",
+      "etiqueta": {
+        "es": "Cámara de seguridad",
+        "en": "Security camera"
+      },
+      "prefijo_tag": "CC",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "cctv",
+      "capa_dxf": "COM-CCTV",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.15,
+        "alto_m": 0.15
+      }
+    },
+    {
+      "id": "AP",
+      "etiqueta": {
+        "es": "Punto de acceso inalámbrico",
+        "en": "Wireless access point"
+      },
+      "prefijo_tag": "AP",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "antena",
+      "capa_dxf": "COM-CCTV",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.15,
+        "alto_m": 0.15
       }
     }
   ],

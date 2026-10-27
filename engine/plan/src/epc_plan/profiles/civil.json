@@ -4,6 +4,30 @@
     "es": "Civil (estructura y obras)",
     "en": "Civil (structure and works)"
   },
+  "subdisciplinas": [
+    {
+      "id": "estructura",
+      "nombre": {
+        "es": "Estructura",
+        "en": "Structure"
+      },
+      "tipos": [
+        "CO",
+        "VG",
+        "ZP"
+      ]
+    },
+    {
+      "id": "zanjas",
+      "nombre": {
+        "es": "Zanjas y canalizaciones de obra",
+        "en": "Trenches and conduits"
+      },
+      "tipos": [
+        "ZJ"
+      ]
+    }
+  ],
   "disciplina_proyecto": "civil",
   "tramos": [
     {

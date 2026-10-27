@@ -4,6 +4,33 @@
     "es": "Climatización (HVAC)",
     "en": "HVAC"
   },
+  "subdisciplinas": [
+    {
+      "id": "ductos",
+      "nombre": {
+        "es": "Conductos de aire",
+        "en": "Air ducts"
+      },
+      "tipos": [
+        "DA",
+        "UE",
+        "UC",
+        "RJ"
+      ]
+    },
+    {
+      "id": "refrigerante",
+      "nombre": {
+        "es": "Cañerías de refrigerante",
+        "en": "Refrigerant piping"
+      },
+      "tipos": [
+        "TF",
+        "UE",
+        "UC"
+      ]
+    }
+  ],
   "disciplina_proyecto": "hvac",
   "tramos": [
     {

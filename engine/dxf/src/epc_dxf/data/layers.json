@@ -672,6 +672,76 @@
         "es": "Bandejas de instrumentación (plano)",
         "en": "Instrumentation trays (plan)"
       }
+    },
+    "plan.ELEC-INT": {
+      "name": "ELEC-INT",
+      "color": 40,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Interruptores (plano)",
+        "en": "Switches (plan)"
+      }
+    },
+    "plan.ELEC-TRAFO": {
+      "name": "ELEC-TRAFO",
+      "color": 6,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Transformadores y celdas de media tensión (plano)",
+        "en": "Transformers and MV cells (plan)"
+      }
+    },
+    "plan.ELEC-MT": {
+      "name": "ELEC-MT",
+      "color": 1,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Cables y canalizaciones de media tensión (plano)",
+        "en": "Medium-voltage cables and conduits (plan)"
+      }
+    },
+    "plan.PCI-PULSADOR": {
+      "name": "PCI-PULSADOR",
+      "color": 10,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Pulsadores y sirenas (plano)",
+        "en": "Pull stations and sirens (plan)"
+      }
+    },
+    "plan.COM-CCTV": {
+      "name": "COM-CCTV",
+      "color": 30,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Cámaras y puntos de acceso (plano)",
+        "en": "Cameras and access points (plan)"
+      }
     }
   }
 }

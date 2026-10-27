@@ -344,6 +344,11 @@
         "lines": 0,
         "stretches": 0,
         "length_m": 0
+      },
+      "MT": {
+        "lines": 0,
+        "stretches": 0,
+        "length_m": 0
       }
     },
     "nodes": {
@@ -354,7 +359,10 @@
       "TG": 1,
       "TE": 0,
       "HV": 1,
-      "PL": 0
+      "PL": 0,
+      "IN": 0,
+      "TR": 0,
+      "CE": 0
     },
     "circuit_routes": {
       "C-01": {

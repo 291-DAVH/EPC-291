@@ -566,3 +566,8 @@ export function newSheetKey(base: string, discipline: string, keys: string[], pl
   while (keys.includes(key)) key = `${plain}.${slug.slice(0, 21)}-${n++}`;               // up to 24 characters, as the backend asks
   return key;
 }
+
+/** The kinds a plan offers: those of its subdiscipline, or every kind of the discipline when it has none (or an old plan names one the profile no longer has). */
+export function allowedKinds(subs: { id: string; kinds: string[] }[] | undefined, chosen: string | undefined): string[] | undefined {
+  return (subs ?? []).find((x) => x.id === chosen)?.kinds;
+}

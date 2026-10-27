@@ -9,7 +9,7 @@ export interface DCircuit { tag: string; from: string; to: string; via?: string[
 export interface UnderlayOpts { opacity?: number; rotation?: number; locked?: boolean; hidden?: boolean; crop?: { x: number; y: number; w: number; h: number } | null }
 export interface Room { id: string; name: string; points: Pt[] }
 export interface Drawing {
-  discipline: string; plan_name?: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string; underlay_opts?: UnderlayOpts; rooms?: Room[];
+  discipline: string; subdiscipline?: string; plan_name?: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string; underlay_opts?: UnderlayOpts; rooms?: Room[];
 }
 export type Ref = { type: "node" | "line"; id: string };
 
