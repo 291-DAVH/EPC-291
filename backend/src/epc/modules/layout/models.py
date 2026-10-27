@@ -50,3 +50,11 @@ class DrawingIn(BaseModel):
     outlet: str = ""                        # node where a network drains to
     outlet_invert_m: Optional[float] = None
     dxf_version: str = ""
+    underlay_opts: Dict[str, Any] = {}      # how the plan underlay is shown (opacity, rotation, locked, hidden, crop): editor-only, the engine never reads it
+
+
+class TemplateIn(BaseModel):
+    """A group of nodes and lines saved to be put again, in the drawing's own units, with positions relative to the corner of the group."""
+    discipline: str = "electrica_BT"
+    nodes: List[Dict[str, Any]] = []
+    lines: List[Dict[str, Any]] = []

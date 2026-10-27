@@ -398,7 +398,7 @@
    },
    "T1_entregable.json": {
     "lines": 184,
-    "sha256": "b4f9e2d0d8db6c2c9f7060ace11bd8a07a4a7a1fcaacd3e7204928c91ebe9a6c"
+    "sha256": "cde2e3d471475528e28437962262956293bda14c17634a8ce255e0770d24bc69"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -660,7 +660,7 @@
    },
    "T1_entregable.json": {
     "lines": 106,
-    "sha256": "9b12fe6ee6c4085d447aaf42d95f3b9dc192b1f73f22c07969815f18ed0d85e1"
+    "sha256": "802a3ddbd01ab0795dbfbde62dc355e7a6ad72dfb2244ebe70f936b8acfd02a2"
    },
    "T1_memoria.json": {
     "lines": 2252,
@@ -865,7 +865,7 @@
    },
    "T1_entregable.json": {
     "lines": 80,
-    "sha256": "3c9901d887736a765a072dd2e80470112022774cc1ea45fc77148b6fa07e5bf4"
+    "sha256": "67717522c2b8a4833440b3601fea75e9b6a63c5f52e0fc0a552240bccb5c5ad0"
    },
    "T1_memoria.json": {
     "lines": 436,

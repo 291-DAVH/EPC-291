@@ -24,6 +24,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -66,6 +67,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -110,6 +112,7 @@ source_modules =
     epc.modules.backlog
     epc.modules.billing
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -143,6 +146,49 @@ layers =
     epc.modules.catalogs.service
     epc.modules.catalogs.repository
 
+[importlinter:contract:coordination-encapsulated]
+name = coordination: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.catalogs
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.layout
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.coordination.api
+    epc.modules.coordination.service
+    epc.modules.coordination.repository
+
+[importlinter:contract:coordination-layers]
+name = coordination: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.coordination.api
+    epc.modules.coordination.service
+    epc.modules.coordination.repository
+
 [importlinter:contract:deliverables-encapsulated]
 name = deliverables: other modules use only its public interface
 type = forbidden
@@ -153,6 +199,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.engineering
     epc.modules.identity
     epc.modules.intake
@@ -195,6 +242,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.identity
     epc.modules.intake
@@ -239,6 +287,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.intake
@@ -284,6 +333,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -326,6 +376,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -370,6 +421,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -414,6 +466,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -458,6 +511,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -500,6 +554,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -544,6 +599,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -586,6 +642,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -630,6 +687,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -672,6 +730,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -716,6 +775,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -758,6 +818,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -802,6 +863,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity
@@ -846,6 +908,7 @@ source_modules =
     epc.modules.billing
     epc.modules.catalogs
     epc.modules.construction
+    epc.modules.coordination
     epc.modules.deliverables
     epc.modules.engineering
     epc.modules.identity

@@ -1,4 +1,5 @@
 """Files of the plan-drawing editor inside workspace/02-engineering/layout/<level>/: src (drawing and underlay), out (result, DXF, PDF)."""
+import datetime as dt
 import shutil
 import subprocess
 from pathlib import Path
@@ -24,16 +25,60 @@ def levels(d: Path) -> List[str]:
     return sorted((p.name for p in b.iterdir() if p.is_dir() and (p / "src" / "drawing.json").is_file()), key=_order) if b.is_dir() else []
 
 
-def _order(level: str) -> int:
-    return int(level[1:])
+def split(sheet: str):
+    """A sheet is a level (`L0`) or a level with the discipline it belongs to (`L0@sanitaria_cloacas`): one level can hold one drawing per discipline."""
+    level, _, discipline = sheet.partition("@")
+    return level, discipline
+
+
+def _order(sheet: str):
+    level, discipline = split(sheet)
+    return (int(level[1:]), discipline)
 
 
 def load_drawing(d: Path, level: str) -> Optional[dict]:
     return read_json(level_dir(d, level) / "src" / "drawing.json", None)
 
 
+HISTORY_EVERY_S = 300                                          # a snapshot of the previous state at most every five minutes of work
+HISTORY_KEEP = 40
+
+
+def history_dir(d: Path, level: str) -> Path:
+    return level_dir(d, level) / "history"
+
+
+def _remember(d: Path, level: str, previous: dict) -> None:
+    """Keep what the drawing was before this save, unless a snapshot was kept a moment ago; the oldest go when there are too many."""
+    folder = history_dir(d, level)
+    old = sorted(folder.glob("*.json")) if folder.is_dir() else []
+    now = dt.datetime.now()
+    if old and (now - dt.datetime.strptime(old[-1].stem, "%Y%m%dT%H%M%S")).total_seconds() < HISTORY_EVERY_S:
+        return
+    write_json(folder / f"{now.strftime('%Y%m%dT%H%M%S')}.json", previous)
+    for extra in old[: max(0, len(old) + 1 - HISTORY_KEEP)]:
+        extra.unlink(missing_ok=True)
+
+
+def _remember_if_changed(d: Path, level: str, data: dict) -> None:
+    previous = load_drawing(d, level)
+    if previous is not None and previous != data:
+        _remember(d, level, previous)
+
+
 def save_drawing(d: Path, level: str, data: dict) -> None:
+    _remember_if_changed(d, level, data)
     write_json(level_dir(d, level) / "src" / "drawing.json", data)
+
+
+def history(d: Path, level: str) -> List[str]:
+    """Ids of the kept snapshots, newest first."""
+    folder = history_dir(d, level)
+    return [p.stem for p in sorted(folder.glob("*.json"), reverse=True)] if folder.is_dir() else []
+
+
+def load_snapshot(d: Path, level: str, snapshot: str) -> Optional[dict]:
+    return read_json(history_dir(d, level) / f"{snapshot}.json", None) if snapshot.replace("T", "").isdigit() else None
 
 
 def delete_level(d: Path, level: str) -> None:
@@ -97,6 +142,11 @@ def out_dir(d: Path, level: str) -> Path:
 
 def load_result(d: Path, level: str) -> Optional[dict]:
     return read_json(out_dir(d, level) / "result.json", None)
+
+
+def load_made_from(d: Path, level: str) -> Optional[dict]:
+    """The drawing the last DXF and PDF were made from."""
+    return read_json(out_dir(d, level) / "drawing.json", None)
 
 
 def render_pdf(dxf: Path, dst: Path) -> Optional[str]:

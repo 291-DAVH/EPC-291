@@ -422,7 +422,13 @@
         "circuits": [
           "C-01"
         ],
-        "cables": 2
+        "cables": 2,
+        "fill": {
+          "used_pct": 9.9,
+          "limit_pct": 31.0,
+          "cable_mm": 14.0,
+          "status": "ok"
+        }
       }
     ],
     "total_length_m": 89.1422,

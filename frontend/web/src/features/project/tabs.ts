@@ -1,3 +1,3 @@
-export const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "layout", "catalogs", "deliverables", "observations", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
+export const TABS = ["inputs", "requirements", "plan", "registers", "engineering", "layout", "coordination", "catalogs", "deliverables", "observations", "reports", "overview"] as const;      // tab order: a project starts from its input data; Resumen is last but the default
 export type Tab = (typeof TABS)[number];
-export const ENGINEER_TABS: Tab[] = ["engineering", "layout", "registers", "catalogs"];          // internal work: admin/engineer role only
+export const ENGINEER_TABS: Tab[] = ["engineering", "layout", "coordination", "registers", "catalogs"];          // internal work: admin/engineer role only

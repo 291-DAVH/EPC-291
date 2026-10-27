@@ -12,7 +12,7 @@ from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
-from epc.modules.layout import repository
+from epc.modules.layout import changes, repository
 from epc.modules.layout.models import DrawingIn
 from epc.modules.projects import public as projects
 from epc.modules.sld import public as sld
@@ -22,23 +22,53 @@ RASTER = {b"\x89PNG\r\n\x1a\n": ".png", b"\xff\xd8\xff": ".jpg"}
 MEDIA = {".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml"}
 
 
+def _no_guard(d: Path, discipline: str) -> None:
+    return None
+
+
+_edit_guard = _no_guard
+
+
+def set_edit_guard(fn) -> None:
+    """Who may change the drawings of a discipline is decided by the coordination module, which depends on this one: it registers its rule here (as the board does for lengths)."""
+    global _edit_guard
+    _edit_guard = fn
+
+
 def _engine():
     import epc_plan                                           # the engine owns the rules of the drawing (single source)
     from epc_plan import core, dxfout, jobs, underlay
     return core, dxfout, jobs, underlay
 
 
-def _level(level: str) -> str:
-    core = _engine()[0]
+def _check_base(core, base: str) -> None:
     try:
-        core.parse_level(level)
+        core.parse_level(base)
     except core.PlanError as e:
         raise Invalid({"level": str(e)})
+
+
+def _check_suffix(core, level: str, discipline: str) -> None:
+    if "@" in level and discipline not in core.profiles():
+        raise Invalid({"level": f"unknown discipline {discipline!r}: profiles are {', '.join(core.profiles())}"})
+
+
+def _level(level: str) -> str:
+    """The key of a sheet: a valid level, optionally followed by `@` and the discipline of a second drawing on that level."""
+    core = _engine()[0]
+    base, discipline = repository.split(level)
+    _check_base(core, base)
+    _check_suffix(core, level, discipline)
     return level
 
 
+def _discipline_of(d: Path, level: str) -> str:
+    return (repository.load_drawing(d, level) or {}).get("discipline", "electrica_BT")
+
+
 def _document(level: str, data: dict, version: str = "") -> dict:
-    return {"schema_version": "1.0", "plan": {"id": f"PLAN_{level}", "level": level, "scale": data["scale"], "origin": data["origin"]}, "discipline": data["discipline"],
+    base = repository.split(level)[0]
+    return {"schema_version": "1.0", "plan": {"id": "PLAN_" + level.replace("@", "_"), "level": base, "scale": data["scale"], "origin": data["origin"]}, "discipline": data["discipline"],
             "nodes": [{k: v for k, v in n.items() if v not in ("", None)} for n in data["nodes"]],
             "lines": [{k: v for k, v in ln.items() if v not in ("", None)} for ln in data["lines"]],
             "circuits": data.get("circuits", []),
@@ -62,7 +92,7 @@ def overview(d: Path) -> dict:
     items = []
     for lv in repository.levels(d):
         dr = repository.load_drawing(d, lv) or {}
-        items.append({"level": lv, "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None,
+        items.append({"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None,
                       "has_files": bool((repository.load_result(d, lv) or {}).get("files"))})
     profiles = []
     for pid in core.profiles():
@@ -73,7 +103,7 @@ def overview(d: Path) -> dict:
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": ""}
+    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}}
 
 
 def view(d: Path, level: str) -> dict:
@@ -117,9 +147,21 @@ def plan_lengths(d: Path) -> Dict[str, dict]:
 sld.set_plan_lengths(plan_lengths)                              # the board reads its lengths through this (the dependency stays layout -> sld)
 
 
+def _check_sheet(d: Path, level: str, data: dict) -> None:
+    """One drawing per discipline on each level: a second sheet carries its discipline in its name, and no two sheets of a level share one."""
+    base, suffix = repository.split(level)
+    if suffix and data["discipline"] != suffix:
+        raise Invalid({"discipline": f"this sheet is for {suffix}"})
+    others = [(repository.load_drawing(d, lv) or {}).get("discipline", "electrica_BT") for lv in repository.levels(d) if lv != level and repository.split(lv)[0] == base]
+    if data["discipline"] in others:
+        raise Invalid({"discipline": f"{base} already has a drawing of {data['discipline']}"})
+
+
 def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
     data = body.model_dump(by_alias=True)
+    _check_sheet(d, level, data)
+    _edit_guard(d, data["discipline"])
     derive_data(level, data)                                    # refuse what the engine refuses before storing it
     repository.save_drawing(d, level, data)
     return view(d, level)
@@ -134,6 +176,7 @@ def remove(d: Path, level: str) -> dict:
     level = _level(level)
     if repository.load_drawing(d, level) is None and not repository.level_dir(d, level).exists():
         raise NotFound("level not found")
+    _edit_guard(d, _discipline_of(d, level))
     repository.delete_level(d, level)
     identity.audit_event("layout_deleted", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""))
     return overview(d)
@@ -181,6 +224,7 @@ def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
     if len(data) > MAX_UPLOAD:
         raise Invalid({"file": f"the file is too big (up to {MAX_UPLOAD // (1024 * 1024)} MB)"})
     data, ext = _underlay_content(name, data)
+    _edit_guard(d, _discipline_of(d, level))
     repository.save_underlay(d, level, ext, data)
     identity.audit_event("layout_underlay", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"kind": ext.lstrip(".")})
     return view(d, level)
@@ -222,6 +266,7 @@ def generate(d: Path, level: str, version: str = "") -> dict:
     result["files"], result["generated_at"] = files, clock.now_local()
     from epc.core.fsutil import write_json
     write_json(out / "result.json", result)
+    write_json(out / "drawing.json", saved)                       # what the files were made from, to show later what changed
     identity.audit_event("layout_generated", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"dxf_version": files["dxf_version"]})
     return view(d, level)
 
@@ -232,3 +277,56 @@ def output_file(d: Path, level: str, name: str) -> Tuple[Path, str]:
     if not name or not is_inside(out, name) or name not in ((repository.load_result(d, level) or {}).get("files") or {}).values():
         raise NotFound("file not found")
     return out / name, "application/pdf" if name.endswith(".pdf") else "application/dxf"
+
+
+# ---------------------------------------------------------------- history
+def history(d: Path, level: str) -> list:
+    level = _level(level)
+    out = []
+    for snap in repository.history(d, level):
+        data = repository.load_snapshot(d, level, snap) or {}
+        out.append({"id": snap, "at": f"{snap[:4]}-{snap[4:6]}-{snap[6:8]}T{snap[9:11]}:{snap[11:13]}:{snap[13:15]}", "nodes": len(data.get("nodes", [])), "lines": len(data.get("lines", []))})
+    return out
+
+
+def snapshot(d: Path, level: str, snap: str) -> dict:
+    level = _level(level)
+    data = repository.load_snapshot(d, level, snap)
+    if data is None:
+        raise NotFound("snapshot not found")
+    return {**_blank(), **data}
+
+
+def restore(d: Path, level: str, snap: str) -> dict:
+    """Go back to a kept state; what was there is kept too, so the restore itself can be undone."""
+    data = snapshot(d, level, snap)
+    _edit_guard(d, data["discipline"])
+    repository.save_drawing(d, _level(level), data)
+    identity.audit_event("layout_restored", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"snapshot": snap})
+    return view(d, level)
+
+
+# ---------------------------------------------------------------- what other modules read
+def sheets(d: Path) -> list:
+    """Every sheet of the project: its key, its level and its discipline."""
+    return [{"sheet": lv, "level": repository.split(lv)[0], "discipline": (repository.load_drawing(d, lv) or {}).get("discipline", "electrica_BT")} for lv in repository.levels(d)]
+
+
+def documents(d: Path) -> list:
+    """The drawing document of each sheet (the engine's input), for the sheets that have a scale: what coordination compares."""
+    out = []
+    for lv in repository.levels(d):
+        saved = repository.load_drawing(d, lv)
+        if saved and saved.get("scale"):
+            out.append((lv, _document(lv, {**_blank(), **saved})))
+    return out
+
+
+def changes_since_files(d: Path, level: str) -> dict:
+    """What changed in the drawing since the DXF and PDF were last made (nothing to compare with when they were never made, or were made before this was kept)."""
+    level = _level(level)
+    made = repository.load_made_from(d, level)
+    saved = repository.load_drawing(d, level)
+    if made is None or saved is None:
+        return {"has_snapshot": False}
+    return changes.diff(made, saved)

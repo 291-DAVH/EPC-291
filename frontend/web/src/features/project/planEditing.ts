@@ -5,8 +5,10 @@ export interface Scale { p1: Pt; p2: Pt; distance_m: number }
 export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DLine { id: string; kind: string; points: Pt[]; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DCircuit { tag: string; from: string; to: string; via?: string[]; ternas: number }
+/** How the plan underlay is shown: editor-only, kept with the drawing so it looks the same the next time. */
+export interface UnderlayOpts { opacity?: number; rotation?: number; locked?: boolean; hidden?: boolean; crop?: { x: number; y: number; w: number; h: number } | null }
 export interface Drawing {
-  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string;
+  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string; underlay_opts?: UnderlayOpts;
 }
 export type Ref = { type: "node" | "line"; id: string };
 
@@ -203,18 +205,22 @@ function reattach(d: Drawing, jumps: Jump[], except: Set<string>): Drawing {
   };
 }
 
-/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points and the nodes on it. The cables that end on something moved stay joined to it and straight. */
-export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
-  if (!dx && !dy) return d;
+/** Apply a point transformation to the selected elements (nodes, lines with their points and the nodes on them). The cables that end on something moved stay joined to it and straight. */
+export function mapElements(d: Drawing, refs: Ref[], fn: (p: Pt) => Pt): Drawing {
   const nodeIds = new Set(refs.filter((r) => r.type === "node").map((r) => r.id));
   const lineIds = new Set(refs.filter((r) => r.type === "line").map((r) => r.id));
-  const shift = (p: Pt): Pt => [p[0] + dx, p[1] + dy];
   const jumps: Jump[] = [
-    ...d.nodes.filter((n) => nodeIds.has(n.id)).map((n): Jump => ({ from: [n.x, n.y], to: [n.x + dx, n.y + dy] })),
-    ...d.lines.filter((l) => lineIds.has(l.id)).flatMap((l) => l.points.map((p): Jump => ({ from: p, to: shift(p) }))),
+    ...d.nodes.filter((n) => nodeIds.has(n.id)).map((n): Jump => ({ from: [n.x, n.y], to: fn([n.x, n.y]) })),
+    ...d.lines.filter((l) => lineIds.has(l.id)).flatMap((l) => l.points.map((p): Jump => ({ from: p, to: fn(p) }))),
   ];
   const r = reattach(d, jumps, lineIds);
-  return { ...r, lines: r.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : l)) };
+  return { ...r, lines: r.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(fn) } : l)) };
+}
+
+/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points and the nodes on it. */
+export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
+  if (!dx && !dy) return d;
+  return mapElements(d, refs, (p) => [p[0] + dx, p[1] + dy]);
 }
 
 /** Move some points of one line; what sits on them follows (see `reattach`). */

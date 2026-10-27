@@ -20,7 +20,12 @@
         "tension_v"
       ],
       "simbolo_2d": "linea_simple",
-      "capa_dxf": "ELEC-CABLE"
+      "capa_dxf": "ELEC-CABLE",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.02,
+        "alto_m": 0.02
+      }
     },
     {
       "id": "CN",
@@ -36,7 +41,12 @@
         "instalacion"
       ],
       "simbolo_2d": "linea_simple",
-      "capa_dxf": "ELEC-CANAL"
+      "capa_dxf": "ELEC-CANAL",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.05,
+        "alto_m": 0.05
+      }
     },
     {
       "id": "BN",
@@ -51,7 +61,12 @@
         "material"
       ],
       "simbolo_2d": "linea_simple",
-      "capa_dxf": "ELEC-BANDEJA"
+      "capa_dxf": "ELEC-BANDEJA",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.3,
+        "alto_m": 0.1
+      }
     },
     {
       "id": "CR",
@@ -66,7 +81,12 @@
         "profundidad_m"
       ],
       "simbolo_2d": "linea_simple",
-      "capa_dxf": "ELEC-CRUCE"
+      "capa_dxf": "ELEC-CRUCE",
+      "geom": {
+        "z_m": -0.6,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
     }
   ],
   "nodos": [
@@ -82,7 +102,12 @@
         "profundidad_m"
       ],
       "simbolo_2d": "camara",
-      "capa_dxf": "ELEC-CAMARA"
+      "capa_dxf": "ELEC-CAMARA",
+      "geom": {
+        "z_m": -0.5,
+        "ancho_m": 0.8,
+        "alto_m": 1.0
+      }
     },
     {
       "id": "CP",
@@ -95,7 +120,12 @@
         "dimensiones"
       ],
       "simbolo_2d": "caja_pase",
-      "capa_dxf": "ELEC-CAJA"
+      "capa_dxf": "ELEC-CAJA",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.2,
+        "alto_m": 0.2
+      }
     },
     {
       "id": "TB",
@@ -108,7 +138,13 @@
         "tablero"
       ],
       "simbolo_2d": "tablero",
-      "capa_dxf": "ELEC-TABLERO"
+      "capa_dxf": "ELEC-TABLERO",
+      "geom": {
+        "z_m": 1.5,
+        "ancho_m": 0.6,
+        "alto_m": 1.2,
+        "libre_m": 1.0
+      }
     },
     {
       "id": "LU",
@@ -123,7 +159,12 @@
         "tipo"
       ],
       "simbolo_2d": "luminaria",
-      "capa_dxf": "ELEC-LUM"
+      "capa_dxf": "ELEC-LUM",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.6,
+        "alto_m": 0.1
+      }
     },
     {
       "id": "TG",
@@ -137,7 +178,12 @@
         "potencia_va"
       ],
       "simbolo_2d": "tomacorriente",
-      "capa_dxf": "ELEC-TUG"
+      "capa_dxf": "ELEC-TUG",
+      "geom": {
+        "z_m": 0.4,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
     },
     {
       "id": "TE",
@@ -152,7 +198,12 @@
         "destino"
       ],
       "simbolo_2d": "tomacorriente_especial",
-      "capa_dxf": "ELEC-TUE"
+      "capa_dxf": "ELEC-TUE",
+      "geom": {
+        "z_m": 1.2,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
     },
     {
       "id": "HV",
@@ -167,7 +218,12 @@
         "equipo"
       ],
       "simbolo_2d": "hvac",
-      "capa_dxf": "ELEC-HVAC"
+      "capa_dxf": "ELEC-HVAC",
+      "geom": {
+        "z_m": 2.6,
+        "ancho_m": 0.6,
+        "alto_m": 0.3
+      }
     },
     {
       "id": "PL",
@@ -182,7 +238,12 @@
         "altura_m"
       ],
       "simbolo_2d": "pleno",
-      "capa_dxf": "ELEC-PLENO"
+      "capa_dxf": "ELEC-PLENO",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.4,
+        "alto_m": 3.0
+      }
     }
   ],
   "calculos": [

@@ -53,10 +53,13 @@ JULIAN = re.compile(r"^\d{7}\.\d+$")
 GUID = re.compile(r"^\{[0-9A-Fa-f-]{36}\}$")
 TODAY = re.compile(r"\b\d{2}/\d{2}/\d{4}\b")        # the title block prints the day the drawing was made
 STAMP = re.compile(r"@ \d{4}-\d{2}-\d{2}T[\d:.]+\+\d\d:\d\d")
+SVG_HASH = re.compile(r'"svg_sha256": "[0-9a-f]{64}"')   # the index of the delivery package holds the hash of each raw SVG, which carries the day it was made; the SVGs are pinned on their own
 
 
 def normalize(name, raw):
     text = TODAY.sub("DD/MM/YYYY", raw.decode("utf-8", errors="replace").replace("\r\n", "\n"))
+    if name.endswith("_entregable.json"):
+        text = SVG_HASH.sub('"svg_sha256": "HASH"', text)
     if name.endswith(".dxf"):
         text = "\n".join("JULIAN" if JULIAN.match(ln) else "{GUID}" if GUID.match(ln) else STAMP.sub("@ STAMP", ln) for ln in text.split("\n"))
     return text
