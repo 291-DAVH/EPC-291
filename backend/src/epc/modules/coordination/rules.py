@@ -42,17 +42,30 @@ def effective(project_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     return clash.merge_rules(*layers)
 
 
+def _discipline_ok(value: Any) -> bool:
+    return isinstance(value, str) and (value == "*" or bool(repository.DISCIPLINE.match(value)))
+
+
+def _clearance_ok(value: Any) -> bool:
+    return isinstance(value, NUMBER) and not isinstance(value, bool) and value >= 0
+
+
+def _kinds_ok(value: Any) -> bool:
+    return isinstance(value, list) and all(isinstance(k, str) for k in value)
+
+
+def _rule_errors(i: int, r: Dict[str, Any]) -> Dict[str, str]:
+    out = {f"rules[{i}].{key}": "a discipline id or *" for key in ("a", "b") if not _discipline_ok(r.get(key, "*"))}
+    if not _clearance_ok(r.get("clearance_m", 0.0)):
+        out[f"rules[{i}].clearance_m"] = "a distance in metres, zero or more"
+    out.update({f"rules[{i}].{key}": "a list of kind ids" for key in ("kinds_a", "kinds_b") if not _kinds_ok(r.get(key, []))})
+    return out
+
+
 def validate(rules: List[Dict[str, Any]]) -> None:
     errors: Dict[str, str] = {}
     for i, r in enumerate(rules):
-        for key in ("a", "b"):
-            if not isinstance(r.get(key, "*"), str) or (r.get(key, "*") != "*" and not repository.DISCIPLINE.match(r[key])):
-                errors[f"rules[{i}].{key}"] = "a discipline id or *"
-        if not isinstance(r.get("clearance_m", 0.0), NUMBER) or isinstance(r.get("clearance_m"), bool) or r.get("clearance_m", 0.0) < 0:
-            errors[f"rules[{i}].clearance_m"] = "a distance in metres, zero or more"
-        for key in ("kinds_a", "kinds_b"):
-            if not isinstance(r.get(key, []), list) or not all(isinstance(k, str) for k in r.get(key, [])):
-                errors[f"rules[{i}].{key}"] = "a list of kind ids"
+        errors.update(_rule_errors(i, r))
     if errors:
         raise Invalid(errors)
 

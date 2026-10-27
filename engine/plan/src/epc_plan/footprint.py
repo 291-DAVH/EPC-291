@@ -45,31 +45,30 @@ def _tags(document: Dict[str, Any]) -> Dict[str, str]:
     return tags
 
 
+def _item(el: Dict[str, Any], shape: str, kind: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
+    g = geometry_of(kind, el.get("attrs") or {})
+    pts = [[x, y] for x, y in (core.to_world(p, ctx["origin"], ctx["k"]) for p in ([[el["x"], el["y"]]] if shape == "node" else el["points"]))]
+    z0, z1 = _span(g, ctx["floor"], bool(kind.get("vertical")))
+    return {"sheet": ctx["sheet"], "discipline": ctx["discipline"], "level": ctx["level"], "level_number": ctx["number"], "id": el["id"], "kind": kind["id"], "shape": shape,
+            "tag": ctx["tags"].get(el["id"], el.get("tag") or el["id"]), "points": pts, "width_m": g["ancho_m"], "z0": round(z0, 4), "z1": round(z1, 4), "clear_m": g["libre_m"], "origin": "drawing"}
+
+
+def _context(document: Dict[str, Any], sheet: str, story: float, params: Dict[str, Any]) -> Dict[str, Any]:
+    plan = document["plan"]
+    level = plan.get("level", params["levels"]["ground"])
+    number = core.parse_level(level, params)
+    return {"sheet": sheet, "level": level, "number": number, "floor": number * story, "k": core.metres_per_unit(plan["scale"], params), "origin": plan.get("origin", [0.0, 0.0]),
+            "discipline": document.get("discipline", ""), "tags": _tags(document)}
+
+
 def footprints(document: Dict[str, Any], sheet: str, story_height_m: Optional[float] = None, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """Every node and line of one drawing as a footprint in metres. A drawing without scale occupies nothing that can be measured: it gives none."""
     params = params or core.PARAMS
-    plan = document.get("plan") or {}
-    if not plan.get("scale"):
+    if not (document.get("plan") or {}).get("scale"):
         return []
-    story = story_height_m if story_height_m is not None else params["coordination"]["story_height_m"]
-    level = plan.get("level", params["levels"]["ground"])
-    number = core.parse_level(level, params)
-    k = core.metres_per_unit(plan["scale"], params)
-    origin = plan.get("origin", [0.0, 0.0])
-    profile = core.load_profile(document.get("discipline", ""))
-    line_kinds, node_kinds = core._kinds(profile)
-    tags = _tags(document)
-    floor = number * story
+    ctx = _context(document, sheet, story_height_m if story_height_m is not None else params["coordination"]["story_height_m"], params)
+    line_kinds, node_kinds = core._kinds(core.load_profile(ctx["discipline"]))
     out: List[Dict[str, Any]] = []
     for shape, items, kinds in (("node", document.get("nodes", []), node_kinds), ("line", document.get("lines", []), line_kinds)):
-        for el in items:
-            kind = kinds.get(el.get("kind"))
-            if kind is None:
-                continue
-            g = geometry_of(kind, el.get("attrs") or {})
-            pts = [[x, y] for x, y in (core.to_world(p, origin, k) for p in ([[el["x"], el["y"]]] if shape == "node" else el["points"]))]
-            z0, z1 = _span(g, floor, bool(kind.get("vertical")))
-            out.append({"sheet": sheet, "discipline": profile["id"], "level": level, "level_number": number, "id": el["id"], "kind": kind["id"], "shape": shape,
-                        "tag": tags.get(el["id"], el.get("tag") or el["id"]), "points": pts, "width_m": g["ancho_m"], "z0": round(z0, 4), "z1": round(z1, 4),
-                        "clear_m": g["libre_m"], "origin": "drawing"})
+        out += [_item(el, shape, kinds[el["kind"]], ctx) for el in items if el.get("kind") in kinds]
     return out

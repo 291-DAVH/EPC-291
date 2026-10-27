@@ -76,18 +76,25 @@ def _status(d: Path) -> dict:
     return repository.read(d, "clash_status.json", {}) or {}
 
 
+def _with_status(found: List[dict], status: dict) -> List[dict]:
+    """Each clash with the state it was left in: open unless somebody accepted it (and why)."""
+    for c in found:
+        c.update({"status": "open", "reason": "", **{k: v for k, v in (status.get(c["id"]) or {}).items() if k in ("status", "reason", "by", "at")}})
+    return found
+
+
+def _counts(found: List[dict]) -> dict:
+    open_n = sum(1 for c in found if c["status"] == "open")
+    return {"total": len(found), "open": open_n, "accepted": len(found) - open_n, "hard": sum(1 for c in found if c["type"] == "hard" and c["status"] == "open")}
+
+
 def detect(d: Path, source: str = "auto", project_rules: Optional[list] = None) -> dict:
     """The clashes of the project with the state each one was left in, and where each discipline's footprints came from."""
     clash, _, _ = _plan()
     groups = items_by_discipline(d, source)
     items = [it for g in groups.values() for it in g["items"]] + reservation_items(d)
-    found = clash.detect(items, project_rules if project_rules is not None else rules.effective(d))
-    status = _status(d)
-    for c in found:
-        c.update({"status": "open", "reason": "", **{k: v for k, v in (status.get(c["id"]) or {}).items() if k in ("status", "reason", "by", "at")}})
-    open_n = sum(1 for c in found if c["status"] == "open")
-    return {"clashes": found, "sources": {k: v["source"] for k, v in groups.items()}, "counts": {"total": len(found), "open": open_n, "accepted": len(found) - open_n,
-            "hard": sum(1 for c in found if c["type"] == "hard" and c["status"] == "open")}}
+    found = _with_status(clash.detect(items, project_rules if project_rules is not None else rules.effective(d)), _status(d))
+    return {"clashes": found, "sources": {k: v["source"] for k, v in groups.items()}, "counts": _counts(found)}
 
 
 def set_status(d: Path, clash_id: str, status: str, reason: str) -> dict:

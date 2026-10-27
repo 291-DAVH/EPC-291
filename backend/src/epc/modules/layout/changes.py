@@ -26,10 +26,25 @@ def _compare(old: List[dict], new: List[dict], changed) -> Dict[str, List[dict]]
             "changed": [_brief(after[i]) for i in after if i in before and changed(before[i], after[i])]}
 
 
+def _attrs_differ(a: dict, b: dict) -> bool:
+    return (a.get("attrs") or {}) != (b.get("attrs") or {})
+
+
+def _node_changed(a: dict, b: dict) -> bool:
+    return _moved_node(a, b) or a["kind"] != b["kind"] or (a.get("circuit") or "") != (b.get("circuit") or "") or _attrs_differ(a, b)
+
+
+def _line_edited(a: dict, b: dict) -> bool:
+    return _changed_line(a, b) or _attrs_differ(a, b)
+
+
+def _flags(old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, bool]:
+    return {"scale_changed": old.get("scale") != new.get("scale"), "origin_changed": old.get("origin") != new.get("origin"),
+            "circuits_changed": old.get("circuits", []) != new.get("circuits", []), "discipline_changed": old.get("discipline") != new.get("discipline")}
+
+
 def diff(old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
     """The differences of the drawing now (`new`) against the one the files were made from (`old`): elements added, removed and moved or edited, and whether the scale, the origin or the circuits changed."""
-    nodes = _compare(old.get("nodes", []), new.get("nodes", []), lambda a, b: _moved_node(a, b) or a["kind"] != b["kind"] or (a.get("circuit") or "") != (b.get("circuit") or "") or (a.get("attrs") or {}) != (b.get("attrs") or {}))
-    lines = _compare(old.get("lines", []), new.get("lines", []), lambda a, b: _changed_line(a, b) or (a.get("attrs") or {}) != (b.get("attrs") or {}))
-    return {"has_snapshot": True, "scale_changed": old.get("scale") != new.get("scale"), "origin_changed": old.get("origin") != new.get("origin"),
-            "circuits_changed": old.get("circuits", []) != new.get("circuits", []), "discipline_changed": old.get("discipline") != new.get("discipline"), "nodes": nodes, "lines": lines,
-            "count": sum(len(v) for part in (nodes, lines) for v in part.values())}
+    nodes = _compare(old.get("nodes", []), new.get("nodes", []), _node_changed)
+    lines = _compare(old.get("lines", []), new.get("lines", []), _line_edited)
+    return {"has_snapshot": True, **_flags(old, new), "nodes": nodes, "lines": lines, "count": sum(len(v) for part in (nodes, lines) for v in part.values())}

@@ -45,13 +45,20 @@ def _cross(o: Point, a: Point, b: Point) -> float:
     return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
 
 
-def _seg_closest(a0: Point, a1: Point, b0: Point, b1: Point) -> Tuple[float, Point, Point]:
-    """Distance between two segments and the closest point of each (zero distance, same point, where they cross)."""
+def _crossing(a0: Point, a1: Point, b0: Point, b1: Point) -> Optional[Point]:
+    """Where two segments cross properly (not just touch), or None."""
     d1, d2 = _cross(a0, a1, b0), _cross(a0, a1, b1)
     d3, d4 = _cross(b0, b1, a0), _cross(b0, b1, a1)
-    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)) and d1 != 0 and d2 != 0 and d3 != 0 and d4 != 0:
+    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)) and 0 not in (d1, d2, d3, d4):
         t = d3 / (d3 - d4)
-        p = (a0[0] + t * (a1[0] - a0[0]), a0[1] + t * (a1[1] - a0[1]))
+        return (a0[0] + t * (a1[0] - a0[0]), a0[1] + t * (a1[1] - a0[1]))
+    return None
+
+
+def _seg_closest(a0: Point, a1: Point, b0: Point, b1: Point) -> Tuple[float, Point, Point]:
+    """Distance between two segments and the closest point of each (zero distance, same point, where they cross)."""
+    p = _crossing(a0, a1, b0, b1)
+    if p is not None:
         return 0.0, p, p
     best: Optional[Tuple[float, Point, Point]] = None
     for p, seg, flip in ((a0, (b0, b1), False), (a1, (b0, b1), False), (b0, (a0, a1), True), (b1, (a0, a1), True)):

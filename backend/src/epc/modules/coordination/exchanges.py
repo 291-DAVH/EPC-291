@@ -30,18 +30,27 @@ def listing(d: Path) -> List[dict]:
     return [_view(x) for x in _all(d)]
 
 
-def _clean(body: Dict[str, Any]) -> dict:
+def _parties(body: Dict[str, Any]) -> tuple:
     owner = repository.discipline_id(body.get("owner", ""))
     consumers = [repository.discipline_id(c) for c in dict.fromkeys(body.get("consumers") or [])]
     if not consumers or owner in consumers:
         raise Invalid({"consumers": "name the other disciplines that use it"})
+    return owner, consumers
+
+
+def _what(body: Dict[str, Any]) -> tuple:
     tag, field = (body.get("tag") or "").strip(), (body.get("field") or "").strip()
     if not tag or not field:
         raise Invalid({"tag": "the equipment and the datum are required"})
-    value = body.get("value")
-    if value in (None, ""):
+    if body.get("value") in (None, ""):
         raise Invalid({"value": "the value is required"})
-    return {"owner": owner, "consumers": consumers, "tag": tag[:60], "field": field[:60], "unit": (body.get("unit") or "")[:16], "value": value}
+    return tag[:60], field[:60]
+
+
+def _clean(body: Dict[str, Any]) -> dict:
+    owner, consumers = _parties(body)
+    tag, field = _what(body)
+    return {"owner": owner, "consumers": consumers, "tag": tag, "field": field, "unit": (body.get("unit") or "")[:16], "value": body["value"]}
 
 
 def publish(d: Path, body: Dict[str, Any]) -> dict:

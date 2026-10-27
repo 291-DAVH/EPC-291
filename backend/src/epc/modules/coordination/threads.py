@@ -37,16 +37,22 @@ def _opening(geom: Dict[str, Any]) -> dict:
     return size
 
 
-def _reservation(geom: Dict[str, Any]) -> dict:
-    pts, width, z0, z1, level = geom.get("points_m"), geom.get("width_m"), geom.get("z0"), geom.get("z1"), geom.get("level", "")
-    points_ok = isinstance(pts, list) and bool(pts) and all(isinstance(p, list) and len(p) == 2 and all(_is_number(v) for v in p) for p in pts)
-    if not points_ok or not all(_is_number(v) for v in (width, z0, z1)) or width <= 0 or z1 <= z0:
-        raise Invalid({"geom": "a reservation needs points_m (metres), a positive width_m and z0 below z1"})
+def _points_ok(pts: Any) -> bool:
+    return isinstance(pts, list) and bool(pts) and all(isinstance(p, list) and len(p) == 2 and all(_is_number(v) for v in p) for p in pts)
+
+
+def _level_number(level: Any) -> int:
     try:
-        number = int(level[1:])
+        return int(level[1:])
     except (ValueError, TypeError):
         raise Invalid({"geom": "level such as L0, L1, L-1"})
-    return {"points_m": pts, "width_m": width, "z0": z0, "z1": z1, "level": level, "level_number": number, "sheet": geom.get("sheet", "")}
+
+
+def _reservation(geom: Dict[str, Any]) -> dict:
+    pts, width, z0, z1, level = geom.get("points_m"), geom.get("width_m"), geom.get("z0"), geom.get("z1"), geom.get("level", "")
+    if not _points_ok(pts) or not all(_is_number(v) for v in (width, z0, z1)) or width <= 0 or z1 <= z0:
+        raise Invalid({"geom": "a reservation needs points_m (metres), a positive width_m and z0 below z1"})
+    return {"points_m": pts, "width_m": width, "z0": z0, "z1": z1, "level": level, "level_number": _level_number(level), "sheet": geom.get("sheet", "")}
 
 
 def _geometry(kind: str, geom: Optional[Dict[str, Any]]) -> Optional[dict]:

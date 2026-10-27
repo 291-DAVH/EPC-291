@@ -78,13 +78,22 @@ def overview(d: Path) -> dict:
             "counts": {**found["counts"], "threads": len(open_threads)}, "sources": found["sources"], "settings": detection.settings(d), "matrix": exchanges.matrix(d)}
 
 
+def _open_clashes_of(d: Path, discipline: str) -> List[dict]:
+    return [c for c in detection.detect(d, "auto")["clashes"] if c["status"] == "open" and discipline in (c["a"]["discipline"], c["b"]["discipline"])]
+
+
+def _asked_of(d: Path, discipline: str) -> List[dict]:
+    return [t for t in threads.listing(d, discipline=discipline) if t["to_discipline"] == discipline and t["status"] in ("open", "review")]
+
+
+def _stale_data_of(d: Path, discipline: str) -> List[dict]:
+    return [x for x in exchanges.listing(d) if discipline in x["consumers"] and x["states"][discipline] != "delivered"]
+
+
 def notifications(d: Path, discipline: str) -> dict:
     """What a discipline should look at: clashes that appeared at the last coordination run, requests addressed to it that are still open, and data it uses that changed."""
     repository.discipline_id(discipline)
-    run = repository.read(d, "last_run.json", {}) or {}
-    new_ids = set(run.get("new", []))
-    clashes = [c for c in detection.detect(d, "auto")["clashes"] if c["status"] == "open" and discipline in (c["a"]["discipline"], c["b"]["discipline"])]
-    asked = [t for t in threads.listing(d, discipline=discipline) if t["to_discipline"] == discipline and t["status"] in ("open", "review")]
-    stale = [x for x in exchanges.listing(d) if discipline in x["consumers"] and x["states"][discipline] != "delivered"]
+    new_ids = set((repository.read(d, "last_run.json", {}) or {}).get("new", []))
+    clashes, asked, stale = _open_clashes_of(d, discipline), _asked_of(d, discipline), _stale_data_of(d, discipline)
     return {"discipline": discipline, "open_clashes": len(clashes), "new_clashes": [c for c in clashes if c["id"] in new_ids], "requests": asked, "data": stale,
             "count": len(clashes) + len(asked) + len(stale)}

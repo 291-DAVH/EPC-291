@@ -60,10 +60,14 @@ def _remember(d: Path, level: str, previous: dict) -> None:
         extra.unlink(missing_ok=True)
 
 
-def save_drawing(d: Path, level: str, data: dict) -> None:
+def _remember_if_changed(d: Path, level: str, data: dict) -> None:
     previous = load_drawing(d, level)
     if previous is not None and previous != data:
         _remember(d, level, previous)
+
+
+def save_drawing(d: Path, level: str, data: dict) -> None:
+    _remember_if_changed(d, level, data)
     write_json(level_dir(d, level) / "src" / "drawing.json", data)
 
 

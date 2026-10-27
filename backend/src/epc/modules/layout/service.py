@@ -41,17 +41,29 @@ def _engine():
     return core, dxfout, jobs, underlay
 
 
-def _level(level: str) -> str:
-    """The key of a sheet: a valid level, optionally followed by `@` and the discipline of a second drawing on that level."""
-    core = _engine()[0]
-    base, discipline = repository.split(level)
+def _check_base(core, base: str) -> None:
     try:
         core.parse_level(base)
     except core.PlanError as e:
         raise Invalid({"level": str(e)})
+
+
+def _check_suffix(core, level: str, discipline: str) -> None:
     if "@" in level and discipline not in core.profiles():
         raise Invalid({"level": f"unknown discipline {discipline!r}: profiles are {', '.join(core.profiles())}"})
+
+
+def _level(level: str) -> str:
+    """The key of a sheet: a valid level, optionally followed by `@` and the discipline of a second drawing on that level."""
+    core = _engine()[0]
+    base, discipline = repository.split(level)
+    _check_base(core, base)
+    _check_suffix(core, level, discipline)
     return level
+
+
+def _discipline_of(d: Path, level: str) -> str:
+    return (repository.load_drawing(d, level) or {}).get("discipline", "electrica_BT")
 
 
 def _document(level: str, data: dict, version: str = "") -> dict:
@@ -164,7 +176,7 @@ def remove(d: Path, level: str) -> dict:
     level = _level(level)
     if repository.load_drawing(d, level) is None and not repository.level_dir(d, level).exists():
         raise NotFound("level not found")
-    _edit_guard(d, (repository.load_drawing(d, level) or {}).get("discipline", "electrica_BT"))
+    _edit_guard(d, _discipline_of(d, level))
     repository.delete_level(d, level)
     identity.audit_event("layout_deleted", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""))
     return overview(d)
@@ -212,7 +224,7 @@ def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
     if len(data) > MAX_UPLOAD:
         raise Invalid({"file": f"the file is too big (up to {MAX_UPLOAD // (1024 * 1024)} MB)"})
     data, ext = _underlay_content(name, data)
-    _edit_guard(d, (repository.load_drawing(d, level) or {}).get("discipline", "electrica_BT"))
+    _edit_guard(d, _discipline_of(d, level))
     repository.save_underlay(d, level, ext, data)
     identity.audit_event("layout_underlay", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"kind": ext.lstrip(".")})
     return view(d, level)
