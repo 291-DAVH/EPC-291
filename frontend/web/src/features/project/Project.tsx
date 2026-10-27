@@ -39,7 +39,7 @@ export default function Project() {
   const closed = d.state !== "active";
 
   const bench = tab === "layout";                      // the layout is a single-page editor: a slim header and the editor takes the rest of the window
-  const tabs = (                                       // in the editor the tabs share the header line with the name of the project
+  const tabs = (                                       // the tabs share the header line with the name of the project, at the right
     <div className="tabs" role="tablist">
       {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
         <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
@@ -51,15 +51,13 @@ export default function Project() {
   );
   return (
     <div className={bench ? "project bench" : "project"}>
-      {bench ? (
-        <div className="benchbar">
-          <Link to="/" className="muted" aria-label={t("u.p.back")}>←</Link>
-          <span className="muted">{d.client}</span><span className="mono muted">{d.code}</span><b>{d.name}</b>
-          <HealthBadge health={d.health} closed={closed} />
-          {tabs}
-        </div>
-      ) : <Link to="/" className="muted">← {t("u.p.back")}</Link>}
-      {!bench && <div className="phead">
+      <div className="benchbar">
+        <Link to="/" className="muted" aria-label={t("u.p.back")} title={t("u.p.back")}>←</Link>
+        <b title={`${d.client} · ${d.code}`}>{d.name}</b>
+        <HealthBadge health={d.health} closed={closed} />
+        {tabs}
+      </div>
+      {tab === "overview" && <div className="phead">
         <div>
           <div className="muted">{d.client} · <span className="mono">{d.code}</span></div>
           <h1 style={{ margin: "2px 0 6px" }}>{d.name}</h1>
@@ -76,8 +74,6 @@ export default function Project() {
           {d.location && <div className="muted small">{t("u.p.location")}: {d.location}</div>}
         </div>
       </div>}
-
-      {!bench && tabs}
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
