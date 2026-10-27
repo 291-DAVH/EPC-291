@@ -1,518 +1,522 @@
 {
- "schema_version": "1.0",
- "plan": {
-  "id": "PLAN-L0",
-  "level": "L0",
-  "level_number": 0,
-  "metres_per_unit": 0.1,
-  "origin": [
-   100,
-   300
-  ]
- },
- "discipline": "electrica_BT",
- "nodes": [
-  {
-   "id": "n1",
-   "tag": "TB-001",
-   "kind": "TB",
-   "placed": true,
-   "x_m": 0.0,
-   "y_m": 0.0,
-   "attrs": {}
-  },
-  {
-   "id": "n2",
-   "tag": "CM-001",
-   "kind": "CM",
-   "placed": true,
-   "x_m": 40.0,
-   "y_m": 0.0,
-   "attrs": {}
-  },
-  {
-   "id": "n3",
-   "tag": "CP-001",
-   "kind": "CP",
-   "placed": true,
-   "x_m": 40.0,
-   "y_m": 20.0,
-   "attrs": {}
-  },
-  {
-   "id": "n4",
-   "tag": "LU-001",
-   "kind": "LU",
-   "placed": true,
-   "x_m": 20.0,
-   "y_m": 0.0,
-   "attrs": {},
-   "circuit": "C-05"
-  },
-  {
-   "id": "n5",
-   "tag": "TG-001",
-   "kind": "TG",
-   "placed": true,
-   "x_m": 30.0,
-   "y_m": 0.0,
-   "attrs": {},
-   "circuit": "C-05"
-  },
-  {
-   "id": "n6",
-   "tag": "HV-001",
-   "kind": "HV",
-   "placed": true,
-   "x_m": 10.0,
-   "y_m": 0.0,
-   "attrs": {}
-  },
-  {
-   "id": "auto:E1",
-   "tag": "E-001",
-   "kind": "E",
-   "placed": false,
-   "x_m": 20.0,
-   "y_m": 15.0,
-   "attrs": {}
-  },
-  {
-   "id": "auto:E2",
-   "tag": "E-002",
-   "kind": "E",
-   "placed": false,
-   "x_m": 5.0,
-   "y_m": 5.0,
-   "attrs": {}
-  },
-  {
-   "id": "auto:E3",
-   "tag": "E-003",
-   "kind": "E",
-   "placed": false,
-   "x_m": 15.0,
-   "y_m": -5.0,
-   "attrs": {}
-  }
- ],
- "stretches": [
-  {
-   "tag": "BN-001/1",
-   "line": "l1",
-   "line_tag": "BN-001",
-   "kind": "BN",
-   "from": "n1",
-   "to": "n6",
-   "length_m": 10.0,
-   "points_m": [
-    [
-     0.0,
-     0.0
-    ],
-    [
-     10.0,
-     0.0
+  "schema_version": "1.0",
+  "plan": {
+    "id": "PLAN-L0",
+    "level": "L0",
+    "level_number": 0,
+    "metres_per_unit": 0.1,
+    "origin": [
+      100,
+      300
     ]
-   ],
-   "attrs": {
-    "ancho_mm": 300
-   },
-   "circuit": "C-01",
-   "carries": [
+  },
+  "discipline": "electrica_BT",
+  "nodes": [
     {
-     "circuit": "C-01",
-     "ternas": 2
+      "id": "n1",
+      "tag": "TB-001",
+      "kind": "TB",
+      "placed": true,
+      "x_m": 0.0,
+      "y_m": 0.0,
+      "attrs": {}
     },
     {
-     "circuit": "C-05",
-     "ternas": 1
-    }
-   ],
-   "cables": 3
-  },
-  {
-   "tag": "BN-001/2",
-   "line": "l1",
-   "line_tag": "BN-001",
-   "kind": "BN",
-   "from": "n6",
-   "to": "n4",
-   "length_m": 10.0,
-   "points_m": [
-    [
-     10.0,
-     0.0
-    ],
-    [
-     20.0,
-     0.0
-    ]
-   ],
-   "attrs": {
-    "ancho_mm": 300
-   },
-   "circuit": "C-01",
-   "carries": [
-    {
-     "circuit": "C-01",
-     "ternas": 2
+      "id": "n2",
+      "tag": "CM-001",
+      "kind": "CM",
+      "placed": true,
+      "x_m": 40.0,
+      "y_m": 0.0,
+      "attrs": {}
     },
     {
-     "circuit": "C-05",
-     "ternas": 1
-    }
-   ],
-   "cables": 3
-  },
-  {
-   "tag": "BN-001/3",
-   "line": "l1",
-   "line_tag": "BN-001",
-   "kind": "BN",
-   "from": "n4",
-   "to": "n5",
-   "length_m": 10.0,
-   "points_m": [
-    [
-     20.0,
-     0.0
-    ],
-    [
-     30.0,
-     0.0
-    ]
-   ],
-   "attrs": {
-    "ancho_mm": 300
-   },
-   "circuit": "C-01",
-   "carries": [
-    {
-     "circuit": "C-01",
-     "ternas": 2
+      "id": "n3",
+      "tag": "CP-001",
+      "kind": "CP",
+      "placed": true,
+      "x_m": 40.0,
+      "y_m": 20.0,
+      "attrs": {}
     },
     {
-     "circuit": "C-05",
-     "ternas": 1
-    }
-   ],
-   "cables": 3
-  },
-  {
-   "tag": "BN-001/4",
-   "line": "l1",
-   "line_tag": "BN-001",
-   "kind": "BN",
-   "from": "n5",
-   "to": "n2",
-   "length_m": 10.0,
-   "points_m": [
-    [
-     30.0,
-     0.0
-    ],
-    [
-     40.0,
-     0.0
-    ]
-   ],
-   "attrs": {
-    "ancho_mm": 300
-   },
-   "circuit": "C-01",
-   "carries": [
+      "id": "n4",
+      "tag": "LU-001",
+      "kind": "LU",
+      "placed": true,
+      "x_m": 20.0,
+      "y_m": 0.0,
+      "attrs": {},
+      "circuit": "C-05"
+    },
     {
-     "circuit": "C-01",
-     "ternas": 2
-    }
-   ],
-   "cables": 2
-  },
-  {
-   "tag": "CN-001",
-   "line": "l2",
-   "line_tag": "CN-001",
-   "kind": "CN",
-   "from": "n2",
-   "to": "n3",
-   "length_m": 20.0,
-   "points_m": [
-    [
-     40.0,
-     0.0
-    ],
-    [
-     40.0,
-     20.0
-    ]
-   ],
-   "attrs": {
-    "diametro_mm": 63
-   },
-   "circuit": "C-01",
-   "carries": [
+      "id": "n5",
+      "tag": "TG-001",
+      "kind": "TG",
+      "placed": true,
+      "x_m": 30.0,
+      "y_m": 0.0,
+      "attrs": {},
+      "circuit": "C-05"
+    },
     {
-     "circuit": "C-01",
-     "ternas": 2
+      "id": "n6",
+      "tag": "HV-001",
+      "kind": "HV",
+      "placed": true,
+      "x_m": 10.0,
+      "y_m": 0.0,
+      "attrs": {}
+    },
+    {
+      "id": "auto:E1",
+      "tag": "E-001",
+      "kind": "E",
+      "placed": false,
+      "x_m": 20.0,
+      "y_m": 15.0,
+      "attrs": {}
+    },
+    {
+      "id": "auto:E2",
+      "tag": "E-002",
+      "kind": "E",
+      "placed": false,
+      "x_m": 5.0,
+      "y_m": 5.0,
+      "attrs": {}
+    },
+    {
+      "id": "auto:E3",
+      "tag": "E-003",
+      "kind": "E",
+      "placed": false,
+      "x_m": 15.0,
+      "y_m": -5.0,
+      "attrs": {}
     }
-   ],
-   "cables": 2
-  },
-  {
-   "tag": "CN-002",
-   "line": "l3",
-   "line_tag": "CN-002",
-   "kind": "CN",
-   "from": "n4",
-   "to": "auto:E1",
-   "length_m": 15.0,
-   "points_m": [
-    [
-     20.0,
-     0.0
-    ],
-    [
-     20.0,
-     15.0
-    ]
-   ],
-   "attrs": {},
-   "circuit": "C-02"
-  },
-  {
-   "tag": "CN-003/1",
-   "line": "l4",
-   "line_tag": "CN-003",
-   "kind": "CN",
-   "from": "auto:E2",
-   "to": "n6",
-   "length_m": 7.0711,
-   "points_m": [
-    [
-     5.0,
-     5.0
-    ],
-    [
-     10.0,
-     0.0
-    ]
-   ],
-   "attrs": {},
-   "circuit": null
-  },
-  {
-   "tag": "CN-003/2",
-   "line": "l4",
-   "line_tag": "CN-003",
-   "kind": "CN",
-   "from": "n6",
-   "to": "auto:E3",
-   "length_m": 7.0711,
-   "points_m": [
-    [
-     10.0,
-     0.0
-    ],
-    [
-     15.0,
-     -5.0
-    ]
-   ],
-   "attrs": {},
-   "circuit": null
-  }
- ],
- "schedule": {
-  "lines": {
-   "CA": {
-    "lines": 0,
-    "stretches": 0,
-    "length_m": 0
-   },
-   "CN": {
-    "lines": 3,
-    "stretches": 4,
-    "length_m": 49.1422
-   },
-   "BN": {
-    "lines": 1,
-    "stretches": 4,
-    "length_m": 40.0
-   },
-   "CR": {
-    "lines": 0,
-    "stretches": 0,
-    "length_m": 0
-   }
-  },
-  "nodes": {
-   "CM": 1,
-   "CP": 1,
-   "TB": 1,
-   "LU": 1,
-   "TG": 1,
-   "TE": 0,
-   "HV": 1,
-   "PL": 0
-  },
-  "circuit_routes": {
-   "C-01": {
-    "stretches": [
-     "BN-001/1",
-     "BN-001/2",
-     "BN-001/3",
-     "BN-001/4",
-     "CN-001"
-    ],
-    "length_m": 60.0
-   },
-   "C-02": {
-    "stretches": [
-     "CN-002"
-    ],
-    "length_m": 15.0
-   }
-  },
-  "length_by_line_m": {
-   "BN-001": 40.0,
-   "CN-001": 20.0,
-   "CN-002": 15.0,
-   "CN-003": 14.1422
-  },
-  "containers": [
-   {
-    "tag": "BN-001/1",
-    "kind": "BN",
-    "circuits": [
-     "C-01",
-     "C-05"
-    ],
-    "cables": 3
-   },
-   {
-    "tag": "BN-001/2",
-    "kind": "BN",
-    "circuits": [
-     "C-01",
-     "C-05"
-    ],
-    "cables": 3
-   },
-   {
-    "tag": "BN-001/3",
-    "kind": "BN",
-    "circuits": [
-     "C-01",
-     "C-05"
-    ],
-    "cables": 3
-   },
-   {
-    "tag": "BN-001/4",
-    "kind": "BN",
-    "circuits": [
-     "C-01"
-    ],
-    "cables": 2
-   },
-   {
-    "tag": "CN-001",
-    "kind": "CN",
-    "circuits": [
-     "C-01"
-    ],
-    "cables": 2
-   }
   ],
-  "total_length_m": 89.1422,
-  "loads": {
-   "by_circuit": {
-    "C-05": {
-     "LU": 1,
-     "TG": 1
-    }
-   },
-   "unassigned": [
-    "HV-001"
-   ]
-  }
- },
- "circuits": {
-  "C-01": {
-   "found": true,
-   "from": "n1",
-   "to": "n3",
-   "ternas": 2,
-   "loads": 0,
-   "unreached": [],
-   "distance_to_load_m": {},
-   "loads_detail": [
+  "stretches": [
     {
-     "tag": "CP-001",
-     "distance_m": 60.0,
-     "power_w": null
-    }
-   ],
-   "max_distance_m": 60.0,
-   "moment_length_m": 60.0,
-   "stretches": [
-    "BN-001/1",
-    "BN-001/2",
-    "BN-001/3",
-    "BN-001/4",
-    "CN-001"
-   ],
-   "lines": [
-    "l1",
-    "l2"
-   ],
-   "length_m": 60.0,
-   "cable_length_m": 120.0
-  },
-  "C-05": {
-   "found": true,
-   "from": "n1",
-   "to": "",
-   "ternas": 1,
-   "loads": 2,
-   "unreached": [],
-   "distance_to_load_m": {
-    "LU-001": 20.0,
-    "TG-001": 30.0
-   },
-   "loads_detail": [
-    {
-     "tag": "LU-001",
-     "distance_m": 20.0,
-     "power_w": null
+      "tag": "BN-001/1",
+      "line": "l1",
+      "line_tag": "BN-001",
+      "kind": "BN",
+      "from": "n1",
+      "to": "n6",
+      "length_m": 10.0,
+      "points_m": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ]
+      ],
+      "attrs": {
+        "ancho_mm": 300
+      },
+      "circuit": "C-01",
+      "carries": [
+        {
+          "circuit": "C-01",
+          "ternas": 2
+        },
+        {
+          "circuit": "C-05",
+          "ternas": 1
+        }
+      ],
+      "cables": 3
     },
     {
-     "tag": "TG-001",
-     "distance_m": 30.0,
-     "power_w": null
+      "tag": "BN-001/2",
+      "line": "l1",
+      "line_tag": "BN-001",
+      "kind": "BN",
+      "from": "n6",
+      "to": "n4",
+      "length_m": 10.0,
+      "points_m": [
+        [
+          10.0,
+          0.0
+        ],
+        [
+          20.0,
+          0.0
+        ]
+      ],
+      "attrs": {
+        "ancho_mm": 300
+      },
+      "circuit": "C-01",
+      "carries": [
+        {
+          "circuit": "C-01",
+          "ternas": 2
+        },
+        {
+          "circuit": "C-05",
+          "ternas": 1
+        }
+      ],
+      "cables": 3
+    },
+    {
+      "tag": "BN-001/3",
+      "line": "l1",
+      "line_tag": "BN-001",
+      "kind": "BN",
+      "from": "n4",
+      "to": "n5",
+      "length_m": 10.0,
+      "points_m": [
+        [
+          20.0,
+          0.0
+        ],
+        [
+          30.0,
+          0.0
+        ]
+      ],
+      "attrs": {
+        "ancho_mm": 300
+      },
+      "circuit": "C-01",
+      "carries": [
+        {
+          "circuit": "C-01",
+          "ternas": 2
+        },
+        {
+          "circuit": "C-05",
+          "ternas": 1
+        }
+      ],
+      "cables": 3
+    },
+    {
+      "tag": "BN-001/4",
+      "line": "l1",
+      "line_tag": "BN-001",
+      "kind": "BN",
+      "from": "n5",
+      "to": "n2",
+      "length_m": 10.0,
+      "points_m": [
+        [
+          30.0,
+          0.0
+        ],
+        [
+          40.0,
+          0.0
+        ]
+      ],
+      "attrs": {
+        "ancho_mm": 300
+      },
+      "circuit": "C-01",
+      "carries": [
+        {
+          "circuit": "C-01",
+          "ternas": 2
+        }
+      ],
+      "cables": 2
+    },
+    {
+      "tag": "CN-001",
+      "line": "l2",
+      "line_tag": "CN-001",
+      "kind": "CN",
+      "from": "n2",
+      "to": "n3",
+      "length_m": 20.0,
+      "points_m": [
+        [
+          40.0,
+          0.0
+        ],
+        [
+          40.0,
+          20.0
+        ]
+      ],
+      "attrs": {
+        "diametro_mm": 63
+      },
+      "circuit": "C-01",
+      "carries": [
+        {
+          "circuit": "C-01",
+          "ternas": 2
+        }
+      ],
+      "cables": 2
+    },
+    {
+      "tag": "CN-002",
+      "line": "l3",
+      "line_tag": "CN-002",
+      "kind": "CN",
+      "from": "n4",
+      "to": "auto:E1",
+      "length_m": 15.0,
+      "points_m": [
+        [
+          20.0,
+          0.0
+        ],
+        [
+          20.0,
+          15.0
+        ]
+      ],
+      "attrs": {},
+      "circuit": "C-02"
+    },
+    {
+      "tag": "CN-003/1",
+      "line": "l4",
+      "line_tag": "CN-003",
+      "kind": "CN",
+      "from": "auto:E2",
+      "to": "n6",
+      "length_m": 7.0711,
+      "points_m": [
+        [
+          5.0,
+          5.0
+        ],
+        [
+          10.0,
+          0.0
+        ]
+      ],
+      "attrs": {},
+      "circuit": null
+    },
+    {
+      "tag": "CN-003/2",
+      "line": "l4",
+      "line_tag": "CN-003",
+      "kind": "CN",
+      "from": "n6",
+      "to": "auto:E3",
+      "length_m": 7.0711,
+      "points_m": [
+        [
+          10.0,
+          0.0
+        ],
+        [
+          15.0,
+          -5.0
+        ]
+      ],
+      "attrs": {},
+      "circuit": null
     }
-   ],
-   "max_distance_m": 30.0,
-   "moment_length_m": 25.0,
-   "stretches": [
-    "BN-001/1",
-    "BN-001/2",
-    "BN-001/3"
-   ],
-   "lines": [
-    "l1"
-   ],
-   "length_m": 30.0,
-   "cable_length_m": 30.0
-  }
- },
- "network": null,
- "rules_used": [],
- "warnings": [
-  "line l3 has a free end at (20.00, 15.00) m",
-  "line l4 has a free end at (5.00, 5.00) m",
-  "line l4 has a free end at (15.00, -5.00) m",
-  "1 load(s) have no circuit yet: HV-001"
- ]
+  ],
+  "schedule": {
+    "lines": {
+      "CA": {
+        "lines": 0,
+        "stretches": 0,
+        "length_m": 0
+      },
+      "CN": {
+        "lines": 3,
+        "stretches": 4,
+        "length_m": 49.1422
+      },
+      "BN": {
+        "lines": 1,
+        "stretches": 4,
+        "length_m": 40.0
+      },
+      "CR": {
+        "lines": 0,
+        "stretches": 0,
+        "length_m": 0
+      }
+    },
+    "nodes": {
+      "CM": 1,
+      "CP": 1,
+      "TB": 1,
+      "LU": 1,
+      "TG": 1,
+      "TE": 0,
+      "HV": 1,
+      "PL": 0
+    },
+    "circuit_routes": {
+      "C-01": {
+        "stretches": [
+          "BN-001/1",
+          "BN-001/2",
+          "BN-001/3",
+          "BN-001/4",
+          "CN-001"
+        ],
+        "length_m": 60.0
+      },
+      "C-02": {
+        "stretches": [
+          "CN-002"
+        ],
+        "length_m": 15.0
+      }
+    },
+    "length_by_line_m": {
+      "BN-001": 40.0,
+      "CN-001": 20.0,
+      "CN-002": 15.0,
+      "CN-003": 14.1422
+    },
+    "containers": [
+      {
+        "tag": "BN-001/1",
+        "kind": "BN",
+        "circuits": [
+          "C-01",
+          "C-05"
+        ],
+        "cables": 3
+      },
+      {
+        "tag": "BN-001/2",
+        "kind": "BN",
+        "circuits": [
+          "C-01",
+          "C-05"
+        ],
+        "cables": 3
+      },
+      {
+        "tag": "BN-001/3",
+        "kind": "BN",
+        "circuits": [
+          "C-01",
+          "C-05"
+        ],
+        "cables": 3
+      },
+      {
+        "tag": "BN-001/4",
+        "kind": "BN",
+        "circuits": [
+          "C-01"
+        ],
+        "cables": 2
+      },
+      {
+        "tag": "CN-001",
+        "kind": "CN",
+        "circuits": [
+          "C-01"
+        ],
+        "cables": 2
+      }
+    ],
+    "total_length_m": 89.1422,
+    "loads": {
+      "by_circuit": {
+        "C-05": {
+          "LU": 1,
+          "TG": 1
+        }
+      },
+      "unassigned": [
+        "HV-001"
+      ]
+    }
+  },
+  "circuits": {
+    "C-01": {
+      "found": true,
+      "from": "n1",
+      "to": "n3",
+      "ternas": 2,
+      "loads": 0,
+      "unreached": [],
+      "distance_to_load_m": {},
+      "loads_detail": [
+        {
+          "tag": "CP-001",
+          "distance_m": 60.0,
+          "power_w": null
+        }
+      ],
+      "max_distance_m": 60.0,
+      "moment_length_m": 60.0,
+      "plenums": [],
+      "rise_m": 0,
+      "stretches": [
+        "BN-001/1",
+        "BN-001/2",
+        "BN-001/3",
+        "BN-001/4",
+        "CN-001"
+      ],
+      "lines": [
+        "l1",
+        "l2"
+      ],
+      "length_m": 60.0,
+      "cable_length_m": 120.0
+    },
+    "C-05": {
+      "found": true,
+      "from": "n1",
+      "to": "",
+      "ternas": 1,
+      "loads": 2,
+      "unreached": [],
+      "distance_to_load_m": {
+        "LU-001": 20.0,
+        "TG-001": 30.0
+      },
+      "loads_detail": [
+        {
+          "tag": "LU-001",
+          "distance_m": 20.0,
+          "power_w": null
+        },
+        {
+          "tag": "TG-001",
+          "distance_m": 30.0,
+          "power_w": null
+        }
+      ],
+      "max_distance_m": 30.0,
+      "moment_length_m": 25.0,
+      "plenums": [],
+      "rise_m": 0,
+      "stretches": [
+        "BN-001/1",
+        "BN-001/2",
+        "BN-001/3"
+      ],
+      "lines": [
+        "l1"
+      ],
+      "length_m": 30.0,
+      "cable_length_m": 30.0
+    }
+  },
+  "network": null,
+  "rules_used": [],
+  "warnings": [
+    "line l3 has a free end at (20.00, 15.00) m",
+    "line l4 has a free end at (5.00, 5.00) m",
+    "line l4 has a free end at (15.00, -5.00) m",
+    "1 load(s) have no circuit yet: HV-001"
+  ]
 }

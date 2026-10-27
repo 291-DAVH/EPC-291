@@ -552,7 +552,8 @@ def _route(doc, gnodes, stretches, line_kinds, node_kinds, warnings):
     """The circuits routed over the drawing and the loads placed on it."""
     circuits = _read_circuits(doc)
     load_kinds = {k for k, v in node_kinds.items() if v.get("carga")}
-    routes = routing.route_circuits(gnodes, stretches, circuits, {k for k, v in line_kinds.items() if v.get("un_solo_circuito")}, load_kinds, warnings)
+    routes = routing.route_circuits(gnodes, stretches, circuits, {k for k, v in line_kinds.items() if v.get("un_solo_circuito")}, load_kinds, warnings,
+                                  {k for k, v in node_kinds.items() if v.get("vertical")})
     return routes, _loads(gnodes, load_kinds, {c["tag"] for c in circuits}, warnings)
 
 

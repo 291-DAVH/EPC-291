@@ -436,3 +436,30 @@ class TestPlenum(unittest.TestCase):
             doc = ezdxf.readfile(str(path))
             self.assertIn("ELEC-PLENO", {lay.dxf.name for lay in doc.layers})
             self.assertTrue(any(e.dxftype() == "INSERT" and e.dxf.layer == "ELEC-PLENO" for e in doc.modelspace()))
+
+
+class TestRouteThroughPlenums(unittest.TestCase):
+    """A cable that goes up or down through plenums adds the height of each one it passes, however many there are."""
+
+    def run_plan(self, heights, circuits):
+        pa, pb = ({"pleno": f"P-0{i}", "altura_m": h} if h is not None else {"pleno": f"P-0{i}"} for i, h in enumerate(heights, 1))
+        nodes = [node("A", "TB", 0, 0), node("P1", "PL", 100, 0, attrs=pa), node("P2", "PL", 200, 0, attrs=pb), node("C", "CP", 300, 0)]
+        return core.process(drawing(nodes, [line("bn", "BN", [[0, 0], [300, 0]])], circuits=circuits))
+
+    def test_each_plenum_on_the_way_adds_its_own_height(self):
+        out = self.run_plan([3.2, 2.0], [{"tag": "C-01", "from": "A", "to": "C"}, {"tag": "C-02", "from": "A", "to": "P1"}])
+        two, one = out["circuits"]["C-01"], out["circuits"]["C-02"]
+        self.assertEqual((two["plenums"], two["rise_m"], two["length_m"]), (["PL-001", "PL-002"], 5.2, 35.2))
+        self.assertEqual((one["plenums"], one["length_m"]), (["PL-001"], 13.2))
+        self.assertEqual(two["cable_length_m"], 35.2)
+
+    def test_a_route_that_goes_through_no_plenum_is_unchanged(self):
+        out = self.run_plan([3.2, 2.0], [{"tag": "C-01", "from": "A", "to": "A"}])
+        self.assertNotIn("C-01", out["circuits"])
+        flat = core.process(drawing([node("A", "TB", 0, 0), node("C", "CP", 300, 0)], [line("bn", "BN", [[0, 0], [300, 0]])], circuits=[{"tag": "C-01", "from": "A", "to": "C"}]))["circuits"]["C-01"]
+        self.assertEqual((flat["plenums"], flat["rise_m"], flat["length_m"]), ([], 0.0, 30.0))
+
+    def test_a_plenum_without_a_height_is_reported_and_adds_nothing(self):
+        out = self.run_plan([None, 2.0], [{"tag": "C-01", "from": "A", "to": "C"}])
+        self.assertEqual(out["circuits"]["C-01"]["length_m"], 32.0)
+        self.assertTrue(any("has no height" in w for w in out["warnings"]))
