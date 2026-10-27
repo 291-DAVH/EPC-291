@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  addRoom, boardPlan, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  addRoom, boardPlan, newSheetKey, planLabel, planSlug, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
   convertClip, linkProblems, insidePolygon, loadsByRoom, pointIndex, removeRoom, renameRoom, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
@@ -314,5 +314,16 @@ describe("rooms and the automatic design", () => {
     expect(boardPlan(two, [A, B], "LU", isBoard, isLoad)).toEqual({ action: "ask", options: [A, B] });
     expect(boardPlan(two, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "missing" });             // every board is already placed
     expect(withBoard(addNode(empty, "LU", [1, 1]), "n1", A, false).nodes[0]).toEqual({ id: "n1", kind: "LU", x: 1, y: 1, board: "b1" });
+  });
+  it("names the plans of a discipline on a level: the first sheet is plain and the next ones carry their plan in the key", () => {
+    expect(planSlug("Iluminación")).toBe("iluminacion");
+    expect(planSlug("  Tomacorrientes / Piso 1 ")).toBe("tomacorrientes-piso-1");
+    expect(planSlug("¿?")).toBe("plano");
+    expect(planSlug("a".repeat(40)).length).toBe(24);
+    expect(newSheetKey("L0", "hvac", ["L0"], "", false)).toBe("L0@hvac");                                  // the first sheet of a discipline has no plan in its key
+    expect(newSheetKey("L0", "electrica_BT", ["L0", "L0@electrica_BT"], "Tomas", true)).toBe("L0@electrica_BT.tomas");
+    expect(newSheetKey("L0", "electrica_BT", ["L0@electrica_BT", "L0@electrica_BT.tomas"], "Tomas", true)).toBe("L0@electrica_BT.tomas-2");
+    expect(planLabel("Eléctrica", "Iluminación")).toBe("Eléctrica · Iluminación");
+    expect(planLabel("Eléctrica", "")).toBe("Eléctrica");
   });
 });

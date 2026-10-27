@@ -31,6 +31,14 @@ def split(sheet: str):
     return level, discipline
 
 
+def parts(sheet: str):
+    """A sheet is `L0`, `L0@<discipline>` or `L0@<discipline>.<plan>`: the level, the discipline and the plan of that discipline on it. A discipline can have several plans on a level (lighting and
+    sockets of the electrical one); the first one has no plan in its key."""
+    level, suffix = split(sheet)
+    discipline, _, plan = suffix.partition(".")
+    return level, discipline, plan
+
+
 def _order(sheet: str):
     level, discipline = split(sheet)
     return (int(level[1:]), discipline)

@@ -546,3 +546,23 @@ export function boardPlan(d: Drawing, boards: BoardRef[], kind: string, isBoard:
 export const withBoard = (d: Drawing, nodeId: string, board: BoardRef, asSymbol: boolean): Drawing => ({
   ...d, nodes: d.nodes.map((n) => (n.id === nodeId ? { ...n, board: board.id, ...(asSymbol ? { tag: board.name } : {}) } : n)),
 });
+
+// ---------------------------------------------------------------- plans: a discipline can have several on a level (lighting and sockets of the electrical one)
+/** What a sheet is called in the tabs: its discipline and, when it has one, the name of its plan. */
+export const planLabel = (discipline: string, planName?: string): string => (planName ? `${discipline} · ${planName}` : discipline);
+
+/** The part of a sheet's key that names its plan: lowercase letters, digits and hyphens, as the backend asks. */
+export function planSlug(name: string): string {
+  const s = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 24).replace(/-+$/, "");
+  return s || "plano";
+}
+
+/** The key of a new sheet of a discipline on a level: the plain one (`L0@hvac`) while it has no sheet there, then one per plan (`L0@hvac.tomas`), made unique. */
+export function newSheetKey(base: string, discipline: string, keys: string[], planName: string, hasSheet: boolean): string {
+  const plain = `${base}@${discipline}`;
+  if (!hasSheet && !keys.includes(plain)) return plain;
+  const slug = planSlug(planName);
+  let key = `${plain}.${slug}`, n = 2;
+  while (keys.includes(key)) key = `${plain}.${slug.slice(0, 21)}-${n++}`;               // up to 24 characters, as the backend asks
+  return key;
+}

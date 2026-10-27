@@ -1221,6 +1221,8 @@ export const en = {
     "plan.route.none": "Those nodes are not joined by lines.",
     "plan.route.added": "routed",
     "plan.sheets": "Sheets of the level (one per discipline)",
+    "plan.newPlan": "Name of the new plan (for example: Lighting, Sockets)",
+    "plan.renamePlan": "Name of this plan (double-click the tab)",
     "plan.addSheet": "discipline",
     "plan.savedAgo": "Last saved on the server",
     "plan.notSaved": "Not saved",

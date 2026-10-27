@@ -1221,6 +1221,8 @@ export const es = {
     "plan.route.none": "Esos nodos no están unidos por líneas.",
     "plan.route.added": "ruteado",
     "plan.sheets": "Hojas del nivel (una por disciplina)",
+    "plan.newPlan": "Nombre del nuevo plano (por ejemplo: Iluminación, Tomacorrientes)",
+    "plan.renamePlan": "Nombre de este plano (doble clic en la pestaña)",
     "plan.addSheet": "disciplina",
     "plan.savedAgo": "Último guardado en el servidor",
     "plan.notSaved": "Sin guardar",

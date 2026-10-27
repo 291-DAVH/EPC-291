@@ -2,6 +2,7 @@
 
 One drawing per level of the project (L0 ground, L1.. up, L-1.. down). The engine part (`epc_plan`) is pure; this module stores, checks who may do what and calls it.
 """
+import re
 import shutil
 import tempfile
 from pathlib import Path
@@ -48,9 +49,20 @@ def _check_base(core, base: str) -> None:
         raise Invalid({"level": str(e)})
 
 
+PLAN_SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,23}$")
+
+
+def _check_plan(discipline: str) -> None:
+    plan = discipline.partition(".")[2]
+    if "." in discipline and not PLAN_SLUG.match(plan):
+        raise Invalid({"level": f"the plan {plan!r} of a sheet is lowercase letters, digits and hyphens (up to 24)"})
+
+
 def _check_suffix(core, level: str, discipline: str) -> None:
-    if "@" in level and discipline not in core.profiles():
-        raise Invalid({"level": f"unknown discipline {discipline!r}: profiles are {', '.join(core.profiles())}"})
+    profile = discipline.partition(".")[0]
+    if "@" in level and profile not in core.profiles():
+        raise Invalid({"level": f"unknown discipline {profile!r}: profiles are {', '.join(core.profiles())}"})
+    _check_plan(discipline)
 
 
 def _level(level: str) -> str:
@@ -107,18 +119,20 @@ def _profiles(d: Path, core, used: set) -> list:
     return out
 
 
+def _sheet_item(d: Path, lv: str) -> dict:
+    dr = repository.load_drawing(d, lv) or {}
+    return {"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "plan": repository.parts(lv)[2], "plan_name": dr.get("plan_name", ""),
+            "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None, "has_files": bool((repository.load_result(d, lv) or {}).get("files"))}
+
+
 def overview(d: Path) -> dict:
     core, dxfout, _, _ = _engine()
-    items = []
-    for lv in repository.levels(d):
-        dr = repository.load_drawing(d, lv) or {}
-        items.append({"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None,
-                      "has_files": bool((repository.load_result(d, lv) or {}).get("files"))})
+    items = [_sheet_item(d, lv) for lv in repository.levels(d)]
     return {"levels": items, "profiles": _profiles(d, core, {i["discipline"] for i in items}), "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
+    return {"discipline": "electrica_BT", "plan_name": "", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
 
 
 def view(d: Path, level: str) -> dict:
@@ -162,14 +176,19 @@ def plan_lengths(d: Path) -> Dict[str, dict]:
 sld.set_plan_lengths(plan_lengths)                              # the board reads its lengths through this (the dependency stays layout -> sld)
 
 
+def _plan_of(d: Path, lv: str) -> tuple:
+    """The discipline and the plan a sheet holds: the discipline is what is drawn in it, the plan what its key says."""
+    return (repository.load_drawing(d, lv) or {}).get("discipline", "electrica_BT"), repository.parts(lv)[2]
+
+
 def _check_sheet(d: Path, level: str, data: dict) -> None:
-    """One drawing per discipline on each level: a second sheet carries its discipline in its name, and no two sheets of a level share one."""
+    """A level holds one drawing per discipline and plan: a second sheet carries its discipline (and its plan) in its name, and no two sheets of a level are the same plan of the same discipline."""
     base, suffix = repository.split(level)
-    if suffix and data["discipline"] != suffix:
-        raise Invalid({"discipline": f"this sheet is for {suffix}"})
-    others = [(repository.load_drawing(d, lv) or {}).get("discipline", "electrica_BT") for lv in repository.levels(d) if lv != level and repository.split(lv)[0] == base]
-    if data["discipline"] in others:
-        raise Invalid({"discipline": f"{base} already has a drawing of {data['discipline']}"})
+    if suffix and data["discipline"] != repository.parts(level)[1]:
+        raise Invalid({"discipline": f"this sheet is for {repository.parts(level)[1]}"})
+    taken = [_plan_of(d, lv) for lv in repository.levels(d) if lv != level and repository.split(lv)[0] == base]
+    if (data["discipline"], repository.parts(level)[2]) in taken:
+        raise Invalid({"discipline": f"{base} already has that plan of {data['discipline']}: give the new plan another name"})
 
 
 def save(d: Path, level: str, body: DrawingIn) -> dict:
