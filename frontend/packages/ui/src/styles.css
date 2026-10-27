@@ -378,12 +378,15 @@ textarea.mono { font-family: var(--mono); font-size: 13px; }
 /* ---- layout workbench: the plan editor is a single page (a toolbox of buttons on the left, the canvas, a panel on the right) ---- */
 .benchbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
 .benchbar b { font-family: var(--display); font-size: 16px; }
+.benchbar .tabs { flex: 1 1 100%; margin-bottom: 0; }
+.project:not(.bench) .benchbar { margin-bottom: 14px; }
+.project.bench .benchbar { flex: none; }
 @media (min-width: 900px) {
   .benchbar { flex-wrap: nowrap; }
   .benchbar > * { flex: none; }
   .benchbar > b { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .project.bench .benchbar .tabs { flex: 1 1 0; min-width: 0; margin: 0 0 0 12px; justify-content: flex-start; border-bottom: 0; }
-  .project.bench .benchbar .tabs button { min-height: 28px; padding: 3px 10px; font-size: 13px; }
+  .project .benchbar .tabs { flex: 0 1 auto; min-width: 0; margin: 0 0 0 auto; justify-content: flex-start; border-bottom: 0; scrollbar-width: none; }
+  .project .benchbar .tabs button { min-height: 28px; padding: 3px 10px; font-size: 13px; }
   .workbench .wb-top { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
   .workbench .wb-top > * { flex: none; }
   .wb-top .add-sheet.compact { width: 54px; }
@@ -431,7 +434,6 @@ textarea.mono { font-family: var(--mono); font-size: 13px; }
 @media (min-width: 900px) {
   .main:has(.workbench) { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 10px; }
   .project.bench { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-  .project.bench .tabs { flex: none; margin-bottom: 8px; }
   .workbench { flex: 1; min-height: 0; }
   .wb-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 8px; }
   .wb-editor, .wb-canvas, .wb-side { min-height: 0; }
