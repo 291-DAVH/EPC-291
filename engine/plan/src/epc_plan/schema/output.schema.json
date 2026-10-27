@@ -8,7 +8,7 @@
     "plan": {"type": "object"}, "discipline": {"type": "string"},
     "nodes": {"type": "array"}, "stretches": {"type": "array"},
     "schedule": {"type": "object", "required": ["lines", "nodes", "circuit_routes", "length_by_line_m", "total_length_m"]},
-    "circuits": {"type": "object", "description": "route of each circuit: found, stretches, length_m, ternas, cable_length_m"}, "network": {"type": ["object", "null"]}, "rules_used": {"type": "array"}, "warnings": {"type": "array", "items": {"type": "string"}},
+    "circuits": {"type": "object", "description": "route of each circuit: found, stretches, length_m (with the height of the plenums it goes through), plenums, rise_m, ternas, cable_length_m"}, "network": {"type": ["object", "null"]}, "rules_used": {"type": "array"}, "warnings": {"type": "array", "items": {"type": "string"}},
     "files": {"type": "object"}
   }
 }

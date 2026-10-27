@@ -176,6 +176,7 @@
         "en": "Plenum (vertical shaft between levels)"
       },
       "prefijo_tag": "PL",
+      "vertical": true,
       "atributos": [
         "pleno",
         "altura_m"
