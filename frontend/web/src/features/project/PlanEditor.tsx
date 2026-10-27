@@ -10,7 +10,7 @@ import {
 import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
 import PlanScene from "./PlanScene";
 import { exportPng, printSheet } from "./planExport";
-import { DEFAULT_KEYS, keyOf, usePlanPrefs } from "./planPrefs";
+import { DEFAULT_KEYS, keyOf, PlanPrefs, usePlanPrefs } from "./planPrefs";
 import type { Ghost, Pin, RefItem } from "./planTypes";
 import { Icon } from "@epc/ui";
 
@@ -33,7 +33,7 @@ interface View { x: number; y: number; w: number; h: number }
 type Measure = "dist" | "angle" | "area";
 
 export interface Props {
-  drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
+  prefs?: [PlanPrefs, (p: Partial<PlanPrefs>) => void]; drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; reference?: RefItem[]; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
   freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt }; architecture?: Architecture | null;
@@ -53,7 +53,8 @@ const SELECT_TOOLS: ToolDef[] = [
 
 export default function PlanEditor(props: Props) {
   const { drawing, onChange, derived, profile, lang, underlayUrl, readOnly, t, selection, onSelect, highlight = [] } = props;
-  const [prefs, setPrefs] = usePlanPrefs();
+  const own = usePlanPrefs();
+  const [prefs, setPrefs] = props.prefs ?? own;
   const [tool, setTool] = useState<Tool>("select");
   const [kindId, setKindId] = useState("");
   const [draft, setDraft] = useState<Pt[]>([]);

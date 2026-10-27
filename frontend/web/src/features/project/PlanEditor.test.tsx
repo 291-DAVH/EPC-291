@@ -129,6 +129,21 @@ describe("plan editor: selecting and editing", () => {
   });
 });
 
+describe("plan editor: layers", () => {
+  const lamp: Drawing = { ...blank(), nodes: [{ id: "n1", kind: "LU", x: 100, y: 100 }] };
+  const circles = (c: HTMLElement) => c.querySelectorAll("svg[preserveAspectRatio] circle").length;
+
+  it("draws what a layer holds and stops drawing it when the layer is hidden, and a hidden discipline loses its reference", () => {
+    const shown = render(<Harness start={lamp} />);
+    const withLamp = circles(shown.container);
+    expect(withLamp).toBeGreaterThan(0);
+    cleanup();
+    window.localStorage.setItem("epc.plan.prefs.v1", JSON.stringify({ hiddenLayers: ["ELEC"] }));
+    const hidden = render(<Harness start={lamp} />);
+    expect(circles(hidden.container)).toBeLessThan(withLamp);
+  });
+});
+
 describe("plan editor: commands", () => {
   it("finds a command in the palette and runs it", () => {
     const { container } = render(<Harness />);

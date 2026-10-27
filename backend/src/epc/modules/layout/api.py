@@ -9,6 +9,7 @@ from epc.modules.projects import public as projects
 router = APIRouter(prefix="/api/projects/{client}/{code}/layout")
 
 templates_router = APIRouter(prefix="/api/projects/{client}/{code}/layout-templates")
+layers_router = APIRouter(prefix="/api/projects/{client}/{code}/layout-layers")
 
 # The plan underlay may be an SVG: it is shown through <img>, and the policy also stops scripts if the file is opened directly.
 SAFE_HEADERS = {"Content-Security-Policy": "sandbox; default-src 'none'; style-src 'unsafe-inline'", "X-Content-Type-Options": "nosniff"}
@@ -112,3 +113,9 @@ def save_template(client: str, code: str, name: str, body: TemplateIn):
 @templates_router.delete("/{name}", status_code=204)
 def delete_template(client: str, code: str, name: str):
     templates.remove(projects.get_project_dir(client, code), name)
+
+
+@layers_router.get("")
+def layers_by_discipline(client: str, code: str):
+    """The DXF layers in force for the project, by discipline."""
+    return service.layers_by_discipline(projects.get_project_dir(client, code))

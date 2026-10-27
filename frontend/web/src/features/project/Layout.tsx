@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, Badge, errorText, Icon, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
 import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
+import LayersPanel from "./LayersPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, TablePanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
-import { clearDraft, loadDraft, saveDraft } from "./planPrefs";
+import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
 import { Architecture, Clip, convertClip, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
@@ -15,7 +16,7 @@ interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircui
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "circuits" | "table" | "warnings" | "coord" | "history";
+type Panel = "props" | "circuits" | "table" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -62,6 +63,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [arch, setArch] = useState<Architecture | null>(null);
   const [recognizing, setRecognizing] = useState(false);
 
+  const [prefs, setPrefs] = usePlanPrefs();
   const sheets = ov.data?.levels ?? [];
   const levels = sheets.map((x) => x.level);
   const base = levelOf(level);
@@ -249,8 +251,11 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; badge?: number }[] = [
     { id: "props", label: tl("layout.tab.props") }, { id: "circuits", label: tl("layout.tab.circuits") }, { id: "table", label: tl("layout.tab.table") }, { id: "warnings", label: tl("layout.tab.warnings"), badge: warnings.length },
-    { id: "coord", label: tl("coord.tab"), badge: coord.count }, { id: "history", label: tl("plan.history") },
+    { id: "layers", label: tl("layers.tab") }, { id: "coord", label: tl("coord.tab"), badge: coord.count }, { id: "history", label: tl("plan.history") },
   ];
+  const layerOfKind = (id: string) => [...(profile?.lines ?? []), ...(profile?.nodes ?? [])].find((k) => k.id === id)?.capa_dxf ?? "";
+  const layerCounts: Record<string, number> = {};
+  [...drawing.nodes, ...drawing.lines].forEach((e) => { const l = layerOfKind(e.kind); if (l) layerCounts[l] = (layerCounts[l] ?? 0) + 1; });
   const tplHere = (templates.data ?? []).filter((x) => x.discipline === discipline);
 
   return (
@@ -327,7 +332,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -346,6 +351,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "circuits" && <Circuits drawing={drawing} derived={dp} boardCircuits={ov.data.circuits} profile={profile} onSelect={setSelection} readOnly={!write} focus={focus} onFocus={setFocus} onChange={change} t={tl} />}
               {panel === "table" && <TablePanel d={d} tl={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
+              {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} canWrite={canWrite}
+                sheetOf={(pid) => sameBase.find((x) => x.discipline === pid)?.level ?? null} onOpen={(pid) => { const s = sameBase.find((x) => x.discipline === pid); if (s) setLevel(s.level); else createSheet(sheets.length ? `${base}@${pid}` : base, pid); }} />}
               {panel === "coord" && <Coordination client={client} code={code} discipline={discipline} canWrite={canWrite} onChanged={coord.reload} onFocus={focusAt} />}
               {panel === "history" && <HistoryPanel root={root} level={level} rev={rev + hrev} canWrite={write} comparing={compare?.id ?? ""} onCompare={openCompare} onRestore={restore} tl={tl} />}
             </div>

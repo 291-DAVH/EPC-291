@@ -237,6 +237,21 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.put(f"{self.base}/clashes/abc", json={"status": "maybe"}).status_code, 422)
         self.assertEqual(self.c.get(f"{self.layout}/L0/history/zzz").status_code, 404)
 
+    # ---------------------------------------------------------------- the layers of each discipline
+    def test_the_layers_in_force_come_grouped_by_discipline_with_what_the_editor_draws_in_them(self):
+        url = "/api/projects/ACME/P-1/layout-layers"
+        groups = {g["id"]: g for g in self.c.get(url).json()["disciplines"]}
+        self.assertEqual([g for g in groups][:4], ["arquitectura", "electrica", "hvac", "pci"])
+        cable = next(x for x in groups["electrica"]["layers"] if x["name"] == "ELEC-CABLE")
+        self.assertEqual((cable["hex"], cable["kinds"][0]["id"], cable["kinds"][0]["type"]), ("#ff0000", "CA", "line"))
+        self.assertEqual(groups["hvac"]["profile"], None)
+        self.assertFalse(groups["electrica"]["drawn"])
+        self.c.put(f"{self.layout}/L0", json=ELEC)
+        self.assertTrue({g["id"]: g for g in self.c.get(url).json()["disciplines"]}["electrica"]["drawn"])
+        self.c.put(f"/api/projects/ACME/P-1/drawing-layers", json={"layers": {"plan.HVAC-DUCTO": {"color": 3}}})
+        hv = {g["id"]: g for g in self.c.get(url).json()["disciplines"]}["hvac"]
+        self.assertEqual(next(x for x in hv["layers"] if x["name"] == "HVAC-DUCTO")["color"], 3)             # the project's own catalog wins
+
     # ---------------------------------------------------------------- templates
     def test_a_template_is_saved_listed_and_deleted(self):
         url = "/api/projects/ACME/P-1/layout-templates"
