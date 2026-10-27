@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Icon } from "@epc/ui";
 import { addLine, addNode, commit, DLine, dist, Drawing, History, inBox, circuitFor, connectEnds, drawnJunctions, onDrawn, joinCircuit, merge, metresPerUnit, moveElements, moveSegment, stretchEnd, ortho, pick, Pt, redo, Ref, removeMany, sameRef, setOrigin, setScale, snap, toggle, undo } from "./planEditing";
 
 /** The canvas of the plan-drawing editor: the plan as an underlay, a toolbar, and what the person draws over it. It computes nothing about the engineering
@@ -224,32 +225,38 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
     { id: "select", key: "layout.tool.select", write: false }, { id: "box", key: "layout.tool.box", write: false }, { id: "scale", key: "layout.tool.scale", write: true }, { id: "origin", key: "layout.tool.origin", write: true },
     { id: "node", key: "layout.tool.node", write: true }, { id: "line", key: "layout.tool.line", write: true }, { id: "erase", key: "layout.tool.erase", write: true },
   ];
+  const fit = () => setView(img ? { x: 0, y: 0, w: img.w, h: img.h } : { x: 0, y: 0, w: 1200, h: 800 });
+  const palette = tool === "node" ? nodeKinds : tool === "line" ? lineKinds : [];
   const hint = { select: "", box: "layout.hint.box", scale: "layout.hint.scale", origin: "layout.hint.origin", node: "layout.hint.node", line: "layout.hint.line", erase: "layout.hint.erase" }[tool];
 
   return (
-    <div className="card" tabIndex={0} onKeyDown={onKey} style={{ outline: "none" }}>
-      <div className="row" style={{ flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
-        {tools.filter((x) => !readOnly || !x.write).map((x) => <button key={x.id} className={tool === x.id ? "primary" : ""} onClick={() => choose(x.id)}>{t(x.key)}</button>)}
-        {(tool === "node" ? nodeKinds : tool === "line" ? lineKinds : []).map((kd) => (
-          <button key={kd.id} className={kindId === kd.id ? "primary" : ""} onClick={() => setKindId(kd.id)} title={kd.capa_dxf}>{kd.id} · {kindName(kd)}</button>
+    <div className="wb-editor" tabIndex={0} onKeyDown={onKey}>
+      <div className="wb-tools" role="toolbar" aria-orientation="vertical" aria-label={t("layout.toolbox")}>
+        {tools.filter((x) => !readOnly || !x.write).map((x) => (
+          <button key={x.id} className={"tool" + (tool === x.id ? " on" : "")} onClick={() => choose(x.id)} title={t(x.key)} aria-pressed={tool === x.id}><Icon name={x.id} size={20} /><span>{t(x.key)}</span></button>
         ))}
-        <span style={{ flex: 1 }} />
-        {!readOnly && <><button onClick={doUndo} disabled={hist.past.length === 0}>{t("layout.undo")}</button><button onClick={doRedo} disabled={hist.future.length === 0}>{t("layout.redo")}</button></>}
-        <button onClick={() => setView(img ? { x: 0, y: 0, w: img.w, h: img.h } : { x: 0, y: 0, w: 1200, h: 800 })}>{t("layout.fit")}</button>
+        <span className="tool-sep" />
+        {!readOnly && <>
+          <button className="tool" onClick={doUndo} disabled={hist.past.length === 0} title={t("layout.undo")}><Icon name="undo" size={20} /><span>{t("layout.undo")}</span></button>
+          <button className="tool" onClick={doRedo} disabled={hist.future.length === 0} title={t("layout.redo")}><Icon name="redo" size={20} /><span>{t("layout.redo")}</span></button>
+        </>}
+        <button className="tool" onClick={fit} title={t("layout.fit")}><Icon name="fit" size={20} /><span>{t("layout.fit")}</span></button>
       </div>
-      <div className="muted small" style={{ minHeight: 18 }}>
-        {hint && t(hint)} {k === null ? <b style={{ color: "var(--bad)" }}>{t("layout.notCalibrated")}</b> : <span>{t("layout.scaleIs")} 1 u = {k.toFixed(4)} m</span>}
-      </div>
-      {tool === "scale" && scalePts.length === 2 && (
-        <div className="row" style={{ margin: "6px 0" }}>
-          <span>{t("layout.scaleDistance")}</span>
-          <input ref={scaleInput} value={scaleText} onChange={(e) => setScaleText(e.target.value)} onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") confirmScale(); }} style={{ width: 90 }} />
-          <button className="primary" onClick={confirmScale}>{t("layout.apply")}</button><button onClick={() => cancel()}>{t("layout.cancel")}</button>
-        </div>
-      )}
-      <div ref={box} style={{ border: "1px solid var(--line, #ccc)", background: "#fff", height: 560, overflow: "hidden", touchAction: "none" }}>
+      <div className="wb-canvas" ref={box}>
+        {palette.length > 0 && (
+          <div className="wb-kinds" role="group" aria-label={t("layout.kinds")}>
+            {palette.map((kd) => <button key={kd.id} className={kindId === kd.id ? "on" : ""} onClick={() => setKindId(kd.id)} title={kd.capa_dxf}><b>{kd.id}</b> {kindName(kd)}</button>)}
+          </div>
+        )}
+        {tool === "scale" && scalePts.length === 2 && (
+          <div className="wb-float">
+            <span>{t("layout.scaleDistance")}</span>
+            <input ref={scaleInput} value={scaleText} onChange={(e) => setScaleText(e.target.value)} onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") confirmScale(); }} style={{ width: 90 }} />
+            <button className="primary" onClick={confirmScale}>{t("layout.apply")}</button><button onClick={() => cancel()}>{t("layout.cancel")}</button>
+          </div>
+        )}
         <svg ref={svgRef} width="100%" height="100%" viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`} preserveAspectRatio="xMinYMin meet" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp}
-          onDoubleClick={finishLine} onContextMenu={(e) => e.preventDefault()} style={{ cursor: tool === "select" ? "default" : "crosshair", display: "block" }}>
+          onDoubleClick={finishLine} onContextMenu={(e) => e.preventDefault()} style={{ cursor: tool === "select" ? "default" : "crosshair", display: "block", width: "100%", height: "100%", background: "#fff" }}>
           {underlayUrl && img && <image href={underlayUrl} x={0} y={0} width={img.w} height={img.h} />}
           {drawing.scale && <g stroke="#ff7f0e" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.scale.p1[0]} y1={drawing.scale.p1[1]} x2={drawing.scale.p2[0]} y2={drawing.scale.p2[1]} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />
             <text x={(drawing.scale.p1[0] + drawing.scale.p2[0]) / 2} y={(drawing.scale.p1[1] + drawing.scale.p2[1]) / 2 - 4 * u} fontSize={11 * u} fill="#ff7f0e" stroke="none">{drawing.scale.distance_m} m</text></g>}
@@ -286,6 +293,10 @@ export default function PlanEditor({ drawing, onChange, derived, profile, lang, 
             <line x1={drawing.origin[0]} y1={drawing.origin[1] - 10 * u} x2={drawing.origin[0]} y2={drawing.origin[1] + 10 * u} vectorEffect="non-scaling-stroke" />
             <text x={drawing.origin[0] + 12 * u} y={drawing.origin[1] - 4 * u} fontSize={11 * u} fill="#2ca02c" stroke="none">0,0</text></g>
         </svg>
+        <div className="wb-hint">
+          <span>{hint && t(hint)}</span>
+          {k === null ? <b style={{ color: "var(--bad)" }}>{t("layout.notCalibrated")}</b> : <span className="mono">{t("layout.scaleIs")} 1 u = {k.toFixed(4)} m</span>}
+        </div>
       </div>
     </div>
   );

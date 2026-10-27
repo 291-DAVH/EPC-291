@@ -14,3 +14,4 @@ export { WbsTree } from "./plan/WbsTree";
 export { Gantt } from "./plan/Gantt";
 export { LayersEditor } from "./catalogs/LayersEditor";
 export { SolutionsEditor } from "./catalogs/SolutionsEditor";
+export { Icon } from "./icons";

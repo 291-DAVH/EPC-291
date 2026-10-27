@@ -19,6 +19,20 @@ const PATHS: Record<string, string> = {
   account: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7",
   close: "M5 5l14 14 M19 5L5 19",
   app: "M4 4h16v16H4z M4 9h16 M9 9v11",
+  select: "M5 3l13 7-6 2-2 6z M12 12l6 6",
+  box: "M4 4h16v16H4z M8 4v16 M4 8h16",
+  scale: "M3 8h18v8H3z M7 8v4 M11 8v3 M15 8v4 M19 8v3",
+  origin: "M12 3v18 M3 12h18 M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0",
+  node: "M5 5h14v14H5z M12 9v6 M9 12h6",
+  line: "M4 19l5-9 5 5 6-10 M4 19h0 M20 5h0",
+  erase: "M4 16l9-9 7 7-5 5H8z M10 10l7 7 M8 21h12",
+  undo: "M9 14L4 9l5-5 M4 9h10a6 6 0 0 1 0 12h-3",
+  redo: "M15 14l5-5-5-5 M20 9H10a6 6 0 0 0 0 12h3",
+  fit: "M4 9V4h5 M20 9V4h-5 M4 15v5h5 M20 15v5h-5",
+  upload: "M12 16V4 M7 9l5-5 5 5 M4 16v4h16v-4",
+  help: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8 M12 17h0",
+  file: "M6 3h9l4 4v14H6z M14 3v5h5",
+  trash: "M4 7h16 M9 7V4h6v3 M6 7l1 14h10l1-14",
 };
 
 /** Which icon each section of the navigation uses (by the key of its label), so the two applications share one set. */
