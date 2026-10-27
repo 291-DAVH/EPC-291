@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
   alignDelta, alignNodes, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
-  convertClip, linkProblems, pointIndex, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
+  convertClip, linkProblems, pointIndex, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
 const node = (id: string) => ({ type: "node" as const, id });
@@ -180,6 +180,30 @@ describe("labels and warnings", () => {
     const st = [{ line: "l1", tag: "CA-001/1", line_tag: "CA-001" }];
     expect(warningTargets("the loads of TB-001 are not routed along CA-001/1", nodes, st)).toEqual([node("n1"), line("l1")]);
     expect(warningTargets("something else", nodes, st)).toEqual([]);
+  });
+});
+
+describe("walls recognized in the plan", () => {
+  const wall = { id: "w1", a: [0, 0] as [number, number], b: [100, 0] as [number, number], thickness: 10, confidence: 0.9 };
+  it("has two faces, half the thickness either side of the centre line", () => {
+    expect(wallFaces(wall)).toEqual([[[0, 5], [100, 5]], [[0, -5], [100, -5]]]);
+  });
+  it("snaps to a face, a corner winning over the middle of it, and to nothing when far", () => {
+    expect(wallSnap([wall], [40, 9], 6)).toEqual([40, 5]);
+    expect(wallSnap([wall], [3, 8], 6)).toEqual([0, 5]);
+    expect(wallSnap([wall], [40, 30], 6)).toBeNull();
+  });
+  it("is one more thing snapEx looks at, after nodes and ends", () => {
+    const d = addNode(blank(), "CM", [40, 5]);
+    expect(snapEx(d, [41, 6], 5, { walls: [wall] }).kind).toBe("node");
+    expect(snapEx(blank(), [41, 6], 5, { walls: [wall] })).toEqual({ p: [41, 5], kind: "wall" });
+  });
+  it("turns a line that is nearly parallel to a nearby wall into one that is", () => {
+    const p = parallelToWall([0, 20], [100, 24], [wall], 30);
+    expect(p[1]).toBeCloseTo(20, 5);
+    expect(p[0]).toBeCloseTo(100.0, 0);
+    expect(parallelToWall([0, 20], [100, 60], [wall], 80)).toEqual([100, 60]);          // too far from parallel
+    expect(parallelToWall([0, 20], [100, 24], [wall], 5)).toEqual([100, 24]);           // no wall within reach
   });
 });
 

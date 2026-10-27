@@ -73,6 +73,23 @@ class Opening:
     swing: Optional[Pt] = None
 
 
+def _r3(p: Pt) -> List[float]:
+    return [round(p[0], 3), round(p[1], 3)]
+
+
+def _wall_dict(w: "Wall") -> Dict[str, Any]:
+    return {"id": w.id, "a": _r3(w.a), "b": _r3(w.b), "thickness": round(w.thickness, 3), "confidence": round(w.confidence, 2), "reason": w.reason}
+
+
+def _opening_dict(o: "Opening") -> Dict[str, Any]:
+    out = {"id": o.id, "kind": o.kind, "at": _r3(o.at), "width": round(o.width, 3), "angle": round(o.angle, 2), "wall": o.wall, "confidence": round(o.confidence, 2), "reason": o.reason}
+    if o.hinge:
+        out["hinge"] = _r3(o.hinge)
+    if o.swing:
+        out["swing"] = _r3(o.swing)
+    return out
+
+
 @dataclass
 class Architecture:
     source: str
@@ -84,16 +101,14 @@ class Architecture:
     openings: List[Opening] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
+    def counts(self) -> Dict[str, int]:
+        return {"walls": len(self.walls), "doors": sum(1 for o in self.openings if o.kind == "door"), "windows": sum(1 for o in self.openings if o.kind == "window"),
+                "openings": sum(1 for o in self.openings if o.kind == "opening")}
+
     def as_dict(self) -> Dict[str, Any]:
-        r3 = lambda p: [round(p[0], 3), round(p[1], 3)]                          # noqa: E731
         return {"schema_version": "1.0", "source": self.source, "size": [round(self.size[0], 3), round(self.size[1], 3)], "units_per_metre": self.units_per_metre, "scale_hint": self.scale_hint,
-                "wall_thickness": None if self.wall_thickness is None else round(self.wall_thickness, 3),
-                "walls": [{"id": w.id, "a": r3(w.a), "b": r3(w.b), "thickness": round(w.thickness, 3), "confidence": round(w.confidence, 2), "reason": w.reason} for w in self.walls],
-                "openings": [{"id": o.id, "kind": o.kind, "at": r3(o.at), "width": round(o.width, 3), "angle": round(o.angle, 2), "wall": o.wall, "confidence": round(o.confidence, 2), "reason": o.reason,
-                              **({"hinge": r3(o.hinge)} if o.hinge else {}), **({"swing": r3(o.swing)} if o.swing else {})} for o in self.openings],
-                "counts": {"walls": len(self.walls), "doors": sum(1 for o in self.openings if o.kind == "door"), "windows": sum(1 for o in self.openings if o.kind == "window"),
-                           "openings": sum(1 for o in self.openings if o.kind == "opening")},
-                "warnings": self.warnings}
+                "wall_thickness": None if self.wall_thickness is None else round(self.wall_thickness, 3), "walls": [_wall_dict(w) for w in self.walls],
+                "openings": [_opening_dict(o) for o in self.openings], "counts": self.counts(), "warnings": self.warnings}
 
 
 @dataclass(frozen=True)

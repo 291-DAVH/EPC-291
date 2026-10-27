@@ -52,6 +52,12 @@ def _background(prims: Primitives, limit: int) -> List[str]:
     return out
 
 
+def _layer_items(arch: Architecture) -> List[List[str]]:
+    """The elements of each layer, in the order of LAYERS."""
+    of = lambda kind: [o for o in arch.openings if o.kind == kind]                      # noqa: E731
+    return [[_wall(w) for w in arch.walls], [_door(o) for o in of("door")], [_span_line(o, "#2563eb") for o in of("window")], [_span_line(o, "#9ca3af") for o in of("opening")]]
+
+
 def render(arch: Architecture, prims: Primitives, background: bool = True, limit: int = 60000) -> str:
     """The SVG text of the recognized plan."""
     w, h = arch.size
@@ -59,8 +65,6 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
            f'<rect width="{_f(w)}" height="{_f(h)}" fill="#ffffff"/>']
     if background:
         out += ['<g id="ARQ-FONDO" data-layer="arq.background" fill="none" stroke="#9aa3b5" stroke-opacity="0.7">', *_background(prims, limit), "</g>"]
-    by_kind = {"door": [o for o in arch.openings if o.kind == "door"], "window": [o for o in arch.openings if o.kind == "window"], "opening": [o for o in arch.openings if o.kind == "opening"]}
-    body = [[_wall(x) for x in arch.walls], [_door(o) for o in by_kind["door"]], [_span_line(o, "#2563eb") for o in by_kind["window"]], [_span_line(o, "#9ca3af") for o in by_kind["opening"]]]
-    for (gid, role), items in zip(LAYERS, body):
+    for (gid, role), items in zip(LAYERS, _layer_items(arch)):
         out += [f'<g id="{gid}" data-layer="{role}">', *items, "</g>"]
-    return "\n".join(out + ["</svg>", ""])
+    return chr(10).join(out + ["</svg>", ""])

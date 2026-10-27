@@ -7,10 +7,24 @@ from epc_arch.model import Arc, ArchError, Block, Line, Primitives
 Size = Tuple[float, float]
 
 
+def _points(prims: Primitives):
+    """Every place the drawing reaches: the ends of the lines, the box of each arc and the insertion points."""
+    for l in prims.lines:
+        yield l.a
+        yield l.b
+    for a in prims.arcs:
+        yield (a.c[0] - a.r, a.c[1] - a.r)
+        yield (a.c[0] + a.r, a.c[1] + a.r)
+    for b in prims.blocks:
+        yield b.at
+
+
 def bounds(prims: Primitives) -> Optional[Tuple[float, float, float, float]]:
-    xs = [p[0] for l in prims.lines for p in (l.a, l.b)] + [v for a in prims.arcs for v in (a.c[0] - a.r, a.c[0] + a.r)] + [b.at[0] for b in prims.blocks]
-    ys = [p[1] for l in prims.lines for p in (l.a, l.b)] + [v for a in prims.arcs for v in (a.c[1] - a.r, a.c[1] + a.r)] + [b.at[1] for b in prims.blocks]
-    return (min(xs), min(ys), max(xs), max(ys)) if xs and ys else None
+    pts = list(_points(prims))
+    if not pts:
+        return None
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return (min(xs), min(ys), max(xs), max(ys))
 
 
 def _flip_arc(a: Arc) -> Arc:

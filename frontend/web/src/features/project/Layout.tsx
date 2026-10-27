@@ -7,12 +7,13 @@ import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft } from "./planPrefs";
-import { Clip, convertClip, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { Architecture, Clip, convertClip, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
 interface Sheet { level: string; base: string; discipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
 interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; dxf_versions: string[]; default_dxf_version: string }
-interface LevelView { level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
+interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
+interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
 type Panel = "props" | "circuits" | "table" | "warnings" | "coord" | "history";
 
@@ -58,6 +59,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [copying, setCopying] = useState<Clip | null>(null);
   const [targets, setTargets] = useState<string[]>([]);
   const [changes, setChanges] = useState<Changes | null>(null);
+  const [arch, setArch] = useState<Architecture | null>(null);
+  const [recognizing, setRecognizing] = useState(false);
 
   const sheets = ov.data?.levels ?? [];
   const levels = sheets.map((x) => x.level);
@@ -89,6 +92,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     Promise.all(near.map((x) => api<LevelView>(`${root}/${x.level}`).then((v) => ({ level: x.base, drawing: v.drawing })).catch(() => null))).then((r) => live && setOthers(r.filter((x): x is { level: string; drawing: Drawing } => !!x)));
     return () => { live = false; };
   }, [level, discipline, rev, sheets.length]);
+
+  useEffect(() => {                                    // what was recognized in the plan of this sheet (walls, doors, windows)
+    if (!level || !lv?.architecture) { setArch(null); return; }
+    let live = true;
+    api<Architecture>(`${root}/${level}/architecture`).then((a) => live && setArch(a)).catch(() => live && setArch(null));
+    return () => { live = false; };
+  }, [level, lv?.architecture?.counts?.walls, lv?.architecture?.source, stamp]);
 
   const profile = ov.data?.profiles.find((p) => p.id === discipline);
   const k = metresPerUnit(drawing);
@@ -173,6 +183,21 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
       setRev((n) => n + 1); setCopying(null); setTargets([]); setErr("");
     } catch (x) { setErr(errorText(x)); }
   };
+  const recognize = async () => {
+    if (!level || recognizing) return;
+    const vector = lv?.underlay && lv.underlay.kind !== "png" && lv.underlay.kind !== "jpg" && lv.underlay.kind !== "jpeg";
+    if (vector && (drawing.nodes.length || drawing.lines.length) && !window.confirm(tl("plan.arch.confirm"))) return;
+    setRecognizing(true);
+    try {
+      const r = await api<{ view: LevelView; underlay_replaced: boolean }>(`${root}/${level}/architecture`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({}) });
+      setLv(r.view); setStamp((n) => n + 1); setErr(""); setRev((n) => n + 1);
+    } catch (x) { setErr(errorText(x)); }
+    setRecognizing(false);
+  };
+  const useHintedScale = () => {
+    const h = lv?.architecture?.scale_hint;
+    if (h && write) change({ ...drawing, scale: { p1: [0, 0], p2: [h.units_per_metre, 0], distance_m: 1 } });
+  };
   const restore = async (id: string) => {
     try { const v = await api<LevelView>(`${root}/${level}/history/${id}/restore`, { method: "POST" }); setLv(v); setDrawing(v.drawing); setDerived(v.result); setCompare(null); setHrev((n) => n + 1); setRev((n) => n + 1); setStale(true); } catch (x) { setErr(errorText(x)); }
   };
@@ -253,6 +278,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           {write && <label className="btn wb-upload" title={tl("layout.noUnderlay")}><Icon name="upload" size={16} /> {tl("layout.underlay")}
             <input type="file" accept=".png,.jpg,.jpeg,.svg,.dxf,.pdf" disabled={busy} onChange={(e) => { upload(e.target.files?.[0]); e.target.value = ""; }} /></label>}
           {!lv?.underlay && <span className="muted small wb-note">{tl("layout.noUnderlay")}</span>}
+          {write && lv?.underlay && <button onClick={recognize} disabled={recognizing || busy} title={tl("plan.arch.help")}><Icon name="select" size={16} /> {recognizing ? tl("plan.arch.working") : tl("plan.arch.recognize")}</button>}
+          {lv?.architecture && <span className="badge accent" title={lv.architecture.warnings.join("\n")}>{lv.architecture.counts.walls} {tl("plan.arch.walls")} · {lv.architecture.counts.doors} {tl("plan.arch.doors")} · {lv.architecture.counts.windows} {tl("plan.arch.windows")}{lv.architecture.counts.openings ? ` · ${lv.architecture.counts.openings} ${tl("plan.arch.openings")}` : ""}</span>}
+          {write && !drawing.scale && lv?.architecture?.scale_hint && <button onClick={useHintedScale} title={lv.architecture.scale_hint.basis}>{tl("plan.arch.useScale")}</button>}
           {discipline !== "electrica_BT" && (
             <label className="wb-field"><span>{tl("layout.outlet")}</span>
               <select value={drawing.outlet} disabled={!write} onChange={(e) => change({ ...drawing, outlet: e.target.value })}>
@@ -299,7 +327,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>

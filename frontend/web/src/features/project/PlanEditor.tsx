@@ -4,7 +4,7 @@ import {
   removeMany, sameRef, setOrigin, setScale, stretchEnd, toggle, undo, updateCircuit,
 } from "./planEditing";
 import {
-  alignDelta, alignNodes, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, polygonArea, Problem,
+  alignDelta, alignNodes, Architecture, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
   RoutePath, selectionStats, setLocked, shortestRoute, SnapKind, snapEx, splitLineAt, svgVertices, toMetres, transformGroup, unlocked, UnderlayOpts,
 } from "./planTools";
 import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
@@ -36,7 +36,7 @@ export interface Props {
   drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; reference?: RefItem[]; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
-  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt };
+  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt }; architecture?: Architecture | null;
   onNewPin?: (at_m: Pt) => void; onCopyLevels?: (clip: Clip) => void; onReserve?: (lineId: string) => void; onTemplateSave?: (name: string, clip: Clip) => void; pendingClip?: Clip | null; onClipUsed?: () => void;
 }
 
@@ -157,12 +157,12 @@ export default function PlanEditor(props: Props) {
   const gridUnits = prefs.grid > 0 && k ? prefs.grid / k : undefined;
   const snapAt = (raw: Pt, tol: number): { p: Pt; kind: SnapKind } => {
     if (!prefs.snap) return { p: raw, kind: "none" };
-    const s = snapEx(drawing, raw, tol, { grid: gridUnits, mid: prefs.mid });
+    const s = snapEx(drawing, raw, tol, { grid: gridUnits, mid: prefs.mid, walls: prefs.walls ? props.architecture?.walls : undefined });
     if (s.kind !== "none" && s.kind !== "grid") return s;
     const v = vertices?.(raw, tol);
     return v ? { p: v, kind: "ref" } : s;
   };
-  const straight = (prev: Pt, p: Pt, shift: boolean) => (prefs.ortho !== shift ? ortho(prev, p) : p);
+  const straight = (prev: Pt, p: Pt, shift: boolean) => (prefs.ortho !== shift ? ortho(prev, p) : prefs.walls && props.architecture ? parallelToWall(prev, p, props.architecture.walls, 6 * u * 4) : p);      // a line near a wall runs along it
   const selectionOf = (refs: Ref[]) => unlocked(drawing, refs);
   const zoomTo = (refs?: Ref[]) => {
     const b = boundsOf(drawing, refs, 0.2);
@@ -589,7 +589,7 @@ export default function PlanEditor(props: Props) {
           {grid > 0 && <><defs><pattern id="plan-grid" x={drawing.origin[0]} y={drawing.origin[1]} width={grid} height={grid} patternUnits="userSpaceOnUse"><circle cx={0} cy={0} r={0.9 * u} fill="#9aa3b5" /></pattern></defs><rect data-ui x={view.x} y={view.y} width={view.w} height={view.h} fill="url(#plan-grid)" pointerEvents="none" /></>}
           <PlanScene drawing={drawing} profile={profile} derived={derived} lang={lang} u={u} k={k} prefs={prefs} tool={tool} readOnly={readOnly} selection={selection} highlight={highlight} focusCircuit={props.focusCircuit ?? ""} hoverRef={hoverRef}
             underlayUrl={underlayUrl} img={img} underlayOpts={under} draft={draft} hover={hover} kindId={kindId} snapMark={snapMark} scalePts={scalePts} marquee={marquee} measure={measureMode === "area" || tool === "measure" || tool === "alignUnderlay" ? measure : []}
-            route={route} routeFrom={routeFrom} guides={guides} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
+            route={route} routeFrom={routeFrom} guides={guides} architecture={props.underlayKind === "svg" ? null : props.architecture ?? null} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
         </svg>
         <Legend title={t(prefs.color === "circuit" ? "plan.colorBy.circuit" : "plan.colorBy.kind")} entries={legend} />
         {prefs.minimap && <MiniMap drawing={drawing} world={world} view={view} t={t} onCenter={(p) => setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 }))} />}

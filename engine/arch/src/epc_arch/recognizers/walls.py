@@ -103,6 +103,20 @@ class ParallelPairs:
 STRATEGIES: List[Strategy] = [ThickStrokes(), ParallelPairs()]
 
 
+def _bin(thickness: float, lo: float, k: float, bins: int) -> int:
+    """The bin of a thickness in a histogram that is finer for thin walls (logarithmic: a wall is thick or thin in proportion)."""
+    return min(bins - 1, max(0, int(math.log(max(thickness, lo) / lo) * k)))
+
+
+def _peak(cands: List[Candidate], lo: float, k: float, bins: int) -> int:
+    """The bin where most of the length of the candidates is, counting a little of its neighbours."""
+    weight = [0.0] * bins
+    for c in cands:
+        weight[_bin(c.thickness, lo, k, bins)] += c.weight
+    smooth = [weight[i] + 0.5 * (weight[i - 1] if i else 0.0) + 0.5 * (weight[i + 1] if i + 1 < bins else 0.0) for i in range(bins)]
+    return max(range(bins), key=lambda i: smooth[i])
+
+
 def calibrate(cands: List[Candidate], ctx: Context) -> Optional[float]:
     """The thickness most of the candidates agree on (weighted by their length), or None when nothing stands out: a plan with no walls drawn as walls."""
     lo, hi = ctx.scale.wall_thickness
@@ -110,15 +124,8 @@ def calibrate(cands: List[Candidate], ctx: Context) -> Optional[float]:
     if not cands or hi <= lo:
         return None
     k = bins / math.log(hi / lo)
-    weight = [0.0] * bins
-    count = [0] * bins
-    for c in cands:
-        b = min(bins - 1, max(0, int(math.log(max(c.thickness, lo) / lo) * k)))
-        weight[b] += c.weight
-        count[b] += 1
-    smooth = [weight[i] + 0.5 * (weight[i - 1] if i else 0.0) + 0.5 * (weight[i + 1] if i + 1 < bins else 0.0) for i in range(bins)]
-    peak = max(range(bins), key=lambda i: smooth[i])
-    near = [c for c in cands if abs(int(math.log(max(c.thickness, lo) / lo) * k) - peak) <= 1]
+    peak = _peak(cands, lo, k, bins)
+    near = [c for c in cands if abs(_bin(c.thickness, lo, k, bins) - peak) <= 1]
     if len(near) < ctx.params["walls"]["min_votes"]:
         return None
     return sum(c.thickness * c.weight for c in near) / sum(c.weight for c in near)

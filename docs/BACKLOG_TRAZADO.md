@@ -111,9 +111,14 @@ Ordenado como lo dejó el responsable el 2026-10-27; todo es pendiente, nada est
 - [ ] Pendientes de antes: curvas en cables, elegir nodo intermedio de una ruta, desempate entre rutas iguales, valores de pendiente de cloacas de la norma, verificar el DXF en AutoCAD, GitHub Actions / Docker / migraciones, cobertura baja de los generadores por subproceso (sld, titleblock, mld, dxf).
 - [ ] Subir `dev` a GitHub (solo cuando el responsable lo pida).
 
-### Servicio de reconocimiento de arquitectura (idea nueva)
-Convertir un plano que llega como imagen o PDF en un SVG de trabajo y reconocer paredes, puertas y ventanas, para trazar las canalizaciones alineadas a las paredes.
-- [ ] Fase 1, fuentes vectoriales (DXF y PDF vectorial): leer las líneas y bloques directamente, clasificar por capa y por tipo de bloque; sin visión artificial.
-- [ ] Fase 2, imágenes y PDF escaneado: detección de líneas y de arcos de puerta con visión clásica; el resultado se corrige a mano en el editor.
-- [ ] El resultado entra como SVG con capas (paredes, puertas, ventanas) y como referencia de imán: la canalización se pega a la pared.
-- [ ] Cada elemento reconocido lleva su nivel de confianza y se puede aceptar, corregir o borrar.
+### Servicio de reconocimiento de arquitectura
+Hecho el 2026-10-27 (ADR-0025): motor aislado `epc_arch` con un lector por fuente (DXF, PDF vectorial, imagen), reconocimiento de paredes, puertas y ventanas, SVG con capas, botón en el editor, imán a las paredes y líneas paralelas a ellas.
+- [x] Fase 1, fuentes vectoriales (DXF y PDF vectorial).
+- [~] Fase 2, imágenes y PDF escaneado: paredes horizontales y verticales y huecos; sin arcos de puerta.
+- [x] El resultado entra como SVG con capas y como referencia de imán.
+- [ ] Probarlo con planos reales de arquitectura y ajustar los umbrales (`params.json`): hasta ahora solo hay pruebas con planos sintéticos.
+- [ ] Aceptar, corregir o borrar cada elemento reconocido (hoy se reconoce todo o nada); mostrar la confianza en el editor.
+- [ ] Imágenes: paredes en diagonal, arcos de puerta (visión clásica) y planos fotografiados o torcidos.
+- [ ] PDF de varias páginas y formularios anidados; rotación de página.
+- [ ] Planos con mucho detalle: el fondo que dibuja el motor es simplificado (sin textos ni sombreados); ofrecer mantener el fondo fiel y superponer lo reconocido.
+- [ ] Reglas de arquitectura para el trazado: avisar si una bandeja atraviesa una pared fuera de una puerta o ventana.

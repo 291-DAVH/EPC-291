@@ -61,27 +61,47 @@ def _apply(m, x: float, y: float) -> Tuple[float, float]:
     return m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]
 
 
+class _Walker:
+    """Follows the segments of one path: where the pen is, where the subpath began and the control points of a curve being collected."""
+
+    def __init__(self, prims: Primitives, skipped: List[int], width: float):
+        self.prims, self.skipped, self.width = prims, skipped, width
+        self.start: Optional[Tuple[float, float]] = None
+        self.cur: Optional[Tuple[float, float]] = None
+        self.bez: List[Tuple[float, float]] = []
+
+    def move(self, p) -> None:
+        self.start = self.cur = p
+
+    def line(self, p) -> None:
+        if self.cur is not None:
+            self.prims.lines.append(Line(self.cur, p, self.width))
+            self.cur = p
+
+    def curve(self, p) -> None:
+        if self.cur is None:
+            return
+        self.bez.append(p)
+        if len(self.bez) == 3:
+            arc = arc_from_bezier(self.cur, self.bez[0], self.bez[1], self.bez[2])
+            self.prims.arcs.append(arc) if arc else self.skipped.append(1)
+            self.cur, self.bez = self.bez[2], []
+
+    def close(self) -> None:
+        if self.start is not None and self.cur is not None and self.cur != self.start:
+            self.prims.lines.append(Line(self.cur, self.start, self.width))
+            self.cur = self.start
+
+
 def _path_geometry(path, prims: Primitives, skipped: List[int]) -> None:
     m = _matrix(path)
-    width = _stroke_width(path, m)
-    start = cur = None
-    bez: List[Tuple[float, float]] = []
+    walk = _Walker(prims, skipped, _stroke_width(path, m))
+    step = {raw.FPDF_SEGMENT_MOVETO: walk.move, raw.FPDF_SEGMENT_LINETO: walk.line, raw.FPDF_SEGMENT_BEZIERTO: walk.curve}
     for typ, x, y, close in _segments(path):
-        p = _apply(m, x, y)
-        if typ == raw.FPDF_SEGMENT_MOVETO:
-            start = cur = p
-        elif typ == raw.FPDF_SEGMENT_LINETO and cur is not None:
-            prims.lines.append(Line(cur, p, width))
-            cur = p
-        elif typ == raw.FPDF_SEGMENT_BEZIERTO and cur is not None:
-            bez.append(p)
-            if len(bez) == 3:
-                arc = arc_from_bezier(cur, bez[0], bez[1], bez[2])
-                prims.arcs.append(arc) if arc else skipped.append(1)
-                cur, bez = bez[2], []
-        if close and start is not None and cur is not None and cur != start:
-            prims.lines.append(Line(cur, start, width))
-            cur = start
+        if typ in step:
+            step[typ](_apply(m, x, y))
+        if close:
+            walk.close()
 
 
 def _is_frame(line: Line, page: Tuple[float, float]) -> bool:

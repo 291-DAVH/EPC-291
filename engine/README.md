@@ -13,6 +13,7 @@ Engineering libraries: pure Python, no web and no Claude dependency. The backend
 | [sld](sld/README.md) | `epc_sld` | Single-line diagram generator: it draws what `epc_calc` calculated | 2 + smoke |
 | [mld](mld/README.md) | `epc_mld` | Multi-line diagram generator: each line expanded into its conductors | 2 |
 | [plan](plan/README.md) | `epc_plan` | Plan-drawing engine: graph, tags, circuit routes (moment method), schedules, DXF | 56 |
+| [arch](arch/README.md) | `epc_arch` | Architecture recognition: walls, doors and windows from a DXF, a vector PDF or an image, as JSON and an SVG with layers | 33 |
 | [drawing](drawing/README.md) | `epc_drawing` | Board design (calculation + SLD + MLD in one go) and the exports: PDF, stamped DXF, report and transmittal PDF | 17 |
 | [documents](documents/README.md) | `epc_documents` | Document and specification verifiers, input converter, CCPM, PM2 exporters | 216 (11 skipped by environment) |
 | [jurisdictions](jurisdictions/README.md) | data | Country packs (AR): promoted `rules.json` per standard | - |
