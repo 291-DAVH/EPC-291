@@ -4,6 +4,44 @@
     "es": "Protección contra incendios",
     "en": "Fire protection"
   },
+  "subdisciplinas": [
+    {
+      "id": "rociadores",
+      "nombre": {
+        "es": "Rociadores",
+        "en": "Sprinklers"
+      },
+      "tipos": [
+        "TA",
+        "RO"
+      ]
+    },
+    {
+      "id": "deteccion",
+      "nombre": {
+        "es": "Detección y alarma",
+        "en": "Detection and alarm"
+      },
+      "tipos": [
+        "DH",
+        "PM",
+        "SI",
+        "CF"
+      ]
+    },
+    {
+      "id": "extincion",
+      "nombre": {
+        "es": "Hidrantes y extintores",
+        "en": "Hydrants and extinguishers"
+      },
+      "tipos": [
+        "HI",
+        "EX",
+        "TA"
+      ]
+    }
+  ],
   "disciplina_proyecto": "fire",
   "tramos": [
     {
@@ -23,6 +61,24 @@
         "z_m": 2.8,
         "ancho_m": 0.06,
         "alto_m": 0.06
+      }
+    },
+    {
+      "id": "CF",
+      "etiqueta": {
+        "es": "Cableado de detección",
+        "en": "Detection wiring"
+      },
+      "prefijo_tag": "CF",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "PCI-DETECTOR",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.02,
+        "alto_m": 0.02
       }
     }
   ],
@@ -97,6 +153,42 @@
         "z_m": 0.0,
         "ancho_m": 0.25,
         "alto_m": 0.25
+      }
+    },
+    {
+      "id": "PM",
+      "etiqueta": {
+        "es": "Pulsador manual",
+        "en": "Manual pull station"
+      },
+      "prefijo_tag": "PM",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "pulsador",
+      "capa_dxf": "PCI-PULSADOR",
+      "geom": {
+        "z_m": 1.4,
+        "ancho_m": 0.12,
+        "alto_m": 0.12
+      }
+    },
+    {
+      "id": "SI",
+      "etiqueta": {
+        "es": "Sirena",
+        "en": "Siren"
+      },
+      "prefijo_tag": "SI",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "sirena",
+      "capa_dxf": "PCI-PULSADOR",
+      "geom": {
+        "z_m": 2.4,
+        "ancho_m": 0.2,
+        "alto_m": 0.2
       }
     }
   ],

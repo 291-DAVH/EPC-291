@@ -68,6 +68,20 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(clash.status_code, 422)                                              # L0 is the first plan of the electrical discipline too
         self.assertIn("another name", clash.json()["detail"]["errors"]["discipline"])
 
+    def test_a_plan_is_of_a_subdiscipline_of_its_discipline_and_the_profile_lists_them(self):
+        o = self.c.get(self.base).json()
+        electrical = next(p for p in o["profiles"] if p["id"] == "electrica_BT")
+        subs = {s["id"]: s["kinds"] for s in electrical["subdisciplines"]}
+        self.assertIn("LU", subs["iluminacion"])
+        self.assertNotIn("TG", subs["iluminacion"])
+        ok = self.c.put(f"{self.base}/L0@electrica_BT.luz", json={**DRAWING, "subdiscipline": "iluminacion", "plan_name": "Luz"})
+        self.assertEqual(ok.status_code, 200, ok.text)
+        self.assertEqual(next(x for x in self.c.get(self.base).json()["levels"] if x["level"] == "L0@electrica_BT.luz")["subdiscipline"], "iluminacion")
+        bad = self.c.put(f"{self.base}/L0@electrica_BT.otra", json={**DRAWING, "subdiscipline": "cloacas"})
+        self.assertEqual(bad.status_code, 422)
+        self.assertIn("subdiscipline", bad.json()["detail"]["errors"])
+        self.assertEqual(self.c.put(f"{self.base}/L0@electrica_BT.libre", json={**DRAWING, "subdiscipline": ""}).status_code, 200)         # none: every kind
+
     def test_levels_are_named_from_l0_up_and_down_and_nothing_else_is_accepted(self):
         for level in ("L0", "L1", "L-1"):
             self.assertEqual(self.c.put(f"{self.base}/{level}", json=DRAWING).status_code, 200, level)

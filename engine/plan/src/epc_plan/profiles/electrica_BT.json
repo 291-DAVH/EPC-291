@@ -4,6 +4,89 @@
     "es": "Eléctrica",
     "en": "Electrical"
   },
+  "subdisciplinas": [
+    {
+      "id": "iluminacion",
+      "nombre": {
+        "es": "Iluminación",
+        "en": "Lighting"
+      },
+      "tipos": [
+        "LU",
+        "IN",
+        "CP",
+        "TB",
+        "CN",
+        "BN",
+        "CA"
+      ]
+    },
+    {
+      "id": "tomacorrientes",
+      "nombre": {
+        "es": "Tomacorrientes",
+        "en": "Sockets"
+      },
+      "tipos": [
+        "TG",
+        "TE",
+        "CP",
+        "TB",
+        "CN",
+        "BN",
+        "CA"
+      ]
+    },
+    {
+      "id": "fuerza",
+      "nombre": {
+        "es": "Fuerza motriz y equipos",
+        "en": "Power and equipment"
+      },
+      "tipos": [
+        "HV",
+        "TE",
+        "CP",
+        "TB",
+        "CN",
+        "BN",
+        "CA"
+      ]
+    },
+    {
+      "id": "distribucion_bt",
+      "nombre": {
+        "es": "Distribución de baja tensión",
+        "en": "Low-voltage distribution"
+      },
+      "tipos": [
+        "TB",
+        "CM",
+        "CP",
+        "PL",
+        "BN",
+        "CN",
+        "CA",
+        "CR"
+      ]
+    },
+    {
+      "id": "distribucion_mt",
+      "nombre": {
+        "es": "Distribución de media tensión",
+        "en": "Medium-voltage distribution"
+      },
+      "tipos": [
+        "TR",
+        "CE",
+        "CM",
+        "TB",
+        "MT",
+        "CR",
+        "BN"
+      ]
+    }
+  ],
   "disciplina_proyecto": "electrical",
   "tramos": [
     {
@@ -85,6 +168,25 @@
       "capa_dxf": "ELEC-CRUCE",
       "geom": {
         "z_m": -0.6,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
+    },
+    {
+      "id": "MT",
+      "etiqueta": {
+        "es": "Cable o canalización de media tensión",
+        "en": "Medium-voltage cable or conduit"
+      },
+      "prefijo_tag": "MT",
+      "atributos": [
+        "seccion_mm2",
+        "tension_v"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "ELEC-MT",
+      "geom": {
+        "z_m": -0.8,
         "ancho_m": 0.1,
         "alto_m": 0.1
       }
@@ -248,6 +350,61 @@
         "z_m": 0.0,
         "ancho_m": 0.4,
         "alto_m": 3.0
+      }
+    },
+    {
+      "id": "IN",
+      "etiqueta": {
+        "es": "Interruptor",
+        "en": "Switch"
+      },
+      "prefijo_tag": "IN",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "interruptor",
+      "capa_dxf": "ELEC-INT",
+      "geom": {
+        "z_m": 1.2,
+        "ancho_m": 0.12,
+        "alto_m": 0.12
+      }
+    },
+    {
+      "id": "TR",
+      "etiqueta": {
+        "es": "Transformador",
+        "en": "Transformer"
+      },
+      "prefijo_tag": "TR",
+      "atributos": [
+        "potencia_w",
+        "tension_v"
+      ],
+      "simbolo_2d": "transformador",
+      "capa_dxf": "ELEC-TRAFO",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 1.5,
+        "alto_m": 1.5
+      }
+    },
+    {
+      "id": "CE",
+      "etiqueta": {
+        "es": "Celda de media tensión",
+        "en": "MV switchgear cell"
+      },
+      "prefijo_tag": "CE",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "celda",
+      "capa_dxf": "ELEC-TRAFO",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.8,
+        "alto_m": 1.0
       }
     }
   ],

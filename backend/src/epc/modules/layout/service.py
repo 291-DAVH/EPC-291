@@ -115,13 +115,13 @@ def _profiles(d: Path, core, used: set) -> list:
         p = core.load_profile(pid)
         symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
         offered = _offered(p, pid, chosen, used)
-        out.append({"id": pid, "name": p["nombre"], "project_discipline": p.get("disciplina_proyecto", ""), "offered": offered, "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
+        out.append({"id": pid, "name": p["nombre"], "project_discipline": p.get("disciplina_proyecto", ""), "offered": offered, "subdisciplines": [{"id": s["id"], "name": s["nombre"], "kinds": s["tipos"]} for s in p.get("subdisciplinas", [])], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
     return out
 
 
 def _sheet_item(d: Path, lv: str) -> dict:
     dr = repository.load_drawing(d, lv) or {}
-    return {"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "plan": repository.parts(lv)[2], "plan_name": dr.get("plan_name", ""),
+    return {"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "plan": repository.parts(lv)[2], "plan_name": dr.get("plan_name", ""), "subdiscipline": dr.get("subdiscipline", ""),
             "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None, "has_files": bool((repository.load_result(d, lv) or {}).get("files"))}
 
 
@@ -132,7 +132,7 @@ def overview(d: Path) -> dict:
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "plan_name": "", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
+    return {"discipline": "electrica_BT", "subdiscipline": "", "plan_name": "", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
 
 
 def view(d: Path, level: str) -> dict:
@@ -181,6 +181,14 @@ def _plan_of(d: Path, lv: str) -> tuple:
     return (repository.load_drawing(d, lv) or {}).get("discipline", "electrica_BT"), repository.parts(lv)[2]
 
 
+def _check_subdiscipline(data: dict) -> None:
+    """The subdiscipline of a plan is one the profile of its discipline has (or none: every kind is offered)."""
+    chosen = data.get("subdiscipline", "")
+    allowed = {s["id"] for s in _engine()[0].load_profile(data["discipline"]).get("subdisciplinas", [])}
+    if chosen and chosen not in allowed:
+        raise Invalid({"subdiscipline": f"{data['discipline']} has no subdiscipline {chosen!r}: {', '.join(sorted(allowed)) or 'none'}"})
+
+
 def _check_sheet(d: Path, level: str, data: dict) -> None:
     """A level holds one drawing per discipline and plan: a second sheet carries its discipline (and its plan) in its name, and no two sheets of a level are the same plan of the same discipline."""
     base, suffix = repository.split(level)
@@ -195,6 +203,7 @@ def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
     data = body.model_dump(by_alias=True)
     _check_sheet(d, level, data)
+    _check_subdiscipline(data)
     _edit_guard(d, data["discipline"])
     derive_data(level, data)                                    # refuse what the engine refuses before storing it
     repository.save_drawing(d, level, data)

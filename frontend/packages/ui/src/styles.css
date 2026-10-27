@@ -467,6 +467,7 @@ textarea.mono { font-family: var(--mono); font-size: 13px; }
 .plan-list li { display: flex; gap: 6px; align-items: center; padding: 3px; border: 1px solid transparent; border-radius: 4px; }
 .plan-list li.on { background: var(--accent-soft); border-color: var(--accent); }
 .plan-list input { flex: 1; min-width: 0; }
+.plan-add { display: grid; gap: 6px; margin-top: 10px; }
 .plan-open { flex: 1; text-align: left; background: none; border-color: transparent; box-shadow: none; }
 .cmd-line { position: relative; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-bottom: 1px solid var(--edge); pointer-events: auto; }
 .cmd-prompt { font-family: var(--mono); font-weight: 700; color: var(--accent); }

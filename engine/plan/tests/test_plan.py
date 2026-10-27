@@ -424,6 +424,18 @@ class TestDisciplines(unittest.TestCase):
                 self.assertIn(k["capa_dxf"], known, f"{pid}:{k['id']}")
                 self.assertTrue(k["simbolo_2d"] == "linea_simple" or k["simbolo_2d"] in core.SYMBOLS, f"{pid}:{k['id']}")
 
+    def test_every_subdiscipline_offers_kinds_its_discipline_has(self):
+        for pid in core.profiles():
+            prof = core.load_profile(pid)
+            kinds = {k["id"] for k in prof["tramos"] + prof["nodos"]}
+            ids = [s["id"] for s in prof.get("subdisciplinas", [])]
+            self.assertEqual(len(ids), len(set(ids)), pid)
+            for s in prof.get("subdisciplinas", []):
+                self.assertTrue(s["tipos"] and set(s["tipos"]) <= kinds, f"{pid}:{s['id']}")
+        electrical = {s["id"]: set(s["tipos"]) for s in core.load_profile("electrica_BT")["subdisciplinas"]}
+        self.assertTrue({"LU", "IN"} <= electrical["iluminacion"] and not {"TG", "TR"} & electrical["iluminacion"])      # each one has its own symbols
+        self.assertTrue({"TR", "CE", "MT"} <= electrical["distribucion_mt"])
+
     def test_a_drawing_of_each_new_discipline_is_processed(self):
         for pid in ("hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion", "arquitectura"):
             prof = core.load_profile(pid)

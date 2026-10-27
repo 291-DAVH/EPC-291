@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  addRoom, boardPlan, newSheetKey, planLabel, planSlug, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  addRoom, allowedKinds, boardPlan, newSheetKey, planLabel, planSlug, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
   convertClip, linkProblems, insidePolygon, loadsByRoom, pointIndex, removeRoom, renameRoom, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
@@ -325,5 +325,12 @@ describe("rooms and the automatic design", () => {
     expect(newSheetKey("L0", "electrica_BT", ["L0@electrica_BT", "L0@electrica_BT.tomas"], "Tomas", true)).toBe("L0@electrica_BT.tomas-2");
     expect(planLabel("Eléctrica", "Iluminación")).toBe("Eléctrica · Iluminación");
     expect(planLabel("Eléctrica", "")).toBe("Eléctrica");
+  });
+  it("offers the kinds of the subdiscipline of a plan, or all of them when it has none", () => {
+    const subs = [{ id: "iluminacion", kinds: ["LU", "IN"] }, { id: "tomas", kinds: ["TG"] }];
+    expect(allowedKinds(subs, "iluminacion")).toEqual(["LU", "IN"]);
+    expect(allowedKinds(subs, "")).toBeUndefined();
+    expect(allowedKinds(subs, "ya-no-existe")).toBeUndefined();
+    expect(allowedKinds(undefined, "iluminacion")).toBeUndefined();
   });
 });

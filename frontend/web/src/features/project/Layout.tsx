@@ -10,10 +10,10 @@ import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { applyProposal, applyRuns, Architecture, BoardRef, newSheetKey, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, applyRuns, Architecture, BoardRef, allowedKinds, newSheetKey, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
-interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
+interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; subdiscipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
 interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: BoardRef[]; dxf_versions: string[]; default_dxf_version: string }
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
@@ -148,13 +148,14 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => send(next), 700);                    // saved a moment after the last change
   };
-  const createSheet = async (name: string, discipline = "arquitectura", planName = "") => {
-    try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
+  const createSheet = async (name: string, discipline = "arquitectura", planName = "", subdiscipline = "") => {
+    try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName, subdiscipline }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
   };
   /** A discipline is on a level once; what it draws there is split in plans (lighting, sockets...), each a sheet of its own: the first one has no name in its key, the next ones carry theirs. */
   const addDiscipline = (pid: string) => createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), "", false), pid);
-  const addPlan = (name: string) => createSheet(newSheetKey(base, discipline, sheets.filter((x) => x.base === base).map((x) => x.level), name, true), discipline, name);
+  const addPlan = (name: string, subdiscipline: string) => createSheet(newSheetKey(base, discipline, sheets.filter((x) => x.base === base).map((x) => x.level), name, true), discipline, name, subdiscipline);
   const renamePlan = (name: string) => { if (write) change({ ...drawing, plan_name: name }); };
+  const setSubdiscipline = (id: string) => { if (write) change({ ...drawing, subdiscipline: id }); };
   const deleteSheet = async (target = level) => {
     if (!window.confirm(tl("layout.confirmDelete"))) return;
     try { await api(`${root}/${target}`, { method: "DELETE" }); const rest = levels.filter((x) => x !== target); if (target === level) setLevel(rest.find((x) => x.split("@")[0] === base) ?? rest[0] ?? ""); setRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
@@ -288,7 +289,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const usedHere = new Set(sameBase.map((x) => x.discipline));
   const order = ov.data.profiles.map((p) => p.id);                                    // the order a project is worked
   const disciplinesHere = [...usedHere].sort((a, b) => order.indexOf(a) - order.indexOf(b));
-  const plansHere = sameBase.filter((x) => x.discipline === discipline).map((x) => ({ level: x.level, name: x.level === level ? drawing.plan_name ?? x.plan_name : x.plan_name }));
+  const subs = ov.data.profiles.find((p) => p.id === discipline)?.subdisciplines ?? [];
+  const subName = (id: string) => subs.find((x) => x.id === id)?.name[lang] ?? subs.find((x) => x.id === id)?.name.es ?? "";
+  const plansHere = sameBase.filter((x) => x.discipline === discipline).map((x) => ({ level: x.level, name: x.level === level ? drawing.plan_name ?? x.plan_name : x.plan_name, sub: subName(x.level === level ? drawing.subdiscipline ?? x.subdiscipline : x.subdiscipline) }));
   const profName = (id: string) => ov.data!.profiles.find((p) => p.id === id)?.name[lang] ?? id;
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; icon: string; badge?: number }[] = [
@@ -372,7 +375,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -390,7 +393,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               )}
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
-              {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
+              {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}
