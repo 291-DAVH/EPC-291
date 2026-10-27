@@ -474,13 +474,15 @@ export default function PlanEditor(props: Props) {
   // ---------------------------------------------------------------- keyboard
   const onKey = (e: React.KeyboardEvent) => {
     const mod = e.ctrlKey || e.metaKey, key = e.key.toLowerCase();
+    const on = e.target as HTMLElement;
+    if (on.closest?.("input, select, textarea") && !(mod && key === "k")) return;                  // typing in a field of a panel is not a shortcut
     if (mod) {
       const handled = { z: doUndo, y: doRedo, c: () => copy(), x: () => { if (copy()) remove(); }, v: () => pasteAt(hover), d: () => act("duplicate"), l: lockSelection, k: () => setPalette(true),
         a: () => onSelect([...drawing.nodes.map((n): Ref => ({ type: "node", id: n.id })), ...drawing.lines.map((l): Ref => ({ type: "line", id: l.id }))]) }[key];
       if (handled) { e.preventDefault(); handled(); }
       return;
     }
-    if (e.key === " ") { e.preventDefault(); setSpaceDown(true); return; }
+    if (e.key === " ") { if (on.closest?.("button, a, summary")) return; e.preventDefault(); setSpaceDown(true); return; }       // Space on a button presses it; elsewhere it moves the view
     if (tool === "line" && draft.length > 0 && /^[0-9.,]$/.test(e.key) && k) { setLenText((s) => s + e.key); setForm("length"); return; }
     if (form === "length") {
       if (e.key === "Enter") { applyLength(); return; }
@@ -553,7 +555,7 @@ export default function PlanEditor(props: Props) {
           <button className="strip-btn corner-btn" onClick={() => setPanel(panel === "keys" ? "" : "keys")} aria-pressed={panel === "keys"} title={t("plan.keys")} aria-label={t("plan.keys")}><Icon name="keyboard" size={16} /></button>
         </div>
         {panel === "view" && <ViewPanel prefs={prefs} set={setPrefs} kinds={lineKinds.map((kd) => ({ id: kd.id, name: kindName(kd) }))} underlay={under} onUnderlay={(o) => setUnder(o)} hasUnderlay={!!underlayUrl} onTool={choose} onClose={() => setPanel("")} t={t} />}
-        {panel === "keys" && <ShortcutsPanel keys={prefs.keys} set={(keys) => setPrefs({ keys })} fixed={FIXED_KEYS} t={t} onClose={() => setPanel("")} />}
+        {panel === "keys" && <ShortcutsPanel keys={prefs.keys} set={(keys) => setPrefs({ keys })} fixed={FIXED_KEYS} reserved={Object.keys(profile?.shortcuts ?? {})} t={t} onClose={() => setPanel("")} />}
         {panel === "table" && <SelectionTable stats={stats} t={t} onClose={() => setPanel("")} />}
         {tool === "scale" && scalePts.length === 2 && (
           <div className="wb-float">

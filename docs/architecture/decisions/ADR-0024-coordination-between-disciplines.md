@@ -1,0 +1,26 @@
+# ADR-0024: Coordination between disciplines that stay separate
+
+Status: accepted. Done: sheets per discipline, footprints, clash detection, issues, threads, data exchanged, rules, permissions, the editor tools. Date: 2026-10-27
+
+## Context
+A project has several engineerings (electrical, sewer, and the ones to come) and each draws its own routes over the same architectural plan. Until now a level held one drawing, so two disciplines could not share a level, and nothing told an engineer that a tray crossed a pipe.
+The disciplines must stay separate (each owns its drawing, its calculations and its rules) and still talk: see where the others are, find clashes, ask each other for things and share the few data that cross.
+
+## Decisions
+1. **One sheet per level and discipline.** A sheet is `L0` or `L0@<discipline>` (`layout/<sheet>/`): the first drawing of a level keeps its name, a second one carries its discipline. A level cannot hold two sheets of one discipline. Every endpoint of the layout takes a sheet key; the engine still receives the level and one discipline.
+2. **Only footprints cross (`epc_plan.footprint`).** What a discipline gives the others is, for every node and line: where it is (metres from the project origin), how wide, the heights it spans from the floor of the project (level number x storey height + elevation), and the free space it asks for. Circuits, cables, lengths, tags of the calculation stay inside the discipline. Typical sizes live in each profile (`geom`) and the person overrides them on the element (`z_m`, `ancho_m`, `alto_m`, `libre_m`, `altura_m` for a shaft).
+3. **Clash detection is a pure function (`epc_plan.clash`).** Footprints of different disciplines clash when they occupy the same space (hard), when they are closer than the rules ask (clearance) or when something sits in the free space of an equipment (maintenance). Heights are compared on one absolute scale, so a shaft that rises through a level meets what crosses it on the next one. One result per pair of elements, with an id that depends only on the pair; the most specific rule wins.
+4. **Rules are data at three levels.** `epc_plan/clash_rules.json` (typical values, not a standard), the company's (`<data>/orgs/<org>/clash-rules.json`) and the project's (`workspace/02-engineering/coordination/rules.json`); a later level replaces a rule with the same pair of disciplines and kinds, or removes it.
+5. **Issue, then coordinate.** A discipline issues what it occupies (`emissions/<discipline>/<rev>.json`); coordination compares what was issued and, for a discipline that has not issued, what is drawn. Issuing reports only the clashes that were not there at the previous run. A clash can be accepted with a reason, who and when; it stops alerting and stays on record.
+6. **Conversations instead of edits.** A discipline never edits another's drawing: it opens a thread (comment, request, opening, space reservation) addressed to the other, which answers on it. A reservation counts as an element of the discipline that made it while it stands.
+7. **Data with one owner.** A datum that crosses (the power of a pump) is published by its owner and taken by the disciplines that use it; changing the value makes what they took out of date. The matrix says who gives what to whom and in what state.
+8. **Who edits what.** A discipline with members is edited only by them (and the engineering team); the others read and comment. Without members it follows the project's permission. The layout asks the coordination module through a registered guard, so the dependency stays coordination -> layout.
+9. **The editor.** Snapping (nodes, ends, midpoints, grid, vertices of a vector underlay), continuous lines and typed lengths, selection by box and by crossing, copy/paste/array/templates, align/distribute/rotate/mirror/scale, locks, measuring, route by the drawn network, context menu, command palette, configurable keys, minimap, layers, history with compare and restore, checks before making files and a list of what changed since the last files, a reference layer of the other disciplines, ghosts of the neighbouring levels, pins for clashes and comments, review mode, drafts kept on the computer until the server has them, PNG and print.
+10. **Containers show how full they are.** The engine reports, for a tray or a conduit with a size, the share of its section the cables take against the share allowed (`epc_plan.occupancy`; typical limits in `params.json`).
+
+## Limits (known, accepted)
+- Footprint sizes and separations are typical values to confirm for each project; the engine does not know a standard for them.
+- Two disciplines on a level must share the point 0,0 (the same place on the plan); each sheet keeps its own scale, so the metres agree.
+- Nodes are compared as circles of their width; the vertical gap is exact, the horizontal one is between segments, and the two combine as a 3D distance. Slabs and walls are not modelled: an opening is a request.
+- A circuit routed between levels is not measured (only the links of shafts between levels are checked); occupancy takes the diameter of the cable written on the line or a default.
+- The editor is tested in jsdom (clicks, keys, menus, palette), not with a real touch screen or a real DXF.

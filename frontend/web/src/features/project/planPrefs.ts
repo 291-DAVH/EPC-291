@@ -18,8 +18,8 @@ export const DEFAULT_PREFS: PlanPrefs = {
   refs: true, ghosts: true, pins: true, minimap: true, hidden: [], isolate: false, favorites: [], keys: {},
 };
 
-/** Keys of the tools; the person can change any of them. The kinds of the discipline keep their own letters (see the profile). */
-export const DEFAULT_KEYS: Record<string, string> = { select: "1", box: "2", scale: "3", origin: "4", node: "5", line: "6", erase: "7", split: "8", measure: "9", route: "0", pin: "p+", pan: "h+" };
+/** Keys of the tools; the person can change any of them. The kinds of the discipline keep their own letters (see the profile), so the tools that would clash with them start without a key. */
+export const DEFAULT_KEYS: Record<string, string> = { select: "1", box: "2", scale: "3", origin: "4", node: "5", line: "6", erase: "7", split: "8", measure: "9", route: "0", pin: "", pan: "" };
 
 const KEY = "epc.plan.prefs.v1";
 

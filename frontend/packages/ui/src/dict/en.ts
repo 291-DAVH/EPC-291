@@ -1380,4 +1380,5 @@ export const en = {
     "coord.view.help": "The disciplines of a level seen together, as footprints only. Each is edited on its own sheet.",
     "coord.view.none": "There is nothing to show on this level.",
     "coord.view.reset": "Fit",
+    "plan.checks.close": "Close",
 } as const;

@@ -86,7 +86,7 @@ export default function PlanScene(p: SceneProps) {
     });
     return out;
   }, [drawing, derived, prefs.labels, prefs.lengths, u, nodeTag, lineTag, lengthOf, fillOf]);
-  const offsets = useMemo(() => spreadLabels(labels), [labels]);
+  const offsets = useMemo(() => (labels.length > 400 ? {} : spreadLabels(labels)), [labels]);                  // a very large drawing keeps its labels where they are: moving them would cost more than it helps
 
   const op = p.underlayOpts;
   const crop = op.crop;

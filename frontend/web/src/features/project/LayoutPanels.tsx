@@ -83,7 +83,7 @@ export function ChecksPanel({ problems, describe, onGo, onForce, onClose, tl }: 
         {problems.map((p, i) => <li key={i}><Badge tone={p.severity === "error" ? "bad" : "warn"}>{tl(p.severity === "error" ? "plan.checks.error" : "plan.checks.warn")}</Badge> <button className="linkbtn" onClick={() => onGo(p)}>{describe(p)}</button></li>)}
       </ul>
       <div className="row" style={{ gap: 6 }}>
-        <button className="primary" disabled={errors.length > 0} onClick={onForce}>{tl("plan.checks.go")}</button><button onClick={onClose}>{tl("layout.cancel")}</button>
+        {problems.length > 0 && <button className="primary" disabled={errors.length > 0} onClick={onForce}>{tl("plan.checks.go")}</button>}<button onClick={onClose}>{tl(problems.length > 0 ? "layout.cancel" : "plan.checks.close")}</button>
       </div>
     </div>
   );

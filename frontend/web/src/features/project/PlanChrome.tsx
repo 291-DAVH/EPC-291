@@ -197,9 +197,9 @@ export function CommandPalette({ commands, onClose, t }: { commands: Command[]; 
 }
 
 // ---------------------------------------------------------------- shortcuts
-export function ShortcutsPanel({ keys, set, fixed, t, onClose }: { keys: Record<string, string>; set: (k: Record<string, string>) => void; fixed: { keys: string; action: string }[]; t: T; onClose: () => void }) {
+export function ShortcutsPanel({ keys, set, fixed, reserved, t, onClose }: { keys: Record<string, string>; set: (k: Record<string, string>) => void; fixed: { keys: string; action: string }[]; reserved: string[]; t: T; onClose: () => void }) {
   const actions = Object.keys(DEFAULT_KEYS);
-  const taken = (action: string, key: string) => !!key && actions.some((a) => a !== action && (keys[a] ?? DEFAULT_KEYS[a]) === key);
+  const taken = (action: string, key: string) => !!key && (reserved.includes(key) || actions.some((a) => a !== action && (keys[a] ?? DEFAULT_KEYS[a]) === key));
   return (
     <div className="wb-pop wb-shortcuts" role="dialog" aria-label={t("plan.keys")}>
       <div className="pop-head"><b>{t("plan.keys")}</b><button className="strip-btn" onClick={onClose} aria-label={t("layout.cancel")}><Icon name="close" size={14} /></button></div>

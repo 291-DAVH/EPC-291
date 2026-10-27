@@ -1380,4 +1380,5 @@ export const es = {
     "coord.view.help": "Las disciplinas de un nivel vistas juntas, solo como huella. Cada una se edita en su propia hoja.",
     "coord.view.none": "No hay nada que mostrar en este nivel.",
     "coord.view.reset": "Ajustar",
+    "plan.checks.close": "Cerrar",
 } as const;
