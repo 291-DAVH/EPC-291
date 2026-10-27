@@ -37,10 +37,17 @@ export default function Project() {
   const d = p.data;
   const closed = d.state !== "active";
 
+  const bench = tab === "layout";                      // the layout is a single-page editor: a slim header and the editor takes the rest of the window
   return (
-    <>
-      <Link to="/" className="muted">← {t("u.p.back")}</Link>
-      <div className="phead">
+    <div className={bench ? "project bench" : "project"}>
+      {bench ? (
+        <div className="benchbar">
+          <Link to="/" className="muted" aria-label={t("u.p.back")}>←</Link>
+          <span className="muted">{d.client}</span><span className="mono muted">{d.code}</span><b>{d.name}</b>
+          <HealthBadge health={d.health} closed={closed} />
+        </div>
+      ) : <Link to="/" className="muted">← {t("u.p.back")}</Link>}
+      {!bench && <div className="phead">
         <div>
           <div className="muted">{d.client} · <span className="mono">{d.code}</span></div>
           <h1 style={{ margin: "2px 0 6px" }}>{d.name}</h1>
@@ -56,7 +63,7 @@ export default function Project() {
           {d.manager && <div className="muted small">{t("u.card.manager")}: {d.manager}</div>}
           {d.location && <div className="muted small">{t("u.p.location")}: {d.location}</div>}
         </div>
-      </div>
+      </div>}
 
       <div className="tabs" role="tablist">
         {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
@@ -78,7 +85,7 @@ export default function Project() {
       {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
       {tab === "requirements" && <Requirements canWrite={canWrite} base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
       {tab === "reports" && <Reports base={base} go={go} engineer={engineer} client={client} code={code} />}
-    </>
+    </div>
   );
 }
 

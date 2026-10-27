@@ -375,5 +375,60 @@ textarea.mono { font-family: var(--mono); font-size: 13px; }
   .eng-list h3 { font-size: 11px; }
 }
 
+/* ---- layout workbench: the plan editor is a single page (a toolbox of buttons on the left, the canvas, a panel on the right) ---- */
+.benchbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.benchbar b { font-family: var(--display); font-size: 16px; }
+.workbench { display: flex; flex-direction: column; gap: 8px; }
+.wb-top { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; padding: 6px 8px; background: var(--panel); border: 1px solid var(--edge); border-radius: var(--radius); }
+.wb-top .grow { flex: 1; }
+.wb-group { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.wb-group .lvl.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.wb-field { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; max-width: 100%; }
+.wb-field select { min-width: 0; max-width: 100%; }
+.wb-field > span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.wb-upload { position: relative; gap: 6px; cursor: pointer; }
+.wb-upload input { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; }
+.wb-note { max-width: 36ch; }
+.tool-ico { display: grid; place-items: center; min-width: var(--tap); padding: 0 8px; }
+.tool-ico[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.wb-help { margin: 0; padding: 8px 12px; background: var(--info-soft); border-left: 4px solid var(--marker); border-radius: 3px; }
+.wb-empty { padding: 48px 16px; text-align: center; }
+.wb-body { display: flex; flex-direction: column; gap: 8px; }
+.wb-editor { display: flex; flex-direction: column; min-height: 460px; border: 1px solid var(--edge); border-radius: var(--radius); overflow: hidden; background: var(--panel); outline: none; }
+.wb-editor:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.wb-tools { display: flex; flex-direction: row; flex: none; gap: 2px; padding: 6px; background: var(--chrome); border-bottom: 1px solid var(--chrome-line); overflow-x: auto; scrollbar-width: none; }
+.tool { flex: none; width: 54px; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px 2px; background: transparent; color: var(--chrome-muted); border: 1px solid transparent; border-radius: 4px; font-size: 10px; line-height: 1.1; text-align: center; box-shadow: none; transform: none; }
+.tool:hover:not(:disabled) { background: var(--chrome-2); color: var(--chrome-text); border-color: var(--chrome-line); transform: none; box-shadow: none; }
+.tool.on { background: var(--chrome-2); color: var(--chrome-text); border-color: var(--chrome-line); box-shadow: inset 3px 0 0 var(--marker); }
+.tool:disabled { opacity: .35; }
+.tool-sep { width: 1px; background: var(--chrome-line); margin: 4px 4px; flex: none; }
+.wb-canvas { position: relative; flex: 1; min-width: 0; min-height: 420px; overflow: hidden; background: #fff; touch-action: none; }
+.wb-canvas > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wb-kinds { position: absolute; top: 8px; left: 8px; z-index: 2; display: flex; flex-direction: column; gap: 2px; padding: 6px; background: var(--panel); border: 1px solid var(--ink); border-radius: 4px; box-shadow: 0 6px 18px rgba(14, 16, 28, .25); max-height: calc(100% - 48px); overflow: auto; }
+.wb-kinds button { display: block; text-align: left; border-color: transparent; background: none; min-height: 28px; padding: 2px 10px; white-space: nowrap; }
+.wb-kinds button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 700; }
+.wb-float { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 8px 10px; background: var(--panel); border: 1px solid var(--ink); border-radius: 4px; box-shadow: 0 6px 18px rgba(14, 16, 28, .25); }
+.wb-hint { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; gap: 12px; padding: 3px 10px; background: color-mix(in srgb, var(--panel) 92%, transparent); border-top: 1px solid var(--edge); font-size: 11.5px; color: var(--muted); pointer-events: none; }
+.wb-side { display: flex; flex-direction: column; border: 1px solid var(--edge); border-radius: var(--radius); background: var(--panel); min-height: 240px; overflow: hidden; }
+.wb-tabs { display: flex; flex: none; overflow-x: auto; background: var(--panel-2); border-bottom: 1px solid var(--edge); scrollbar-width: none; }
+.wb-tabs button { flex: 1; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; min-height: 36px; padding: 0 12px; box-shadow: none; transform: none; color: var(--muted); white-space: nowrap; }
+.wb-tabs button:hover { background: var(--accent-soft); color: var(--text); }
+.wb-tabs button.on { background: var(--panel); color: var(--text); font-weight: 700; border-bottom-color: var(--accent); }
+.wb-panel { flex: 1; min-height: 0; overflow: auto; padding: 10px 12px; }
+.wb-panel .card { border: 0; box-shadow: none; padding: 0; background: none; overflow: visible; }
+.wb-panel .card > h2:first-child { margin: 0 0 8px; padding: 0; background: none; border: 0; }
+@media (min-width: 900px) {
+  .main:has(.workbench) { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 10px; }
+  .project.bench { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .project.bench .tabs { flex: none; margin-bottom: 8px; }
+  .workbench { flex: 1; min-height: 0; }
+  .wb-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 8px; }
+  .wb-editor, .wb-canvas, .wb-side { min-height: 0; }
+  .wb-editor { flex-direction: row; }
+  .wb-tools { flex-direction: column; border-bottom: 0; border-right: 1px solid var(--chrome-line); overflow-x: hidden; overflow-y: auto; }
+  .tool-sep { width: auto; height: 1px; margin: 4px 6px; }
+}
+@media (min-width: 1500px) { .wb-body { grid-template-columns: minmax(0, 1fr) 400px; } }
+
 /* ---- print: ink on white, no colour washes ---- */
 @media print { body { background: #fff; } .titlebar, .navmain, .account, .statusbar { display: none !important; } .card { box-shadow: none; } }
