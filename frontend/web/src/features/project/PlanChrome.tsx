@@ -64,11 +64,11 @@ export function ViewPanel({ prefs, set, kinds, underlay, onUnderlay, hasUnderlay
     <div className="wb-pop wb-viewpanel" role="dialog" aria-label={t("plan.view")}>
       <div className="pop-head"><b>{t("plan.view")}</b><button className="strip-btn" onClick={onClose} aria-label={t("layout.cancel")}><Icon name="close" size={14} /></button></div>
       <fieldset><legend>{t("plan.snap")}</legend>
-        {flag("snap", "plan.snap.on")}{flag("mid", "plan.snap.mid")}{flag("ortho", "plan.snap.ortho")}{flag("chain", "plan.snap.chain")}
+        {flag("snap", "plan.snap.on")}{flag("mid", "plan.snap.mid")}{flag("walls", "plan.snap.walls")}{flag("ortho", "plan.snap.ortho")}{flag("chain", "plan.snap.chain")}
         <label className="vp-row">{t("plan.grid")} <select value={prefs.grid} onChange={(e) => set({ grid: parseFloat(e.target.value) })}>{[0, 0.1, 0.25, 0.5, 1, 2].map((g) => <option key={g} value={g}>{g === 0 ? t("plan.grid.off") : `${g} m`}</option>)}</select></label>
       </fieldset>
       <fieldset><legend>{t("plan.show")}</legend>
-        {flag("labels", "plan.show.labels")}{flag("lengths", "plan.show.lengths")}{flag("coords", "plan.show.coords")}{flag("minimap", "plan.show.minimap")}{flag("refs", "plan.show.refs")}{flag("ghosts", "plan.show.ghosts")}{flag("pins", "plan.show.pins")}{flag("isolate", "plan.show.isolate")}
+        {flag("labels", "plan.show.labels")}{flag("lengths", "plan.show.lengths")}{flag("coords", "plan.show.coords")}{flag("minimap", "plan.show.minimap")}{flag("refs", "plan.show.refs")}{flag("arch", "plan.show.arch")}{flag("ghosts", "plan.show.ghosts")}{flag("pins", "plan.show.pins")}{flag("isolate", "plan.show.isolate")}
         <label className="vp-row">{t("plan.colorBy")} <select value={prefs.color} onChange={(e) => set({ color: e.target.value as PlanPrefs["color"] })}><option value="kind">{t("plan.colorBy.kind")}</option><option value="circuit">{t("plan.colorBy.circuit")}</option></select></label>
       </fieldset>
       {kinds.length > 0 && <fieldset><legend>{t("plan.kinds")}</legend>

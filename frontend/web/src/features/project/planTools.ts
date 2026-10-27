@@ -8,10 +8,10 @@ const same = (a: Pt, b: Pt) => Math.abs(a[0] - b[0]) < EPS && Math.abs(a[1] - b[
 const ref = (type: Ref["type"], id: string): Ref => ({ type, id });
 
 // ---------------------------------------------------------------- snapping
-export interface SnapOpts { grid?: number; mid?: boolean; ref?: Pt[] }
-export type SnapKind = "node" | "end" | "ref" | "mid" | "grid" | "none";
+export interface SnapOpts { grid?: number; mid?: boolean; ref?: Pt[]; walls?: ArchWall[] }
+export type SnapKind = "node" | "end" | "ref" | "wall" | "mid" | "grid" | "none";
 export interface Snapped { p: Pt; kind: SnapKind }
-const RANK: Record<SnapKind, number> = { node: 0, end: 1, ref: 2, mid: 3, grid: 4, none: 5 };
+const RANK: Record<SnapKind, number> = { node: 0, end: 1, ref: 2, wall: 3, mid: 4, grid: 5, none: 6 };
 
 /** The point to use for a click: the nearest node, line end, vertex of a reference drawing or segment midpoint within `tol` (nodes first), else the grid point, else the point itself. */
 export function snapEx(d: Drawing, at: Pt, tol: number, o: SnapOpts = {}): Snapped {
@@ -23,6 +23,8 @@ export function snapEx(d: Drawing, at: Pt, tol: number, o: SnapOpts = {}): Snapp
     if (o.mid) l.points.slice(0, -1).forEach((a, i) => consider([(a[0] + l.points[i + 1][0]) / 2, (a[1] + l.points[i + 1][1]) / 2], "mid"));
   });
   (o.ref ?? []).forEach((p) => consider(p, "ref"));
+  const w = o.walls ? wallSnap(o.walls, at, tol) : null;
+  if (w) consider(w, "wall");
   found.sort((a, b) => RANK[a.kind] - RANK[b.kind] || a.gap - b.gap);
   if (found.length) return { p: found[0].p, kind: found[0].kind };
   if (o.grid && o.grid > 0) return { p: [d.origin[0] + Math.round((at[0] - d.origin[0]) / o.grid) * o.grid, d.origin[1] + Math.round((at[1] - d.origin[1]) / o.grid) * o.grid], kind: "grid" };
@@ -394,4 +396,52 @@ export function linkProblems(d: Drawing, base: string, k: number | null, resolve
     if ((typeof twin.attrs?.enlace === "string" ? twin.attrs.enlace.trim() : "") !== `${base}:${n.id}`) out.push({ code: "link_oneway", severity: "warn", ref: here, at, tag: n.attrs!.enlace as string });
   });
   return out;
+}
+
+// ---------------------------------------------------------------- walls recognized in the plan
+export interface ArchWall { id: string; a: Pt; b: Pt; thickness: number; confidence: number }
+export interface ArchOpening { id: string; kind: "door" | "window" | "opening"; at: Pt; width: number; angle: number; wall: string; confidence: number; reason: string; hinge?: Pt; swing?: Pt }
+export interface Architecture {
+  source: string; size: [number, number]; units_per_metre: number | null; wall_thickness: number | null; walls: ArchWall[]; openings: ArchOpening[]; warnings: string[];
+  scale_hint: { units_per_metre: number; basis: string; confidence: number } | null; counts: { walls: number; doors: number; windows: number; openings: number };
+}
+
+/** The faces of a wall as two segments, at half its thickness either side of its centre line. */
+export function wallFaces(w: ArchWall): [Pt, Pt][] {
+  const dx = w.b[0] - w.a[0], dy = w.b[1] - w.a[1], n = Math.hypot(dx, dy) || 1;
+  const ox = (-dy / n) * (w.thickness / 2), oy = (dx / n) * (w.thickness / 2);
+  return [[[w.a[0] + ox, w.a[1] + oy], [w.b[0] + ox, w.b[1] + oy]], [[w.a[0] - ox, w.a[1] - oy], [w.b[0] - ox, w.b[1] - oy]]];
+}
+
+/** The point of a face of a wall (or its corner) nearest to `at` within `tol`, so that a cable can run along the wall. Corners win over the middle of a face. */
+export function wallSnap(walls: ArchWall[], at: Pt, tol: number): Pt | null {
+  let best: { p: Pt; gap: number } | null = null;
+  const consider = (p: Pt, gap: number) => { if (gap <= tol && (!best || gap < best.gap)) best = { p, gap }; };
+  for (const w of walls) {
+    for (const [a, b] of wallFaces(w)) {
+      const dx = b[0] - a[0], dy = b[1] - a[1], n = dx * dx + dy * dy;
+      const t = n === 0 ? 0 : Math.max(0, Math.min(1, ((at[0] - a[0]) * dx + (at[1] - a[1]) * dy) / n));
+      const p: Pt = [a[0] + t * dx, a[1] + t * dy];
+      consider(a, dist(a, at));                                                   // the corners of the face are preferred a little to its middle
+      consider(b, dist(b, at));
+      consider(p, dist(p, at) + tol * 0.25);
+    }
+  }
+  return best ? (best as { p: Pt }).p : null;
+}
+
+/** While drawing a line: the next point is moved so that the segment runs parallel to a wall near it, when it was nearly so (within `maxDeg`). */
+export function parallelToWall(prev: Pt, p: Pt, walls: ArchWall[], reach: number, maxDeg = 8): Pt {
+  const dx = p[0] - prev[0], dy = p[1] - prev[1], len = Math.hypot(dx, dy);
+  if (len < 1e-9) return p;
+  const here = (Math.atan2(dy, dx) * 180) / Math.PI;
+  for (const w of walls) {
+    if (segmentDistance(p, w.a, w.b) > reach) continue;
+    const wa = (Math.atan2(w.b[1] - w.a[1], w.b[0] - w.a[0]) * 180) / Math.PI;
+    const d = Math.abs(here - wa) % 180, diff = Math.min(d, 180 - d);
+    if (diff > maxDeg) continue;
+    const ux = Math.cos((wa * Math.PI) / 180), uy = Math.sin((wa * Math.PI) / 180), s = dx * ux + dy * uy;
+    return [prev[0] + ux * s, prev[1] + uy * s];
+  }
+  return p;
 }

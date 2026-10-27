@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile
 from fastapi.responses import FileResponse
 
 from epc.modules.layout import service, templates
-from epc.modules.layout.models import DrawingIn, TemplateIn
+from epc.modules.layout.models import ArchIn, DrawingIn, TemplateIn
 from epc.modules.projects import public as projects
 
 # Internal engineering surface (the organization's own projects): never under /api/app.
@@ -64,6 +64,22 @@ def history_snapshot(client: str, code: str, level: str, snapshot: str):
 @router.post("/{level}/history/{snapshot}/restore")
 def history_restore(client: str, code: str, level: str, snapshot: str):
     return service.restore(projects.get_project_dir(client, code), level, snapshot)
+
+
+@router.post("/{level}/architecture")
+def recognize_architecture(client: str, code: str, level: str, body: ArchIn):
+    """Walls, doors and windows of the plan that was uploaded (DXF, PDF or image), found by the architecture engine."""
+    return service.recognize_architecture(projects.get_project_dir(client, code), level, body.units_per_metre)
+
+
+@router.get("/{level}/architecture")
+def get_architecture(client: str, code: str, level: str):
+    return service.architecture(projects.get_project_dir(client, code), level)
+
+
+@router.delete("/{level}/architecture")
+def delete_architecture(client: str, code: str, level: str):
+    return service.remove_architecture(projects.get_project_dir(client, code), level)
 
 
 @router.get("/{level}/changes")

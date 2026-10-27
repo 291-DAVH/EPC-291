@@ -3,7 +3,7 @@ import { DLine, Drawing, Pt, Ref, sameRef } from "./planEditing";
 import type { Derived, Kind, Prim, Profile } from "./PlanEditor";
 import type { PlanPrefs } from "./planPrefs";
 import { colorOfDiscipline, Ghost, Pin, RefItem } from "./planTypes";
-import { fromMetres, isLocked, Problem, RoutePath, SnapKind, spreadLabels, UnderlayOpts } from "./planTools";
+import { Architecture, fromMetres, isLocked, Problem, RoutePath, SnapKind, spreadLabels, UnderlayOpts, wallFaces } from "./planTools";
 
 /** The drawing as the canvas shows it: the underlay, what is drawn, what other disciplines occupy, marks and aids. It only draws what the editor gives it; it holds no state. */
 export const NODE_PX = 9;
@@ -35,7 +35,7 @@ export interface SceneProps {
   selection: Ref[]; highlight: string[]; focusCircuit: string; hoverRef: Ref | null;
   underlayUrl: string | null; img: { w: number; h: number } | null; underlayOpts: UnderlayOpts;
   draft: Pt[]; hover: Pt | null; kindId: string; snapMark: { p: Pt; kind: SnapKind } | null; scalePts: Pt[]; marquee: { a: Pt; b: Pt } | null;
-  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null;
+  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null;
   reference: RefItem[]; ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
   t: (key: string) => string;
 }
@@ -103,6 +103,17 @@ export default function PlanScene(p: SceneProps) {
         <g transform={op.rotation ? `rotate(${op.rotation} ${iw / 2} ${ih / 2})` : undefined} clipPath={crop ? "url(#under-crop)" : undefined}>
           {crop && <defs><clipPath id="under-crop"><rect x={crop.x} y={crop.y} width={crop.w} height={crop.h} /></clipPath></defs>}
           <image href={p.underlayUrl!} x={0} y={0} width={iw} height={ih} opacity={op.opacity ?? 1} />
+        </g>
+      )}
+      {p.architecture && prefs.arch && (
+        <g data-ui pointerEvents="none">
+          {p.architecture.walls.map((w) => <polygon key={w.id} points={[...wallFaces(w)[0], ...wallFaces(w)[1].slice().reverse()].map((q) => q.join(",")).join(" ")} fill="#6b7280" fillOpacity={0.4} stroke="#374151" strokeWidth={1} vectorEffect="non-scaling-stroke"><title>{`${w.id} · ${Math.round(w.confidence * 100)}%`}</title></polygon>)}
+          {p.architecture.openings.map((o) => {
+            const a = o.angle * Math.PI / 180, ux = Math.cos(a) * o.width / 2, uy = Math.sin(a) * o.width / 2;
+            const color = o.kind === "door" ? "#b45309" : o.kind === "window" ? "#2563eb" : "#9ca3af";
+            return <g key={o.id}><line x1={o.at[0] - ux} y1={o.at[1] - uy} x2={o.at[0] + ux} y2={o.at[1] + uy} stroke={color} strokeWidth={3} vectorEffect="non-scaling-stroke"><title>{`${o.id} · ${o.kind} · ${Math.round(o.confidence * 100)}%`}</title></line>
+              {o.hinge && o.swing && <line x1={o.hinge[0]} y1={o.hinge[1]} x2={o.swing[0]} y2={o.swing[1]} stroke={color} strokeWidth={1.5} vectorEffect="non-scaling-stroke" />}</g>;
+          })}
         </g>
       )}
       {p.ghosts.filter(() => prefs.ghosts).map((g) => (
