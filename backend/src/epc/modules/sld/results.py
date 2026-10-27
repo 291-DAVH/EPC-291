@@ -53,6 +53,11 @@ def _upstream(d: Path, board: dict) -> Optional[dict]:
     return info
 
 
+def _outdated(st: dict, d: Path, saved: Optional[dict]) -> bool:
+    """Whether the last generation (memo or diagram) was made from other data than the board has now. It does not depend on the memo file being there: files generated before the memo existed are told apart too."""
+    return bool(saved) and st.get("state") == "done" and bool(st.get("input_hash")) and st["input_hash"] != _hash(d, lengths.apply(d, saved))
+
+
 def memo(d: Path, bid: str = "") -> dict:
     """Calculation memo and summary of the board (what the last calculation produced) and whether the data changed since."""
     bid = _resolve(d, bid)
@@ -61,7 +66,7 @@ def memo(d: Path, bid: str = "") -> dict:
     base = repository.pkg(d) / "calc"
     m = read_json(base / f"{st.get('name')}_memoria.json", None) if st.get("name") and st.get("state") == "done" else None
     if not m or not saved:
-        return {"available": False, "stale": False, "memo": None, "files": []}
+        return {"available": False, "stale": False, "outdated": _outdated(st, d, saved), "memo": None, "files": []}
     stale = st.get("input_hash") != _hash(d, lengths.apply(d, saved))                # a change in the plan that alters a length makes the memo stale
     files = [f for f in (f"docs/{st['name']}_MC.md", f"docs/{st['name']}_SP.md") if (repository.pkg(d) / f).is_file()]
-    return {"available": True, "stale": stale, "memo": m, "files": files, "finished": st.get("finished")}
+    return {"available": True, "stale": stale, "outdated": stale, "memo": m, "files": files, "finished": st.get("finished")}

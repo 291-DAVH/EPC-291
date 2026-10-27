@@ -210,7 +210,7 @@ export interface BoardRow { id: string; name: string; voltage_v: number; system:
 export interface MemoCurve { curva: string; In: number; min: number[][]; max: number[][] }
 export interface MemoSelectivity { aguas_arriba: string; aguas_abajo: string; relacion_termica: number | null; is_a: number; resultado: "total" | "parcial" | "revisar"; nota: string }
 export interface BoardMemoView {
-  available: boolean; stale: boolean; files: string[]; finished?: string;
+  available: boolean; stale: boolean; outdated?: boolean; files: string[]; finished?: string;
   memo: {
     validated: boolean; board: { name: string; icc_ka: number };
     curvas: Record<string, MemoCurve>; selectividad: MemoSelectivity[];

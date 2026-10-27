@@ -286,7 +286,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
             {status.state === "failed" && <div className="alert bad"><b>{t("sld.failed")}</b><pre className="eng-text" style={{ padding: 0 }}>{status.error}</pre></div>}
             {status.state === "done" && (
               <>
-                <div className="alert ok">{t("sld.done")} <button onClick={onOpenFiles} style={{ marginLeft: 8 }}>{t("sld.openFiles")}</button></div>
+                <div className={memo.data?.outdated ? "alert warn" : "alert ok"}>{memo.data?.outdated ? t("sld.outdated") : t("sld.done")} <button onClick={onOpenFiles} style={{ marginLeft: 8 }}>{t("sld.openFiles")}</button></div>
                 <div className="muted small" style={{ marginTop: 6 }}>{t("sld.outputs")}: {status.outputs.map((f) => <Badge key={f}>{f.split("/").pop()}</Badge>)}</div>
               </>
             )}
