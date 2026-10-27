@@ -291,6 +291,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const layerOfKind = (id: string) => [...(profile?.lines ?? []), ...(profile?.nodes ?? [])].find((k) => k.id === id)?.capa_dxf ?? "";
   const layerCounts: Record<string, number> = {};
   [...drawing.nodes, ...drawing.lines].forEach((e) => { const l = layerOfKind(e.kind); if (l) layerCounts[l] = (layerCounts[l] ?? 0) + 1; });
+  const found = lv?.architecture?.counts;                                      // what was recognized on the plan, by its layer
+  if (lv?.underlay) layerCounts["ARQ-FONDO"] = 1;
+  if (found) Object.assign(layerCounts, { "ARQ-MUROS": found.walls, "ARQ-PUERTAS": found.doors, "ARQ-VENTANAS": found.windows, "ARQ-HUECOS": found.openings ?? 0 });
   const tplHere = (templates.data ?? []).filter((x) => x.discipline === discipline);
 
   return (

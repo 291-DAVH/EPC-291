@@ -1,0 +1,118 @@
+{
+  "id": "hvac",
+  "nombre": {
+    "es": "Climatización (HVAC)",
+    "en": "HVAC"
+  },
+  "tramos": [
+    {
+      "id": "DA",
+      "etiqueta": {
+        "es": "Conducto de aire",
+        "en": "Air duct"
+      },
+      "prefijo_tag": "DA",
+      "atributos": [
+        "dimensiones",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "HVAC-DUCTO",
+      "geom": {
+        "z_m": 2.7,
+        "ancho_m": 0.4,
+        "alto_m": 0.3
+      }
+    },
+    {
+      "id": "TF",
+      "etiqueta": {
+        "es": "Cañería frigorífica",
+        "en": "Refrigerant pipe"
+      },
+      "prefijo_tag": "TF",
+      "atributos": [
+        "diametro_mm",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "HVAC-TUBERIA",
+      "geom": {
+        "z_m": 2.7,
+        "ancho_m": 0.05,
+        "alto_m": 0.05
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "UE",
+      "etiqueta": {
+        "es": "Unidad evaporadora",
+        "en": "Indoor unit"
+      },
+      "prefijo_tag": "UE",
+      "atributos": [
+        "potencia_w",
+        "tipo"
+      ],
+      "simbolo_2d": "hvac",
+      "capa_dxf": "HVAC-EQUIPO",
+      "geom": {
+        "z_m": 2.2,
+        "ancho_m": 0.9,
+        "alto_m": 0.3
+      }
+    },
+    {
+      "id": "UC",
+      "etiqueta": {
+        "es": "Unidad condensadora",
+        "en": "Outdoor unit"
+      },
+      "prefijo_tag": "UC",
+      "atributos": [
+        "potencia_w",
+        "tipo"
+      ],
+      "simbolo_2d": "hvac",
+      "capa_dxf": "HVAC-EQUIPO",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.9,
+        "alto_m": 0.4
+      }
+    },
+    {
+      "id": "RJ",
+      "etiqueta": {
+        "es": "Rejilla o difusor",
+        "en": "Grille or diffuser"
+      },
+      "prefijo_tag": "RJ",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "caja_pase",
+      "capa_dxf": "HVAC-REJILLA",
+      "geom": {
+        "z_m": 2.7,
+        "ancho_m": 0.6,
+        "alto_m": 0.6
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "d": "DA",
+    "t": "TF",
+    "e": "UE",
+    "c": "UC",
+    "r": "RJ"
+  },
+  "unidades_salida": "m"
+}

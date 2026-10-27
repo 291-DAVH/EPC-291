@@ -1,0 +1,115 @@
+{
+  "id": "pci",
+  "nombre": {
+    "es": "Protección contra incendios",
+    "en": "Fire protection"
+  },
+  "tramos": [
+    {
+      "id": "TA",
+      "etiqueta": {
+        "es": "Cañería de agua contra incendio",
+        "en": "Fire water pipe"
+      },
+      "prefijo_tag": "TA",
+      "atributos": [
+        "diametro_mm",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "PCI-TUBERIA",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.06,
+        "alto_m": 0.06
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "RO",
+      "etiqueta": {
+        "es": "Rociador",
+        "en": "Sprinkler"
+      },
+      "prefijo_tag": "RO",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "rociador",
+      "capa_dxf": "PCI-ROCIADOR",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.15,
+        "alto_m": 0.15
+      }
+    },
+    {
+      "id": "DH",
+      "etiqueta": {
+        "es": "Detector de humo",
+        "en": "Smoke detector"
+      },
+      "prefijo_tag": "DH",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "detector",
+      "capa_dxf": "PCI-DETECTOR",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.15,
+        "alto_m": 0.15
+      }
+    },
+    {
+      "id": "HI",
+      "etiqueta": {
+        "es": "Boca de incendio / hidrante",
+        "en": "Hydrant cabinet"
+      },
+      "prefijo_tag": "HI",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "caja_pase",
+      "capa_dxf": "PCI-HIDRANTE",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.6,
+        "alto_m": 0.25
+      }
+    },
+    {
+      "id": "EX",
+      "etiqueta": {
+        "es": "Extintor",
+        "en": "Extinguisher"
+      },
+      "prefijo_tag": "EX",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "extintor",
+      "capa_dxf": "PCI-EXTINTOR",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.25,
+        "alto_m": 0.25
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "t": "TA",
+    "r": "RO",
+    "d": "DH",
+    "h": "HI",
+    "e": "EX"
+  },
+  "unidades_salida": "m"
+}
