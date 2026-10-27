@@ -109,6 +109,19 @@ def lights(room, n, kind="LU", prefix="l"):
     return [node(f"{prefix}{room['id']}{i}", kind, x0 + 30 + (i % cols) * (x1 - x0 - 60) / max(1, cols - 1), y0 + 30 + (i // cols) * 40) for i in range(n)]
 
 
+class TestBoards(unittest.TestCase):
+    def test_only_the_loads_fed_from_the_board_of_the_symbol_are_designed(self):
+        tb = {**BOARD, "board": "b1"}
+        mine = [{**n, "board": "b1"} for n in BANDS[:8]]
+        other = [{**n, "board": "b2"} for n in BANDS[8:12]]
+        free = BANDS[12:16]                                                      # not tied to a board yet: they go with whichever is designed
+        both = design.propose_runs(doc([tb, *mine, *other, *free]))
+        alone = design.propose_runs(doc([tb, *mine, *free]))
+        self.assertEqual(both["lines"], alone["lines"])                            # the loads of the other board change nothing here
+        only_other = design.propose_runs(doc([{**BOARD, "board": "b3"}, *other]))
+        self.assertTrue(any("no loads" in w for w in only_other["warnings"]))     # the loads of another board are not this board's
+
+
 class TestWiring(unittest.TestCase):
     def drawn(self, nodes):
         d = doc(nodes)

@@ -99,7 +99,7 @@ def overview(d: Path) -> dict:
         p = core.load_profile(pid)
         symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
         profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
-    return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
+    return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
 def _blank() -> dict:
@@ -431,10 +431,10 @@ def design_wiring(d: Path, level: str, body) -> dict:
         raise Invalid({"drawing": str(e)})
 
 
-def accept_circuits(d: Path, level: str, circuits: list) -> dict:
+def accept_circuits(d: Path, level: str, circuits: list, board: str = "") -> dict:
     """Create in the board the circuits the person accepted from a proposal (the drawing refers to them by tag)."""
     level = _level(level)
     _edit_guard(d, _discipline_of(d, level))
-    out = sld.add_circuits(d, [c.model_dump() for c in circuits])
+    out = sld.add_circuits(d, [c.model_dump() for c in circuits], board)
     identity.audit_event("layout_circuits_created", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"added": len(out["added"])})
     return out

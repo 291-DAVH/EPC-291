@@ -2,7 +2,7 @@
  *  Coordinates are the units of the view (the pixels of the plan, y down); the engine turns them into metres. */
 export type Pt = [number, number];
 export interface Scale { p1: Pt; p2: Pt; distance_m: number }
-export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
+export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; circuit?: string; board?: string; attrs?: Record<string, unknown> }
 export interface DLine { id: string; kind: string; points: Pt[]; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DCircuit { tag: string; from: string; to: string; via?: string[]; ternas: number }
 /** How the plan underlay is shown: editor-only, kept with the drawing so it looks the same the next time. */

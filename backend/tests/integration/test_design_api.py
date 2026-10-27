@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from epc.core.config import settings
 from epc.main import create_app
+from tests.integration.test_sld_api import BOARD, CIRCUITS, TB
 
 SCALE = {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}
 ROOMS = [{"id": "A", "name": "Cocina", "points": [[100, 0], [400, 0], [400, 200], [100, 200]]}, {"id": "B", "name": "Living", "points": [[100, 220], [400, 220], [400, 480], [100, 480]]}]
@@ -85,6 +86,19 @@ class TestDesign(unittest.TestCase):
         self.assertEqual((again["added"], len(again["skipped"])), ([], 3))
         nxt = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": drawn}).json()      # the tags now in the board are not proposed again
         self.assertFalse({c["tag"] for c in nxt["circuits"]} & {c["tag"] for c in p["circuits"]})
+
+    def test_the_boards_of_engineering_are_offered_and_the_drawing_keeps_which_one_feeds_each_load(self):
+        self.assertEqual(self.c.get(self.base).json()["boards"], [])                           # no board yet: the editor asks to make it in Engineering first
+        sld = "/api/projects/ACME/P-1/sld"
+        self.assertEqual(self.c.put(sld, json={"board": {**BOARD, "name": "TGBT-02"}, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
+        boards = self.c.get(self.base).json()["boards"]
+        self.assertEqual([b["name"] for b in boards], ["TGBT-02"])
+        nodes = [{**n, "board": boards[0]["id"]} if n["kind"] in ("TB", "LU") else n for n in DRAWING["nodes"]]
+        saved = self.c.put(f"{self.base}/L0", json={**DRAWING, "nodes": nodes}).json()["drawing"]["nodes"]
+        self.assertTrue(all(n["board"] == boards[0]["id"] for n in saved))
+        body = {"board": boards[0]["id"], "circuits": [{"tag": "IUG-01", "description": "Cocina", "load": 900, "unit": "VA"}]}
+        self.assertEqual(self.c.post(f"{self.base}/L0/design/circuits", json=body).json()["board_id"], boards[0]["id"])
+        self.assertEqual([c["board_id"] for c in self.c.get(self.base).json()["circuits"] if c["tag"] == "IUG-01"], [boards[0]["id"]])
 
     def test_a_drawing_without_a_board_gets_a_warning_not_an_error(self):
         nodes = [n for n in DRAWING["nodes"] if n["kind"] != "TB"]

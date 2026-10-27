@@ -1,42 +1,9 @@
 import { Badge, Icon, State, useApi } from "@epc/ui";
-import type { Derived } from "./PlanEditor";
 import type { Ref } from "./planEditing";
 import type { Problem } from "./planTools";
 
 /** The contents of the tabs of the layout side panel that only show things: the schedule the engine derived, its warnings, the kept states of the drawing and the checks before making files. */
 type T = (key: string) => string;
-
-export function TablePanel({ d, tl }: { d: Derived | null; tl: T }) {
-  if (!d?.ready || !d.schedule) return <div className="state">{tl("layout.needScale")}</div>;
-  const s = d.schedule;
-  return (
-    <div>
-      <div className="row small" style={{ flexWrap: "wrap", gap: 12, margin: "0 0 8px" }}>
-        {Object.entries(s.lines).filter(([, v]) => v.stretches > 0).map(([kind, v]) => <span key={kind}><b>{kind}</b>: {v.lines} · {v.length_m} m</span>)}
-        {Object.entries(s.nodes).filter(([, n]) => n > 0).map(([kind, n]) => <span key={kind}><b>{kind}</b>: {n}</span>)}
-        <span><b>{tl("layout.total")}</b>: {s.total_length_m} m</span>
-      </div>
-      {Object.keys(s.circuit_routes).length > 0 && (
-        <table><thead><tr><th>{tl("layout.col.circuit")}</th><th>{tl("layout.col.stretches")}</th><th>{tl("layout.col.length")}</th></tr></thead>
-          <tbody>{Object.entries(s.circuit_routes).map(([c, r]) => <tr key={c}><td className="mono">{c}</td><td className="mono">{r.stretches.join(", ")}</td><td className="mono">{r.length_m}</td></tr>)}</tbody></table>
-      )}
-      {s.containers.length > 0 && (
-        <table style={{ marginTop: 8 }}><thead><tr><th>{tl("layout.col.tag")}</th><th>{tl("layout.col.kind")}</th><th>{tl("layout.circuits")}</th><th>{tl("layout.props.cables")}</th><th>{tl("plan.fill")}</th></tr></thead>
-          <tbody>{s.containers.map((c) => (
-            <tr key={c.tag}><td className="mono">{c.tag}</td><td>{c.kind}</td><td className="mono">{c.circuits.join(", ")}</td><td className="mono">{c.cables}</td>
-              <td>{c.fill ? <span className={"fillbar " + c.fill.status} title={`${c.fill.used_pct}% / ${c.fill.limit_pct}% (${c.fill.cable_mm} mm)`}><i style={{ width: `${Math.min(100, (c.fill.used_pct / Math.max(1, c.fill.limit_pct)) * 100)}%` }} /><b className="mono">{c.fill.used_pct}%</b></span> : <span className="muted small">{tl("plan.fill.nosize")}</span>}</td></tr>
-          ))}</tbody></table>
-      )}
-      <table style={{ marginTop: 8 }}>
-        <thead><tr><th>{tl("layout.col.tag")}</th><th>{tl("layout.col.kind")}</th><th>{tl("layout.col.from")}</th><th>{tl("layout.col.to")}</th><th>{tl("layout.col.length")}</th><th>{tl("layout.col.circuit")}</th></tr></thead>
-        <tbody>
-          {(d.stretches ?? []).map((st) => <tr key={st.tag}><td className="mono">{st.tag}</td><td>{st.kind}</td><td className="mono">{d.nodes?.find((n) => n.id === st.from)?.tag}</td><td className="mono">{d.nodes?.find((n) => n.id === st.to)?.tag}</td><td className="mono">{st.length_m}</td><td className="mono">{st.circuit ?? ""}</td></tr>)}
-        </tbody>
-      </table>
-      {d.network && <p className="small muted">{tl("layout.levels")}: {Object.entries(d.network.invert_m).map(([id, v]) => `${d.nodes?.find((n) => n.id === id)?.tag ?? id} ${v}`).join(" · ")}{d.network.validated ? "" : ` (${tl("layout.provisional")})`}</p>}
-    </div>
-  );
-}
 
 export function WarningsPanel({ warnings, onJump, tl }: { warnings: string[]; onJump: (w: string) => void; tl: T }) {
   if (!warnings.length) return <div className="state">–</div>;

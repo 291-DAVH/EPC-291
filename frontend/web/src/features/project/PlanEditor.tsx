@@ -4,7 +4,7 @@ import {
   removeMany, sameRef, setOrigin, setScale, stretchEnd, toggle, undo, updateCircuit,
 } from "./planEditing";
 import {
-  addRoom, rectCorners, rectOutline, alignDelta, alignNodes, Architecture, RunsProposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
+  addRoom, boardPlan, BoardRef, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, Architecture, RunsProposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
   RoutePath, selectionStats, setLocked, shortestRoute, SnapKind, snapEx, splitLineAt, svgVertices, toMetres, transformGroup, unlocked, UnderlayOpts,
 } from "./planTools";
 import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
@@ -36,7 +36,7 @@ export interface Props {
   prefs?: [PlanPrefs, (p: Partial<PlanPrefs>) => void]; drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; reference?: RefItem[]; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
-  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; onTool?: (tool: string) => void; roomRequest?: number;
+  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; boards?: BoardRef[]; onTool?: (tool: string) => void; roomRequest?: number;
   onNewPin?: (at_m: Pt) => void; onCopyLevels?: (clip: Clip) => void; onReserve?: (lineId: string) => void; onTemplateSave?: (name: string, clip: Clip) => void; pendingClip?: Clip | null; onClipUsed?: () => void;
 }
 
@@ -99,6 +99,9 @@ export default function PlanEditor(props: Props) {
   const lineKinds = profile?.lines ?? [];
   const nodeKinds = profile?.nodes ?? [];
   const loadKinds = useMemo(() => new Set(nodeKinds.filter((n) => n.carga).map((n) => n.id)), [profile]);
+  const boardKinds = useMemo(() => new Set(nodeKinds.filter((n) => n.atributos?.includes("tablero")).map((n) => n.id)), [profile]);
+  const [boardAsk, setBoardAsk] = useState<{ nodeId: string; options: BoardRef[]; symbol: boolean } | null>(null);
+  const [boardNote, setBoardNote] = useState("");
   const kindName = (kd: Kind) => kd.etiqueta[lang] ?? kd.etiqueta.es;
   const k = metresPerUnit(drawing);
   const under: UnderlayOpts = (drawing as Drawing & { underlay_opts?: UnderlayOpts }).underlay_opts ?? {};
@@ -272,7 +275,7 @@ export default function PlanEditor(props: Props) {
     else if (tool === "erase") { const hit = pick(drawing, raw, tol); if (hit) remove([hit]); }
     else if (tool === "origin") { apply(setOrigin(drawing, snapAt(raw, tol).p)); setTool("select"); }
     else if (tool === "scale") { if (scalePts.length < 2) setScalePts([...scalePts, snapAt(raw, tol).p]); }
-    else if (tool === "node" && kindId) { const p = snapAt(raw, tol).p; apply(addNode(drawing, kindId, p)); last.current = { type: "node", kind: kindId }; }
+    else if (tool === "node" && kindId) { placeNode(kindId, snapAt(raw, tol).p); last.current = { type: "node", kind: kindId }; }
     else if (tool === "line" && kindId) {
       let p = snapAt(raw, tol).p;
       if (draft.length > 0) p = straight(draft[draft.length - 1], p, e.shiftKey);
@@ -446,11 +449,21 @@ export default function PlanEditor(props: Props) {
     ];
     setMenu({ at: [e.clientX - r.left, e.clientY - r.top], items });
   };
+  /** A node placed on the plan: a board symbol stands for a board made in Engineering and a load is fed from one, so the board is taken or asked for here. */
+  const placeNode = (kind: string, at: Pt) => {
+    const plan = props.boards ? boardPlan(drawing, props.boards, kind, (k) => boardKinds.has(k), (k) => loadKinds.has(k)) : { action: "none" as const };
+    if (plan.action === "missing") { setBoardNote(t(props.boards?.length ? "plan.board.allPlaced" : "plan.board.missing")); return; }
+    const next = addNode(drawing, kind, at);
+    const id = next.nodes[next.nodes.length - 1].id;
+    const symbol = boardKinds.has(kind);
+    apply(plan.action === "set" ? withBoard(next, id, plan.board, symbol) : next);
+    if (plan.action === "ask") setBoardAsk({ nodeId: id, options: plan.options, symbol });
+  };
   const repeat = (at: Pt | null) => {
     const l = last.current;
     if (!l || !write) return;
     if (l.type === "paste") pasteAt(at);
-    else if (l.type === "node" && at) apply(addNode(drawing, l.kind, at));
+    else if (l.type === "node" && at) placeNode(l.kind, at);
     else if (l.type === "line") { setKindId(l.kind); setTool("line"); }
   };
   const act = (id: string) => {
@@ -604,6 +617,18 @@ export default function PlanEditor(props: Props) {
         {form === "transform" && <NumberForm title={t("plan.act.transform")} t={t} fields={[{ key: "deg", label: t("plan.transform.angle"), value: 90 }, { key: "factor", label: t("plan.transform.scale"), value: 1 }]} onCancel={() => setForm("")}
           onApply={(v) => { let d = drawing; const ok = selectionOf(selection); if (v.deg) d = transformGroup(d, ok, { type: "rotate", deg: v.deg }); if (v.factor > 0 && v.factor !== 1) d = transformGroup(d, ok, { type: "scale", factor: v.factor }); if (d !== drawing) apply(d); setForm(""); }} />}
         {form === "template" && <TextForm title={t("plan.act.template")} label={t("plan.template.name")} t={t} onCancel={() => setForm("")} onApply={(name) => { props.onTemplateSave?.(name, normalizeClip(copyElements(drawing, selection))); setForm(""); }} />}
+        {boardNote && (
+          <div className="wb-float" role="alertdialog" aria-label={t("plan.board.title")}>
+            <span>{boardNote}</span><button className="primary" onClick={() => setBoardNote("")}>{t("plan.board.ok")}</button>
+          </div>
+        )}
+        {boardAsk && (
+          <div className="wb-float" role="dialog" aria-label={t("plan.board.which")}>
+            <b>{t("plan.board.which")}</b>
+            {boardAsk.options.map((b) => <button key={b.id} className="primary" onClick={() => { apply(withBoard(drawing, boardAsk.nodeId, b, boardAsk.symbol)); setBoardAsk(null); }}>{b.name}</button>)}
+            <button onClick={() => { if (boardAsk.symbol) remove([{ type: "node", id: boardAsk.nodeId }]); setBoardAsk(null); }}>{t("layout.cancel")}</button>
+          </div>
+        )}
         {form === "room" && <TextForm title={t("plan.room.new")} label={t("plan.room.name")} t={t} onCancel={() => { setForm(""); setRoomDraft([]); }} onApply={(name) => { apply(addRoom(drawing, name, roomDraft)); setRoomDraft([]); setForm(""); setTool("select"); }} />}
         {form === "length" && <div className="wb-float"><span>{t("plan.length.type")}</span><b className="mono">{lenText || "…"} m</b><small className="muted">{t("plan.length.enter")}</small></div>}
         {note && <div className="wb-note-toast" role="status">{note}</div>}

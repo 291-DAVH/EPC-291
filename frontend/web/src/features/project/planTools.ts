@@ -517,3 +517,32 @@ export function applyProposal(d: Drawing, p: Proposal): Drawing {
   const circuits = [...cur.circuits, ...p.circuits.filter((c) => !have.has(c.tag)).map((c) => ({ tag: c.tag, from: c.from, to: c.to, via: c.via, ternas: c.ternas }))];
   return { ...cur, nodes, circuits };
 }
+
+// ---------------------------------------------------------------- boards: the board symbol and the loads belong to a board made in Engineering
+export interface BoardRef { id: string; name: string }
+/** What to do when something is placed: nothing; there is no board to stand for (make it in Engineering first); take this one; or ask which of these. */
+export type BoardPlan = { action: "none" } | { action: "missing" } | { action: "set"; board: BoardRef } | { action: "ask"; options: BoardRef[] };
+
+const boardsOn = (d: Drawing, boards: BoardRef[], isBoard: (kind: string) => boolean): BoardRef[] => {
+  const ids = new Set(d.nodes.filter((n) => isBoard(n.kind) && n.board).map((n) => n.board));
+  return boards.filter((b) => ids.has(b.id));
+};
+
+const choose = (options: BoardRef[]): BoardPlan => (options.length === 1 ? { action: "set", board: options[0] } : { action: "ask", options });
+
+/** A board symbol stands for a board of the project that is not on the plan yet; a load is fed from the board on the plan (asking when there are two or more). */
+export function boardPlan(d: Drawing, boards: BoardRef[], kind: string, isBoard: (kind: string) => boolean, isLoad: (kind: string) => boolean): BoardPlan {
+  if (isBoard(kind)) {
+    const placed = new Set(boardsOn(d, boards, isBoard).map((b) => b.id));
+    const free = boards.filter((b) => !placed.has(b.id));
+    return free.length ? choose(free) : { action: "missing" };
+  }
+  if (!isLoad(kind)) return { action: "none" };
+  const on = boardsOn(d, boards, isBoard);
+  return on.length ? choose(on) : { action: "none" };
+}
+
+/** The node tied to a board; a board symbol also takes the name of its board as its tag. */
+export const withBoard = (d: Drawing, nodeId: string, board: BoardRef, asSymbol: boolean): Drawing => ({
+  ...d, nodes: d.nodes.map((n) => (n.id === nodeId ? { ...n, board: board.id, ...(asSymbol ? { tag: board.name } : {}) } : n)),
+});

@@ -94,8 +94,11 @@ def _limits(options: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, Dict[s
     return {f: {**v, **{k: x for k, x in ((options.get("families") or {}).get(f) or {}).items() if k in ("max_outlets", "va_per_outlet") and isinstance(x, (int, float)) and x > 0}} for f, v in base.items()}
 
 
-def _loads(document: Dict[str, Any], families: Dict[str, str]) -> List[Dict[str, Any]]:
-    return [{"id": n["id"], "x": n["x"], "y": n["y"], "kind": n["kind"], "family": families[n["kind"]]} for n in document.get("nodes", []) if n.get("kind") in families]
+def _loads(document: Dict[str, Any], families: Dict[str, str], board: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    """The loads of the drawing; when the board has a board of Engineering behind it, only the loads fed from that board (or from none yet)."""
+    mine = (board or {}).get("board", "")
+    return [{"id": n["id"], "x": n["x"], "y": n["y"], "kind": n["kind"], "family": families[n["kind"]]} for n in document.get("nodes", [])
+            if n.get("kind") in families and (not mine or n.get("board", mine) == mine)]
 
 
 def _board(document: Dict[str, Any], profile: Dict[str, Any], wanted: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -202,7 +205,7 @@ def propose_runs(document: Dict[str, Any], options: Optional[Dict[str, Any]] = N
     profile = core.load_profile(document.get("discipline", "electrica_BT"))
     families = _families(profile)
     board = _board(document, profile, options.get("board"))
-    loads = _loads(document, families)
+    loads = _loads(document, families, board)
     if board is None:
         return {"orientation": "", "lines": [], "stats": {}, "warnings": ["no board (tablero) in the drawing: place one to start the runs from it"]}
     if not loads:
@@ -235,7 +238,7 @@ class _Wiring:
 
     def loads_by_room(self) -> Dict[str, List[Dict[str, Any]]]:
         by_room: Dict[str, List[Dict[str, Any]]] = {}
-        for l in _loads(self.document, self.families):
+        for l in _loads(self.document, self.families, self.board):
             r = room_of((l["x"], l["y"]), self.rooms)
             by_room.setdefault(r["id"], []).append(l) if r else self.unassigned.append(l["id"])
         if self.unassigned:

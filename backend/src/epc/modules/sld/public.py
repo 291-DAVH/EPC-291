@@ -4,7 +4,7 @@ from typing import List
 
 from epc.modules.sld import lengths, repository
 
-__all__ = ["circuits", "set_plan_lengths", "add_circuits"]
+__all__ = ["circuits", "boards", "set_plan_lengths", "add_circuits"]
 
 
 def circuits(d: Path) -> List[dict]:
@@ -15,6 +15,12 @@ def circuits(d: Path) -> List[dict]:
         name = (data.get("board") or {}).get("name", "")
         out += [{"tag": c["tag"], "description": c.get("description", ""), "board": name, "board_id": bid} for c in data.get("circuits", []) if c.get("tag")]
     return out
+
+
+def boards(d: Path) -> List[dict]:
+    """The boards of the project (id and name): what the plan editor offers when a board symbol or a load is placed."""
+    from epc.modules.sld import boards as _boards
+    return [{"id": b["id"], "name": b["name"]} for b in _boards.boards(d)]
 
 
 def set_plan_lengths(provider) -> None:

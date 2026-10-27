@@ -6,12 +6,12 @@ import { centroidOf, loadsByRoom, Limits, Proposal, RunsProposal, removeRoom, re
 
 /** Automatic design: the rooms marked on the plan, the limits per circuit, the circuits, trunk and branches the program proposes for the loads placed in them, and the button that accepts it. */
 interface Props {
-  drawing: Drawing; profile: Profile | undefined; proposal: Proposal | null; runs: RunsProposal | null; busy: boolean; canWrite: boolean; limitsOverride: Record<string, Partial<Limits>>;
+  drawing: Drawing; profile: Profile | undefined; boards: { id: string; name: string }[]; board: string; onBoard: (id: string) => void; proposal: Proposal | null; runs: RunsProposal | null; busy: boolean; canWrite: boolean; limitsOverride: Record<string, Partial<Limits>>;
   onLimits: (v: Record<string, Partial<Limits>>) => void; onProposeRuns: () => void; onApplyRuns: () => void; onDiscardRuns: () => void; onPropose: () => void; onApply: (createInBoard: boolean) => void; onDiscard: () => void;
   onChange: (d: Drawing) => void; onNewRoom: () => void; onLook: (at: [number, number]) => void; derived: Derived | null;
 }
 
-export default function DesignPanel({ drawing, profile, proposal, runs, busy, canWrite, limitsOverride, onLimits, onProposeRuns, onApplyRuns, onDiscardRuns, onPropose, onApply, onDiscard, onChange, onNewRoom, onLook }: Props) {
+export default function DesignPanel({ drawing, profile, boards, board, onBoard, proposal, runs, busy, canWrite, limitsOverride, onLimits, onProposeRuns, onApplyRuns, onDiscardRuns, onPropose, onApply, onDiscard, onChange, onNewRoom, onLook }: Props) {
   const { t, lang } = useI18n();
   const tl = (k: string) => t(k as Key);
   const [inBoard, setInBoard] = useState(true);
@@ -23,6 +23,7 @@ export default function DesignPanel({ drawing, profile, proposal, runs, busy, ca
   return (
     <div className="design">
       <p className="muted small" style={{ margin: "0 0 8px" }}>{tl("design.help")}</p>
+      {boards.length > 1 && <label className="vp-row">{tl("design.board")} <select value={board} onChange={(e) => onBoard(e.target.value)}>{boards.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>}
       <h4 className="coord-h">{tl("design.step1")}</h4>
       <p className="muted small" style={{ margin: "0 0 6px" }}>{tl("design.runsHelp")}</p>
       {canWrite && <button className="primary" disabled={busy} onClick={onProposeRuns}>{busy ? tl("design.working") : tl("design.proposeRuns")}</button>}

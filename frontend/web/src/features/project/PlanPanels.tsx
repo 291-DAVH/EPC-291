@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addCircuit, assignCircuit, Drawing, freeCircuits, loadsOf, ofKind, Ref, removeCircuit, removeMany, setAttr, updateCircuit, updateLine, updateNode } from "./planEditing";
+import { assignCircuit, Drawing, ofKind, Ref, removeMany, setAttr, updateLine, updateNode } from "./planEditing";
 import { isLocked, setLocked, unlocked } from "./planTools";
 import { Derived, Kind, Profile } from "./PlanEditor";
 
@@ -134,50 +134,5 @@ function Geometry({ item, kind, node, readOnly, patch, t }: { item: { attrs?: Re
         {node && kind?.vertical && <label className="field"><span>{t("plan.geom.enlace")}</span><input disabled={readOnly} value={String(attrs.enlace ?? "")} placeholder="L1:n3" onChange={(e) => patch({ attrs: setAttr(attrs, "enlace", e.target.value) })} /></label>}
       </div>
     </details>
-  );
-}
-
-interface CircuitsProps {
-  drawing: Drawing; derived: Derived | null; boardCircuits: BoardCircuit[]; profile: Profile | undefined; readOnly: boolean; focus: string; onFocus: (tag: string) => void;
-  onChange: (d: Drawing) => void; onSelect: (r: Ref[]) => void; t: (key: string) => string;
-}
-
-export function Circuits({ drawing, derived, boardCircuits, profile, readOnly, focus, onFocus, onChange, onSelect, t }: CircuitsProps) {
-  const tagOf = (id: string) => derived?.nodes?.find((n) => n.id === id)?.tag ?? id;
-  const free = freeCircuits(drawing, boardCircuits.map((c) => c.tag));
-  const loads = loadKindsOf(profile);
-  const nodeOptions = <><option value="">–</option>{drawing.nodes.map((n) => <option key={n.id} value={n.id}>{tagOf(n.id)}</option>)}</>;
-  return (
-    <div className="card">
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <b>{t("layout.circuits")}</b>
-        {!readOnly && <button disabled={free.length === 0} onClick={() => onChange(addCircuit(drawing, free[0]))}>+ {t("layout.circuits.add")}</button>}
-      </div>
-      <p className="muted small" style={{ margin: "4px 0 6px" }}>{boardCircuits.length === 0 ? t("layout.circuits.noBoard") : t("layout.circuits.help")}</p>
-      {drawing.circuits.length > 0 && (
-        <div style={{ overflowX: "auto" }}><table>
-          <thead><tr><th>{t("layout.col.circuit")}</th><th>{t("layout.circuits.from")}</th><th>{t("layout.circuits.loads")}</th><th>{t("layout.circuits.to")}</th><th>{t("layout.circuits.ternas")}</th><th>{t("layout.circuits.route")}</th><th /></tr></thead>
-          <tbody>
-            {drawing.circuits.map((c, i) => {
-              const r = derived?.circuits?.[c.tag];
-              const n = loadsOf(drawing, c.tag, loads);
-              return (
-                <tr key={i} className={focus === c.tag ? "on" : ""}>
-                  <td><select disabled={readOnly} value={c.tag} onChange={(e) => onChange(updateCircuit(drawing, i, { tag: e.target.value }))}>
-                    {[c.tag, ...free].filter((x, k, a) => a.indexOf(x) === k).map((x) => <option key={x} value={x}>{x}</option>)}</select></td>
-                  <td><select disabled={readOnly} value={c.from} onChange={(e) => onChange(updateCircuit(drawing, i, { from: e.target.value }))}>{nodeOptions}</select></td>
-                  <td>{n > 0 ? <button className="linkbtn" onClick={() => onSelect(drawing.nodes.filter((x) => x.circuit === c.tag && loads.has(x.kind)).map((x) => ({ type: "node" as const, id: x.id })))}>{n}</button> : "0"}</td>
-                  <td><select disabled={readOnly} value={c.to} onChange={(e) => onChange(updateCircuit(drawing, i, { to: e.target.value }))}>{nodeOptions}</select></td>
-                  <td><input style={{ width: 52 }} type="number" min={1} max={99} disabled={readOnly} value={c.ternas}
-                    onChange={(e) => onChange(updateCircuit(drawing, i, { ternas: Math.max(1, Math.min(99, parseInt(e.target.value, 10) || 1)) }))} /></td>
-                  <td className="small">{r ? (r.found ? <button className="linkbtn" onClick={() => onFocus(focus === c.tag ? "" : c.tag)}>{r.length_m} m · {r.cable_length_m} m {t("layout.circuits.cable")}</button> : <span style={{ color: "var(--bad)" }}>{t("layout.circuits.noRoute")}</span>) : "–"}</td>
-                  <td>{!readOnly && <button onClick={() => onChange(removeCircuit(drawing, i))}>×</button>}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table></div>
-      )}
-    </div>
   );
 }
