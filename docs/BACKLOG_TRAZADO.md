@@ -90,3 +90,30 @@ Estado: `[ ]` pendiente, `[~]` hecho en parte (se dice qué falta), `[x]` hecho.
 - [x] Atajos visibles en la botonera y paleta de comandos (Ctrl+K).
 - [x] Vista previa "fantasma" del elemento bajo el cursor.
 - [~] Pellizco para zoom, dos dedos para panear, asas grandes de arrastre. — Hecho en el código; falta probarlo en una pantalla táctil real.
+
+## Para hacer luego (lo que quedó incompleto o sin verificar)
+Ordenado como lo dejó el responsable el 2026-10-27; todo es pendiente, nada está en curso.
+
+### Lo que no está completo
+- [ ] Ruta de un circuito entre niveles: hoy solo se comprueban los enlaces de los conductos verticales; no se mide un circuito que cruza niveles (por plenos o por conductos verticales).
+- [ ] Valores típicos, no de norma: tamaños de cada tipo, separaciones mínimas entre disciplinas y límites de ocupación son valores típicos; confirmarlos para cada proyecto contra su norma.
+- [ ] Alineación entre disciplinas: dos disciplinas de un mismo nivel deben compartir el punto 0,0; avisar o alinear automáticamente.
+- [ ] Vista de impresión: es una hoja simple; llevarla a la lámina IRAM con su rótulo.
+- [ ] Táctil: pellizco y arrastre con dos dedos probados en pantalla táctil real; imán a vértices del fondo probado con un DXF real.
+- [ ] Teléfono: el encabezado del trazado ocupa casi toda la primera pantalla; plegarlo para que el editor quede a la vista.
+- [ ] Elegir símbolo con vista previa (biblioteca) y modos por disciplina (botonera propia de cada una).
+
+### Otras cosas sin hacer o sin verificar
+- [ ] Probar a mano en el navegador lo que solo tiene prueba automática: matriz de copias, plantillas, copiar a otros niveles, reservar espacio, comentarios fijados, herramienta Ruta, alinear y recortar el fondo, exportar PNG e imprimir, historial con comparar.
+- [ ] Reglas de separación de la empresa: hay API y panel dentro del proyecto, falta la pantalla en Datos de la consola.
+- [ ] Más disciplinas con perfil propio (comunicaciones, climatización, civil, incendio): hoy solo hay eléctrica y cloacas, así que reglas como "fuerza y datos" no tienen con qué probarse.
+- [ ] Pasos y aberturas coordinadas: hoy son un pedido con medidas; falta que aparezcan como marca en el plano de las dos disciplinas.
+- [ ] Pendientes de antes: curvas en cables, elegir nodo intermedio de una ruta, desempate entre rutas iguales, valores de pendiente de cloacas de la norma, verificar el DXF en AutoCAD, GitHub Actions / Docker / migraciones, cobertura baja de los generadores por subproceso (sld, titleblock, mld, dxf).
+- [ ] Subir `dev` a GitHub (solo cuando el responsable lo pida).
+
+### Servicio de reconocimiento de arquitectura (idea nueva)
+Convertir un plano que llega como imagen o PDF en un SVG de trabajo y reconocer paredes, puertas y ventanas, para trazar las canalizaciones alineadas a las paredes.
+- [ ] Fase 1, fuentes vectoriales (DXF y PDF vectorial): leer las líneas y bloques directamente, clasificar por capa y por tipo de bloque; sin visión artificial.
+- [ ] Fase 2, imágenes y PDF escaneado: detección de líneas y de arcos de puerta con visión clásica; el resultado se corrige a mano en el editor.
+- [ ] El resultado entra como SVG con capas (paredes, puertas, ventanas) y como referencia de imán: la canalización se pega a la pared.
+- [ ] Cada elemento reconocido lleva su nivel de confianza y se puede aceptar, corregir o borrar.
