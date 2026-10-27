@@ -83,10 +83,16 @@ def delete_architecture(client: str, code: str, level: str):
     return service.remove_architecture(projects.get_project_dir(client, code), level)
 
 
-@router.post("/{level}/design")
-def design(client: str, code: str, level: str, body: DesignIn):
-    """Circuits, trunk and branches proposed for the loads placed in the rooms of the drawing (nothing is saved)."""
-    return service.design_proposal(projects.get_project_dir(client, code), level, body)
+@router.post("/{level}/design/runs")
+def design_runs(client: str, code: str, level: str, body: DesignIn):
+    """Step 1: straight trunks and conduits proposed for the loads of the drawing (nothing is saved)."""
+    return service.design_runs(projects.get_project_dir(client, code), level, body)
+
+
+@router.post("/{level}/design/wiring")
+def design_wiring(client: str, code: str, level: str, body: DesignIn):
+    """Step 2: circuits by room over the runs already drawn (nothing is saved)."""
+    return service.design_wiring(projects.get_project_dir(client, code), level, body)
 
 
 @router.post("/{level}/design/circuits")

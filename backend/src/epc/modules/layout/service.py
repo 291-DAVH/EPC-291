@@ -408,15 +408,25 @@ def layers_by_discipline(d: Path) -> dict:
 
 
 # ---------------------------------------------------------------- automatic design of circuits and runs
-def design_proposal(d: Path, level: str, body) -> dict:
-    """The circuits, trunk and branches for the loads of the drawing, by room (see `epc_plan.design`). Nothing is saved: the person looks at it and accepts it."""
+def design_runs(d: Path, level: str, body) -> dict:
+    """Step 1 of the automatic design: the straight trunks (trays) and the conduits to each load (see `epc_plan.design`). Nothing is saved: the person looks at the preview and accepts it."""
     from epc_plan import design
     core = _engine()[0]
-    level = _level(level)
+    data = body.drawing.model_dump(by_alias=True)
+    try:
+        return design.propose_runs(_document(_level(level), data), {"board": body.board})
+    except core.PlanError as e:
+        raise Invalid({"drawing": str(e)})
+
+
+def design_wiring(d: Path, level: str, body) -> dict:
+    """Step 2: the circuits by room over the runs that are already drawn, checked by routing each one with the engine. Nothing is saved."""
+    from epc_plan import design
+    core = _engine()[0]
     data = body.drawing.model_dump(by_alias=True)
     taken = {c["tag"] for c in sld.circuits(d)} | {c["tag"] for c in data["circuits"] if c.get("tag")}
     try:
-        return design.propose(_document(level, data), data["rooms"], {"taken": sorted(taken), "board": body.board, "families": body.families})
+        return design.propose_wiring(_document(_level(level), data), data["rooms"], {"taken": sorted(taken), "board": body.board, "families": body.families})
     except core.PlanError as e:
         raise Invalid({"drawing": str(e)})
 

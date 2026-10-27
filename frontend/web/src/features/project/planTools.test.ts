@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  addRoom, alignDelta, alignNodes, applyProposal, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  addRoom, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
   convertClip, linkProblems, insidePolygon, loadsByRoom, pointIndex, removeRoom, renameRoom, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
@@ -276,13 +276,16 @@ describe("rooms and the automatic design", () => {
     expect(insidePolygon([50, 50], square)).toBe(true);
     expect(insidePolygon([150, 50], square)).toBe(false);
   });
-  it("applies an accepted proposal: lines, circuits and the circuit of each load, without repeating a circuit already there", () => {
+  it("applies the accepted runs: a tray per trunk and a conduit per stub", () => {
+    const runs = { orientation: "horizontal", warnings: [], stats: {}, lines: [{ kind: "BN", points: [[0, 0], [50, 0]] as [number, number][], role: "trunk" as const }, { kind: "CN", points: [[50, 0], [50, 20]] as [number, number][], role: "stub" as const }] };
+    expect(applyRuns(blank(), runs).lines.map((l) => [l.id, l.kind])).toEqual([["l1", "BN"], ["l2", "CN"]]);
+  });
+  it("applies an accepted wiring: circuits and the circuit of each load, without repeating a circuit already there", () => {
     const d = addNode(addNode(blank(), "TB", [0, 0]), "LU", [50, 0]);
-    const proposal = { board: "n1", unassigned: [], warnings: [], limits: {}, assignments: { n2: "IUG-01" },
+    const proposal = { board: "n1", unassigned: [], warnings: [], limits: {}, routes: {}, assignments: { n2: "IUG-01" },
       circuits: [{ tag: "IUG-01", family: "IUG", room: "r1", room_name: "Cocina", loads: ["n2"], outlets: 1, from: "n1", to: "n2", via: [], ternas: 1, va: 100, va_per_outlet: 100, description: "" }],
-      lines: [{ kind: "BN", points: [[0, 0], [50, 0]] as [number, number][], role: "trunk" as const, room: "r1" }, { kind: "CN", points: [[50, 0], [50, 20]] as [number, number][], role: "branch" as const, room: "r1", circuit: "IUG-01" }] };
+    };
     const r = applyProposal(d, proposal);
-    expect(r.lines.map((l) => [l.id, l.kind, l.circuit])).toEqual([["l1", "BN", undefined], ["l2", "CN", "IUG-01"]]);
     expect(r.nodes[1].circuit).toBe("IUG-01");
     expect(r.circuits).toEqual([{ tag: "IUG-01", from: "n1", to: "n2", via: [], ternas: 1 }]);
     expect(applyProposal(r, proposal).circuits).toHaveLength(1);
