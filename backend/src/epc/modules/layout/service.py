@@ -103,7 +103,7 @@ def overview(d: Path) -> dict:
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}}
+    return {"discipline": "electrica_BT", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
 
 
 def view(d: Path, level: str) -> dict:
@@ -405,3 +405,26 @@ def layers_by_discipline(d: Path) -> dict:
     drawn = {s["discipline"] for s in sheets(d)}
     groups = dxf_layers.by_discipline(effective)
     return {"disciplines": [{**g, "drawn": g["profile"] in drawn if g["profile"] else False, "layers": [{**x, "kinds": kinds.get(x["name"], [])} for x in g["layers"]]} for g in groups]}
+
+
+# ---------------------------------------------------------------- automatic design of circuits and runs
+def design_proposal(d: Path, level: str, body) -> dict:
+    """The circuits, trunk and branches for the loads of the drawing, by room (see `epc_plan.design`). Nothing is saved: the person looks at it and accepts it."""
+    from epc_plan import design
+    core = _engine()[0]
+    level = _level(level)
+    data = body.drawing.model_dump(by_alias=True)
+    taken = {c["tag"] for c in sld.circuits(d)} | {c["tag"] for c in data["circuits"] if c.get("tag")}
+    try:
+        return design.propose(_document(level, data), data["rooms"], {"taken": sorted(taken), "board": body.board, "families": body.families})
+    except core.PlanError as e:
+        raise Invalid({"drawing": str(e)})
+
+
+def accept_circuits(d: Path, level: str, circuits: list) -> dict:
+    """Create in the board the circuits the person accepted from a proposal (the drawing refers to them by tag)."""
+    level = _level(level)
+    _edit_guard(d, _discipline_of(d, level))
+    out = sld.add_circuits(d, [c.model_dump() for c in circuits])
+    identity.audit_event("layout_circuits_created", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"added": len(out["added"])})
+    return out

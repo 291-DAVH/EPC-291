@@ -4,7 +4,7 @@ from typing import List
 
 from epc.modules.sld import lengths, repository
 
-__all__ = ["circuits", "set_plan_lengths"]
+__all__ = ["circuits", "set_plan_lengths", "add_circuits"]
 
 
 def circuits(d: Path) -> List[dict]:
@@ -20,3 +20,9 @@ def circuits(d: Path) -> List[dict]:
 def set_plan_lengths(provider) -> None:
     """The plan editor tells this module how to read what the drawings measured for each circuit (see `lengths`)."""
     lengths.set_plan_lengths(provider)
+
+
+def add_circuits(d: Path, specs: List[dict], board_id: str = "") -> dict:
+    """Add circuits to a board of the project (the first one when none is named); see `boards.add_circuits`."""
+    from epc.modules.sld import boards
+    return boards.add_circuits(d, specs, board_id)

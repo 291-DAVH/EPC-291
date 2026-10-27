@@ -39,6 +39,13 @@ class CircuitIn(BaseModel):
     ternas: int = Field(1, ge=1, le=99)
 
 
+class RoomIn(BaseModel):
+    """A room marked on the plan (view units): its name and its outline. The automatic design makes a circuit of each family of load in each room."""
+    id: str
+    name: str = ""
+    points: List[List[float]] = Field(min_length=3)
+
+
 class DrawingIn(BaseModel):
     """What the person drew on one level of the project, in the units of the view (the pixels of the plan)."""
     discipline: str = "electrica_BT"
@@ -47,6 +54,7 @@ class DrawingIn(BaseModel):
     nodes: List[NodeIn] = []
     lines: List[LineIn] = []
     circuits: List[CircuitIn] = []
+    rooms: List[RoomIn] = []                # rooms marked on the plan: editor and design only, the engine never reads them
     outlet: str = ""                        # node where a network drains to
     outlet_invert_m: Optional[float] = None
     dxf_version: str = ""
@@ -63,3 +71,21 @@ class TemplateIn(BaseModel):
 class ArchIn(BaseModel):
     """How to recognize the architecture of the plan the person uploaded: the scale if they know it."""
     units_per_metre: Optional[float] = Field(None, gt=0)
+
+
+class DesignIn(BaseModel):
+    """Ask for a proposal of circuits and runs for the drawing as it is on the screen; `families` overrides, by family of load, the limit of outlets per circuit and the power per outlet."""
+    drawing: DrawingIn
+    board: str = ""
+    families: Dict[str, Dict[str, float]] = {}
+
+
+class NewCircuit(BaseModel):
+    tag: str
+    description: str = ""
+    load: Optional[float] = None
+    unit: str = "VA"
+
+
+class NewCircuits(BaseModel):
+    circuits: List[NewCircuit]

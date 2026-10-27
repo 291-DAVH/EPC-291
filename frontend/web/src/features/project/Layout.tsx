@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, Badge, errorText, Icon, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
 import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
+import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, TablePanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { Architecture, Clip, convertClip, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, Architecture, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
 interface Sheet { level: string; base: string; discipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
@@ -16,7 +17,7 @@ interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircui
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "circuits" | "table" | "warnings" | "coord" | "layers" | "history";
+type Panel = "props" | "circuits" | "design" | "table" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -51,7 +52,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [checks, setChecks] = useState<Problem[] | null>(null);
   const [draft, setDraft] = useState<{ at: string; value: Drawing } | null>(null);
   const [clip, setClip] = useState<Clip | null>(null);
-  const [focusReq, setFocusReq] = useState<{ n: number; refs?: Ref[]; at_m?: Pt }>({ n: 0 });
+  const [focusReq, setFocusReq] = useState<{ n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }>({ n: 0 });
   const [compare, setCompare] = useState<{ id: string; drawing: Drawing } | null>(null);
   const [others, setOthers] = useState<{ level: string; drawing: Drawing }[]>([]);
   const [pinAt, setPinAt] = useState<Pt | null>(null);
@@ -61,6 +62,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [targets, setTargets] = useState<string[]>([]);
   const [changes, setChanges] = useState<Changes | null>(null);
   const [arch, setArch] = useState<Architecture | null>(null);
+  const [proposal, setProposal] = useState<Proposal | null>(null);
+  const [designBusy, setDesignBusy] = useState(false);
+  const [limits, setLimits] = useState<Record<string, Partial<Limits>>>({});
+  const [roomRequest, setRoomRequest] = useState(0);
   const [recognizing, setRecognizing] = useState(false);
 
   const [prefs, setPrefs] = usePlanPrefs();
@@ -196,6 +201,23 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setRecognizing(false);
   };
+  const propose = async () => {
+    setDesignBusy(true);
+    try {
+      const body = { drawing, families: Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))])) };
+      setProposal(await api<Proposal>(`${root}/${level}/design`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) })); setErr("");
+    } catch (x) { setErr(errorText(x)); }
+    setDesignBusy(false);
+  };
+  const applyDesign = async (inBoard: boolean) => {
+    if (!proposal) return;
+    setDesignBusy(true);
+    try {
+      if (inBoard) await api(`${root}/${level}/design/circuits`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ circuits: proposal.circuits.map((c) => ({ tag: c.tag, description: c.description, load: c.va, unit: "VA" })) }) });
+      change(applyProposal(drawing, proposal)); setProposal(null); setRev((n) => n + 1); setErr("");
+    } catch (x) { setErr(errorText(x)); }
+    setDesignBusy(false);
+  };
   const useHintedScale = () => {
     const h = lv?.architecture?.scale_hint;
     if (h && write) change({ ...drawing, scale: { p1: [0, 0], p2: [h.units_per_metre, 0], distance_m: 1 } });
@@ -207,7 +229,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (!id) { setCompare(null); return; }
     try { setCompare({ id, drawing: await api<Drawing>(`${root}/${level}/history/${id}`) }); } catch (x) { setErr(errorText(x)); }
   };
-  const look = (refs?: Ref[], at_m?: Pt) => { if (refs) setSelection(refs); setFocusReq((r) => ({ n: r.n + 1, refs, at_m })); };
+  const look = (refs?: Ref[], at_m?: Pt, at?: Pt) => { if (refs) setSelection(refs); setFocusReq((r) => ({ n: r.n + 1, refs, at_m, at })); };
   const jump = (w: string) => { const r = warningTargets(w, derived?.nodes ?? [], derived?.stretches ?? []); if (r.length) look(r); };
   const goProblem = (p: Problem) => { if (p.ref) look([p.ref]); else if (p.tag) { setPanel("circuits"); setFocus(p.tag); } };
   const describeProblem = (p: Problem) => {
@@ -251,7 +273,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; badge?: number }[] = [
     { id: "props", label: tl("layout.tab.props") }, { id: "circuits", label: tl("layout.tab.circuits") }, { id: "table", label: tl("layout.tab.table") }, { id: "warnings", label: tl("layout.tab.warnings"), badge: warnings.length },
-    { id: "layers", label: tl("layers.tab") }, { id: "coord", label: tl("coord.tab"), badge: coord.count }, { id: "history", label: tl("plan.history") },
+    { id: "design", label: tl("design.tab") }, { id: "layers", label: tl("layers.tab") }, { id: "coord", label: tl("coord.tab"), badge: coord.count }, { id: "history", label: tl("plan.history") },
   ];
   const layerOfKind = (id: string) => [...(profile?.lines ?? []), ...(profile?.nodes ?? [])].find((k) => k.id === id)?.capa_dxf ?? "";
   const layerCounts: Record<string, number> = {};
@@ -332,7 +354,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={proposal} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -351,6 +373,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "circuits" && <Circuits drawing={drawing} derived={dp} boardCircuits={ov.data.circuits} profile={profile} onSelect={setSelection} readOnly={!write} focus={focus} onFocus={setFocus} onChange={change} t={tl} />}
               {panel === "table" && <TablePanel d={d} tl={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
+              {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onPropose={propose} onApply={applyDesign} onDiscard={() => setProposal(null)}
+                onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} canWrite={canWrite}
                 sheetOf={(pid) => sameBase.find((x) => x.discipline === pid)?.level ?? null} onOpen={(pid) => { const s = sameBase.find((x) => x.discipline === pid); if (s) setLevel(s.level); else createSheet(sheets.length ? `${base}@${pid}` : base, pid); }} />}
               {panel === "coord" && <Coordination client={client} code={code} discipline={discipline} canWrite={canWrite} onChanged={coord.reload} onFocus={focusAt} />}
