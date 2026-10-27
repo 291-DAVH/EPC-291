@@ -1435,7 +1435,7 @@ export const es = {
     "design.family": "Familia",
     "design.max": "Máx. bocas",
     "design.va": "VA por boca",
-    "design.propose": "Proponer circuitos y canalizaciones",
+    "design.propose": "Proponer circuitos",
     "design.working": "Calculando…",
     "design.needRooms": "Marca al menos un ambiente.",
     "design.typical": "Los máximos y las potencias son valores típicos: confírmalos con la norma del proyecto. El cable de cada circuito sigue las canalizaciones; no se dibuja aparte.",

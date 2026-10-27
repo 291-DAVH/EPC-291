@@ -177,24 +177,9 @@ def best_layout(pts: List[Tuple[float, float]], board: Point) -> Dict[str, Any]:
     return best
 
 
-def _on(p: Point, line: List[Point]) -> bool:
-    (x0, y0), (x1, y1) = line[0], line[-1]
-    return min(x0, x1) - 1e-6 <= p[0] <= max(x0, x1) + 1e-6 and min(y0, y1) - 1e-6 <= p[1] <= max(y0, y1) + 1e-6 and abs((x1 - x0) * (p[1] - y0) - (y1 - y0) * (p[0] - x0)) < 1e-6 * (1 + abs(x1 - x0) + abs(y1 - y0))
-
-
-def _leaves(o: List[Point], ln: List[Point]) -> bool:
-    """Whether run `o` starts or ends on `ln` without lying along it."""
-    return (_on(o[0], ln) or _on(o[-1], ln)) and not (_on(ln[0], o) and _on(ln[-1], o))
-
-
-def _classify(lines: List[List[Point]], loads: List[Point]) -> List[Dict[str, Any]]:
-    """A run is a trunk (tray) when it serves two or more points (loads on it, or runs that leave it) and a conduit (a stub to a single point) when it serves one or none."""
-    out = []
-    for i, ln in enumerate(lines):
-        served = sum(1 for p in loads if _on(p, ln)) + sum(1 for j, o in enumerate(lines) if j != i and _leaves(o, ln))
-        trunk = served >= 2
-        out.append({"kind": "BN" if trunk else "CN", "points": [list(p) for p in ln], "role": "trunk" if trunk else "stub"})
-    return out
+def _runs(lay: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """The lines of a layout with their role: a trunk is a tray (BN) and a stub a conduit (CN) to a single load."""
+    return [{"kind": "BN", "points": [list(p) for p in ln], "role": "trunk"} for ln in lay["trunks"]] + [{"kind": "CN", "points": [list(p) for p in ln], "role": "stub"} for ln in lay["stubs"]]
 
 
 def _transpose(lines: List[List[Point]]) -> List[List[Point]]:
@@ -227,7 +212,7 @@ def propose_runs(document: Dict[str, Any], options: Optional[Dict[str, Any]] = N
     cols = best_layout([(y, x) for x, y in pts], (b[1], b[0]))
     cols = {**cols, "trunks": _transpose(cols["trunks"]), "stubs": _transpose(cols["stubs"])}
     orientation, lay = ("horizontal", rows) if rows["length"] <= cols["length"] + 1e-9 else ("vertical", cols)
-    lines = _classify(lay["trunks"] + lay["stubs"], pts)
+    lines = _runs(lay)
     stats = _stats(orientation, lines, document, params)
     return {"orientation": orientation, "lines": lines, "stats": stats, "warnings": []}
 
