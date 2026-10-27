@@ -52,6 +52,22 @@ class TestLayout(unittest.TestCase):
         self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["arquitectura", "civil", "electrica_BT", "pci", "comunicaciones", "sanitaria_cloacas"])        # the architecture is always there, first
         self.assertEqual({p["project_discipline"] for p in o["profiles"] if p["offered"]}, {"", "civil", "electrical", "fire", "telecom"})
 
+    def test_a_discipline_can_have_several_plans_on_a_level_each_with_its_own_name(self):
+        self.assertEqual(self.c.put(f"{self.base}/L0@electrica_BT", json=DRAWING).status_code, 200)
+        light = self.c.put(f"{self.base}/L0@electrica_BT.iluminacion", json={**DRAWING, "plan_name": "Iluminación"})
+        self.assertEqual(light.status_code, 200, light.text)
+        self.assertEqual(self.c.put(f"{self.base}/L0@electrica_BT.tomas", json={**DRAWING, "plan_name": "Tomacorrientes"}).status_code, 200)
+        sheets = {x["level"]: x for x in self.c.get(self.base).json()["levels"]}
+        self.assertEqual({k: (v["discipline"], v["plan"], v["plan_name"]) for k, v in sheets.items()},
+                         {"L0@electrica_BT": ("electrica_BT", "", ""), "L0@electrica_BT.iluminacion": ("electrica_BT", "iluminacion", "Iluminación"), "L0@electrica_BT.tomas": ("electrica_BT", "tomas", "Tomacorrientes")})
+        again = self.c.put(f"{self.base}/L0@electrica_BT.tomas", json={**DRAWING, "plan_name": "Otra vez"})
+        self.assertEqual(again.status_code, 200)                                              # saving the same plan again is not a second plan
+        self.assertEqual(self.c.put(f"{self.base}/L0@sanitaria_cloacas.tomas", json={**DRAWING, "discipline": "electrica_BT"}).status_code, 422)   # the key says another discipline
+        self.assertEqual(self.c.put(f"{self.base}/L0@electrica_BT.Mal Nombre", json=DRAWING).status_code, 422)
+        clash = self.c.put(f"{self.base}/L0", json=DRAWING)
+        self.assertEqual(clash.status_code, 422)                                              # L0 is the first plan of the electrical discipline too
+        self.assertIn("another name", clash.json()["detail"]["errors"]["discipline"])
+
     def test_levels_are_named_from_l0_up_and_down_and_nothing_else_is_accepted(self):
         for level in ("L0", "L1", "L-1"):
             self.assertEqual(self.c.put(f"{self.base}/{level}", json=DRAWING).status_code, 200, level)

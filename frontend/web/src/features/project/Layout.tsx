@@ -9,10 +9,10 @@ import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { applyProposal, applyRuns, Architecture, BoardRef, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, applyRuns, Architecture, BoardRef, newSheetKey, planLabel, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
-interface Sheet { level: string; base: string; discipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
+interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
 interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: BoardRef[]; dxf_versions: string[]; default_dxf_version: string }
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
@@ -147,8 +147,20 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => send(next), 700);                    // saved a moment after the last change
   };
-  const createSheet = async (name: string, discipline = "arquitectura") => {
-    try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(blank(discipline)) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
+  const createSheet = async (name: string, discipline = "arquitectura", planName = "") => {
+    try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
+  };
+  /** A discipline can have several plans on a level: its first sheet has no name, the next ones ask for one (lighting, sockets...). */
+  const addPlan = (pid: string) => {
+    const here = sheets.filter((x) => x.base === base && x.discipline === pid);
+    const name = here.length ? (window.prompt(tl("plan.newPlan"), "") ?? "").trim() : "";
+    if (here.length && !name) return;
+    createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), name, here.length > 0), pid, name);
+  };
+  const renamePlan = () => {
+    if (!write) return;
+    const name = window.prompt(tl("plan.renamePlan"), drawing.plan_name ?? "");
+    if (name !== null) change({ ...drawing, plan_name: name.trim().slice(0, 60) });
   };
   const deleteSheet = async () => {
     if (!window.confirm(tl("layout.confirmDelete"))) return;
@@ -307,10 +319,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
             : <><button onClick={() => createSheet(nextLevel(bases, "up"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "up")}</button><button onClick={() => createSheet(nextLevel(bases, "down"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "down")}</button></>)}
         </div>
         {level && <div className="wb-group" role="tablist" aria-label={tl("plan.sheets")}>
-          {sameBase.map((x) => <button key={x.level} role="tab" aria-selected={x.level === level} className={"lvl disc" + (x.level === level ? " on" : "")} onClick={() => setLevel(x.level)} title={profName(x.discipline)}>{profName(x.discipline)}</button>)}
-          {canWrite && ov.data.profiles.some((p) => p.offered !== false && !usedHere.has(p.id)) && (
-            <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && createSheet(`${base}@${e.target.value}`, e.target.value)}>
-              <option value="">+</option>{ov.data.profiles.filter((p) => p.offered !== false && !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
+          {sameBase.map((x) => { const label = planLabel(profName(x.discipline), x.level === level ? drawing.plan_name ?? x.plan_name : x.plan_name); return <button key={x.level} role="tab" aria-selected={x.level === level} className={"lvl disc" + (x.level === level ? " on" : "")} onClick={() => setLevel(x.level)} onDoubleClick={() => x.level === level && renamePlan()} title={write && x.level === level ? `${label} — ${tl("plan.renamePlan")}` : label}>{label}</button>; })}
+          {canWrite && ov.data.profiles.some((p) => p.offered !== false) && (
+            <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && addPlan(e.target.value)}>
+              <option value="">+</option>{ov.data.profiles.filter((p) => p.offered !== false).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
             </select>)}
           {level && canWrite && <button onClick={deleteSheet} title={tl("layout.deleteLevel")} aria-label={tl("layout.deleteLevel")}><Icon name="trash" size={16} /></button>}
         </div>}
