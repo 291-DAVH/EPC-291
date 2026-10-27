@@ -8,7 +8,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 
 | Unidad | Usa | Lo usan | Impacto si la modificas |
 |---|---|---|---|
-| `arch` | — | — | — |
+| `arch` | — | `backend.layout` | `backend.app`, `backend.coordination`, `backend.layout` |
 | `calc` | — | `backend.catalogs`, `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
 | `drawing` | `calc`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
@@ -37,7 +37,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `backend.intake` | `backend.core`, `backend.projects` | `backend.app`, `backend.management`, `backend.reporting`, `backend.requirements` |
 | `backend.issuing` | `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `drawing` | `backend.app` |
 | `backend.knowledge` | `backend.core`, `rules` | `backend.admin`, `backend.app` |
-| `backend.layout` | `backend.catalogs`, `backend.core`, `backend.identity`, `backend.projects`, `backend.sld`, `drawing`, `plan` | `backend.app`, `backend.coordination` |
+| `backend.layout` | `arch`, `backend.catalogs`, `backend.core`, `backend.identity`, `backend.projects`, `backend.sld`, `drawing`, `plan` | `backend.app`, `backend.coordination` |
 | `backend.management` | `backend.core`, `backend.deliverables`, `backend.intake`, `backend.projects`, `backend.requirements` | `backend.app`, `backend.reporting` |
 | `backend.masterdata` | `backend.core`, `backend.identity`, `backend.projects` | `backend.app`, `backend.issuing`, `backend.sld` |
 | `backend.norms` | `backend.core`, `backend.identity`, `calc` | `backend.app` |
