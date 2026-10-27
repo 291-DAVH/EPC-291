@@ -11,6 +11,8 @@ export const en = {
     "app.skip": "Skip to content",
     "app.menu": "Account and options",
     "app.navigation": "Sections",
+    "app.ready": "Ready",
+    "app.statusAdmin": "Engineering team",
     "theme.toggle": "Toggle theme",
     "console.denied.title": "Restricted access",
     "console.denied.help": "The technical console is for administrators only.",
