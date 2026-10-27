@@ -11,6 +11,8 @@ export const es = {
     "app.skip": "Saltar al contenido",
     "app.menu": "Cuenta y opciones",
     "app.navigation": "Secciones",
+    "app.ready": "Listo",
+    "app.statusAdmin": "Equipo de ingeniería",
     "theme.toggle": "Cambiar tema",
     "console.denied.title": "Acceso restringido",
     "console.denied.help": "La consola técnica es solo para administradores.",
