@@ -326,6 +326,7 @@ export const es = {
     "sld.unsaved": "Hay cambios sin guardar.",
     "sld.saved": "Datos guardados.",
     "sld.running": "Generando… puede tardar unos segundos.",
+    "sld.outdated": "Los datos cambiaron después de generar este unifilar: recalcula la memoria y vuelve a generarlo.",
     "sld.done": "Unifilar generado. Ya está en Archivos (SVG, DXF y cálculo).",
     "sld.failed": "No se pudo generar",
     "sld.outputs": "Archivos generados",

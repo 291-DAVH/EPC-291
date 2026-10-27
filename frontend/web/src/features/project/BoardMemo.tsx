@@ -5,7 +5,7 @@ import { Badge, BoardMemoView, Key, Markdown, State, useApi, useI18n } from "@ep
 export default function BoardMemo({ client, code, v }: { client: string; code: string; v: BoardMemoView }) {
   const { t } = useI18n();
   const [tab, setTab] = useState<"mc" | "sp" | "curves">("sp");
-  if (!v.available || !v.memo) return <div className="state">{t("memo.none")}</div>;
+  if (!v.available || !v.memo) return <div className="state">{t("memo.none")}{v.outdated && <div className="alert warn small" style={{ marginTop: 8 }}>{t("memo.stale")}</div>}</div>;
   const r = v.memo.resumen;
   const file = (suffix: string) => v.files.find((f) => f.endsWith(suffix));
   return (

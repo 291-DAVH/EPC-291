@@ -326,6 +326,7 @@ export const en = {
     "sld.unsaved": "There are unsaved changes.",
     "sld.saved": "Data saved.",
     "sld.running": "Generating… it can take a few seconds.",
+    "sld.outdated": "The data changed after this diagram was generated: recalculate the memo and generate it again.",
     "sld.done": "Diagram generated. It is now in Files (SVG, DXF and calculation).",
     "sld.failed": "Generation failed",
     "sld.outputs": "Generated files",
