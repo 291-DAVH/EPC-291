@@ -39,7 +39,7 @@ class TestLayout(unittest.TestCase):
     def test_the_overview_offers_profiles_versions_and_no_levels_yet(self):
         o = self.c.get(self.base).json()
         self.assertEqual(o["levels"], [])
-        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas"})
+        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas", "hvac", "pci", "comunicaciones"})
         self.assertEqual((o["default_dxf_version"], o["dxf_versions"][-1]), ("R2018", "R2018"))
 
     def test_levels_are_named_from_l0_up_and_down_and_nothing_else_is_accepted(self):
@@ -89,6 +89,19 @@ class TestLayout(unittest.TestCase):
         self.assertIn("default-src 'none'", served.headers["content-security-policy"])
         for name, data in (("x.exe", b"MZ..."), ("x.txt", b"hello"), ("x.dxf", b"not a dxf"), ("x.png", b"")):
             self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": (name, data, "application/octet-stream")}).status_code, 422, name)
+
+    def test_the_architectural_plan_is_shared_by_every_discipline_drawn_on_the_level(self):
+        self.c.put(f"{self.base}/L0", json=DRAWING)
+        self.c.put(f"{self.base}/L0@sanitaria_cloacas", json={**DRAWING, "discipline": "sanitaria_cloacas", "nodes": [], "lines": []})
+        self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.png", PNG, "image/png")}).status_code, 200)
+        other = self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()
+        self.assertEqual(other["underlay"]["kind"], "png")                                      # the other discipline sees the same plan
+        self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas/underlay").content[1:4], b"PNG")
+        self.assertTrue(all(x["underlay"] for x in self.c.get(self.base).json()["levels"]))
+        self.assertEqual(self.c.post(f"{self.base}/L0@sanitaria_cloacas/underlay", files={"file": ("p2.png", PNG, "image/png")}).status_code, 200)
+        self.assertEqual(len(list((self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "layout").glob("*/src/underlay.*"))), 1)   # one plan, not a copy per discipline
+        self.assertEqual(self.c.delete(f"{self.base}/L0").status_code, 200)                      # deleting the level's own sheet keeps the plan for the others
+        self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()["underlay"]["kind"], "png")
 
     def test_a_pdf_becomes_an_image_underlay(self):
         self.c.put(f"{self.base}/L0", json=DRAWING)

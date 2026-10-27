@@ -94,7 +94,7 @@ export default function PlanScene(p: SceneProps) {
   const op = p.underlayOpts;
   const crop = op.crop;
   const iw = p.img?.w ?? 0, ih = p.img?.h ?? 0;
-  const showUnder = p.underlayUrl && p.img && !op.hidden;
+  const showUnder = p.underlayUrl && p.img && !op.hidden && archOn("ARQ-FONDO");
   const coarse = u > 0 && typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
   const hs = (coarse ? 9 : 5) * u;
   const selLine = !p.readOnly && p.tool === "select" && selection.length === 1 && selection[0].type === "line" ? drawing.lines.find((x) => x.id === selection[0].id) : undefined;

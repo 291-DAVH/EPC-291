@@ -414,6 +414,25 @@ class TestJobs(unittest.TestCase):
             self.assertIn("level", st["error"])
 
 
+class TestDisciplines(unittest.TestCase):
+    def test_every_discipline_with_tools_draws_in_layers_and_symbols_that_exist(self):
+        from epc_dxf import layers
+        known = {k.split(".", 1)[1] for k in layers.defaults() if k.startswith("plan.")}
+        for pid in ("hvac", "pci", "comunicaciones", "sanitaria_cloacas", "electrica_BT"):
+            prof = core.load_profile(pid)
+            for k in prof["tramos"] + prof["nodos"]:
+                self.assertIn(k["capa_dxf"], known, f"{pid}:{k['id']}")
+                self.assertTrue(k["simbolo_2d"] == "linea_simple" or k["simbolo_2d"] in core.SYMBOLS, f"{pid}:{k['id']}")
+
+    def test_a_drawing_of_each_new_discipline_is_processed(self):
+        for pid in ("hvac", "pci", "comunicaciones"):
+            prof = core.load_profile(pid)
+            nodes = [{"id": f"n{i}", "kind": k["id"], "x": 10 + i * 20, "y": 10} for i, k in enumerate(prof["nodos"])]
+            ln = [{"id": "l1", "kind": prof["tramos"][0]["id"], "points": [[10, 10], [10 + 20 * (len(nodes) - 1), 10]]}]
+            out = core.process({**drawing(nodes, ln), "discipline": pid})
+            self.assertEqual(out["schedule"]["lines"][prof["tramos"][0]["id"]]["lines"], 1, pid)
+
+
 if __name__ == "__main__":
     unittest.main()
 

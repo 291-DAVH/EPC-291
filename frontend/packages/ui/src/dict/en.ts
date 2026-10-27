@@ -1005,6 +1005,8 @@ export const en = {
     "layout.circuits.loads": "Loads",
     "nav.layers": "Drawing layers",
     "layers.title": "Drawing layers (DXF)",
+    "layers.archShared": "The architectural plan is one for the level: it shows in every discipline drawn over it.",
+    "layers.others": "Other disciplines on this level",
     "layers.help": "How the layers every drawing is delivered with are called and look (single-line, multi-line and plan). This is the global catalog: a change reaches the next DXF generated, except in the companies and projects that have their own.",
     "layers.group.sld": "Single-line and multi-line diagrams",
     "layers.group.plan": "Plan drawing",

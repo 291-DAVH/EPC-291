@@ -81,20 +81,55 @@ def load_snapshot(d: Path, level: str, snapshot: str) -> Optional[dict]:
     return read_json(history_dir(d, level) / f"{snapshot}.json", None) if snapshot.replace("T", "").isdigit() else None
 
 
+SHARED_PLAN = ("underlay.*", "original.*", "architecture.*")
+
+
+def _strip_to_shared_plan(folder: Path) -> None:
+    """Empty a sheet's folder but for the architectural plan the other disciplines of the level still use."""
+    for item in folder.iterdir():
+        if item.name != "src":
+            shutil.rmtree(item, ignore_errors=True) if item.is_dir() else item.unlink()
+    for item in (folder / "src").iterdir():
+        if not any(item.match(pattern) for pattern in SHARED_PLAN):
+            item.unlink()
+
+
+def _remove_sheet(d: Path, level: str) -> None:
+    """The architectural plan stays while another discipline is drawn on the same level: it is shared (see `_plan_homes`)."""
+    shared = "@" not in level and any(s != level and split(s)[0] == level for s in levels(d))
+    _strip_to_shared_plan(level_dir(d, level)) if shared else shutil.rmtree(level_dir(d, level), ignore_errors=True)
+
+
 def delete_level(d: Path, level: str) -> None:
-    shutil.rmtree(level_dir(d, level), ignore_errors=True)
+    """Delete a sheet (its drawing, files and history)."""
+    _remove_sheet(d, level)
+
+
+def _plan_homes(d: Path, level: str) -> List[Path]:
+    """Where the architectural plan of a sheet lives: with the level, shared by every discipline drawn on it (the plan is one; the disciplines are layers over it). A sheet that kept its own
+    copy before that (`L0@hvac`) still finds it, after the level's."""
+    return [level_dir(d, key) / "src" for key in dict.fromkeys([split(level)[0], level])]
+
+
+def _plan_file(d: Path, level: str, pattern: str) -> Optional[Path]:
+    return next((p for home in _plan_homes(d, level) if home.is_dir() for p in sorted(home.glob(pattern))), None)
 
 
 def underlay_file(d: Path, level: str) -> Optional[Path]:
-    src = level_dir(d, level) / "src"
-    return next((p for ext in UNDERLAY_EXT for p in [src / f"underlay{ext}"] if p.is_file()), None)
+    return next((p for ext in UNDERLAY_EXT for p in [_plan_file(d, level, f"underlay{ext}")] if p), None)
+
+
+def _clear_plan(d: Path, level: str, patterns: tuple) -> None:
+    for home in _plan_homes(d, level):
+        for pattern in patterns:
+            for old in home.glob(pattern):
+                old.unlink()
 
 
 def save_underlay(d: Path, level: str, ext: str, data: bytes) -> Path:
-    src = level_dir(d, level) / "src"
+    _clear_plan(d, level, ("underlay.*",))
+    src = _plan_homes(d, level)[0]
     src.mkdir(parents=True, exist_ok=True)
-    for old in src.glob("underlay.*"):
-        old.unlink()
     dest = src / f"underlay{ext}"
     dest.write_bytes(data)
     return dest
@@ -133,33 +168,37 @@ ARCHITECTURE = ("architecture.json", "architecture.svg")
 
 def save_original(d: Path, level: str, name: str, data: bytes) -> None:
     """Keep the file as the person sent it (the underlay is a converted copy): what architecture recognition reads."""
-    src = level_dir(d, level) / "src"
+    _clear_plan(d, level, ("original.*",))
+    src = _plan_homes(d, level)[0]
     src.mkdir(parents=True, exist_ok=True)
-    for old in src.glob("original.*"):
-        old.unlink()
     ext = Path(name or "").suffix.lower()
     if ext in ORIGINAL_EXT:
         (src / f"original{ext}").write_bytes(data)
 
 
 def load_original(d: Path, level: str) -> Optional[Path]:
-    src = level_dir(d, level) / "src"
-    return next(iter(sorted(src.glob("original.*"))), None) if src.is_dir() else None
+    return _plan_file(d, level, "original.*")
+
+
+def _plan_json(d: Path, level: str, name: str) -> Optional[dict]:
+    f = _plan_file(d, level, name)
+    return read_json(f, None) if f else None
 
 
 def load_architecture(d: Path, level: str) -> Optional[dict]:
-    return read_json(level_dir(d, level) / "src" / ARCHITECTURE[0], None)
+    return _plan_json(d, level, ARCHITECTURE[0])
 
 
 def save_architecture(d: Path, level: str, data: dict, svg: str) -> None:
-    src = level_dir(d, level) / "src"
+    _clear_plan(d, level, ARCHITECTURE)
+    src = _plan_homes(d, level)[0]
+    src.mkdir(parents=True, exist_ok=True)
     write_json(src / ARCHITECTURE[0], data)
     (src / ARCHITECTURE[1]).write_text(svg, encoding="utf-8")
 
 
 def delete_architecture(d: Path, level: str) -> None:
-    for name in ARCHITECTURE:
-        (level_dir(d, level) / "src" / name).unlink(missing_ok=True)
+    _clear_plan(d, level, ARCHITECTURE)
 
 
 def out_dir(d: Path, level: str) -> Path:

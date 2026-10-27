@@ -1,0 +1,95 @@
+{
+  "id": "comunicaciones",
+  "nombre": {
+    "es": "Comunicaciones",
+    "en": "Communications"
+  },
+  "tramos": [
+    {
+      "id": "BC",
+      "etiqueta": {
+        "es": "Bandeja de comunicaciones",
+        "en": "Communications tray"
+      },
+      "prefijo_tag": "BC",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "COM-BANDEJA",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.2,
+        "alto_m": 0.05
+      }
+    },
+    {
+      "id": "CD",
+      "etiqueta": {
+        "es": "Cable o canalización de datos",
+        "en": "Data cable or conduit"
+      },
+      "prefijo_tag": "CD",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "COM-CABLE",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.02,
+        "alto_m": 0.02
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "RK",
+      "etiqueta": {
+        "es": "Rack",
+        "en": "Rack"
+      },
+      "prefijo_tag": "RK",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "rack",
+      "capa_dxf": "COM-RACK",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.6,
+        "alto_m": 0.6
+      }
+    },
+    {
+      "id": "TD",
+      "etiqueta": {
+        "es": "Boca de datos",
+        "en": "Data outlet"
+      },
+      "prefijo_tag": "TD",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "boca_datos",
+      "capa_dxf": "COM-BOCA",
+      "geom": {
+        "z_m": 0.3,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "b": "BC",
+    "c": "CD",
+    "r": "RK",
+    "t": "TD"
+  },
+  "unidades_salida": "m"
+}

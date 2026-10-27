@@ -27,7 +27,8 @@ class TestCatalog(unittest.TestCase):
         self.assertTrue({"HVAC-DUCTO", "HVAC-EQUIPO"} <= {x["name"] for x in groups["hvac"]["layers"]})
         self.assertTrue({"PCI-ROCIADOR", "PCI-DETECTOR"} <= {x["name"] for x in groups["pci"]["layers"]})
         self.assertEqual(groups["sanitaria"]["profile"], "sanitaria_cloacas")
-        self.assertIsNone(groups["hvac"]["profile"])
+        self.assertEqual([groups[k]["profile"] for k in ("hvac", "pci", "comunicaciones")], ["hvac", "pci", "comunicaciones"])
+        self.assertIsNone(groups["arquitectura"]["profile"])                     # the architecture is the plan the others are drawn over, not a drawing of its own
         self.assertIn("291-E-DIAGRAMA", [x["name"] for x in groups["diagramas"]["layers"]])
         grouped = {x["name"] for g in groups.values() for x in g["layers"]}
         self.assertEqual(grouped, {a["name"] for a in L.load().values()})                       # every layer of the catalog belongs to some discipline

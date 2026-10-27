@@ -39,6 +39,16 @@ export default function Project() {
   const closed = d.state !== "active";
 
   const bench = tab === "layout";                      // the layout is a single-page editor: a slim header and the editor takes the rest of the window
+  const tabs = (                                       // in the editor the tabs share the header line with the name of the project
+    <div className="tabs" role="tablist">
+      {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
+        <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
+          {t(("u.tab." + x) as Key)}
+          {x === "inputs" && d.inputs.open > 0 && <span className="dot">{d.inputs.open}</span>}
+        </button>
+      ))}
+    </div>
+  );
   return (
     <div className={bench ? "project bench" : "project"}>
       {bench ? (
@@ -46,6 +56,7 @@ export default function Project() {
           <Link to="/" className="muted" aria-label={t("u.p.back")}>←</Link>
           <span className="muted">{d.client}</span><span className="mono muted">{d.code}</span><b>{d.name}</b>
           <HealthBadge health={d.health} closed={closed} />
+          {tabs}
         </div>
       ) : <Link to="/" className="muted">← {t("u.p.back")}</Link>}
       {!bench && <div className="phead">
@@ -66,14 +77,7 @@ export default function Project() {
         </div>
       </div>}
 
-      <div className="tabs" role="tablist">
-        {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
-          <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => go(x)}>
-            {t(("u.tab." + x) as Key)}
-            {x === "inputs" && d.inputs.open > 0 && <span className="dot">{d.inputs.open}</span>}
-          </button>
-        ))}
-      </div>
+      {!bench && tabs}
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Plan base={base} />}
