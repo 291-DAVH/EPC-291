@@ -33,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "d5fbb39ac25826fb"
+      "hash": "698e27afcd08c446"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -55,7 +55,7 @@
       "engine": [
         "dxf"
       ],
-      "hash": "90956966e16cc2b0"
+      "hash": "137e0db233595430"
     },
     "equipment-catalog": {
       "version": "0.1.0",
@@ -100,7 +100,7 @@
         "dxf",
         "titleblock"
       ],
-      "hash": "dda72883ce0f319d"
+      "hash": "8e79b716d7470e51"
     },
     "mld": {
       "version": "0.2.2",
@@ -120,7 +120,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "643a475d2f97e20c"
+      "hash": "c10afdb1479ef21d"
     },
     "plan-drawing": {
       "version": "0.1.0",
@@ -134,7 +134,7 @@
         "dxf",
         "plan"
       ],
-      "hash": "fca49789537b262d"
+      "hash": "b48b7aa339c57851"
     },
     "pm2-docs": {
       "version": "0.1.0",
@@ -182,7 +182,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "3267dec3893ad03a"
+      "hash": "cef2fc0334630385"
     },
     "spec-writer": {
       "version": "0.1.0",

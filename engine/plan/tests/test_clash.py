@@ -62,6 +62,11 @@ class TestClash(unittest.TestCase):
         self.assertEqual(found[0]["point_m"], [5.0, 0.0])
         self.assertEqual({found[0]["a"]["discipline"], found[0]["b"]["discipline"]}, {"electrica_BT", "sanitaria_cloacas"})
 
+    def test_the_architecture_is_the_plan_the_others_are_drawn_over_and_clashes_with_nobody(self):
+        wall = {"id": "l1", "kind": "MU", "points": [[50, -50], [50, 50]]}
+        e = sheet(lines=[tray("l1", [0, 0], [100, 0])])
+        self.assertEqual(clash.detect(items(("E", e), ("A", sheet(discipline="arquitectura", lines=[wall])))), [])
+
     def test_two_elements_of_the_same_discipline_never_clash(self):
         e = sheet(lines=[tray("l1", [0, 0], [100, 0]), tray("l2", [50, -50], [50, 50])])
         self.assertEqual(clash.detect(items(("E", e))), [])

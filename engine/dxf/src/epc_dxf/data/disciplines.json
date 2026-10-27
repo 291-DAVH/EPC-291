@@ -5,7 +5,7 @@
     {
       "id": "arquitectura",
       "prefix": "ARQ-",
-      "profile": null,
+      "profile": "arquitectura",
       "name": {
         "es": "Arquitectura",
         "en": "Architecture"

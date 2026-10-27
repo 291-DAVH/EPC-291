@@ -87,6 +87,11 @@ def derive_data(level: str, data: dict) -> dict:
         raise Invalid({"drawing": str(e)})
 
 
+def _offered(profile: dict, pid: str, chosen: set, used: set) -> bool:
+    """A profile is offered when the project chose its discipline, it is always there (architecture), the sheet already exists, or the project chose none."""
+    return not chosen or bool(profile.get("siempre")) or profile.get("disciplina_proyecto") in chosen or pid in used
+
+
 def _profiles(d: Path, core, used: set) -> list:
     """The drawing profiles, in the order a project is worked (architecture, civil, mechanical, electrical...). `offered` tells whether the project chose that discipline when it was created
     (or already draws in it): those are the ones the editor lists to add a sheet; a project that chose none is offered all of them."""
@@ -97,7 +102,7 @@ def _profiles(d: Path, core, used: set) -> list:
     for pid in sorted(core.profiles(), key=lambda x: order.index(x) if x in order else len(order)):
         p = core.load_profile(pid)
         symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
-        offered = not chosen or p.get("disciplina_proyecto") in chosen or pid in used
+        offered = _offered(p, pid, chosen, used)
         out.append({"id": pid, "name": p["nombre"], "project_discipline": p.get("disciplina_proyecto", ""), "offered": offered, "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
     return out
 
@@ -227,8 +232,15 @@ def _underlay_content(name: str, data: bytes) -> Tuple[bytes, str]:
     raise Invalid({"file": "use a PNG or JPG image, an SVG, a DXF or a PDF"})
 
 
+def _architecture_only(d: Path, level: str) -> None:
+    """The architectural plan is put in, recognized and taken out from the Architecture sheet of the level; the other disciplines only draw over it."""
+    if _discipline_of(d, level) != "arquitectura":
+        raise Invalid({"discipline": "the plan is managed from the Architecture sheet of the level"})
+
+
 def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
     level = _level(level)
+    _architecture_only(d, level)
     if not data:
         raise Invalid({"file": "the file is empty"})
     if len(data) > MAX_UPLOAD:
@@ -366,6 +378,7 @@ def recognize_architecture(d: Path, level: str, units_per_metre: Optional[float]
     """Find the walls, doors and windows of the plan the person uploaded (their file, as they sent it), keep them with the sheet and, when the plan was vector (a DXF or a PDF made from CAD), show the recognized SVG as the underlay: the engine draws it, so its frame is the one the findings are in.
     An image keeps its own underlay: the findings are in its pixels."""
     level = _level(level)
+    _architecture_only(d, level)
     original = repository.load_original(d, level)
     if original is None:
         raise Invalid({"file": "upload the plan first: a DXF, a PDF or an image"})
@@ -388,6 +401,7 @@ def architecture(d: Path, level: str) -> dict:
 
 def remove_architecture(d: Path, level: str) -> dict:
     level = _level(level)
+    _architecture_only(d, level)
     _edit_guard(d, _discipline_of(d, level))
     repository.delete_architecture(d, level)
     return view(d, level)

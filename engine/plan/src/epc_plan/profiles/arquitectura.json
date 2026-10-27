@@ -1,0 +1,79 @@
+{
+  "id": "arquitectura",
+  "nombre": {
+    "es": "Arquitectura",
+    "en": "Architecture"
+  },
+  "disciplina_proyecto": "",
+  "siempre": true,
+  "tramos": [
+    {
+      "id": "MU",
+      "etiqueta": {
+        "es": "Muro",
+        "en": "Wall"
+      },
+      "prefijo_tag": "MU",
+      "atributos": [
+        "dimensiones",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "ARQ-MUROS",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.2,
+        "alto_m": 2.6
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "PU",
+      "etiqueta": {
+        "es": "Puerta",
+        "en": "Door"
+      },
+      "prefijo_tag": "PU",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "puerta",
+      "capa_dxf": "ARQ-PUERTAS",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.9,
+        "alto_m": 0.2
+      }
+    },
+    {
+      "id": "VE",
+      "etiqueta": {
+        "es": "Ventana",
+        "en": "Window"
+      },
+      "prefijo_tag": "VE",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "ventana",
+      "capa_dxf": "ARQ-VENTANAS",
+      "geom": {
+        "z_m": 1.0,
+        "ancho_m": 1.2,
+        "alto_m": 0.2
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "m": "MU",
+    "p": "PU",
+    "v": "VE"
+  },
+  "unidades_salida": "m"
+}

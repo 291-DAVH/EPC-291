@@ -1,4 +1,4 @@
-import { Badge, Icon, Key, State, useApi, useI18n } from "@epc/ui";
+import { Key, State, useApi, useI18n } from "@epc/ui";
 import type { PlanPrefs } from "./planPrefs";
 import { colorOfDiscipline } from "./planTypes";
 
@@ -10,11 +10,10 @@ export interface LayerItem { role: string; name: string; color: number; hex: str
 export interface DisciplineLayers { id: string; prefix: string; profile: string | null; name: { es: string; en: string }; drawn: boolean; layers: LayerItem[] }
 
 interface Props {
-  client: string; code: string; rev: number; current: string; prefs: PlanPrefs; setPrefs: (p: Partial<PlanPrefs>) => void; counts: Record<string, number>; canWrite: boolean;
-  sheetOf: (profile: string) => string | null; onOpen: (profile: string) => void;
+  client: string; code: string; rev: number; current: string; prefs: PlanPrefs; setPrefs: (p: Partial<PlanPrefs>) => void; counts: Record<string, number>;
 }
 
-export default function LayersPanel({ client, code, rev, current, prefs, setPrefs, counts, canWrite, sheetOf, onOpen }: Props) {
+export default function LayersPanel({ client, code, rev, current, prefs, setPrefs, counts }: Props) {
   const { t, lang } = useI18n();
   const tl = (k: string) => t(k as Key);
   const data = useApi<{ disciplines: DisciplineLayers[] }>(`/projects/${client}/${code}/layout-layers?r=${rev}`);
@@ -22,7 +21,6 @@ export default function LayersPanel({ client, code, rev, current, prefs, setPref
   const groups = data.data.disciplines;
   const arq = groups.find((g) => g.prefix === "ARQ-");
   const mine = groups.find((g) => g.profile === current);
-  const others = groups.filter((g) => g.profile && g.profile !== current);
   const hidden = prefs.hiddenLayers;
   const shown = (name: string) => !hidden.includes(name);
   const setMany = (names: string[], on: boolean) => setPrefs({ hiddenLayers: on ? hidden.filter((n) => !names.includes(n)) : [...new Set([...hidden, ...names])] });
@@ -54,23 +52,8 @@ export default function LayersPanel({ client, code, rev, current, prefs, setPref
   );
   return (
     <div className="layers">
-      {arq && <>{table(arq, false)}<p className="muted small" style={{ margin: "6px 0 0" }}>{tl("layers.archShared")}</p></>}
-      {mine ? table(mine, true) : <p className="muted small">{tl("layers.noProfile")}</p>}
-      {others.length > 0 && (
-        <section aria-label={tl("layers.others")}>
-          <h4 className="coord-h">{tl("layers.others")}</h4>
-          {others.map((g) => {
-            const sheet = sheetOf(g.profile!);
-            return (
-              <div key={g.id} className="row small" style={{ gap: 8, flexWrap: "wrap", margin: "4px 0", alignItems: "center" }}>
-                <i className="disc-dot" style={{ background: colorOfDiscipline(g.profile!) }} /><span style={{ flex: 1, minWidth: 120 }}>{g.name[lang] ?? g.name.es}</span>
-                <label className="vp-row"><input type="checkbox" checked={!prefs.hiddenDisc.includes(g.profile!)} onChange={(e) => setPrefs({ hiddenDisc: e.target.checked ? prefs.hiddenDisc.filter((p) => p !== g.profile) : [...prefs.hiddenDisc, g.profile!] })} /> {tl("layers.footprint")}</label>
-                <button onClick={() => onOpen(g.profile!)} disabled={!sheet && !canWrite}><Icon name={sheet ? "eye" : "new"} size={14} /> {tl(sheet ? "layers.openSheet" : "layers.createSheet")}</button>
-              </div>
-            );
-          })}
-        </section>
-      )}
+      {arq && <>{table(arq, current === "arquitectura")}<p className="muted small" style={{ margin: "6px 0 0" }}>{tl("layers.archShared")}</p></>}
+      {mine && mine !== arq ? table(mine, true) : !mine && <p className="muted small">{tl("layers.noProfile")}</p>}
       <p className="muted small" style={{ margin: "8px 0 0" }}>{tl("layers.help")}</p>
     </div>
   );

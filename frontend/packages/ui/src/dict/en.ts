@@ -1175,7 +1175,6 @@ export const en = {
     "plan.show.lengths": "Lengths on the stretches",
     "plan.show.coords": "Cursor coordinates",
     "plan.show.minimap": "Minimap",
-    "plan.show.refs": "Other disciplines (footprint only)",
     "plan.show.ghosts": "Neighbouring levels",
     "plan.show.pins": "Clashes and comments",
     "plan.show.isolate": "Isolate the chosen circuit",

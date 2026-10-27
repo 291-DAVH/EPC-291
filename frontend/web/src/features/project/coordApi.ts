@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@epc/ui";
 import type { Pt } from "./planEditing";
-import type { Pin, RefItem } from "./planTypes";
+import type { Pin } from "./planTypes";
 
 /** What the web reads from the coordination API (see backend `coordination`): footprints of other disciplines, clashes, threads and what a discipline should look at. */
 export interface ClashRef { sheet: string; discipline: string; level: string; id: string; tag: string; kind: string; shape: string }
@@ -20,9 +20,8 @@ export interface RulesView { default: Rule[]; inherited: Rule[]; own: Rule[]; ef
 export const base = (client: string, code: string) => `/projects/${client}/${code}/coordination`;
 export const levelOf = (sheet: string) => sheet.split("@")[0];
 
-/** What the editor needs about the other disciplines on a sheet: their footprints, the clashes and threads of its level, and the number of things for its discipline to look at. */
+/** What the editor needs from the coordination of a sheet: the clashes and threads of its level, and the number of things for its discipline to look at. The other disciplines are not drawn in the editor: they are seen in the Coordination tab. */
 export function useCoordination(client: string, code: string, sheet: string, discipline: string) {
-  const [reference, setReference] = useState<RefItem[]>([]);
   const [clashes, setClashes] = useState<Clash[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
   const [count, setCount] = useState(0);
@@ -30,16 +29,15 @@ export function useCoordination(client: string, code: string, sheet: string, dis
   const level = levelOf(sheet);
   const reload = useCallback(() => setRev((n) => n + 1), []);
   useEffect(() => {
-    if (!sheet || !discipline) { setReference([]); setClashes([]); setThreads([]); setCount(0); return; }
+    if (!sheet || !discipline) { setClashes([]); setThreads([]); setCount(0); return; }
     let live = true;
     const b = base(client, code);
-    api<{ items: RefItem[] }>(`${b}/reference?discipline=${encodeURIComponent(discipline)}&level=${encodeURIComponent(level)}`).then((r) => live && setReference(r.items)).catch(() => live && setReference([]));
     api<ClashResult>(`${b}/clashes`).then((r) => live && setClashes(r.clashes)).catch(() => live && setClashes([]));
     api<Thread[]>(`${b}/threads?level=${encodeURIComponent(level)}`).then((r) => live && setThreads(r)).catch(() => live && setThreads([]));
     api<Notifications>(`${b}/notifications?discipline=${encodeURIComponent(discipline)}`).then((r) => live && setCount(r.count)).catch(() => live && setCount(0));
     return () => { live = false; };
   }, [client, code, sheet, discipline, level, rev]);
-  return { reference, clashes, threads, count, reload };
+  return { clashes, threads, count, reload };
 }
 
 /** The marks the plan shows for clashes and threads of the level. A resolved or accepted one stays, quiet. */
