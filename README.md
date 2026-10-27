@@ -64,7 +64,7 @@ git config core.hooksPath tools/hooks
 # Python environment (from the repository root)
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
-.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
+.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/arch -e engine/documents -e "backend[dev]"
 
 # Test battery (21 checks, run before merging anything)
 .venv\Scripts\python tools\ci\run_gate.py

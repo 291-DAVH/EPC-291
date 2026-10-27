@@ -100,22 +100,13 @@ def save_underlay(d: Path, level: str, ext: str, data: bytes) -> Path:
     return dest
 
 
-def _pdf_with_pdfium(pdf: bytes, max_side: int = 3000) -> Optional[bytes]:
-    """First page of a PDF as a PNG with pypdfium2 (Apache-2.0 / BSD-3, the library of Chrome's PDF viewer); None when it is not installed or cannot read the file."""
+def _pdf_with_pdfium(pdf: bytes) -> Optional[bytes]:
+    """First page of a PDF as a PNG: the architecture engine does it (one place, so the picture shown and the picture it reads have the same pixels); None when it cannot."""
     try:
-        import io
-        import pypdfium2
+        from epc_arch import pdf_to_png
     except ImportError:
         return None
-    try:
-        page = pypdfium2.PdfDocument(pdf)[0]
-        width, height = page.get_size()
-        image = page.render(scale=min(2.5, max_side / max(width, height, 1))).to_pil()
-        out = io.BytesIO()
-        image.save(out, format="PNG")
-        return out.getvalue()
-    except Exception:                                         # noqa: BLE001 - a broken or protected PDF is reported by the caller as "cannot open"
-        return None
+    return pdf_to_png(pdf)
 
 
 def _pdf_with_poppler(pdf: bytes, tmp: Path) -> Optional[bytes]:
@@ -134,6 +125,41 @@ def _pdf_with_poppler(pdf: bytes, tmp: Path) -> Optional[bytes]:
 def pdf_to_png(pdf: bytes, tmp: Path) -> Optional[bytes]:
     """First page of a PDF as an image for the plan underlay: pypdfium2 first, poppler as a fallback; None when neither can."""
     return _pdf_with_pdfium(pdf) or _pdf_with_poppler(pdf, tmp)
+
+
+ORIGINAL_EXT = (".dxf", ".pdf", ".png", ".jpg", ".jpeg")
+ARCHITECTURE = ("architecture.json", "architecture.svg")
+
+
+def save_original(d: Path, level: str, name: str, data: bytes) -> None:
+    """Keep the file as the person sent it (the underlay is a converted copy): what architecture recognition reads."""
+    src = level_dir(d, level) / "src"
+    src.mkdir(parents=True, exist_ok=True)
+    for old in src.glob("original.*"):
+        old.unlink()
+    ext = Path(name or "").suffix.lower()
+    if ext in ORIGINAL_EXT:
+        (src / f"original{ext}").write_bytes(data)
+
+
+def load_original(d: Path, level: str) -> Optional[Path]:
+    src = level_dir(d, level) / "src"
+    return next(iter(sorted(src.glob("original.*"))), None) if src.is_dir() else None
+
+
+def load_architecture(d: Path, level: str) -> Optional[dict]:
+    return read_json(level_dir(d, level) / "src" / ARCHITECTURE[0], None)
+
+
+def save_architecture(d: Path, level: str, data: dict, svg: str) -> None:
+    src = level_dir(d, level) / "src"
+    write_json(src / ARCHITECTURE[0], data)
+    (src / ARCHITECTURE[1]).write_text(svg, encoding="utf-8")
+
+
+def delete_architecture(d: Path, level: str) -> None:
+    for name in ARCHITECTURE:
+        (level_dir(d, level) / "src" / name).unlink(missing_ok=True)
 
 
 def out_dir(d: Path, level: str) -> Path:

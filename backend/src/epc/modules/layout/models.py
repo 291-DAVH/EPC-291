@@ -58,3 +58,8 @@ class TemplateIn(BaseModel):
     discipline: str = "electrica_BT"
     nodes: List[Dict[str, Any]] = []
     lines: List[Dict[str, Any]] = []
+
+
+class ArchIn(BaseModel):
+    """How to recognize the architecture of the plan the person uploaded: the scale if they know it."""
+    units_per_metre: Optional[float] = Field(None, gt=0)

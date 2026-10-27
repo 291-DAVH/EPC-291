@@ -7,9 +7,9 @@ import tempfile
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
-from epc.core import clock
+from epc.core import clock, engine
 from epc.core.errors import Invalid, NotFound
-from epc.core.fsutil import is_inside
+from epc.core.fsutil import is_inside, read_json
 from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
 from epc.modules.layout import changes, repository
@@ -113,7 +113,7 @@ def view(d: Path, level: str) -> dict:
     result = repository.load_result(d, level)
     up = repository.underlay_file(d, level)
     return {"level": level, "saved": saved is not None, "drawing": data, "result": derive_data(level, data) if saved else None,
-            "underlay": {"kind": up.suffix.lstrip("."), "version": int(up.stat().st_mtime)} if up else None,
+            "underlay": {"kind": up.suffix.lstrip("."), "version": int(up.stat().st_mtime)} if up else None, "architecture": _architecture_summary(d, level),
             "files": (result or {}).get("files") if result else None, "generated_at": (result or {}).get("generated_at")}
 
 
@@ -223,9 +223,12 @@ def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
         raise Invalid({"file": "the file is empty"})
     if len(data) > MAX_UPLOAD:
         raise Invalid({"file": f"the file is too big (up to {MAX_UPLOAD // (1024 * 1024)} MB)"})
+    original = data
     data, ext = _underlay_content(name, data)
     _edit_guard(d, _discipline_of(d, level))
     repository.save_underlay(d, level, ext, data)
+    repository.save_original(d, level, name, original)
+    repository.delete_architecture(d, level)                   # what was recognized belonged to the earlier plan
     identity.audit_event("layout_underlay", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"kind": ext.lstrip(".")})
     return view(d, level)
 
@@ -330,3 +333,51 @@ def changes_since_files(d: Path, level: str) -> dict:
     if made is None or saved is None:
         return {"has_snapshot": False}
     return changes.diff(made, saved)
+
+
+# ---------------------------------------------------------------- architecture of the plan (walls, doors, windows)
+def _architecture_summary(d: Path, level: str) -> Optional[dict]:
+    a = repository.load_architecture(d, level)
+    return None if a is None else {k: a[k] for k in ("source", "counts", "wall_thickness", "units_per_metre", "scale_hint", "warnings")}
+
+
+def _recognize_file(src: Path, units_per_metre: Optional[float]) -> Tuple[dict, str]:
+    """Run the architecture engine on a file, as a process of its own (it reads files of any size and quality: it gets a time limit and cannot take the server down)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        args = [src, "--out", tmp] + (["--units-per-metre", units_per_metre] if units_per_metre else [])
+        res = engine.run_module("epc_arch", args, timeout=180)
+        if res.returncode != 0:
+            raise Invalid({"file": engine.tail(res, 300) or "the plan could not be recognized"})
+        out = Path(tmp)
+        return read_json(out / f"{src.stem}.architecture.json", {}), (out / f"{src.stem}.architecture.svg").read_text(encoding="utf-8")
+
+
+def recognize_architecture(d: Path, level: str, units_per_metre: Optional[float]) -> dict:
+    """Find the walls, doors and windows of the plan the person uploaded (their file, as they sent it), keep them with the sheet and, when the plan was vector (a DXF or a PDF made from CAD), show the recognized SVG as the underlay: the engine draws it, so its frame is the one the findings are in.
+    An image keeps its own underlay: the findings are in its pixels."""
+    level = _level(level)
+    original = repository.load_original(d, level)
+    if original is None:
+        raise Invalid({"file": "upload the plan first: a DXF, a PDF or an image"})
+    _edit_guard(d, _discipline_of(d, level))
+    arch, svg = _recognize_file(original, units_per_metre)
+    repository.save_architecture(d, level, arch, svg)
+    replaced = arch.get("source") in ("dxf", "pdf")
+    if replaced:
+        repository.save_underlay(d, level, ".svg", svg.encode("utf-8"))
+    identity.audit_event("layout_architecture", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"source": arch.get("source"), **(arch.get("counts") or {})})
+    return {"architecture": arch, "underlay_replaced": replaced, "view": view(d, level)}
+
+
+def architecture(d: Path, level: str) -> dict:
+    a = repository.load_architecture(d, _level(level))
+    if a is None:
+        raise NotFound("no architecture was recognized on this sheet")
+    return a
+
+
+def remove_architecture(d: Path, level: str) -> dict:
+    level = _level(level)
+    _edit_guard(d, _discipline_of(d, level))
+    repository.delete_architecture(d, level)
+    return view(d, level)

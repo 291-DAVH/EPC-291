@@ -8,6 +8,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 
 | Unidad | Usa | Lo usan | Impacto si la modificas |
 |---|---|---|---|
+| `arch` | — | — | — |
 | `calc` | — | `backend.catalogs`, `backend.norms`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.norms`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `sld`, `standards` |
 | `documents` | — | — | — |
 | `drawing` | `calc`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
@@ -54,6 +55,7 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 
 | Unidad | Importa | Declarado | Falta declarar |
 |---|---|---|---|
+| `arch` | `ezdxf`, `numpy`, `pillow`, `pypdfium2` | `ezdxf`, `numpy`, `pillow`, `pypdfium2` | — |
 | `calc` | `openpyxl` | `openpyxl` | — |
 | `documents` | `playwright`, `pypdf`, `python-docx` | `playwright`, `pypdf`, `python-docx` | — |
 | `drawing` | `ezdxf`, `matplotlib`, `openpyxl` | `epc-calc`, `epc-mld`, `epc-sld`, `epc-titleblock`, `ezdxf`, `matplotlib`, `openpyxl` | — |

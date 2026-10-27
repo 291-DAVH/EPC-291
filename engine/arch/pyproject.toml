@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-arch"
+version = "0.1.0"
+description = "EPC-291 architecture recognition engine: walls, doors and windows from a DXF, a vector PDF or an image, as an SVG with layers"
+requires-python = ">=3.10"
+dependencies = ["ezdxf", "numpy", "pillow", "pypdfium2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+epc_arch = ["params.json"]
