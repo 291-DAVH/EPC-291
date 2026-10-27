@@ -12,7 +12,7 @@ from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
-from epc.modules.layout import repository
+from epc.modules.layout import changes, repository
 from epc.modules.layout.models import DrawingIn
 from epc.modules.projects import public as projects
 from epc.modules.sld import public as sld
@@ -254,6 +254,7 @@ def generate(d: Path, level: str, version: str = "") -> dict:
     result["files"], result["generated_at"] = files, clock.now_local()
     from epc.core.fsutil import write_json
     write_json(out / "result.json", result)
+    write_json(out / "drawing.json", saved)                       # what the files were made from, to show later what changed
     identity.audit_event("layout_generated", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"dxf_version": files["dxf_version"]})
     return view(d, level)
 
@@ -307,3 +308,13 @@ def documents(d: Path) -> list:
         if saved and saved.get("scale"):
             out.append((lv, _document(lv, {**_blank(), **saved})))
     return out
+
+
+def changes_since_files(d: Path, level: str) -> dict:
+    """What changed in the drawing since the DXF and PDF were last made (nothing to compare with when they were never made, or were made before this was kept)."""
+    level = _level(level)
+    made = repository.load_made_from(d, level)
+    saved = repository.load_drawing(d, level)
+    if made is None or saved is None:
+        return {"has_snapshot": False}
+    return changes.diff(made, saved)

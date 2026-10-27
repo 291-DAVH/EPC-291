@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addCircuit, assignCircuit, Drawing, freeCircuits, loadsOf, ofKind, Ref, removeCircuit, removeMany, setAttr, updateCircuit, updateLine, updateNode } from "./planEditing";
+import { isLocked, setLocked, unlocked } from "./planTools";
 import { Derived, Kind, Profile } from "./PlanEditor";
 
 /** The side panels of the plan editor: the properties of what is selected (one element, or many to give them a circuit at once), and the circuits routed over the drawing.
@@ -56,7 +57,8 @@ function Many({ drawing, selection, profile, lang, boardCircuits, readOnly, onCh
       )}
       <div className="row" style={{ marginTop: 8, gap: 6 }}>
         <button onClick={() => onSelect([])}>{t("layout.sel.none")}</button>
-        {!readOnly && <button onClick={() => { onChange(removeMany(drawing, selection)); onSelect([]); }}>{t("layout.tool.erase")}</button>}
+        {!readOnly && <button onClick={() => { onChange(removeMany(drawing, unlocked(drawing, selection))); onSelect([]); }}>{t("layout.tool.erase")}</button>}
+        {!readOnly && <button onClick={() => onChange(setLocked(drawing, selection, !selection.every((r) => isLocked(drawing, r))))}>{t("plan.act.lock")}</button>}
       </div>
       <ByKind drawing={drawing} profile={profile} lang={lang} onSelect={onSelect} t={t} />
     </div>
@@ -104,8 +106,34 @@ export function Properties(props: PropsProps) {
           <ul style={{ margin: "4px 0 0", paddingLeft: 18 }}>{carried.map((s) => <li key={s.tag}><span className="mono">{s.tag}</span>: {(s.carries ?? []).map((c) => `${c.circuit}${c.ternas > 1 ? ` ×${c.ternas}` : ""}`).join(", ")} · {s.cables} {t("layout.props.cables")}</li>)}</ul>
         </div>
       )}
-      {!readOnly && <div style={{ marginTop: 8 }}><button onClick={() => { onChange(removeMany(drawing, selection)); onSelect([]); }}>{t("layout.tool.erase")}</button></div>}
+      <Geometry item={item} kind={kind} node={!!node} readOnly={readOnly} patch={patch} t={t} />
+      {!readOnly && <div className="row" style={{ marginTop: 8, gap: 6 }}>
+        <button onClick={() => { onChange(removeMany(drawing, unlocked(drawing, selection))); onSelect([]); }} disabled={isLocked(drawing, selected)}>{t("layout.tool.erase")}</button>
+        <button aria-pressed={isLocked(drawing, selected)} onClick={() => onChange(setLocked(drawing, selection, !isLocked(drawing, selected)))}>{t(isLocked(drawing, selected) ? "plan.act.unlock" : "plan.act.lock")}</button>
+      </div>}
     </div>
+  );
+}
+
+const GEOM_FIELDS = ["z_m", "ancho_m", "alto_m", "libre_m"];
+
+/** What the element occupies in space: the numbers other disciplines see (never anything else of the drawing), a turn for symbols and the link of a shaft with its twin on another level. */
+function Geometry({ item, kind, node, readOnly, patch, t }: { item: { attrs?: Record<string, unknown> }; kind: Kind | undefined; node: boolean; readOnly: boolean; patch: (p: object) => void; t: (k: string) => string }) {
+  const attrs = (item.attrs ?? {}) as Record<string, unknown>;
+  const fields = [...GEOM_FIELDS, ...(kind?.vertical ? ["altura_m"] : [])];
+  return (
+    <details className="geom" style={{ marginTop: 8 }}>
+      <summary>{t("plan.geom")}</summary>
+      <p className="muted small" style={{ margin: "4px 0" }}>{t("plan.geom.help")}</p>
+      <div className="fgrid">
+        {fields.map((f) => (
+          <label key={f} className="field"><span>{t("plan.geom." + f)}</span>
+            <input disabled={readOnly} inputMode="decimal" value={String(attrs[f] ?? "")} placeholder={String(kind?.geom?.[f] ?? "")} onChange={(e) => patch({ attrs: setAttr(attrs, f, e.target.value) })} /></label>
+        ))}
+        {node && <label className="field"><span>{t("plan.geom.rot_deg")}</span><input disabled={readOnly} inputMode="decimal" value={String(attrs.rot_deg ?? "")} placeholder="0" onChange={(e) => patch({ attrs: setAttr(attrs, "rot_deg", e.target.value) })} /></label>}
+        {node && kind?.vertical && <label className="field"><span>{t("plan.geom.enlace")}</span><input disabled={readOnly} value={String(attrs.enlace ?? "")} placeholder="L1:n3" onChange={(e) => patch({ attrs: setAttr(attrs, "enlace", e.target.value) })} /></label>}
+      </div>
+    </details>
   );
 }
 

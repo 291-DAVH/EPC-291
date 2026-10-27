@@ -1,12 +1,14 @@
 from fastapi import APIRouter, UploadFile
 from fastapi.responses import FileResponse
 
-from epc.modules.layout import service
-from epc.modules.layout.models import DrawingIn
+from epc.modules.layout import service, templates
+from epc.modules.layout.models import DrawingIn, TemplateIn
 from epc.modules.projects import public as projects
 
 # Internal engineering surface (the organization's own projects): never under /api/app.
 router = APIRouter(prefix="/api/projects/{client}/{code}/layout")
+
+templates_router = APIRouter(prefix="/api/projects/{client}/{code}/layout-templates")
 
 # The plan underlay may be an SVG: it is shown through <img>, and the policy also stops scripts if the file is opened directly.
 SAFE_HEADERS = {"Content-Security-Policy": "sandbox; default-src 'none'; style-src 'unsafe-inline'", "X-Content-Type-Options": "nosniff"}
@@ -64,6 +66,12 @@ def history_restore(client: str, code: str, level: str, snapshot: str):
     return service.restore(projects.get_project_dir(client, code), level, snapshot)
 
 
+@router.get("/{level}/changes")
+def changes(client: str, code: str, level: str):
+    """What changed in the drawing since its files were last made."""
+    return service.changes_since_files(projects.get_project_dir(client, code), level)
+
+
 @router.post("/{level}/generate")
 def generate(client: str, code: str, level: str, version: str = ""):
     return service.generate(projects.get_project_dir(client, code), level, version)
@@ -73,3 +81,18 @@ def generate(client: str, code: str, level: str, version: str = ""):
 def get_file(client: str, code: str, level: str, name: str):
     path, media = service.output_file(projects.get_project_dir(client, code), level, name)
     return FileResponse(path, media_type=media, filename=name)
+
+
+@templates_router.get("")
+def list_templates(client: str, code: str):
+    return templates.listing(projects.get_project_dir(client, code))
+
+
+@templates_router.put("/{name}")
+def save_template(client: str, code: str, name: str, body: TemplateIn):
+    return templates.save(projects.get_project_dir(client, code), name, body)
+
+
+@templates_router.delete("/{name}", status_code=204)
+def delete_template(client: str, code: str, name: str):
+    templates.remove(projects.get_project_dir(client, code), name)

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  alignDelta, alignNodes, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, isLocked, measureAngle, normalizeClip, pasteClip,
-  polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, toMetres, transformGroup, unlocked, warningTargets,
+  alignDelta, alignNodes, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  convertClip, linkProblems, pointIndex, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
 const node = (id: string) => ({ type: "node" as const, id });
@@ -180,5 +180,57 @@ describe("labels and warnings", () => {
     const st = [{ line: "l1", tag: "CA-001/1", line_tag: "CA-001" }];
     expect(warningTargets("the loads of TB-001 are not routed along CA-001/1", nodes, st)).toEqual([node("n1"), line("l1")]);
     expect(warningTargets("something else", nodes, st)).toEqual([]);
+  });
+});
+
+describe("selecting by crossing", () => {
+  it("takes what the box touches, not only what lies inside it", () => {
+    let d = addNode(blank(), "LU", [10, 10]);
+    d = addLine(d, "CA", [[-50, 5], [100, 5]]);
+    d = addLine(d, "CA", [[0, 200], [100, 200]]);
+    expect(inBoxCross(d, [0, 0], [20, 20])).toEqual([node("n1"), line("l1")]);
+  });
+});
+
+describe("vertices of a vector underlay", () => {
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><line x1="0" y1="0" x2="100" y2="50"/><polyline points="10,10 20,10 20,20"/><path d="M5 5 L15 5"/><path d="M0 0 C1 1 2 2 3 3"/></svg>';
+  it("maps the points of lines, polylines and straight paths to the size the picture has on the view", () => {
+    const v = svgVertices(svg, 200, 100);
+    expect(v).toContainEqual([0, 0]);
+    expect(v).toContainEqual([200, 100]);
+    expect(v).toContainEqual([40, 20]);
+    expect(v).toContainEqual([10, 10]);
+    expect(v.length).toBe(7);                                                 // the curve gives none
+  });
+  it("gives nothing for text that is not an svg", () => {
+    expect(svgVertices("not xml", 10, 10)).toEqual([]);
+    expect(svgVertices("<html/>", 10, 10)).toEqual([]);
+  });
+  it("finds the nearest point within a distance without scanning all of them", () => {
+    const near = pointIndex([[0, 0], [100, 100], [103, 100]], 20);
+    expect(near([101, 101], 5)).toEqual([100, 100]);
+    expect(near([50, 50], 5)).toBeNull();
+    expect(near([102.4, 100], 5)).toEqual([103, 100]);
+  });
+});
+
+describe("the same group on another level", () => {
+  it("moves a clip between sheets with different origin and scale through metres", () => {
+    const from = { origin: [0, 0] as [number, number], k: 0.1 }, to = { origin: [50, 50] as [number, number], k: 0.05 };
+    const clip = { nodes: [{ id: "n1", kind: "LU", x: 100, y: 0 }], lines: [{ id: "l1", kind: "CA", points: [[0, 0], [100, 0]] as [number, number][] }] };
+    const c = convertClip(clip, from, to);
+    expect(c.nodes[0]).toMatchObject({ x: 250, y: 50 });                      // 10 m to the right of the origin, at the new scale
+    expect(c.lines[0].points).toEqual([[50, 50], [250, 50]]);
+  });
+  it("checks that linked shafts exist, sit together and point back", () => {
+    const here = { ...addNode(setScale(blank(), [0, 0], [100, 0], 10), "PL", [100, 100]), };
+    const linked = { ...here, nodes: [{ ...here.nodes[0], attrs: { enlace: "L1:n1" } }] };
+    const twin = (x: number, back: string) => ({ ...setScale(blank(), [0, 0], [100, 0], 10), nodes: [{ id: "n1", kind: "PL", x, y: 100, attrs: back ? { enlace: back } : undefined }] });
+    const k = 0.1;
+    expect(linkProblems(linked, "L0", k, () => undefined).map((p) => p.code)).toEqual(["link_missing"]);
+    expect(linkProblems(linked, "L0", k, () => ({ drawing: twin(100, "L0:n1"), k })).map((p) => p.code)).toEqual([]);
+    expect(linkProblems(linked, "L0", k, () => ({ drawing: twin(100, ""), k })).map((p) => p.code)).toEqual(["link_oneway"]);
+    expect(linkProblems(linked, "L0", k, () => ({ drawing: twin(160, "L0:n1"), k })).map((p) => p.code)).toEqual(["link_far"]);
+    expect(linkProblems(here, "L0", k, () => undefined)).toEqual([]);
   });
 });

@@ -5,8 +5,10 @@ export interface Scale { p1: Pt; p2: Pt; distance_m: number }
 export interface DNode { id: string; kind: string; x: number; y: number; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DLine { id: string; kind: string; points: Pt[]; tag?: string; circuit?: string; attrs?: Record<string, unknown> }
 export interface DCircuit { tag: string; from: string; to: string; via?: string[]; ternas: number }
+/** How the plan underlay is shown: editor-only, kept with the drawing so it looks the same the next time. */
+export interface UnderlayOpts { opacity?: number; rotation?: number; locked?: boolean; hidden?: boolean; crop?: { x: number; y: number; w: number; h: number } | null }
 export interface Drawing {
-  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string;
+  discipline: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string; underlay_opts?: UnderlayOpts;
 }
 export type Ref = { type: "node" | "line"; id: string };
 

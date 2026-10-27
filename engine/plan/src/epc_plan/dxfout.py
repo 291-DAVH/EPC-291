@@ -48,6 +48,12 @@ def _define_block(doc, sid: str, size: float, scale: float, height: float) -> st
     return name
 
 
+def _turn(n: Dict[str, Any]) -> Dict[str, float]:
+    """The turn of a symbol (`rot_deg` on the node, clockwise on the screen) as the rotation of its block, counter-clockwise as CAD counts it."""
+    rot = (n.get("attrs") or {}).get("rot_deg")
+    return {"rotation": -float(rot)} if isinstance(rot, (int, float)) and not isinstance(rot, bool) and rot else {}
+
+
 def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float, layer) -> int:
     """Placed nodes as block insertions with their tag, junctions as small circles. Returns how many entities were added."""
     count = 0
@@ -56,7 +62,7 @@ def _add_nodes(doc, msp, result, node_kinds, cfg, scale: float, height: float, l
         if n["placed"]:
             kind = node_kinds[n["kind"]]
             block = _define_block(doc, kind["simbolo_2d"], cfg["node_symbol_size_m"], scale, height)
-            msp.add_blockref(block, at, dxfattribs={"layer": layer(kind["capa_dxf"])}).add_auto_attribs({"TAG": n["tag"]})
+            msp.add_blockref(block, at, dxfattribs={"layer": layer(kind["capa_dxf"]), **_turn(n)}).add_auto_attribs({"TAG": n["tag"]})
             count += 1
         elif n["kind"] == "J":
             msp.add_circle(at, 0.05 * scale, dxfattribs={"layer": layer(cfg["junction_layer"])})

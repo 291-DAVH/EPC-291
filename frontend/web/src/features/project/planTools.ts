@@ -1,6 +1,7 @@
 /** More pure rules of the plan-drawing editor: snapping, splitting, copying, aligning, transforming, measuring, checking and routing. No React here, so they are tested alone.
  *  Coordinates are the units of the view (the pixels of the plan, y down); metres appear only where a scale `k` (metres per unit) is passed. */
-import { DLine, DNode, Drawing, dist, drawnJunctions, mapElements, moveElements, nextId, Pt, Ref, sameRef, segmentDistance } from "./planEditing";
+import { DLine, DNode, Drawing, dist, drawnJunctions, mapElements, moveElements, nextId, Pt, Ref, sameRef, segmentDistance, UnderlayOpts } from "./planEditing";
+export type { UnderlayOpts };
 
 const EPS = 1e-6;
 const same = (a: Pt, b: Pt) => Math.abs(a[0] - b[0]) < EPS && Math.abs(a[1] - b[1]) < EPS;
@@ -205,8 +206,6 @@ export const toMetres = (p: Pt, origin: Pt, k: number): Pt => [(p[0] - origin[0]
 export const fromMetres = (m: Pt, origin: Pt, k: number): Pt => [origin[0] + m[0] / k, origin[1] - m[1] / k];
 
 // ---------------------------------------------------------------- the plan underlay
-export interface UnderlayOpts { opacity?: number; rotation?: number; locked?: boolean; hidden?: boolean; crop?: { x: number; y: number; w: number; h: number } | null }
-
 /** How much to turn the underlay (degrees, added to its current turn) so that the line between two points taken on the screen becomes horizontal (vertical with `vertical`). */
 export function alignDelta(p1: Pt, p2: Pt, vertical = false): number {
   const angle = (Math.atan2(p2[1] - p1[1], p2[0] - p1[0]) * 180) / Math.PI;
@@ -218,7 +217,7 @@ export function alignDelta(p1: Pt, p2: Pt, vertical = false): number {
 }
 
 // ---------------------------------------------------------------- checks
-export interface Problem { code: "dup_node" | "orphan_node" | "isolated_line" | "no_scale" | "empty" | "circuit_unrouted" | "circuit_open"; severity: "error" | "warn"; ref?: Ref; at?: Pt; tag?: string }
+export interface Problem { code: "dup_node" | "orphan_node" | "isolated_line" | "no_scale" | "empty" | "circuit_unrouted" | "circuit_open" | "link_missing" | "link_far" | "link_oneway"; severity: "error" | "warn"; ref?: Ref; at?: Pt; tag?: string }
 
 function touches(l: DLine, p: Pt, tol: number): boolean {
   return l.points.some((q, i) => (i + 1 < l.points.length ? segmentDistance(p, q, l.points[i + 1]) : dist(p, q)) <= tol);
@@ -317,4 +316,82 @@ export function warningTargets(text: string, nodes: { id: string; tag: string }[
   nodes.filter((n) => n.tag && text.includes(n.tag)).forEach((n) => found.push(ref("node", n.id)));
   stretches.filter((s) => (s.tag && text.includes(s.tag)) || (s.line_tag && text.includes(s.line_tag))).forEach((s) => { if (!found.some((r) => r.type === "line" && r.id === s.line)) found.push(ref("line", s.line)); });
   return found;
+}
+
+// ---------------------------------------------------------------- selecting by crossing
+/** Select by a box dragged right to left (as CAD does): what is inside the box and what it touches. */
+export function inBoxCross(d: Drawing, a: Pt, b: Pt): Ref[] {
+  const [x0, x1] = [Math.min(a[0], b[0]), Math.max(a[0], b[0])], [y0, y1] = [Math.min(a[1], b[1]), Math.max(a[1], b[1])];
+  const inside = (p: Pt) => p[0] >= x0 && p[0] <= x1 && p[1] >= y0 && p[1] <= y1;
+  const edges: [Pt, Pt][] = [[[x0, y0], [x1, y0]], [[x1, y0], [x1, y1]], [[x1, y1], [x0, y1]], [[x0, y1], [x0, y0]]];
+  const hits = (p: Pt, q: Pt) => inside(p) || inside(q) || edges.some(([e, f]) => turn(p, q, e) !== turn(p, q, f) && turn(e, f, p) !== turn(e, f, q));
+  return [
+    ...d.nodes.filter((n) => inside([n.x, n.y])).map((n) => ref("node", n.id)),
+    ...d.lines.filter((l) => l.points.slice(0, -1).some((p, i) => hits(p, l.points[i + 1]))).map((l) => ref("line", l.id)),
+  ];
+}
+
+// ---------------------------------------------------------------- the vertices of a drawn underlay
+/** The points of a vector underlay (a DXF shown as an SVG) in the units of the view, to snap to. Reads lines, polylines, polygons and the straight parts of paths. */
+export function svgVertices(text: string, width: number, height: number, limit = 40000): Pt[] {
+  let doc: Document;
+  try { doc = new DOMParser().parseFromString(text, "image/svg+xml"); } catch { return []; }
+  const root = doc.documentElement;
+  if (!root || root.nodeName !== "svg") return [];
+  const vb = (root.getAttribute("viewBox") ?? "").split(/[\s,]+/).map(Number);
+  const [vx, vy, vw, vh] = vb.length === 4 && vb.every((n) => Number.isFinite(n)) && vb[2] > 0 && vb[3] > 0 ? vb : [0, 0, parseFloat(root.getAttribute("width") ?? "") || width, parseFloat(root.getAttribute("height") ?? "") || height];
+  const sx = width / vw, sy = height / vh, s = Math.min(sx, sy);              // preserveAspectRatio meet, centred
+  const ox = (width - vw * s) / 2, oy = (height - vh * s) / 2;
+  const out: Pt[] = [];
+  const add = (x: number, y: number) => { if (Number.isFinite(x) && Number.isFinite(y) && out.length < limit) out.push([ox + (x - vx) * s, oy + (y - vy) * s]); };
+  const nums = (t: string) => (t.match(/-?\d*\.?\d+(?:e[-+]?\d+)?/gi) ?? []).map(Number);
+  doc.querySelectorAll("line").forEach((l) => { add(+(l.getAttribute("x1") ?? NaN), +(l.getAttribute("y1") ?? NaN)); add(+(l.getAttribute("x2") ?? NaN), +(l.getAttribute("y2") ?? NaN)); });
+  doc.querySelectorAll("polyline,polygon").forEach((p) => { const n = nums(p.getAttribute("points") ?? ""); for (let i = 0; i + 1 < n.length; i += 2) add(n[i], n[i + 1]); });
+  doc.querySelectorAll("path").forEach((p) => {
+    const d = p.getAttribute("d") ?? "";
+    if (/[AaCcSsQqTt]/.test(d)) return;                                          // curves have no vertices to snap to (their ends are in the next commands)
+    const n = nums(d);
+    for (let i = 0; i + 1 < n.length; i += 2) add(n[i], n[i + 1]);
+  });
+  return out;
+}
+
+/** Nearest-point lookup over many points (the vertices of a plan) without comparing against all of them: points are bucketed in square cells of `cell` units. */
+export function pointIndex(points: Pt[], cell: number): (at: Pt, tol: number) => Pt | null {
+  const grid = new Map<string, Pt[]>();
+  const key = (cx: number, cy: number) => `${cx},${cy}`;
+  points.forEach((p) => { const k = key(Math.floor(p[0] / cell), Math.floor(p[1] / cell)); (grid.get(k) ?? grid.set(k, []).get(k)!).push(p); });
+  return (at, tol) => {
+    const r = Math.ceil(tol / cell);
+    const cx = Math.floor(at[0] / cell), cy = Math.floor(at[1] / cell);
+    let best: Pt | null = null, gap = tol;
+    for (let i = -r; i <= r; i++) for (let j = -r; j <= r; j++) for (const p of grid.get(key(cx + i, cy + j)) ?? []) { const g = dist(p, at); if (g <= gap) { best = p; gap = g; } }
+    return best;
+  };
+}
+
+// ---------------------------------------------------------------- the same group on another level
+export interface Frame { origin: Pt; k: number }
+
+/** A clip drawn on one sheet, as it must be put on another that has its own origin and scale: positions go through metres. */
+export function convertClip(clip: Clip, from: Frame, to: Frame): Clip {
+  const conv = (p: Pt): Pt => fromMetres(toMetres(p, from.origin, from.k), to.origin, to.k);
+  return { nodes: clip.nodes.map((n) => { const q = conv([n.x, n.y]); return { ...n, x: q[0], y: q[1] }; }), lines: clip.lines.map((l) => ({ ...l, points: l.points.map(conv) })) };
+}
+
+export interface LinkTarget { drawing: Drawing; k: number | null }
+
+/** Shafts (and any node) that say they continue on another level with `enlace` = `L1:n3`: the twin must exist, sit at the same place (within `tolM`) and point back. */
+export function linkProblems(d: Drawing, base: string, k: number | null, resolve: (level: string) => LinkTarget | undefined, tolM = 0.3): Problem[] {
+  const out: Problem[] = [];
+  d.nodes.forEach((n) => {
+    const m = typeof n.attrs?.enlace === "string" ? /^(L-?\d+):(.+)$/.exec(n.attrs.enlace.trim()) : null;
+    if (!m) return;
+    const target = resolve(m[1]), twin = target?.drawing.nodes.find((x) => x.id === m[2]);
+    const at: Pt = [n.x, n.y], here = ref("node", n.id);
+    if (!target || !twin) { out.push({ code: "link_missing", severity: "warn", ref: here, at, tag: n.attrs!.enlace as string }); return; }
+    if (k && target.k && dist(toMetres(at, d.origin, k), toMetres([twin.x, twin.y], target.drawing.origin, target.k)) > tolM) out.push({ code: "link_far", severity: "warn", ref: here, at, tag: n.attrs!.enlace as string });
+    if ((typeof twin.attrs?.enlace === "string" ? twin.attrs.enlace.trim() : "") !== `${base}:${n.id}`) out.push({ code: "link_oneway", severity: "warn", ref: here, at, tag: n.attrs!.enlace as string });
+  });
+  return out;
 }

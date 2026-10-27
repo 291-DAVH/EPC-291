@@ -186,6 +186,40 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(len(back["drawing"]["nodes"]), 2)
         self.assertEqual(self.c.get(f"{self.layout}/L0/history/20000101T000000").status_code, 404)
 
+    # ---------------------------------------------------------------- the disciplines seen together, and what changed
+    def test_the_overlay_shows_every_discipline_of_a_level_with_its_clashes(self):
+        self.draw()
+        o = self.c.get(f"{self.base}/overlay", params={"level": "L0"}).json()
+        self.assertEqual({i["discipline"] for i in o["items"]}, {"electrica_BT", "sanitaria_cloacas"})
+        self.assertEqual(len(o["clashes"]), 1)
+        self.assertEqual(self.c.get(f"{self.base}/overlay", params={"level": "L2"}).json()["items"], [])
+
+    def test_what_changed_since_the_files_were_made_is_listed(self):
+        self.assertEqual(self.c.put(f"{self.layout}/L0", json=ELEC).status_code, 200)
+        self.assertEqual(self.c.get(f"{self.layout}/L0/changes").json(), {"has_snapshot": False})
+        self.assertEqual(self.c.post(f"{self.layout}/L0/generate").status_code, 200)
+        self.assertEqual(self.c.get(f"{self.layout}/L0/changes").json()["count"], 0)
+        moved = {**ELEC, "nodes": [{**ELEC["nodes"][0], "x": 50}, {"id": "n9", "kind": "LU", "x": 10, "y": 10}], "lines": []}
+        self.c.put(f"{self.layout}/L0", json=moved)
+        ch = self.c.get(f"{self.layout}/L0/changes").json()
+        self.assertEqual([n["id"] for n in ch["nodes"]["added"]], ["n9"])
+        self.assertEqual([n["id"] for n in ch["nodes"]["removed"]], ["n2"])
+        self.assertEqual([n["id"] for n in ch["nodes"]["changed"]], ["n1"])
+        self.assertEqual([n["id"] for n in ch["lines"]["removed"]], ["l1"])
+        self.assertEqual((ch["count"], ch["scale_changed"]), (4, False))
+
+    # ---------------------------------------------------------------- templates
+    def test_a_template_is_saved_listed_and_deleted(self):
+        url = "/api/projects/ACME/P-1/layout-templates"
+        group = {"discipline": "electrica_BT", "nodes": [{"id": "n1", "kind": "LU", "x": 0, "y": 0}], "lines": [{"id": "l1", "kind": "CA", "points": [[0, 0], [10, 0]]}]}
+        self.assertEqual(self.c.put(f"{url}/Office tipo", json=group).status_code, 200)
+        self.assertEqual([t["name"] for t in self.c.get(url).json()], ["Office tipo"])
+        self.assertEqual(self.c.put(f"{url}/empty", json={"discipline": "electrica_BT"}).status_code, 422)
+        self.assertEqual(self.c.put(f"{url}/..bad", json=group).status_code, 422)
+        self.assertEqual(self.c.delete(f"{url}/Office tipo").status_code, 204)
+        self.assertEqual(self.c.get(url).json(), [])
+        self.assertEqual(self.c.delete(f"{url}/Office tipo").status_code, 404)
+
 
 if __name__ == "__main__":
     unittest.main()

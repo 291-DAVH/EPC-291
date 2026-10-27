@@ -70,6 +70,7 @@ def create_app() -> FastAPI:
         app.include_router(module_api.router)
     app.include_router(catalogs_api.company)                     # layers and standard solutions of the company
     app.include_router(catalogs_api.project)                     # ... and of each project
+    app.include_router(layout_api.templates_router)               # templates of layout of the organization
     app.include_router(coordination_api.company)                 # separations between disciplines of the company (the project's are in the module router)
     app.include_router(masterdata_api.parties_router)            # who issues and who signs each project (staff)
     app.include_router(registers_api.observations)               # customer-surface routes of the registers module

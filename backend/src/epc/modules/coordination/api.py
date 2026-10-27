@@ -93,6 +93,12 @@ def reference(client: str, code: str, discipline: str, level: str, source: str =
     return {"items": detection.reference(_dir(client, code), discipline, level, source), "settings": detection.settings(_dir(client, code))}
 
 
+@router.get("/overlay")
+def overlay(client: str, code: str, level: str, source: str = "auto"):
+    """The disciplines of a level seen together (footprints and clashes), for the coordination view."""
+    return detection.overlay(_dir(client, code), level, source)
+
+
 @router.get("/notifications")
 def notifications(client: str, code: str, discipline: str):
     return service.notifications(_dir(client, code), discipline)

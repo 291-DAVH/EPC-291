@@ -120,3 +120,11 @@ def new_since_last_run(d: Path, found: List[dict]) -> List[dict]:
     fresh = [c for c in found if c["id"] not in known]
     repository.write(d, "last_run.json", {"at": clock.now_local(), "ids": sorted({c["id"] for c in found}), "new": [c["id"] for c in fresh]})
     return fresh
+
+
+def overlay(d: Path, level: str, source: str = "auto") -> dict:
+    """Everything every discipline occupies on a level, with the clashes of that level: one read-only view where the disciplines are seen together, each still owning its own drawing."""
+    groups = items_by_discipline(d, source)
+    found = detect(d, source)
+    return {"items": [it for g in groups.values() for it in g["items"] if it["level"] == level] + [it for it in reservation_items(d) if it["level"] == level],
+            "clashes": [c for c in found["clashes"] if c["level"] == level], "sources": {k: v["source"] for k, v in groups.items()}}
