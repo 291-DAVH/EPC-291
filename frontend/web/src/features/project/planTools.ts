@@ -467,6 +467,17 @@ export const insidePolygon = (p: Pt, poly: Pt[]): boolean => {
 
 export const centroidOf = (pts: Pt[]): Pt => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
 
+/** The four corners of the box with opposite corners a and b (null when it has no width or no height). */
+export function rectCorners(a: Pt, b: Pt): Pt[] | null {
+  if (Math.abs(a[0] - b[0]) < 1e-6 || Math.abs(a[1] - b[1]) < 1e-6) return null;
+  return [a, [b[0], a[1]], b, [a[0], b[1]]];
+}
+/** The closed outline of that box as a path that ends on b (so the preview adds no stray line to the pointer). */
+export function rectOutline(a: Pt, b: Pt): Pt[] {
+  const c = rectCorners(a, b);
+  return c ? [b, c[3], a, c[1], b] : [a, b];
+}
+
 export function addRoom(d: Drawing, name: string, points: Pt[]): Drawing {
   if (points.length < 3) return d;
   const rooms = d.rooms ?? [];

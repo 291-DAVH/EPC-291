@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  addRoom, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  addRoom, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
   convertClip, linkProblems, insidePolygon, loadsByRoom, pointIndex, removeRoom, renameRoom, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
@@ -289,5 +289,12 @@ describe("rooms and the automatic design", () => {
     expect(r.nodes[1].circuit).toBe("IUG-01");
     expect(r.circuits).toEqual([{ tag: "IUG-01", from: "n1", to: "n2", via: [], ternas: 1 }]);
     expect(applyProposal(r, proposal).circuits).toHaveLength(1);
+  });
+  it("makes a room from two opposite corners, whichever way they are given, and refuses a flat box", () => {
+    expect(rectCorners([0, 0], [4, 3])).toEqual([[0, 0], [4, 0], [4, 3], [0, 3]]);
+    expect(rectCorners([4, 3], [0, 0])).toEqual([[4, 3], [0, 3], [0, 0], [4, 0]]);
+    expect(rectCorners([0, 0], [4, 0])).toBeNull();
+    const o = rectOutline([0, 0], [4, 3]);
+    expect([o[0], o[o.length - 1]]).toEqual([[4, 3], [4, 3]]);
   });
 });

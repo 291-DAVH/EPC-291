@@ -4,7 +4,7 @@ import {
   removeMany, sameRef, setOrigin, setScale, stretchEnd, toggle, undo, updateCircuit,
 } from "./planEditing";
 import {
-  addRoom, alignDelta, alignNodes, Architecture, RunsProposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
+  addRoom, rectCorners, rectOutline, alignDelta, alignNodes, Architecture, RunsProposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
   RoutePath, selectionStats, setLocked, shortestRoute, SnapKind, snapEx, splitLineAt, svgVertices, toMetres, transformGroup, unlocked, UnderlayOpts,
 } from "./planTools";
 import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
@@ -72,6 +72,7 @@ export default function PlanEditor(props: Props) {
   const [panel, setPanel] = useState<"" | "view" | "keys" | "table">("");
   const [form, setForm] = useState<"" | "array" | "transform" | "template" | "length" | "room">("");
   const [roomDraft, setRoomDraft] = useState<Pt[]>([]);
+  const [roomMode, setRoomMode] = useState<"poly" | "rect">("poly");        // outline point by point, or a box from two opposite corners
   const [measureMode, setMeasureMode] = useState<Measure>("dist");
   const [measure, setMeasure] = useState<Pt[]>([]);
   const [routeFrom, setRouteFrom] = useState("");
@@ -215,6 +216,17 @@ export default function PlanEditor(props: Props) {
   };
   const lockSelection = () => { if (!selection.length || !write) return; const lockedAll = selection.every((r) => isLocked(drawing, r)); apply(setLocked(drawing, selection, !lockedAll)); };
   const nudge = (dx: number, dy: number) => { const ok = selectionOf(selection); if (ok.length && write) onChange(moveElements(drawing, ok, dx, dy)); };
+  const placeRoomPoint = (at: Pt, shift: boolean) => {
+    if (roomMode === "rect") {
+      if (!roomDraft.length) { setRoomDraft([at]); return; }
+      const box = rectCorners(roomDraft[0], at);
+      if (box) { setRoomDraft(box); setForm("room"); }
+      return;
+    }
+    const p = roomDraft.length > 0 ? straight(roomDraft[roomDraft.length - 1], at, shift) : at;
+    if (!roomDraft.length || dist(roomDraft[roomDraft.length - 1], p) > 1e-6) setRoomDraft([...roomDraft, p]);
+  };
+  const roomShown = (): Pt[] => (roomMode === "rect" && roomDraft.length === 1 && hover ? rectOutline(roomDraft[0], hover) : roomDraft);
   const addMeasurePoint = (p: Pt) => setMeasure((m) => (measureMode === "dist" && m.length >= 2) || (measureMode === "angle" && m.length >= 3) ? [p] : [...m, p]);
   const measureText = (): string => {
     if (!k) return t("layout.notCalibrated");
@@ -271,7 +283,7 @@ export default function PlanEditor(props: Props) {
       if (hit?.type === "line") { const r = splitLineAt(drawing, hit.id, snapAt(raw, tol).p, kindId || undefined); if (r.drawing !== drawing) { apply(r.drawing); if (r.nodeId) onSelect([{ type: "node", id: r.nodeId }]); } }
     }
     else if (tool === "measure") addMeasurePoint(snapAt(raw, tol).p);
-    else if (tool === "room") { let p = snapAt(raw, tol).p; if (roomDraft.length > 0) p = straight(roomDraft[roomDraft.length - 1], p, e.shiftKey); if (!roomDraft.length || dist(roomDraft[roomDraft.length - 1], p) > 1e-6) setRoomDraft([...roomDraft, p]); }
+    else if (tool === "room") placeRoomPoint(snapAt(raw, tol).p, e.shiftKey);
     else if (tool === "pin") { if (k && props.onNewPin) props.onNewPin(toMetres(snapAt(raw, tol).p, drawing.origin, k)); setTool("select"); }
     else if (tool === "route") {
       const hit = pick({ ...drawing, lines: [] }, raw, tol);
@@ -334,7 +346,7 @@ export default function PlanEditor(props: Props) {
     const s = placing ? snapAt(raw, 8 * u) : { p: raw, kind: "none" as SnapKind };
     let p = s.p;
     if (tool === "line" && draft.length > 0) p = straight(draft[draft.length - 1], p, e.shiftKey);
-    if (tool === "room" && roomDraft.length > 0) p = straight(roomDraft[roomDraft.length - 1], p, e.shiftKey);
+    if (tool === "room" && roomMode === "poly" && roomDraft.length > 0) p = straight(roomDraft[roomDraft.length - 1], p, e.shiftKey);
     setHover(p);
     setSnapMark(placing && s.kind !== "none" ? { p: s.p, kind: s.kind } : null);
     if (tool === "select" && !marquee) {
@@ -532,7 +544,7 @@ export default function PlanEditor(props: Props) {
   const world = useMemo(() => { const b = boundsOf(drawing, undefined, 0.1); return img ? { x: 0, y: 0, w: img.w, h: img.h } : b ?? { x: 0, y: 0, w: 1200, h: 800 }; }, [drawing, img]);
   useEffect(() => { if (props.roomRequest) choose("room"); }, [props.roomRequest]);
   const hint = tool === "measure" ? measureText() : { select: "", box: "layout.hint.box", pan: "plan.hint.pan", scale: "layout.hint.scale", origin: "layout.hint.origin", node: "layout.hint.node", line: "layout.hint.line", erase: "layout.hint.erase", split: "plan.hint.split",
-    route: routeFrom ? "plan.hint.route2" : "plan.hint.route1", room: "plan.hint.room", pin: "plan.hint.pin", alignUnderlay: "plan.hint.align", cropUnderlay: "plan.hint.crop" }[tool];
+    route: routeFrom ? "plan.hint.route2" : "plan.hint.route1", room: roomMode === "rect" ? "plan.hint.roomRect" : "plan.hint.room", pin: "plan.hint.pin", alignUnderlay: "plan.hint.align", cropUnderlay: "plan.hint.crop" }[tool];
   const hintText = tool === "measure" ? hint : hint ? t(hint) : "";
   const snapName = snapMark && snapMark.kind !== "none" ? t("plan.snapkind." + snapMark.kind) : "";
   const cursor = spaceDown || tool === "pan" ? "grab" : tool === "select" ? "default" : "crosshair";
@@ -570,6 +582,11 @@ export default function PlanEditor(props: Props) {
             <button className="primary" onClick={confirmScale}>{t("layout.apply")}</button><button onClick={() => cancel()}>{t("layout.cancel")}</button>
           </div>
         )}
+        {tool === "room" && form !== "room" && (
+          <div className="wb-float" role="group" aria-label={t("plan.tool.room")}>
+            {(["poly", "rect"] as const).map((m) => <button key={m} className={roomMode === m ? "on" : ""} aria-pressed={roomMode === m} onClick={() => { setRoomMode(m); setRoomDraft([]); }}>{t("plan.room." + m)}</button>)}
+          </div>
+        )}
         {tool === "measure" && (
           <div className="wb-float" role="group" aria-label={t("plan.tool.measure")}>
             {(["dist", "angle", "area"] as Measure[]).map((m) => <button key={m} className={measureMode === m ? "on" : ""} aria-pressed={measureMode === m} onClick={() => { setMeasureMode(m); setMeasure([]); }}>{t("plan.measure." + m)}</button>)}
@@ -596,7 +613,7 @@ export default function PlanEditor(props: Props) {
           {grid > 0 && <><defs><pattern id="plan-grid" x={drawing.origin[0]} y={drawing.origin[1]} width={grid} height={grid} patternUnits="userSpaceOnUse"><circle cx={0} cy={0} r={0.9 * u} fill="#9aa3b5" /></pattern></defs><rect data-ui x={view.x} y={view.y} width={view.w} height={view.h} fill="url(#plan-grid)" pointerEvents="none" /></>}
           <PlanScene drawing={drawing} profile={profile} derived={derived} lang={lang} u={u} k={k} prefs={prefs} tool={tool} readOnly={readOnly} selection={selection} highlight={highlight} focusCircuit={props.focusCircuit ?? ""} hoverRef={hoverRef}
             underlayUrl={underlayUrl} img={img} underlayOpts={under} draft={draft} hover={hover} kindId={kindId} snapMark={snapMark} scalePts={scalePts} marquee={marquee} measure={measureMode === "area" || tool === "measure" || tool === "alignUnderlay" ? measure : []}
-            route={route} routeFrom={routeFrom} guides={guides} roomDraft={roomDraft} proposal={props.proposal ?? null} architecture={props.underlayKind === "svg" ? null : props.architecture ?? null} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
+            route={route} routeFrom={routeFrom} guides={guides} roomDraft={roomShown()} proposal={props.proposal ?? null} architecture={props.underlayKind === "svg" ? null : props.architecture ?? null} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
         </svg>
         <Legend title={t(prefs.color === "circuit" ? "plan.colorBy.circuit" : "plan.colorBy.kind")} entries={legend} />
         {prefs.minimap && <MiniMap drawing={drawing} world={world} view={view} t={t} onCenter={(p) => setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 }))} />}
