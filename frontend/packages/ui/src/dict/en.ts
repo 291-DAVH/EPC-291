@@ -1435,7 +1435,7 @@ export const en = {
     "design.family": "Family",
     "design.max": "Max outlets",
     "design.va": "VA per outlet",
-    "design.propose": "Propose circuits and runs",
+    "design.propose": "Propose circuits",
     "design.working": "Working…",
     "design.needRooms": "Mark at least one room.",
     "design.typical": "The maximums and powers are typical values: confirm them against the standard of the project. A circuit's cable follows the conduits; it is not drawn apart.",
