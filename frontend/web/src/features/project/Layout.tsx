@@ -4,20 +4,20 @@ import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
-import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, TablePanel, WarningsPanel } from "./LayoutPanels";
+import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
-import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
+import { BoardCircuit, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { applyProposal, applyRuns, Architecture, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, applyRuns, Architecture, BoardRef, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
 interface Sheet { level: string; base: string; discipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
-interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; dxf_versions: string[]; default_dxf_version: string }
+interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: BoardRef[]; dxf_versions: string[]; default_dxf_version: string }
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "circuits" | "design" | "table" | "warnings" | "coord" | "layers" | "history";
+type Panel = "props" | "design" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -46,7 +46,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [stale, setStale] = useState(false);          // the drawing changed after the files were made
   const timer = useRef<number | null>(null);
   const [stamp, setStamp] = useState(0);                 // bumps the underlay URL after an upload
-  const [panel, setPanel] = useState<Panel>("props");
+  const [panel, setPanel] = useState<Panel | null>(null);        // the panels sit behind icons on the right and close when the person goes back to the canvas
+  const [designBoard, setDesignBoard] = useState("");
   const [help, setHelp] = useState(false);
   const [review, setReview] = useState(false);            // read-only look at the drawing, even for someone who may edit it
   const [checks, setChecks] = useState<Problem[] | null>(null);
@@ -78,7 +79,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const write = canWrite && !review;
   const coord = useCoordination(client, code, level, discipline);
 
-  useEffect(() => { if (selection.length > 0) setPanel("props"); }, [selection]);        // picking something on the canvas brings its properties forward
+  useEffect(() => { if (selection.length > 0) setPanel((p) => (p ? "props" : p)); }, [selection]);        // with a panel open, picking something shows its properties
+  useEffect(() => {
+    if (!panel) return;
+    const away = (e: PointerEvent) => { if (!(e.target as Element | null)?.closest?.(".wb-side")) setPanel(null); };
+    document.addEventListener("pointerdown", away);
+    return () => document.removeEventListener("pointerdown", away);
+  }, [panel]);
   useEffect(() => { if (ov.data && !level) setLevel(ov.data.levels[0]?.level ?? ""); }, [ov.data]);
   useEffect(() => { const id = window.setInterval(() => tick((n) => n + 1), 15000); return () => window.clearInterval(id); }, []);
   useEffect(() => {
@@ -206,7 +213,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     setDesignBusy(true);
     try {
       const families = Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))]));
-      then(await api<T>(`${root}/${level}/design/${step}`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ drawing, families }) })); setErr("");
+      then(await api<T>(`${root}/${level}/design/${step}`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ drawing, families, board: boardNode?.id ?? "" }) })); setErr("");
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
   };
@@ -217,7 +224,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (!proposal) return;
     setDesignBusy(true);
     try {
-      if (inBoard) await api(`${root}/${level}/design/circuits`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ circuits: proposal.circuits.map((c) => ({ tag: c.tag, description: c.description, load: c.va, unit: "VA" })) }) });
+      if (inBoard) await api(`${root}/${level}/design/circuits`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ board: boardNode?.board ?? "", circuits: proposal.circuits.map((c) => ({ tag: c.tag, description: c.description, load: c.va, unit: "VA" })) }) });
       change(applyProposal(drawing, proposal)); setProposal(null); setRev((n) => n + 1); setErr("");
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
@@ -235,7 +242,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   };
   const look = (refs?: Ref[], at_m?: Pt, at?: Pt) => { if (refs) setSelection(refs); setFocusReq((r) => ({ n: r.n + 1, refs, at_m, at })); };
   const jump = (w: string) => { const r = warningTargets(w, derived?.nodes ?? [], derived?.stretches ?? []); if (r.length) look(r); };
-  const goProblem = (p: Problem) => { if (p.ref) look([p.ref]); else if (p.tag) { setPanel("circuits"); setFocus(p.tag); } };
+  const goProblem = (p: Problem) => { if (p.ref) look([p.ref]); else if (p.tag) setFocus(p.tag); };
   const describeProblem = (p: Problem) => {
     const what = p.ref ? (p.ref.type === "node" ? derived?.nodes?.find((n) => n.id === p.ref!.id)?.tag ?? p.ref.id : derived?.stretches?.find((s) => s.line === p.ref!.id)?.line_tag ?? p.ref.id) : p.tag ?? "";
     return `${tl("layout.problem." + p.code)}${what ? `: ${what}` : ""}`;
@@ -275,10 +282,12 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const usedHere = new Set(sameBase.map((x) => x.discipline));
   const profName = (id: string) => ov.data!.profiles.find((p) => p.id === id)?.name[lang] ?? id;
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
-  const tabs: { id: Panel; label: string; badge?: number }[] = [
-    { id: "props", label: tl("layout.tab.props") }, { id: "circuits", label: tl("layout.tab.circuits") }, { id: "table", label: tl("layout.tab.table") }, { id: "warnings", label: tl("layout.tab.warnings"), badge: warnings.length },
-    { id: "design", label: tl("design.tab") }, { id: "layers", label: tl("layers.tab") }, { id: "coord", label: tl("coord.tab"), badge: coord.count }, { id: "history", label: tl("plan.history") },
+  const tabs: { id: Panel; label: string; icon: string; badge?: number }[] = [
+    { id: "props", label: tl("layout.tab.props"), icon: "select", badge: selection.length }, { id: "warnings", label: tl("layout.tab.warnings"), icon: "warn", badge: warnings.length },
+    { id: "design", label: tl("design.tab"), icon: "star" }, { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
   ];
+  const boardNodes = drawing.nodes.filter((n) => (profile?.nodes ?? []).some((k) => k.id === n.kind && k.atributos?.includes("tablero")));
+  const boardNode = boardNodes.find((n) => n.id === designBoard) ?? boardNodes[0];          // the board symbol the design starts from
   const layerOfKind = (id: string) => [...(profile?.lines ?? []), ...(profile?.nodes ?? [])].find((k) => k.id === id)?.capa_dxf ?? "";
   const layerCounts: Record<string, number> = {};
   [...drawing.nodes, ...drawing.lines].forEach((e) => { const l = layerOfKind(e.kind); if (l) layerCounts[l] = (layerCounts[l] ?? 0) + 1; });
@@ -358,14 +367,15 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
-            <div className="wb-tabs" role="tablist">
-              {tabs.map((x) => <button key={x.id} role="tab" aria-selected={panel === x.id} className={panel === x.id ? "on" : ""} onClick={() => setPanel(x.id)}>{x.label}{!!x.badge && <span className="dot">{x.badge}</span>}</button>)}
+            <div className="wb-rail" role="tablist" aria-orientation="vertical">
+              {tabs.map((x) => <button key={x.id} role="tab" aria-selected={panel === x.id} className={panel === x.id ? "on" : ""} title={x.label} aria-label={x.label} onClick={() => setPanel(panel === x.id ? null : x.id)}><Icon name={x.icon as never} size={20} />{!!x.badge && <span className="dot">{x.badge}</span>}</button>)}
             </div>
-            <div className="wb-panel" role="tabpanel">
+            {panel && <div className="wb-panel" role="tabpanel" aria-label={tabs.find((x) => x.id === panel)?.label}>
+              <h3 className="wb-panel-h">{tabs.find((x) => x.id === panel)?.label}</h3>
               {pinAt && (
                 <div className="coord-form" style={{ marginBottom: 8 }}>
                   <b>{tl("plan.pin.new")}</b>
@@ -374,16 +384,14 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
                 </div>
               )}
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
-              {panel === "circuits" && <Circuits drawing={drawing} derived={dp} boardCircuits={ov.data.circuits} profile={profile} onSelect={setSelection} readOnly={!write} focus={focus} onFocus={setFocus} onChange={change} t={tl} />}
-              {panel === "table" && <TablePanel d={d} tl={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
-                onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
+                boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} canWrite={canWrite}
                 sheetOf={(pid) => sameBase.find((x) => x.discipline === pid)?.level ?? null} onOpen={(pid) => { const s = sameBase.find((x) => x.discipline === pid); if (s) setLevel(s.level); else createSheet(sheets.length ? `${base}@${pid}` : base, pid); }} />}
               {panel === "coord" && <Coordination client={client} code={code} discipline={discipline} canWrite={canWrite} onChanged={coord.reload} onFocus={focusAt} />}
               {panel === "history" && <HistoryPanel root={root} level={level} rev={rev + hrev} canWrite={write} comparing={compare?.id ?? ""} onCompare={openCompare} onRestore={restore} tl={tl} />}
-            </div>
+            </div>}
           </aside>
           {copying && (
             <div className="wb-float wb-checks" role="dialog" aria-label={tl("plan.act.copyLevels")}>

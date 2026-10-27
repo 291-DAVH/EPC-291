@@ -98,7 +98,7 @@ def design_wiring(client: str, code: str, level: str, body: DesignIn):
 @router.post("/{level}/design/circuits")
 def design_circuits(client: str, code: str, level: str, body: NewCircuits):
     """Create in the board the circuits of an accepted proposal."""
-    return service.accept_circuits(projects.get_project_dir(client, code), level, body.circuits)
+    return service.accept_circuits(projects.get_project_dir(client, code), level, body.circuits, body.board)
 
 
 @router.get("/{level}/changes")

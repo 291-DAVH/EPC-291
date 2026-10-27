@@ -16,6 +16,7 @@ class NodeIn(BaseModel):
     x: float
     y: float
     tag: str = ""
+    board: str = ""                         # a board symbol stands for a board made in Engineering; a load is fed from one (its id): a reference, never created here
     circuit: str = ""                       # a load (luminaire, socket, HVAC...) belongs to a circuit of the board: a reference, never created here
     attrs: Dict[str, Any] = {}
 
@@ -89,3 +90,4 @@ class NewCircuit(BaseModel):
 
 class NewCircuits(BaseModel):
     circuits: List[NewCircuit]
+    board: str = ""                         # the board of the project that receives them (the first one when empty)

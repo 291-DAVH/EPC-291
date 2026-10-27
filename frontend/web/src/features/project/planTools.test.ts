@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, addNode, blank, Drawing, setScale } from "./planEditing";
 import {
-  addRoom, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
+  addRoom, boardPlan, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, applyProposal, applyRuns, arrayClip, boundsOf, copyElements, distributeNodes, findProblems, fromMetres, generationChecks, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip,
   convertClip, linkProblems, insidePolygon, loadsByRoom, pointIndex, removeRoom, renameRoom, parallelToWall, wallFaces, wallSnap, polygonArea, selectionStats, setLocked, shortestRoute, snapEx, splitLineAt, spreadLabels, svgVertices, toMetres, transformGroup, unlocked, warningTargets,
 } from "./planTools";
 
@@ -296,5 +296,23 @@ describe("rooms and the automatic design", () => {
     expect(rectCorners([0, 0], [4, 0])).toBeNull();
     const o = rectOutline([0, 0], [4, 3]);
     expect([o[0], o[o.length - 1]]).toEqual([[4, 3], [4, 3]]);
+  });
+  it("ties a board symbol to a board of Engineering that is not on the plan yet, and a load to the board on the plan, asking when there are two", () => {
+    const A = { id: "b1", name: "TGBT-01" }, B = { id: "b2", name: "TGBT-02" };
+    const isBoard = (k: string) => k === "TB", isLoad = (k: string) => k === "LU";
+    const empty = blank();
+    expect(boardPlan(empty, [], "TB", isBoard, isLoad)).toEqual({ action: "missing" });              // make it in Engineering first
+    expect(boardPlan(empty, [A], "TB", isBoard, isLoad)).toEqual({ action: "set", board: A });
+    expect(boardPlan(empty, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "ask", options: [A, B] });
+    expect(boardPlan(empty, [A], "LU", isBoard, isLoad)).toEqual({ action: "none" });                 // no board on the plan yet: the load waits
+    expect(boardPlan(empty, [A], "XX", isBoard, isLoad)).toEqual({ action: "none" });
+    const one = withBoard(addNode(empty, "TB", [0, 0]), "n1", A, true);
+    expect(one.nodes[0]).toMatchObject({ board: "b1", tag: "TGBT-01" });
+    expect(boardPlan(one, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "set", board: B });       // the other one is the only free
+    expect(boardPlan(one, [A, B], "LU", isBoard, isLoad)).toEqual({ action: "set", board: A });
+    const two = withBoard(addNode(one, "TB", [9, 9]), "n2", B, true);
+    expect(boardPlan(two, [A, B], "LU", isBoard, isLoad)).toEqual({ action: "ask", options: [A, B] });
+    expect(boardPlan(two, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "missing" });             // every board is already placed
+    expect(withBoard(addNode(empty, "LU", [1, 1]), "n1", A, false).nodes[0]).toEqual({ id: "n1", kind: "LU", x: 1, y: 1, board: "b1" });
   });
 });
