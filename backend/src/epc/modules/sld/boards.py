@@ -22,7 +22,7 @@ def _resolve(d: Path, bid: str) -> str:
     return ids[0] if ids else ""
 
 
-BOARD_TITLEBLOCK = ("description", "location", "scale", "revision", "status")           # what a board owns; the rest comes from the project (single source)
+BOARD_TITLEBLOCK = ("description", "location", "scale", "revision", "status", "drawing_type", "replaces", "replaced_by", "internal_code")           # what a board owns; the rest comes from the project (single source)
 
 
 DISCIPLINE = "electrical"

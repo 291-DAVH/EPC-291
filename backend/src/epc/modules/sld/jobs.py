@@ -6,6 +6,7 @@ from typing import Dict
 
 from epc.core import clock
 from epc.core.errors import Conflict, Invalid
+from epc.modules.catalogs import public as catalogs
 from epc.modules.engineering import public as engineering
 from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
@@ -38,7 +39,7 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
         criteria = engineering.criteria_values(d)
         data = lengths.apply(d, data)                                  # the length each circuit uses: the plan's or the board's
         res = repository.run_design(work, name, {**data, "titleblock": titleblock(d, data.get("titleblock")), "upstream": _upstream(d, data["board"]),
-                                                 "validated": engineering.criteria_validated(d)}, criteria, logos, diagrams)
+                                                 "validated": engineering.criteria_validated(d)}, criteria, logos, diagrams, catalogs.files(d))
         summary = repository.read_summary(work)
         log = list(summary.get("log", [])) + [f"AVISO {a}" for a in summary.get("avisos", [])]
         if res.returncode != 0 or not summary.get("ok"):
@@ -46,7 +47,7 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
         else:
             log += repository.render_pdfs(out, "SLD_" + name) if "sld" in diagrams else []
             log += repository.render_pdfs(out, "MLD_" + name) if "mld" in diagrams else []
-            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name), name=name, input_hash=_hash(data),
+            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name), name=name, input_hash=_hash(d, data),
                       calculation={"limits_pct": summary.get("limites_pct"), "conductor": summary.get("conductor"), "non_compliant": summary.get("non_compliant", [])})
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status
         st.update(state="failed", error=str(exc)[:600])

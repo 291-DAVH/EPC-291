@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pleno: conducto vertical que une niveles. Símbolo provisional, coordenadas en [-0.5, 0.5]: el programa lo lee de este archivo (rect, circle, line, polyline, polygon centrados). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 1 1" width="40mm" height="40mm" fill="none" stroke="#000" stroke-width="0.04">
+  <title>Pleno</title>
+  <rect x="-0.5" y="-0.5" width="1" height="1"/>
+  <circle cx="0" cy="0" r="0.32"/>
+  <line x1="0" y1="-0.32" x2="0" y2="0.32"/>
+  <polyline points="-0.12,-0.2 0,-0.32 0.12,-0.2"/>
+  <polyline points="-0.12,0.2 0,0.32 0.12,0.2"/>
+</svg>

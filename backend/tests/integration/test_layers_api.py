@@ -36,9 +36,12 @@ class TestLayers(unittest.TestCase):
         self.assertEqual((v["layers"]["sld.diagram"]["name"], v["changed"]), ("DIAGRAMA", ["sld.diagram"]))
         stored = json.loads(settings.layers_file.read_text(encoding="utf-8"))["layers"]
         self.assertEqual(stored, {"sld.diagram": {"name": "DIAGRAMA", "color": 3, "lineweight": 0.5}})
+        events = [e["action"] for e in self.c.get("/api/identity/audit", params={"limit": 20}).json()]
+        self.assertIn("drawing_layers_changed", events)                                       # the change leaves a record
         back = self.c.delete("/api/layers").json()
         self.assertEqual((back["layers"]["sld.diagram"]["name"], back["changed"]), ("291-E-DIAGRAMA", []))
         self.assertFalse(settings.layers_file.exists())
+        self.assertIn("drawing_layers_reset", [e["action"] for e in self.c.get("/api/identity/audit", params={"limit": 20}).json()])
 
     def test_wrong_values_and_unknown_roles_are_refused_and_nothing_is_stored(self):
         bad = self.c.put("/api/layers", json={"layers": {"sld.text": {"name": "291-E-DIAGRAMA", "color": 999}}})

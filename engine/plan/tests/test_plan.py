@@ -416,3 +416,23 @@ class TestJobs(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestPlenum(unittest.TestCase):
+    """The plenum (a vertical shaft between levels): a symbol drawn as an SVG, a kind of node with its height, a layer of its own."""
+
+    def test_the_symbol_is_read_from_its_svg(self):
+        prims = core.SYMBOLS["pleno"]["prims"]
+        self.assertEqual([p["t"] for p in prims], ["rect", "circle", "line", "line", "line", "line", "line"])
+        self.assertEqual(prims[0], {"t": "rect", "w": 1.0, "h": 1.0})
+
+    def test_a_plenum_is_a_node_with_a_shared_id_and_a_height_and_goes_to_its_layer_in_the_dxf(self):
+        out = core.process(drawing([node("p0", "PL", 100, 100, attrs={"pleno": "P-01", "altura_m": 3.2})], []))
+        placed = next(n for n in out["nodes"] if n["kind"] == "PL")
+        self.assertEqual((placed["tag"], placed["attrs"]), ("PL-001", {"pleno": "P-01", "altura_m": 3.2}))
+        with tempfile.TemporaryDirectory() as t:
+            path = Path(t) / "plan.dxf"
+            dxfout.write_dxf(out, path)
+            doc = ezdxf.readfile(str(path))
+            self.assertIn("ELEC-PLENO", {lay.dxf.name for lay in doc.layers})
+            self.assertTrue(any(e.dxftype() == "INSERT" and e.dxf.layer == "ELEC-PLENO" for e in doc.modelspace()))

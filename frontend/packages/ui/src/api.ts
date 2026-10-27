@@ -175,7 +175,7 @@ export interface CriteriaView {
 
 /* ---- DXF layers (global catalog the MASTER edits) ---- */
 export interface LayerAttrs { name: string; color: number; lineweight: number | null; linetype: string; on: boolean; frozen: boolean; locked: boolean; plot: boolean; description?: { es?: string; en?: string } }
-export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; changed: string[]; options: { lineweights: number[]; linetypes: string[] } }
+export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; changed: string[]; inherits?: "factory" | "global" | "company"; options: { lineweights: number[]; linetypes: string[] } }
 
 /* ---- standard solutions (global document the MASTER edits) ---- */
 export interface SolutionWhen { topology?: string[]; kind?: string[]; phase?: string[]; type?: string[]; has_children?: boolean; motor?: boolean; in_a?: Record<string, number>; text_contains?: string[] }
@@ -183,7 +183,7 @@ export interface SolutionItem { symbol: string; short?: string; poles?: number |
 export interface Solution { name?: { es?: string; en?: string }; enabled?: boolean; priority?: number; when: SolutionWhen; chain: SolutionItem[]; disp?: string }
 export interface GroupRule { name?: { es?: string; en?: string }; enabled?: boolean; when: SolutionWhen; by?: string[]; max_circuits?: number; max_ib_a?: number; tag?: string; description?: { es?: string; en?: string } }
 export interface SolutionsView {
-  solutions: Record<string, Solution>; add_ons: Record<string, Solution>; groups?: Record<string, GroupRule>; default: { solutions: Record<string, Solution>; add_ons: Record<string, Solution> }; changed: string[];
+  solutions: Record<string, Solution>; add_ons: Record<string, Solution>; groups?: Record<string, GroupRule>; default: { solutions: Record<string, Solution>; add_ons: Record<string, Solution> }; changed: string[]; inherits?: "factory" | "global" | "company";
   symbols: { id: string; name: { es: string; en: string }; slots: { key: string; example: string }[] }[]; options: { conditions: string[]; phases: string[]; ranges: string[]; item_keys: string[] };
 }
 
@@ -197,6 +197,7 @@ export interface SldCircuit {
 export interface SldTitleblock {
   company: string; company_cuit: string; client: string; client_cuit: string; drawn_by: string; checked_by: string; approved_by: string;
   description: string; location: string; scale: string; revision: string; status: string;
+  drawing_type: string; replaces: string; replaced_by: string; internal_code: string;
 }
 /** Where the length of a circuit comes from now: `used` is what the calculation takes (the plan's or the board's), the other value is shown beside it. */
 export interface LengthInfo { setting: string; used: "plan" | "data"; data_m: number; plan_m: number | null; plan_max_m: number | null; plan_total_m: number | null; levels: string[]; moments: boolean; reason: string; fallback: boolean }

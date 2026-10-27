@@ -27,3 +27,13 @@ class TestSldPackage(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestImport(unittest.TestCase):
+    def test_importing_the_generator_runs_nothing(self):
+        sys.path[:0] = SRC
+        import importlib
+        before = set(os.listdir("."))
+        module = importlib.import_module("epc_sld.sld_generator")
+        self.assertTrue(callable(module.generate) and callable(module.main))
+        self.assertEqual(set(os.listdir(".")), before)                          # no file was written, no argument was read

@@ -56,3 +56,24 @@ class TestCatalog(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestScopes(unittest.TestCase):
+    def test_files_apply_in_order_of_authority_and_a_diff_is_made_against_what_a_level_inherits(self):
+        with tempfile.TemporaryDirectory() as t:
+            g, c, p = (Path(t) / n for n in ("global.json", "company.json", "project.json"))
+            g.write_text(json.dumps({"layers": {"sld.diagram": {"name": "GLOBAL-D", "color": 3}}}), encoding="utf-8")
+            c.write_text(json.dumps({"layers": {"sld.diagram": {"color": 4}, "sld.text": {"name": "EMPRESA-T"}}}), encoding="utf-8")
+            p.write_text(json.dumps({"layers": {"sld.text": {"color": 6}}}), encoding="utf-8")
+            cat = L.load([g, c, p])
+            self.assertEqual((cat["sld.diagram"]["name"], cat["sld.diagram"]["color"], cat["sld.text"]["name"], cat["sld.text"]["color"]), ("GLOBAL-D", 4, "EMPRESA-T", 6))
+            os.environ[L.ENV_VAR] = os.pathsep.join([str(g), str(c)])                          # the environment may name several files too
+            try:
+                self.assertEqual(L.load(p)["sld.text"]["color"], 6)
+                self.assertEqual(L.name("sld.diagram"), "GLOBAL-D")
+            finally:
+                del os.environ[L.ENV_VAR]
+            inherited = L.load([g, c])
+            mine = {r: dict(a) for r, a in inherited.items()}
+            mine["sld.text"]["color"] = 9
+            self.assertEqual(L.override_of(mine, inherited), {"sld.text": {"color": 9}})

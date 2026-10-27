@@ -1,7 +1,7 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
-import { api, Badge, ClientRecord, errorText, IssuerRecord, JSON_HEADERS, Key, Me, Page, PersonRecord, State, useApi, useI18n } from "@epc/ui";
+import { api, Badge, ClientRecord, errorText, IssuerRecord, JSON_HEADERS, Key, LayersEditor, Me, Page, PersonRecord, SolutionsEditor, State, useApi, useI18n } from "@epc/ui";
 
-type Tab = "issuers" | "clients" | "people";
+type Tab = "issuers" | "clients" | "people" | "layers" | "solutions";
 
 /** Information that does not change between projects, entered once (company, clients, people, logos). Admin/engineer role only. */
 export default function Data() {
@@ -12,13 +12,15 @@ export default function Data() {
   return (
     <Page title={t("data.title")} help={t("data.help")}>
       <div className="subtabs" role="tablist">
-        {(["issuers", "clients", "people"] as Tab[]).map((x) => (
+        {(["issuers", "clients", "people", "layers", "solutions"] as Tab[]).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => setTab(x)}>{t(("data.tab." + x) as Key)}</button>
         ))}
       </div>
       {tab === "issuers" && <Issuers write={write} />}
       {tab === "clients" && <Clients write={write} />}
       {tab === "people" && <People write={write} />}
+      {tab === "layers" && <LayersEditor bare path="/data/drawing-layers" />}
+      {tab === "solutions" && <SolutionsEditor bare path="/data/standard-solutions" />}
     </Page>
   );
 }

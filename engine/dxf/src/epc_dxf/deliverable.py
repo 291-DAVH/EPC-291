@@ -42,7 +42,7 @@ def _retarget(entity, name: str) -> None:
 def finish_draft(doc, dxf_path, layers_file=None) -> dict:
     """A DXF in development (an ezdxf document) whose entities sit on layers named by their ROLE (`plan.ELEC-LUM`) becomes the deliverable: every role layer is renamed
     and given the look the catalog says, the entities follow and the file is saved. Returns {"dxf": path, "layers": {name: entities}, "blocks": inserts}."""
-    catalog = _L.load(layers_file)
+    catalog = _L.load(layers_file)                                                   # a path or a list of paths: global, company, project
     drafts = [lay.dxf.name for lay in doc.layers if lay.dxf.name in catalog]
     final = {role: _L.apply(doc, role, catalog) for role in drafts}
     for entity in doc.modelspace():

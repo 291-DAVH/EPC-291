@@ -197,6 +197,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
         <div className="fgrid">
           {text("description", "titleblock", "sld.description")}{text("location", "titleblock", "sld.location")}
           {text("scale", "titleblock", "sld.scale")}{text("revision", "titleblock", "sld.revision")}{text("status", "titleblock", "sld.status")}
+          {text("drawing_type", "titleblock", "sld.drawingType")}{text("replaces", "titleblock", "sld.replaces")}{text("replaced_by", "titleblock", "sld.replacedBy")}{text("internal_code", "titleblock", "sld.internalCode")}
         </div>
       </div>
 

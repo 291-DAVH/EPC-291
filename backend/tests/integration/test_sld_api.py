@@ -53,6 +53,12 @@ class TestSld(unittest.TestCase):
                 time.sleep(0.5)
         return self.c.post(base + "/generate", params=params)
 
+    def test_the_title_block_fields_the_project_may_give_are_saved_with_the_board(self):
+        tb = {**TB, "drawing_type": "ESQUEMAS", "replaces": "PLN-1", "replaced_by": "PLN-3", "internal_code": "PLN-2"}
+        self.assertEqual(self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": tb}).status_code, 200)
+        saved = self.c.get(self.base).json()["input"]["titleblock"]
+        self.assertEqual((saved["drawing_type"], saved["replaces"], saved["replaced_by"], saved["internal_code"]), ("ESQUEMAS", "PLN-1", "PLN-3", "PLN-2"))
+
     def wait(self):
         for _ in range(240):
             st = self.c.get(self.base + "/status").json()

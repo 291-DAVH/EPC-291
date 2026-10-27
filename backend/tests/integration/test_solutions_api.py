@@ -41,6 +41,8 @@ class TestSolutions(unittest.TestCase):
         self.assertEqual(out["changed"], ["lighting-differential-mcb"])
         stored = json.loads(settings.solutions_file.read_text(encoding="utf-8"))
         self.assertEqual(set(stored["solutions"]), {"lighting-differential-mcb"})
+        events = [e["action"] for e in self.c.get("/api/identity/audit", params={"limit": 20}).json()]
+        self.assertIn("standard_solutions_changed", events)                                   # the change leaves a record
         back = self.c.delete("/api/solutions").json()
         self.assertEqual(back["changed"], [])
         self.assertFalse(settings.solutions_file.exists())

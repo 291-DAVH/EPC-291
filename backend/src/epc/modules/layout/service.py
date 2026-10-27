@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 from epc.core import clock
-from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
+from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
 from epc.modules.layout import repository
 from epc.modules.layout.models import DrawingIn
@@ -67,7 +67,8 @@ def overview(d: Path) -> dict:
     profiles = []
     for pid in core.profiles():
         p = core.load_profile(pid)
-        profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {})})
+        symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
+        profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
     return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
@@ -208,7 +209,7 @@ def generate(d: Path, level: str, version: str = "") -> dict:
     if out.exists():
         shutil.rmtree(out)
     try:
-        result = jobs.run(_document(level, saved, version or saved.get("dxf_version", "")), out, layers_file=settings.layers_file)
+        result = jobs.run(_document(level, saved, version or saved.get("dxf_version", "")), out, layers_file=catalogs.files(d)["layers"])
     except core.PlanError as e:
         raise Invalid({"drawing": str(e)})
     dxf = out / result["files"]["dxf"]
