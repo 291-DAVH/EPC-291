@@ -4,6 +4,9 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 
+### Added
+- The catalog of layers and the document of standard solutions have a company level and a project level (default < global < company < project). Each level stores only what it changes; the company edits them in the tab Datos and each project in the new tab Catálogos; the engine receives the files in order and the memo of a board is stale when the solutions in force for its project change. Changes to layers and solutions at any level are recorded in the audit log.
+
 ### Changed
 - Automatic groups of differentials: rules in the standard solutions put the circuits that have no differential of their own behind one, as many as are needed (circuits and current per differential, split by type and phase); switched off by default, edited in the console tab "Soluciones estándar". A change in the document of standard solutions now makes the memos of the boards stale. The multi-line draws the circuits behind a single-phase group on the group's phase.
 - When the catalog of layers sets a line weight for a layer, the layer governs over the stroke widths of the SVG. The plan editor delivers its DXF through the deliverable service (a draft with roles) and its package has an index like the diagrams'.

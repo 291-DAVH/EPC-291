@@ -7,6 +7,7 @@ from epc.core import engine
 from epc.core.config import settings
 from epc.core.fsutil import read_json, write_json
 from epc.core.text import slugify
+from epc.modules.catalogs import public as catalogs
 
 # Excel column <-> form field names, used to turn the plugin's example workbook into form data
 BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "system"), ("ICC_KA", "icc_ka"), ("FP_DEFAULT", "fp_default"),
@@ -22,12 +23,9 @@ def pkg(d: Path) -> Path:
     return d / "workspace" / "02-engineering" / DISCIPLINE / PACKAGE
 
 
-def solutions_digest() -> str:
-    """A short fingerprint of the document of standard solutions in force: the default one plus the MASTER's changes."""
-    import hashlib
-    import json
-    from epc_calc import solutions
-    return hashlib.sha256(json.dumps(solutions.load(settings.solutions_file), sort_keys=True).encode("utf-8")).hexdigest()[:12]
+def solutions_digest(d: Path) -> str:
+    """A short fingerprint of the document of standard solutions in force for the project: the default one plus the MASTER's, the company's and the project's changes."""
+    return catalogs.solutions_digest(d)
 
 
 def route_kinds() -> List[str]:
@@ -117,7 +115,7 @@ def delete_board(d: Path, bid: str) -> None:
     shutil.rmtree(work_dir(d, bid), ignore_errors=True)
 
 
-def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[str, Path], diagrams: str = "sld"):
+def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[str, Path], diagrams: str = "sld", catalogs_of: Optional[dict] = None):
     """Criteria-driven calculation + SLD through the engine's `epc_drawing.board_design` (the plugin pipeline, as it runs inside Claude)."""
     work.mkdir(parents=True, exist_ok=True)
     write_json(work / "input.json", data)
@@ -125,7 +123,7 @@ def run_design(work: Path, name: str, data: dict, criteria: dict, logos: Dict[st
     args = ["--input", work / "input.json", "--criteria", work / "criteria.json", "--out", work, "--name", name, "--diagrams", diagrams]
     for k, p in logos.items():
         args += ["--logo", f"{k}={p}"]
-    return engine.run_module("epc_drawing.board_design", args, timeout=900)
+    return engine.run_module("epc_drawing.board_design", args, timeout=900, catalogs=catalogs_of)
 
 
 def read_summary(work: Path) -> dict:

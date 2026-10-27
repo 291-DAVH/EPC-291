@@ -77,6 +77,14 @@ class TestDocument(unittest.TestCase):
             finally:
                 del os.environ[S.ENV_VAR]
 
+    def test_a_level_stores_only_what_differs_from_what_it_inherits(self):
+        base = S.load()
+        mine = copy.deepcopy(base)
+        mine["solutions"]["circuit-mcb"]["priority"] = 11
+        del mine["solutions"]["motor-vfd"]
+        self.assertEqual({k: set(v) for k, v in S.override_of(mine, base).items()}, {"solutions": {"circuit-mcb", "motor-vfd"}})
+        self.assertEqual(S.override_of(base, base), {})
+
     def test_validation_names_what_is_wrong_and_a_circuit_without_a_solution_is_refused(self):
         doc = S.defaults()
         doc["solutions"]["bad"] = {"priority": "high", "when": {"colour": ["red"], "in_a": {"around": 3}}, "chain": [{"symbol": "lv_x", "slots": {"a": "{nope}"}, "count": "__import__('os')"}]}

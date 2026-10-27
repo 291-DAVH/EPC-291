@@ -53,10 +53,17 @@ def _merge(base: dict, extra: dict) -> None:
                 base.setdefault(part, {})[id_] = entry
 
 
-def load(*extra: Optional[os.PathLike]) -> dict:
-    """The document in force: the default one, the global file and `extra` files (those that exist) on top of it."""
+def _files(*extra: Any) -> List[Path]:
+    """The override files in order of authority: those the environment names (several are separated as paths are), then `extra` (each a path or a list of paths)."""
+    named = [x for x in (os.environ.get(ENV_VAR) or "").split(os.pathsep) if x]
+    flat = [y for x in extra for y in (x if isinstance(x, (list, tuple)) else [x]) if y]
+    return [Path(x) for x in [*named, *flat]]
+
+
+def load(*extra: Any) -> dict:
+    """The document in force: the default one with, in order, the files of the environment (the global one, the company's, the project's) and `extra` (those that exist) on top of it."""
     doc = defaults()
-    for p in (Path(x) for x in [os.environ.get(ENV_VAR), *extra] if x):
+    for p in _files(*extra):
         if p.is_file():
             _merge(doc, _read(p))
     return doc
@@ -66,9 +73,10 @@ def resolve_doc(doc: Optional[dict]) -> dict:
     return doc if doc is not None else load()
 
 
-def override_of(doc: dict) -> dict:
-    """What a document changes with respect to the default one: id -> its entry, or null for a solution that was removed (what the global file stores)."""
-    base, out = defaults(), {part: {} for part in PARTS}
+def override_of(doc: dict, base: Optional[dict] = None) -> dict:
+    """What a document changes with respect to a base (the default document when none is given): id -> its entry, or null for what was removed. It is what a file at that level stores."""
+    base = defaults() if base is None else base
+    out: dict = {part: {} for part in PARTS}
     for part in PARTS:
         mine, theirs = doc.get(part, {}), base.get(part, {})
         out[part] = {**{i: e for i, e in mine.items() if theirs.get(i) != e}, **{i: None for i in theirs if i not in mine}}

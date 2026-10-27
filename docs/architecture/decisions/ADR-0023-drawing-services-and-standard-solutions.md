@@ -30,12 +30,12 @@ and the layers of the DXF were names written in the code, assigned by where an e
    (one layer per kind, from the same catalog) and does not go through SVG.
 5. **Layer catalog (done).** `epc_dxf.layers`: a drawing asks for a layer by role (`sld.diagram`, `sld.text`, `sld.titleblock`, `sld.sheet`, `plan.<layer>`); the catalog gives name, colour (AutoCAD index), line weight (empty = standard),
    line type and state (on, frozen, locked, plots). Sources, the later winning role by role: the default (`data/layers.json`), the global file (`<data>/global/drawing-layers.json`, edited by the MASTER in the console tab "Capas de dibujo",
-   passed to engine runs in `EPC_LAYERS_JSON`), and later the project's own file so the user can adapt it.
+   passed to engine runs in `EPC_LAYERS_JSON`), the company's file (`<data>/orgs/<org>/drawing-layers.json`, tab Datos) and the project's (`workspace/00-setup/drawing-layers.json`, tab Catálogos); several files are separated as paths are.
 6. Layers of the packages, top down: `epc_drawing` > (`epc_mld`, `epc_sld`) > (`epc_titleblock`, `epc_symbols`, `epc_plan`, `epc_calc`) > `epc_dxf`.
 
 ## Consequences
 Each piece installs and changes alone; the map `docs/architecture/DEPENDENCIAS.md` says what a change touches. Defaults are identical to what was delivered before (golden outputs unchanged);
-only what the MASTER edits changes a drawing. All steps are done; what remains is the project's and the company's own copies of the two documents (layer catalog and standard solutions), which the loaders already accept.
+only what the MASTER edits changes a drawing. All steps are done. The two documents (layer catalog and standard solutions) have three levels, default < global (MASTER) < company < project, kept by the backend module `catalogs`: each level stores only its difference with the one above (`override_of(doc, base)`), so what it did not touch keeps following the level above. The engine reads the ordered list of files (`EPC_LAYERS_JSON` / `EPC_SOLUTIONS_JSON`, `load(*extra)`), the stale-memo fingerprint is per project, and every save or reset at any level is audited (`drawing_layers_changed`, `standard_solutions_changed`, ... with the target `global`, `company:<org>` or the project).
 When the catalog sets a weight for a layer, the layer governs: the entities of that layer are left "by layer" instead of carrying the stroke width of the SVG; a layer without a weight keeps the strokes (the default).
 The plan editor no longer writes its layers itself: it makes a DXF draft whose layers are roles (`plan.ELEC-LUM`) and hands it to `epc_dxf.deliverable.finish_draft`, which gives every role its name and look from the catalog; its delivery
 package gets the same index as the diagrams (`package.describe_dxf`).

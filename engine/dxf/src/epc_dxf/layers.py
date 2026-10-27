@@ -9,7 +9,7 @@ Three sources, the later one winning role by role (a file may carry only the rol
 import json
 import os
 from pathlib import Path
-from typing import Dict, Iterable, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 ENV_VAR = "EPC_LAYERS_JSON"
 DEFAULT_FILE = Path(__file__).resolve().parent / "data" / "layers.json"
@@ -24,11 +24,17 @@ def _read(path: Path) -> Dict[str, dict]:
     return json.loads(path.read_text(encoding="utf-8-sig")).get("layers", {})
 
 
-def load(*extra: Optional[os.PathLike]) -> Dict[str, dict]:
-    """The catalog: role -> attributes, the default one overridden by the global file and by `extra` files (those that exist)."""
+def _files(*extra: Any) -> List[Path]:
+    """The override files in order of authority: those the environment names (several are separated as paths are), then `extra` (each a path or a list of paths)."""
+    named = [x for x in (os.environ.get(ENV_VAR) or "").split(os.pathsep) if x]
+    flat = [y for x in extra for y in (x if isinstance(x, (list, tuple)) else [x]) if y]
+    return [Path(x) for x in [*named, *flat]]
+
+
+def load(*extra: Any) -> Dict[str, dict]:
+    """The catalog: role -> attributes, the default one overridden, in order, by the files of the environment (the global one, the company's, the project's) and by `extra` (those that exist)."""
     out = {role: dict(a) for role, a in _read(DEFAULT_FILE).items()}
-    paths = [os.environ.get(ENV_VAR), *extra]
-    for p in (Path(x) for x in paths if x):
+    for p in _files(*extra):
         if p.is_file():
             for role, a in _read(p).items():
                 out[role] = {**out.get(role, {}), **a}
@@ -40,9 +46,9 @@ def defaults() -> Dict[str, dict]:
     return {role: dict(a) for role, a in _read(DEFAULT_FILE).items()}
 
 
-def override_of(catalog: Dict[str, dict]) -> Dict[str, dict]:
-    """What a catalog changes with respect to the default one: role -> only the fields that differ (what the global file stores)."""
-    base = defaults()
+def override_of(catalog: Dict[str, dict], base: Optional[Dict[str, dict]] = None) -> Dict[str, dict]:
+    """What a catalog changes with respect to a base (the default catalog when none is given): role -> only the fields that differ. It is what a file at that level stores."""
+    base = defaults() if base is None else base
     out: Dict[str, dict] = {}
     for role, a in catalog.items():
         diff = {k: v for k, v in a.items() if k != "description" and base.get(role, {}).get(k) != v}

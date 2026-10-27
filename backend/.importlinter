@@ -22,6 +22,7 @@ allow_indirect_imports = True
 source_modules =
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -63,6 +64,7 @@ allow_indirect_imports = True
 source_modules =
     epc.modules.admin
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -99,6 +101,48 @@ layers =
     epc.modules.backlog.repository
     epc.modules.backlog.models
 
+[importlinter:contract:catalogs-encapsulated]
+name = catalogs: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.construction
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.layout
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.catalogs.api
+    epc.modules.catalogs.service
+    epc.modules.catalogs.repository
+
+[importlinter:contract:catalogs-layers]
+name = catalogs: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.catalogs.api
+    epc.modules.catalogs.service
+    epc.modules.catalogs.repository
+
 [importlinter:contract:deliverables-encapsulated]
 name = deliverables: other modules use only its public interface
 type = forbidden
@@ -107,6 +151,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.engineering
     epc.modules.identity
@@ -148,6 +193,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.identity
@@ -191,6 +237,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -235,6 +282,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -276,6 +324,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -319,6 +368,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -362,6 +412,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -405,6 +456,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -446,6 +498,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -489,6 +542,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -530,6 +584,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -573,6 +628,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -614,6 +670,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -657,6 +714,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -698,6 +756,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -741,6 +800,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering
@@ -784,6 +844,7 @@ source_modules =
     epc.modules.admin
     epc.modules.backlog
     epc.modules.billing
+    epc.modules.catalogs
     epc.modules.construction
     epc.modules.deliverables
     epc.modules.engineering

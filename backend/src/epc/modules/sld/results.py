@@ -31,9 +31,9 @@ def calculation(d: Path, bid: str = "") -> dict:
     return {"rows": rows, "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
 
 
-def _hash(data: dict) -> str:
-    """Fingerprint of what a calculation was made from: the board data and the document of standard solutions in force (a change in either makes the memo stale)."""
-    return sha256_json([data, repository.solutions_digest()])[:16]
+def _hash(d: Path, data: dict) -> str:
+    """Fingerprint of what a calculation was made from: the board data and the document of standard solutions in force for the project (a change in either makes the memo stale)."""
+    return sha256_json([data, repository.solutions_digest(d)])[:16]
 
 
 def _upstream(d: Path, board: dict) -> Optional[dict]:
@@ -62,6 +62,6 @@ def memo(d: Path, bid: str = "") -> dict:
     m = read_json(base / f"{st.get('name')}_memoria.json", None) if st.get("name") and st.get("state") == "done" else None
     if not m or not saved:
         return {"available": False, "stale": False, "memo": None, "files": []}
-    stale = st.get("input_hash") != _hash(lengths.apply(d, saved))                # a change in the plan that alters a length makes the memo stale
+    stale = st.get("input_hash") != _hash(d, lengths.apply(d, saved))                # a change in the plan that alters a length makes the memo stale
     files = [f for f in (f"docs/{st['name']}_MC.md", f"docs/{st['name']}_SP.md") if (repository.pkg(d) / f).is_file()]
     return {"available": True, "stale": stale, "memo": m, "files": files, "finished": st.get("finished")}
