@@ -208,6 +208,35 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual([n["id"] for n in ch["lines"]["removed"]], ["l1"])
         self.assertEqual((ch["count"], ch["scale_changed"]), (4, False))
 
+    # ---------------------------------------------------------------- the rest of the surface
+    def test_settings_members_threads_and_data_can_be_read_changed_and_removed(self):
+        self.assertEqual(self.c.get(f"{self.base}/settings").json()["story_height_m"], 3.0)
+        self.assertEqual(self.c.put(f"{self.base}/settings", json={"story_height_m": 3.5}).json()["story_height_m"], 3.5)
+        self.assertEqual(self.c.put(f"{self.base}/settings", json={"story_height_m": 99}).status_code, 422)
+        self.assertEqual(self.c.get(f"{self.base}/members").json(), {})
+        self.assertEqual(self.c.post(f"{self.base}/emit", json={"discipline": "a b"}).status_code, 422)
+        t = self.c.post(f"{self.base}/threads", json={"kind": "comment", "from_discipline": "electrica_BT", "text": "x"}).json()["id"]
+        self.assertEqual(self.c.patch(f"{self.base}/threads/{t}", json={"status": "open"}).status_code, 422)             # nothing changes: say something
+        self.assertEqual(self.c.patch(f"{self.base}/threads/T-999", json={"comment": "hi"}).status_code, 404)
+        self.assertEqual(self.c.delete(f"{self.base}/threads/{t}").status_code, 204)
+        self.assertEqual(self.c.delete(f"{self.base}/threads/{t}").status_code, 404)
+        body = {"owner": "mecanica", "consumers": ["electrica_BT"], "tag": "P-1", "field": "power", "value": 5}
+        self.assertEqual(self.c.post(f"{self.base}/exchanges", json={**body, "tag": ""}).status_code, 422)
+        self.assertEqual(self.c.post(f"{self.base}/exchanges", json={**body, "value": ""}).status_code, 422)
+        x = self.c.post(f"{self.base}/exchanges", json=body).json()["id"]
+        self.assertEqual(self.c.post(f"{self.base}/exchanges/X-999/take", json={"discipline": "electrica_BT"}).status_code, 404)
+        self.assertEqual(self.c.delete(f"{self.base}/exchanges/{x}").status_code, 204)
+        self.assertEqual(self.c.delete(f"{self.base}/exchanges/{x}").status_code, 404)
+
+    def test_the_company_rules_belong_to_an_organization(self):
+        self.assertEqual(self.c.get("/api/data/clash-rules").status_code, 422)                       # this session works in no organization
+        self.assertEqual(self.c.put("/api/data/clash-rules", json={"rules": []}).status_code, 422)
+
+    def test_a_clash_needs_a_known_source_and_a_valid_state(self):
+        self.assertEqual(self.c.get(f"{self.base}/clashes?source=nope").status_code, 422)
+        self.assertEqual(self.c.put(f"{self.base}/clashes/abc", json={"status": "maybe"}).status_code, 422)
+        self.assertEqual(self.c.get(f"{self.layout}/L0/history/zzz").status_code, 404)
+
     # ---------------------------------------------------------------- templates
     def test_a_template_is_saved_listed_and_deleted(self):
         url = "/api/projects/ACME/P-1/layout-templates"
