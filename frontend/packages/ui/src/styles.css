@@ -378,6 +378,17 @@ textarea.mono { font-family: var(--mono); font-size: 13px; }
 /* ---- layout workbench: the plan editor is a single page (a toolbox of buttons on the left, the canvas, a panel on the right) ---- */
 .benchbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
 .benchbar b { font-family: var(--display); font-size: 16px; }
+@media (min-width: 900px) {
+  .benchbar { flex-wrap: nowrap; }
+  .benchbar > * { flex: none; }
+  .benchbar > b { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .project.bench .benchbar .tabs { flex: 1 1 0; min-width: 0; margin: 0 0 0 12px; justify-content: flex-start; border-bottom: 0; }
+  .project.bench .benchbar .tabs button { min-height: 28px; padding: 3px 10px; font-size: 13px; }
+  .workbench .wb-top { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
+  .workbench .wb-top > * { flex: none; }
+  .wb-top .add-sheet.compact { width: 54px; }
+  .wb-top .compact-select { width: 82px; }
+}
 .workbench { display: flex; flex-direction: column; gap: 8px; }
 .wb-top { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; padding: 6px 8px; background: var(--panel); border: 1px solid var(--edge); border-radius: var(--radius); }
 .wb-top .grow { flex: 1; }

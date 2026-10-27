@@ -308,21 +308,16 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
         {level && <div className="wb-group" role="tablist" aria-label={tl("plan.sheets")}>
           {sameBase.map((x) => <button key={x.level} role="tab" aria-selected={x.level === level} className={"lvl disc" + (x.level === level ? " on" : "")} onClick={() => setLevel(x.level)} title={profName(x.discipline)}>{profName(x.discipline)}</button>)}
           {canWrite && ov.data.profiles.some((p) => !usedHere.has(p.id)) && (
-            <select className="add-sheet" value="" aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && createSheet(`${base}@${e.target.value}`, e.target.value)}>
-              <option value="">+ {tl("plan.addSheet")}</option>{ov.data.profiles.filter((p) => !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
+            <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && createSheet(`${base}@${e.target.value}`, e.target.value)}>
+              <option value="">+</option>{ov.data.profiles.filter((p) => !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
             </select>)}
           {level && canWrite && <button onClick={deleteSheet} title={tl("layout.deleteLevel")} aria-label={tl("layout.deleteLevel")}><Icon name="trash" size={16} /></button>}
         </div>}
         {level && <>
-          <label className="wb-field"><span>{tl("layout.discipline")}</span>
-            <select value={discipline} disabled={!write || level.includes("@")} onChange={(e) => change({ ...drawing, discipline: e.target.value })}>
-              {ov.data.profiles.map((p) => <option key={p.id} value={p.id} disabled={usedHere.has(p.id) && p.id !== discipline}>{p.name[lang] ?? p.name.es}</option>)}
-            </select></label>
-          {write && <label className="btn wb-upload" title={tl("layout.noUnderlay")}><Icon name="upload" size={16} /> {tl("layout.underlay")}
+          {write && <label className="tool-ico wb-upload" title={lv?.underlay ? tl("layout.underlay") : tl("layout.noUnderlay")} aria-label={tl("layout.underlay")}><Icon name="upload" size={18} />
             <input type="file" accept=".png,.jpg,.jpeg,.svg,.dxf,.pdf" disabled={busy} onChange={(e) => { upload(e.target.files?.[0]); e.target.value = ""; }} /></label>}
-          {!lv?.underlay && <span className="muted small wb-note">{tl("layout.noUnderlay")}</span>}
-          {write && lv?.underlay && <button onClick={recognize} disabled={recognizing || busy} title={tl("plan.arch.help")}><Icon name="select" size={16} /> {recognizing ? tl("plan.arch.working") : tl("plan.arch.recognize")}</button>}
-          {lv?.architecture && <span className="badge accent" title={lv.architecture.warnings.join("\n")}>{lv.architecture.counts.walls} {tl("plan.arch.walls")} · {lv.architecture.counts.doors} {tl("plan.arch.doors")} · {lv.architecture.counts.windows} {tl("plan.arch.windows")}{lv.architecture.counts.openings ? ` · ${lv.architecture.counts.openings} ${tl("plan.arch.openings")}` : ""}</span>}
+          {write && lv?.underlay && <button className="tool-ico" onClick={recognize} disabled={recognizing || busy} title={recognizing ? tl("plan.arch.working") : tl("plan.arch.recognize") + " — " + tl("plan.arch.help")} aria-label={tl("plan.arch.recognize")}><Icon name={recognizing ? "update" : "select"} size={18} /></button>}
+          {lv?.architecture && <span className="badge accent" title={[`${lv.architecture.counts.walls} ${tl("plan.arch.walls")}`, `${lv.architecture.counts.doors} ${tl("plan.arch.doors")}`, `${lv.architecture.counts.windows} ${tl("plan.arch.windows")}`, `${lv.architecture.counts.openings ?? 0} ${tl("plan.arch.openings")}`, ...lv.architecture.warnings].join("\n")}>{lv.architecture.counts.walls} {tl("plan.arch.walls")}</span>}
           {write && !drawing.scale && lv?.architecture?.scale_hint && <button onClick={useHintedScale} title={lv.architecture.scale_hint.basis}>{tl("plan.arch.useScale")}</button>}
           {discipline !== "electrica_BT" && (
             <label className="wb-field"><span>{tl("layout.outlet")}</span>
@@ -343,16 +338,15 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
         {state === "saved" && <span className="muted small" title={tl("plan.savedAgo")}>{tl("layout.saved")} {ago < 60 ? `${ago}s` : `${Math.round(ago / 60)} min`}</span>}
         {state === "error" && <Badge tone="bad">{tl("plan.notSaved")}</Badge>}
         {level && <>
-          <label className="wb-field"><span>{tl("layout.dxfVersion")}</span>
-            <select value={version} onChange={(e) => setVersion(e.target.value)}>
-              <option value="">{tl("layout.latest")} ({ov.data.default_dxf_version})</option>
-              {ov.data.dxf_versions.map((v) => <option key={v} value={v}>{v}</option>)}
-            </select></label>
-          <button className="primary" disabled={busy || !drawing.scale || !write} onClick={beforeGenerate} title={!drawing.scale ? tl("layout.needScale") : ""}><Icon name="file" size={16} /> {tl("layout.makeFiles")}</button>
-          {lv?.files?.dxf && <a className="btn" href={download(lv.files.dxf)}>{tl("layout.downloadDxf")} ({lv.files.dxf_version})</a>}
-          {lv?.files?.pdf && <a className="btn" href={download(lv.files.pdf)}>{tl("layout.downloadPdf")}</a>}
+          <select className="compact-select" value={version} title={`${tl("layout.dxfVersion")}: ${tl("layout.latest")}`} aria-label={tl("layout.dxfVersion")} onChange={(e) => setVersion(e.target.value)}>
+            <option value="">{ov.data.default_dxf_version}</option>
+            {ov.data.dxf_versions.map((v) => <option key={v} value={v}>{v}</option>)}
+          </select>
+          <button className="tool-ico primary" disabled={busy || !drawing.scale || !write} onClick={beforeGenerate} title={!drawing.scale ? tl("layout.needScale") : tl("layout.makeFiles")} aria-label={tl("layout.makeFiles")}><Icon name="file" size={18} /></button>
+          {lv?.files?.dxf && <a className="btn" href={download(lv.files.dxf)} title={`${tl("layout.downloadDxf")} (${lv.files.dxf_version})`}>DXF</a>}
+          {lv?.files?.pdf && <a className="btn" href={download(lv.files.pdf)} title={tl("layout.downloadPdf")}>PDF</a>}
           {lv?.files && stale && <button className="badge warn" onClick={showChanges} title={tl("plan.changes")}>{tl("layout.filesOutdated")} ▸</button>}
-          <button onClick={runChecks} title={tl("plan.check.help")}><Icon name="check" size={16} /> {tl("plan.check")}</button>
+          <button className="tool-ico" onClick={runChecks} title={`${tl("plan.check")} — ${tl("plan.check.help")}`} aria-label={tl("plan.check")}><Icon name="check" size={18} /></button>
         </>}
         {canWrite && <button className="tool-ico" onClick={() => setReview(!review)} aria-pressed={review} aria-label={tl("plan.review")} title={tl("plan.review")}><Icon name="eye" size={18} /></button>}
         <button className="tool-ico" onClick={() => setHelp(!help)} aria-pressed={help} aria-label={tl("layout.helpToggle")} title={tl("layout.helpToggle")}><Icon name="help" size={18} /></button>
