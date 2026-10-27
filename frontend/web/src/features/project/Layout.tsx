@@ -9,7 +9,7 @@ import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Circuits, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { applyProposal, Architecture, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, applyRuns, Architecture, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
 interface Sheet { level: string; base: string; discipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
@@ -63,6 +63,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [changes, setChanges] = useState<Changes | null>(null);
   const [arch, setArch] = useState<Architecture | null>(null);
   const [proposal, setProposal] = useState<Proposal | null>(null);
+  const [runs, setRuns] = useState<RunsProposal | null>(null);
   const [designBusy, setDesignBusy] = useState(false);
   const [limits, setLimits] = useState<Record<string, Partial<Limits>>>({});
   const [roomRequest, setRoomRequest] = useState(0);
@@ -201,14 +202,17 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setRecognizing(false);
   };
-  const propose = async () => {
+  const designCall = async <T,>(step: "runs" | "wiring", then: (r: T) => void) => {
     setDesignBusy(true);
     try {
-      const body = { drawing, families: Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))])) };
-      setProposal(await api<Proposal>(`${root}/${level}/design`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) })); setErr("");
+      const families = Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))]));
+      then(await api<T>(`${root}/${level}/design/${step}`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ drawing, families }) })); setErr("");
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
   };
+  const proposeRuns = () => designCall<RunsProposal>("runs", setRuns);
+  const proposeWiring = () => designCall<Proposal>("wiring", setProposal);
+  const applyDesignRuns = () => { if (runs) { change(applyRuns(drawing, runs)); setRuns(null); setRev((n) => n + 1); } };
   const applyDesign = async (inBoard: boolean) => {
     if (!proposal) return;
     setDesignBusy(true);
@@ -354,7 +358,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={proposal} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -373,7 +377,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "circuits" && <Circuits drawing={drawing} derived={dp} boardCircuits={ov.data.circuits} profile={profile} onSelect={setSelection} readOnly={!write} focus={focus} onFocus={setFocus} onChange={change} t={tl} />}
               {panel === "table" && <TablePanel d={d} tl={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
-              {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onPropose={propose} onApply={applyDesign} onDiscard={() => setProposal(null)}
+              {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} canWrite={canWrite}
                 sheetOf={(pid) => sameBase.find((x) => x.discipline === pid)?.level ?? null} onOpen={(pid) => { const s = sameBase.find((x) => x.discipline === pid); if (s) setLevel(s.level); else createSheet(sheets.length ? `${base}@${pid}` : base, pid); }} />}

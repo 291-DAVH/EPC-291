@@ -1,21 +1,25 @@
-"""Automatic design of circuits and runs for the loads placed in rooms.
+"""Automatic design in two steps, so the person sees and can change the first before the second.
 
-The person places the loads (luminaires, sockets...) and marks the rooms; this module proposes
-  - the circuits: each room is a circuit of each family of load it holds (lighting, general sockets...), split when a room holds more loads than a circuit may have (15 for lighting);
-  - the trunk: tray lines from the board to the entrance of each room, sharing what they can;
-  - the branches: one conduit per circuit from the entrance of its room through its loads, in the order of the shortest chain.
-Cables are not lines of their own: a circuit's cable follows the conduits and trays it is routed through (the engine records on every stretch which circuits it carries).
+1. The runs (`propose_runs`): the trays and conduits for the loads placed in the drawing, as few and as straight as possible. A trunk is a long straight tray along a row (or a column) of loads, trunks hang
+   from one straight spine that starts at the board, and each load is reached by a short straight conduit perpendicular to its trunk. No line has a bend: the only corners are the T junctions where a run
+   leaves another. Both orientations (rows or columns) and every number of trunks are tried and the shortest layout is kept.
+2. The wiring (`propose_wiring`): once the runs are in the drawing, a circuit for each room and family of load (the room is where the load lies; at most 15 lighting outlets per circuit), routed over the
+   runs that are drawn, and checked with the engine: a circuit whose loads the runs do not reach is said.
+Cables are not lines of their own: a circuit's cable follows the runs it is routed through.
 
-Pure: a drawing document and the rooms in, a proposal out (circuits, assignments, lines); it changes nothing. Lines are straight horizontal and vertical stretches, in the units of the view.
-The limits per circuit and the power per outlet are typical values in `params.json` (`design`): the engineer confirms them against the standard of the project.
+Pure: a drawing document (and the rooms for the wiring) in, a proposal out; it changes nothing. Units are those of the view. The limits per circuit and the power per outlet are typical values in
+`params.json` (`design`): the engineer confirms them against the standard of the project.
 """
+import copy
 import math
+import statistics
 from typing import Any, Dict, List, Optional, Tuple
 
 from epc_plan import core
 
 Point = Tuple[float, float]
 EPS = 1e-9
+MAX_TRUNKS = 10
 
 
 # ---------------------------------------------------------------- geometry
@@ -39,48 +43,6 @@ def room_of(p: Point, rooms: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """The room a point is in; the smallest when rooms are nested."""
     found = [r for r in rooms if len(r["points"]) >= 3 and inside(p, [tuple(q) for q in r["points"]])]
     return min(found, key=lambda r: area([tuple(q) for q in r["points"]])) if found else None
-
-
-def l_path(a: Point, b: Point, horizontal_first: bool) -> List[Point]:
-    """A straight run from a to b with at most one elbow, horizontal first or vertical first."""
-    if abs(a[0] - b[0]) < EPS or abs(a[1] - b[1]) < EPS:
-        return [a, b]
-    return [a, (b[0], a[1]), b] if horizontal_first else [a, (a[0], b[1]), b]
-
-
-def _dedupe(points: List[Point]) -> List[Point]:
-    out: List[Point] = []
-    for p in points:
-        if not out or math.hypot(p[0] - out[-1][0], p[1] - out[-1][1]) > 1e-6:
-            out.append(p)
-    return out
-
-
-def nearest_on(segments: List[Tuple[Point, Point]], p: Point) -> Point:
-    """The point of a set of segments closest to p."""
-    best, gap = segments[0][0], float("inf")
-    for a, b in segments:
-        dx, dy = b[0] - a[0], b[1] - a[1]
-        n = dx * dx + dy * dy
-        t = 0.0 if n == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / n))
-        q = (a[0] + t * dx, a[1] + t * dy)
-        if math.hypot(p[0] - q[0], p[1] - q[1]) < gap:
-            best, gap = q, math.hypot(p[0] - q[0], p[1] - q[1])
-    return best
-
-
-def entry_point(path: List[Point], poly: List[Point]) -> Tuple[List[Point], Point]:
-    """Where a run toward a room first enters it: the run up to there and that point. A run that starts inside the room has no trunk to lay."""
-    if inside(path[0], poly):
-        return [path[0]], path[0]
-    for a, b in zip(path, path[1:]):
-        steps = 200
-        for i in range(1, steps + 1):
-            q = (a[0] + (b[0] - a[0]) * i / steps, a[1] + (b[1] - a[1]) * i / steps)
-            if inside(q, poly):
-                cut = path[: path.index(a) + 1] + [q]
-                return _dedupe(cut), q
-    return [path[0]], path[0]
 
 
 def chain(points: List[Point], start: Point) -> List[int]:
@@ -111,7 +73,7 @@ def split_evenly(loads: List[Dict[str, Any]], maximum: int) -> List[List[Dict[st
     return out
 
 
-# ---------------------------------------------------------------- the design
+# ---------------------------------------------------------------- data of the profile and the limits
 def _families(profile: Dict[str, Any]) -> Dict[str, str]:
     """Kind of load -> family of circuit (lighting, general sockets...), as the profile says."""
     return {k["id"]: k["circuito"] for k in profile["nodos"] if k.get("carga") and k.get("circuito")}
@@ -136,47 +98,155 @@ def _loads(document: Dict[str, Any], families: Dict[str, str]) -> List[Dict[str,
     return [{"id": n["id"], "x": n["x"], "y": n["y"], "kind": n["kind"], "family": families[n["kind"]]} for n in document.get("nodes", []) if n.get("kind") in families]
 
 
-def _trunk_to(trunk: List[Tuple[Point, Point]], target: Point, poly: List[Point]) -> Tuple[List[Point], Point]:
-    """The tray run from the nearest point of what is laid to the entrance of a room (and that entrance), and records it in the trunk."""
-    start = nearest_on(trunk, target)
-    path = _dedupe(l_path(start, target, abs(target[0] - start[0]) >= abs(target[1] - start[1])))
-    run, entrance = entry_point(path, poly)
-    run = _dedupe(run)
-    trunk.extend(zip(run, run[1:]))
-    return run, entrance
+def _board(document: Dict[str, Any], profile: Dict[str, Any], wanted: Optional[str]) -> Optional[Dict[str, Any]]:
+    kinds = {k["id"]: k for k in profile["nodos"]}
+    boards = [n for n in document.get("nodes", []) if kinds.get(n.get("kind"), {}).get("simbolo_2d") == "tablero" and (not wanted or n["id"] == wanted)]
+    return boards[0] if boards else None
 
 
-def _branch(entrance: Point, group: List[Dict[str, Any]], horizontal_first: bool) -> Tuple[List[Point], List[str]]:
-    """The conduit of one circuit: from the entrance of the room through its loads in the order of the shortest chain; and the loads in that order."""
-    pts = [(l["x"], l["y"]) for l in group]
-    order = chain(pts, entrance)
-    path: List[Point] = [entrance]
-    for i in order:
-        path += l_path(path[-1], pts[i], horizontal_first)[1:]
-    return _dedupe(path), [group[i]["id"] for i in order]
+# ---------------------------------------------------------------- step 1: the runs
+def _costs(ordered: List[Tuple[float, float]]) -> Dict[Tuple[int, int], float]:
+    """What one trunk costs for each run of consecutive loads (ordered by y): the stubs from the trunk, at their median y, to each load plus the trunk, as long as the loads are wide."""
+    n = len(ordered)
+    ys = [p[1] for p in ordered]
+    pre = [0.0]
+    for y in ys:
+        pre.append(pre[-1] + y)
+    cost: Dict[Tuple[int, int], float] = {}
+    for i in range(n):
+        lo = hi = ordered[i][0]
+        for j in range(i, n):
+            lo, hi = min(lo, ordered[j][0]), max(hi, ordered[j][0])
+            m = (i + j) // 2
+            cost[(i, j)] = ys[m] * (m - i + 1) - (pre[m + 1] - pre[i]) + (pre[j + 1] - pre[m + 1]) - ys[m] * (j - m) + (hi - lo)
+    return cost
 
 
-class _Design:
-    """One proposal being made: the board, the rooms with their loads, the trunk laid so far, the tags taken and what has been proposed."""
+def partitions(pts: List[Tuple[float, float]], most: int = MAX_TRUNKS) -> Dict[int, List[List[Tuple[float, float]]]]:
+    """For every number of trunks k, the best way to cut the loads, ordered by y, into k consecutive groups (least total of stubs and trunks, by dynamic programming)."""
+    ordered = sorted(pts, key=lambda p: (p[1], p[0]))
+    n = len(ordered)
+    cost = _costs(ordered)
+    best: Dict[Tuple[int, int], Tuple[float, int]] = {}
+    out: Dict[int, List[List[Tuple[float, float]]]] = {}
+    for k in range(1, min(most, n) + 1):
+        for j in range(k - 1, n):
+            best[(k, j)] = (cost[(0, j)], 0) if k == 1 else min((best[(k - 1, i - 1)][0] + cost[(i, j)], i) for i in range(k - 1, j + 1))
+        cuts, j = [], n - 1
+        for kk in range(k, 0, -1):
+            i = best[(kk, j)][1]
+            cuts.append(ordered[i: j + 1])
+            j = i - 1
+        out[k] = cuts[::-1]
+    return out
+
+
+def _layout(groups: List[List[Tuple[float, float]]], board: Point, spine_x: float) -> Dict[str, Any]:
+    """The lines of one way of cutting the loads: a horizontal trunk per group at the median y of its loads reaching the spine, the spine, the feeder from the board and a vertical stub per load."""
+    trunks, stubs = [], []
+    ys = []
+    for g in groups:
+        y = statistics.median(p[1] for p in g)
+        ys.append(y)
+        lo, hi = min(min(p[0] for p in g), spine_x), max(max(p[0] for p in g), spine_x)
+        if hi - lo > EPS:
+            trunks.append([(lo, y), (hi, y)])
+        stubs += [[(p[0], y), (p[0], p[1])] for p in g if abs(p[1] - y) > 1e-6]
+    top, bottom = min(ys + [board[1]]), max(ys + [board[1]])
+    if bottom - top > EPS:
+        trunks.append([(spine_x, top), (spine_x, bottom)])
+    if abs(board[0] - spine_x) > EPS:
+        trunks.append([board, (spine_x, board[1])])
+    return {"trunks": trunks, "stubs": stubs}
+
+
+def _length(lines: List[List[Point]]) -> float:
+    return sum(math.hypot(b[0] - a[0], b[1] - a[1]) for ln in lines for a, b in zip(ln, ln[1:]))
+
+
+def best_layout(pts: List[Tuple[float, float]], board: Point) -> Dict[str, Any]:
+    """The shortest layout of rows (horizontal trunks) over every number of trunks and over the places the spine can be (through the board or through the middle of the loads)."""
+    best: Optional[Dict[str, Any]] = None
+    for groups in partitions(pts).values():
+        for sx in sorted({board[0], statistics.median(p[0] for p in pts)}):
+            lay = _layout(groups, board, sx)
+            lay["length"] = _length(lay["trunks"]) + _length(lay["stubs"])
+            if best is None or lay["length"] < best["length"] - 1e-9:
+                best = lay
+    assert best is not None
+    return best
+
+
+def _on(p: Point, line: List[Point]) -> bool:
+    (x0, y0), (x1, y1) = line[0], line[-1]
+    return min(x0, x1) - 1e-6 <= p[0] <= max(x0, x1) + 1e-6 and min(y0, y1) - 1e-6 <= p[1] <= max(y0, y1) + 1e-6 and abs((x1 - x0) * (p[1] - y0) - (y1 - y0) * (p[0] - x0)) < 1e-6 * (1 + abs(x1 - x0) + abs(y1 - y0))
+
+
+def _leaves(o: List[Point], ln: List[Point]) -> bool:
+    """Whether run `o` starts or ends on `ln` without lying along it."""
+    return (_on(o[0], ln) or _on(o[-1], ln)) and not (_on(ln[0], o) and _on(ln[-1], o))
+
+
+def _classify(lines: List[List[Point]], loads: List[Point]) -> List[Dict[str, Any]]:
+    """A run is a trunk (tray) when it serves two or more points (loads on it, or runs that leave it) and a conduit (a stub to a single point) when it serves one or none."""
+    out = []
+    for i, ln in enumerate(lines):
+        served = sum(1 for p in loads if _on(p, ln)) + sum(1 for j, o in enumerate(lines) if j != i and _leaves(o, ln))
+        trunk = served >= 2
+        out.append({"kind": "BN" if trunk else "CN", "points": [list(p) for p in ln], "role": "trunk" if trunk else "stub"})
+    return out
+
+
+def _transpose(lines: List[List[Point]]) -> List[List[Point]]:
+    return [[(p[1], p[0]) for p in ln] for ln in lines]
+
+
+def _stats(orientation: str, lines: List[Dict[str, Any]], document: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, Any]:
+    scale = (document.get("plan") or {}).get("scale")
+    k = core.metres_per_unit(scale, params) if scale else None
+    unit = k if k else 1.0
+    trunks = [ln["points"] for ln in lines if ln["role"] == "trunk"]
+    stubs = [ln["points"] for ln in lines if ln["role"] == "stub"]
+    return {"orientation": orientation, "trunks": len(trunks), "stubs": len(stubs), "bends": 0, "trunk_length": round(_length(trunks) * unit, 2), "stub_length": round(_length(stubs) * unit, 2), "in_metres": bool(k)}
+
+
+def propose_runs(document: Dict[str, Any], options: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """The trays and conduits for the loads of the drawing: straight trunks hanging from one spine that starts at the board, and a short straight conduit to each load. Both orientations are tried
+    (horizontal trunks, or vertical ones) and the shorter wins. Returns {orientation, lines, stats, warnings}; a line is {kind, points, role} with role trunk (tray) or stub (conduit)."""
+    params, options = params or core.PARAMS, options or {}
+    profile = core.load_profile(document.get("discipline", "electrica_BT"))
+    families = _families(profile)
+    board = _board(document, profile, options.get("board"))
+    loads = _loads(document, families)
+    if board is None:
+        return {"orientation": "", "lines": [], "stats": {}, "warnings": ["no board (tablero) in the drawing: place one to start the runs from it"]}
+    if not loads:
+        return {"orientation": "", "lines": [], "stats": {}, "warnings": ["there are no loads in the drawing: place the luminaires or sockets first"]}
+    pts, b = [(l["x"], l["y"]) for l in loads], (board["x"], board["y"])
+    rows = best_layout(pts, b)
+    cols = best_layout([(y, x) for x, y in pts], (b[1], b[0]))
+    cols = {**cols, "trunks": _transpose(cols["trunks"]), "stubs": _transpose(cols["stubs"])}
+    orientation, lay = ("horizontal", rows) if rows["length"] <= cols["length"] + 1e-9 else ("vertical", cols)
+    lines = _classify(lay["trunks"] + lay["stubs"], pts)
+    stats = _stats(orientation, lines, document, params)
+    return {"orientation": orientation, "lines": lines, "stats": stats, "warnings": []}
+
+
+# ---------------------------------------------------------------- step 2: the wiring over the runs that are drawn
+class _Wiring:
+    """One wiring being proposed: the board, the loads by room, the tags taken and what has been proposed."""
 
     def __init__(self, document: Dict[str, Any], rooms: List[Dict[str, Any]], options: Dict[str, Any], params: Dict[str, Any]):
         profile = core.load_profile(document.get("discipline", "electrica_BT"))
-        self.document, self.rooms = document, rooms
-        self.kinds = {k["id"]: k for k in profile["nodos"]}
+        self.document, self.rooms, self.params = document, rooms, params
         self.families = _families(profile)
         self.limits = _limits(options, params)
-        self.board = self._find_board(options.get("board"))
+        self.board = _board(document, profile, options.get("board"))
         self.taken = set(options.get("taken") or [])
-        self.trunk: List[Tuple[Point, Point]] = [((self.board["x"], self.board["y"]),) * 2] if self.board else []
         self.circuits: List[Dict[str, Any]] = []
-        self.lines: List[Dict[str, Any]] = []
         self.assignments: Dict[str, str] = {}
         self.unassigned: List[str] = []
         self.warnings: List[str] = []
-
-    def _find_board(self, wanted: Optional[str]) -> Optional[Dict[str, Any]]:
-        boards = [n for n in self.document.get("nodes", []) if self.kinds.get(n.get("kind"), {}).get("simbolo_2d") == "tablero" and (not wanted or n["id"] == wanted)]
-        return boards[0] if boards else None
 
     def loads_by_room(self) -> Dict[str, List[Dict[str, Any]]]:
         by_room: Dict[str, List[Dict[str, Any]]] = {}
@@ -190,42 +260,54 @@ class _Design:
     def distance_to_board(self, loads: List[Dict[str, Any]]) -> float:
         return math.hypot(*(sum(l[a] for l in loads) / len(loads) - self.board[a] for a in ("x", "y")))
 
-    def _target(self, loads: List[Dict[str, Any]], poly: List[Point]) -> Point:
-        """Where the trunk heads for in a room: the middle of its loads, or the load nearest to it when the middle falls outside the outline."""
-        mid = (sum(l["x"] for l in loads) / len(loads), sum(l["y"] for l in loads) / len(loads))
-        return mid if inside(mid, poly) else min(((l["x"], l["y"]) for l in loads), key=lambda q: math.hypot(q[0] - mid[0], q[1] - mid[1]))
-
-    def lay_room(self, room: Dict[str, Any], loads: List[Dict[str, Any]]) -> None:
-        poly = [tuple(q) for q in room["points"]]
-        run, entrance = _trunk_to(self.trunk, self._target(loads, poly), poly)
-        if len(run) >= 2:
-            self.lines.append({"kind": "BN", "points": [list(p) for p in run], "role": "trunk", "room": room["id"]})
+    def room_circuits(self, room: Dict[str, Any], loads: List[Dict[str, Any]]) -> None:
         for family in sorted({l["family"] for l in loads}):
             for group in split_evenly([l for l in loads if l["family"] == family], int(self.limits[family]["max_outlets"])):
-                self._circuit(room, family, group, entrance)
+                self._circuit(room, family, group)
 
-    def _circuit(self, room: Dict[str, Any], family: str, group: List[Dict[str, Any]], entrance: Point) -> None:
+    def _circuit(self, room: Dict[str, Any], family: str, group: List[Dict[str, Any]]) -> None:
         lim = self.limits[family]
         tag = _next_tag(lim["prefix"], self.taken)
-        path, order = _branch(entrance, group, len(self.circuits) % 2 == 0)
-        self.lines.append({"kind": "CN", "points": [list(p) for p in path], "circuit": tag, "role": "branch", "room": room["id"]})
+        pts = [(l["x"], l["y"]) for l in group]
+        order = [group[i]["id"] for i in chain(pts, (self.board["x"], self.board["y"]))]
         self.assignments.update({i: tag for i in order})
         self.circuits.append({"tag": tag, "family": family, "room": room["id"], "room_name": room.get("name", ""), "loads": order, "outlets": len(order), "from": self.board["id"], "to": order[-1], "via": [],
                               "ternas": 1, "va": round(len(order) * float(lim["va_per_outlet"]), 1), "va_per_outlet": lim["va_per_outlet"], "description": f"{lim['label']['es']} {room.get('name', '')} ({len(order)})".strip()})
 
-    def result(self) -> Dict[str, Any]:
-        return {"board": self.board["id"] if self.board else "", "circuits": self.circuits, "lines": self.lines, "assignments": self.assignments, "unassigned": self.unassigned, "warnings": self.warnings, "limits": self.limits}
+    def verify(self) -> Dict[str, Any]:
+        """Route what was proposed over the runs that are drawn, with the engine itself: for each circuit whether every load is reached and how far."""
+        doc = copy.deepcopy(self.document)
+        for n in doc["nodes"]:
+            if n["id"] in self.assignments:
+                n["circuit"] = self.assignments[n["id"]]
+        doc["circuits"] = [{"tag": c["tag"], "from": c["from"], "to": c["to"], "via": [], "ternas": 1} for c in self.circuits]
+        try:
+            done = core.process(doc)
+        except core.PlanError as e:
+            self.warnings.append(f"the proposal could not be checked: {e}")
+            return {}
+        routes = {t: {"found": r["found"], "length_m": r["length_m"], "max_distance_m": r.get("max_distance_m", 0.0), "unreached": r.get("unreached", [])} for t, r in done["circuits"].items()}
+        for t, r in routes.items():
+            if not r["found"]:
+                self.warnings.append(f"circuit {t}: the runs do not reach {', '.join(r['unreached'][:6]) or 'all its loads'}: draw a run to them or apply the runs first")
+        return routes
+
+    def result(self, routes: Dict[str, Any]) -> Dict[str, Any]:
+        return {"board": self.board["id"] if self.board else "", "circuits": self.circuits, "assignments": self.assignments, "unassigned": self.unassigned, "warnings": self.warnings, "limits": self.limits, "routes": routes}
 
 
-def propose(document: Dict[str, Any], rooms: List[Dict[str, Any]], options: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """The circuits, trunk and branches for the loads of the drawing, by room. `options`: `taken` (tags already used in the board), `board` (id of the origin node; the first board of the drawing when empty),
-    `families` (limits that replace the defaults). Returns {board, circuits, lines, assignments, unassigned, warnings, limits}."""
-    work = _Design(document, rooms, options or {}, params or core.PARAMS)
+def propose_wiring(document: Dict[str, Any], rooms: List[Dict[str, Any]], options: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """The circuits for the loads of the drawing, by room and family (at most `max_outlets` each), routed over the runs already drawn. `options`: `taken` (tags already used in the board), `board` (id of the
+    origin node), `families` (limits that replace the defaults). Returns {board, circuits, assignments, unassigned, warnings, limits, routes}."""
+    work = _Wiring(document, rooms, options or {}, params or core.PARAMS)
     if work.board is None:
         work.warnings.append("no board (tablero) in the drawing: place one to start the runs from it")
-        return work.result()
+        return work.result({})
+    if not document.get("lines"):
+        work.warnings.append("there are no runs in the drawing: generate and apply the runs first")
+        return work.result({})
     by_room = work.loads_by_room()
     by_id = {r["id"]: r for r in rooms}
     for rid in sorted(by_room, key=lambda r: work.distance_to_board(by_room[r])):
-        work.lay_room(by_id[rid], by_room[rid])
-    return work.result()
+        work.room_circuits(by_id[rid], by_room[rid])
+    return work.result(work.verify() if work.circuits else {})

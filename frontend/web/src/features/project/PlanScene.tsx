@@ -35,7 +35,7 @@ export interface SceneProps {
   selection: Ref[]; highlight: string[]; focusCircuit: string; hoverRef: Ref | null;
   underlayUrl: string | null; img: { w: number; h: number } | null; underlayOpts: UnderlayOpts;
   draft: Pt[]; hover: Pt | null; kindId: string; snapMark: { p: Pt; kind: SnapKind } | null; scalePts: Pt[]; marquee: { a: Pt; b: Pt } | null;
-  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").Proposal | null;
+  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").RunsProposal | null;
   reference: RefItem[]; ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
   t: (key: string) => string;
 }
@@ -116,7 +116,6 @@ export default function PlanScene(p: SceneProps) {
       {p.roomDraft.length > 0 && <polyline data-ui points={polyline([...p.roomDraft, ...(p.hover ? [p.hover] : [])])} fill="none" stroke="#7c3aed" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />}
       {p.proposal && <g data-ui pointerEvents="none">
         {p.proposal.lines.map((ln, i) => <polyline key={i} points={polyline(ln.points)} fill="none" stroke={ln.role === "trunk" ? "#7c3aed" : "#db2777"} strokeWidth={ln.role === "trunk" ? 5 : 3} strokeOpacity={0.55} strokeDasharray="10 5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />)}
-        {p.proposal.lines.filter((ln) => ln.circuit).map((ln, i) => <text key={"t" + i} x={ln.points[0][0] + 4 * u} y={ln.points[0][1] - 4 * u} fontSize={11 * u} fill="#9d174d" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{ln.circuit}</text>)}
       </g>}
       {p.architecture && prefs.arch && (
         <g data-ui pointerEvents="none">

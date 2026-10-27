@@ -448,9 +448,13 @@ export function parallelToWall(prev: Pt, p: Pt, walls: ArchWall[], reach: number
 
 // ---------------------------------------------------------------- rooms and the automatic design
 export interface ProposalCircuit { tag: string; family: string; room: string; room_name: string; loads: string[]; outlets: number; from: string; to: string; via: string[]; ternas: number; va: number; va_per_outlet: number; description: string }
-export interface ProposalLine { kind: string; points: Pt[]; role: "trunk" | "branch"; room: string; circuit?: string }
+export interface RunLine { kind: string; points: Pt[]; role: "trunk" | "stub" }
+export interface RunStats { orientation: string; trunks: number; stubs: number; bends: number; trunk_length: number; stub_length: number; in_metres: boolean }
+/** Step 1 of the design: the straight trays and conduits proposed for the loads (shown on the plan until accepted). */
+export interface RunsProposal { orientation: string; lines: RunLine[]; stats: RunStats | Record<string, never>; warnings: string[] }
 export interface Limits { prefix: string; max_outlets: number; va_per_outlet: number; label: { es: string; en: string } }
-export interface Proposal { board: string; circuits: ProposalCircuit[]; lines: ProposalLine[]; assignments: Record<string, string>; unassigned: string[]; warnings: string[]; limits: Record<string, Limits> }
+/** Step 2: the circuits by room over the runs already drawn, and whether the engine reaches every load of each one. */
+export interface Proposal { board: string; circuits: ProposalCircuit[]; assignments: Record<string, string>; unassigned: string[]; warnings: string[]; limits: Record<string, Limits>; routes: Record<string, { found: boolean; unreached?: string[] }> }
 
 export const insidePolygon = (p: Pt, poly: Pt[]): boolean => {
   let hit = false;
@@ -487,10 +491,16 @@ export function loadsByRoom(d: Drawing, loadKinds: Set<string>): { rooms: Record
   return { rooms, outside };
 }
 
-/** The drawing with an accepted proposal: its trunk and branch lines, the circuits (origin, destination) and the circuit of every load. A circuit the drawing already routes is left as it is. */
-export function applyProposal(d: Drawing, p: Proposal): Drawing {
+/** The drawing with the accepted runs: a tray (BN) per trunk and a conduit (CN) per stub. */
+export function applyRuns(d: Drawing, p: RunsProposal): Drawing {
   let cur = d;
-  for (const ln of p.lines) cur = { ...cur, lines: [...cur.lines, { id: nextId(cur, "l"), kind: ln.kind, points: ln.points, ...(ln.circuit ? { circuit: ln.circuit } : {}) }] };
+  for (const ln of p.lines) cur = { ...cur, lines: [...cur.lines, { id: nextId(cur, "l"), kind: ln.kind, points: ln.points }] };
+  return cur;
+}
+
+/** The drawing with the accepted wiring: the circuits (origin, destination) and the circuit of every load. A circuit the drawing already routes is left as it is; the cable follows the runs. */
+export function applyProposal(d: Drawing, p: Proposal): Drawing {
+  const cur = d;
   const nodes = cur.nodes.map((n) => (p.assignments[n.id] ? { ...n, circuit: p.assignments[n.id] } : n));
   const have = new Set(cur.circuits.map((c) => c.tag));
   const circuits = [...cur.circuits, ...p.circuits.filter((c) => !have.has(c.tag)).map((c) => ({ tag: c.tag, from: c.from, to: c.to, via: c.via, ternas: c.ternas }))];

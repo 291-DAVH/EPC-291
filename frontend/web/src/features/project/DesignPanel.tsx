@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Badge, Icon, Key, useI18n } from "@epc/ui";
 import type { Derived, Profile } from "./PlanEditor";
 import type { Drawing } from "./planEditing";
-import { centroidOf, loadsByRoom, Limits, Proposal, removeRoom, renameRoom } from "./planTools";
+import { centroidOf, loadsByRoom, Limits, Proposal, RunsProposal, removeRoom, renameRoom } from "./planTools";
 
 /** Automatic design: the rooms marked on the plan, the limits per circuit, the circuits, trunk and branches the program proposes for the loads placed in them, and the button that accepts it. */
 interface Props {
-  drawing: Drawing; profile: Profile | undefined; proposal: Proposal | null; busy: boolean; canWrite: boolean; limitsOverride: Record<string, Partial<Limits>>;
-  onLimits: (v: Record<string, Partial<Limits>>) => void; onPropose: () => void; onApply: (createInBoard: boolean) => void; onDiscard: () => void;
+  drawing: Drawing; profile: Profile | undefined; proposal: Proposal | null; runs: RunsProposal | null; busy: boolean; canWrite: boolean; limitsOverride: Record<string, Partial<Limits>>;
+  onLimits: (v: Record<string, Partial<Limits>>) => void; onProposeRuns: () => void; onApplyRuns: () => void; onDiscardRuns: () => void; onPropose: () => void; onApply: (createInBoard: boolean) => void; onDiscard: () => void;
   onChange: (d: Drawing) => void; onNewRoom: () => void; onLook: (at: [number, number]) => void; derived: Derived | null;
 }
 
-export default function DesignPanel({ drawing, profile, proposal, busy, canWrite, limitsOverride, onLimits, onPropose, onApply, onDiscard, onChange, onNewRoom, onLook }: Props) {
+export default function DesignPanel({ drawing, profile, proposal, runs, busy, canWrite, limitsOverride, onLimits, onProposeRuns, onApplyRuns, onDiscardRuns, onPropose, onApply, onDiscard, onChange, onNewRoom, onLook }: Props) {
   const { t, lang } = useI18n();
   const tl = (k: string) => t(k as Key);
   const [inBoard, setInBoard] = useState(true);
@@ -23,6 +23,22 @@ export default function DesignPanel({ drawing, profile, proposal, busy, canWrite
   return (
     <div className="design">
       <p className="muted small" style={{ margin: "0 0 8px" }}>{tl("design.help")}</p>
+      <h4 className="coord-h">{tl("design.step1")}</h4>
+      <p className="muted small" style={{ margin: "0 0 6px" }}>{tl("design.runsHelp")}</p>
+      {canWrite && <button className="primary" disabled={busy} onClick={onProposeRuns}>{busy ? tl("design.working") : tl("design.proposeRuns")}</button>}
+      {runs && (
+        <div style={{ marginTop: 8 }}>
+          {runs.warnings.map((w, i) => <div key={i} className="alert warn small" style={{ margin: "4px 0" }}>{w}</div>)}
+          {runs.lines.length > 0 && <>
+            <p className="small" style={{ margin: "6px 0" }}>{runs.lines.filter((l) => l.role === "trunk").length} {tl("design.trunks")} · {runs.lines.filter((l) => l.role === "stub").length} {tl("design.branches")} · {tl("design.noBends")}
+              {" "}({tl(`design.${runs.orientation}` as Key)}; {(runs.stats as { trunk_length?: number }).trunk_length} + {(runs.stats as { stub_length?: number }).stub_length} {(runs.stats as { in_metres?: boolean }).in_metres ? "m" : "u"}). {tl("design.cables")}</p>
+            {canWrite && <div className="row" style={{ gap: 6 }}><button className="primary" disabled={busy} onClick={onApplyRuns}><Icon name="check" size={14} /> {tl("design.applyRuns")}</button><button onClick={onDiscardRuns}>{tl("design.discard")}</button></div>}
+          </>}
+        </div>
+      )}
+
+      <h4 className="coord-h">{tl("design.step2")}</h4>
+      <p className="muted small" style={{ margin: "0 0 6px" }}>{tl("design.wiringHelp")}</p>
       <h4 className="coord-h">{tl("design.rooms")}</h4>
       {rooms.length === 0 && <p className="muted small">{tl("design.noRooms")}</p>}
       <ul className="coord-list">
@@ -62,7 +78,7 @@ export default function DesignPanel({ drawing, profile, proposal, busy, canWrite
           {proposal.circuits.length === 0 ? <div className="state">{tl("design.none")}</div> : <>
             <table className="coord-rules"><thead><tr><th>{tl("layout.col.circuit")}</th><th>{tl("design.room")}</th><th>{tl("design.outlets")}</th><th>VA</th></tr></thead>
               <tbody>{proposal.circuits.map((c) => <tr key={c.tag}><td className="mono"><b>{c.tag}</b></td><td>{c.room_name}</td><td className="mono">{c.outlets}</td><td className="mono">{c.va}</td></tr>)}</tbody></table>
-            <p className="small muted" style={{ margin: "6px 0" }}>{proposal.lines.filter((l) => l.role === "trunk").length} {tl("design.trunks")} · {proposal.lines.filter((l) => l.role === "branch").length} {tl("design.branches")}. {tl("design.cables")}</p>
+            <p className="small muted" style={{ margin: "6px 0" }}>{tl("design.cableFollows")}</p>
             {canWrite && <>
               <label className="vp-row"><input type="checkbox" checked={inBoard} onChange={(e) => setInBoard(e.target.checked)} /> {tl("design.inBoard")}</label>
               <div className="row" style={{ gap: 6, marginTop: 6 }}><button className="primary" disabled={busy} onClick={() => onApply(inBoard)}><Icon name="check" size={14} /> {tl("design.apply")}</button><button onClick={onDiscard}>{tl("design.discard")}</button></div>

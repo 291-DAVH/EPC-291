@@ -42,20 +42,38 @@ class TestDesign(unittest.TestCase):
         self.assertEqual([x["name"] for x in r.json()["drawing"]["rooms"]], ["Cocina", "Living"])
         self.assertEqual(self.c.put(f"{self.base}/L0", json={**DRAWING, "rooms": [{"id": "x", "points": [[0, 0], [1, 1]]}]}).status_code, 422)
 
-    def test_a_proposal_gives_circuits_by_room_within_the_limit_and_saves_nothing(self):
-        r = self.c.post(f"{self.base}/L0/design", json={"drawing": DRAWING})
+    def drawn(self):
+        """The drawing once the person accepted the runs of step 1."""
+        p = self.c.post(f"{self.base}/L0/design/runs", json={"drawing": DRAWING}).json()
+        lines = [{"id": f"r{i}", "kind": ln["kind"], "points": ln["points"]} for i, ln in enumerate(p["lines"], 1)]
+        return {**DRAWING, "lines": lines}
+
+    def test_the_runs_are_straight_trunks_with_stubs_and_save_nothing(self):
+        r = self.c.post(f"{self.base}/L0/design/runs", json={"drawing": DRAWING})
         self.assertEqual(r.status_code, 200, r.text)
         p = r.json()
-        sizes = sorted((c["room"], c["outlets"]) for c in p["circuits"])
-        self.assertEqual(sizes, [("A", 9), ("B", 8), ("B", 9)])
-        self.assertTrue(all(c["outlets"] <= 15 for c in p["circuits"]))
-        self.assertEqual({ln["kind"] for ln in p["lines"]}, {"BN", "CN"})
+        self.assertIn("BN", {ln["kind"] for ln in p["lines"]})
+        self.assertTrue(all(ln["kind"] == ("BN" if ln["role"] == "trunk" else "CN") for ln in p["lines"]))
+        self.assertTrue(all(len(ln["points"]) == 2 for ln in p["lines"]))                      # no bends
+        self.assertEqual(p["stats"]["bends"], 0)
         self.assertEqual(self.c.get(self.base).json()["levels"], [])                           # nothing was stored
-        limited = self.c.post(f"{self.base}/L0/design", json={"drawing": DRAWING, "families": {"IUG": {"max_outlets": 5, "va_per_outlet": 200}}}).json()
+
+    def test_the_wiring_gives_circuits_by_room_within_the_limit_over_the_runs(self):
+        r = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": self.drawn()})
+        self.assertEqual(r.status_code, 200, r.text)
+        p = r.json()
+        self.assertEqual(sorted((c["room"], c["outlets"]) for c in p["circuits"]), [("A", 9), ("B", 8), ("B", 9)])
+        self.assertTrue(all(x["found"] for x in p["routes"].values()), p["routes"])
+        limited = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": self.drawn(), "families": {"IUG": {"max_outlets": 5, "va_per_outlet": 200}}}).json()
         self.assertTrue(all(c["outlets"] <= 5 and c["va_per_outlet"] == 200 for c in limited["circuits"]))
 
+    def test_the_wiring_without_runs_asks_for_them(self):
+        p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": DRAWING}).json()
+        self.assertTrue(any("no runs" in w for w in p["warnings"]))
+
     def test_the_accepted_circuits_are_created_in_the_board_and_a_second_time_changes_nothing(self):
-        p = self.c.post(f"{self.base}/L0/design", json={"drawing": DRAWING}).json()
+        drawn = self.drawn()
+        p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": drawn}).json()
         body = {"circuits": [{"tag": c["tag"], "description": c["description"], "load": c["va"], "unit": "VA"} for c in p["circuits"]]}
         r = self.c.post(f"{self.base}/L0/design/circuits", json=body)
         self.assertEqual(r.status_code, 200, r.text)
@@ -65,12 +83,14 @@ class TestDesign(unittest.TestCase):
         self.assertEqual({c["unit"] for c in board["circuits"]}, {"VA"})
         again = self.c.post(f"{self.base}/L0/design/circuits", json=body).json()
         self.assertEqual((again["added"], len(again["skipped"])), ([], 3))
-        nxt = self.c.post(f"{self.base}/L0/design", json={"drawing": DRAWING}).json()          # the tags now in the board are not proposed again
+        nxt = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": drawn}).json()      # the tags now in the board are not proposed again
         self.assertFalse({c["tag"] for c in nxt["circuits"]} & {c["tag"] for c in p["circuits"]})
 
     def test_a_drawing_without_a_board_gets_a_warning_not_an_error(self):
         nodes = [n for n in DRAWING["nodes"] if n["kind"] != "TB"]
-        p = self.c.post(f"{self.base}/L0/design", json={"drawing": {**DRAWING, "nodes": nodes}}).json()
+        d = {**DRAWING, "nodes": nodes}
+        self.assertTrue(any("no board" in w for w in self.c.post(f"{self.base}/L0/design/runs", json={"drawing": d}).json()["warnings"]))
+        p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": d}).json()
         self.assertEqual(p["circuits"], [])
         self.assertTrue(any("no board" in w for w in p["warnings"]))
 
