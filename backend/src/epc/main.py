@@ -13,6 +13,7 @@ from epc.core.errors import DomainError
 from epc.modules.admin import api as admin_api
 from epc.modules.backlog import api as backlog_api
 from epc.modules.catalogs import api as catalogs_api
+from epc.modules.coordination import api as coordination_api
 from epc.modules.deliverables import api as deliverables_api
 from epc.modules.engineering import api as engineering_api
 from epc.modules.identity import api as identity_api
@@ -65,10 +66,11 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, coordination_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     app.include_router(catalogs_api.company)                     # layers and standard solutions of the company
     app.include_router(catalogs_api.project)                     # ... and of each project
+    app.include_router(coordination_api.company)                 # separations between disciplines of the company (the project's are in the module router)
     app.include_router(masterdata_api.parties_router)            # who issues and who signs each project (staff)
     app.include_router(registers_api.observations)               # customer-surface routes of the registers module
     return app

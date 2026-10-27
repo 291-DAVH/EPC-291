@@ -13,4 +13,4 @@ dependencies = ["ezdxf", "epc-dxf"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-epc_plan = ["params.json", "symbols.json", "profiles/*.json", "knowledge/*.json", "schema/*.json", "symbols/*.svg"]
+epc_plan = ["params.json", "symbols.json", "clash_rules.json", "profiles/*.json", "knowledge/*.json", "schema/*.json", "symbols/*.svg"]

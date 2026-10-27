@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from epc_plan import svgsymbol
+from epc_plan import occupancy, svgsymbol
 
 HERE = Path(__file__).resolve().parent
 PARAMS = json.loads((HERE / "params.json").read_text(encoding="utf-8"))
@@ -576,9 +576,16 @@ def _loads(gnodes, load_kinds, routed: set, warnings: List[str]) -> Dict[str, An
     return {"by_circuit": dict(sorted(by_circuit.items())), "unassigned": free}
 
 
-def _containers(stretches) -> List[Dict[str, Any]]:
-    """What each stretch that carries routed circuits holds: the circuits and how many cables (the sum of their ternas)."""
-    return [{"tag": s["tag"], "kind": s["kind"], "circuits": [c["circuit"] for c in s["carries"]], "cables": sum(c["ternas"] for c in s["carries"])} for s in stretches if s.get("carries")]
+def _container(s, params) -> Dict[str, Any]:
+    cables = sum(c["ternas"] for c in s["carries"])
+    out = {"tag": s["tag"], "kind": s["kind"], "circuits": [c["circuit"] for c in s["carries"]], "cables": cables}
+    full = occupancy.fill(s.get("attrs") or {}, cables, params["occupancy"])
+    return {**out, "fill": full} if full else out
+
+
+def _containers(stretches, params=PARAMS) -> List[Dict[str, Any]]:
+    """What each stretch that carries routed circuits holds: the circuits, how many cables (the sum of their ternas) and, when the container has a size, how full it is."""
+    return [_container(s, params) for s in stretches if s.get("carries")]
 
 
 def _schedule(gnodes, stretches, lines, line_tag, line_kinds, node_kinds) -> Dict[str, Any]:

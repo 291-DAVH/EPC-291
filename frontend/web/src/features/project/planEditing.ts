@@ -203,18 +203,22 @@ function reattach(d: Drawing, jumps: Jump[], except: Set<string>): Drawing {
   };
 }
 
-/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points and the nodes on it. The cables that end on something moved stay joined to it and straight. */
-export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
-  if (!dx && !dy) return d;
+/** Apply a point transformation to the selected elements (nodes, lines with their points and the nodes on them). The cables that end on something moved stay joined to it and straight. */
+export function mapElements(d: Drawing, refs: Ref[], fn: (p: Pt) => Pt): Drawing {
   const nodeIds = new Set(refs.filter((r) => r.type === "node").map((r) => r.id));
   const lineIds = new Set(refs.filter((r) => r.type === "line").map((r) => r.id));
-  const shift = (p: Pt): Pt => [p[0] + dx, p[1] + dy];
   const jumps: Jump[] = [
-    ...d.nodes.filter((n) => nodeIds.has(n.id)).map((n): Jump => ({ from: [n.x, n.y], to: [n.x + dx, n.y + dy] })),
-    ...d.lines.filter((l) => lineIds.has(l.id)).flatMap((l) => l.points.map((p): Jump => ({ from: p, to: shift(p) }))),
+    ...d.nodes.filter((n) => nodeIds.has(n.id)).map((n): Jump => ({ from: [n.x, n.y], to: fn([n.x, n.y]) })),
+    ...d.lines.filter((l) => lineIds.has(l.id)).flatMap((l) => l.points.map((p): Jump => ({ from: p, to: fn(p) }))),
   ];
   const r = reattach(d, jumps, lineIds);
-  return { ...r, lines: r.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(shift) } : l)) };
+  return { ...r, lines: r.lines.map((l) => (lineIds.has(l.id) ? { ...l, points: l.points.map(fn) } : l)) };
+}
+
+/** Move the selected elements by a delta. Nodes move; a selected line moves with all its points and the nodes on it. */
+export function moveElements(d: Drawing, refs: Ref[], dx: number, dy: number): Drawing {
+  if (!dx && !dy) return d;
+  return mapElements(d, refs, (p) => [p[0] + dx, p[1] + dy]);
 }
 
 /** Move some points of one line; what sits on them follows (see `reattach`). */

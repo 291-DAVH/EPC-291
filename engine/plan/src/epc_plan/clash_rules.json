@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "note": "Default separations between disciplines. They are typical values, not a standard: each company and each project overrides them (the later level replaces a rule with the same pair and kinds; {\"disabled\": true} removes one).",
+  "rules": [
+    {"a": "*", "b": "*", "clearance_m": 0.0, "why": "Any two bodies of different disciplines must not occupy the same space."},
+    {"a": "electrica_BT", "b": "sanitaria_cloacas", "clearance_m": 0.30, "why": "Keep electrical routes away from sewer pipes and chambers."}
+  ]
+}

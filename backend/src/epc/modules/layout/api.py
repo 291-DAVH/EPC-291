@@ -49,6 +49,21 @@ def get_underlay(client: str, code: str, level: str):
     return FileResponse(path, media_type=media, headers=SAFE_HEADERS)
 
 
+@router.get("/{level}/history")
+def history(client: str, code: str, level: str):
+    return service.history(projects.get_project_dir(client, code), level)
+
+
+@router.get("/{level}/history/{snapshot}")
+def history_snapshot(client: str, code: str, level: str, snapshot: str):
+    return service.snapshot(projects.get_project_dir(client, code), level, snapshot)
+
+
+@router.post("/{level}/history/{snapshot}/restore")
+def history_restore(client: str, code: str, level: str, snapshot: str):
+    return service.restore(projects.get_project_dir(client, code), level, snapshot)
+
+
 @router.post("/{level}/generate")
 def generate(client: str, code: str, level: str, version: str = ""):
     return service.generate(projects.get_project_dir(client, code), level, version)

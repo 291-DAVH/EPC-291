@@ -50,3 +50,4 @@ class DrawingIn(BaseModel):
     outlet: str = ""                        # node where a network drains to
     outlet_invert_m: Optional[float] = None
     dxf_version: str = ""
+    underlay_opts: Dict[str, Any] = {}      # how the plan underlay is shown (opacity, rotation, locked, hidden, crop): editor-only, the engine never reads it
