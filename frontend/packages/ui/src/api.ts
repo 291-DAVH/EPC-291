@@ -177,7 +177,8 @@ export interface CriteriaView {
 
 /* ---- DXF layers (global catalog the MASTER edits) ---- */
 export interface LayerAttrs { name: string; color: number; lineweight: number | null; linetype: string; on: boolean; frozen: boolean; locked: boolean; plot: boolean; description?: { es?: string; en?: string } }
-export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; changed: string[]; inherits?: "factory" | "global" | "company"; options: { lineweights: number[]; linetypes: string[] } }
+export interface LayerDiscipline { id: string; prefix: string; profile: string | null; name: { es: string; en: string } }
+export interface LayersView { layers: Record<string, LayerAttrs>; default: Record<string, LayerAttrs>; disciplines?: LayerDiscipline[]; changed: string[]; inherits?: "factory" | "global" | "company"; options: { lineweights: number[]; linetypes: string[] } }
 
 /* ---- standard solutions (global document the MASTER edits) ---- */
 export interface SolutionWhen { topology?: string[]; kind?: string[]; phase?: string[]; type?: string[]; has_children?: boolean; motor?: boolean; in_a?: Record<string, number>; text_contains?: string[] }

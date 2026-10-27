@@ -1408,4 +1408,5 @@ export const en = {
     "layers.count": "Elements",
     "layers.show": "Show",
     "layers.off": "off",
+    "layers.group.other": "Other layers",
 } as const;
