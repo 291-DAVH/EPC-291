@@ -4,6 +4,7 @@
     "es": "Instalación eléctrica en baja tensión",
     "en": "Low-voltage electrical installation"
   },
+  "disciplina_proyecto": "electrical",
   "tramos": [
     {
       "id": "CA",

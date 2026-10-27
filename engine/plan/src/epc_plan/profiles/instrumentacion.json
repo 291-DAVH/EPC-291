@@ -1,0 +1,77 @@
+{
+  "id": "instrumentacion",
+  "nombre": {
+    "es": "Instrumentación",
+    "en": "Instrumentation"
+  },
+  "disciplina_proyecto": "instrumentation",
+  "tramos": [
+    {
+      "id": "BI",
+      "etiqueta": {
+        "es": "Bandeja de instrumentación",
+        "en": "Instrumentation tray"
+      },
+      "prefijo_tag": "BI",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "INS-BANDEJA",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.2,
+        "alto_m": 0.05
+      }
+    },
+    {
+      "id": "CS",
+      "etiqueta": {
+        "es": "Cable de señal",
+        "en": "Signal cable"
+      },
+      "prefijo_tag": "CS",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "INS-CABLE",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.02,
+        "alto_m": 0.02
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "IN",
+      "etiqueta": {
+        "es": "Instrumento de campo",
+        "en": "Field instrument"
+      },
+      "prefijo_tag": "IN",
+      "atributos": [
+        "tipo"
+      ],
+      "simbolo_2d": "instrumento",
+      "capa_dxf": "INS-INSTRUMENTO",
+      "geom": {
+        "z_m": 1.5,
+        "ancho_m": 0.2,
+        "alto_m": 0.2
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "b": "BI",
+    "c": "CS",
+    "i": "IN"
+  },
+  "unidades_salida": "m"
+}

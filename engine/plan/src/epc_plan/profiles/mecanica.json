@@ -1,0 +1,79 @@
+{
+  "id": "mecanica",
+  "nombre": {
+    "es": "Mecánica",
+    "en": "Mechanical"
+  },
+  "disciplina_proyecto": "mechanical",
+  "tramos": [
+    {
+      "id": "TP",
+      "etiqueta": {
+        "es": "Cañería de proceso",
+        "en": "Process pipe"
+      },
+      "prefijo_tag": "TP",
+      "atributos": [
+        "diametro_mm",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "MEC-TUBERIA",
+      "geom": {
+        "z_m": 2.5,
+        "ancho_m": 0.1,
+        "alto_m": 0.1
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "EQ",
+      "etiqueta": {
+        "es": "Equipo mecánico",
+        "en": "Mechanical equipment"
+      },
+      "prefijo_tag": "EQ",
+      "atributos": [
+        "potencia_w",
+        "tipo"
+      ],
+      "simbolo_2d": "equipo_mec",
+      "capa_dxf": "MEC-EQUIPO",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 1.0,
+        "alto_m": 1.0
+      }
+    },
+    {
+      "id": "SP",
+      "etiqueta": {
+        "es": "Soporte o apoyo",
+        "en": "Support"
+      },
+      "prefijo_tag": "SP",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "caja_pase",
+      "capa_dxf": "MEC-SOPORTE",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.3,
+        "alto_m": 0.3
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "t": "TP",
+    "e": "EQ",
+    "s": "SP"
+  },
+  "unidades_salida": "m"
+}

@@ -39,8 +39,17 @@ class TestLayout(unittest.TestCase):
     def test_the_overview_offers_profiles_versions_and_no_levels_yet(self):
         o = self.c.get(self.base).json()
         self.assertEqual(o["levels"], [])
-        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas", "hvac", "pci", "comunicaciones"})
+        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas", "hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion"})
+        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["electrica_BT"])          # the project chose the electrical discipline only
         self.assertEqual((o["default_dxf_version"], o["dxf_versions"][-1]), ("R2018", "R2018"))
+
+    def test_the_disciplines_the_project_chose_are_the_ones_offered_in_the_order_they_are_worked(self):
+        r = self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-2", "project_name": "Planta 2",
+                                                "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["telecom", "fire", "electrical", "civil"]})
+        self.assertEqual(r.status_code, 201, r.text)
+        o = self.c.get("/api/projects/ACME/P-2/layout").json()
+        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["civil", "electrica_BT", "pci", "comunicaciones", "sanitaria_cloacas"])
+        self.assertEqual({p["project_discipline"] for p in o["profiles"] if p["offered"]}, {"civil", "electrical", "fire", "telecom"})
 
     def test_levels_are_named_from_l0_up_and_down_and_nothing_else_is_accepted(self):
         for level in ("L0", "L1", "L-1"):

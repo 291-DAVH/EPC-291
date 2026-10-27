@@ -307,9 +307,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
         </div>
         {level && <div className="wb-group" role="tablist" aria-label={tl("plan.sheets")}>
           {sameBase.map((x) => <button key={x.level} role="tab" aria-selected={x.level === level} className={"lvl disc" + (x.level === level ? " on" : "")} onClick={() => setLevel(x.level)} title={profName(x.discipline)}>{profName(x.discipline)}</button>)}
-          {canWrite && ov.data.profiles.some((p) => !usedHere.has(p.id)) && (
+          {canWrite && ov.data.profiles.some((p) => p.offered !== false && !usedHere.has(p.id)) && (
             <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && createSheet(`${base}@${e.target.value}`, e.target.value)}>
-              <option value="">+</option>{ov.data.profiles.filter((p) => !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
+              <option value="">+</option>{ov.data.profiles.filter((p) => p.offered !== false && !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
             </select>)}
           {level && canWrite && <button onClick={deleteSheet} title={tl("layout.deleteLevel")} aria-label={tl("layout.deleteLevel")}><Icon name="trash" size={16} /></button>}
         </div>}

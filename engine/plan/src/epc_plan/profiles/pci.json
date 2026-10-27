@@ -4,6 +4,7 @@
     "es": "Protección contra incendios",
     "en": "Fire protection"
   },
+  "disciplina_proyecto": "fire",
   "tramos": [
     {
       "id": "TA",

@@ -87,6 +87,21 @@ def derive_data(level: str, data: dict) -> dict:
         raise Invalid({"drawing": str(e)})
 
 
+def _profiles(d: Path, core, used: set) -> list:
+    """The drawing profiles, in the order a project is worked (architecture, civil, mechanical, electrical...). `offered` tells whether the project chose that discipline when it was created
+    (or already draws in it): those are the ones the editor lists to add a sheet; a project that chose none is offered all of them."""
+    from epc_dxf import layers as dxf_layers
+    order = [g["profile"] for g in dxf_layers.disciplines() if g.get("profile")]
+    chosen = set(projects.read_meta(d).get("disciplines") or [])
+    out = []
+    for pid in sorted(core.profiles(), key=lambda x: order.index(x) if x in order else len(order)):
+        p = core.load_profile(pid)
+        symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
+        offered = not chosen or p.get("disciplina_proyecto") in chosen or pid in used
+        out.append({"id": pid, "name": p["nombre"], "project_discipline": p.get("disciplina_proyecto", ""), "offered": offered, "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
+    return out
+
+
 def overview(d: Path) -> dict:
     core, dxfout, _, _ = _engine()
     items = []
@@ -94,12 +109,7 @@ def overview(d: Path) -> dict:
         dr = repository.load_drawing(d, lv) or {}
         items.append({"level": lv, "base": repository.split(lv)[0], "discipline": dr.get("discipline", "electrica_BT"), "nodes": len(dr.get("nodes", [])), "lines": len(dr.get("lines", [])), "underlay": repository.underlay_file(d, lv) is not None,
                       "has_files": bool((repository.load_result(d, lv) or {}).get("files"))})
-    profiles = []
-    for pid in core.profiles():
-        p = core.load_profile(pid)
-        symbols = {k["simbolo_2d"]: core.SYMBOLS[k["simbolo_2d"]]["prims"] for k in p["nodos"] if k.get("simbolo_2d") in core.SYMBOLS}          # the editor draws what the engine draws
-        profiles.append({"id": pid, "name": p["nombre"], "lines": p["tramos"], "nodes": p["nodos"], "shortcuts": p.get("atajos_teclado", {}), "symbols": symbols})
-    return {"levels": items, "profiles": profiles, "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
+    return {"levels": items, "profiles": _profiles(d, core, {i["discipline"] for i in items}), "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
 def _blank() -> dict:

@@ -4,6 +4,7 @@
     "es": "Climatización (HVAC)",
     "en": "HVAC"
   },
+  "disciplina_proyecto": "hvac",
   "tramos": [
     {
       "id": "DA",

@@ -7,7 +7,7 @@ import {
   addRoom, boardPlan, BoardRef, withBoard, rectCorners, rectOutline, alignDelta, alignNodes, Architecture, RunsProposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
   RoutePath, selectionStats, setLocked, shortestRoute, SnapKind, snapEx, splitLineAt, svgVertices, toMetres, transformGroup, unlocked, UnderlayOpts,
 } from "./planTools";
-import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
+import { Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
 import PlanScene from "./PlanScene";
 import { exportPng, printSheet } from "./planExport";
 import { DEFAULT_KEYS, keyOf, PlanPrefs, usePlanPrefs } from "./planPrefs";
@@ -18,7 +18,7 @@ import { Icon } from "@epc/ui";
  *  (lengths, tags, the graph): the parent gives it what the engine derived. Text goes through `t`; data comes in props and changes go out through `onChange`. */
 export interface Kind { id: string; etiqueta: { es: string; en: string }; prefijo_tag: string; simbolo_2d: string; capa_dxf: string; atributos?: string[]; un_solo_circuito?: boolean; carga?: boolean; vertical?: boolean; geom?: Record<string, number> }
 export type Prim = { t: "rect"; w: number; h: number } | { t: "circle"; r: number } | { t: "line"; a: [number, number]; b: [number, number] };
-export interface Profile { id: string; name: { es: string; en: string }; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string>; symbols?: Record<string, Prim[]> }
+export interface Profile { id: string; name: { es: string; en: string }; offered?: boolean; lines: Kind[]; nodes: Kind[]; shortcuts: Record<string, string>; symbols?: Record<string, Prim[]> }
 export interface DerivedNode { id: string; tag: string; kind: string; placed: boolean; x_m: number; y_m: number }
 export interface DerivedStretch { tag: string; line: string; line_tag: string; kind: string; from: string; to: string; length_m: number; circuit: string | null; carries?: { circuit: string; ternas: number }[]; cables?: number }
 export interface DerivedRoute { found: boolean; from: string; to: string; ternas: number; stretches: string[]; lines: string[]; length_m: number; cable_length_m: number; unreached?: string[] }
@@ -68,7 +68,7 @@ export default function PlanEditor(props: Props) {
   const [img, setImg] = useState<{ w: number; h: number } | null>(null);
   const [view, setView] = useState<View>({ x: 0, y: 0, w: 1200, h: 800 });
   const [menu, setMenu] = useState<{ at: [number, number]; items: MenuItem[] } | null>(null);
-  const [palette, setPalette] = useState(false);
+  const [cmdFocus, setCmdFocus] = useState(0);                      // bumps to put the cursor in the command line under the canvas
   const [panel, setPanel] = useState<"" | "view" | "keys" | "table">("");
   const [form, setForm] = useState<"" | "array" | "transform" | "template" | "length" | "room">("");
   const [roomDraft, setRoomDraft] = useState<Pt[]>([]);
@@ -507,7 +507,7 @@ export default function PlanEditor(props: Props) {
     const on = e.target as HTMLElement;
     if (on.closest?.("input, select, textarea") && !(mod && key === "k")) return;                  // typing in a field of a panel is not a shortcut
     if (mod) {
-      const handled = { z: doUndo, y: doRedo, c: () => copy(), x: () => { if (copy()) remove(); }, v: () => pasteAt(hover), d: () => act("duplicate"), l: lockSelection, k: () => setPalette(true),
+      const handled = { z: doUndo, y: doRedo, c: () => copy(), x: () => { if (copy()) remove(); }, v: () => pasteAt(hover), d: () => act("duplicate"), l: lockSelection, k: () => setCmdFocus((n) => n + 1),
         a: () => onSelect([...drawing.nodes.map((n): Ref => ({ type: "node", id: n.id })), ...drawing.lines.map((l): Ref => ({ type: "line", id: l.id }))]) }[key];
       if (handled) { e.preventDefault(); handled(); }
       return;
@@ -566,7 +566,7 @@ export default function PlanEditor(props: Props) {
   return (
     <div className="wb-editor" tabIndex={0} ref={editorRef} onKeyDown={onKey} onKeyUp={(e) => { if (e.key === " ") setSpaceDown(false); }}>
       <Toolbox tools={tools} tool={tool} readOnly={readOnly} keys={Object.fromEntries(Object.keys(DEFAULT_KEYS).map((a) => [a, keyOf(prefs, a)]))} t={t} onChoose={choose} canUndo={hist.past.length > 0} canRedo={hist.future.length > 0}
-        onUndo={doUndo} onRedo={doRedo} onFit={fit} onSelection={() => zoomTo(selection.length ? selection : undefined)} onPalette={() => setPalette(true)}
+        onUndo={doUndo} onRedo={doRedo} onFit={fit} onSelection={() => zoomTo(selection.length ? selection : undefined)} onPalette={() => setCmdFocus((n) => n + 1)}
         onExport={() => setMenu({ at: [64, 220], items: [{ label: t("plan.export.png"), icon: "image", run: () => doExport("png") }, { label: t("plan.export.print"), icon: "print", run: () => doExport("print") }] })} />
       <div className="wb-canvas" ref={box}>
         {palette2.length > 0 && (
@@ -642,10 +642,9 @@ export default function PlanEditor(props: Props) {
         </svg>
         <Legend title={t(prefs.color === "circuit" ? "plan.colorBy.circuit" : "plan.colorBy.kind")} entries={legend} />
         {prefs.minimap && <MiniMap drawing={drawing} world={world} view={view} t={t} onCenter={(p) => setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 }))} />}
-        <CoordBar hint={hintText} cursor={prefs.coords ? cursorM : null} zoom={baseW / view.w} snap={snapName} stats={selection.length ? stats : null} scale={k} t={t} onTable={() => setPanel(panel === "table" ? "" : "table")} />
+        <CoordBar hint={hintText} cursor={prefs.coords ? cursorM : null} zoom={baseW / view.w} snap={snapName} stats={selection.length ? stats : null} scale={k} commands={commands} focusKey={cmdFocus} onDone={() => editorRef.current?.focus()} t={t} onTable={() => setPanel(panel === "table" ? "" : "table")} />
       </div>
       {menu && <ContextMenu at={menu.at} items={menu.items} onClose={() => setMenu(null)} />}
-      {palette && <CommandPalette commands={commands} t={t} onClose={() => { setPalette(false); editorRef.current?.focus(); }} />}
     </div>
   );
 }
