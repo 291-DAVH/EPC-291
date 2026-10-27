@@ -151,3 +151,24 @@ def example() -> dict:
 def status(d: Path, bid: str = "") -> dict:
     bid = _resolve(d, bid)
     return repository.load_status(d, bid) if bid else {"state": "idle", "outputs": [], "log": []}
+
+
+def _board_to_fill(d: Path, bid: str) -> str:
+    """The board that receives new circuits: the one asked for, else the first of the project, creating it when there is none."""
+    return create_board(d, "TG")["board_id"] if not bid and not repository.board_ids(d) else bid
+
+
+def _circuit_of(spec: dict) -> dict:
+    return Circuit(tag=spec["tag"], description=spec.get("description", ""), load=spec.get("load"), unit=spec.get("unit", "VA"), phase=spec.get("phase", "1F")).model_dump()
+
+
+def add_circuits(d: Path, specs: list, bid: str = "") -> dict:
+    """Add circuits (tag, description, load in VA) to a board, creating the first board of the project when there is none. A tag the board already has is left as it is.
+    The caller is the plan editor, after the person accepted what it proposed."""
+    v = view(d, _board_to_fill(d, bid))
+    data = v["input"]
+    have = {c["tag"] for c in data["circuits"]}
+    added = [s for s in specs if s["tag"] not in have]
+    data["circuits"] += [_circuit_of(s) for s in added]
+    saved = save(d, SldIn(**data), v["board_id"]) if added else v
+    return {"board_id": saved["board_id"], "added": [s["tag"] for s in added], "skipped": [s["tag"] for s in specs if s["tag"] in have]}

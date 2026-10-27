@@ -3,7 +3,7 @@ import { DLine, Drawing, Pt, Ref, sameRef } from "./planEditing";
 import type { Derived, Kind, Prim, Profile } from "./PlanEditor";
 import type { PlanPrefs } from "./planPrefs";
 import { colorOfDiscipline, Ghost, Pin, RefItem } from "./planTypes";
-import { Architecture, fromMetres, isLocked, Problem, RoutePath, SnapKind, spreadLabels, UnderlayOpts, wallFaces } from "./planTools";
+import { Architecture, centroidOf, fromMetres, isLocked, Problem, RoutePath, SnapKind, spreadLabels, UnderlayOpts, wallFaces } from "./planTools";
 
 /** The drawing as the canvas shows it: the underlay, what is drawn, what other disciplines occupy, marks and aids. It only draws what the editor gives it; it holds no state. */
 export const NODE_PX = 9;
@@ -35,7 +35,7 @@ export interface SceneProps {
   selection: Ref[]; highlight: string[]; focusCircuit: string; hoverRef: Ref | null;
   underlayUrl: string | null; img: { w: number; h: number } | null; underlayOpts: UnderlayOpts;
   draft: Pt[]; hover: Pt | null; kindId: string; snapMark: { p: Pt; kind: SnapKind } | null; scalePts: Pt[]; marquee: { a: Pt; b: Pt } | null;
-  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null;
+  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").Proposal | null;
   reference: RefItem[]; ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
   t: (key: string) => string;
 }
@@ -108,6 +108,16 @@ export default function PlanScene(p: SceneProps) {
           <image href={p.underlayUrl!} x={0} y={0} width={iw} height={ih} opacity={op.opacity ?? 1} />
         </g>
       )}
+      {prefs.rooms && (drawing.rooms ?? []).map((r, i) => {
+        const c = centroidOf(r.points), hue = (i * 67) % 360;
+        return <g key={r.id} data-ui pointerEvents="none"><polygon points={r.points.map((q) => q.join(",")).join(" ")} fill={`hsl(${hue} 70% 55%)`} fillOpacity={0.12} stroke={`hsl(${hue} 60% 40%)`} strokeWidth={1.2} strokeDasharray="8 4" vectorEffect="non-scaling-stroke" />
+          <text x={c[0]} y={c[1]} fontSize={13 * u} textAnchor="middle" fill={`hsl(${hue} 60% 30%)`} stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{r.name}</text></g>;
+      })}
+      {p.roomDraft.length > 0 && <polyline data-ui points={polyline([...p.roomDraft, ...(p.hover ? [p.hover] : [])])} fill="none" stroke="#7c3aed" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />}
+      {p.proposal && <g data-ui pointerEvents="none">
+        {p.proposal.lines.map((ln, i) => <polyline key={i} points={polyline(ln.points)} fill="none" stroke={ln.role === "trunk" ? "#7c3aed" : "#db2777"} strokeWidth={ln.role === "trunk" ? 5 : 3} strokeOpacity={0.55} strokeDasharray="10 5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />)}
+        {p.proposal.lines.filter((ln) => ln.circuit).map((ln, i) => <text key={"t" + i} x={ln.points[0][0] + 4 * u} y={ln.points[0][1] - 4 * u} fontSize={11 * u} fill="#9d174d" stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{ln.circuit}</text>)}
+      </g>}
       {p.architecture && prefs.arch && (
         <g data-ui pointerEvents="none">
           {archOn("ARQ-MUROS") && p.architecture.walls.map((w) => <polygon key={w.id} points={[...wallFaces(w)[0], ...wallFaces(w)[1].slice().reverse()].map((q) => q.join(",")).join(" ")} fill="#6b7280" fillOpacity={0.4} stroke="#374151" strokeWidth={1} vectorEffect="non-scaling-stroke"><title>{`${w.id} · ${Math.round(w.confidence * 100)}%`}</title></polygon>)}

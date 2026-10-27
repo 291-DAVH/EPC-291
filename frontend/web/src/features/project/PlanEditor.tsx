@@ -4,7 +4,7 @@ import {
   removeMany, sameRef, setOrigin, setScale, stretchEnd, toggle, undo, updateCircuit,
 } from "./planEditing";
 import {
-  alignDelta, alignNodes, Architecture, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
+  addRoom, alignDelta, alignNodes, Architecture, Proposal, arrayClip, boundsOf, Clip, copyElements, distributeNodes, fromMetres, inBoxCross, isLocked, measureAngle, normalizeClip, pasteClip, pointIndex, parallelToWall, polygonArea, Problem,
   RoutePath, selectionStats, setLocked, shortestRoute, SnapKind, snapEx, splitLineAt, svgVertices, toMetres, transformGroup, unlocked, UnderlayOpts,
 } from "./planTools";
 import { CommandPalette, Command, ContextMenu, CoordBar, Legend, MenuItem, MiniMap, NumberForm, SelectionStrip, SelectionTable, ShortcutsPanel, TextForm, ToolDef, Toolbox, ViewPanel } from "./PlanChrome";
@@ -28,7 +28,7 @@ export interface Derived {
   schedule?: { lines: Record<string, { lines: number; stretches: number; length_m: number }>; nodes: Record<string, number>; circuit_routes: Record<string, { stretches: string[]; length_m: number }>; containers: { tag: string; kind: string; circuits: string[]; cables: number; fill?: Fill }[]; length_by_line_m: Record<string, number>; total_length_m: number };
   network?: { invert_m: Record<string, number>; validated: boolean; rule: string } | null;
 }
-type Tool = "select" | "box" | "pan" | "scale" | "origin" | "node" | "line" | "erase" | "split" | "measure" | "route" | "pin" | "alignUnderlay" | "cropUnderlay";
+type Tool = "select" | "box" | "pan" | "scale" | "origin" | "node" | "line" | "erase" | "split" | "measure" | "route" | "pin" | "room" | "alignUnderlay" | "cropUnderlay";
 interface View { x: number; y: number; w: number; h: number }
 type Measure = "dist" | "angle" | "area";
 
@@ -36,7 +36,7 @@ export interface Props {
   prefs?: [PlanPrefs, (p: Partial<PlanPrefs>) => void]; drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; reference?: RefItem[]; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
-  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt }; architecture?: Architecture | null;
+  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: Proposal | null; onTool?: (tool: string) => void; roomRequest?: number;
   onNewPin?: (at_m: Pt) => void; onCopyLevels?: (clip: Clip) => void; onReserve?: (lineId: string) => void; onTemplateSave?: (name: string, clip: Clip) => void; pendingClip?: Clip | null; onClipUsed?: () => void;
 }
 
@@ -47,7 +47,7 @@ const FIXED_KEYS = [
 ];
 const SELECT_TOOLS: ToolDef[] = [
   { id: "select", icon: "select", write: false }, { id: "box", icon: "box", write: false }, { id: "pan", icon: "pan", write: false }, { id: "measure", icon: "measure", write: false }, { id: "pin", icon: "pin", write: false },
-  { id: "scale", icon: "scale", write: true }, { id: "origin", icon: "origin", write: true }, { id: "node", icon: "node", write: true }, { id: "line", icon: "line", write: true }, { id: "split", icon: "split", write: true },
+  { id: "scale", icon: "scale", write: true }, { id: "origin", icon: "origin", write: true }, { id: "node", icon: "node", write: true }, { id: "line", icon: "line", write: true }, { id: "split", icon: "split", write: true }, { id: "room", icon: "room", write: true },
   { id: "route", icon: "route", write: true }, { id: "erase", icon: "erase", write: true },
 ];
 
@@ -70,7 +70,8 @@ export default function PlanEditor(props: Props) {
   const [menu, setMenu] = useState<{ at: [number, number]; items: MenuItem[] } | null>(null);
   const [palette, setPalette] = useState(false);
   const [panel, setPanel] = useState<"" | "view" | "keys" | "table">("");
-  const [form, setForm] = useState<"" | "array" | "transform" | "template" | "length">("");
+  const [form, setForm] = useState<"" | "array" | "transform" | "template" | "length" | "room">("");
+  const [roomDraft, setRoomDraft] = useState<Pt[]>([]);
   const [measureMode, setMeasureMode] = useState<Measure>("dist");
   const [measure, setMeasure] = useState<Pt[]>([]);
   const [routeFrom, setRouteFrom] = useState("");
@@ -135,7 +136,8 @@ export default function PlanEditor(props: Props) {
   useEffect(() => {                                    // the parent asks to look at something (a warning, a clash, a note)
     const r = props.focusRequest;
     if (!r) return;
-    if (r.at_m && k) { const p = fromMetres(r.at_m, drawing.origin, k); setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 })); }
+    if (r.at) setView((v) => ({ ...v, x: r.at![0] - v.w / 2, y: r.at![1] - v.h / 2 }));
+    else if (r.at_m && k) { const p = fromMetres(r.at_m, drawing.origin, k); setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 })); }
     else if (r.refs?.length) zoomTo(r.refs);
   }, [props.focusRequest?.n]);
 
@@ -190,7 +192,7 @@ export default function PlanEditor(props: Props) {
     }
     setDraft([]);
   };
-  const cancel = (keepSelection = false) => { setDraft([]); setScalePts([]); setMarquee(null); setMeasure([]); setRoute(null); setRouteFrom(""); setLenText(""); setForm(""); setMenu(null); if (!keepSelection) onSelect([]); };
+  const cancel = (keepSelection = false) => { setRoomDraft([]); setDraft([]); setScalePts([]); setMarquee(null); setMeasure([]); setRoute(null); setRouteFrom(""); setLenText(""); setForm(""); setMenu(null); if (!keepSelection) onSelect([]); };
   const choose = (next: Tool | string) => { cancel(next === "line"); setPanel(""); setTool(next as Tool); };
   const confirmScale = () => {
     const meters = parseFloat(scaleText.replace(",", "."));
@@ -269,6 +271,7 @@ export default function PlanEditor(props: Props) {
       if (hit?.type === "line") { const r = splitLineAt(drawing, hit.id, snapAt(raw, tol).p, kindId || undefined); if (r.drawing !== drawing) { apply(r.drawing); if (r.nodeId) onSelect([{ type: "node", id: r.nodeId }]); } }
     }
     else if (tool === "measure") addMeasurePoint(snapAt(raw, tol).p);
+    else if (tool === "room") { let p = snapAt(raw, tol).p; if (roomDraft.length > 0) p = straight(roomDraft[roomDraft.length - 1], p, e.shiftKey); if (!roomDraft.length || dist(roomDraft[roomDraft.length - 1], p) > 1e-6) setRoomDraft([...roomDraft, p]); }
     else if (tool === "pin") { if (k && props.onNewPin) props.onNewPin(toMetres(snapAt(raw, tol).p, drawing.origin, k)); setTool("select"); }
     else if (tool === "route") {
       const hit = pick({ ...drawing, lines: [] }, raw, tol);
@@ -327,10 +330,11 @@ export default function PlanEditor(props: Props) {
       return;
     }
     if (marquee) setMarquee({ a: marquee.a, b: raw });
-    const placing = ["node", "line", "scale", "origin", "split", "measure", "pin"].includes(tool);
+    const placing = ["node", "line", "scale", "origin", "split", "measure", "pin", "room"].includes(tool);
     const s = placing ? snapAt(raw, 8 * u) : { p: raw, kind: "none" as SnapKind };
     let p = s.p;
     if (tool === "line" && draft.length > 0) p = straight(draft[draft.length - 1], p, e.shiftKey);
+    if (tool === "room" && roomDraft.length > 0) p = straight(roomDraft[roomDraft.length - 1], p, e.shiftKey);
     setHover(p);
     setSnapMark(placing && s.kind !== "none" ? { p: s.p, kind: s.kind } : null);
     if (tool === "select" && !marquee) {
@@ -490,7 +494,7 @@ export default function PlanEditor(props: Props) {
       if (e.key === "Backspace") { setLenText((s) => s.slice(0, -1)); return; }
     }
     if (e.key === "Escape") { if (tool === "line" && draft.length > 0) { setDraft([]); setLenText(""); setForm(""); } else { cancel(); if (tool !== "select") setTool("select"); } return; }
-    if (e.key === "Enter") { if (tool === "route" && route) acceptRoute(); else if (tool === "line") finishLine(false); else if (tool === "measure" && measureMode === "area") setMeasure((m) => m); else if (tool === "select" && !selection.length) repeat(hover); return; }
+    if (e.key === "Enter") { if (tool === "room") { if (roomDraft.length >= 3) setForm("room"); return; } if (tool === "route" && route) acceptRoute(); else if (tool === "line") finishLine(false); else if (tool === "measure" && measureMode === "area") setMeasure((m) => m); else if (tool === "select" && !selection.length) repeat(hover); return; }
     if ((e.key === "Delete" || e.key === "Backspace") && selection.length > 0) { remove(); return; }
     if (e.key.startsWith("Arrow") && selection.length) { e.preventDefault(); const s = (e.shiftKey ? 10 : 1) * u; nudge(e.key === "ArrowLeft" ? -s : e.key === "ArrowRight" ? s : 0, e.key === "ArrowUp" ? -s : e.key === "ArrowDown" ? s : 0); return; }
     if (e.key === "?") { setPanel(panel === "keys" ? "" : "keys"); return; }
@@ -526,8 +530,9 @@ export default function PlanEditor(props: Props) {
   }, [drawing.lines, drawing.circuits, prefs.color, profile, lang]);
   const lockedAll = selection.length > 0 && selection.every((r) => isLocked(drawing, r));
   const world = useMemo(() => { const b = boundsOf(drawing, undefined, 0.1); return img ? { x: 0, y: 0, w: img.w, h: img.h } : b ?? { x: 0, y: 0, w: 1200, h: 800 }; }, [drawing, img]);
+  useEffect(() => { if (props.roomRequest) choose("room"); }, [props.roomRequest]);
   const hint = tool === "measure" ? measureText() : { select: "", box: "layout.hint.box", pan: "plan.hint.pan", scale: "layout.hint.scale", origin: "layout.hint.origin", node: "layout.hint.node", line: "layout.hint.line", erase: "layout.hint.erase", split: "plan.hint.split",
-    route: routeFrom ? "plan.hint.route2" : "plan.hint.route1", pin: "plan.hint.pin", alignUnderlay: "plan.hint.align", cropUnderlay: "plan.hint.crop" }[tool];
+    route: routeFrom ? "plan.hint.route2" : "plan.hint.route1", room: "plan.hint.room", pin: "plan.hint.pin", alignUnderlay: "plan.hint.align", cropUnderlay: "plan.hint.crop" }[tool];
   const hintText = tool === "measure" ? hint : hint ? t(hint) : "";
   const snapName = snapMark && snapMark.kind !== "none" ? t("plan.snapkind." + snapMark.kind) : "";
   const cursor = spaceDown || tool === "pan" ? "grab" : tool === "select" ? "default" : "crosshair";
@@ -582,15 +587,16 @@ export default function PlanEditor(props: Props) {
         {form === "transform" && <NumberForm title={t("plan.act.transform")} t={t} fields={[{ key: "deg", label: t("plan.transform.angle"), value: 90 }, { key: "factor", label: t("plan.transform.scale"), value: 1 }]} onCancel={() => setForm("")}
           onApply={(v) => { let d = drawing; const ok = selectionOf(selection); if (v.deg) d = transformGroup(d, ok, { type: "rotate", deg: v.deg }); if (v.factor > 0 && v.factor !== 1) d = transformGroup(d, ok, { type: "scale", factor: v.factor }); if (d !== drawing) apply(d); setForm(""); }} />}
         {form === "template" && <TextForm title={t("plan.act.template")} label={t("plan.template.name")} t={t} onCancel={() => setForm("")} onApply={(name) => { props.onTemplateSave?.(name, normalizeClip(copyElements(drawing, selection))); setForm(""); }} />}
+        {form === "room" && <TextForm title={t("plan.room.new")} label={t("plan.room.name")} t={t} onCancel={() => { setForm(""); setRoomDraft([]); }} onApply={(name) => { apply(addRoom(drawing, name, roomDraft)); setRoomDraft([]); setForm(""); setTool("select"); }} />}
         {form === "length" && <div className="wb-float"><span>{t("plan.length.type")}</span><b className="mono">{lenText || "…"} m</b><small className="muted">{t("plan.length.enter")}</small></div>}
         {note && <div className="wb-note-toast" role="status">{note}</div>}
         {tip && tip.text.length > 0 && <div className="wb-tip" style={{ left: tip.x, top: tip.y }} role="tooltip">{tip.text.map((l, i) => <div key={i}>{i === 0 ? <b>{l}</b> : l}</div>)}</div>}
         <svg ref={svgRef} width="100%" height="100%" viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`} preserveAspectRatio="xMinYMin meet" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-          onDoubleClick={() => { if (tool === "line") finishLine(true); }} onContextMenu={onContext} style={{ cursor, display: "block", width: "100%", height: "100%", background: "#fff" }}>
+          onDoubleClick={() => { if (tool === "line") finishLine(true); else if (tool === "room" && roomDraft.length >= 3) setForm("room"); }} onContextMenu={onContext} style={{ cursor, display: "block", width: "100%", height: "100%", background: "#fff" }}>
           {grid > 0 && <><defs><pattern id="plan-grid" x={drawing.origin[0]} y={drawing.origin[1]} width={grid} height={grid} patternUnits="userSpaceOnUse"><circle cx={0} cy={0} r={0.9 * u} fill="#9aa3b5" /></pattern></defs><rect data-ui x={view.x} y={view.y} width={view.w} height={view.h} fill="url(#plan-grid)" pointerEvents="none" /></>}
           <PlanScene drawing={drawing} profile={profile} derived={derived} lang={lang} u={u} k={k} prefs={prefs} tool={tool} readOnly={readOnly} selection={selection} highlight={highlight} focusCircuit={props.focusCircuit ?? ""} hoverRef={hoverRef}
             underlayUrl={underlayUrl} img={img} underlayOpts={under} draft={draft} hover={hover} kindId={kindId} snapMark={snapMark} scalePts={scalePts} marquee={marquee} measure={measureMode === "area" || tool === "measure" || tool === "alignUnderlay" ? measure : []}
-            route={route} routeFrom={routeFrom} guides={guides} architecture={props.underlayKind === "svg" ? null : props.architecture ?? null} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
+            route={route} routeFrom={routeFrom} guides={guides} roomDraft={roomDraft} proposal={props.proposal ?? null} architecture={props.underlayKind === "svg" ? null : props.architecture ?? null} reference={props.reference ?? []} ghosts={props.ghosts ?? []} pins={props.pins ?? []} problems={props.problems ?? []} onPin={(id) => props.onPin?.(id)} grabLine={grab} t={t} />
         </svg>
         <Legend title={t(prefs.color === "circuit" ? "plan.colorBy.circuit" : "plan.colorBy.kind")} entries={legend} />
         {prefs.minimap && <MiniMap drawing={drawing} world={world} view={view} t={t} onCenter={(p) => setView((v) => ({ ...v, x: p[0] - v.w / 2, y: p[1] - v.h / 2 }))} />}

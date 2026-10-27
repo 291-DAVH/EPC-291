@@ -164,7 +164,8 @@
         "z_m": 2.8,
         "ancho_m": 0.6,
         "alto_m": 0.1
-      }
+      },
+      "circuito": "IUG"
     },
     {
       "id": "TG",
@@ -183,7 +184,8 @@
         "z_m": 0.4,
         "ancho_m": 0.1,
         "alto_m": 0.1
-      }
+      },
+      "circuito": "TUG"
     },
     {
       "id": "TE",
@@ -203,7 +205,8 @@
         "z_m": 1.2,
         "ancho_m": 0.1,
         "alto_m": 0.1
-      }
+      },
+      "circuito": "TUE"
     },
     {
       "id": "HV",
@@ -223,7 +226,8 @@
         "z_m": 2.6,
         "ancho_m": 0.6,
         "alto_m": 0.3
-      }
+      },
+      "circuito": "ACU"
     },
     {
       "id": "PL",

@@ -33,6 +33,7 @@ const PATHS: Record<string, string> = {
   help: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8 M12 17h0",
   file: "M6 3h9l4 4v14H6z M14 3v5h5",
   trash: "M4 7h16 M9 7V4h6v3 M6 7l1 14h10l1-14",
+  room: "M4 4h16v16H4z M4 12h9v8",
   pan: "M12 3v18 M3 12h18 M12 3l-3 3 M12 3l3 3 M12 21l-3-3 M12 21l3-3 M3 12l3-3 M3 12l3 3 M21 12l-3-3 M21 12l-3 3",
   split: "M3 12h7 M14 12h7 M12 5v14 M9.5 7.5L12 5l2.5 2.5",
   measure: "M3 17L17 3l4 4L7 21z M7 13l2 2 M10 10l2 2 M13 7l2 2",

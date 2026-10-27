@@ -129,6 +129,20 @@ describe("plan editor: selecting and editing", () => {
   });
 });
 
+describe("plan editor: rooms", () => {
+  it("draws a room point by point, closes it with Enter and keeps it with the name given", () => {
+    const { container } = render(<Harness />);
+    const svg = svgOf(container), editor = container.querySelector(".wb-editor")!;
+    tool("room");
+    down(svg, 100, 100); down(svg, 300, 100); down(svg, 300, 250);
+    key(editor, "Enter");
+    const box = screen.getByRole("dialog", { name: "plan.room.new" }).querySelector("input")!;
+    fireEvent.change(box, { target: { value: "Cocina" } });
+    fireEvent.keyDown(box, { key: "Enter" });
+    expect(latest.rooms).toEqual([{ id: "r1", name: "Cocina", points: [[100, 100], [300, 100], [300, 250]] }]);
+  });
+});
+
 describe("plan editor: layers", () => {
   const lamp: Drawing = { ...blank(), nodes: [{ id: "n1", kind: "LU", x: 100, y: 100 }] };
   const circles = (c: HTMLElement) => c.querySelectorAll("svg[preserveAspectRatio] circle").length;

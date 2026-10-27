@@ -445,3 +445,54 @@ export function parallelToWall(prev: Pt, p: Pt, walls: ArchWall[], reach: number
   }
   return p;
 }
+
+// ---------------------------------------------------------------- rooms and the automatic design
+export interface ProposalCircuit { tag: string; family: string; room: string; room_name: string; loads: string[]; outlets: number; from: string; to: string; via: string[]; ternas: number; va: number; va_per_outlet: number; description: string }
+export interface ProposalLine { kind: string; points: Pt[]; role: "trunk" | "branch"; room: string; circuit?: string }
+export interface Limits { prefix: string; max_outlets: number; va_per_outlet: number; label: { es: string; en: string } }
+export interface Proposal { board: string; circuits: ProposalCircuit[]; lines: ProposalLine[]; assignments: Record<string, string>; unassigned: string[]; warnings: string[]; limits: Record<string, Limits> }
+
+export const insidePolygon = (p: Pt, poly: Pt[]): boolean => {
+  let hit = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if (yi > p[1] !== yj > p[1] && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) hit = !hit;
+  }
+  return hit;
+};
+
+export const centroidOf = (pts: Pt[]): Pt => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+
+export function addRoom(d: Drawing, name: string, points: Pt[]): Drawing {
+  if (points.length < 3) return d;
+  const rooms = d.rooms ?? [];
+  let n = rooms.length + 1;
+  while (rooms.some((r) => r.id === `r${n}`)) n++;
+  return { ...d, rooms: [...rooms, { id: `r${n}`, name, points }] };
+}
+export const removeRoom = (d: Drawing, id: string): Drawing => ({ ...d, rooms: (d.rooms ?? []).filter((r) => r.id !== id) });
+export const renameRoom = (d: Drawing, id: string, name: string): Drawing => ({ ...d, rooms: (d.rooms ?? []).map((r) => (r.id === id ? { ...r, name } : r)) });
+
+/** How many loads of each kind lie in each room (the smallest room that holds them), and those in none. */
+export function loadsByRoom(d: Drawing, loadKinds: Set<string>): { rooms: Record<string, Record<string, number>>; outside: number } {
+  const rooms: Record<string, Record<string, number>> = {};
+  let outside = 0;
+  const area = (poly: Pt[]) => Math.abs(poly.reduce((s, p, i) => s + p[0] * poly[(i + 1) % poly.length][1] - poly[(i + 1) % poly.length][0] * p[1], 0)) / 2;
+  const sorted = [...(d.rooms ?? [])].sort((a, b) => area(a.points) - area(b.points));
+  d.nodes.filter((n) => loadKinds.has(n.kind)).forEach((n) => {
+    const r = sorted.find((x) => x.points.length >= 3 && insidePolygon([n.x, n.y], x.points));
+    if (!r) { outside++; return; }
+    (rooms[r.id] ??= {})[n.kind] = (rooms[r.id][n.kind] ?? 0) + 1;
+  });
+  return { rooms, outside };
+}
+
+/** The drawing with an accepted proposal: its trunk and branch lines, the circuits (origin, destination) and the circuit of every load. A circuit the drawing already routes is left as it is. */
+export function applyProposal(d: Drawing, p: Proposal): Drawing {
+  let cur = d;
+  for (const ln of p.lines) cur = { ...cur, lines: [...cur.lines, { id: nextId(cur, "l"), kind: ln.kind, points: ln.points, ...(ln.circuit ? { circuit: ln.circuit } : {}) }] };
+  const nodes = cur.nodes.map((n) => (p.assignments[n.id] ? { ...n, circuit: p.assignments[n.id] } : n));
+  const have = new Set(cur.circuits.map((c) => c.tag));
+  const circuits = [...cur.circuits, ...p.circuits.filter((c) => !have.has(c.tag)).map((c) => ({ tag: c.tag, from: c.from, to: c.to, via: c.via, ternas: c.ternas }))];
+  return { ...cur, nodes, circuits };
+}

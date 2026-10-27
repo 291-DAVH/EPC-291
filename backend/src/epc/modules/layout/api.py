@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile
 from fastapi.responses import FileResponse
 
 from epc.modules.layout import service, templates
-from epc.modules.layout.models import ArchIn, DrawingIn, TemplateIn
+from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, TemplateIn
 from epc.modules.projects import public as projects
 
 # Internal engineering surface (the organization's own projects): never under /api/app.
@@ -81,6 +81,18 @@ def get_architecture(client: str, code: str, level: str):
 @router.delete("/{level}/architecture")
 def delete_architecture(client: str, code: str, level: str):
     return service.remove_architecture(projects.get_project_dir(client, code), level)
+
+
+@router.post("/{level}/design")
+def design(client: str, code: str, level: str, body: DesignIn):
+    """Circuits, trunk and branches proposed for the loads placed in the rooms of the drawing (nothing is saved)."""
+    return service.design_proposal(projects.get_project_dir(client, code), level, body)
+
+
+@router.post("/{level}/design/circuits")
+def design_circuits(client: str, code: str, level: str, body: NewCircuits):
+    """Create in the board the circuits of an accepted proposal."""
+    return service.accept_circuits(projects.get_project_dir(client, code), level, body.circuits)
 
 
 @router.get("/{level}/changes")
