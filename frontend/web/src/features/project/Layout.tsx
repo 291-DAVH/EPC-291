@@ -4,12 +4,13 @@ import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
+import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
-import { applyProposal, applyRuns, Architecture, BoardRef, newSheetKey, planLabel, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
+import { applyProposal, applyRuns, Architecture, BoardRef, newSheetKey, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 
 interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
@@ -17,7 +18,7 @@ interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircui
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "design" | "warnings" | "coord" | "layers" | "history";
+type Panel = "props" | "plans" | "design" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -150,21 +151,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const createSheet = async (name: string, discipline = "arquitectura", planName = "") => {
     try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
   };
-  /** A discipline can have several plans on a level: its first sheet has no name, the next ones ask for one (lighting, sockets...). */
-  const addPlan = (pid: string) => {
-    const here = sheets.filter((x) => x.base === base && x.discipline === pid);
-    const name = here.length ? (window.prompt(tl("plan.newPlan"), "") ?? "").trim() : "";
-    if (here.length && !name) return;
-    createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), name, here.length > 0), pid, name);
-  };
-  const renamePlan = () => {
-    if (!write) return;
-    const name = window.prompt(tl("plan.renamePlan"), drawing.plan_name ?? "");
-    if (name !== null) change({ ...drawing, plan_name: name.trim().slice(0, 60) });
-  };
-  const deleteSheet = async () => {
+  /** A discipline is on a level once; what it draws there is split in plans (lighting, sockets...), each a sheet of its own: the first one has no name in its key, the next ones carry theirs. */
+  const addDiscipline = (pid: string) => createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), "", false), pid);
+  const addPlan = (name: string) => createSheet(newSheetKey(base, discipline, sheets.filter((x) => x.base === base).map((x) => x.level), name, true), discipline, name);
+  const renamePlan = (name: string) => { if (write) change({ ...drawing, plan_name: name }); };
+  const deleteSheet = async (target = level) => {
     if (!window.confirm(tl("layout.confirmDelete"))) return;
-    try { await api(`${root}/${level}`, { method: "DELETE" }); const rest = levels.filter((x) => x !== level); setLevel(rest[0] ?? ""); setRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
+    try { await api(`${root}/${target}`, { method: "DELETE" }); const rest = levels.filter((x) => x !== target); if (target === level) setLevel(rest.find((x) => x.split("@")[0] === base) ?? rest[0] ?? ""); setRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
   };
   const upload = async (file?: File) => {
     if (!file) return;
@@ -293,10 +286,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const bases = [...new Set(sheets.map((x) => x.base))];
   const sameBase = sheets.filter((x) => x.base === base);
   const usedHere = new Set(sameBase.map((x) => x.discipline));
+  const order = ov.data.profiles.map((p) => p.id);                                    // the order a project is worked
+  const disciplinesHere = [...usedHere].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const plansHere = sameBase.filter((x) => x.discipline === discipline).map((x) => ({ level: x.level, name: x.level === level ? drawing.plan_name ?? x.plan_name : x.plan_name }));
   const profName = (id: string) => ov.data!.profiles.find((p) => p.id === id)?.name[lang] ?? id;
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; icon: string; badge?: number }[] = [
-    { id: "props", label: tl("layout.tab.props"), icon: "select", badge: selection.length }, { id: "warnings", label: tl("layout.tab.warnings"), icon: "warn", badge: warnings.length },
+    { id: "props", label: tl("layout.tab.props"), icon: "select", badge: selection.length }, { id: "plans", label: tl("plan.plans"), icon: "file", badge: plansHere.length > 1 ? plansHere.length : 0 }, { id: "warnings", label: tl("layout.tab.warnings"), icon: "warn", badge: warnings.length },
     { id: "design", label: tl("design.tab"), icon: "star" }, { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
   ];
   const boardNodes = drawing.nodes.filter((n) => (profile?.nodes ?? []).some((k) => k.id === n.kind && k.atributos?.includes("tablero")));
@@ -319,12 +315,11 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
             : <><button onClick={() => createSheet(nextLevel(bases, "up"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "up")}</button><button onClick={() => createSheet(nextLevel(bases, "down"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "down")}</button></>)}
         </div>
         {level && <div className="wb-group" role="tablist" aria-label={tl("plan.sheets")}>
-          {sameBase.map((x) => { const label = planLabel(profName(x.discipline), x.level === level ? drawing.plan_name ?? x.plan_name : x.plan_name); return <button key={x.level} role="tab" aria-selected={x.level === level} className={"lvl disc" + (x.level === level ? " on" : "")} onClick={() => setLevel(x.level)} onDoubleClick={() => x.level === level && renamePlan()} title={write && x.level === level ? `${label} — ${tl("plan.renamePlan")}` : label}>{label}</button>; })}
-          {canWrite && ov.data.profiles.some((p) => p.offered !== false) && (
-            <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && addPlan(e.target.value)}>
-              <option value="">+</option>{ov.data.profiles.filter((p) => p.offered !== false).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
+          {disciplinesHere.map((pid) => { const first = sameBase.find((x) => x.discipline === pid)!; return <button key={pid} role="tab" aria-selected={pid === discipline} className={"lvl disc" + (pid === discipline ? " on" : "")} onClick={() => pid !== discipline && setLevel(first.level)} title={profName(pid)}>{profName(pid)}</button>; })}
+          {canWrite && ov.data.profiles.some((p) => p.offered !== false && !usedHere.has(p.id)) && (
+            <select className="add-sheet compact" value="" title={tl("plan.addSheet")} aria-label={tl("plan.addSheet")} onChange={(e) => e.target.value && addDiscipline(e.target.value)}>
+              <option value="">+</option>{ov.data.profiles.filter((p) => p.offered !== false && !usedHere.has(p.id)).map((p) => <option key={p.id} value={p.id}>{p.name[lang] ?? p.name.es}</option>)}
             </select>)}
-          {level && canWrite && <button onClick={deleteSheet} title={tl("layout.deleteLevel")} aria-label={tl("layout.deleteLevel")}><Icon name="trash" size={16} /></button>}
         </div>}
         {level && <>
           {write && isArchitecture && <label className="tool-ico wb-upload" title={lv?.underlay ? tl("layout.underlay") : tl("layout.noUnderlay")} aria-label={tl("layout.underlay")}><Icon name="upload" size={18} />
@@ -395,6 +390,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               )}
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
+              {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}

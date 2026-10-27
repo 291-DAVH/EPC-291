@@ -1,8 +1,8 @@
 {
   "id": "electrica_BT",
   "nombre": {
-    "es": "Instalación eléctrica en baja tensión",
-    "en": "Low-voltage electrical installation"
+    "es": "Eléctrica",
+    "en": "Electrical"
   },
   "disciplina_proyecto": "electrical",
   "tramos": [
