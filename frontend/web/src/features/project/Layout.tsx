@@ -76,6 +76,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const base = levelOf(level);
   const mine = sheets.find((x) => x.level === level);
   const discipline = drawing.discipline;
+  const isArchitecture = discipline === "arquitectura";          // the plan is put in and recognized here; the other disciplines only draw over it
   const write = canWrite && !review;
   const coord = useCoordination(client, code, level, discipline);
 
@@ -146,7 +147,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => send(next), 700);                    // saved a moment after the last change
   };
-  const createSheet = async (name: string, discipline = "electrica_BT") => {
+  const createSheet = async (name: string, discipline = "arquitectura") => {
     try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(blank(discipline)) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
   };
   const deleteSheet = async () => {
@@ -314,10 +315,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           {level && canWrite && <button onClick={deleteSheet} title={tl("layout.deleteLevel")} aria-label={tl("layout.deleteLevel")}><Icon name="trash" size={16} /></button>}
         </div>}
         {level && <>
-          {write && <label className="tool-ico wb-upload" title={lv?.underlay ? tl("layout.underlay") : tl("layout.noUnderlay")} aria-label={tl("layout.underlay")}><Icon name="upload" size={18} />
+          {write && isArchitecture && <label className="tool-ico wb-upload" title={lv?.underlay ? tl("layout.underlay") : tl("layout.noUnderlay")} aria-label={tl("layout.underlay")}><Icon name="upload" size={18} />
             <input type="file" accept=".png,.jpg,.jpeg,.svg,.dxf,.pdf" disabled={busy} onChange={(e) => { upload(e.target.files?.[0]); e.target.value = ""; }} /></label>}
-          {write && lv?.underlay && <button className="tool-ico" onClick={recognize} disabled={recognizing || busy} title={recognizing ? tl("plan.arch.working") : tl("plan.arch.recognize") + " — " + tl("plan.arch.help")} aria-label={tl("plan.arch.recognize")}><Icon name={recognizing ? "update" : "select"} size={18} /></button>}
-          {lv?.architecture && <span className="badge accent" title={[`${lv.architecture.counts.walls} ${tl("plan.arch.walls")}`, `${lv.architecture.counts.doors} ${tl("plan.arch.doors")}`, `${lv.architecture.counts.windows} ${tl("plan.arch.windows")}`, `${lv.architecture.counts.openings ?? 0} ${tl("plan.arch.openings")}`, ...lv.architecture.warnings].join("\n")}>{lv.architecture.counts.walls} {tl("plan.arch.walls")}</span>}
+          {write && isArchitecture && lv?.underlay && <button className="tool-ico" onClick={recognize} disabled={recognizing || busy} title={recognizing ? tl("plan.arch.working") : tl("plan.arch.recognize") + " — " + tl("plan.arch.help")} aria-label={tl("plan.arch.recognize")}><Icon name={recognizing ? "update" : "select"} size={18} /></button>}
+          {isArchitecture && lv?.architecture && <span className="badge accent" title={[`${lv.architecture.counts.walls} ${tl("plan.arch.walls")}`, `${lv.architecture.counts.doors} ${tl("plan.arch.doors")}`, `${lv.architecture.counts.windows} ${tl("plan.arch.windows")}`, `${lv.architecture.counts.openings ?? 0} ${tl("plan.arch.openings")}`, ...lv.architecture.warnings].join("\n")}>{lv.architecture.counts.walls} {tl("plan.arch.walls")}</span>}
           {write && !drawing.scale && lv?.architecture?.scale_hint && <button onClick={useHintedScale} title={lv.architecture.scale_hint.basis}>{tl("plan.arch.useScale")}</button>}
           {discipline !== "electrica_BT" && (
             <label className="wb-field"><span>{tl("layout.outlet")}</span>
@@ -364,7 +365,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} reference={coord.reference} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -384,8 +385,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
-              {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} canWrite={canWrite}
-                sheetOf={(pid) => sameBase.find((x) => x.discipline === pid)?.level ?? null} onOpen={(pid) => { const s = sameBase.find((x) => x.discipline === pid); if (s) setLevel(s.level); else createSheet(sheets.length ? `${base}@${pid}` : base, pid); }} />}
+              {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}
               {panel === "coord" && <Coordination client={client} code={code} discipline={discipline} canWrite={canWrite} onChanged={coord.reload} onFocus={focusAt} />}
               {panel === "history" && <HistoryPanel root={root} level={level} rev={rev + hrev} canWrite={write} comparing={compare?.id ?? ""} onCompare={openCompare} onRestore={restore} tl={tl} />}
             </div>}

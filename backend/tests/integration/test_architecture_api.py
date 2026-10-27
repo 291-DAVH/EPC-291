@@ -53,7 +53,7 @@ class TestArchitecture(unittest.TestCase):
                                                 "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
         self.assertEqual(r.status_code, 201, r.text)
         self.base = "/api/projects/ACME/P-1/layout"
-        self.c.put(f"{self.base}/L0", json={"discipline": "electrica_BT"})
+        self.c.put(f"{self.base}/L0", json={"discipline": "arquitectura"})
 
     def tearDown(self):
         settings.projects_dir, settings.role, settings.data_dir = self._old

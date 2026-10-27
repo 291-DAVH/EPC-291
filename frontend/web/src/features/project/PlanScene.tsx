@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { DLine, Drawing, Pt, Ref, sameRef } from "./planEditing";
 import type { Derived, Kind, Prim, Profile } from "./PlanEditor";
 import type { PlanPrefs } from "./planPrefs";
-import { colorOfDiscipline, Ghost, Pin, RefItem } from "./planTypes";
+import { Ghost, Pin } from "./planTypes";
 import { Architecture, centroidOf, fromMetres, isLocked, Problem, RoutePath, SnapKind, spreadLabels, UnderlayOpts, wallFaces } from "./planTools";
 
 /** The drawing as the canvas shows it: the underlay, what is drawn, what other disciplines occupy, marks and aids. It only draws what the editor gives it; it holds no state. */
@@ -36,7 +36,7 @@ export interface SceneProps {
   underlayUrl: string | null; img: { w: number; h: number } | null; underlayOpts: UnderlayOpts;
   draft: Pt[]; hover: Pt | null; kindId: string; snapMark: { p: Pt; kind: SnapKind } | null; scalePts: Pt[]; marquee: { a: Pt; b: Pt } | null;
   measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").RunsProposal | null;
-  reference: RefItem[]; ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
+  ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
   t: (key: string) => string;
 }
 
@@ -98,7 +98,6 @@ export default function PlanScene(p: SceneProps) {
   const coarse = u > 0 && typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
   const hs = (coarse ? 9 : 5) * u;
   const selLine = !p.readOnly && p.tool === "select" && selection.length === 1 && selection[0].type === "line" ? drawing.lines.find((x) => x.id === selection[0].id) : undefined;
-  const refPx = (it: RefItem): Pt[] => it.points.map((m) => (k ? fromMetres(m, drawing.origin, k) : [0, 0]));
 
   return (
     <>
@@ -135,13 +134,6 @@ export default function PlanScene(p: SceneProps) {
           <text x={(g.lines[0]?.[0] ?? g.nodes[0] ?? [0, 0])[0]} y={(g.lines[0]?.[0] ?? g.nodes[0] ?? [0, 0])[1] - 6 * u} fontSize={10 * u} fill="#7a8190" stroke="none">{g.level}</text>
         </g>
       ))}
-      {prefs.refs && k !== null && p.reference.filter((it) => !prefs.hiddenDisc.includes(it.discipline)).map((it) => {
-        const c = colorOfDiscipline(it.discipline), pts = refPx(it), w = Math.max(it.width_m / k, 2 * u);
-        const tip = <title>{`${it.discipline} · ${it.kind} ${it.tag}`}</title>;
-        return it.shape === "line"
-          ? <polyline key={it.sheet + it.id} points={polyline(pts)} fill="none" stroke={c} strokeOpacity={it.origin === "reservation" ? 0.25 : 0.35} strokeWidth={w} strokeLinecap="butt" strokeLinejoin="round" strokeDasharray={it.origin === "reservation" ? "8 5" : undefined}>{tip}</polyline>
-          : <rect key={it.sheet + it.id} x={pts[0][0] - w / 2} y={pts[0][1] - w / 2} width={w} height={w} fill={c} fillOpacity={0.3} stroke={c} strokeOpacity={0.6} strokeWidth={1} vectorEffect="non-scaling-stroke">{tip}</rect>;
-      })}
       {drawing.scale && <g stroke="#ff7f0e" strokeWidth={1.5} vectorEffect="non-scaling-stroke"><line x1={drawing.scale.p1[0]} y1={drawing.scale.p1[1]} x2={drawing.scale.p2[0]} y2={drawing.scale.p2[1]} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />
         <text x={(drawing.scale.p1[0] + drawing.scale.p2[0]) / 2} y={(drawing.scale.p1[1] + drawing.scale.p2[1]) / 2 - 4 * u} fontSize={11 * u} fill="#ff7f0e" stroke="none">{drawing.scale.distance_m} m</text></g>}
       {p.scalePts.map((q, i) => <circle key={i} cx={q[0]} cy={q[1]} r={4 * u} fill="#ff7f0e" data-ui />)}

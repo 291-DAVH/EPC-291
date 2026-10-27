@@ -6,10 +6,9 @@ export interface PlanPrefs {
   snap: boolean; mid: boolean; ortho: boolean; walls: boolean; grid: number;           // grid in metres, 0 = off
   chain: boolean;                                                      // after Enter the next line starts where the last one ended
   color: "kind" | "circuit"; lengths: boolean; labels: boolean; coords: boolean;
-  refs: boolean; ghosts: boolean; pins: boolean; minimap: boolean; arch: boolean; rooms: boolean;
+  ghosts: boolean; pins: boolean; minimap: boolean; arch: boolean; rooms: boolean;
   hidden: string[];                                                    // kinds of line not shown
   hiddenLayers: string[];                                              // layers of the catalog not shown (by layer name)
-  hiddenDisc: string[];                                                // disciplines whose footprint is not shown as a reference
   isolate: boolean;                                                    // only the circuit in focus is shown at full strength
   favorites: string[];                                                 // kind ids kept at the top of the palette, as `<discipline>:<kind>`
   keys: Record<string, string>;                                        // the person's own keys for actions
@@ -17,7 +16,7 @@ export interface PlanPrefs {
 
 export const DEFAULT_PREFS: PlanPrefs = {
   snap: true, mid: true, ortho: false, walls: true, grid: 0, chain: true, color: "kind", lengths: false, labels: true, coords: true,
-  refs: true, ghosts: true, pins: true, minimap: true, arch: true, rooms: true, hidden: [], hiddenLayers: [], hiddenDisc: [], isolate: false, favorites: [], keys: {},
+  ghosts: true, pins: true, minimap: true, arch: true, rooms: true, hidden: [], hiddenLayers: [], isolate: false, favorites: [], keys: {},
 };
 
 /** Keys of the tools; the person can change any of them. The kinds of the discipline keep their own letters (see the profile), so the tools that would clash with them start without a key. */

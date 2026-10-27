@@ -244,7 +244,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual([g for g in groups][:4], ["arquitectura", "civil", "mecanica", "electrica"])           # in the order a project is worked
         cable = next(x for x in groups["electrica"]["layers"] if x["name"] == "ELEC-CABLE")
         self.assertEqual((cable["hex"], cable["kinds"][0]["id"], cable["kinds"][0]["type"]), ("#ff0000", "CA", "line"))
-        self.assertEqual((groups["hvac"]["profile"], groups["arquitectura"]["profile"]), ("hvac", None))      # the architecture is the plan, not a drawing of its own
+        self.assertEqual((groups["hvac"]["profile"], groups["arquitectura"]["profile"]), ("hvac", "arquitectura"))
         self.assertFalse(groups["electrica"]["drawn"])
         self.c.put(f"{self.layout}/L0", json=ELEC)
         self.assertTrue({g["id"]: g for g in self.c.get(url).json()["disciplines"]}["electrica"]["drawn"])

@@ -1175,7 +1175,6 @@ export const es = {
     "plan.show.lengths": "Longitudes en los tramos",
     "plan.show.coords": "Coordenadas del cursor",
     "plan.show.minimap": "Minimapa",
-    "plan.show.refs": "Otras disciplinas (solo su huella)",
     "plan.show.ghosts": "Niveles vecinos",
     "plan.show.pins": "Choques y comentarios",
     "plan.show.isolate": "Aislar el circuito elegido",

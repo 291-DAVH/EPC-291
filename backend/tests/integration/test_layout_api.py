@@ -13,6 +13,7 @@ from tests.integration.test_identity_api import PW, PROJECT, Base
 from tests.integration.test_sld_api import BOARD, CIRCUITS, TB
 
 PNG = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==")
+ARCH = {"discipline": "arquitectura", "scale": None, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}        # the sheet the plan is put in from
 DRAWING = {
     "discipline": "electrica_BT", "scale": {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}, "origin": [0, 0],
     "nodes": [{"id": "n1", "kind": "TB", "x": 0, "y": 0}, {"id": "n2", "kind": "CM", "x": 200, "y": 0}],
@@ -39,8 +40,8 @@ class TestLayout(unittest.TestCase):
     def test_the_overview_offers_profiles_versions_and_no_levels_yet(self):
         o = self.c.get(self.base).json()
         self.assertEqual(o["levels"], [])
-        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas", "hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion"})
-        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["electrica_BT"])          # the project chose the electrical discipline only
+        self.assertEqual({p["id"] for p in o["profiles"]}, {"electrica_BT", "sanitaria_cloacas", "hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion", "arquitectura"})
+        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["arquitectura", "electrica_BT"])          # the architecture and the electrical discipline the project chose
         self.assertEqual((o["default_dxf_version"], o["dxf_versions"][-1]), ("R2018", "R2018"))
 
     def test_the_disciplines_the_project_chose_are_the_ones_offered_in_the_order_they_are_worked(self):
@@ -48,8 +49,8 @@ class TestLayout(unittest.TestCase):
                                                 "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["telecom", "fire", "electrical", "civil"]})
         self.assertEqual(r.status_code, 201, r.text)
         o = self.c.get("/api/projects/ACME/P-2/layout").json()
-        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["civil", "electrica_BT", "pci", "comunicaciones", "sanitaria_cloacas"])
-        self.assertEqual({p["project_discipline"] for p in o["profiles"] if p["offered"]}, {"civil", "electrical", "fire", "telecom"})
+        self.assertEqual([p["id"] for p in o["profiles"] if p["offered"]], ["arquitectura", "civil", "electrica_BT", "pci", "comunicaciones", "sanitaria_cloacas"])        # the architecture is always there, first
+        self.assertEqual({p["project_discipline"] for p in o["profiles"] if p["offered"]}, {"", "civil", "electrical", "fire", "telecom"})
 
     def test_levels_are_named_from_l0_up_and_down_and_nothing_else_is_accepted(self):
         for level in ("L0", "L1", "L-1"):
@@ -84,7 +85,7 @@ class TestLayout(unittest.TestCase):
         self.assertFalse(self.c.get(f"{self.base}/L0").json()["saved"])
 
     def test_the_underlay_is_an_image_and_a_dxf_becomes_a_view_never_a_script(self):
-        self.c.put(f"{self.base}/L0", json=DRAWING)
+        self.c.put(f"{self.base}/L0", json=ARCH)
         r = self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.png", PNG, "image/png")})
         self.assertEqual(r.status_code, 200, r.text)
         self.assertEqual(r.json()["underlay"]["kind"], "png")
@@ -99,23 +100,29 @@ class TestLayout(unittest.TestCase):
         for name, data in (("x.exe", b"MZ..."), ("x.txt", b"hello"), ("x.dxf", b"not a dxf"), ("x.png", b"")):
             self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": (name, data, "application/octet-stream")}).status_code, 422, name)
 
-    def test_the_architectural_plan_is_shared_by_every_discipline_drawn_on_the_level(self):
-        self.c.put(f"{self.base}/L0", json=DRAWING)
+    def test_the_architectural_plan_is_put_in_from_the_architecture_sheet_and_shared_by_every_discipline_on_the_level(self):
+        self.c.put(f"{self.base}/L0", json=ARCH)
+        self.c.put(f"{self.base}/L0@electrica_BT", json=DRAWING)
         self.c.put(f"{self.base}/L0@sanitaria_cloacas", json={**DRAWING, "discipline": "sanitaria_cloacas", "nodes": [], "lines": []})
+        refused = self.c.post(f"{self.base}/L0@electrica_BT/underlay", files={"file": ("plano.png", PNG, "image/png")})
+        self.assertEqual(refused.status_code, 422)                                              # another discipline only draws over the plan
+        self.assertIn("Architecture", refused.json()["detail"]["errors"]["discipline"])
+        self.assertEqual(self.c.post(f"{self.base}/L0@electrica_BT/architecture", json={}).status_code, 422)
         self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.png", PNG, "image/png")}).status_code, 200)
         other = self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()
         self.assertEqual(other["underlay"]["kind"], "png")                                      # the other discipline sees the same plan
         self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas/underlay").content[1:4], b"PNG")
         self.assertTrue(all(x["underlay"] for x in self.c.get(self.base).json()["levels"]))
-        self.assertEqual(self.c.post(f"{self.base}/L0@sanitaria_cloacas/underlay", files={"file": ("p2.png", PNG, "image/png")}).status_code, 200)
+        self.assertEqual(self.c.post(f"{self.base}/L0/underlay", files={"file": ("p2.png", PNG, "image/png")}).status_code, 200)
         self.assertEqual(len(list((self.root / "ACME" / "P-1" / "workspace" / "02-engineering" / "layout").glob("*/src/underlay.*"))), 1)   # one plan, not a copy per discipline
         self.assertEqual(self.c.delete(f"{self.base}/L0").status_code, 200)                      # deleting the level's own sheet keeps the plan for the others
         self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()["underlay"]["kind"], "png")
 
     def test_a_pdf_becomes_an_image_underlay(self):
-        self.c.put(f"{self.base}/L0", json=DRAWING)
-        made = self.c.post(f"{self.base}/L0/generate").json()          # the PDF the platform itself makes is a real, valid PDF
-        pdf = self.c.get(f"{self.base}/L0/files/{made['files']['pdf']}").content
+        self.c.put(f"{self.base}/L0", json=ARCH)
+        self.c.put(f"{self.base}/L0@electrica_BT", json=DRAWING)
+        made = self.c.post(f"{self.base}/L0@electrica_BT/generate").json()          # the PDF the platform itself makes is a real, valid PDF
+        pdf = self.c.get(f"{self.base}/L0@electrica_BT/files/{made['files']['pdf']}").content
         r = self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.pdf", pdf, "application/pdf")})
         self.assertEqual(r.status_code, 200, r.text)
         self.assertEqual(r.json()["underlay"]["kind"], "png")

@@ -425,7 +425,7 @@ class TestDisciplines(unittest.TestCase):
                 self.assertTrue(k["simbolo_2d"] == "linea_simple" or k["simbolo_2d"] in core.SYMBOLS, f"{pid}:{k['id']}")
 
     def test_a_drawing_of_each_new_discipline_is_processed(self):
-        for pid in ("hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion"):
+        for pid in ("hvac", "pci", "comunicaciones", "civil", "mecanica", "instrumentacion", "arquitectura"):
             prof = core.load_profile(pid)
             kinds = prof["nodos"] * 2                                         # a stretch needs two points: at least two nodes
             nodes = [{"id": f"n{i}", "kind": k["id"], "x": 10 + i * 20, "y": 10} for i, k in enumerate(kinds)]

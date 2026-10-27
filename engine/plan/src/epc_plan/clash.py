@@ -4,7 +4,8 @@ Two elements of different disciplines clash when
   hard         their bodies occupy the same space (the 3D gap between them is zero or negative);
   clearance    they do not touch but are closer than the separation the rules ask for those two kinds;
   maintenance  one of them sits in the free space an equipment asks for around itself (`clear_m`).
-Elements of the same discipline never clash here: coordinating inside a discipline is that discipline's own work.
+Elements of the same discipline never clash here: coordinating inside a discipline is that discipline's own work. Architecture is the plan every discipline is drawn over, not a body that
+ competes with them for space: it is left out.
 """
 import hashlib
 import json
@@ -25,6 +26,13 @@ def default_rules() -> List[Dict[str, Any]]:
 
 def rule_key(r: Dict[str, Any]) -> str:
     return "|".join([r.get("a", "*"), r.get("b", "*"), ",".join(sorted(r.get("kinds_a", []))), ",".join(sorted(r.get("kinds_b", [])))])
+
+
+CONTEXT = "arquitectura"                                      # the discipline of the plan itself
+
+
+def _same_or_context(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
+    return a["discipline"] == b["discipline"] or CONTEXT in (a["discipline"], b["discipline"])
 
 
 def merge_rules(*layers: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -157,7 +165,7 @@ def _candidates(items: List[Dict[str, Any]], margin: float):
         for bj, b in boxes[i + 1:]:
             if bj[0] - bi[1] > margin:
                 break
-            if a["discipline"] == b["discipline"] or bj[2] - bi[3] > margin or bi[2] - bj[3] > margin or height_gap(a, b) > margin:
+            if _same_or_context(a, b) or bj[2] - bi[3] > margin or bi[2] - bj[3] > margin or height_gap(a, b) > margin:
                 continue
             yield a, b
 
