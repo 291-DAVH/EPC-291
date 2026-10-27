@@ -294,6 +294,258 @@
     "es": "Plenos entre niveles (plano)",
     "en": "Plenums between levels (plan)"
    }
+  },
+  "plan.ARQ-FONDO": {
+   "name": "ARQ-FONDO",
+   "color": 253,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Fondo del plano de arquitectura",
+    "en": "Architecture plan background"
+   }
+  },
+  "plan.ARQ-MUROS": {
+   "name": "ARQ-MUROS",
+   "color": 8,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Muros reconocidos",
+    "en": "Recognized walls"
+   }
+  },
+  "plan.ARQ-PUERTAS": {
+   "name": "ARQ-PUERTAS",
+   "color": 30,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Puertas reconocidas",
+    "en": "Recognized doors"
+   }
+  },
+  "plan.ARQ-VENTANAS": {
+   "name": "ARQ-VENTANAS",
+   "color": 5,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Ventanas reconocidas",
+    "en": "Recognized windows"
+   }
+  },
+  "plan.ARQ-HUECOS": {
+   "name": "ARQ-HUECOS",
+   "color": 9,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Huecos reconocidos",
+    "en": "Recognized openings"
+   }
+  },
+  "plan.HVAC-DUCTO": {
+   "name": "HVAC-DUCTO",
+   "color": 140,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Conductos de aire (plano)",
+    "en": "Air ducts (plan)"
+   }
+  },
+  "plan.HVAC-REJILLA": {
+   "name": "HVAC-REJILLA",
+   "color": 130,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Rejillas y difusores (plano)",
+    "en": "Grilles and diffusers (plan)"
+   }
+  },
+  "plan.HVAC-EQUIPO": {
+   "name": "HVAC-EQUIPO",
+   "color": 160,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Equipos de climatización (plano)",
+    "en": "HVAC equipment (plan)"
+   }
+  },
+  "plan.HVAC-TUBERIA": {
+   "name": "HVAC-TUBERIA",
+   "color": 120,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cañerías de refrigerante y agua (plano)",
+    "en": "Refrigerant and water pipes (plan)"
+   }
+  },
+  "plan.PCI-ROCIADOR": {
+   "name": "PCI-ROCIADOR",
+   "color": 1,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Rociadores (plano)",
+    "en": "Sprinklers (plan)"
+   }
+  },
+  "plan.PCI-TUBERIA": {
+   "name": "PCI-TUBERIA",
+   "color": 10,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cañerías de incendio (plano)",
+    "en": "Fire pipes (plan)"
+   }
+  },
+  "plan.PCI-DETECTOR": {
+   "name": "PCI-DETECTOR",
+   "color": 6,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Detectores y pulsadores (plano)",
+    "en": "Detectors and call points (plan)"
+   }
+  },
+  "plan.PCI-HIDRANTE": {
+   "name": "PCI-HIDRANTE",
+   "color": 12,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Hidrantes y bocas de incendio (plano)",
+    "en": "Hydrants and hose cabinets (plan)"
+   }
+  },
+  "plan.PCI-EXTINTOR": {
+   "name": "PCI-EXTINTOR",
+   "color": 14,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Extintores (plano)",
+    "en": "Extinguishers (plan)"
+   }
+  },
+  "plan.COM-CABLE": {
+   "name": "COM-CABLE",
+   "color": 4,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Cables de datos y voz (plano)",
+    "en": "Data and voice cables (plan)"
+   }
+  },
+  "plan.COM-BANDEJA": {
+   "name": "COM-BANDEJA",
+   "color": 3,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Bandejas de comunicaciones (plano)",
+    "en": "Communications trays (plan)"
+   }
+  },
+  "plan.COM-RACK": {
+   "name": "COM-RACK",
+   "color": 5,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Racks y gabinetes (plano)",
+    "en": "Racks and cabinets (plan)"
+   }
+  },
+  "plan.COM-BOCA": {
+   "name": "COM-BOCA",
+   "color": 6,
+   "lineweight": null,
+   "linetype": "CONTINUOUS",
+   "on": true,
+   "frozen": false,
+   "locked": false,
+   "plot": true,
+   "description": {
+    "es": "Bocas de datos y voz (plano)",
+    "en": "Data and voice outlets (plan)"
+   }
   }
  }
 }

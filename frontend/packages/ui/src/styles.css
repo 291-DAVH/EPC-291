@@ -526,5 +526,14 @@ button.badge { cursor: pointer; border: 0; min-height: 0; box-shadow: none; tran
 .cview-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 6px 0; font-size: 12.5px; }
 .cview-legend label { display: flex; align-items: center; gap: 4px; }
 
+.layers .wb-tabs.sub { flex-wrap: wrap; overflow: visible; }
+.layers .wb-tabs.sub button { flex: 0 1 auto; display: inline-flex; align-items: center; gap: 6px; }
+.disc-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.layer-table { width: 100%; }
+.layer-table td { vertical-align: top; padding: 4px 6px; }
+.layer-table tr.off { opacity: .45; }
+.layer-swatch { display: inline-block; width: 12px; height: 12px; margin-right: 6px; border: 1px solid var(--ink); vertical-align: -1px; }
+.kind-chip { display: inline-block; margin: 0 3px 3px 0; padding: 0 5px; border: 1px solid var(--edge); border-radius: 3px; font-family: var(--mono); font-size: 11px; }
+
 /* ---- print: ink on white, no colour washes ---- */
 @media print { body { background: #fff; } .titlebar, .navmain, .account, .statusbar { display: none !important; } .card { box-shadow: none; } }

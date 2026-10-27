@@ -381,3 +381,27 @@ def remove_architecture(d: Path, level: str) -> dict:
     _edit_guard(d, _discipline_of(d, level))
     repository.delete_architecture(d, level)
     return view(d, level)
+
+
+# ---------------------------------------------------------------- the layers of each discipline
+def _kinds_by_layer() -> Dict[str, list]:
+    """What the plan editor draws in each layer: layer name -> the kinds of line and node of every profile that use it."""
+    core = _engine()[0]
+    out: Dict[str, list] = {}
+    for pid in core.profiles():
+        p = core.load_profile(pid)
+        for kind_type, items in (("line", p["tramos"]), ("node", p["nodos"])):
+            for k in items:
+                out.setdefault(k.get("capa_dxf", ""), []).append({"profile": pid, "id": k["id"], "type": kind_type, "name": k["etiqueta"]})
+    return out
+
+
+def layers_by_discipline(d: Path) -> dict:
+    """The catalog of DXF layers in force for this project (default, global, company, project) grouped by discipline, each layer with the kinds the editor draws in it, and which disciplines
+    already have a drawing in the project."""
+    from epc_dxf import layers as dxf_layers
+    effective = catalogs.layers_view("project", d)["layers"]
+    kinds = _kinds_by_layer()
+    drawn = {s["discipline"] for s in sheets(d)}
+    groups = dxf_layers.by_discipline(effective)
+    return {"disciplines": [{**g, "drawn": g["profile"] in drawn if g["profile"] else False, "layers": [{**x, "kinds": kinds.get(x["name"], [])} for x in g["layers"]]} for g in groups]}

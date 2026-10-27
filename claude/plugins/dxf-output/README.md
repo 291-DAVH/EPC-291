@@ -13,7 +13,7 @@ The default catalog travels with the package; the global file the MASTER edits (
 | Necesita (plugins) | — |
 | Lo necesitan | `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld` |
 | Paquetes de Python | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` |
-| Si lo modificas, revisa | plugins `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld`; módulos del backend `backend.catalogs` |
+| Si lo modificas, revisa | plugins `board-design`, `iram-titleblock`, `mld`, `plan-drawing`, `sld`; módulos del backend `backend.catalogs`, `backend.layout` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

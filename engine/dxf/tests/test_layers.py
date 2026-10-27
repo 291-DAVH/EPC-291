@@ -20,6 +20,27 @@ class TestCatalog(unittest.TestCase):
         self.assertEqual(L.name("sld.diagram", cat), "291-E-DIAGRAMA")
         self.assertTrue({"sld.text", "sld.titleblock", "sld.sheet", "plan.ELEC-LUM", "plan.SAN-CLOACA", "plan.PLAN-TAG"} <= set(cat))
 
+    def test_the_layers_are_grouped_by_discipline_by_the_prefix_of_their_names(self):
+        groups = {g["id"]: g for g in L.by_discipline()}
+        self.assertEqual(list(groups)[:3], ["arquitectura", "electrica", "hvac"])
+        self.assertIn("ELEC-CABLE", [x["name"] for x in groups["electrica"]["layers"]])
+        self.assertTrue({"HVAC-DUCTO", "HVAC-EQUIPO"} <= {x["name"] for x in groups["hvac"]["layers"]})
+        self.assertTrue({"PCI-ROCIADOR", "PCI-DETECTOR"} <= {x["name"] for x in groups["pci"]["layers"]})
+        self.assertEqual(groups["sanitaria"]["profile"], "sanitaria_cloacas")
+        self.assertIsNone(groups["hvac"]["profile"])
+        self.assertIn("291-E-DIAGRAMA", [x["name"] for x in groups["diagramas"]["layers"]])
+        grouped = {x["name"] for g in groups.values() for x in g["layers"]}
+        self.assertEqual(grouped, {a["name"] for a in L.load().values()})                       # every layer of the catalog belongs to some discipline
+
+    def test_a_layer_renamed_in_a_file_moves_with_its_prefix_and_a_colour_has_a_hex(self):
+        cat = L.load()
+        cat["plan.ELEC-CABLE"] = {**cat["plan.ELEC-CABLE"], "name": "HVAC-X"}
+        names = {g["id"]: [x["name"] for x in g["layers"]] for g in L.by_discipline(cat)}
+        self.assertIn("HVAC-X", names["hvac"])
+        self.assertNotIn("HVAC-X", names["electrica"])
+        self.assertEqual(L.aci_hex(1), "#ff0000")
+        self.assertEqual(L.aci_hex(7), "#000000")
+
     def test_a_file_overrides_role_by_role_and_field_by_field(self):
         with tempfile.TemporaryDirectory() as t:
             f = Path(t) / "layers.json"

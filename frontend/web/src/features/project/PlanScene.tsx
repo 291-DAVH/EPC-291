@@ -65,7 +65,10 @@ export default function PlanScene(p: SceneProps) {
   const autoPos = (n: { x_m: number; y_m: number }): Pt => (kr ? [drawing.origin[0] + n.x_m / kr, drawing.origin[1] - n.y_m / kr] : [0, 0]);
   const dim = (circuit: string | undefined, lineId?: string) => prefs.isolate && !!focusCircuit && circuit !== focusCircuit && !(lineId && highlight.includes(lineId));
   const lineColor = (l: DLine) => (prefs.color === "circuit" ? circuitColor(l.circuit || circuitOfLine[l.id] || "") : colorOf(l.kind));
-  const shownLines = drawing.lines.filter((l) => !prefs.hidden.includes(l.kind));
+  const layerOf = (kind: string) => kindOf(kind)?.capa_dxf ?? "";
+  const shownLines = drawing.lines.filter((l) => !prefs.hidden.includes(l.kind) && !prefs.hiddenLayers.includes(layerOf(l.kind)));
+  const shownNodes = drawing.nodes.filter((n) => !prefs.hiddenLayers.includes(layerOf(n.kind)));
+  const archOn = (layer: string) => !prefs.hiddenLayers.includes(layer);
 
   // text labels, kept off each other
   const labels = useMemo(() => {
@@ -79,13 +82,13 @@ export default function PlanScene(p: SceneProps) {
       const m = mid(l);
       out.push({ id: "l:" + l.id, x: m[0] - text.length * 3 * u, y: m[1] - 5 * u - size, w: text.length * 6 * u, h: size * 1.2, text: f ? `${text} · ${f.used_pct}%` : text, color: f ? FILL_TONE[f.status] : colorOf(l.kind), anchor: "middle" });
     });
-    drawing.nodes.forEach((n) => {
+    shownNodes.forEach((n) => {
       const inv = derived?.network?.invert_m?.[n.id];
       const text = `${nodeTag[n.id] ?? n.id}${n.circuit ? ` · ${n.circuit}` : ""}${inv !== undefined ? ` ▼${inv}` : ""}`;
       out.push({ id: "n:" + n.id, x: n.x + NODE_PX * 1.2 * u, y: n.y - NODE_PX * 1.2 * u - size, w: text.length * 6 * u, h: size * 1.2, text, color: "#222", anchor: "start" });
     });
     return out;
-  }, [drawing, derived, prefs.labels, prefs.lengths, u, nodeTag, lineTag, lengthOf, fillOf]);
+  }, [drawing, derived, prefs.labels, prefs.lengths, prefs.hiddenLayers, prefs.hidden, u, nodeTag, lineTag, lengthOf, fillOf]);
   const offsets = useMemo(() => (labels.length > 400 ? {} : spreadLabels(labels)), [labels]);                  // a very large drawing keeps its labels where they are: moving them would cost more than it helps
 
   const op = p.underlayOpts;
@@ -107,8 +110,8 @@ export default function PlanScene(p: SceneProps) {
       )}
       {p.architecture && prefs.arch && (
         <g data-ui pointerEvents="none">
-          {p.architecture.walls.map((w) => <polygon key={w.id} points={[...wallFaces(w)[0], ...wallFaces(w)[1].slice().reverse()].map((q) => q.join(",")).join(" ")} fill="#6b7280" fillOpacity={0.4} stroke="#374151" strokeWidth={1} vectorEffect="non-scaling-stroke"><title>{`${w.id} · ${Math.round(w.confidence * 100)}%`}</title></polygon>)}
-          {p.architecture.openings.map((o) => {
+          {archOn("ARQ-MUROS") && p.architecture.walls.map((w) => <polygon key={w.id} points={[...wallFaces(w)[0], ...wallFaces(w)[1].slice().reverse()].map((q) => q.join(",")).join(" ")} fill="#6b7280" fillOpacity={0.4} stroke="#374151" strokeWidth={1} vectorEffect="non-scaling-stroke"><title>{`${w.id} · ${Math.round(w.confidence * 100)}%`}</title></polygon>)}
+          {p.architecture.openings.filter((o) => archOn(o.kind === "door" ? "ARQ-PUERTAS" : o.kind === "window" ? "ARQ-VENTANAS" : "ARQ-HUECOS")).map((o) => {
             const a = o.angle * Math.PI / 180, ux = Math.cos(a) * o.width / 2, uy = Math.sin(a) * o.width / 2;
             const color = o.kind === "door" ? "#b45309" : o.kind === "window" ? "#2563eb" : "#9ca3af";
             return <g key={o.id}><line x1={o.at[0] - ux} y1={o.at[1] - uy} x2={o.at[0] + ux} y2={o.at[1] + uy} stroke={color} strokeWidth={3} vectorEffect="non-scaling-stroke"><title>{`${o.id} · ${o.kind} · ${Math.round(o.confidence * 100)}%`}</title></line>
@@ -123,7 +126,7 @@ export default function PlanScene(p: SceneProps) {
           <text x={(g.lines[0]?.[0] ?? g.nodes[0] ?? [0, 0])[0]} y={(g.lines[0]?.[0] ?? g.nodes[0] ?? [0, 0])[1] - 6 * u} fontSize={10 * u} fill="#7a8190" stroke="none">{g.level}</text>
         </g>
       ))}
-      {prefs.refs && k !== null && p.reference.map((it) => {
+      {prefs.refs && k !== null && p.reference.filter((it) => !prefs.hiddenDisc.includes(it.discipline)).map((it) => {
         const c = colorOfDiscipline(it.discipline), pts = refPx(it), w = Math.max(it.width_m / k, 2 * u);
         const tip = <title>{`${it.discipline} · ${it.kind} ${it.tag}`}</title>;
         return it.shape === "line"
@@ -151,7 +154,7 @@ export default function PlanScene(p: SceneProps) {
       {p.tool === "line" && p.draft.length === 0 && p.hover && !p.readOnly && <circle data-ui pointerEvents="none" cx={p.hover[0]} cy={p.hover[1]} r={4 * u} fill="none" stroke={colorOf(p.kindId)} strokeWidth={1.5} vectorEffect="non-scaling-stroke" />}
       {p.route && <polyline points={polyline(p.route.points)} fill="none" stroke="#ff2bd6" strokeWidth={5} strokeOpacity={0.6} vectorEffect="non-scaling-stroke" strokeLinejoin="round" data-ui />}
       {auto.map((n) => { const q = autoPos(n); return <circle key={n.id} cx={q[0]} cy={q[1]} r={(n.kind === "J" ? 3.5 : 4.5) * u} fill={n.kind === "J" ? "#555" : "none"} stroke={n.kind === "J" ? "#555" : "#d62728"} strokeWidth={1.5} vectorEffect="non-scaling-stroke"><title>{n.tag}</title></circle>; })}
-      {drawing.nodes.map((n) => {
+      {shownNodes.map((n) => {
         const sel = isSel({ type: "node", id: n.id }), sym = kindOf(n.kind)?.simbolo_2d ?? "camara";
         const rot = typeof n.attrs?.rot_deg === "number" ? (n.attrs.rot_deg as number) : 0;
         return <g key={n.id} opacity={dim(n.circuit) ? 0.18 : 1}>

@@ -13,6 +13,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 ENV_VAR = "EPC_LAYERS_JSON"
 DEFAULT_FILE = Path(__file__).resolve().parent / "data" / "layers.json"
+DISCIPLINES_FILE = Path(__file__).resolve().parent / "data" / "disciplines.json"
 LINEWEIGHTS = (0.0, 0.05, 0.09, 0.13, 0.15, 0.18, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.53, 0.6, 0.7, 0.8, 0.9, 1.0, 1.06, 1.2, 1.4, 1.58, 2.0, 2.11)      # mm: the ones DXF knows
 LINETYPES = ("CONTINUOUS", "DASHED", "DASHDOT", "CENTER", "HIDDEN", "PHANTOM", "DOT")
 FLAGS = ("on", "frozen", "locked", "plot")
@@ -124,3 +125,27 @@ def validate(catalog: Dict[str, dict]) -> Dict[str, str]:
 def dump(catalog: Dict[str, dict], path: os.PathLike) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps({"schema_version": "1.0", "layers": catalog}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+
+
+# ---------------------------------------------------------------- the layers of each discipline
+def disciplines() -> List[dict]:
+    """The disciplines the layers are grouped by: id, prefix of the layer names, names and the drawing profile of the plan editor (None: no tools of its own yet). Data, in `data/disciplines.json`."""
+    return json.loads(DISCIPLINES_FILE.read_text(encoding="utf-8-sig"))["disciplines"]
+
+
+def aci_hex(aci: int) -> str:
+    """An AutoCAD colour index as `#rrggbb` (7 is drawn as black on white paper)."""
+    from ezdxf import colors
+    return "#000000" if aci == 7 else colors.aci2rgb(aci).to_hex()[:7]
+
+
+def by_discipline(catalog: Optional[Dict[str, dict]] = None) -> List[dict]:
+    """The catalog grouped by discipline, in the order of `disciplines()`: each with its layers (role, name, colour as the index and as hex, line type and weight, state, description).
+    A layer goes to the discipline whose prefix its name starts with; one that matches none is left out."""
+    cat = resolve(catalog)
+    out = []
+    for d in disciplines():
+        mine = [{"role": role, "name": a["name"], "color": a["color"], "hex": aci_hex(a["color"]), "linetype": a.get("linetype", "CONTINUOUS"), "lineweight": a.get("lineweight"),
+                 "on": a.get("on", True), "description": a.get("description", {})} for role, a in cat.items() if str(a.get("name", "")).startswith(d["prefix"])]
+        out.append({**d, "layers": sorted(mine, key=lambda x: x["name"])})
+    return out
