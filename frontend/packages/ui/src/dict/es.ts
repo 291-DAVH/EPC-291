@@ -1408,4 +1408,5 @@ export const es = {
     "layers.count": "Elementos",
     "layers.show": "Mostrar",
     "layers.off": "apagada",
+    "layers.group.other": "Otras capas",
 } as const;

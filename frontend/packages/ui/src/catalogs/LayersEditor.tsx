@@ -25,6 +25,7 @@ export function LayersEditor({ path, bare = false }: { path: string; bare?: bool
   const [draft, setDraft] = useState<Record<string, LayerAttrs>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [state, setState] = useState<"idle" | "saving" | "saved">("idle");
+  const [tab, setTab] = useState("");
   useEffect(() => { if (view.data) { setDraft(view.data.layers); setErrors({}); } }, [view.data]);
   const Wrap = ({ children }: { children: React.ReactNode }) => (bare ? <>{children}</> : <Page title={t("layers.title")} help={t("layers.help")}>{children}</Page>);
   if (!view.data) return <Wrap><State loading={view.loading} error={view.error} /></Wrap>;
@@ -42,7 +43,13 @@ export function LayersEditor({ path, bare = false }: { path: string; bare?: bool
       setErrors(e instanceof ApiError ? e.fieldErrors : {}); setState("idle");
     }
   };
-  const groups = ["sld", "plan"].map((g) => ({ g, roles: Object.keys(draft).filter((r) => r.startsWith(g + ".")) }));
+  // one tab per discipline: a layer belongs to the one whose prefix its original name starts with (so renaming it does not move it); a layer the default catalog does not know goes to the last tab
+  const disciplines = view.data.disciplines ?? [];
+  const home = (role: string) => disciplines.find((d) => ((base[role]?.name ?? draft[role].name) as string).startsWith(d.prefix))?.id ?? "other";
+  const tabs = [...disciplines.map((d) => ({ id: d.id, label: d.name[lang] ?? d.name.es })), ...(Object.keys(draft).some((r) => home(r) === "other") ? [{ id: "other", label: t("layers.group.other" as Key) }] : [])];
+  const current = tabs.find((x) => x.id === tab)?.id ?? tabs.find((x) => Object.keys(draft).some((r) => home(r) === x.id))?.id ?? tabs[0]?.id ?? "";
+  const rolesOf = (id: string) => Object.keys(draft).filter((r) => home(r) === id);
+  const groups = disciplines.length ? [{ g: current, roles: rolesOf(current) }] : ["sld", "plan"].map((g) => ({ g, roles: Object.keys(draft).filter((r) => r.startsWith(g + ".")) }));
   const err = (role: string) => Object.entries(errors).filter(([k]) => k.startsWith(role + ".")).map(([k, v]) => `${k.slice(role.length + 1)}: ${v}`).join(" · ");
 
   return (
@@ -55,9 +62,18 @@ export function LayersEditor({ path, bare = false }: { path: string; bare?: bool
         {state === "saved" && <Badge tone="ok">{t("layers.saved")}</Badge>}
         {Object.keys(errors).length > 0 && <Badge tone="bad">{t("layers.refused")}</Badge>}
       </div>
+      {tabs.length > 0 && (
+        <div className="wb-tabs sub" role="tablist" aria-label={t("layers.disciplines" as Key)} style={{ flexWrap: "wrap", overflow: "visible", marginBottom: 10 }}>
+          {tabs.map((x) => {
+            const changed = rolesOf(x.id).filter((r) => differs(r)).length, n = rolesOf(x.id).length;
+            return <button key={x.id} role="tab" aria-selected={current === x.id} className={current === x.id ? "on" : ""} onClick={() => setTab(x.id)} style={{ flex: "0 1 auto" }}>{x.label} <span className="muted small">({n})</span>{changed > 0 && <span className="dot">{changed}</span>}</button>;
+          })}
+        </div>
+      )}
       {groups.map(({ g, roles }) => (
         <div key={g} className="card" style={{ marginBottom: 12 }}>
-          <h2 style={{ marginTop: 0 }}>{t(`layers.group.${g}` as Key)}</h2>
+          {disciplines.length === 0 && <h2 style={{ marginTop: 0 }}>{t(`layers.group.${g}` as Key)}</h2>}
+          {disciplines.length > 0 && roles.length === 0 && <p className="muted">{t("layers.none" as Key)}</p>}
           <div style={{ overflowX: "auto" }}>
             <table className="sldtable">
               <thead><tr>{(["layers.col.role", "layers.col.name", "layers.col.color", "layers.col.weight", "layers.col.linetype", "layers.col.on", "layers.col.frozen", "layers.col.locked", "layers.col.plot"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}<th /></tr></thead>
@@ -66,7 +82,7 @@ export function LayersEditor({ path, bare = false }: { path: string; bare?: bool
                   const a = draft[role];
                   return (
                     <tr key={role} title={err(role)}>
-                      <td><div><b>{role.slice(g.length + 1)}</b></div><div className="muted small">{a.description?.[lang] ?? a.description?.es ?? ""}</div></td>
+                      <td><div><b>{role.includes(".") ? role.slice(role.indexOf(".") + 1) : role}</b></div><div className="muted small">{a.description?.[lang] ?? a.description?.es ?? ""}</div></td>
                       <td><input value={a.name} onChange={(e) => set(role, { name: e.target.value })} style={{ width: 170 }} aria-label={t("layers.col.name")} /></td>
                       <td style={{ whiteSpace: "nowrap" }}>
                         <span style={{ display: "inline-block", width: 14, height: 14, border: "1px solid #999", background: aci(a.color), verticalAlign: "middle", marginRight: 4 }} />

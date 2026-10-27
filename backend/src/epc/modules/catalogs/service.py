@@ -50,7 +50,7 @@ def layers_view(level: str, project_dir: Optional[Path] = None) -> dict:
     from epc_dxf import layers as L
     chain = _files("layers", level, project_dir)
     base, effective = L.load(chain[:-1]), L.load(chain)
-    return {"layers": effective, "default": base, "inherits": PARENT[level], "changed": sorted(L.override_of(effective, base)),
+    return {"layers": effective, "default": base, "disciplines": L.disciplines(), "inherits": PARENT[level], "changed": sorted(L.override_of(effective, base)),
             "options": {"lineweights": list(L.LINEWEIGHTS), "linetypes": list(L.LINETYPES)}}
 
 
