@@ -159,15 +159,17 @@ describe("plan editor: layers", () => {
 });
 
 describe("plan editor: commands", () => {
-  it("finds a command in the palette and runs it", () => {
+  it("finds a command in the command line under the canvas and runs it", () => {
     const { container } = render(<Harness />);
     const editor = container.querySelector(".wb-editor")!;
     key(editor, "k", { ctrlKey: true });
-    const box = screen.getByRole("dialog", { name: "plan.palette" }).querySelector("input")!;
+    const box = screen.getByRole("textbox", { name: "plan.palette" });
+    expect(document.activeElement).toBe(box);                                   // Ctrl+K puts the cursor in the line
     fireEvent.change(box, { target: { value: "plan.tool.erase" } });
     expect(screen.getAllByRole("option")).toHaveLength(1);
     fireEvent.keyDown(box, { key: "Enter" });
-    expect(screen.queryByRole("dialog", { name: "plan.palette" })).toBeNull();
+    expect(screen.queryByRole("option")).toBeNull();
+    expect((box as HTMLInputElement).value).toBe("");
     expect(screen.getByTitle(/^plan\.tool\.erase/).getAttribute("aria-pressed")).toBe("true");
   });
 

@@ -1,0 +1,98 @@
+{
+  "id": "civil",
+  "nombre": {
+    "es": "Civil (estructura y obras)",
+    "en": "Civil (structure and works)"
+  },
+  "disciplina_proyecto": "civil",
+  "tramos": [
+    {
+      "id": "ZJ",
+      "etiqueta": {
+        "es": "Zanja o canalización de obra",
+        "en": "Trench or civil conduit"
+      },
+      "prefijo_tag": "ZJ",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "CIV-ZANJA",
+      "geom": {
+        "z_m": -0.6,
+        "ancho_m": 0.4,
+        "alto_m": 0.6
+      }
+    },
+    {
+      "id": "VG",
+      "etiqueta": {
+        "es": "Viga",
+        "en": "Beam"
+      },
+      "prefijo_tag": "VG",
+      "atributos": [
+        "dimensiones",
+        "material"
+      ],
+      "simbolo_2d": "linea_simple",
+      "capa_dxf": "CIV-ESTRUCTURA",
+      "geom": {
+        "z_m": 3.0,
+        "ancho_m": 0.25,
+        "alto_m": 0.5
+      }
+    }
+  ],
+  "nodos": [
+    {
+      "id": "CO",
+      "etiqueta": {
+        "es": "Columna",
+        "en": "Column"
+      },
+      "prefijo_tag": "CO",
+      "atributos": [
+        "dimensiones",
+        "material"
+      ],
+      "simbolo_2d": "columna",
+      "capa_dxf": "CIV-ESTRUCTURA",
+      "geom": {
+        "z_m": 0.0,
+        "ancho_m": 0.3,
+        "alto_m": 0.3
+      }
+    },
+    {
+      "id": "ZP",
+      "etiqueta": {
+        "es": "Zapata o fundación",
+        "en": "Footing"
+      },
+      "prefijo_tag": "ZP",
+      "atributos": [
+        "dimensiones"
+      ],
+      "simbolo_2d": "zapata",
+      "capa_dxf": "CIV-FUNDACION",
+      "geom": {
+        "z_m": -1.0,
+        "ancho_m": 1.2,
+        "alto_m": 1.2
+      }
+    }
+  ],
+  "calculos": [
+    "longitud",
+    "cantidad"
+  ],
+  "normas": [],
+  "atajos_teclado": {
+    "z": "ZJ",
+    "v": "VG",
+    "c": "CO",
+    "f": "ZP"
+  },
+  "unidades_salida": "m"
+}

@@ -89,13 +89,51 @@ export function ViewPanel({ prefs, set, kinds, underlay, onUnderlay, hasUnderlay
   );
 }
 
-// ---------------------------------------------------------------- the bar under the canvas
-export function CoordBar({ hint, cursor, zoom, snap, stats, scale, t, onTable }: {
-  hint: string; cursor: Pt | null; zoom: number; snap: string; stats: SelectionStats | null; scale: number | null; t: T; onTable: () => void;
+// ---------------------------------------------------------------- the bar under the canvas: the command line, what to do next, and where the cursor is
+/** The command line: type part of a command, pick with the arrows, Enter runs it, Esc gives the canvas back. */
+function CommandLine({ commands, focusKey, onDone, t }: { commands: Command[]; focusKey: number; onDone: () => void; t: T }) {
+  const [q, setQ] = useState("");
+  const [at, setAt] = useState(0);
+  const [open, setOpen] = useState(false);
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => { if (focusKey > 0) input.current?.focus(); }, [focusKey]);
+  const list = useMemo(() => {
+    const plain = (x: string) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();          // "lin" finds "Línea"
+    const words = plain(q).split(/\s+/).filter(Boolean);
+    return commands.filter((c) => !c.disabled && words.every((w) => plain(`${c.group} ${c.label}`).includes(w)));
+  }, [q, commands]);
+  useEffect(() => setAt(0), [q]);
+  const finish = () => { setQ(""); setOpen(false); input.current?.blur(); onDone(); };
+  const run = (c?: Command) => { if (!c) return; finish(); c.run(); };
+  const key = (e: React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (e.key === "Escape") finish();
+    else if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setAt((x) => Math.min(x + 1, Math.min(list.length, 12) - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setAt((x) => Math.max(x - 1, 0)); }
+    else if (e.key === "Enter") run(list[at]);
+  };
+  return (
+    <div className="cmd-line">
+      <span className="cmd-prompt" aria-hidden>›</span>
+      <input ref={input} value={q} placeholder={t("plan.palette.ph")} aria-label={t("plan.palette")} title={t("plan.palette") + " (Ctrl+K)"} aria-expanded={open && list.length > 0}
+        onChange={(e) => { setQ(e.target.value); setOpen(true); }} onFocus={() => setOpen(true)} onBlur={() => window.setTimeout(() => setOpen(false), 120)} onKeyDown={key} />
+      {open && (q.length > 0 || list.length > 0) && (
+        <ul className="cmd-list" role="listbox">
+          {list.slice(0, 12).map((c, i) => <li key={c.id} role="option" aria-selected={i === at} className={i === at ? "on" : ""} onMouseEnter={() => setAt(i)} onMouseDown={(e) => { e.preventDefault(); run(c); }}><span className="muted small">{c.group}</span> {c.label}{c.hint && <kbd>{c.hint}</kbd>}</li>)}
+          {list.length === 0 && <li className="muted">{t("plan.palette.none")}</li>}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export function CoordBar({ hint, cursor, zoom, snap, stats, scale, commands, focusKey, onDone, t, onTable }: {
+  hint: string; cursor: Pt | null; zoom: number; snap: string; stats: SelectionStats | null; scale: number | null; commands: Command[]; focusKey: number; onDone: () => void; t: T; onTable: () => void;
 }) {
   const sel = stats && stats.nodes + stats.lines > 0 ? `${stats.nodes ? `${stats.nodes} ${t("plan.stat.nodes")}` : ""}${stats.nodes && stats.lines ? " · " : ""}${stats.lines ? `${stats.lines} ${t("plan.stat.lines")}` : ""}${stats.length_m !== null && stats.lines ? ` · ${stats.length_m} m` : ""}` : "";
   return (
     <div className="wb-hint">
+      <CommandLine commands={commands} focusKey={focusKey} onDone={onDone} t={t} />
       <span className="hint-text">{hint}</span>
       {sel && <button className="hint-btn" onClick={onTable} title={t("plan.stat.open")}>{sel}</button>}
       <span className="mono hint-right">
@@ -168,30 +206,6 @@ export function ContextMenu({ at, items, onClose }: { at: [number, number]; item
           {it.sub && open === i && <div className="wb-menu sub" role="menu">{it.sub.map((s, j) => <button key={j} role="menuitem" disabled={s.disabled} onClick={() => go(s)}>{s.label}</button>)}</div>}
         </div>
       ))}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------- command palette
-export function CommandPalette({ commands, onClose, t }: { commands: Command[]; onClose: () => void; t: T }) {
-  const [q, setQ] = useState("");
-  const [at, setAt] = useState(0);
-  const list = useMemo(() => {
-    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
-    return commands.filter((c) => !c.disabled && words.every((w) => `${c.group} ${c.label}`.toLowerCase().includes(w)));
-  }, [q, commands]);
-  useEffect(() => setAt(0), [q]);
-  const run = (c?: Command) => { if (!c) return; onClose(); c.run(); };
-  return (
-    <div className="wb-palette" role="dialog" aria-label={t("plan.palette")} onPointerDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="palette-box">
-        <input autoFocus value={q} placeholder={t("plan.palette.ph")} onChange={(e) => setQ(e.target.value)} aria-label={t("plan.palette")}
-          onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Escape") onClose(); else if (e.key === "ArrowDown") { e.preventDefault(); setAt((a) => Math.min(a + 1, list.length - 1)); } else if (e.key === "ArrowUp") { e.preventDefault(); setAt((a) => Math.max(a - 1, 0)); } else if (e.key === "Enter") run(list[at]); }} />
-        <ul role="listbox">
-          {list.slice(0, 12).map((c, i) => <li key={c.id} role="option" aria-selected={i === at} className={i === at ? "on" : ""} onMouseEnter={() => setAt(i)} onClick={() => run(c)}><span className="muted small">{c.group}</span> {c.label}{c.hint && <kbd>{c.hint}</kbd>}</li>)}
-          {list.length === 0 && <li className="muted">{t("plan.palette.none")}</li>}
-        </ul>
-      </div>
     </div>
   );
 }

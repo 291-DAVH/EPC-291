@@ -4,6 +4,7 @@
     "es": "Comunicaciones",
     "en": "Communications"
   },
+  "disciplina_proyecto": "telecom",
   "tramos": [
     {
       "id": "BC",

@@ -22,7 +22,7 @@ class TestCatalog(unittest.TestCase):
 
     def test_the_layers_are_grouped_by_discipline_by_the_prefix_of_their_names(self):
         groups = {g["id"]: g for g in L.by_discipline()}
-        self.assertEqual(list(groups)[:3], ["arquitectura", "electrica", "hvac"])
+        self.assertEqual(list(groups)[:3], ["arquitectura", "civil", "mecanica"])                # the order a project is worked
         self.assertIn("ELEC-CABLE", [x["name"] for x in groups["electrica"]["layers"]])
         self.assertTrue({"HVAC-DUCTO", "HVAC-EQUIPO"} <= {x["name"] for x in groups["hvac"]["layers"]})
         self.assertTrue({"PCI-ROCIADOR", "PCI-DETECTOR"} <= {x["name"] for x in groups["pci"]["layers"]})

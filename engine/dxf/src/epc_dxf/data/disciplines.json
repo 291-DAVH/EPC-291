@@ -12,6 +12,24 @@
       }
     },
     {
+      "id": "civil",
+      "prefix": "CIV-",
+      "profile": "civil",
+      "name": {
+        "es": "Civil",
+        "en": "Civil"
+      }
+    },
+    {
+      "id": "mecanica",
+      "prefix": "MEC-",
+      "profile": "mecanica",
+      "name": {
+        "es": "Mecánica",
+        "en": "Mechanical"
+      }
+    },
+    {
       "id": "electrica",
       "prefix": "ELEC-",
       "profile": "electrica_BT",
@@ -39,12 +57,12 @@
       }
     },
     {
-      "id": "sanitaria",
-      "prefix": "SAN-",
-      "profile": "sanitaria_cloacas",
+      "id": "instrumentacion",
+      "prefix": "INS-",
+      "profile": "instrumentacion",
       "name": {
-        "es": "Sanitaria (cloacas)",
-        "en": "Plumbing (sewer)"
+        "es": "Instrumentación",
+        "en": "Instrumentation"
       }
     },
     {
@@ -54,6 +72,15 @@
       "name": {
         "es": "Comunicaciones",
         "en": "Communications"
+      }
+    },
+    {
+      "id": "sanitaria",
+      "prefix": "SAN-",
+      "profile": "sanitaria_cloacas",
+      "name": {
+        "es": "Sanitaria (cloacas)",
+        "en": "Plumbing (sewer)"
       }
     },
     {

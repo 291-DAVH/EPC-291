@@ -4,6 +4,7 @@
     "es": "Cloacas",
     "en": "Sewer"
   },
+  "disciplina_proyecto": "civil",
   "tramos": [
     {
       "id": "CC",
