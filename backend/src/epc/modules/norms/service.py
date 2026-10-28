@@ -17,7 +17,9 @@ from epc.modules.norms import repository
 RULE_TYPES = ("obligatorio", "recomendado", "prohibido")
 SOURCE_KEYS = ("norma", "edicion", "clausula", "pagina_impresa")
 TABLE_SECTIONS = {"cap": ("tablas_capacidad", "Tablas de capacidad de corriente"), "fac": ("factores_correccion", "Factores de corrección"), "const": ("constantes", "Constantes")}
-EDITABLE = {"rule": ["tema", "regla", "tipo", "parametros", "aplica_a", "fuente"], "criterion": ["label", "unit", "default", "options", "min", "max"], "table": ["value"]}
+EDITABLE = {"rule": ["tema", "regla", "tipo", "parametros", "aplica_a", "fuente"], "criterion": ["label", "unit", "default", "options", "min", "max"], "table": ["value"],
+            "lighting_rule": ["summary", "value", "unit", "plane", "clause"]}
+LIGHTING_UNITS = ("lx", "ratio")
 
 
 def slug(s: str) -> str:
@@ -68,8 +70,39 @@ def _criterion_points() -> List[dict]:
              "ref": c.get("unit", ""), "value": c} for c in cat["criteria"]]
 
 
-def _all_units() -> Dict[str, dict]:
+def _lighting_points() -> Dict[str, dict]:
+    """The rules of each norm of the lighting engine, as the reviewer sees them (without the `review` flag the engine reads: approving changes it, and the approved value must not)."""
     units: Dict[str, dict] = {}
+    for f in repository.lighting_files():
+        data = repository.read(f)
+        uid = "lighting-rule:" + slug(data["norm"])
+        pts = [{"unit": uid, "kind": "lighting_rule", "key": r["id"], "title": r["summary"], "group": r["clause"], "ref": r["clause"], "value": {k: v for k, v in r.items() if k != "review"}} for r in data["rules"]]
+        units[uid] = {"id": uid, "kind": "lighting_rule", "name": f"{data['norm']} · iluminación (valores por revisar)", "points": pts}
+    return units
+
+
+def lighting_rule(rule_id: str) -> Optional[dict]:
+    """A rule of the lighting norms with its review status: `{id, norm, clause, summary, value, unit, status}`, or None when there is none."""
+    rev = repository.review()
+    for u in _lighting_points().values():
+        for p in u["points"]:
+            if p["key"] == rule_id:
+                v = p["value"]
+                return {"id": rule_id, "norm": v.get("norm", ""), "clause": v.get("clause", ""), "summary": v.get("summary", ""), "value": v.get("value"), "unit": v.get("unit", ""),
+                        "status": _status(rev.get(_pid(p["unit"], p["key"])), v)}
+    return None
+
+
+def lighting_rules() -> List[dict]:
+    """Every rule of the lighting norms that gives a level in lux (one with no value loaded yet is not one), with its review status: the lighting panel offers the approved ones."""
+    out = []
+    for u in _lighting_points().values():
+        out += [r for p in u["points"] if p["value"].get("unit") == "lx" and _is_num(p["value"].get("value")) and (r := lighting_rule(p["key"]))]
+    return out
+
+
+def _all_units() -> Dict[str, dict]:
+    units: Dict[str, dict] = dict(_lighting_points())
     for uid, pts in sorted(_rule_points().items()):
         units[uid] = {"id": uid, "kind": "rule", "name": pts[0]["unit_name"], "points": pts}
     units["table:aea-calculo"] = {"id": "table:aea-calculo", "kind": "table", "name": "Tablas y constantes de cálculo (AEA 90364-7-771, 2006)", "points": _table_points()}
@@ -240,6 +273,36 @@ def _edit_criterion(old: dict, patch: dict) -> dict:
     return new
 
 
+LIGHTING_TEXT = {"summary": 240, "clause": 200, "plane": 40}                    # the texts of a lighting rule and how long each may be
+
+
+def _lighting_field(key: str, value) -> Tuple[bool, object]:
+    """One corrected field of a lighting rule: (valid, the value to keep or what to correct)."""
+    if key in LIGHTING_TEXT:
+        ok = isinstance(value, str) and bool(value.strip()) and len(value) <= LIGHTING_TEXT[key]
+        return ok, value.strip() if ok else f"text, up to {LIGHTING_TEXT[key]} characters"
+    if key == "value":
+        return (True, value) if _is_num(value) and value >= 0 else (False, "a number from 0 up")
+    if key == "unit":
+        return (True, value) if value in LIGHTING_UNITS else (False, "one of " + ", ".join(LIGHTING_UNITS))
+    return False, "not editable"
+
+
+def _edit_lighting_rule(old: dict, patch: dict) -> dict:
+    new, errors = copy.deepcopy(old), {}
+    for k, v in patch.items():
+        ok, kept = _lighting_field(k, v)
+        if ok:
+            new[k] = kept
+        else:
+            errors[k] = kept
+    if not errors and new.get("unit") == "lx" and new.get("value") is not None and not new["value"] > 0:
+        errors["value"] = "a level in lux is above 0"
+    if errors:
+        raise Invalid(errors)
+    return new
+
+
 def _edit_table(old, patch: dict):
     if set(patch) != {"value"}:
         raise Invalid({"value": "send the corrected table as {\"value\": ...}"})
@@ -249,7 +312,7 @@ def _edit_table(old, patch: dict):
     return patch["value"]
 
 
-_EDITORS = {"rule": _edit_rule, "table": _edit_table, "criterion": _edit_criterion}       # point kind -> how its patch is validated and applied
+_EDITORS = {"rule": _edit_rule, "table": _edit_table, "criterion": _edit_criterion, "lighting_rule": _edit_lighting_rule}       # point kind -> how its patch is validated and applied
 
 
 def _diff(old, new, path: str = "") -> List[list]:
@@ -292,7 +355,32 @@ def _store_criterion(p: dict, new_value) -> None:
     repository.write_criteria(cat)
 
 
-_STORERS = {"rule": _store_rule, "table": _store_table, "criterion": _store_criterion}       # point kind -> where its corrected value is written
+def _write_lighting_rule(p: dict, change) -> None:
+    """Rewrite one rule of its norm's file: `change` gets the rule as the file has it and returns it as it must be."""
+    for f in repository.lighting_files():
+        data = repository.read(f)
+        for i, r in enumerate(data["rules"]):
+            if r["id"] == p["key"]:
+                data["rules"][i] = change(r)
+                repository.write_like(f, data)
+                return
+
+
+def _store_lighting_rule(p: dict, new_value) -> None:
+    _write_lighting_rule(p, lambda old: {**new_value, "review": old.get("review", "pending")})
+
+
+def _sync_lighting_review(p: dict, status: str) -> None:
+    """The engine reads whether a rule is approved from the rule itself: it follows what the reviewer decided."""
+    flag = "approved" if status == "approved" else "pending"
+    try:
+        _write_lighting_rule(p, lambda old: {**old, "review": flag})
+    except OSError:
+        raise Conflict({"filesystem": "this installation is read-only: review the norms in the development copy of the repository"})
+    repository.clear_engine_cache()
+
+
+_STORERS = {"rule": _store_rule, "table": _store_table, "criterion": _store_criterion, "lighting_rule": _store_lighting_rule}       # point kind -> where its corrected value is written
 
 
 def _store(p: dict, new_value) -> None:
@@ -317,6 +405,9 @@ def _sync_criteria_validated() -> None:
             raise Conflict({"filesystem": "this installation is read-only: review the norms in the development copy of the repository"})
 
 
+_AFTER_RECORD = {"criterion": lambda p, status: _sync_criteria_validated(), "lighting_rule": _sync_lighting_review}       # what a kind of point keeps in step once its review changed
+
+
 def _record(p: dict, status: str, note: str, value, action: str, extra: Optional[dict] = None) -> dict:
     now, who = _now(), _who()
     rev = repository.review()
@@ -324,8 +415,7 @@ def _record(p: dict, status: str, note: str, value, action: str, extra: Optional
     rev[_pid(p["unit"], p["key"])] = rec
     repository.save_review(rev)
     repository.log_append({"at": now, "by": who, "point": _pid(p["unit"], p["key"]), "action": action, "note": note, **(extra or {})})
-    if p["kind"] == "criterion":
-        _sync_criteria_validated()
+    _AFTER_RECORD.get(p["kind"], lambda *_: None)(p, status)
     return rec
 
 

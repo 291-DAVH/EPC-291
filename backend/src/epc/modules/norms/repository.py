@@ -1,9 +1,11 @@
 """Files of the norms review: the engine's norm data (rules, calculation tables, design-criteria catalog), the review state next to them and the review log.
 
 The data files stay the single source of truth and are rewritten with the same formatting they have (so git shows only what the reviewer changed).
+The rules of the lighting engine (`epc_lighting/rules/*.rules.json`) are one more unit: the reviewer's approval is kept with the others and the engine reads it from the `review` field of the rule.
 The review state lives in the norm package (`epc_aea90364/data/review.json`) (who approved which point, when, and the fingerprint of the approved value) and every action is appended to
 `epc_aea90364/data/review-log.jsonl`.
 """
+import importlib
 import json
 import os
 from pathlib import Path
@@ -24,7 +26,9 @@ def paths() -> dict:
     if _override:
         return _override
     from epc_aea90364 import aea_rules, aea_tables, norm_data
-    return {"rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG}
+    from epc_lighting import norm_data as lighting_norms
+    return {"rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG,
+            "lighting_rules": lighting_norms.RULES_DIR}
 
 
 def read(path: Path):
@@ -53,6 +57,12 @@ def write_like(path: Path, data) -> None:
 # ---- rules: one file per group
 def rule_files() -> List[Path]:
     return sorted(p for p in paths()["rules"].glob("*.json") if not p.name.startswith("_"))
+
+
+# ---- lighting rules: one file per norm of the lighting engine (`<norm>.rules.json`)
+def lighting_files() -> List[Path]:
+    folder = paths().get("lighting_rules")
+    return sorted(folder.glob("*.rules.json")) if folder else []
 
 
 # ---- design criteria: header keys, then one compact criterion per line
@@ -93,11 +103,17 @@ def log_read(point_id: Optional[str] = None, limit: int = 100) -> List[dict]:
     return rows[-limit:][::-1]
 
 
-def clear_engine_cache() -> None:
-    """The calculation engine keeps the data in memory: after a correction it reads the files again."""
+_ENGINE_CACHES = (("epc_aea90364.aea_rules", "limpiar_cache_reglas"), ("epc_aea90364.aea_tables", "limpiar_cache_tablas"), ("epc_lighting.norm_data", "clear_cache"))
+
+
+def _clear(module: str, function: str) -> None:
     try:
-        from epc_aea90364 import aea_rules, aea_tables
-        aea_rules.limpiar_cache_reglas()
-        aea_tables.limpiar_cache_tablas()
+        getattr(importlib.import_module(module), function)()
     except ImportError:
         pass
+
+
+def clear_engine_cache() -> None:
+    """The calculation engines keep the data in memory: after a correction they read the files again."""
+    for module, function in _ENGINE_CACHES:
+        _clear(module, function)

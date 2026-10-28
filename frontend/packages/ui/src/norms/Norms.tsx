@@ -86,6 +86,9 @@ function toDraft(p: NormPoint): Draft {
     return { tema: v.tema, regla: v.regla, tipo: v.tipo, aplica_a: (v.aplica_a ?? []).join(", "), parametros: JSON.stringify(v.parametros ?? {}, null, 1),
              norma: v.fuente?.norma ?? "", edicion: v.fuente?.edicion ?? "", clausula: v.fuente?.clausula ?? "", pagina_impresa: String(v.fuente?.pagina_impresa ?? "") };
   }
+  if (p.kind === "lighting_rule") {
+    return { summary: v.summary ?? "", value: v.value === null || v.value === undefined ? "" : String(v.value), unit: v.unit ?? "lx", plane: v.plane ?? "", clause: v.clause ?? "" };
+  }
   if (p.kind === "criterion") {
     return { label_es: v.label.es, label_en: v.label.en, unit: v.unit ?? "", default: String(v.default), options: (v.options ?? []).join(", "), min: String(v.min ?? ""), max: String(v.max ?? "") };
   }
@@ -105,6 +108,9 @@ function toPatch(p: NormPoint, d: Draft, o: Draft): Record<string, unknown> {
     for (const k of ["norma", "edicion", "clausula"]) if (changed(k)) f[k] = d[k];
     if (changed("pagina_impresa")) f.pagina_impresa = Number(d.pagina_impresa);
     if (Object.keys(f).length) patch.fuente = f;
+  } else if (p.kind === "lighting_rule") {
+    for (const k of ["summary", "unit", "plane", "clause"]) if (changed(k)) patch[k] = d[k];
+    if (changed("value")) patch.value = Number(d.value);
   } else if (p.kind === "criterion") {
     if (changed("label_es") || changed("label_en")) patch.label = { es: d.label_es, en: d.label_en };
     if (changed("unit")) patch.unit = d.unit;
@@ -160,6 +166,12 @@ function PointEditor({ unitId, pointKey, onChanged, onClose }: { unitId: string;
           {field("aplica_a", t("norms.f.appliesTo"))}
           {field("norma", t("norms.f.standard"))}{field("edicion", t("norms.f.edition"))}{field("clausula", t("norms.f.clause"))}{field("pagina_impresa", t("norms.f.page"))}
           {field("parametros", t("norms.f.params"), true, true, true)}
+        </>)}
+        {p.kind === "lighting_rule" && (<>
+          {field("summary", t("norms.f.summary"), true, true)}
+          {field("value", t("norms.f.level"))}
+          <label className="field"><span>{t("norms.f.unit")}</span><select value={draft.unit} onChange={(e) => set("unit", e.target.value)}>{["lx", "ratio"].map((x) => <option key={x}>{x}</option>)}</select></label>
+          {field("plane", t("norms.f.plane"))}{field("clause", t("norms.f.clause"))}
         </>)}
         {p.kind === "criterion" && (<>
           {field("label_es", t("norms.f.labelEs"), true)}{field("label_en", t("norms.f.labelEn"), true)}

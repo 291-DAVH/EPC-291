@@ -11,7 +11,7 @@
     "local_path": "local/dev-knowledge/standards/AR/D351-79/source/"
   },
   "review_status": "pending_human_review",
-  "engine_use": "none yet: values are not read by the pipeline until reviewed and promoted",
+  "engine_use": "a room may take its target from a rule here (target_rule) once a person approves it in the norms review; pending rules are never read",
   "notes": [
     "Valores y clausulas resumidos, sin copiar el texto de la norma.",
     "Filas industriales de la Tabla 2 sin cargar."

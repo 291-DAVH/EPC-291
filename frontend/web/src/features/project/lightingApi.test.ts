@@ -188,3 +188,14 @@ describe("emergency lighting and glare", () => {
     expect(cardOf(result())).toMatchObject({ ugr: "not_verifiable", ugrLimit: null });
   });
 });
+
+describe("the level a room takes from a norm", () => {
+  it("is enough to calculate a room with a luminaire, is sent with the room and goes away when emptied", () => {
+    expect(isReady({ luminaire: "x", norm_rule: "D351-AIV-T2-oficina-general" })).toBe(true);
+    expect(isReady({ norm_rule: "D351-AIV-T2-oficina-general" })).toBe(false);
+    let d = setRoomLighting(twoRooms(), "r1", { luminaire: "x", norm_rule: "D351-AIV-T2-oficina-general" });
+    expect(requestOf(d, "es").rooms.r1).toEqual({ luminaire: "x", norm_rule: "D351-AIV-T2-oficina-general" });
+    d = setRoomLighting(d, "r1", { norm_rule: "" });
+    expect(d.rooms![0].lighting).toEqual({ luminaire: "x" });
+  });
+});

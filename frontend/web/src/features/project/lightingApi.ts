@@ -4,19 +4,21 @@ import { addNode, DNode, Drawing, Pt, Room } from "./planEditing";
  *  The calculation is the backend's (`epc_lighting`); nothing here computes light. */
 export interface RoomLighting {
   activity?: string; luminaire?: string; method?: "lumen" | "zonal"; height_m?: number; target_lux?: number; coefficient_of_utilisation?: number;
+  norm_rule?: string;                                                                     // the id of a rule of a norm, approved in the norms review, that gives the target
   emergency_luminaire?: string; ugr_calculated?: number;                                  // antipanic emergency lighting of the room, and the UGR it was given from outside
   exterior?: boolean; beam_utilisation?: number; enclosure?: "open" | "closed";        // an exterior area: floodlights from its area and its target
 }
 export interface LightActivity { id: string; label: string; em_lux: number; ugr_l: number | null; ra: number | null; source: string }
 export interface LightLuminaire { id: string; name: string; kind: "interior" | "exterior"; lamps: number; lamp_flux_lm: number; power_w: number | null; illustrative: boolean; level: string }
-export interface LightingOptions { activities: LightActivity[]; materials: { id: string; label: string; range: [number, number] }[]; systems: { id: string; label: string }[]; methods: string[]; luminaires: LightLuminaire[] }
+export interface NormRule { id: string; norm: string; clause: string; summary: string; value: number; status: "pending" | "approved" | "rejected" | "stale" }
+export interface LightingOptions { norm_rules?: NormRule[]; activities: LightActivity[]; materials: { id: string; label: string; range: [number, number] }[]; systems: { id: string; label: string }[]; methods: string[]; luminaires: LightLuminaire[] }
 
 export interface Estimate { value: number; reason: string; confidence: number }
 export interface SpacingAxis { checked: boolean; status?: "ok" | "within_tolerance" | "exceeds"; spacing_m?: number; max_spacing_m?: number }
 export interface UgrResult { result: "not_verifiable" | "meets" | "does_not_meet"; limit: number | null; calculated: number | null }
 export interface RoomResult {
   id: string; name: string; method: string; ugr?: UgrResult;
-  target: Estimate & { activity?: string };
+  target: Estimate & { activity?: string; norm_rule?: string; norm?: string; clause?: string };
   factors: { cu: Estimate; maintenance: Estimate };
   reflectances: { ceiling: Estimate; walls: Estimate; floor: Estimate };
   layout: { installed: number; required: number; rows_across_width: number; columns_along_length: number; spacing_check: { along_length: SpacingAxis; across_width: SpacingAxis } };
@@ -52,7 +54,7 @@ export interface LightingProposal {
   fingerprint: string;
 }
 
-const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation", "exterior", "beam_utilisation", "enclosure", "emergency_luminaire", "ugr_calculated"];
+const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation", "exterior", "beam_utilisation", "enclosure", "emergency_luminaire", "ugr_calculated", "norm_rule"];
 
 /** The drawing with a change to what a room says about its lighting; a value that is empty is taken out, and a room with nothing left has no `lighting` at all. */
 export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Record<keyof RoomLighting, unknown>>): Drawing {
@@ -71,7 +73,7 @@ export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Recor
 }
 
 /** A room can be calculated when it has a luminaire and either an activity or a target; an exterior area needs its target (there is no table of typical ones). */
-export const isReady = (l: RoomLighting | undefined): boolean => !!l?.luminaire && (l.exterior ? !!l.target_lux : !!(l.activity || l.target_lux));
+export const isReady = (l: RoomLighting | undefined): boolean => !!l?.luminaire && (l.exterior ? !!l.target_lux : !!(l.activity || l.target_lux || l.norm_rule));
 
 /** Number typed in a field: a decimal comma is allowed; anything that is not a positive number is nothing. */
 export function parsePositive(text: string): number | undefined {
