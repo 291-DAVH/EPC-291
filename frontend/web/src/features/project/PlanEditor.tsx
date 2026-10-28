@@ -629,8 +629,16 @@ export default function PlanEditor(props: Props) {
         )}
         {boardAsk && (
           <div className="wb-float" role="dialog" aria-label={t("plan.board.which")}>
-            <b>{t("plan.board.which")}</b>
-            {boardAsk.options.map((b) => <button key={b.id} className="primary" onClick={() => { apply(withBoard(drawing, boardAsk.nodeId, b, boardAsk.symbol)); setBoardAsk(null); }}>{b.name}</button>)}
+            <b>{t(boardAsk.symbol ? "plan.board.whichAdd" : "plan.board.which")}</b>
+            {boardAsk.options.map((b) => {
+              const elsewhere = boardAsk.symbol && b.level && b.level !== (props.sheetKey ?? "").split("@")[0];
+              return (
+                <button key={b.id} className="primary" style={{ textAlign: "left" }} onClick={() => { apply(withBoard(drawing, boardAsk.nodeId, b, boardAsk.symbol)); setBoardAsk(null); }}>
+                  {b.name}{b.level && <small> · {b.level}</small>}{b.location && <small> · {b.location}</small>}
+                  {elsewhere && <small style={{ display: "block", opacity: 0.85 }}>{t("plan.board.otherLevel").replace("{level}", b.level!)}</small>}
+                </button>
+              );
+            })}
             <button onClick={() => { if (boardAsk.symbol) remove([{ type: "node", id: boardAsk.nodeId }]); setBoardAsk(null); }}>{t("layout.cancel")}</button>
           </div>
         )}
