@@ -33,3 +33,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0027](ADR-0027-one-engine-per-norm.md) | One engine per norm | Accepted |
 | [0028](ADR-0028-norm-selector.md) | Norm selector: generic calculation engines, norms as complete packages, one registry | Proposed |
 | [0029](ADR-0029-lighting-engine.md) | Lighting engine | Accepted |
+| [0030](ADR-0030-lighting-in-the-platform.md) | Lighting in the platform: backend module and plan-editor integration | Proposed |
