@@ -174,16 +174,20 @@ def _document(body: CalcIn, rooms: List[dict], used: List[str], luminaires: Dict
     return {"schema_version": "1.0", "luminaires": [catalogue.as_document(lid, luminaires[lid], body.lang) for lid in used], "rooms": rooms}
 
 
-def _placements(result: dict, rects: Dict[str, geometry.Rect], k: float) -> Dict[str, List[dict]]:
-    """The luminaires of each room as points of the view (the engine's tag is kept to follow them back)."""
-    out = {}
+def _placements(result: dict, rects: Dict[str, geometry.Rect], k: float, outlines: Dict[str, list]) -> tuple:
+    """The luminaires of each room as points of the view (the engine's tag is kept to follow them back), and a warning for each room whose outline is not its rectangle and left some of them outside."""
+    out, warnings = {}, []
     for room in result["rooms"]:
         points = []
         for p in room["layout"]["positions"]:
             x, y = geometry.to_view(rects[room["id"]], k, p["x_m"], p["y_m"])
             points.append({"tag": p["tag"], "x": x, "y": y, "z_m": p["z_m"]})
-        out[room["id"]] = points
-    return out
+        outline = outlines.get(room["id"])
+        kept = [p for p in points if outline is None or geometry.contains(outline, p["x"], p["y"])]
+        if len(kept) < len(points):
+            warnings.append(f"room '{room['name']}': {len(points) - len(kept)} of {len(points)} luminaires fall outside its outline and are not placed; the illuminance shown counts all of them")
+        out[room["id"]] = kept
+    return out, warnings
 
 
 def _fingerprint(body: CalcIn, luminaires: Dict[str, dict], used: List[str]) -> str:
@@ -235,4 +239,5 @@ def calc(project_dir: Path, body: CalcIn) -> dict:
     except engine.LightingError as exc:
         raise Invalid({"lighting": str(exc)})
     shown = [{"id": r["id"], "name": r["name"], "length_m": r["length_m"], "width_m": r["width_m"], "exact": rects[r["id"]].exact, "corner": geometry.corner(rects[r["id"]])} for r in rooms]
-    return {"result": result, "placements": _placements(result, rects, k), "rooms": shown, **summary, "warnings": warnings + list(result["warnings"]), "fingerprint": _fingerprint(body, luminaires, used)}
+    placements, outside = _placements(result, rects, k, {r.id: r.points for r in body.sheet.rooms if r.id in rects and not rects[r.id].exact})
+    return {"result": result, "placements": placements, "rooms": shown, **summary, "warnings": warnings + list(result["warnings"]) + outside, "fingerprint": _fingerprint(body, luminaires, used)}

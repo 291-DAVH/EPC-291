@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addRoom } from "./planTools";
 import { blank, Drawing, setScale } from "./planEditing";
-import { cardOf, isReady, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
+import { applyLighting, cardOf, hasPlacements, isReady, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
 
 const square = (d: Drawing, name: string): Drawing => addRoom(d, name, [[0, 0], [60, 0], [60, 40], [0, 40]]);
 const twoRooms = (): Drawing => square(square(setScale(blank(), [0, 0], [100, 0], 10), "Aula"), "Pasillo");
@@ -94,5 +94,39 @@ describe("the luminaires over the plan", () => {
 
   it("are nothing when there is no proposal", () => {
     expect(marksOf(null)).toEqual([]);
+  });
+});
+
+describe("applying the luminaires to the plan", () => {
+  const room = (id: string): RoomResult => result({ id, layout: { ...result().layout, installed: 2 }, energy: { installed_power_w: 80, power_density_w_m2: 3 } });
+  const proposal = (over: Partial<LightingProposal> = {}): LightingProposal => ({
+    result: { rooms: [room("r1")], warnings: [], counts: { rooms: 1, luminaires: 2 } }, rooms: [], skipped: [], warnings: [], fingerprint: "x",
+    placements: { r1: [{ tag: "LU-001", x: 15, y: 20, z_m: 2.6 }, { tag: "LU-002", x: 45, y: 20, z_m: 2.6 }] }, ...over,
+  });
+  const base = (): Drawing => setRoomLighting(twoRooms(), "r1", { activity: "a", luminaire: "led_panel_600" });
+
+  it("draws one luminaire per placement with its room, its luminaire and its power, and is nothing without placements", () => {
+    const out = applyLighting(base(), proposal());
+    expect(out).toMatchObject({ added: 2, removed: 0 });
+    expect(out.drawing.nodes.map((n) => [n.kind, n.tag, n.x, n.y])).toEqual([["LU", "LU-001", 15, 20], ["LU", "LU-002", 45, 20]]);
+    expect(out.drawing.nodes[0].attrs).toEqual({ lighting: { source: "calc", room: "r1", luminaire: "led_panel_600", power_w: 40, height_m: 2.6 } });
+    expect(hasPlacements(proposal())).toBe(true);
+    expect(hasPlacements(proposal({ placements: { r1: [] } }))).toBe(false);
+    expect(applyLighting(base(), proposal({ placements: { r1: [] } }))).toMatchObject({ added: 0, removed: 0 });
+  });
+
+  it("replaces what a calculation placed in the room and leaves what the person drew, going on with the tags", () => {
+    let d = applyLighting(base(), proposal()).drawing;
+    d = { ...d, nodes: [...d.nodes, { id: "own", kind: "LU", x: 1, y: 1, tag: "LU-007" }, { id: "t", kind: "TG", x: 2, y: 2 }] };
+    const out = applyLighting(d, proposal({ placements: { r1: [{ tag: "LU-001", x: 30, y: 20, z_m: 2.6 }] } }));
+    expect(out).toMatchObject({ added: 1, removed: 2 });
+    expect(out.drawing.nodes.map((n) => n.tag ?? n.kind)).toEqual(["LU-007", "TG", "LU-008"]);
+  });
+
+  it("does not touch the luminaires a calculation placed in another room", () => {
+    const first = applyLighting(base(), proposal()).drawing;
+    const out = applyLighting(first, proposal({ result: { rooms: [room("r2")], warnings: [], counts: { rooms: 1, luminaires: 1 } }, placements: { r2: [{ tag: "LU-001", x: 5, y: 60, z_m: 2.6 }] } }));
+    expect(out).toMatchObject({ added: 1, removed: 0 });
+    expect(out.drawing.nodes).toHaveLength(3);
   });
 });

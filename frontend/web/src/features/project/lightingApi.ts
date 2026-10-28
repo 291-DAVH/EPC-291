@@ -1,4 +1,4 @@
-import type { Drawing, Pt, Room } from "./planEditing";
+import { addNode, DNode, Drawing, Pt, Room } from "./planEditing";
 
 /** The lighting of the rooms of a sheet: what the person says about each room, the request to the calculation, and what comes back reduced to what the panel and the plan show.
  *  The calculation is the backend's (`epc_lighting`); nothing here computes light. */
@@ -94,4 +94,37 @@ export function cardOf(r: RoomResult): Card {
 /** The luminaires of every room as marks to draw over the plan. */
 export function marksOf(p: LightingProposal | null): { room: string; tag: string; at: Pt }[] {
   return p ? Object.entries(p.placements).flatMap(([room, list]) => list.map((m) => ({ room, tag: m.tag, at: [m.x, m.y] as Pt }))) : [];
+}
+
+export const hasPlacements = (p: LightingProposal): boolean => Object.values(p.placements).some((l) => l.length > 0);
+
+export const CALC = "calc";                               // `attrs.lighting.source` of a luminaire that the calculation placed: the one the next calculation of its room replaces
+
+const isCalc = (n: DNode, room: string): boolean => {
+  const l = (n.attrs?.lighting ?? {}) as { source?: string; room?: string };
+  return n.kind === "LU" && l.source === CALC && l.room === room;
+};
+
+/** Put the luminaires of a proposal in the drawing: in each room that was calculated the ones a previous calculation placed are replaced (the ones the person drew or moved by hand are not touched), and each new
+ *  one carries its room, its luminaire and its power so that the design of the circuits can use it. Tags go on from the highest `LU-` of the drawing. */
+export function applyLighting(d: Drawing, p: LightingProposal): { drawing: Drawing; added: number; removed: number } {
+  const rooms = Object.keys(p.placements).filter((id) => p.placements[id].length > 0);
+  const results = new Map((p.result?.rooms ?? []).map((r) => [r.id, r]));
+  const dropped = d.nodes.filter((n) => rooms.some((r) => isCalc(n, r)));
+  let work: Drawing = { ...d, nodes: d.nodes.filter((n) => !dropped.includes(n)) };
+  let tag = work.nodes.reduce((m, n) => Math.max(m, Number(/^LU-(\d+)$/.exec(n.tag ?? "")?.[1] ?? 0)), 0);
+  let added = 0;
+  for (const room of rooms) {
+    const r = results.get(room);
+    const watts = r && r.layout.installed > 0 && r.energy.installed_power_w ? r.energy.installed_power_w / r.layout.installed : undefined;
+    const luminaire = (d.rooms ?? []).find((x) => x.id === room)?.lighting?.luminaire;
+    for (const m of p.placements[room]) {
+      work = addNode(work, "LU", [m.x, m.y]);
+      const id = work.nodes[work.nodes.length - 1].id;
+      const lighting = { source: CALC, room, ...(luminaire ? { luminaire } : {}), ...(watts ? { power_w: Math.round(watts * 10) / 10 } : {}), height_m: m.z_m };
+      work = { ...work, nodes: work.nodes.map((n) => (n.id === id ? { ...n, tag: `LU-${String(++tag).padStart(3, "0")}`, attrs: { lighting } } : n)) };
+      added++;
+    }
+  }
+  return { drawing: work, added, removed: dropped.length };
 }

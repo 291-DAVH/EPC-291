@@ -1,17 +1,17 @@
 import { Badge, Icon, Key, useI18n } from "@epc/ui";
 import type { Drawing } from "./planEditing";
-import { Card, cardOf, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
+import { Card, cardOf, hasPlacements, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
 
 /** Lighting: for each room marked on the plan, what it is for and which luminaire; the program calculates how many go in and where, and shows it over the plan and as a card per room until the
  *  person decides. The numbers are the backend's (`epc_lighting`); this panel only asks and shows. */
 interface Props {
   drawing: Drawing; options: LightingOptions | undefined; proposal: LightingProposal | null; busy: boolean; canWrite: boolean;
-  onChange: (d: Drawing) => void; onCalc: () => void; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
+  onChange: (d: Drawing) => void; onCalc: () => void; onApply: () => void; applied: string; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
 }
 
 const ESTIMATES = ["target", "cu", "maintenance", "ceiling", "walls", "floor"];
 
-export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onDiscard, onNewRoom, onLook }: Props) {
+export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onApply, applied, onDiscard, onNewRoom, onLook }: Props) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   const rooms = drawing.rooms ?? [];
@@ -63,9 +63,11 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
       {canWrite && <button onClick={onNewRoom}><Icon name="room" size={14} /> {tl("design.newRoom")}</button>}
       {canWrite && <div className="row" style={{ gap: 6, marginTop: 8 }}>
         <button className="primary" disabled={busy || !drawing.scale || !ready} onClick={onCalc}>{busy ? tl("design.working") : tl("light.calc")}</button>
+        {proposal && hasPlacements(proposal) && <button className="primary" onClick={onApply}>{tl("light.apply")}</button>}
         {proposal && <button onClick={onDiscard}>{tl("design.discard")}</button>}
       </div>}
       {!ready && rooms.length > 0 && <p className="muted small">{tl("light.needFields")}</p>}
+      {applied && <div className="alert ok small" style={{ marginTop: 8 }}>{applied}</div>}
       {proposal && <Result proposal={proposal} />}
     </div>
   );
