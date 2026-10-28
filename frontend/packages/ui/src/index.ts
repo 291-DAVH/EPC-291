@@ -4,6 +4,8 @@ export { default as CompanySignup } from "./CompanySignup";
 export * from "./components";
 export { CalculationTable } from "./calculation";
 export { Markdown } from "./markdown";
+export { PdfViewer, usePdfUrl } from "./pdf";
+export type { PdfViewerProps } from "./pdf";
 export * from "./i18n";
 export * from "./theme";
 export { Shell } from "./Shell";
