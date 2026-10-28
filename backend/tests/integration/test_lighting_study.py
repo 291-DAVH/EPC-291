@@ -4,11 +4,16 @@ import unittest
 from epc.core.fsutil import read_json
 from tests.integration.test_lighting_api import BASE, CLASSROOM, OWN, PARAMS, SCALE, Base, body
 
-LAYOUT = "/api/projects/ACME/P-1/layout/L0"
-STUDY = BASE + "/study/L0"
+LAYOUT = "/api/projects/ACME/P-1/layout/L0@electrica_BT"
+PLAN = "/api/projects/ACME/P-1/layout/L0"                                                          # the Architecture sheet of the level: the only one that sets the scale
+STUDY = BASE + "/study/L0@electrica_BT"
 
 
-def drawing(params=PARAMS, scale=SCALE):
+def plan(scale=SCALE):
+    return {"discipline": "arquitectura", "scale": scale, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}
+
+
+def drawing(params=PARAMS, scale=None):
     return {"discipline": "electrica_BT", "scale": scale, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": params}]}
 
 
@@ -16,6 +21,7 @@ class Study(Base):
     def setUp(self):
         super().setUp()
         self.with_own()
+        self.assertEqual(self.c.put(PLAN, json=plan()).status_code, 200)
         self.assertEqual(self.c.put(LAYOUT, json=drawing()).status_code, 200)
 
     def save(self):
@@ -30,10 +36,11 @@ class TestKeeping(Study):
         r = self.save()
         self.assertEqual(r.status_code, 200, r.text)
         s = r.json()
-        self.assertTrue(s["exists"] and not s["stale"] and not s["report"])
+        self.assertTrue(s["exists"] and not s["stale"] and s["report"])                                      # the report is made with the study
+        self.assertEqual((s["report_file"], s["report_error"]), ("LIGHTING_L0_electrica_BT.pdf", ""))
         self.assertEqual(s["result"]["rooms"][0]["id"], "R1")
         self.assertTrue(s["placements"]["R1"])
-        kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0" / "src" / "lighting.json", None)
+        kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0@electrica_BT" / "src" / "lighting.json", None)
         self.assertEqual(kept["fingerprint"], s["fingerprint"])
         self.assertEqual(self.c.get(STUDY).json()["fingerprint"], s["fingerprint"])                      # it survives a reload
 
@@ -49,6 +56,31 @@ class TestKeeping(Study):
         self.assertEqual(self.c.get(STUDY).json()["fingerprint"], second["fingerprint"])
 
 
+class TestReportWithTheStudy(Study):
+    def test_the_report_is_among_the_files_of_engineering_as_a_pdf_the_moment_the_study_is_kept(self):
+        self.save()
+        eng = "/api/projects/ACME/P-1/engineering"
+        docs = [x for x in self.c.get(eng).json()["documents"] if x["name"].startswith("LIGHTING_")]
+        self.assertEqual([(x["kind"], x["ext"], x["discipline"]) for x in docs], [("pdf", ".pdf", "electrical")])
+        shown = self.c.get(eng + "/pdf", params={"path": docs[0]["path"]})
+        self.assertEqual((shown.status_code, shown.headers["content-type"]), (200, "application/pdf"))
+        self.assertTrue(shown.content.startswith(b"%PDF"))
+
+    def test_the_pdf_endpoint_only_serves_pdfs_the_workspace_lists(self):
+        eng = "/api/projects/ACME/P-1/engineering/pdf"
+        self.assertEqual(self.c.get(eng, params={"path": "../../project.json"}).status_code, 422)
+        self.assertEqual(self.c.get(eng, params={"path": "electrical/PQ-01/docs/nope.pdf"}).status_code, 404)
+        self.assertEqual(self.c.get(eng, params={"path": "electrical/PQ-01/docs/x.md"}).status_code, 422)
+
+    def test_a_report_that_cannot_be_made_does_not_undo_the_study_and_says_why(self):
+        self.c.put(LAYOUT, json=drawing({**PARAMS, "height_m": 3.4}))                                           # the saved sheet no longer says what the request says
+        out = self.save().json()
+        self.assertTrue(out["exists"])
+        self.assertEqual(out["report_file"], "")
+        self.assertIn("changed since the study was made", out["report_error"])
+        self.assertTrue(self.c.get(STUDY).json()["exists"])
+
+
 class TestStale(Study):
     def test_it_goes_stale_when_what_a_room_says_changes_and_is_good_again_when_the_study_is_remade(self):
         self.save()
@@ -59,7 +91,7 @@ class TestStale(Study):
 
     def test_it_goes_stale_when_the_scale_changes(self):
         self.save()
-        self.c.put(LAYOUT, json=drawing(scale={"p1": [0, 0], "p2": [100, 0], "distance_m": 12}))
+        self.c.put(PLAN, json=plan({"p1": [0, 0], "p2": [100, 0], "distance_m": 12}))                   # calibrating the plan again
         self.assertTrue(self.c.get(STUDY).json()["stale"])
 
     def test_it_goes_stale_when_a_luminaire_of_the_catalogue_it_used_changes(self):

@@ -1,22 +1,26 @@
 import { useState } from "react";
 import DesignCriteria from "./DesignCriteria";
+import Layout from "./Layout";
 import SldInput from "./SldInput";
 import Issuing from "./Issuing";
 import Parties from "./Parties";
 import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, State, useApi, useI18n } from "@epc/ui";
 
-/** Engineering workspace of a project: SVG diagrams (single-line, multi-line, drawings) and lists/notes as text. Engineer/admin only. */
-export default function Engineering({ client, code, onOpenDeliverables }: { client: string; code: string; onOpenDeliverables: () => void }) {
+/** Engineering workspace of a project: its files, the drawings (every discipline over the plan), the parties, the technical information (single-line data), the design criteria and the issue. Engineer/admin only. */
+export default function Engineering({ client, code, onOpenDeliverables, sub: subParam, onSub, canWrite }: { client: string; code: string; onOpenDeliverables: () => void; sub: string; onSub: (x: string) => void; canWrite: boolean }) {
   const { t } = useI18n();
-  const [sub, setSub] = useState<"files" | "sld" | "criteria" | "parties" | "issue">("files");
+  const SUBS = ["files", "layout", "parties", "sld", "criteria", "issue"] as const;
+  const sub = (SUBS as readonly string[]).includes(subParam) ? (subParam as (typeof SUBS)[number]) : "files";
+  const setSub = (x: (typeof SUBS)[number]) => onSub(x);
   return (
     <>
       <div className="subtabs" role="tablist">
-        {(["files", "parties", "sld", "criteria", "issue"] as const).map((x) => (
+        {SUBS.map((x) => (
           <button key={x} role="tab" aria-selected={sub === x} className={sub === x ? "on" : ""} onClick={() => setSub(x)}>{t(("eng.sub." + x) as Key)}</button>
         ))}
       </div>
       {sub === "files" && <Files client={client} code={code} />}
+      {sub === "layout" && <Layout client={client} code={code} canWrite={canWrite} />}
       {sub === "parties" && <Parties client={client} code={code} />}
       {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={() => setSub("parties")} />}
       {sub === "criteria" && <DesignCriteria client={client} code={code} />}
@@ -55,9 +59,21 @@ function Files({ client, code }: { client: string; code: string }) {
         </div>
         <div className="card">
           <div className="muted small" style={{ marginBottom: 8 }}>{current.discipline} / {current.package} / <span className="mono">{current.name}{current.ext}</span></div>
-          {current.what === "diagram" ? <SvgView base={base} f={current} /> : current.kind === "calculation" ? <CalcFile base={base} f={current} /> : <TextView base={base} f={current} />}
+          {current.what === "diagram" ? <SvgView base={base} f={current} /> : current.kind === "calculation" ? <CalcFile base={base} f={current} /> : current.kind === "pdf" ? <PdfView base={base} f={current} /> : <TextView base={base} f={current} />}
         </div>
       </div>
+    </>
+  );
+}
+
+/** A document made as a PDF (a calculation report): shown as it is, with a link to open it on its own. */
+function PdfView({ base, f }: { base: string; f: EngFile }) {
+  const { t } = useI18n();
+  const src = `/api${base}/pdf?path=${encodeURIComponent(f.path)}`;
+  return (
+    <>
+      <div className="row" style={{ marginBottom: 8 }}><a className="btn" href={src} target="_blank" rel="noreferrer">{t("eng.openPdf")}</a></div>
+      <iframe key={f.path} src={src} title={f.name} style={{ width: "100%", height: "75vh", border: "1px solid var(--line, #ccc)", borderRadius: 6 }} />
     </>
   );
 }

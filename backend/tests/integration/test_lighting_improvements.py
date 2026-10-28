@@ -44,14 +44,15 @@ class TestCheckedAsDrawn(Base):
         self.assertEqual(room["layout"]["positions"][0]["z_m"], 2.2)
 
     def test_the_nodes_are_not_kept_in_the_study_and_do_not_make_it_stale(self):
-        layout = "/api/projects/ACME/P-1/layout/L0"
-        drawing = {"discipline": "electrica_BT", "scale": SCALE, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": PANEL}]}
+        self.assertEqual(self.c.put("/api/projects/ACME/P-1/layout/L0", json={"discipline": "arquitectura", "scale": SCALE, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}).status_code, 200)
+        layout = "/api/projects/ACME/P-1/layout/L0@electrica_BT"
+        drawing = {"discipline": "electrica_BT", "scale": None, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": PANEL}]}
         self.assertEqual(self.c.put(layout, json=drawing).status_code, 200)
         asked = body(params={"R1": PANEL})
         asked["sheet"]["nodes"] = [node(1, 15, 10)]
-        self.assertEqual(self.c.put(BASE + "/study/L0", json=asked).status_code, 200)
-        self.assertFalse(self.c.get(BASE + "/study/L0").json()["stale"])
-        kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0" / "src" / "lighting.json", {})
+        self.assertEqual(self.c.put(BASE + "/study/L0@electrica_BT", json=asked).status_code, 200)
+        self.assertFalse(self.c.get(BASE + "/study/L0@electrica_BT").json()["stale"])
+        kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0@electrica_BT" / "src" / "lighting.json", {})
         self.assertNotIn("nodes", kept["input"]["sheet"])
 
 

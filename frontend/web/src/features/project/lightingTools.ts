@@ -123,3 +123,19 @@ export function levelsOf(min: number, max: number, count = 5): number[] {
   for (let x = first; x < max; x += step) levels.push(Math.round(x * 1000) / 1000);
   return levels.filter((x) => x > min);
 }
+
+const LABEL_GAP_PX = 30;                                 // the least distance on the screen between two numbers of a map: they must not crowd the plan
+
+/** The lux to write over a map, one every few cells so that two numbers are never closer than `LABEL_GAP_PX` on the screen (`u` is how many units of the plan a pixel is). Cells with no value (outside the outline) have none. */
+export function valueLabels(m: LightMap, u: number): { x: number; y: number; text: string }[] {
+  const stride = Math.max(1, Math.ceil((LABEL_GAP_PX * u) / Math.max(Math.min(m.dx, m.dy), 1e-9)));
+  const out: { x: number; y: number; text: string }[] = [];
+  const first = (n: number) => Math.min(Math.floor(stride / 2), Math.floor((n - 1) / 2));                  // a map zoomed out far still has one number, in its middle
+  for (let j = first(m.ny); j < m.ny; j += stride) {
+    for (let i = first(m.nx); i < m.nx; i += stride) {
+      const v = m.values[j * m.nx + i];
+      if (v !== null && v !== undefined) out.push({ x: m.x0 + (i + 0.5) * m.dx, y: m.y0 + (j + 0.5) * m.dy, text: String(Math.round(v)) });
+    }
+  }
+  return out;
+}

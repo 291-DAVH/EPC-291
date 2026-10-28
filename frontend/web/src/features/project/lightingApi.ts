@@ -29,7 +29,7 @@ export interface RoomResult {
 }
 /** The study kept with a sheet: what the last calculation applied to the plan gave, and whether the rooms and luminaires are still the ones it was made for. */
 export interface LightingStudy {
-  exists: boolean; stale?: boolean; report?: boolean; saved_at?: string; saved_by?: string;
+  exists: boolean; stale?: boolean; report?: boolean; report_file?: string; report_error?: string; saved_at?: string; saved_by?: string;
   result?: LightingProposal["result"]; skipped?: LightingProposal["skipped"]; warnings?: string[];
 }
 export interface EmergencyResult {

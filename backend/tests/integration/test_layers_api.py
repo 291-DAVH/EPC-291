@@ -54,6 +54,7 @@ class TestLayers(unittest.TestCase):
         self.c.post("/api/projects", json={"client_name": "Acme SA", "client_code": "ACME", "project_code": "P-1", "project_name": "Planta",
                                            "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical"]})
         base = "/api/projects/ACME/P-1/layout"
+        self.c.put(f"{base}/L0@arquitectura", json={"discipline": "arquitectura", "scale": DRAWING["scale"], "origin": [0, 0], "nodes": [], "lines": [], "circuits": []})
         self.c.put(f"{base}/L0", json=DRAWING)
         self.c.put("/api/layers", json={"layers": {"plan.ELEC-TABLERO": {"name": "TABLEROS", "color": 1}}})
         v = self.c.post(f"{base}/L0/generate").json()

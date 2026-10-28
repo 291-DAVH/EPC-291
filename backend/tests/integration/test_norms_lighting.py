@@ -149,13 +149,14 @@ class TestApprovedRuleFeedsTheTarget(Reviewed, Base):
     def test_the_study_goes_stale_when_the_rule_it_used_is_corrected_or_withdrawn(self):
         service.approve(UNIT, RULE, "ok")
         params = {"luminaire": "led_panel_600", "norm_rule": RULE}
-        layout = "/api/projects/ACME/P-1/layout/L0"
-        drawing = {"discipline": "electrica_BT", "scale": {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": params}]}
+        self.assertEqual(self.c.put("/api/projects/ACME/P-1/layout/L0", json={"discipline": "arquitectura", "scale": {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}).status_code, 200)
+        layout = "/api/projects/ACME/P-1/layout/L0@electrica_BT"
+        drawing = {"discipline": "electrica_BT", "scale": None, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": params}]}
         self.assertEqual(self.c.put(layout, json=drawing).status_code, 200)
-        self.assertEqual(self.c.put(BASE + "/study/L0", json=body(params={"R1": params})).status_code, 200)
-        self.assertFalse(self.c.get(BASE + "/study/L0").json()["stale"])
+        self.assertEqual(self.c.put(BASE + "/study/L0@electrica_BT", json=body(params={"R1": params})).status_code, 200)
+        self.assertFalse(self.c.get(BASE + "/study/L0@electrica_BT").json()["stale"])
         service.edit(UNIT, RULE, {"value": 450}, "corrected", approve=True)
-        self.assertTrue(self.c.get(BASE + "/study/L0").json()["stale"])
+        self.assertTrue(self.c.get(BASE + "/study/L0@electrica_BT").json()["stale"])
 
 
 if __name__ == "__main__":

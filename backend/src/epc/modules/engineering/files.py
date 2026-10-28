@@ -18,6 +18,7 @@ def _kind(name: str) -> str:
 
 
 CALC_SUFFIX = "_dimensionado"
+DOC_KINDS = {".csv": "list", ".xlsx": "list", repository.PDF_EXT: "pdf"}           # how a document is shown by its extension; the rest is read as text
 
 
 def _doc(item: dict) -> Optional[dict]:
@@ -27,7 +28,7 @@ def _doc(item: dict) -> Optional[dict]:
         if stem.endswith(CALC_SUFFIX):
             return {**item, "kind": "calculation", "name": stem[: -len(CALC_SUFFIX)]}
         return None
-    return {**item, "kind": "list" if ext in (".csv", ".xlsx") else "text"}
+    return {**item, "kind": DOC_KINDS.get(ext, "text")}
 
 
 def overview(d: Path, technical: bool = False) -> dict:
@@ -54,6 +55,10 @@ def _file(d: Path, rel: str, exts: tuple) -> Path:
     if rel not in known or not is_inside(repository.base(d), rel):
         raise NotFound("file not found")
     return (repository.base(d) / rel).resolve()
+
+
+def pdf_file(d: Path, rel: str) -> Path:
+    return _file(d, rel, (repository.PDF_EXT,))
 
 
 def svg_file(d: Path, rel: str) -> Path:

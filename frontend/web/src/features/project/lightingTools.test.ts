@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { addRoom } from "./planTools";
 import { blank, Drawing, setScale } from "./planEditing";
 import { applyLighting, hasPlacements, isDrawn, isReady, LightingProposal, marksOf, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
-import { applyTemplate, contoursOf, copyLighting, levelsOf, removeTemplate, saveTemplate, setSetting, settingsOf, settingsOptions, suggestActivity } from "./lightingTools";
+import { applyTemplate, contoursOf, copyLighting, levelsOf, removeTemplate, saveTemplate, setSetting, settingsOf, settingsOptions, suggestActivity, valueLabels } from "./lightingTools";
 
 const room = (d: Drawing, name: string, x: number): Drawing => addRoom(d, name, [[x, 0], [x + 60, 0], [x + 60, 40], [x, 40]]);
 const sheet = (): Drawing => room(room(room(setScale(blank(), [0, 0], [100, 0], 10), "Aula", 0), "Pasillo", 100), "Depósito", 200);
@@ -167,5 +167,36 @@ describe("applying the emergency luminaires", () => {
 
   it("is something to apply when there are only emergency luminaires", () => {
     expect(hasPlacements(emergency())).toBe(true);
+  });
+});
+
+describe("the numbers written over a map", () => {
+  const map = (nx: number, ny: number, values?: (number | null)[]) => ({ x0: 100, y0: 200, dx: 10, dy: 10, nx, ny, values: values ?? Array.from({ length: nx * ny }, (_, n) => 100 + n), min: 100, max: 300 });
+
+  it("are one per cell when the cells are far enough apart on the screen, written at the centre of the cell and rounded", () => {
+    const labels = valueLabels(map(3, 2, [100.4, 200.6, 300, 110, 210, 310]), 0.2);                // a cell is 50 px wide: room for a number in each
+    expect(labels).toHaveLength(6);
+    expect(labels[0]).toEqual({ x: 105, y: 205, text: "100" });
+    expect(labels[1].text).toBe("201");
+  });
+
+  it("thin out as the plan is zoomed out, so that two numbers are never closer than a few dozen pixels", () => {
+    const m = map(40, 40);
+    const dense = valueLabels(m, 0.25).length, far = valueLabels(m, 2).length, farthest = valueLabels(m, 8).length;
+    expect(dense).toBeGreaterThan(far);
+    expect(far).toBeGreaterThan(farthest);
+    const picked = valueLabels(m, 2);
+    const gap = Math.abs(picked[1].x - picked[0].x) / 2;                                              // in pixels: u = 2 units per pixel
+    expect(gap).toBeGreaterThanOrEqual(30);
+  });
+
+  it("are at least one, in the middle of the map, however far the plan is zoomed out", () => {
+    const labels = valueLabels(map(12, 8), 50);
+    expect(labels).toHaveLength(1);
+    expect(labels[0]).toEqual({ x: 100 + 5.5 * 10, y: 200 + 3.5 * 10, text: String(100 + 3 * 12 + 5) });
+  });
+
+  it("leave out the cells outside the outline", () => {
+    expect(valueLabels(map(2, 1, [100, null]), 0.2).map((l) => l.text)).toEqual(["100"]);
   });
 });

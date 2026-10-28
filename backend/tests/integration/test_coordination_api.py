@@ -31,6 +31,12 @@ class TestCoordination(unittest.TestCase):
         self.layout = "/api/projects/ACME/P-1/layout"
         self.base = "/api/projects/ACME/P-1/coordination"
 
+    def with_plan(self):
+        """The Architecture sheet of the level carries the scale: the other disciplines work with the scale of the plan."""
+        arch = {"discipline": "arquitectura", "scale": SCALE, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}
+        self.assertEqual(self.c.put(f"{self.layout}/L0@arquitectura", json=arch).status_code, 200)
+        self.assertEqual(self.c.put(f"{self.layout}/L1@arquitectura", json=arch).status_code, 200)
+
     def tearDown(self):
         settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
@@ -52,6 +58,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.put(f"{self.layout}/L0@nada", json=ELEC).status_code, 422)
 
     def test_a_second_sheet_is_generated_apart_from_the_first(self):
+        self.with_plan()
         self.draw(SAN_LOW)
         r = self.c.post(f"{self.layout}/L0@sanitaria_cloacas/generate")
         self.assertEqual(r.status_code, 200, r.text)
@@ -63,6 +70,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/clashes").json()["clashes"], [])
 
     def test_a_clash_is_found_named_and_can_be_accepted_with_a_reason(self):
+        self.with_plan()
         self.draw()
         res = self.c.get(f"{self.base}/clashes").json()
         self.assertEqual((res["counts"]["total"], res["counts"]["hard"], res["sources"]), (1, 1, {"electrica_BT": "working", "sanitaria_cloacas": "working"}))
@@ -79,6 +87,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/clashes").json()["counts"]["open"], 1)
 
     def test_a_project_rule_can_ignore_a_pair_of_kinds(self):
+        self.with_plan()
         self.draw()
         rule = {"a": "electrica_BT", "b": "sanitaria_cloacas", "kinds_a": ["BN"], "kinds_b": ["CC"], "ignore": True}
         self.assertEqual(self.c.put(f"{self.base}/rules", json={"rules": [rule]}).status_code, 200)
@@ -90,6 +99,7 @@ class TestCoordination(unittest.TestCase):
 
     # ---------------------------------------------------------------- issuing
     def test_coordination_uses_what_a_discipline_issued_not_its_drafts(self):
+        self.with_plan()
         self.draw(SAN_LOW)
         e = self.c.post(f"{self.base}/emit", json={"discipline": "electrica_BT", "note": "first"}).json()
         self.assertEqual((e["rev"], e["elements"], e["new_clashes"]), (1, 3, []))
@@ -107,6 +117,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.post(f"{self.base}/emit", json={"discipline": "electrica_BT"}).status_code, 422)
 
     def test_the_reference_layer_has_only_the_footprints_of_the_other_disciplines(self):
+        self.with_plan()
         self.draw()
         ref = self.c.get(f"{self.base}/reference", params={"discipline": "electrica_BT", "level": "L0"}).json()
         self.assertEqual({i["discipline"] for i in ref["items"]}, {"sanitaria_cloacas"})
@@ -128,6 +139,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/notifications", params={"discipline": "sanitaria_cloacas"}).json()["requests"], [])
 
     def test_a_reserved_space_makes_the_others_keep_out_of_it(self):
+        self.with_plan()
         self.assertEqual(self.c.put(f"{self.layout}/L0", json=ELEC).status_code, 200)
         geom = {"points_m": [[10.0, -5.0], [10.0, 5.0]], "width_m": 0.5, "z0": 2.0, "z1": 3.0, "level": "L0"}
         bad = self.c.post(f"{self.base}/threads", json={"kind": "reservation", "from_discipline": "sanitaria_cloacas", "title": "Riser", "geom": {**geom, "z1": 1.0}})
@@ -188,6 +200,7 @@ class TestCoordination(unittest.TestCase):
 
     # ---------------------------------------------------------------- the disciplines seen together, and what changed
     def test_the_overlay_shows_every_discipline_of_a_level_with_its_clashes(self):
+        self.with_plan()
         self.draw()
         o = self.c.get(f"{self.base}/overlay", params={"level": "L0"}).json()
         self.assertEqual({i["discipline"] for i in o["items"]}, {"electrica_BT", "sanitaria_cloacas"})
@@ -195,6 +208,7 @@ class TestCoordination(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/overlay", params={"level": "L2"}).json()["items"], [])
 
     def test_what_changed_since_the_files_were_made_is_listed(self):
+        self.with_plan()
         self.assertEqual(self.c.put(f"{self.layout}/L0", json=ELEC).status_code, 200)
         self.assertEqual(self.c.get(f"{self.layout}/L0/changes").json(), {"has_snapshot": False})
         self.assertEqual(self.c.post(f"{self.layout}/L0/generate").status_code, 200)

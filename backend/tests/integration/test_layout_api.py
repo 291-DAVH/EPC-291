@@ -37,6 +37,32 @@ class TestLayout(unittest.TestCase):
         settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
 
+    def with_plan(self):
+        """The Architecture sheet of the level with the scale: the scale of the plan is the only one, and the other disciplines work with it."""
+        self.assertEqual(self.c.put(f"{self.base}/L0@arquitectura", json={**ARCH, "scale": DRAWING["scale"]}).status_code, 200)
+
+    def test_the_scale_is_only_set_in_the_architecture_sheet_and_travels_with_the_plan_to_the_other_disciplines(self):
+        mine = {"p1": [0, 0], "p2": [100, 0], "distance_m": 99}                                                  # a scale an electrical sheet tries to set for itself
+        saved = self.c.put(f"{self.base}/L0@electrica_BT", json={**DRAWING, "scale": mine}).json()
+        self.assertEqual((saved["drawing"]["scale"], saved["scale_locked"], saved["result"]), (None, True, {"ready": False, "reason": "scale"}))     # no plan, no scale
+        arch = self.c.put(f"{self.base}/L0", json={**ARCH, "scale": DRAWING["scale"]}).json()
+        self.assertEqual((arch["drawing"]["scale"], arch["scale_locked"]), (DRAWING["scale"], False))             # the architecture sheet is where it is set
+        electrical = self.c.get(f"{self.base}/L0@electrica_BT").json()
+        self.assertEqual((electrical["drawing"]["scale"], electrical["result"]["ready"]), (DRAWING["scale"], True))   # the plan's scale, with no new save
+        other = self.c.put(f"{self.base}/L0@sanitaria_cloacas", json={**ARCH, "discipline": "sanitaria_cloacas", "scale": mine}).json()
+        self.assertEqual(other["drawing"]["scale"], DRAWING["scale"])
+        recalibrated = {"p1": [0, 0], "p2": [100, 0], "distance_m": 20}
+        self.c.put(f"{self.base}/L0", json={**ARCH, "scale": recalibrated})
+        self.assertEqual(self.c.get(f"{self.base}/L0@electrica_BT").json()["drawing"]["scale"], recalibrated)         # calibrating the plan again reaches every discipline
+        self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()["drawing"]["scale"], recalibrated)
+
+    def test_a_sheet_of_another_level_does_not_take_the_scale_of_this_one(self):
+        self.c.put(f"{self.base}/L0", json={**ARCH, "scale": DRAWING["scale"]})
+        up = self.c.put(f"{self.base}/L1@electrica_BT", json=DRAWING).json()
+        self.assertIsNone(up["drawing"]["scale"])
+        self.c.put(f"{self.base}/L1", json={**ARCH, "scale": {"p1": [0, 0], "p2": [10, 0], "distance_m": 5}})
+        self.assertEqual(self.c.get(f"{self.base}/L1@electrica_BT").json()["drawing"]["scale"]["distance_m"], 5)
+
     def test_the_overview_offers_profiles_versions_and_no_levels_yet(self):
         o = self.c.get(self.base).json()
         self.assertEqual(o["levels"], [])
@@ -91,6 +117,7 @@ class TestLayout(unittest.TestCase):
         self.assertIn("L0 for the ground level", r.json()["detail"]["errors"]["level"])
 
     def test_saving_returns_what_the_engine_derived(self):
+        self.with_plan()
         v = self.c.put(f"{self.base}/L0", json=DRAWING).json()
         self.assertTrue(v["saved"])
         res = v["result"]
@@ -104,10 +131,13 @@ class TestLayout(unittest.TestCase):
     def test_derive_does_not_save_and_waits_for_the_scale(self):
         r = self.c.post(f"{self.base}/L0/derive", json={**DRAWING, "scale": None}).json()
         self.assertEqual(r, {"ready": False, "reason": "scale"})
+        self.assertEqual(self.c.post(f"{self.base}/L0/derive", json=DRAWING).json(), {"ready": False, "reason": "scale"})              # a scale of its own is not the scale: only the plan sets it
+        self.with_plan()
         self.assertEqual(self.c.post(f"{self.base}/L0/derive", json=DRAWING).json()["schedule"]["total_length_m"], 20.0)
         self.assertFalse(self.c.get(f"{self.base}/L0").json()["saved"])
 
     def test_what_the_engine_refuses_is_refused_with_its_message(self):
+        self.with_plan()
         bad = {**DRAWING, "nodes": [{"id": "n1", "kind": "ZZ", "x": 0, "y": 0}]}
         r = self.c.put(f"{self.base}/L0", json=bad)
         self.assertEqual(r.status_code, 422)
@@ -149,7 +179,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/L0@sanitaria_cloacas").json()["underlay"]["kind"], "png")
 
     def test_a_pdf_becomes_an_image_underlay(self):
-        self.c.put(f"{self.base}/L0", json=ARCH)
+        self.c.put(f"{self.base}/L0", json={**ARCH, "scale": DRAWING["scale"]})
         self.c.put(f"{self.base}/L0@electrica_BT", json=DRAWING)
         made = self.c.post(f"{self.base}/L0@electrica_BT/generate").json()          # the PDF the platform itself makes is a real, valid PDF
         pdf = self.c.get(f"{self.base}/L0@electrica_BT/files/{made['files']['pdf']}").content
@@ -161,6 +191,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(bad.status_code, 422)
 
     def test_generate_writes_a_dxf_in_the_chosen_version_and_it_downloads(self):
+        self.with_plan()
         self.c.put(f"{self.base}/L0", json=DRAWING)
         v = self.c.post(f"{self.base}/L0/generate", params={"version": "R2013"}).json()
         self.assertEqual(v["files"]["dxf_version"], "R2013")
@@ -176,6 +207,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/L0/files/other.dxf").status_code, 404)
 
     def test_circuits_are_routed_from_an_origin_to_a_destination_and_come_from_the_boards(self):
+        self.with_plan()
         self.c.put("/api/data/organization", json={"legal_name": "Oficina SA"})
         self.assertEqual(self.c.put("/api/projects/ACME/P-1/sld", json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
         listed = self.c.get(self.base).json()["circuits"]
@@ -198,6 +230,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["circuits"], [])
 
     def test_loads_assigned_to_a_circuit_are_routed_from_its_origin(self):
+        self.with_plan()
         drawing = {**DRAWING, "nodes": [*DRAWING["nodes"], {"id": "n3", "kind": "LU", "x": 100, "y": 0, "circuit": "C-01"}, {"id": "n4", "kind": "TG", "x": 150, "y": 0, "circuit": "C-01"},
                                           {"id": "n5", "kind": "HV", "x": 50, "y": 0}], "circuits": [{"tag": "C-01", "from": "n1", "ternas": 1}]}
         res = self.c.put(f"{self.base}/L0", json=drawing).json()["result"]
@@ -207,6 +240,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["nodes"][2]["circuit"], "C-01")
 
     def test_the_board_takes_the_length_of_a_circuit_from_the_plan_or_from_its_data(self):
+        self.with_plan()
         sld = "/api/projects/ACME/P-1/sld"
         self.c.put("/api/data/organization", json={"legal_name": "Oficina SA"})
         circuits = [dict(c) for c in CIRCUITS]

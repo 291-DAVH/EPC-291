@@ -5,17 +5,15 @@ import AnalysisPanel from "./AnalysisPanel";
 import Deliverables from "./Deliverables";
 import Engineering from "./Engineering";
 import Inputs from "./Inputs";
-import Layout from "./Layout";
 import Observations from "./Observations";
 import Overview from "./Overview";
-import Plan from "./Plan";
-import Registers from "./Registers";
+import Management from "./Management";
 import Reporting from "./Reporting";
 import Reports from "./Reports";
 import Requirements from "./Requirements";
 import Catalogs from "./Catalogs";
 import Coordination from "./Coordination";
-import { ENGINEER_TABS, Tab, TABS } from "./tabs";
+import { ENGINEER_TABS, placeOf, Tab, TABS } from "./tabs";
 
 export default function Project() {
   const { client = "", code = "" } = useParams();
@@ -26,19 +24,22 @@ export default function Project() {
   const can = (subject: string, action: string) => !!me.data?.abilities?.[subject]?.includes(action);
   const engineer = can("workspace", "read");           // the engineering workspace: the engineering team and the people of the organization that owns the project
   const canWrite = can("app", "write");                // inspectors and auditors read only: the screens hide what the server would refuse
-  const wanted = sp.get("tab") as Tab;
+  const place = placeOf(sp.get("tab"), sp.get("sub"));                // the drawings and the registers used to be tabs: old links land where they live now
+  const wanted = place.tab as Tab;
   const tab = (TABS.includes(wanted) && (!ENGINEER_TABS.includes(wanted) || engineer) ? wanted : "overview") as Tab;
+  const sub = place.sub ?? "";
   const base = `/app/projects/${client}/${code}`;
   const p = useApi<PortfolioProject>(base);
   const [rev, setRev] = useState(0);                       // bump to reload lists after sending information
   const go = (x: Tab, extra: Record<string, string> = {}) => setSp({ tab: x, ...extra });
+  const goSub = (x: string) => setSp({ tab, sub: x });
 
   if (p.error) return <div className="state err">{t("u.p.notFound")} <Link to="/">{t("u.p.back")}</Link></div>;
   if (!p.data) return <State loading />;
   const d = p.data;
   const closed = d.state !== "active";
 
-  const bench = tab === "layout";                      // the layout is a single-page editor: a slim header and the editor takes the rest of the window
+  const bench = tab === "engineering" && sub === "layout";          // the drawings are a single-page editor: a slim header and the editor takes the rest of the window
   const tabs = (                                       // the tabs share the header line with the name of the project, at the right
     <div className="tabs" role="tablist">
       {TABS.filter((x) => !ENGINEER_TABS.includes(x) || engineer).map((x) => (
@@ -76,10 +77,8 @@ export default function Project() {
       </div>}
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
-      {tab === "plan" && <Plan base={base} />}
-      {tab === "registers" && <Registers client={client} code={code} />}
-      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} />}
-      {tab === "layout" && <Layout client={client} code={code} canWrite={can("workspace", "write")} />}
+      {tab === "plan" && <Management base={base} client={client} code={code} engineer={engineer} sub={sub} onSub={goSub} />}
+      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} sub={sub} onSub={goSub} canWrite={can("workspace", "write")} />}
       {tab === "coordination" && <Coordination client={client} code={code} discipline="" canWrite={can("workspace", "write")} standalone />}
       {tab === "catalogs" && <Catalogs client={client} code={code} />}
       {tab === "deliverables" && <Deliverables base={base} />}
