@@ -98,6 +98,11 @@ class ArchIn(BaseModel):
     units_per_metre: Optional[float] = Field(None, gt=0)
 
 
+class SizingIn(BaseModel):
+    """Size the cables of the circuits of the saved drawing and the conduits and trays that carry them (the board whose circuits they are; empty: all)."""
+    board: str = ""
+
+
 class DesignIn(BaseModel):
     """Ask for a proposal of circuits and runs for the drawing as it is on the screen; `families` overrides, by family of load, the limit of outlets per circuit and the power per outlet."""
     drawing: DrawingIn

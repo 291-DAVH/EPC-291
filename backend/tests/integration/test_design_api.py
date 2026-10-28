@@ -10,6 +10,7 @@ from epc.main import create_app
 from tests.integration.test_sld_api import BOARD, CIRCUITS, TB
 
 SCALE = {"p1": [0, 0], "p2": [100, 0], "distance_m": 10}
+SHEET = "L0@electrica_BT"
 ROOMS = [{"id": "A", "name": "Cocina", "points": [[100, 0], [400, 0], [400, 200], [100, 200]]}, {"id": "B", "name": "Living", "points": [[100, 220], [400, 220], [400, 480], [100, 480]]}]
 
 
@@ -128,6 +129,37 @@ class TestDesign(unittest.TestCase):
         body = {"board": boards[0]["id"], "circuits": [{"tag": "IUG-01", "description": "Cocina", "load": 900, "unit": "VA"}]}
         self.assertEqual(self.c.post(f"{self.base}/L0/design/circuits", json=body).json()["board_id"], boards[0]["id"])
         self.assertEqual([c["board_id"] for c in self.c.get(self.base).json()["circuits"] if c["tag"] == "IUG-01"], [boards[0]["id"]])
+
+    def accepted(self):
+        """The whole way up to sizing: runs drawn, the wiring accepted into the drawing and its circuits created in the board, the drawing saved."""
+        drawn = self.drawn()
+        p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": drawn}).json()
+        body = {"circuits": [{"tag": c["tag"], "description": c["description"], "load": c["va"], "unit": "VA"} for c in p["circuits"]]}
+        self.assertEqual(self.c.post(f"{self.base}/L0/design/circuits", json=body).status_code, 200)
+        nodes = [{**n, "circuit": p["assignments"].get(n["id"], "")} for n in drawn["nodes"]]
+        circuits = [{"tag": c["tag"], "from": c["from"], "to": c["to"], "via": [], "ternas": 1} for c in p["circuits"]]
+        self.assertEqual(self.c.put(f"{self.base}/L0", json={"discipline": "arquitectura", "scale": SCALE, "origin": [0, 0], "nodes": [], "lines": [], "circuits": []}).status_code, 200)       # the scale is Architecture's
+        self.assertEqual(self.c.put(f"{self.base}/{SHEET}", json={**drawn, "scale": None, "nodes": nodes, "circuits": circuits}).status_code, 200)
+        return p
+
+    def test_sizing_gives_the_cable_of_each_circuit_and_the_smallest_conduit_or_tray_that_carries_them(self):
+        p = self.accepted()
+        r = self.c.post(f"{self.base}/{SHEET}/design/sizing", json={})
+        self.assertEqual(r.status_code, 200, r.text)
+        out = r.json()
+        self.assertEqual({c["tag"] for c in out["circuits"]}, {c["tag"] for c in p["circuits"]})
+        self.assertTrue(all(c["section_mm2"] and c["found"] and c["length_m"] > 0 for c in out["circuits"]), out["circuits"])
+        self.assertTrue(out["containers"])
+        for box in out["containers"]:
+            self.assertTrue(box["fits"] and box["used_pct"] <= box["limit_pct"], box)
+            self.assertTrue(box["line"].startswith("r"))                                          # the line of the drawing to write the size on
+            self.assertTrue({"diametro_mm"} <= set(box["size"]) or {"ancho_mm", "alto_mm"} <= set(box["size"]))
+        self.assertEqual(out["warnings"], [])
+
+    def test_sizing_asks_for_the_drawing_to_be_saved_and_for_a_scale(self):
+        self.assertEqual(self.c.post(f"{self.base}/{SHEET}/design/sizing", json={}).status_code, 422)            # nothing saved
+        self.c.put(f"{self.base}/{SHEET}", json={**DRAWING, "scale": None})
+        self.assertEqual(self.c.post(f"{self.base}/{SHEET}/design/sizing", json={}).status_code, 422)            # saved, but no architecture gives it a scale
 
     def test_a_drawing_without_a_board_gets_a_warning_not_an_error(self):
         nodes = [n for n in DRAWING["nodes"] if n["kind"] != "TB"]

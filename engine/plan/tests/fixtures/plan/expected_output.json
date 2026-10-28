@@ -392,6 +392,7 @@
     "containers": [
       {
         "tag": "BN-001/1",
+        "line": "l1",
         "kind": "BN",
         "circuits": [
           "C-01",
@@ -401,6 +402,7 @@
       },
       {
         "tag": "BN-001/2",
+        "line": "l1",
         "kind": "BN",
         "circuits": [
           "C-01",
@@ -410,6 +412,7 @@
       },
       {
         "tag": "BN-001/3",
+        "line": "l1",
         "kind": "BN",
         "circuits": [
           "C-01",
@@ -419,6 +422,7 @@
       },
       {
         "tag": "BN-001/4",
+        "line": "l1",
         "kind": "BN",
         "circuits": [
           "C-01"
@@ -427,6 +431,7 @@
       },
       {
         "tag": "CN-001",
+        "line": "l2",
         "kind": "CN",
         "circuits": [
           "C-01"

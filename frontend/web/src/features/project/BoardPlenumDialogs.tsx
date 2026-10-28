@@ -3,11 +3,11 @@ import { Key, useI18n } from "@epc/ui";
 import { levelChoices, reachOf } from "./plenumFlow";
 
 /** The two questions asked before the electrical drawing begins and before a level is added: where the board is, and the plenum (vertical shaft) that goes with it. */
-function Modal({ title, children, onClose }: { title: string; children: ReactNode; onClose: () => void }) {
+export function Modal({ title, children, onClose, wide }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
   return (
     <div role="dialog" aria-modal="true" aria-label={title} onKeyDown={(e) => e.key === "Escape" && onClose()}
          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", display: "grid", placeItems: "center", zIndex: 50 }}>
-      <div className="card" style={{ width: "min(520px, 92vw)", maxHeight: "90vh", overflow: "auto", padding: 18 }}>
+      <div className="card" style={{ width: wide ? "min(900px, 94vw)" : "min(520px, 92vw)", maxHeight: "90vh", overflow: "auto", padding: 18 }}>
         <h3 style={{ marginTop: 0 }}>{title}</h3>
         {children}
       </div>
