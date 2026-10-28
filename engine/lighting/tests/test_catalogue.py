@@ -17,6 +17,16 @@ class TestFactory(unittest.TestCase):
             self.assertEqual(catalogue.check(lid, entry), [], lid)
             self.assertTrue(entry["illustrative"], lid)                       # typical numbers, never presented as a maker's
 
+    def test_the_interior_ones_have_an_intensity_curve_that_emits_the_lamp_flux_and_the_exterior_ones_none(self):
+        from epc_lighting import photometry
+        from epc_lighting.tables import parse_photometry
+        for lid, entry in catalogue.defaults().items():
+            if entry["kind"] == "exterior":
+                self.assertNotIn("photometry", entry, lid)
+                continue
+            curve = parse_photometry(entry["photometry"], lid)
+            self.assertAlmostEqual(photometry.emitted_fraction(curve), 1.0, delta=0.02, msg=lid)          # an analytic curve: all the flux, no loss to invent
+
     def test_the_factory_has_interior_and_exterior_luminaires(self):
         self.assertEqual({e["kind"] for e in catalogue.defaults().values()}, {"interior", "exterior"})
 

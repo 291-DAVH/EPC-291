@@ -20,7 +20,7 @@ from epc.modules.projects import public as projects
 
 FILE = "lighting.json"
 DOCS = Path("workspace") / "02-engineering" / "electrical" / "PQ-01" / "docs"          # where the issuing flow looks for the documents of the engineering workspace
-KEPT = ("saved_at", "saved_by", "fingerprint", "result", "placements", "rooms", "skipped", "warnings")
+KEPT = ("saved_at", "saved_by", "fingerprint", "result", "placements", "rooms", "areas", "skipped", "warnings")
 UNSAFE = re.compile(r"[^A-Za-z0-9_.-]+")
 
 

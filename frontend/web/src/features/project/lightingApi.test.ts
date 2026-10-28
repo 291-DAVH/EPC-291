@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addRoom } from "./planTools";
 import { blank, Drawing, setScale } from "./planEditing";
-import { applyLighting, cardOf, hasPlacements, isReady, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
+import { applyLighting, areaCardOf, cardOf, cellsOf, hasPlacements, isReady, mapsOf, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
 
 const square = (d: Drawing, name: string): Drawing => addRoom(d, name, [[0, 0], [60, 0], [60, 40], [0, 40]]);
 const twoRooms = (): Drawing => square(square(setScale(blank(), [0, 0], [100, 0], 10), "Aula"), "Pasillo");
@@ -128,5 +128,35 @@ describe("applying the luminaires to the plan", () => {
     const out = applyLighting(first, proposal({ result: { rooms: [room("r2")], warnings: [], counts: { rooms: 1, luminaires: 1 } }, placements: { r2: [{ tag: "LU-001", x: 5, y: 60, z_m: 2.6 }] } }));
     expect(out).toMatchObject({ added: 1, removed: 0 });
     expect(out.drawing.nodes).toHaveLength(3);
+  });
+});
+
+describe("exterior areas and the illuminance map", () => {
+  it("an exterior area is ready with a luminaire and a target, never with only an activity", () => {
+    expect(isReady({ exterior: true, luminaire: "f", target_lux: 20 })).toBe(true);
+    expect(isReady({ exterior: true, luminaire: "f", activity: "education.classroom" })).toBe(false);
+    expect(isReady({ exterior: true, target_lux: 20 })).toBe(false);
+  });
+
+  it("is saved with the room and goes away when it is unchecked", () => {
+    let d = setRoomLighting(twoRooms(), "r1", { exterior: true, luminaire: "f", target_lux: 20, enclosure: "closed" });
+    expect(d.rooms![0].lighting).toEqual({ exterior: true, luminaire: "f", target_lux: 20, enclosure: "closed" });
+    d = setRoomLighting(d, "r1", { exterior: false, enclosure: "" });
+    expect(d.rooms![0].lighting).toEqual({ luminaire: "f", target_lux: 20 });
+    expect(requestOf(setRoomLighting(twoRooms(), "r1", { exterior: true, luminaire: "f", target_lux: 20, beam_utilisation: 0.7 }), "en", { map: true }).options).toEqual({ map: true });
+  });
+
+  it("draws a map as one cell per value with its place, size and where its lux is between the lowest and the highest", () => {
+    const m = { x0: 10, y0: 20, dx: 5, dy: 4, nx: 2, ny: 2, values: [100, 300, null, 200], min: 100, max: 300 };
+    expect(cellsOf(m)).toEqual([{ x: 10, y: 20, w: 5, h: 4, t: 0 }, { x: 15, y: 20, w: 5, h: 4, t: 1 }, { x: 15, y: 24, w: 5, h: 4, t: 0.5 }]);
+    expect(cellsOf({ ...m, values: [50, 50, 50, 50], min: 50, max: 50 }).every((c) => c.t === 0)).toBe(true);          // a room with the same light everywhere has no span to divide by
+    expect(mapsOf(null)).toEqual([]);
+  });
+
+  it("an area card says the floodlights, the verdict and what was estimated with little confidence", () => {
+    const est = (v: number, c: number) => ({ value: v, reason: "x", confidence: c });
+    const card = areaCardOf({ id: "a", name: "Patio", area_m2: 40, target: est(20, 1), factors: { beam_utilisation: est(0.75, 0.4), maintenance: est(0.65, 0.9) }, flux: { luminaires_required: 3 },
+                              verification: { average_lux: 24, target_lux: 20, complies: true, margin_pct: 20 }, energy: { installed_power_w: 300 } });
+    expect(card).toMatchObject({ floodlights: 3, complies: true, power_w: 300, unsure: ["beam"] });
   });
 });

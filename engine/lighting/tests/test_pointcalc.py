@@ -75,7 +75,32 @@ class TestGrid(unittest.TestCase):
         self.assertLessEqual(len(pointcalc.grid_points(200, 300, 0.5)), 2500)
 
 
+class TestGrid(unittest.TestCase):
+    def test_the_shape_of_the_grid_is_the_one_of_its_points(self):
+        nx, ny = pointcalc.grid_shape(4, 6, 0.5)
+        self.assertEqual((nx, ny), (12, 8))
+        self.assertEqual(len(pointcalc.grid_points(4, 6, 0.5)), nx * ny)
+
+    def test_the_grid_is_only_given_when_asked_and_has_one_value_per_cell_row_by_row(self):
+        lone = [Source(1.0, 1.0, 3.0, UNIFORM, 1000.0)]
+        plain, _ = pointcalc.calculate(lone, 2.0, 2.0, 0.0, 1.0, 0.8)
+        self.assertNotIn("grid", plain)
+        report, _ = pointcalc.calculate(lone, 2.0, 2.0, 0.0, 1.0, 0.8, with_grid=True)
+        grid = report["grid"]
+        self.assertEqual((grid["nx"], grid["ny"], grid["dx_m"], grid["dy_m"]), (2, 2, 1.0, 1.0))
+        self.assertEqual(len(grid["maintained_lux"]), 4)
+        self.assertAlmostEqual(grid["maintained_lux"][0], grid["maintained_lux"][3], places=1)           # symmetric under a source in the middle
+        self.assertAlmostEqual(sum(grid["maintained_lux"]) / 4, report["avg_lux"], delta=0.2)             # the same figures as the statistics
+
+
 class TestInPipeline(unittest.TestCase):
+    def test_the_option_reaches_the_report_of_a_room_with_photometry(self):
+        from epc_lighting import Options
+        pts = run(helpers.document([helpers.room_dict()]), Options(return_grid=True)).as_dict()["rooms"][0]["points"]
+        self.assertEqual(len(pts["grid"]["maintained_lux"]), pts["grid"]["nx"] * pts["grid"]["ny"])
+        self.assertNotIn("grid", self._points())
+
+
     def _points(self, **kw):
         return run(helpers.document([helpers.room_dict(**kw)])).as_dict()["rooms"][0]["points"]
 

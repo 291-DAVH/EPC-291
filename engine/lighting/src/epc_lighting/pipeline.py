@@ -75,7 +75,7 @@ def _points(room: Room, lum: Luminaire, lay: Dict[str, Any], h: float, cm: float
         pointcalc.Source(p["x_m"], p["y_m"], p["z_m"], lum.photometry, lum.flux_lm) for p in lay["positions"]
     ]
     step = room.point_step_m or options.point_step_m
-    report, extra = pointcalc.calculate(sources, room.width_m, room.length_m, room.work_plane_m, step, cm, room.points)
+    report, extra = pointcalc.calculate(sources, room.width_m, room.length_m, room.work_plane_m, step, cm, room.points, options.return_grid)
     warnings.extend(extra)
     report["photometry_output_ratio"] = _output_ratio(lum, warnings)
     return report

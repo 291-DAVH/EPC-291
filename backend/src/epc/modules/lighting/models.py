@@ -40,12 +40,17 @@ class RoomParams(Strict):
     work_plane_height_m: Optional[float] = Field(None, ge=0, le=60)
     operating_hours_per_year: Optional[float] = Field(None, ge=0, le=8760)
     reflectances: Optional[Dict[str, Any]] = None
+    exterior: bool = False                                               # an exterior area: floodlights by the beam method, from the area and the target (nothing about its walls or its height)
+    beam_utilisation: Optional[float] = Field(None, gt=0, le=1)
+    enclosure: Literal["open", "closed"] = "open"
+    maintenance_factor: Optional[float] = Field(None, gt=0, le=1)
 
 
 class CalcOptions(Strict):
     enforce_spacing: bool = False
     spacing_basis: Literal["height", "distribution"] = "height"
     compute_points: bool = True
+    map: bool = False                                                    # also give the illuminance of every cell of the grid, to draw it over the plan
     point_step_m: float = Field(0.5, gt=0, le=5)
     default_height_m: float = Field(2.6, gt=0, le=60)                    # for a room whose height was not given
 

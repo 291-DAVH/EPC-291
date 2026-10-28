@@ -138,6 +138,7 @@ class Options:
     spacing_basis: str = "height"
     compute_points: bool = True
     point_step_m: float = PARAMS["point_grid"]["step_m"]
+    return_grid: bool = False                         # also give the illuminance of every cell of the grid (for a map), not only its statistics
 
 
 @dataclass

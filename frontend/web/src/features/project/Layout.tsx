@@ -5,7 +5,7 @@ import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
-import { applyLighting, LightingOptions, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
+import { applyLighting, LightingOptions, mapsOf, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
 import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
@@ -70,6 +70,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [runs, setRuns] = useState<RunsProposal | null>(null);
   const [lighting, setLighting] = useState<LightingProposal | null>(null);          // luminaires proposed for the rooms, shown over the plan until the person decides
   const [lightBusy, setLightBusy] = useState(false);
+  const [lightMap, setLightMap] = useState(false);                                // also draw the illuminance of the rooms over the plan
   const [lightApplied, setLightApplied] = useState("");
   const [studyRev, setStudyRev] = useState(0);
   const [reported, setReported] = useState("");
@@ -233,9 +234,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
   };
-  const calcLighting = async () => {
+  const calcLighting = async (on?: boolean) => {
     setLightBusy(true);
-    try { setLighting(await api<LightingProposal>(`/projects/${client}/${code}/lighting/calc`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) })); setErr(""); } catch (x) { setErr(errorText(x)); }
+    try { setLighting(await api<LightingProposal>(`/projects/${client}/${code}/lighting/calc`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang, { map: on ?? lightMap })) })); setErr(""); } catch (x) { setErr(errorText(x)); }
     setLightBusy(false);
   };
   const lightKey = useMemo(() => JSON.stringify(requestOf(drawing, lang)), [drawing, lang]);
@@ -405,7 +406,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={marksOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={marksOf(lighting)} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -424,7 +425,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
-              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={calcLighting} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} onReport={makeReport} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
+              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={() => calcLighting()} showMap={lightMap} onMap={(on) => { setLightMap(on); if (lighting) calcLighting(on); }} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} onReport={makeReport} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}

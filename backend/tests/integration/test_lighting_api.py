@@ -101,7 +101,7 @@ class TestCalc(Base):
         out = self.c.post(BASE + "/calc", json=body(params={})).json()
         self.assertIsNone(out["result"])
         self.assertEqual(len(out["skipped"]), 1)
-        self.assertTrue(any("no room could be calculated" in w for w in out["warnings"]))
+        self.assertTrue(any("nothing could be calculated" in w for w in out["warnings"]))
 
     def test_a_room_that_is_not_a_rectangle_is_calculated_by_its_bounding_box_and_says_so(self):
         self.with_own()
@@ -206,6 +206,68 @@ class TestCatalogue(Base):
         self.assertIn("mine", [x["id"] for x in self.c.get(BASE + "/options").json()["luminaires"]])
         self.assertEqual(self.c.delete(BASE + "/luminaires").status_code, 200)
         self.assertNotIn("mine", [x["id"] for x in self.c.get(BASE + "/options").json()["luminaires"]])
+
+
+FLOOD = {"exterior": True, "luminaire": "led_floodlight_100w", "target_lux": 20}
+PANEL = {"activity": "education.classroom", "luminaire": "led_panel_600"}
+L_SHAPE = {"id": "R1", "name": "En L", "points": [[0, 0], [120, 0], [120, 20], [20, 20], [20, 80], [0, 80]]}
+
+
+class TestExteriorAndMap(Base):
+    def test_an_exterior_area_gets_floodlights_from_its_area_and_target_and_no_positions(self):
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": FLOOD})).json()
+        area = out["result"]["areas"][0]
+        self.assertEqual((area["id"], area["area_m2"], area["method"]), ("R1", 24.0, "floodlight"))
+        self.assertGreaterEqual(area["flux"]["luminaires_required"], 1)
+        self.assertEqual((out["result"]["rooms"], out["placements"], out["rooms"]), ([], {}, []))
+        self.assertEqual(out["areas"], [{"id": "R1", "name": "Aula", "area_m2": 24.0}])
+        self.assertTrue(area["verification"]["complies"])
+
+    def test_the_area_of_an_exterior_outline_is_the_real_one_not_the_bounding_box(self):
+        out = self.c.post(BASE + "/calc", json=body(rooms=(L_SHAPE,), params={"R1": FLOOD})).json()
+        self.assertEqual(out["areas"][0]["area_m2"], 36.0)                                          # 12 x 2 m plus 2 x 6 m of the leg of the L; the bounding box would be 96 m²
+        self.assertFalse(any("bounding box" in w for w in out["warnings"]))
+
+    def test_an_exterior_area_needs_a_target_and_the_luminaire_has_to_be_of_its_kind(self):
+        no_target = self.c.post(BASE + "/calc", json=body(params={"R1": {**FLOOD, "target_lux": None}})).json()
+        self.assertIn("needs its target", no_target["skipped"][0]["reason"])
+        interior_in_area = self.c.post(BASE + "/calc", json=body(params={"R1": {**FLOOD, "luminaire": "led_panel_600"}})).json()
+        self.assertIn("for interior use", interior_in_area["skipped"][0]["reason"])
+        exterior_in_room = self.c.post(BASE + "/calc", json=body(params={"R1": {**PANEL, "luminaire": "led_floodlight_100w"}})).json()
+        self.assertIn("for exterior use", exterior_in_room["skipped"][0]["reason"])
+
+    def test_rooms_and_areas_are_calculated_together_and_an_outline_too_large_is_left_out(self):
+        pool = {"id": "R2", "name": "Patio", "points": [[0, 100], [60, 100], [60, 160], [0, 160]]}
+        both = self.c.post(BASE + "/calc", json=body(rooms=(CLASSROOM, pool), params={"R1": PANEL, "R2": FLOOD})).json()
+        self.assertEqual(([r["id"] for r in both["result"]["rooms"]], [a["id"] for a in both["result"]["areas"]]), (["R1"], ["R2"]))
+        huge = {"id": "R3", "name": "Enorme", "points": [[0, 0], [100000, 0], [100000, 100000], [0, 100000]]}
+        out = self.c.post(BASE + "/calc", json=body(rooms=(huge,), params={"R3": FLOOD})).json()
+        self.assertIn("larger than", out["skipped"][0]["reason"])
+
+    def test_the_illuminance_map_is_given_only_when_asked_one_value_per_cell(self):
+        plain = self.c.post(BASE + "/calc", json=body(params={"R1": PANEL})).json()
+        self.assertEqual(plain["maps"], {})
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": PANEL}, options={"map": True})).json()
+        m = out["maps"]["R1"]
+        self.assertEqual(len(m["values"]), m["nx"] * m["ny"])
+        self.assertEqual((m["x0"], m["y0"]), (0.0, 0.0))
+        self.assertAlmostEqual(m["nx"] * m["dx"], 60.0, places=2)                                       # the cells cover the room, in view units
+        self.assertLess(m["min"], m["max"])
+
+    def test_the_map_of_an_l_shaped_room_leaves_out_the_cells_outside_its_outline(self):
+        out = self.c.post(BASE + "/calc", json=body(rooms=(L_SHAPE,), params={"R1": PANEL}, options={"map": True})).json()
+        m = out["maps"]["R1"]
+        self.assertIn(None, m["values"])
+        self.assertTrue(any(v is not None for v in m["values"]))
+        last_row = m["values"][-m["nx"]:]                                                               # the bottom of the L is the leg: its right side is outside
+        self.assertIsNone(last_row[-1])
+        self.assertIsNotNone(last_row[0])
+
+    def test_a_luminaire_without_curve_gives_no_map_and_says_why_in_the_statistics(self):
+        self.with_own()
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": PARAMS}, options={"map": True})).json()
+        self.assertEqual(out["maps"], {})
+        self.assertFalse(out["result"]["rooms"][0]["points"]["computed"])
 
 
 class TestCompanyLevel(Base):

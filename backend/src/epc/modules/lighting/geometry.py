@@ -49,6 +49,11 @@ def _area(points: Sequence[Sequence[float]]) -> float:
     return abs(total) / 2
 
 
+def area_m2(points: Sequence[Sequence[float]], k: float) -> float:
+    """Area of an outline in square metres (any polygon)."""
+    return _area(points) * k * k
+
+
 def rectangle(points: Sequence[Sequence[float]]) -> Rect:
     """The bounding box of an outline and whether the outline fills it (so it is a rectangle along the axes)."""
     xs, ys = [p[0] for p in points], [p[1] for p in points]

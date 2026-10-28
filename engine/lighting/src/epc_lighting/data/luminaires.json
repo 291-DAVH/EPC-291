@@ -1,30 +1,202 @@
 {
   "schema_version": "1.0",
-  "note": "Generic luminaires to start from. They are ILLUSTRATIVE: the flux and the power are typical of the kind of luminaire, not of a maker. The company and each project replace them with the luminaires they use (flux, power and, when they have it, the coefficient-of-utilisation table or the intensity curve of the maker).",
+  "note": "Generic luminaires to start from. They are ILLUSTRATIVE: the flux and the power are typical of the kind of luminaire, not of a maker. The company and each project replace them with the luminaires they use (flux, power and, when they have it, the coefficient-of-utilisation table or the intensity curve of the maker). The interior ones carry an analytic intensity curve (a cosine power law that emits all the lamp flux, so no light output ratio is assumed) only so that the illuminance map can be drawn: replace it with the maker's curve.",
   "luminaires": {
     "led_panel_600": {
-      "name": {"es": "Panel LED 600 x 600 mm, 36 W", "en": "LED panel 600 x 600 mm, 36 W"},
-      "kind": "interior", "lamps": 1, "lamp_flux_lm": 3600, "power_w": 36, "illustrative": true
+      "name": {
+        "es": "Panel LED 600 x 600 mm, 36 W",
+        "en": "LED panel 600 x 600 mm, 36 W"
+      },
+      "kind": "interior",
+      "lamps": 1,
+      "lamp_flux_lm": 3600,
+      "power_w": 36,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          318.3,
+          313.5,
+          299.1,
+          275.7,
+          243.8,
+          204.6,
+          159.2,
+          108.9,
+          55.3,
+          0.0
+        ]
+      }
     },
     "led_downlight_20w": {
-      "name": {"es": "Embutido LED (downlight), 20 W", "en": "Recessed LED downlight, 20 W"},
-      "kind": "interior", "lamps": 1, "lamp_flux_lm": 2000, "power_w": 20, "illustrative": true
+      "name": {
+        "es": "Embutido LED (downlight), 20 W",
+        "en": "Recessed LED downlight, 20 W"
+      },
+      "kind": "interior",
+      "lamps": 1,
+      "lamp_flux_lm": 2000,
+      "power_w": 20,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          636.6,
+          608.0,
+          528.2,
+          413.5,
+          286.2,
+          169.1,
+          79.6,
+          25.5,
+          3.3,
+          0.0
+        ]
+      }
     },
     "led_batten_2x18w": {
-      "name": {"es": "Regleta LED, 2 x 18 W", "en": "LED batten, 2 x 18 W"},
-      "kind": "interior", "lamps": 2, "lamp_flux_lm": 1800, "power_w": 36, "illustrative": true
+      "name": {
+        "es": "Regleta LED, 2 x 18 W",
+        "en": "LED batten, 2 x 18 W"
+      },
+      "kind": "interior",
+      "lamps": 2,
+      "lamp_flux_lm": 1800,
+      "power_w": 36,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          318.3,
+          313.5,
+          299.1,
+          275.7,
+          243.8,
+          204.6,
+          159.2,
+          108.9,
+          55.3,
+          0.0
+        ]
+      }
     },
     "fluorescent_2x36w": {
-      "name": {"es": "Artefacto fluorescente, 2 x 36 W (con balasto)", "en": "Fluorescent fitting, 2 x 36 W (with ballast)"},
-      "kind": "interior", "lamps": 2, "lamp_flux_lm": 3350, "power_w": 80, "illustrative": true
+      "name": {
+        "es": "Artefacto fluorescente, 2 x 36 W (con balasto)",
+        "en": "Fluorescent fitting, 2 x 36 W (with ballast)"
+      },
+      "kind": "interior",
+      "lamps": 2,
+      "lamp_flux_lm": 3350,
+      "power_w": 80,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          318.3,
+          313.5,
+          299.1,
+          275.7,
+          243.8,
+          204.6,
+          159.2,
+          108.9,
+          55.3,
+          0.0
+        ]
+      }
     },
     "led_highbay_150w": {
-      "name": {"es": "Campana LED industrial, 150 W", "en": "LED high-bay, 150 W"},
-      "kind": "interior", "lamps": 1, "lamp_flux_lm": 19500, "power_w": 150, "illustrative": true
+      "name": {
+        "es": "Campana LED industrial, 150 W",
+        "en": "LED high-bay, 150 W"
+      },
+      "kind": "interior",
+      "lamps": 1,
+      "lamp_flux_lm": 19500,
+      "power_w": 150,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          795.8,
+          748.5,
+          620.5,
+          447.6,
+          274.0,
+          135.9,
+          49.7,
+          10.9,
+          0.7,
+          0.0
+        ]
+      }
     },
     "led_floodlight_100w": {
-      "name": {"es": "Proyector LED, 100 W", "en": "LED floodlight, 100 W"},
-      "kind": "exterior", "lamps": 1, "lamp_flux_lm": 11000, "power_w": 100, "illustrative": true
+      "name": {
+        "es": "Proyector LED, 100 W",
+        "en": "LED floodlight, 100 W"
+      },
+      "kind": "exterior",
+      "lamps": 1,
+      "lamp_flux_lm": 11000,
+      "power_w": 100,
+      "illustrative": true
     }
   }
 }
