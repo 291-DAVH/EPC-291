@@ -1,5 +1,6 @@
 """The boards of a project: reading, saving, creating and removing them, with their title block and supply."""
 
+import re
 from pathlib import Path
 from typing import Dict
 
@@ -64,6 +65,11 @@ def _parties_line(d: Path) -> dict:
     return {"issuer": (p["issuer"] or {}).get("legal_name", ""), "client": p["client"].get("name", ""), "team": p["team"].get(DISCIPLINE, {})}
 
 
+def _location(data: dict) -> str:
+    """Where in the building the board is (a field of its title block)."""
+    return (data.get("titleblock") or {}).get("location") or ""
+
+
 def boards(d: Path) -> list:
     """The boards of the project with their state; each one has its own data, calculation, memo and diagrams."""
     out = []
@@ -72,7 +78,7 @@ def boards(d: Path) -> list:
         b = {**Board().model_dump(), **(data.get("board") or {})}
         st = repository.load_status(d, bid)
         out.append({"id": bid, "name": b["name"] or bid, "voltage_v": b["voltage_v"], "system": b["system"], "icc_ka": b["icc_ka"], "circuits": len(data.get("circuits") or []),
-                    "supplied_from": b["supplied_from"], "supply_tag": b["supply_tag"], "state": st.get("state", "idle"), "finished": st.get("finished")})
+                    "supplied_from": b["supplied_from"], "supply_tag": b["supply_tag"], "level": b["level"], "location": _location(data), "state": st.get("state", "idle"), "finished": st.get("finished")})
     return out
 
 
@@ -115,14 +121,37 @@ def save(d: Path, body: SldIn, bid: str = "") -> dict:
     return view(d, bid)
 
 
-def create_board(d: Path, name: str, supplied_from: str = "", supply_tag: str = "") -> dict:
+LEVEL = re.compile(r"^L-?\d{1,2}$")
+
+
+def _placement_errors(level: str, location: str) -> Dict[str, str]:
+    errors = {}
+    if level and not LEVEL.match(level):
+        errors["level"] = "a level of the building: L-1, L0, L1..."
+    if len(location) > 120:
+        errors["location"] = "up to 120 characters"
+    return errors
+
+
+def _placement(level: str, location: str) -> tuple:
+    """The level and the place of a board, clean, or `Invalid` with what to correct."""
+    level, location = (level or "").strip(), (location or "").strip()
+    errors = _placement_errors(level, location)
+    if errors:
+        raise Invalid(errors)
+    return level, location
+
+
+def create_board(d: Path, name: str, supplied_from: str = "", supply_tag: str = "", level: str = "", location: str = "") -> dict:
     name = (name or "").strip()
     if not name or len(name) > 60:
         raise Invalid({"name": "required, up to 60 characters"})
+    level, location = _placement(level, location)
     if name.lower() in {b["name"].lower() for b in boards(d)}:
         raise Conflict({"name": "a board with that name already exists"})
     data = _blank(d, name)
-    data["board"].update(supplied_from=supplied_from.strip(), supply_tag=supply_tag.strip())
+    data["board"].update(supplied_from=supplied_from.strip(), supply_tag=supply_tag.strip(), level=level)
+    data["titleblock"]["location"] = location
     errors = _supply_errors(d, "", data["board"])
     if errors:
         raise Invalid(errors)

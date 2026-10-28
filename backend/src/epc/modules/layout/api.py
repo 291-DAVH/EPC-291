@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile
 from fastapi.responses import FileResponse
 
 from epc.modules.layout import service, templates
-from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, TemplateIn
+from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, PlenumIn, TemplateIn
 from epc.modules.projects import public as projects
 
 # Internal engineering surface (the organization's own projects): never under /api/app.
@@ -18,6 +18,22 @@ SAFE_HEADERS = {"Content-Security-Policy": "sandbox; default-src 'none'; style-s
 @router.get("")
 def overview(client: str, code: str):
     return service.overview(projects.get_project_dir(client, code))
+
+
+@router.get("/plenums")
+def plenums(client: str, code: str):
+    return service.plenums(projects.get_project_dir(client, code))
+
+
+@router.put("/plenums")
+def define_plenum(client: str, code: str, body: PlenumIn):
+    """Define a plenum and put it in the drawings of the levels it crosses."""
+    return service.define_plenum(projects.get_project_dir(client, code), body)
+
+
+@router.delete("/plenums/{discipline}/{plenum}")
+def delete_plenum(client: str, code: str, discipline: str, plenum: str):
+    return service.remove_plenum(projects.get_project_dir(client, code), discipline, plenum)
 
 
 @router.get("/{level}")
