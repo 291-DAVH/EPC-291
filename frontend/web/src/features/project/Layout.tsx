@@ -17,9 +17,11 @@ import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "
 import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
 import { applyProposal, applyRuns, Architecture, BoardRef, allowedKinds, newSheetKey, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
+import { BoardAnswer, ElectricalSetupDialog, PlenumAnswer, PlenumDialog } from "./BoardPlenumDialogs";
+import { BoardPlace, ELECTRICAL, levelsToMake, otherShafts, plenumNear, plenumNeededAt, PlenumDef } from "./plenumFlow";
 
 interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; subdiscipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
-interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: BoardRef[]; dxf_versions: string[]; default_dxf_version: string }
+interface Overview { levels: Sheet[]; plenums: PlenumDef[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: (BoardRef & BoardPlace)[]; dxf_versions: string[]; default_dxf_version: string }
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
@@ -73,6 +75,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [runs, setRuns] = useState<RunsProposal | null>(null);
   const [lighting, setLighting] = useState<LightingProposal | null>(null);          // luminaires proposed for the rooms, shown over the plan until the person decides
   const [lightBusy, setLightBusy] = useState(false);
+  const [dialog, setDialog] = useState<null | { type: "setup" } | { type: "plenum"; level: string; next: string; discipline: string; mandatory: boolean; at: Pt }>(null);
+  const [dialogBusy, setDialogBusy] = useState(false);
   const lightMap = !!drawing.lighting_settings?.map;                              // also draw the illuminance of the rooms over the plan: the sheet remembers it
   const [lightCompare, setLightCompare] = useState<{ room: string; options: CompareRow[]; best: string | null } | null>(null);
   const [studyError, setStudyError] = useState("");
@@ -167,7 +171,55 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName, subdiscipline }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
   };
   /** A discipline is on a level once; what it draws there is split in plans (lighting, sockets...), each a sheet of its own: the first one has no name in its key, the next ones carry theirs. */
-  const addDiscipline = (pid: string) => createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), "", false), pid);
+  const addDiscipline = (pid: string) => {
+    if (pid === ELECTRICAL && !sheets.some((x) => x.discipline === ELECTRICAL)) { setDialog({ type: "setup" }); return; }            // the first electrical sheet asks where the board is
+    createSheet(newSheetKey(base, pid, sheets.filter((x) => x.base === base).map((x) => x.level), "", false), pid);
+  };
+  const putSheet = (name: string, discipline: string) => api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: "", subdiscipline: "" }) });
+  /** The first electrical sheet: the levels the board needs (so it sits on its own, not on the ground level), the board with its place, and the sheet of its level. */
+  const submitSetup = async (a: BoardAnswer) => {
+    setDialogBusy(true);
+    try {
+      for (const key of levelsToMake(bases, a.level)) await putSheet(key, "arquitectura");
+      await api(`/projects/${client}/${code}/sld/boards`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ name: a.name, level: a.level, location: a.location }) });
+      await putSheet(`${a.level}@${ELECTRICAL}`, ELECTRICAL);
+      setDialog(null); setRev((n) => n + 1); setLevel(`${a.level}@${ELECTRICAL}`); setErr("");
+    } catch (x) { setErr(errorText(x)); }
+    setDialogBusy(false);
+  };
+  /** Adding a level: where the board is there has to be a plenum for the cables to go through, so it is asked for (and the level waits for the answer); the other disciplines that can have one are asked whether they need it. */
+  const requestLevel = async (direction: "up" | "down") => {
+    const next = nextLevel(bases, direction);
+    const needed = plenumNeededAt(ov.data?.boards ?? [], ov.data?.plenums ?? []);
+    if (needed) {
+      const board = await boardPosition(needed);
+      setDialog({ type: "plenum", level: needed, next, discipline: ELECTRICAL, mandatory: true, at: plenumNear(board) });
+      return;
+    }
+    const others = otherShafts(ov.data?.profiles ?? [], sheets.map((x) => x.discipline), ov.data?.plenums ?? [], base);
+    const asked = others.find((pid) => window.confirm(tl("plenum.askOther").replace("{discipline}", profName(pid)).replace("{level}", base)));
+    if (asked) setDialog({ type: "plenum", level: base, next, discipline: asked, mandatory: false, at: plenumNear(null) });
+    else createSheet(next);
+  };
+  /** Where the board is on the plan of its level, in metres from the origin (null when it is not drawn yet). */
+  const boardPosition = async (boardLevel: string): Promise<Pt | null> => {
+    try {
+      const v = await api<LevelView>(`${root}/${boardLevel}@${ELECTRICAL}`);
+      const node = v.drawing.nodes.find((n) => n.kind === "TB"), k = metresPerUnit(v.drawing);
+      return node && k ? toMetres([node.x, node.y], v.drawing.origin, k) : null;
+    } catch { return null; }
+  };
+  const submitPlenum = async (a: PlenumAnswer) => {
+    if (dialog?.type !== "plenum") return;
+    setDialogBusy(true);
+    try {
+      await api(`${root}/plenums`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...a, discipline: dialog.discipline, level: dialog.level }) });
+      const next = dialog.next;
+      setDialog(null); setErr("");
+      if (next) await createSheet(next); else setRev((n) => n + 1);
+    } catch (x) { setErr(errorText(x)); }
+    setDialogBusy(false);
+  };
   const addPlan = (name: string, subdiscipline: string) => createSheet(newSheetKey(base, discipline, sheets.filter((x) => x.base === base).map((x) => x.level), name, true), discipline, name, subdiscipline);
   const renamePlan = (name: string) => { if (write) change({ ...drawing, plan_name: name }); };
   const setSubdiscipline = (id: string) => { if (write) change({ ...drawing, subdiscipline: id }); };
@@ -351,12 +403,15 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
 
   return (
     <div className="workbench">
+      {dialog?.type === "setup" && <ElectricalSetupDialog levels={bases} busy={dialogBusy} onSubmit={submitSetup} onCancel={() => setDialog(null)} />}
+      {dialog?.type === "plenum" && <PlenumDialog title={tl(dialog.mandatory ? "plenum.titleMandatory" : "plenum.title").replace("{discipline}", profName(dialog.discipline))} help={tl(dialog.mandatory ? "plenum.helpMandatory" : "plenum.help")}
+        level={dialog.level} nextLevel={dialog.next} defaults={{ x_m: dialog.at[0], y_m: dialog.at[1] }} busy={dialogBusy} onSubmit={submitPlenum} onCancel={() => setDialog(null)} />}
       <div className="wb-top">
         <div className="wb-group" role="tablist" aria-label={tl("layout.level")}>
           {bases.map((x) => <button key={x} role="tab" aria-selected={x === base} className={"lvl" + (x === base ? " on" : "")} onClick={() => setLevel((sheets.find((s) => s.base === x && s.discipline === discipline) ?? sheets.find((s) => s.base === x))!.level)}>{x}</button>)}
           {canWrite && (bases.length === 0
             ? <button className="primary" onClick={() => createSheet("L0")}>+ L0</button>
-            : <><button onClick={() => createSheet(nextLevel(bases, "up"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "up")}</button><button onClick={() => createSheet(nextLevel(bases, "down"))} title={tl("layout.addLevel")}>+ {nextLevel(bases, "down")}</button></>)}
+            : <><button onClick={() => requestLevel("up")} title={tl("layout.addLevel")}>+ {nextLevel(bases, "up")}</button><button onClick={() => requestLevel("down")} title={tl("layout.addLevel")}>+ {nextLevel(bases, "down")}</button></>)}
         </div>
         {level && <div className="wb-group" role="tablist" aria-label={tl("plan.sheets")}>
           {disciplinesHere.map((pid) => { const first = sameBase.find((x) => x.discipline === pid)!; return <button key={pid} role="tab" aria-selected={pid === discipline} className={"lvl disc" + (pid === discipline ? " on" : "")} onClick={() => pid !== discipline && setLevel(first.level)} title={profName(pid)}>{profName(pid)}</button>; })}

@@ -18,9 +18,9 @@ def circuits(d: Path) -> List[dict]:
 
 
 def boards(d: Path) -> List[dict]:
-    """The boards of the project (id and name): what the plan editor offers when a board symbol or a load is placed."""
+    """The boards of the project (id, name and where each is: its level and its place): what the plan editor offers when a board symbol or a load is placed, and what decides where the plenum is asked for."""
     from epc.modules.sld import boards as _boards
-    return [{"id": b["id"], "name": b["name"]} for b in _boards.boards(d)]
+    return [{"id": b["id"], "name": b["name"], "level": b["level"], "location": b["location"]} for b in _boards.boards(d)]
 
 
 def set_plan_lengths(provider) -> None:

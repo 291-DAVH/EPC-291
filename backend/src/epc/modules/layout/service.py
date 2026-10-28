@@ -13,8 +13,8 @@ from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside, read_json
 from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
-from epc.modules.layout import changes, repository
-from epc.modules.layout.models import DrawingIn
+from epc.modules.layout import changes, plenums as shafts, repository
+from epc.modules.layout.models import DrawingIn, PlenumIn
 from epc.modules.projects import public as projects
 from epc.modules.sld import public as sld
 
@@ -128,7 +128,7 @@ def _sheet_item(d: Path, lv: str) -> dict:
 def overview(d: Path) -> dict:
     core, dxfout, _, _ = _engine()
     items = [_sheet_item(d, lv) for lv in repository.levels(d)]
-    return {"levels": items, "profiles": _profiles(d, core, {i["discipline"] for i in items}), "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
+    return {"levels": items, "plenums": shafts.load(d), "profiles": _profiles(d, core, {i["discipline"] for i in items}), "circuits": sld.circuits(d), "boards": sld.boards(d), "dxf_versions": dxfout.versions(), "default_dxf_version": core.PARAMS["dxf"]["default_version"]}
 
 
 def _blank() -> dict:
@@ -207,12 +207,47 @@ def _with_plan_scale(d: Path, level: str, data: dict) -> dict:
 def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
     data = _with_plan_scale(d, level, body.model_dump(by_alias=True))
+    is_new = repository.load_drawing(d, level) is None
     _check_sheet(d, level, data)
     _check_subdiscipline(data)
     _edit_guard(d, data["discipline"])
     derive_data(level, data)                                    # refuse what the engine refuses before storing it
     repository.save_drawing(d, level, data)
+    _place_plenums(d, data, is_new)
     return view(d, level)
+
+
+def _place_plenums(d: Path, data: dict, is_new: bool) -> None:
+    """A level or a sheet that is born in the range of a plenum gets its node, and a plan that has just been calibrated can place the ones that waited for its scale."""
+    if is_new or data["discipline"] == repository.ARCH_DISCIPLINE:
+        shafts.sync(d, _blank)
+
+
+def _vertical_kind(discipline: str) -> Optional[str]:
+    """The kind of node that is a vertical shaft in a discipline (None when the discipline has none)."""
+    core = _engine()[0]
+    try:
+        profile = core.load_profile(discipline)
+    except core.PlanError:
+        return None
+    return next((n["id"] for n in profile["nodos"] if n.get("vertical")), None)
+
+
+def plenums(d: Path) -> dict:
+    return {"plenums": shafts.load(d)}
+
+
+def define_plenum(d: Path, body: PlenumIn) -> dict:
+    """Define a plenum and put it in the drawings of the levels it crosses, those of the levels that exist now (the others get it when they are made)."""
+    _edit_guard(d, body.discipline)
+    out = shafts.define(d, body.model_dump(), _vertical_kind, _blank)
+    identity.audit_event("layout_plenum_defined", target=f"{projects.project_id(d)}:{body.code}", org_slug=projects.read_meta(d).get("org", ""), detail={"level": body.level, "up": body.up, "down": body.down})
+    return out
+
+
+def remove_plenum(d: Path, discipline: str, code: str) -> dict:
+    _edit_guard(d, discipline)
+    return {"plenums": shafts.remove(d, code, discipline)}
 
 
 def derive(d: Path, level: str, body: DrawingIn) -> dict:

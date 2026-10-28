@@ -74,6 +74,18 @@ class DrawingIn(BaseModel):
         return v
 
 
+class PlenumIn(BaseModel):
+    """A plenum (vertical shaft) of the building: where it starts, where it is and how far it reaches."""
+    code: str = Field(min_length=1, max_length=20)
+    discipline: str = "electrica_BT"
+    level: str = Field(max_length=4)                 # the level it starts on: `L-1`, `L0`...
+    x_m: float
+    y_m: float
+    altura_m: float = 3.0                            # the height it adds to a route that goes through it
+    up: Optional[int] = None                         # levels it reaches above its own (empty: all of them)
+    down: Optional[int] = None                       # levels it reaches below its own (empty: all of them)
+
+
 class TemplateIn(BaseModel):
     """A group of nodes and lines saved to be put again, in the drawing's own units, with positions relative to the corner of the group."""
     discipline: str = "electrica_BT"

@@ -16,7 +16,7 @@ def list_boards(client: str, code: str):
 
 @router.post("/boards", status_code=201)
 def add_board(client: str, code: str, body: BoardIn):
-    return service.create_board(projects.get_project_dir(client, code), body.name, body.supplied_from, body.supply_tag)
+    return service.create_board(projects.get_project_dir(client, code), body.name, body.supplied_from, body.supply_tag, body.level, body.location)
 
 
 @router.delete("/boards/{board}")

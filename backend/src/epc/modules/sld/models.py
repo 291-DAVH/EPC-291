@@ -14,6 +14,7 @@ class Board(BaseModel):
     feeder_length_m: float = 20             # supply cable length (acometida)
     supplied_from: str = ""                 # id of the upstream board that feeds this one (empty: fed from the utility or a source outside the project)
     supply_tag: str = ""                    # circuit of the upstream board that is this board's supply
+    level: str = ""                         # the level of the building the board is on (`L-1`, `L0`, `L2`...): the plenum of the building starts there
 
 
 class Segment(BaseModel):
@@ -78,3 +79,5 @@ class BoardIn(BaseModel):
     name: str
     supplied_from: str = ""
     supply_tag: str = ""
+    level: str = ""                         # where the board is: a level of the building (`L-1`, `L0`...)
+    location: str = ""                      # where in the building (room, floor area...), for the title block
