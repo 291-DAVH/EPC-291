@@ -47,8 +47,8 @@ def illuminance_at(sources: Sequence[Source], point: Tuple[float, float, float],
     return sum(_contribution(s, point, normal) for s in sources)
 
 
-def grid_points(width_m: float, length_m: float, step_m: float) -> List[Tuple[float, float]]:
-    """Cell-centre points, x along the length and y along the width, never coarser than step_m."""
+def grid_shape(width_m: float, length_m: float, step_m: float) -> Tuple[int, int]:
+    """Cells along the length and along the width, never coarser than step_m and never more than the point limit."""
     limit = PARAMS["point_grid"]["max_points"]
     step = step_m
     while True:
@@ -56,8 +56,20 @@ def grid_points(width_m: float, length_m: float, step_m: float) -> List[Tuple[fl
         if nx * ny <= limit:
             break
         step *= 1.1
+    return nx, ny
+
+
+def grid_points(width_m: float, length_m: float, step_m: float) -> List[Tuple[float, float]]:
+    """Cell-centre points, x along the length and y along the width, never coarser than step_m."""
+    nx, ny = grid_shape(width_m, length_m, step_m)
     dx, dy = length_m / nx, width_m / ny
     return [((i + 0.5) * dx, (j + 0.5) * dy) for j in range(ny) for i in range(nx)]
+
+
+def _grid_report(width_m: float, length_m: float, step_m: float, values: List[float], maintenance: float) -> Dict[str, Any]:
+    """The illuminance (maintained lux) of every cell, row by row (y first, x along the length), with the size of a cell: what a map is drawn from."""
+    nx, ny = grid_shape(width_m, length_m, step_m)
+    return {"nx": nx, "ny": ny, "dx_m": rnd(length_m / nx), "dy_m": rnd(width_m / ny), "maintained_lux": [round(v * maintenance, 1) for v in values]}
 
 
 def _stats(values: List[float], maintenance: float) -> Dict[str, Any]:
@@ -100,6 +112,7 @@ def calculate(
     step_m: float,
     maintenance: float,
     points: Sequence[PointSpec] = (),
+    with_grid: bool = False,
 ) -> Tuple[Dict[str, Any], List[str]]:
     """Grid statistics (maintained lux) plus any requested points; returns (report, warnings)."""
     if step_m <= 0:
@@ -116,4 +129,6 @@ def calculate(
         **stats,
         "points": _points_report(sources, points, plane_m, maintenance),
     }
+    if with_grid:
+        report["grid"] = _grid_report(width_m, length_m, step_m, values, maintenance)
     return report, _uniformity_warnings(stats)

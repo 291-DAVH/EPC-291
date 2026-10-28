@@ -4,6 +4,7 @@ import { addNode, DNode, Drawing, Pt, Room } from "./planEditing";
  *  The calculation is the backend's (`epc_lighting`); nothing here computes light. */
 export interface RoomLighting {
   activity?: string; luminaire?: string; method?: "lumen" | "zonal"; height_m?: number; target_lux?: number; coefficient_of_utilisation?: number;
+  exterior?: boolean; beam_utilisation?: number; enclosure?: "open" | "closed";        // an exterior area: floodlights from its area and its target
 }
 export interface LightActivity { id: string; label: string; em_lux: number; ugr_l: number | null; ra: number | null; source: string }
 export interface LightLuminaire { id: string; name: string; kind: "interior" | "exterior"; lamps: number; lamp_flux_lm: number; power_w: number | null; illustrative: boolean; level: string }
@@ -26,9 +27,16 @@ export interface LightingStudy {
   exists: boolean; stale?: boolean; report?: boolean; saved_at?: string; saved_by?: string;
   result?: LightingProposal["result"]; skipped?: LightingProposal["skipped"]; warnings?: string[];
 }
+export interface AreaResult {
+  id: string; name: string; area_m2: number; target: Estimate; factors: { beam_utilisation: Estimate; maintenance: Estimate }; flux: { luminaires_required: number };
+  verification: { average_lux: number; target_lux: number; complies: boolean; margin_pct: number }; energy: { installed_power_w: number | null };
+}
+/** The illuminance of the cells of a room, row by row from its corner (view units), `null` where a cell is outside the outline. */
+export interface LightMap { x0: number; y0: number; dx: number; dy: number; nx: number; ny: number; values: (number | null)[]; min: number; max: number }
 export interface Placement { tag: string; x: number; y: number; z_m: number }
 export interface LightingProposal {
-  result: { rooms: RoomResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;
+  result: { rooms: RoomResult[]; areas?: AreaResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;
+  maps?: Record<string, LightMap>;
   placements: Record<string, Placement[]>;
   rooms: { id: string; name: string; length_m: number; width_m: number; exact: boolean; corner: Pt }[];
   skipped: { id: string; name: string; reason: string }[];
@@ -36,7 +44,7 @@ export interface LightingProposal {
   fingerprint: string;
 }
 
-const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation"];
+const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation", "exterior", "beam_utilisation", "enclosure"];
 
 /** The drawing with a change to what a room says about its lighting; a value that is empty is taken out, and a room with nothing left has no `lighting` at all. */
 export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Record<keyof RoomLighting, unknown>>): Drawing {
@@ -46,7 +54,7 @@ export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Recor
       if (r.id !== roomId) return r;
       const next: Record<string, unknown> = { ...(r.lighting ?? {}) };
       for (const [k, v] of Object.entries(patch)) {
-        if (v === undefined || v === null || v === "" || (typeof v === "number" && !Number.isFinite(v))) delete next[k]; else next[k] = v;
+        if (v === undefined || v === null || v === "" || v === false || (typeof v === "number" && !Number.isFinite(v))) delete next[k]; else next[k] = v;
       }
       const { lighting: _old, ...rest } = r;
       return Object.keys(next).length ? { ...rest, lighting: next as RoomLighting } : rest;
@@ -54,8 +62,8 @@ export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Recor
   };
 }
 
-/** A room can be calculated when it has a luminaire and either an activity or a target. */
-export const isReady = (l: RoomLighting | undefined): boolean => !!l?.luminaire && !!(l.activity || l.target_lux);
+/** A room can be calculated when it has a luminaire and either an activity or a target; an exterior area needs its target (there is no table of typical ones). */
+export const isReady = (l: RoomLighting | undefined): boolean => !!l?.luminaire && (l.exterior ? !!l.target_lux : !!(l.activity || l.target_lux));
 
 /** Number typed in a field: a decimal comma is allowed; anything that is not a positive number is nothing. */
 export function parsePositive(text: string): number | undefined {
@@ -64,7 +72,7 @@ export function parsePositive(text: string): number | undefined {
 }
 
 /** The request of the calculation for the rooms of a sheet: their outlines and what each says about its lighting (only the rooms that say something). */
-export function requestOf(d: Drawing, lang: "es" | "en", options: { compute_points?: boolean; point_step_m?: number } = {}) {
+export function requestOf(d: Drawing, lang: "es" | "en", options: { compute_points?: boolean; point_step_m?: number; map?: boolean } = {}) {
   const rooms = d.rooms ?? [];
   return {
     sheet: { scale: d.scale, rooms: rooms.map((r) => ({ id: r.id, name: r.name, points: r.points })) },
@@ -132,4 +140,18 @@ export function applyLighting(d: Drawing, p: LightingProposal): { drawing: Drawi
     }
   }
   return { drawing: work, added, removed: dropped.length };
+}
+
+/** The cells of a map to draw: each with its place and size (view units) and where its lux falls between the lowest and the highest of the room (0 to 1). */
+export function cellsOf(m: LightMap): { x: number; y: number; w: number; h: number; t: number }[] {
+  const span = m.max - m.min || 1;
+  return m.values.flatMap((v, n) => (v === null ? [] : [{ x: m.x0 + (n % m.nx) * m.dx, y: m.y0 + Math.floor(n / m.nx) * m.dy, w: m.dx, h: m.dy, t: (v - m.min) / span }]));
+}
+
+export const mapsOf = (p: LightingProposal | null): LightMap[] => (p ? Object.values(p.maps ?? {}) : []);
+
+/** What a card of the panel shows of an exterior area: floodlights, the verdict against the target, the power and what was estimated with little confidence. */
+export function areaCardOf(a: AreaResult) {
+  return { id: a.id, name: a.name, area_m2: a.area_m2, floodlights: a.flux.luminaires_required, average: a.verification.average_lux, target: a.verification.target_lux, complies: a.verification.complies,
+           margin: a.verification.margin_pct, power_w: a.energy.installed_power_w, unsure: ([["target", a.target], ["beam", a.factors.beam_utilisation], ["maintenance", a.factors.maintenance]] as [string, Estimate][]).filter(([, e]) => e.confidence < SURE).map(([k]) => k) };
 }

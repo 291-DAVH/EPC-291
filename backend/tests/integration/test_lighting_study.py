@@ -97,6 +97,20 @@ class TestReport(Study):
         self.assertEqual(r.status_code, 409, r.text)
 
 
+class TestExterior(Study):
+    FLOOD = {"exterior": True, "luminaire": "led_floodlight_100w", "target_lux": 20}
+
+    def test_a_study_of_an_exterior_area_is_kept_and_its_report_has_the_floodlights(self):
+        self.c.put(LAYOUT, json=drawing(self.FLOOD))
+        s = self.c.put(STUDY, json=body(params={"R1": self.FLOOD})).json()
+        self.assertEqual([a["id"] for a in s["result"]["areas"]], ["R1"])
+        self.assertEqual(s["areas"][0]["area_m2"], 24.0)
+        self.assertFalse(self.c.get(STUDY).json()["stale"])
+        r = self.c.post(STUDY + "/report?lang=en")
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
+
+
 class TestDocument(unittest.TestCase):
     def test_the_texts_are_in_the_language_asked_and_what_was_estimated_with_little_confidence_is_marked(self):
         from epc.modules.lighting import report
@@ -114,6 +128,12 @@ class TestDocument(unittest.TestCase):
         self.assertIn("[confirmar]", bullets[1])
         self.assertTrue(any("valores típicos" in b.get("text", "") for b in es["blocks"]))
         self.assertEqual(report.document(stored, {}, "en", {}, False, "1.0")["title"], "Lighting calculation report")
+        stored["result"]["areas"] = [{"id": "A1", "name": "Patio", "area_m2": 40.0, "target": est(20, 0.9), "factors": {"beam_utilisation": est(0.75, 0.4)}, "flux": {"luminaires_required": 3},
+                                      "verification": {"average_lux": 24.0, "target_lux": 20, "complies": True}, "energy": {"installed_power_w": 300}}]
+        with_area = report.document(stored, {}, "en", {}, False, "1.0")
+        areas = [b for b in with_area["blocks"] if b["type"] == "table"][1]
+        self.assertEqual(areas["rows"][0], ["Patio", "–", "40", "3", "24", "20", "meets", "300"])
+        self.assertTrue(any("beam utilisation" in line and "[confirm]" in line for b in with_area["blocks"] if b["type"] == "bullets" for line in b["items"]))
 
 
 if __name__ == "__main__":
