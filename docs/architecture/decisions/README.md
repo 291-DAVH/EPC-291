@@ -27,3 +27,8 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0021](ADR-0021-plan-drawing-editor.md) | Plan-drawing editor: levels, scale, graph, circuits and DXF | Accepted |
 | [0022](ADR-0022-engine-split-generated-plugins.md) | Drawing engine split into independent packages; plugins generated from the code | Accepted |
 | [0023](ADR-0023-drawing-services-and-standard-solutions.md) | Drawings as services; DXF layer catalog; standard solutions | Accepted (direction) |
+| [0024](ADR-0024-coordination-between-disciplines.md) | Coordination between disciplines | Accepted |
+| [0025](ADR-0025-architecture-recognition.md) | Architecture recognition as an isolated engine | Accepted |
+| [0026](ADR-0026-automatic-circuit-design.md) | Automatic design of circuits and runs | Accepted |
+| [0027](ADR-0027-one-engine-per-norm.md) | One engine per norm | Accepted |
+| [0028](ADR-0028-norm-selector.md) | Norm selector: generic calculation engines, norms as complete packages, one registry | Proposed |
