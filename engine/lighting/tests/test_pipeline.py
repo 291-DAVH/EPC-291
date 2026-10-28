@@ -20,7 +20,7 @@ class TestOutputContract(unittest.TestCase):
         self.out = run(helpers.document(areas=[{"id": "A1", "area_m2": 100, "target_lux": 20, "luminaire": "F1"}])).as_dict()
 
     def test_stable_top_level_keys(self):
-        self.assertEqual(list(self.out), ["schema_version", "engine", "counts", "rooms", "areas", "warnings"])
+        self.assertEqual(list(self.out), ["schema_version", "engine", "counts", "rooms", "areas", "emergency", "warnings"])
         self.assertEqual(self.out["schema_version"], "1.0")
         self.assertEqual(self.out["engine"], {"name": "epc_lighting", "version": __version__})
 

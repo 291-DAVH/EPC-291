@@ -104,6 +104,7 @@ class Room:
     points: Tuple[PointSpec, ...] = ()
     point_step_m: Optional[float] = None
     operating_hours: Optional[float] = None
+    ugr_calculated: Optional[float] = None
 
     @property
     def area_m2(self) -> float:
@@ -125,10 +126,37 @@ class Area:
 
 
 @dataclass(frozen=True)
+class Route:
+    """An escape route: the axis along which the emergency illuminance is checked (metres from the corner of the room)."""
+    id: str
+    start: Tuple[float, float]
+    end: Tuple[float, float]
+    e_min_lux: Optional[float] = None
+
+
+@dataclass(frozen=True)
+class Emergency:
+    """A room with antipanic emergency lighting: the grid of luminaires is sized so that the floor keeps the minimum illuminance."""
+    id: str
+    name: str
+    width_m: float
+    length_m: float
+    height_m: float
+    luminaire_id: str
+    e_min_lux: Optional[float] = None
+    ratio_max: Optional[float] = None
+    maintenance: Optional[float] = None
+    band_m: Optional[float] = None
+    step_m: Optional[float] = None
+    routes: Tuple[Route, ...] = ()
+
+
+@dataclass(frozen=True)
 class Project:
     luminaires: Dict[str, Luminaire]
     rooms: Tuple[Room, ...]
     areas: Tuple[Area, ...]
+    emergency: Tuple[Emergency, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -163,6 +191,7 @@ class FluxPlan:
 class Result:
     rooms: List[Dict[str, Any]] = field(default_factory=list)
     areas: List[Dict[str, Any]] = field(default_factory=list)
+    emergency: List[Dict[str, Any]] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
     def luminaire_count(self) -> int:
@@ -176,10 +205,12 @@ class Result:
             "counts": {
                 "rooms": len(self.rooms),
                 "areas": len(self.areas),
+                "emergency": len(self.emergency),
                 "luminaires": self.luminaire_count(),
                 "warnings": len(self.warnings),
             },
             "rooms": self.rooms,
             "areas": self.areas,
+            "emergency": self.emergency,
             "warnings": list(self.warnings),
         }

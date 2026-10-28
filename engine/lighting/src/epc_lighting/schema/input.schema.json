@@ -9,7 +9,8 @@
     "schema_version": {"const": "1.0"},
     "luminaires": {"type": "array", "items": {"$ref": "#/$defs/luminaire"}},
     "rooms": {"type": "array", "items": {"$ref": "#/$defs/room"}},
-    "areas": {"type": "array", "items": {"$ref": "#/$defs/area"}}
+    "areas": {"type": "array", "items": {"$ref": "#/$defs/area"}},
+    "emergency": {"type": "array", "items": {"$ref": "#/$defs/emergency"}}
   },
   "$defs": {
     "positive": {"type": "number", "exclusiveMinimum": 0},
@@ -100,7 +101,8 @@
           }
         },
         "point_step_m": {"$ref": "#/$defs/positive"},
-        "operating_hours_per_year": {"type": "number", "minimum": 0, "maximum": 8760}
+        "operating_hours_per_year": {"type": "number", "minimum": 0, "maximum": 8760},
+        "ugr_calculated": {"type": "number", "minimum": 0, "description": "UGR calculated outside (photometric software): compared with the limit of the activity"}
       }
     },
     "area": {
@@ -118,6 +120,35 @@
         "enclosure": {"enum": ["open", "closed"], "default": "closed"},
         "maintenance_factor": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
         "operating_hours_per_year": {"type": "number", "minimum": 0, "maximum": 8760}
+      }
+    },
+    "point_xy": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0}, "description": "[x_m, y_m] in metres from the corner of the room"},
+    "route": {
+      "type": "object",
+      "required": ["start_m", "end_m"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "start_m": {"$ref": "#/$defs/point_xy"},
+        "end_m": {"$ref": "#/$defs/point_xy"},
+        "e_min_lux": {"$ref": "#/$defs/positive", "description": "Minimum illuminance along the route; the one of the room when not given"}
+      }
+    },
+    "emergency": {
+      "type": "object",
+      "required": ["id", "width_m", "length_m", "height_m", "luminaire"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "width_m": {"$ref": "#/$defs/positive"},
+        "length_m": {"$ref": "#/$defs/positive"},
+        "height_m": {"$ref": "#/$defs/positive", "description": "Mounting height above the floor, where the illuminance is checked"},
+        "luminaire": {"type": "string"},
+        "e_min_lux": {"$ref": "#/$defs/positive", "description": "Minimum illuminance of the antipanic area; a typical value (0.5 lux) is assumed, with low confidence, when not given"},
+        "max_over_min": {"type": "number", "minimum": 1, "description": "Highest over lowest illuminance; a typical value (40) is assumed when not given"},
+        "maintenance_factor": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "band_m": {"type": "number", "minimum": 0, "description": "Band along the walls left out of the check"},
+        "point_step_m": {"$ref": "#/$defs/positive"},
+        "routes": {"type": "array", "items": {"$ref": "#/$defs/route"}}
       }
     }
   }

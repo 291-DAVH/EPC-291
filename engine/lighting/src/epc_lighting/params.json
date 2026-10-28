@@ -38,6 +38,18 @@
     "material_midpoint": 0.7,
     "default": 0.5
   },
+  "emergency": {
+    "antipanic_e_min_lux": 0.5,
+    "antipanic_max_over_min": 40.0,
+    "band_m": 0.5,
+    "step_m": 0.5,
+    "maintenance": 1.0,
+    "n_max": 400,
+    "spacing_ratio_max": 1.5
+  },
+  "conformity": {
+    "direct_factor": 0.9
+  },
   "beam_utilisation_range": [0.6, 0.9],
   "uniformity_limits": {
     "min_over_avg": 0.3333333333,

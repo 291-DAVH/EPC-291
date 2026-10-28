@@ -21,4 +21,4 @@ The private material (the PDFs and the study notes) stays out of the repository,
 
 Which norm engine a country uses for a domain is said by `engine/jurisdictions/<CC>/jurisdiction.json` (`packs`: `{"electrical": "aea90364"}`).
 Run: `python -m epc_aea90364.aea_pipeline input.xlsx`. Tests: `python -m unittest discover -s tests` from this folder with `PYTHONPATH` on the `engine/*/src` folders.
-Limits: `hazen_williams.py`, `hvac_airflow.py` and `lighting.py` are not AEA calculations and should move to engines of their own; the calculation is written for this norm only (no selector of norm yet, see `docs/architecture/GUIA_NORMAS.md`).
+Limits: `hazen_williams.py` and `hvac_airflow.py` are not AEA calculations and should move to engines of their own (`lighting.py` already did: it is `engine/lighting`, ADR-0030); the calculation is written for this norm only (no selector of norm yet, see `docs/architecture/GUIA_NORMAS.md`).

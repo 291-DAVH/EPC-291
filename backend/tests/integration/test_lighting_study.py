@@ -111,6 +111,33 @@ class TestExterior(Study):
         self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
 
 
+class TestEmergencyReport(Study):
+    def test_the_emergency_lighting_of_a_room_is_kept_in_the_study_and_listed_in_the_report(self):
+        params = {**PARAMS, "emergency_luminaire": "led_emergency_3w"}
+        self.c.put(LAYOUT, json=drawing(params))
+        s = self.c.put(STUDY, json=body(params={"R1": params})).json()
+        self.assertEqual([e["id"] for e in s["result"]["emergency"]], ["R1"])
+        self.assertFalse(self.c.get(STUDY).json()["stale"])
+        r = self.c.post(STUDY + "/report?lang=es")
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
+
+    def test_the_report_document_lists_the_emergency_rooms_and_marks_the_criteria_that_were_assumed(self):
+        from epc_lighting.config import PARAMS as ENGINE
+        from epc.modules.lighting import report
+        est = lambda v, c: {"value": v, "reason": "x", "confidence": c}                                      # noqa: E731
+        room = {"id": "R1", "name": "Aula", "target": est(300, 0.9), "factors": {"cu": est(0.9, 0.9), "maintenance": est(0.8, 0.9)},
+                "layout": {"installed": 4, "required": 4}, "verification": {"average_lux": 378.4, "target_lux": 300, "complies": True}, "energy": {"installed_power_w": 144, "power_density_w_m2": 6.0}}
+        em = {"id": "R1", "name": "Aula", "luminaire": {"name": "LED emergency"}, "layout": {"installed": 2}, "criteria": {"min_lux": est(ENGINE["emergency"]["antipanic_e_min_lux"], 0.5), "max_over_min": est(40, 0.5)},
+              "verification": {"min_lux": 0.6, "max_over_min": 12.0, "complies": True}, "routes": [{"complies": True}, {"complies": False}]}
+        stored = {"sheet": "L0", "saved_at": "t", "input": {"rooms": {"R1": {"emergency_luminaire": "mine"}}}, "result": {"rooms": [room], "emergency": [em]}, "skipped": [], "warnings": []}
+        doc = report.document(stored, {}, "en", {"mine": "Own 3 W"}, False, "1.0")
+        table = [b for b in doc["blocks"] if b["type"] == "table"][1]
+        self.assertEqual(table["rows"][0], ["Aula", "Own 3 W", "2", "0.60", "12.0", "meets", "1 / 2"])
+        notes = [line for b in doc["blocks"] if b["type"] == "bullets" for line in b["items"]]
+        self.assertEqual(sum("[confirm]" in line for line in notes), 2)                                      # the minimum illuminance and the ratio were not given
+
+
 class TestDocument(unittest.TestCase):
     def test_the_texts_are_in_the_language_asked_and_what_was_estimated_with_little_confidence_is_marked(self):
         from epc.modules.lighting import report

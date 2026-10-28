@@ -5,7 +5,7 @@ import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
-import { applyLighting, LightingOptions, mapsOf, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
+import { applyLighting, emergencyMarksOf, LightingOptions, mapsOf, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
 import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
@@ -406,7 +406,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={marksOf(lighting)} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={[...marksOf(lighting), ...emergencyMarksOf(lighting)]} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>

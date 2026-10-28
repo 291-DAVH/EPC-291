@@ -6,14 +6,14 @@ SURE = 0.6                                         # under this confidence an es
 TEXT: Dict[str, Dict[str, str]] = {
     "en": {"title": "Lighting calculation report", "project": "Project", "sheet": "Sheet", "calculated": "Calculated on", "by": "Calculated by", "engine": "Engine", "summary": "Summary",
            "totals": "{rooms} room(s), {luminaires} luminaire(s), {power} W installed.", "rooms": "Rooms", "room": "Room", "activity": "Activity", "luminaire": "Luminaire", "count": "Qty",
-           "average": "Avg (lx)", "target": "Target (lx)", "verdict": "Result", "density": "W/m²", "areas": "Exterior areas", "floodlights": "Floodlights", "power": "Power (W)", "meets": "meets", "fails": "does not meet", "none": "No room was calculated",
-           "assumptions": "Assumptions and estimates", "est_target": "target", "est_beam": "beam utilisation", "est_cu": "utilisation factor", "est_maintenance": "maintenance factor", "confirm": "confirm",
+           "average": "Avg (lx)", "target": "Target (lx)", "verdict": "Result", "density": "W/m²", "areas": "Exterior areas", "emergency": "Emergency lighting", "min_lux": "Min. (lx)", "ratio": "Max/min", "routes": "Routes", "floodlights": "Floodlights", "power": "Power (W)", "meets": "meets", "fails": "does not meet", "none": "No room was calculated",
+           "assumptions": "Assumptions and estimates", "est_target": "target", "est_emin": "minimum illuminance", "est_ratio": "max/min ratio", "est_beam": "beam utilisation", "est_cu": "utilisation factor", "est_maintenance": "maintenance factor", "confirm": "confirm",
            "left_out": "Rooms left out", "warnings": "Warnings", "illustrative": "The luminaires of this study are typical values, not a maker's: replace them with the ones of the project before issuing.",
            "footer": "Lighting calculation", "page": "Page {n} of {total}"},
     "es": {"title": "Memoria de cálculo de iluminación", "project": "Proyecto", "sheet": "Hoja", "calculated": "Calculado el", "by": "Calculado por", "engine": "Motor", "summary": "Resumen",
            "totals": "{rooms} ambiente(s), {luminaires} luminaria(s), {power} W instalados.", "rooms": "Ambientes", "room": "Ambiente", "activity": "Actividad", "luminaire": "Luminaria", "count": "Cant.",
-           "average": "Prom. (lx)", "target": "Meta (lx)", "verdict": "Resultado", "density": "W/m²", "areas": "Áreas exteriores", "floodlights": "Proyectores", "power": "Potencia (W)", "meets": "cumple", "fails": "no cumple", "none": "No se calculó ningún ambiente",
-           "assumptions": "Supuestos y estimaciones", "est_target": "la meta", "est_beam": "el aprovechamiento del haz", "est_cu": "el factor de utilización", "est_maintenance": "el factor de mantenimiento", "confirm": "confirmar",
+           "average": "Prom. (lx)", "target": "Meta (lx)", "verdict": "Resultado", "density": "W/m²", "areas": "Áreas exteriores", "emergency": "Iluminación de emergencia", "min_lux": "Mín. (lx)", "ratio": "Máx/mín", "routes": "Rutas", "floodlights": "Proyectores", "power": "Potencia (W)", "meets": "cumple", "fails": "no cumple", "none": "No se calculó ningún ambiente",
+           "assumptions": "Supuestos y estimaciones", "est_target": "la meta", "est_emin": "la iluminancia mínima", "est_ratio": "la relación máx/mín", "est_beam": "el aprovechamiento del haz", "est_cu": "el factor de utilización", "est_maintenance": "el factor de mantenimiento", "confirm": "confirmar",
            "left_out": "Ambientes omitidos", "warnings": "Avisos", "illustrative": "Las luminarias de este estudio son valores típicos, no de un fabricante: reemplázalas por las del proyecto antes de emitir.",
            "footer": "Cálculo de iluminación", "page": "Página {n} de {total}"},
 }
@@ -47,6 +47,22 @@ def _area_row(a: dict, areas: Dict[str, dict], t: Dict[str, str], luminaire_name
             t["meets"] if v["complies"] else t["fails"], _number(a["energy"].get("installed_power_w"))]
 
 
+def _emergency_row(e: dict, asked: Dict[str, dict], t: Dict[str, str], luminaire_names: Dict[str, str]) -> List[str]:
+    v = e["verification"]
+    name = luminaire_names.get(asked.get(e["id"], {}).get("emergency_luminaire", ""), e["luminaire"]["name"])
+    routes = f"{sum(1 for r in e['routes'] if r['complies'])} / {len(e['routes'])}" if e["routes"] else "–"
+    return [e["name"], name, str(e["layout"]["installed"]), _number(v.get("min_lux"), 2), _number(v.get("max_over_min"), 1), t["meets"] if v["complies"] else t["fails"], routes]
+
+
+def _emergency_assumptions(emergency: List[dict], t: Dict[str, str]) -> List[str]:
+    lines = []
+    for e in emergency:
+        for key, est in (("est_emin", e["criteria"]["min_lux"]), ("est_ratio", e["criteria"]["max_over_min"])):
+            if est["confidence"] < SURE:
+                lines.append(f"{e['name']}: {t[key]} = {est['value']:g} ({est['reason']}) [{t['confirm']}]")
+    return lines
+
+
 def _area_assumptions(result_areas: List[dict], t: Dict[str, str]) -> List[str]:
     lines = []
     for a in result_areas:
@@ -78,12 +94,17 @@ def _tables(stored: dict, t: Dict[str, str], luminaire_names: Dict[str, str]) ->
         blocks += [{"type": "h", "text": t["areas"]},
                    {"type": "table", "columns": [[t["room"], 0.2], [t["luminaire"], 0.24], ["m²", 0.1], [t["floodlights"], 0.12], [t["average"], 0.1], [t["target"], 0.08], [t["verdict"], 0.1], [t["power"], 0.06]],
                     "rows": [_area_row(a, asked, t, luminaire_names) for a in areas], "empty": t["none"]}]
+    emergency = stored["result"].get("emergency", [])
+    if emergency:
+        blocks += [{"type": "h", "text": t["emergency"]},
+                   {"type": "table", "columns": [[t["room"], 0.2], [t["luminaire"], 0.3], [t["count"], 0.08], [t["min_lux"], 0.1], [t["ratio"], 0.1], [t["verdict"], 0.12], [t["routes"], 0.1]],
+                    "rows": [_emergency_row(e, asked, t, luminaire_names) for e in emergency], "empty": t["none"]}]
     return blocks
 
 
 def _notes(stored: dict, t: Dict[str, str], illustrative: bool) -> List[dict]:
     rooms, areas = stored["result"]["rooms"], stored["result"].get("areas", [])
-    blocks: List[dict] = [{"type": "h", "text": t["assumptions"]}, {"type": "bullets", "items": _assumptions(rooms, t) + _area_assumptions(areas, t)}]
+    blocks: List[dict] = [{"type": "h", "text": t["assumptions"]}, {"type": "bullets", "items": _assumptions(rooms, t) + _area_assumptions(areas, t) + _emergency_assumptions(stored["result"].get("emergency", []), t)}]
     if illustrative:
         blocks.append({"type": "p", "text": t["illustrative"]})
     if stored["skipped"]:

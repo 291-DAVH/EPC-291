@@ -87,7 +87,7 @@ def make_report(d: Path, sheet: str, lang: str) -> dict:
     if _stale(d, sheet, stored):
         raise Conflict({"study": "the rooms or the luminaires changed since the study was made: calculate it again first"})
     luminaires = service.effective(d)
-    used = {r.get("luminaire", "") for r in stored["input"]["rooms"].values()}
+    used = {name for r in stored["input"]["rooms"].values() for name in (r.get("luminaire", ""), r.get("emergency_luminaire", ""))}
     names = {lid: service.label(luminaires[lid], lang) for lid in used if lid in luminaires}
     meta = projects.read_meta(d)
     doc = report.document(stored, {"code": meta.get("project_code", ""), "name": meta.get("project_name", "")}, lang, names,

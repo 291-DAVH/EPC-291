@@ -14,6 +14,8 @@ Lighting engine of EPC-291. From a JSON document with luminaires, interior rooms
 | Point-by-point | `E = I·cos(theta)/r²` for horizontal, vertical or tilted surfaces; grid statistics and uniformity | point-by-point article; UNAC ch. III §6 |
 | Exterior floodlights | `N = Em·S / (Phi·CBU·fm)` | UNAC ch. III §5 |
 | Power and energy | installed W, W/m², W/m² per 100 lx, kWh/year | UNAC ch. III §7 |
+| Antipanic emergency lighting | the smallest regular grid with `E_min >= 0.5 lx` and `E_max/E_min <= 40` on the floor (Lambertian source, direct light only), and the illuminance along escape routes | ported from `epc_aea90364.lighting` (CAL-001); criteria as recalled from EN 1838, to confirm |
+| UGR | compared with the limit of the activity when the caller brings the value from photometric software (`ugr_calculated`); `not_verifiable` otherwise | ported from CAL-001 |
 
 Every estimated number (target, CU, maintenance factor, reflectances, mounting height, spacing limit) comes with a `reason` and a `confidence`. `docs/formulas.md` maps each formula to its source and module.
 
@@ -69,7 +71,8 @@ Python ≥ 3.10 and nothing else: no third-party packages and no other `epc_*` e
 - **The CU table must come from the luminaire maker.** The supplied PDFs refer to annexes (CU tables, effective reflectances, luminaire efficiency, maintenance curves) that were not included. Without a `cu` or `cu_table` the engine falls back to the one illustrative table printed in the UPV article, with a warning and confidence 0.4.
 - **Interpolation differs from the article's.** Between reflectance columns the engine uses inverse-distance weighting; the article averages four table cells. For the article classroom the table gives about 0.92 where the article prints 0.96 (and then uses 0.97). The article's own figures are reproduced by giving `coefficient_of_utilisation: 0.97`.
 - **Effective cavity reflectance** is the standard IES formula, not taken from the PDFs (they defer to annex tables).
-- **Point-by-point is direct light only**: no inter-reflections, luminaires aimed straight down, no tilt or rotation, no glare (UGR) calculation. Angles beyond the last tabulated gamma emit nothing. The engine flags a table that emits more than the lamp flux.
+- **Point-by-point is direct light only**: no inter-reflections, luminaires aimed straight down, no tilt or rotation, no glare (UGR) calculation (the UGR is only compared when given). `verification.direct_check` says whether the direct average reaches 90 % of the target; being a lower bound it often does not, and it is information, not a verdict. Angles beyond the last tabulated gamma emit nothing. The engine flags a table that emits more than the lamp flux.
+- **Emergency**: the criteria (0.5 lux, ratio 40) are typical values carried with confidence 0.5; give `e_min_lux` and `max_over_min` to set the project's. Where no grid of up to 400 luminaires meets them the room is reported as not complying, with the warning that says what to change.
 - **Exterior**: the beam utilisation (CBU) comes from the isocandela curves, which are not computed; give it or accept the assumed 0.75 (confidence 0.4). Floodlights are counted, not placed.
 - **Levels** are only the values quoted in the supplied material (three EN 12464-1 rows as quoted in the UPV article, and the ICARO manual's task table). The standard itself is copyrighted and not stored: confirm with the project standard, or give `target_lux`.
 - **Spacing** is not checked along an axis with a single luminaire (UNAC: no spacing exists with one row).

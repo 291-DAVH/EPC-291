@@ -1,6 +1,6 @@
 import { Badge, Icon, Key, useI18n } from "@epc/ui";
 import type { Drawing } from "./planEditing";
-import { AreaResult, areaCardOf, Card, cardOf, hasPlacements, LightingStudy, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
+import { AreaResult, areaCardOf, Card, cardOf, EmergencyResult, emergencyCardOf, hasPlacements, LightingStudy, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
 
 /** Lighting: for each room marked on the plan, what it is for and which luminaire; the program calculates how many go in and where, and shows it over the plan and as a card per room until the
  *  person decides. The numbers are the backend's (`epc_lighting`); this panel only asks and shows. */
@@ -56,6 +56,12 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
                   <input disabled={!canWrite} inputMode="decimal" defaultValue={l.height_m ?? ""} placeholder="2,6" key={"h" + r.id + (l.height_m ?? "")} onBlur={(e) => set(r.id, { height_m: parsePositive(e.target.value) })} /></label></>}
                 <label>{tl("light.target")}
                   <input disabled={!canWrite} inputMode="numeric" defaultValue={l.target_lux ?? ""} placeholder={activity ? String(activity.em_lux) : "lx"} key={"t" + r.id + (l.target_lux ?? "")} onBlur={(e) => set(r.id, { target_lux: parsePositive(e.target.value) })} /></label>
+                {!ext && <label>{tl("light.emergency")}
+                  <select disabled={!canWrite} value={l.emergency_luminaire ?? ""} onChange={(e) => set(r.id, { emergency_luminaire: e.target.value })}>
+                    <option value="">–</option>{interior.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
+                  </select></label>}
+                {!ext && <label>{tl("light.ugr")}
+                  <input disabled={!canWrite} inputMode="decimal" defaultValue={l.ugr_calculated ?? ""} placeholder="–" key={"u" + r.id + (l.ugr_calculated ?? "")} onBlur={(e) => set(r.id, { ugr_calculated: parsePositive(e.target.value) })} /></label>}
                 {!ext && <label>{tl("light.cu")}
                   <input disabled={!canWrite} inputMode="decimal" defaultValue={l.coefficient_of_utilisation ?? ""} placeholder="–" key={"c" + r.id + (l.coefficient_of_utilisation ?? "")} onBlur={(e) => set(r.id, { coefficient_of_utilisation: parsePositive(e.target.value) })} /></label>}
                 {ext && <><label>{tl("light.beam")}
@@ -96,6 +102,7 @@ function Result({ proposal }: { proposal: LightingProposal }) {
       {proposal.skipped.map((s) => <div key={s.id} className="alert small" style={{ margin: "4px 0" }}><b>{s.name || s.id}</b>: {s.reason}</div>)}
       {cards.map((c) => <RoomCard key={c.id} c={c} />)}
       {(proposal.result?.areas ?? []).map((a) => <AreaCard key={a.id} a={a} />)}
+      {(proposal.result?.emergency ?? []).map((e) => <EmergencyCard key={e.id} e={e} />)}
       {Object.keys(proposal.maps ?? {}).length > 0 && <MapLegend proposal={proposal} />}
       {proposal.warnings.length > 0 && (
         <details className="small" style={{ marginTop: 6 }}><summary>{tl("light.warnings")} ({proposal.warnings.length})</summary>
@@ -123,6 +130,7 @@ function RoomCard({ c }: { c: Card }) {
         {c.power_w !== null && <>{c.power_w.toFixed(0)} W{c.density !== null && <> ({c.density.toFixed(1)} W/m²)</>}</>}
       </div>
       {c.unsure.length > 0 && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.confirm")}: {c.unsure.filter((k) => ESTIMATES.includes(k)).map((k) => tl(`light.est.${k}`)).join(", ")}</div>}
+      <div className="small muted">UGR: {tl(`light.ugr.${c.ugr}`)}{c.ugrLimit !== null && <> (≤ {c.ugrLimit})</>}</div>
     </div>
   );
 }
@@ -176,6 +184,24 @@ function MapLegend({ proposal }: { proposal: LightingProposal }) {
     <div className="small" style={{ margin: "6px 0" }}>
       <div style={{ height: 8, borderRadius: 4, background: "linear-gradient(to right, hsl(240 80% 50%), hsl(120 80% 50%), hsl(0 80% 50%))" }} />
       <div className="row" style={{ justifyContent: "space-between" }}><span>{low.toFixed(0)} lx</span><span>{t("light.map" as Key)}</span><span>{high.toFixed(0)} lx</span></div>
+    </div>
+  );
+}
+
+function EmergencyCard({ e }: { e: EmergencyResult }) {
+  const { t } = useI18n();
+  const tl = (k: string) => t(k as Key);
+  const c = emergencyCardOf(e);
+  return (
+    <div className="coord-item" style={{ margin: "6px 0" }}>
+      <div className="row" style={{ gap: 6, flexWrap: "wrap" }}>
+        <b>{c.name || c.id}</b>
+        <Badge tone={c.complies ? "ok" : "bad"}>{c.complies ? tl("light.meets") : tl("light.notMeets")}</Badge>
+        <Badge>{tl("light.emergencyTitle")}</Badge>
+      </div>
+      <div className="small">{c.installed} {tl("light.luminaires")}{c.min !== null && <> · {c.min.toFixed(2)} lx min{c.ratio !== null && <> · max/min {c.ratio.toFixed(1)}</>}</>}{c.routes > 0 && <> · {tl("light.routes")}: {c.routesOk}/{c.routes}</>}</div>
+      <div className="small muted">{tl("light.emergencyNote")}</div>
+      {c.unsure.length > 0 && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.confirm")}: {c.unsure.map((k) => tl(`light.est.${k}`)).join(", ")}</div>}
     </div>
   );
 }

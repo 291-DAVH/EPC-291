@@ -270,6 +270,46 @@ class TestExteriorAndMap(Base):
         self.assertFalse(out["result"]["rooms"][0]["points"]["computed"])
 
 
+EMERGENCY = {**PANEL, "emergency_luminaire": "led_emergency_3w"}
+
+
+class TestEmergencyAndUgr(Base):
+    def test_a_room_with_an_emergency_luminaire_gets_its_antipanic_grid_apart_from_the_normal_one(self):
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": EMERGENCY})).json()
+        e = out["result"]["emergency"][0]
+        self.assertEqual((e["id"], e["verification"]["complies"]), ("R1", True))
+        marks = out["emergency_placements"]["R1"]
+        self.assertEqual(len(marks), e["layout"]["installed"])
+        self.assertTrue(all(m["tag"].startswith("LE-") for m in marks))
+        self.assertTrue(all(0 <= m["x"] <= 60 and 0 <= m["y"] <= 40 for m in marks))                    # in view units, inside the room
+        self.assertTrue(all(m["tag"].startswith("LU-") for m in out["placements"]["R1"]))                 # the normal luminaires are other ones
+
+    def test_without_an_emergency_luminaire_there_is_none_and_one_that_is_not_for_interiors_is_said(self):
+        plain = self.c.post(BASE + "/calc", json=body(params={"R1": PANEL})).json()
+        self.assertEqual((plain["result"]["emergency"], plain["emergency_placements"]), ([], {}))
+        wrong = self.c.post(BASE + "/calc", json=body(params={"R1": {**PANEL, "emergency_luminaire": "led_floodlight_100w"}})).json()
+        self.assertEqual(wrong["result"]["emergency"], [])
+        self.assertTrue(any("not an interior luminaire" in w for w in wrong["warnings"]))
+
+    def test_the_minimum_illuminance_of_the_room_can_be_given_and_is_then_certain(self):
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": {**EMERGENCY, "emergency_e_min_lux": 1.0}})).json()
+        self.assertEqual(out["result"]["emergency"][0]["criteria"]["min_lux"]["confidence"], 1.0)
+
+    def test_the_emergency_luminaires_outside_the_outline_of_an_l_shaped_room_are_not_placed(self):
+        out = self.c.post(BASE + "/calc", json=body(rooms=(L_SHAPE,), params={"R1": {**EMERGENCY, "emergency_e_min_lux": 2.0}})).json()
+        marks = out["emergency_placements"]["R1"]
+        every = out["result"]["emergency"][0]["layout"]["installed"]
+        self.assertTrue(all(m["x"] <= 20 or m["y"] <= 20 for m in marks), marks)
+        if len(marks) < every:
+            self.assertTrue(any("fall outside its outline" in w for w in out["warnings"]))
+
+    def test_the_ugr_brought_from_outside_is_compared_with_the_limit_of_the_activity(self):
+        out = self.c.post(BASE + "/calc", json=body(params={"R1": {**PANEL, "ugr_calculated": 17}})).json()
+        self.assertEqual(out["result"]["rooms"][0]["ugr"]["result"], "meets")
+        no_value = self.c.post(BASE + "/calc", json=body(params={"R1": PANEL})).json()
+        self.assertEqual(no_value["result"]["rooms"][0]["ugr"]["result"], "not_verifiable")
+
+
 class TestCompanyLevel(Base):
     def setUp(self):
         super().setUp()

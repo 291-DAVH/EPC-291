@@ -37,7 +37,7 @@ export interface Props {
   prefs?: [PlanPrefs, (p: Partial<PlanPrefs>) => void]; drawing: Drawing; onChange: (next: Drawing) => void; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; underlayUrl: string | null; underlayKind?: string;
   readOnly?: boolean; t: (key: string) => string; selection: Ref[]; onSelect: (r: Ref[]) => void; highlight?: string[]; focusCircuit?: string;
   sheetKey?: string; sheetTitle?: string; ghosts?: Ghost[]; pins?: Pin[]; onPin?: (id: string) => void; problems?: Problem[];
-  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; lightMarks?: { room: string; tag: string; at: Pt }[]; lightMaps?: import("./lightingApi").LightMap[]; boards?: BoardRef[]; onTool?: (tool: string) => void; allowedKinds?: string[]; roomRequest?: number;
+  freeCircuits?: string[]; circuitTags?: string[]; focusRequest?: { n: number; refs?: Ref[]; at_m?: Pt; at?: Pt }; architecture?: Architecture | null; proposal?: RunsProposal | null; lightMarks?: import("./lightingApi").LightMark[]; lightMaps?: import("./lightingApi").LightMap[]; boards?: BoardRef[]; onTool?: (tool: string) => void; allowedKinds?: string[]; roomRequest?: number;
   onNewPin?: (at_m: Pt) => void; onCopyLevels?: (clip: Clip) => void; onReserve?: (lineId: string) => void; onTemplateSave?: (name: string, clip: Clip) => void; pendingClip?: Clip | null; onClipUsed?: () => void;
 }
 

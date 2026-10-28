@@ -4,6 +4,7 @@ import { addNode, DNode, Drawing, Pt, Room } from "./planEditing";
  *  The calculation is the backend's (`epc_lighting`); nothing here computes light. */
 export interface RoomLighting {
   activity?: string; luminaire?: string; method?: "lumen" | "zonal"; height_m?: number; target_lux?: number; coefficient_of_utilisation?: number;
+  emergency_luminaire?: string; ugr_calculated?: number;                                  // antipanic emergency lighting of the room, and the UGR it was given from outside
   exterior?: boolean; beam_utilisation?: number; enclosure?: "open" | "closed";        // an exterior area: floodlights from its area and its target
 }
 export interface LightActivity { id: string; label: string; em_lux: number; ugr_l: number | null; ra: number | null; source: string }
@@ -12,8 +13,9 @@ export interface LightingOptions { activities: LightActivity[]; materials: { id:
 
 export interface Estimate { value: number; reason: string; confidence: number }
 export interface SpacingAxis { checked: boolean; status?: "ok" | "within_tolerance" | "exceeds"; spacing_m?: number; max_spacing_m?: number }
+export interface UgrResult { result: "not_verifiable" | "meets" | "does_not_meet"; limit: number | null; calculated: number | null }
 export interface RoomResult {
-  id: string; name: string; method: string;
+  id: string; name: string; method: string; ugr?: UgrResult;
   target: Estimate & { activity?: string };
   factors: { cu: Estimate; maintenance: Estimate };
   reflectances: { ceiling: Estimate; walls: Estimate; floor: Estimate };
@@ -27,6 +29,11 @@ export interface LightingStudy {
   exists: boolean; stale?: boolean; report?: boolean; saved_at?: string; saved_by?: string;
   result?: LightingProposal["result"]; skipped?: LightingProposal["skipped"]; warnings?: string[];
 }
+export interface EmergencyResult {
+  id: string; name: string; layout: { installed: number; columns_along_length: number; rows_across_width: number };
+  criteria: { min_lux: Estimate; max_over_min: Estimate }; verification: { complies: boolean; min_lux?: number; max_over_min?: number }; routes: { id: string; complies: boolean }[];
+  energy: { installed_power_w: number | null };
+}
 export interface AreaResult {
   id: string; name: string; area_m2: number; target: Estimate; factors: { beam_utilisation: Estimate; maintenance: Estimate }; flux: { luminaires_required: number };
   verification: { average_lux: number; target_lux: number; complies: boolean; margin_pct: number }; energy: { installed_power_w: number | null };
@@ -35,7 +42,8 @@ export interface AreaResult {
 export interface LightMap { x0: number; y0: number; dx: number; dy: number; nx: number; ny: number; values: (number | null)[]; min: number; max: number }
 export interface Placement { tag: string; x: number; y: number; z_m: number }
 export interface LightingProposal {
-  result: { rooms: RoomResult[]; areas?: AreaResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;
+  emergency_placements?: Record<string, Placement[]>;
+  result: { rooms: RoomResult[]; areas?: AreaResult[]; emergency?: EmergencyResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;
   maps?: Record<string, LightMap>;
   placements: Record<string, Placement[]>;
   rooms: { id: string; name: string; length_m: number; width_m: number; exact: boolean; corner: Pt }[];
@@ -44,7 +52,7 @@ export interface LightingProposal {
   fingerprint: string;
 }
 
-const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation", "exterior", "beam_utilisation", "enclosure"];
+const KEYS: (keyof RoomLighting)[] = ["activity", "luminaire", "method", "height_m", "target_lux", "coefficient_of_utilisation", "exterior", "beam_utilisation", "enclosure", "emergency_luminaire", "ugr_calculated"];
 
 /** The drawing with a change to what a room says about its lighting; a value that is empty is taken out, and a room with nothing left has no `lighting` at all. */
 export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Record<keyof RoomLighting, unknown>>): Drawing {
@@ -87,7 +95,7 @@ const pick = (l: RoomLighting): Record<string, unknown> => Object.fromEntries(KE
 export type SpacingState = "ok" | "tolerance" | "over" | "na";
 export interface Card {
   id: string; name: string; installed: number; required: number; average: number; target: number; complies: boolean; margin: number;
-  spacing: SpacingState; uniformity: number | null; power_w: number | null; density: number | null; unsure: string[];
+  spacing: SpacingState; uniformity: number | null; power_w: number | null; density: number | null; unsure: string[]; ugr: UgrResult["result"]; ugrLimit: number | null;
 }
 
 const SURE = 0.6;                                         // under this confidence an estimate is shown as something to confirm
@@ -100,13 +108,25 @@ export function cardOf(r: RoomResult): Card {
   return {
     id: r.id, name: r.name, installed: r.layout.installed, required: r.layout.required, average: r.verification.average_lux, target: r.verification.target_lux, complies: r.verification.complies,
     margin: r.verification.margin_pct, spacing, uniformity: r.points.computed ? r.points.min_over_avg ?? null : null, power_w: r.energy.installed_power_w, density: r.energy.power_density_w_m2,
-    unsure: estimates.filter(([, e]) => e.confidence < SURE).map(([k]) => k),
+    unsure: estimates.filter(([, e]) => e.confidence < SURE).map(([k]) => k), ugr: r.ugr?.result ?? "not_verifiable", ugrLimit: r.ugr?.limit ?? null,
   };
 }
 
 /** The luminaires of every room as marks to draw over the plan. */
-export function marksOf(p: LightingProposal | null): { room: string; tag: string; at: Pt }[] {
+export interface LightMark { room: string; tag: string; at: Pt; emergency?: boolean }
+export function marksOf(p: LightingProposal | null): LightMark[] {
   return p ? Object.entries(p.placements).flatMap(([room, list]) => list.map((m) => ({ room, tag: m.tag, at: [m.x, m.y] as Pt }))) : [];
+}
+
+/** The emergency luminaires of every room as marks to draw over the plan (they are not nodes of the drawing: the profile has no kind for them). */
+export function emergencyMarksOf(p: LightingProposal | null): LightMark[] {
+  return p ? Object.entries(p.emergency_placements ?? {}).flatMap(([room, list]) => list.map((m) => ({ room, tag: m.tag, at: [m.x, m.y] as Pt, emergency: true }))) : [];
+}
+
+/** What a card of the panel shows of the emergency lighting of a room: the luminaires, the verdict, the lowest lux and the routes that comply. */
+export function emergencyCardOf(e: EmergencyResult) {
+  return { id: e.id, name: e.name, installed: e.layout.installed, complies: e.verification.complies, min: e.verification.min_lux ?? null, ratio: e.verification.max_over_min ?? null,
+           routesOk: e.routes.filter((r) => r.complies).length, routes: e.routes.length, unsure: ([["emin", e.criteria.min_lux], ["ratio", e.criteria.max_over_min]] as [string, Estimate][]).filter(([, x]) => x.confidence < SURE).map(([k]) => k) };
 }
 
 export const hasPlacements = (p: LightingProposal): boolean => Object.values(p.placements).some((l) => l.length > 0);

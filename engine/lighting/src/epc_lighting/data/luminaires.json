@@ -197,6 +197,43 @@
       "lamp_flux_lm": 11000,
       "power_w": 100,
       "illustrative": true
+    },
+    "led_emergency_3w": {
+      "name": {
+        "es": "Luminaria de emergencia LED, 3 W",
+        "en": "LED emergency luminaire, 3 W"
+      },
+      "kind": "interior",
+      "lamps": 1,
+      "lamp_flux_lm": 300,
+      "power_w": 3,
+      "illustrative": true,
+      "photometry": {
+        "gamma_deg": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "intensity_cd_per_klm": [
+          318.3,
+          313.5,
+          299.1,
+          275.7,
+          243.8,
+          204.6,
+          159.2,
+          108.9,
+          55.3,
+          0.0
+        ]
+      }
     }
   }
 }

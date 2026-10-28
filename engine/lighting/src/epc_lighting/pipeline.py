@@ -8,7 +8,7 @@
 import math
 from typing import Any, Dict, Iterator, List, Tuple
 
-from epc_lighting import energy, exterior, factors, geometry, layout, methods, photometry, pointcalc
+from epc_lighting import checks, emergency, energy, exterior, factors, geometry, layout, methods, photometry, pointcalc
 from epc_lighting.config import PARAMS, data
 from epc_lighting.document import load_document, parse_project
 from epc_lighting.model import Context, Luminaire, Options, Result, Room, rnd
@@ -27,8 +27,13 @@ def run(document: Any, options: Options = Options()) -> Result:
         warnings = []
         result.areas.append(exterior.calculate(area, project.luminaires[area.luminaire_id], tags, warnings))
         result.warnings.extend(f"area '{area.id}': {w}" for w in warnings)
-    if not project.rooms and not project.areas:
-        result.warnings.append("the document has no rooms or areas, so nothing was calculated: add at least one entry to 'rooms' or 'areas'")
+    escape_tags = layout.new_tag_counter()
+    for item in project.emergency:
+        warnings = []
+        result.emergency.append(emergency.calculate(item, project.luminaires[item.luminaire_id], escape_tags, warnings))
+        result.warnings.extend(f"emergency '{item.id}': {w}" for w in warnings)
+    if not (project.rooms or project.areas or project.emergency):
+        result.warnings.append("the document has no rooms, areas or emergency rooms, so nothing was calculated: add at least one entry to 'rooms', 'areas' or 'emergency'")
     return result
 
 
@@ -112,6 +117,8 @@ def _room(room: Room, lum: Luminaire, options: Options, tags: Iterator[int], war
     lay = layout.plan(room, lum, need["count"], h, options, tags, warnings)
     verification = _verify(room, lum, lay["installed"], plan.cu.value, ctx.maintenance.value, ctx.target.value, warnings)
     points = _points(room, lum, lay, h, ctx.maintenance.value, options, warnings)
+    if points.get("computed"):
+        verification["direct_check"] = checks.direct_check(ctx.target.value, verification["average_lux"], points["avg_lux"])
     return {
         "id": room.id,
         "name": room.name,
@@ -142,6 +149,7 @@ def _room(room: Room, lum: Luminaire, options: Options, tags: Iterator[int], war
         },
         "layout": lay,
         "verification": verification,
+        "ugr": checks.ugr(room.ugr_calculated, extras.get("ugr_l_max")),
         "points": points,
         "energy": energy.summarise(lum, lay["installed"], room.area_m2, verification["average_lux"], room.operating_hours),
     }
