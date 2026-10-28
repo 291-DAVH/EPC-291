@@ -35,7 +35,7 @@ export interface SceneProps {
   selection: Ref[]; highlight: string[]; focusCircuit: string; hoverRef: Ref | null;
   underlayUrl: string | null; img: { w: number; h: number } | null; underlayOpts: UnderlayOpts;
   draft: Pt[]; hover: Pt | null; kindId: string; snapMark: { p: Pt; kind: SnapKind } | null; scalePts: Pt[]; marquee: { a: Pt; b: Pt } | null;
-  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").RunsProposal | null;
+  measure: Pt[]; route: RoutePath | null; routeFrom: string; guides: { x?: number; y?: number } | null; architecture: Architecture | null; roomDraft: Pt[]; proposal: import("./planTools").RunsProposal | null; lightMarks: { room: string; tag: string; at: Pt }[];
   ghosts: Ghost[]; pins: Pin[]; problems: Problem[]; onPin: (id: string) => void; grabLine: (e: React.PointerEvent, g: { line: string; end?: 0 | 1; seg?: number }) => void;
   t: (key: string) => string;
 }
@@ -113,6 +113,12 @@ export default function PlanScene(p: SceneProps) {
           <text x={c[0]} y={c[1]} fontSize={13 * u} textAnchor="middle" fill={`hsl(${hue} 60% 30%)`} stroke="#fff" strokeWidth={3 * u} paintOrder="stroke">{r.name}</text></g>;
       })}
       {p.roomDraft.length > 0 && <polyline data-ui points={polyline([...p.roomDraft, ...(p.hover ? [p.hover] : [])])} fill="none" stroke="#7c3aed" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />}
+      {p.lightMarks.length > 0 && <g data-ui pointerEvents="none">
+        {p.lightMarks.map((m, i) => <g key={i} stroke="#d97706" strokeWidth={1.5} vectorEffect="non-scaling-stroke" fill="#fbbf24" fillOpacity={0.3}>
+          <circle cx={m.at[0]} cy={m.at[1]} r={6 * u} strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />
+          <line x1={m.at[0] - 4 * u} y1={m.at[1] - 4 * u} x2={m.at[0] + 4 * u} y2={m.at[1] + 4 * u} vectorEffect="non-scaling-stroke" /><line x1={m.at[0] - 4 * u} y1={m.at[1] + 4 * u} x2={m.at[0] + 4 * u} y2={m.at[1] - 4 * u} vectorEffect="non-scaling-stroke" />
+        </g>)}
+      </g>}
       {p.proposal && <g data-ui pointerEvents="none">
         {p.proposal.lines.map((ln, i) => <polyline key={i} points={polyline(ln.points)} fill="none" stroke={ln.role === "trunk" ? "#7c3aed" : "#db2777"} strokeWidth={ln.role === "trunk" ? 5 : 3} strokeOpacity={0.55} strokeDasharray="10 5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />)}
       </g>}

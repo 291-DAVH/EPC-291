@@ -4,6 +4,8 @@ import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
+import LightingPanel from "./LightingPanel";
+import { LightingOptions, LightingProposal, marksOf, requestOf } from "./lightingApi";
 import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
@@ -18,7 +20,7 @@ interface Overview { levels: Sheet[]; profiles: Profile[]; circuits: BoardCircui
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "plans" | "design" | "warnings" | "coord" | "layers" | "history";
+type Panel = "props" | "plans" | "design" | "lighting" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -66,6 +68,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [arch, setArch] = useState<Architecture | null>(null);
   const [proposal, setProposal] = useState<Proposal | null>(null);
   const [runs, setRuns] = useState<RunsProposal | null>(null);
+  const [lighting, setLighting] = useState<LightingProposal | null>(null);          // luminaires proposed for the rooms, shown over the plan until the person decides
+  const [lightBusy, setLightBusy] = useState(false);
+  const lightOptions = useApi<LightingOptions>(`/projects/${client}/${code}/lighting/options?lang=${lang}`);
   const [designBusy, setDesignBusy] = useState(false);
   const [limits, setLimits] = useState<Record<string, Partial<Limits>>>({});
   const [roomRequest, setRoomRequest] = useState(0);
@@ -224,6 +229,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
   };
+  const calcLighting = async () => {
+    setLightBusy(true);
+    try { setLighting(await api<LightingProposal>(`/projects/${client}/${code}/lighting/calc`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) })); setErr(""); } catch (x) { setErr(errorText(x)); }
+    setLightBusy(false);
+  };
+  const lightKey = useMemo(() => JSON.stringify(requestOf(drawing, lang)), [drawing, lang]);
+  useEffect(() => { setLighting(null); }, [level, discipline, lightKey]);        // a proposal is only good for the rooms and parameters it was calculated with
   const proposeRuns = () => designCall<RunsProposal>("runs", setRuns);
   const proposeWiring = () => designCall<Proposal>("wiring", setProposal);
   const applyDesignRuns = () => { if (runs) { change(applyRuns(drawing, runs)); setRuns(null); setRev((n) => n + 1); } };
@@ -296,7 +308,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; icon: string; badge?: number }[] = [
     { id: "props", label: tl("layout.tab.props"), icon: "select", badge: selection.length }, { id: "plans", label: tl("plan.plans"), icon: "file", badge: plansHere.length > 1 ? plansHere.length : 0 }, { id: "warnings", label: tl("layout.tab.warnings"), icon: "warn", badge: warnings.length },
-    { id: "design", label: tl("design.tab"), icon: "star" }, { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
+    { id: "design", label: tl("design.tab"), icon: "star" }, ...(discipline === "electrica_BT" ? [{ id: "lighting" as Panel, label: tl("light.tab"), icon: "sun" }] : []), { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
   ];
   const boardNodes = drawing.nodes.filter((n) => (profile?.nodes ?? []).some((k) => k.id === n.kind && k.atributos?.includes("tablero")));
   const boardNode = boardNodes.find((n) => n.id === designBoard) ?? boardNodes[0];          // the board symbol the design starts from
@@ -375,7 +387,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={marksOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -394,6 +406,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
+              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={calcLighting} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}

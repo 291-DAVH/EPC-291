@@ -37,6 +37,16 @@ class TestDesign(unittest.TestCase):
         settings.projects_dir, settings.role, settings.data_dir = self._old
         self.tmp.cleanup()
 
+    def test_a_room_keeps_what_it_says_about_its_lighting_and_the_design_ignores_it(self):
+        rooms = [{**ROOMS[0], "lighting": {"activity": "education.classroom", "luminaire": "led_panel_600", "height_m": 2.8}}, ROOMS[1]]
+        r = self.c.put(f"{self.base}/L0", json={**DRAWING, "rooms": rooms})
+        self.assertEqual(r.status_code, 200, r.text)
+        saved = r.json()["drawing"]["rooms"]
+        self.assertEqual(saved[0]["lighting"], {"activity": "education.classroom", "luminaire": "led_panel_600", "height_m": 2.8})
+        self.assertIsNone(saved[1]["lighting"])
+        runs = self.c.post(f"{self.base}/L0/design/runs", json={"drawing": {**DRAWING, "rooms": rooms}})
+        self.assertEqual(runs.status_code, 200, runs.text)                                    # the plan engine never reads it
+
     def test_the_rooms_are_kept_with_the_sheet(self):
         r = self.c.put(f"{self.base}/L0", json=DRAWING)
         self.assertEqual(r.status_code, 200, r.text)
