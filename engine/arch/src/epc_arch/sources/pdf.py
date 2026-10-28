@@ -113,6 +113,18 @@ def _is_frame(line: Line, page: Tuple[float, float]) -> bool:
     return (horiz or vert) and math.hypot(line.b[0] - line.a[0], line.b[1] - line.a[1]) > 0.9 * min(w, h)
 
 
+def _thin(prims: Primitives, limit: int) -> None:
+    """A plan drawn with hatching, dimension ticks and furniture has far more strokes than walls and doors need: over the limit the arcs (door swings) and the longest strokes stay, in the order they
+    were drawn, and the person is told how many of the shortest were left out."""
+    keep = max(0, limit - len(prims.arcs))
+    if len(prims.lines) <= keep:
+        return
+    size = lambda i: math.hypot(prims.lines[i].b[0] - prims.lines[i].a[0], prims.lines[i].b[1] - prims.lines[i].a[1])      # noqa: E731
+    chosen = sorted(sorted(range(len(prims.lines)), key=size, reverse=True)[:keep])
+    prims.warnings.append(f"pdf: {len(prims.lines)} strokes are more than can be read at once: the {len(prims.lines) - keep} shortest (hatching, ticks, fine detail) were left out")
+    prims.lines = [prims.lines[i] for i in chosen]
+
+
 def read_vector(data: bytes, options: Options) -> Primitives:
     try:
         page = pdfium.PdfDocument(data)[options.page]
@@ -122,10 +134,11 @@ def read_vector(data: bytes, options: Options) -> Primitives:
     skipped: List[int] = []
     for obj in page.get_objects(filter=[raw.FPDF_PAGEOBJ_PATH]):
         _path_geometry(obj.raw, prims, skipped)
-        if len(prims.lines) + len(prims.arcs) > PARAMS["plan"]["max_primitives"]:
-            raise ArchError("the PDF has too many strokes to read")
+        if len(prims.lines) + len(prims.arcs) > PARAMS["plan"]["hard_max_primitives"]:
+            raise ArchError("the PDF has too many strokes to read: export the plan with fewer layers or without hatching")
     size = page.get_size()
     prims.lines = [l for l in prims.lines if not _is_frame(l, size)]
+    _thin(prims, PARAMS["plan"]["max_primitives"])
     if skipped:
         prims.warnings.append(f"pdf: {len(skipped)} curves that are not arcs were not read")
     return prims

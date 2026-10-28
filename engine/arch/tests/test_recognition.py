@@ -105,6 +105,29 @@ class TestPdf(unittest.TestCase):
         without = recognize(helpers.room_pdf(arc=False), "flat.pdf")
         self.assertEqual(counts(without)["doors"], 0)
 
+    def test_a_plan_with_more_strokes_than_can_be_read_is_read_from_the_longest_ones(self):
+        hatch = "\n".join(f"{20 + i % 40:.1f} {420 + i // 40 * 0.5:.2f} m {21 + i % 40:.1f} {420.2 + i // 40 * 0.5:.2f} l S" for i in range(900))      # a patch of hatching in a corner
+        from epc_arch.config import PARAMS
+        old = PARAMS["plan"]["max_primitives"]
+        PARAMS["plan"]["max_primitives"] = 200
+        try:
+            r = recognize(helpers.room_pdf().replace(b"0.4 w", b"0.4 w\n" + hatch.encode(), 1), "hatched.pdf")
+        finally:
+            PARAMS["plan"]["max_primitives"] = old
+        self.assertEqual(counts(r), {"walls": 6, "doors": 1, "windows": 1, "openings": 0})                 # the same flat: the hatching is what was left out
+        self.assertTrue(any("shortest" in w for w in r.architecture.warnings), r.architecture.warnings)
+
+    def test_a_plan_beyond_any_reasonable_size_is_still_refused_with_a_way_out(self):
+        from epc_arch.config import PARAMS
+        old = PARAMS["plan"]["hard_max_primitives"]
+        PARAMS["plan"]["hard_max_primitives"] = 50
+        try:
+            with self.assertRaises(ArchError) as caught:
+                recognize(helpers.make_pdf("\n".join(f"{i} 10 m {i + 1} 20 l S" for i in range(120))), "big.pdf")
+        finally:
+            PARAMS["plan"]["hard_max_primitives"] = old
+        self.assertIn("too many strokes", str(caught.exception))
+
     def test_a_pdf_with_no_vector_drawing_falls_back_to_the_picture_of_its_page(self):
         r = recognize(helpers.make_pdf("0.5 w 10 10 m 100 10 l S"), "scan.pdf")
         self.assertEqual(r.architecture.source, "pdf-image")
