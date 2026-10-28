@@ -181,6 +181,16 @@ def _package_index(out: Path, name: str, error) -> None:
         package.describe(svgs, out, name)
 
 
+def _finish(out: Path, summary: dict) -> dict:
+    (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    return summary
+
+
+def _summary(name: str, avisos: list, log: list, res: dict, data: dict, diagrams, memo: Optional[dict], error: Optional[str]) -> dict:
+    return {"name": name, "ok": error is None, "avisos": avisos, "log": log, "limites_pct": res["limites"], "conductor": res["conductor"], "circuits": len(res["datos"]), "groups": _groups_of(data),
+            "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"] if memo else None, "error": error}
+
+
 def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None, logos: Optional[Dict[str, Path]] = None, maxl: int = 18,
            diagrams=("sld",)) -> dict:
     out_dir = Path(out_dir)
@@ -207,6 +217,8 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     crit_json.write_text(json.dumps({"criterios": criteria or {}, "limites_pct": res["limites"], "conductor": res["conductor"], "rcd_ma": res["rcd_ma"]},
                                     ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
+    if "calc" in diagrams:                                    # the calculation alone (sections, protections, drops): no memo, no figures, no diagrams
+        return _finish(out, _summary(name, avisos, [], res, data, diagrams, None, None))
     from epc_aea90364 import board_memo as BM                 # memoria de cálculo y síntesis del tablero: mismos números que el unifilar (fuente única)
     memo = BM.build(data["board"], data["circuits"], res["datos"], res["detalle"], res["limites"], res["conductor"], res["rcd_ma"],
                     upstream=data.get("upstream"), validated=bool(data.get("validated", True)))
@@ -240,10 +252,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
         if run.returncode != 0:
             error = (run.stderr or run.stdout).strip()[-600:]
     _package_index(out, name, error)
-    summary = {"name": name, "ok": error is None, "avisos": avisos, "log": log, "limites_pct": res["limites"], "conductor": res["conductor"],
-               "circuits": len(res["datos"]), "groups": _groups_of(data), "non_compliant": [t for t, d in res["detalle"].items() if not d["cumple"]], "diagrams": list(diagrams), "memo": memo["resumen"], "error": error}
-    (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
-    return summary
+    return _finish(out, _summary(name, avisos, log, res, data, diagrams, memo, error))
 
 
 def _load_input(a, ap):
@@ -272,7 +281,7 @@ def main(argv=None) -> int:
     ap.add_argument("--criteria")
     ap.add_argument("--logo", action="append", default=[], help="provider=FILE or client=FILE")
     ap.add_argument("--maxl", type=int, default=18)
-    ap.add_argument("--diagrams", default="sld", help="comma list: sld,mld (or none: calculation, memo and summary only)")
+    ap.add_argument("--diagrams", default="sld", help="comma list: sld,mld (or none: calculation, memo and summary only; or calc: the calculation alone, no memo)")
     a = ap.parse_args(argv)
     data, criteria = _load_input(a, ap)
     logos = {k: Path(v) for k, v in (x.split("=", 1) for x in a.logo)}

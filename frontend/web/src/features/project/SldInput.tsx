@@ -1,13 +1,42 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
 import RouteEditor from "./RouteEditor";
-import { api, ApiError, Badge, BoardMemoView, BoardRow, CalculationTable, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
 
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
   length_m: 0, length_source: "auto", fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
 });
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
+
+type Options = SldView["options"];
+
+/** The data cells of a circuit (everything but its length, which the caller draws, and the delete button): the same for a circuit of the board and for the one being added. */
+function CircuitInputs({ c, set, parents, o, lengthCell, t, focus }: { c: SldCircuit; set: (patch: Partial<SldCircuit>) => void; parents: string[]; o: Options; lengthCell: ReactNode; t: (k: Key) => string; focus?: boolean }) {
+  const sel = (value: string, items: string[], on: (v: string) => void) => <select value={value} onChange={(e) => on(e.target.value)}>{items.map((x) => <option key={x}>{x}</option>)}</select>;
+  return (
+    <>
+      <td><input className="w-tag" value={c.tag} autoFocus={focus} onChange={(e) => set({ tag: e.target.value })} aria-label={t("sld.tag")} /></td>
+      <td><input className="w-desc" value={c.description} onChange={(e) => set({ description: e.target.value })} aria-label={t("sld.desc")} /></td>
+      <td><input className="w-num" type="number" step="any" value={c.load ?? ""} onChange={(e) => set({ load: num(e.target.value) })} aria-label={t("sld.load")} /></td>
+      <td>{sel(c.unit, o.units, (v) => set({ unit: v }))}</td>
+      <td><input className="w-desc" value={c.destination} onChange={(e) => set({ destination: e.target.value })} aria-label={t("sld.dest")} /></td>
+      <td>
+        <select value={c.parent_tag} onChange={(e) => set({ parent_tag: e.target.value })} aria-label={t("sld.parent")}>
+          <option value="">{t("sld.parentRoot")}</option>
+          {parents.map((p) => <option key={p} value={p}>{p}</option>)}
+        </select>
+      </td>
+      <td>{sel(c.topology, o.topologies, (v) => set({ topology: v }))}</td>
+      <td>{sel(c.phase, o.phases, (v) => set({ phase: v }))}</td>
+      <td style={{ whiteSpace: "nowrap" }}>{lengthCell}</td>
+      <td><input className="w-num" type="number" step="0.01" value={c.fp ?? ""} onChange={(e) => set({ fp: num(e.target.value) })} aria-label={t("sld.fp")} /></td>
+      <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => set({ efficiency: num(e.target.value) })} aria-label={t("sld.eff")} /></td>
+      <td>{sel(c.kind, o.kinds, (v) => set({ kind: v }))}</td>
+      <td>{sel(c.cable_type, o.cable_types, (v) => set({ cable_type: v }))}</td>
+    </>
+  );
+}
 
 /** Under the length of a circuit: where it comes from (plan, data or automatic) and what each one says, so it is clear what the calculation takes. */
 function LengthSource({ c, info, sources, onChange, t }: { c: SldCircuit; info?: LengthInfo; sources: string[]; onChange: (v: string) => void; t: (k: Key) => string }) {
@@ -92,6 +121,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const calc = useApi<CalcView>(`${base}/calculation?${q}&s=${status?.finished ?? ""}`);
   const [msg, setMsg] = useState("");
   const [routeOf, setRouteOf] = useState<number | null>(null);          // circuit whose real route is being edited
+  const [adding, setAdding] = useState<SldCircuit | null>(null);          // the circuit being typed in the row at the end of the table
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -110,13 +140,12 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
 
   const set = <K extends keyof SldData>(k: K, patch: Partial<SldData[K]>) => { setData({ ...data, [k]: { ...(data[k] as object), ...patch } } as SldData); setDirty(true); setMsg(""); };
   const setRow = (i: number, patch: Partial<SldCircuit>) => { setData({ ...data, circuits: data.circuits.map((c, j) => (j === i ? { ...c, ...patch } : c)) }); setDirty(true); setMsg(""); };
-  const addRow = () => { setData({ ...data, circuits: [...data.circuits, blankCircuit()] }); setDirty(true); };
   const delRow = (i: number) => { setData({ ...data, circuits: data.circuits.filter((_, j) => j !== i) }); setDirty(true); setRouteOf(null); };
 
   const fail = (x: unknown) => { if (x instanceof ApiError) setErrors(x.fieldErrors); else setErrors({ error: String(x) }); };
-  const save = async (): Promise<boolean> => {
+  const save = async (payload: SldData = data): Promise<boolean> => {
     try {
-      const v = await api<SldView>(`${base}?${q}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(data) });
+      const v = await api<SldView>(`${base}?${q}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(payload) });
       setErrors({}); setDirty(false); setMsg(t("sld.saved"));
       onSaved(v.board_id);
       return true;
@@ -139,6 +168,24 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
       poll();
     } catch (x) { fail(x); }
   };
+  /** The calculation alone (sections, protections, drops): no memo, no diagrams. It follows the data that were just saved. */
+  const calculate = async (payload: SldData = data) => {
+    if (!(await save(payload))) return;
+    try {
+      const st = await api<SldStatus>(`${base}/generate?diagrams=calc&${q}`, { method: "POST" });
+      setStatus(st); setErrors({}); poll();
+    } catch (x) { fail(x); }
+  };
+  /** Accept the circuit being typed: it joins the board, is saved and calculated at once. */
+  const accept = async () => {
+    if (!adding) return;
+    const tag = adding.tag.trim();
+    if (!tag) { setErrors({ tag: t("sld.tagNeeded") }); return; }
+    if (data.circuits.some((c) => c.tag.trim() === tag)) { setErrors({ tag: t("sld.tagTaken") }); return; }
+    const next = { ...data, circuits: [...data.circuits, { ...adding, tag }] };
+    setData(next); setAdding(null); setErrors({});
+    await calculate(next);
+  };
   const loadExample = async () => {
     if (data.circuits.length > 0 && !window.confirm(t("sld.exampleConfirm"))) return;
     const ex = await api<{ board: SldData["board"]; circuits: SldCircuit[] }>(`${base}/example`);
@@ -156,6 +203,9 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const running = status?.state === "running";
   const memoReady = !!memo.data?.available && !memo.data.stale && !dirty;                // the diagram is drawn only from a memo calculated on the current data
   const errList = Object.entries(errors);
+  const calcOf = new Map((calc.data?.rows ?? []).map((r) => [r.tag, r]));
+  const inputTags = new Set(data.circuits.map((c) => c.tag.trim()));
+  const extra = (calc.data?.rows ?? []).filter((r) => !inputTags.has(r.tag));              // groups the standard solutions added: calculated, not typed
 
   const remove = async () => {
     if (!window.confirm(t("sld.deleteConfirm"))) return;
@@ -204,61 +254,57 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
           <h2 style={{ margin: 0 }}>{t("sld.circuits")} <span className="muted small">({data.circuits.length})</span></h2>
-          <div className="row"><button onClick={loadExample}>{t("sld.loadExample")}</button><button onClick={addRow}>+ {t("sld.addRow")}</button></div>
+          <div className="row">
+            <button onClick={loadExample}>{t("sld.loadExample")}</button>
+            <button onClick={calculate.bind(null, data)} disabled={running || data.circuits.length === 0} title={t("sld.calcHelp")}>{t("sld.calcNow")}</button>
+            <button className={adding ? "" : "primary"} onClick={() => { setAdding(adding ? null : blankCircuit()); setErrors({}); }}>{adding ? t("projects.cancel") : `+ ${t("sld.addRow")}`}</button>
+          </div>
         </div>
-        <div style={{ overflowX: "auto", marginTop: 10 }}>
+        <p className="muted small" style={{ margin: "6px 0 8px" }}>{running ? t("sld.calcRunning") : dirty ? t("sld.calcPending") : t("sld.calcHelp")}</p>
+        {calc.data && calc.data.rows.length > 0 && <CalcHeader view={calc.data} />}
+        <div style={{ overflowX: "auto", marginTop: 6 }}>
           <table className="sldtable">
             <thead>
-              <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.unit", "sld.dest", "sld.parent", "sld.topology", "sld.phase", "sld.length", "sld.fp", "sld.eff", "sld.kind", "sld.cable"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
+              <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.unit", "sld.dest", "sld.parent", "sld.topology", "sld.phase", "sld.length", "sld.fp", "sld.eff", "sld.kind", "sld.cable"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}{CALC_HEADS.map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
             </thead>
             <tbody>
               {data.circuits.map((c, i) => (
                 <tr key={i}>
-                  <td><input className="w-tag" value={c.tag} onChange={(e) => setRow(i, { tag: e.target.value })} aria-label={t("sld.tag")} /></td>
-                  <td><input className="w-desc" value={c.description} onChange={(e) => setRow(i, { description: e.target.value })} /></td>
-                  <td><input className="w-num" type="number" step="any" value={c.load ?? ""} onChange={(e) => setRow(i, { load: num(e.target.value) })} /></td>
-                  <td>{sel(c.unit, o.units, (v) => setRow(i, { unit: v }))}</td>
-                  <td><input className="w-desc" value={c.destination} onChange={(e) => setRow(i, { destination: e.target.value })} /></td>
-                  <td>
-                    <select value={c.parent_tag} onChange={(e) => setRow(i, { parent_tag: e.target.value })}>
-                      <option value="">{t("sld.parentRoot")}</option>
-                      {data.circuits.filter((p, j) => j !== i && p.tag.trim()).map((p) => <option key={p.tag} value={p.tag}>{p.tag}</option>)}
-                    </select>
-                  </td>
-                  <td>{sel(c.topology, o.topologies, (v) => setRow(i, { topology: v }))}</td>
-                  <td>{sel(c.phase, o.phases, (v) => setRow(i, { phase: v }))}</td>
-                  <td style={{ whiteSpace: "nowrap" }}>
+                  <CircuitInputs c={c} set={(p) => setRow(i, p)} parents={data.circuits.filter((p, j) => j !== i && p.tag.trim()).map((p) => p.tag)} o={o} t={t} lengthCell={<>
                     {(c.route?.length ?? 0) > 0
                       ? <b className="mono" title={t("route.totalHint")}>{Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
                       : <input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} title={t("sld.lenData")} />}
                     {" "}<button className={routeOf === i ? "primary" : ""} onClick={() => setRouteOf(routeOf === i ? null : i)} title={t("route.title")}>{t("route.button")}{(c.route?.length ?? 0) > 0 ? ` (${c.route!.length})` : ""}</button>
                     <LengthSource c={c} info={view.data?.lengths?.[c.tag.trim()]} sources={o.length_sources ?? ["auto", "plan", "data"]} onChange={(v) => setRow(i, { length_source: v })} t={t} />
-                  </td>
-                  <td><input className="w-num" type="number" step="0.01" value={c.fp ?? ""} onChange={(e) => setRow(i, { fp: num(e.target.value) })} /></td>
-                  <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => setRow(i, { efficiency: num(e.target.value) })} /></td>
-                  <td>{sel(c.kind, o.kinds, (v) => setRow(i, { kind: v }))}</td>
-                  <td>{sel(c.cable_type, o.cable_types, (v) => setRow(i, { cable_type: v }))}</td>
+                  </>} />
+                  <CalcCells row={calcOf.get(c.tag.trim())} />
                   <td><button onClick={() => delRow(i)} title={t("sld.removeRow")} aria-label={t("sld.removeRow")}>✕</button></td>
                 </tr>
               ))}
+              {extra.map((r) => (
+                <tr key={"auto-" + r.tag} className="muted">
+                  <td className="mono">{r.tag}</td><td colSpan={12}>{r.description} · {t("sld.autoGroup")}</td><CalcCells row={r} /><td />
+                </tr>
+              ))}
+              {adding && (
+                <tr className="draft" onKeyDown={(e) => { if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") { e.preventDefault(); accept(); } else if (e.key === "Escape") setAdding(null); }}>
+                  <CircuitInputs focus c={adding} set={(p) => setAdding({ ...adding, ...p })} parents={data.circuits.filter((p) => p.tag.trim()).map((p) => p.tag)} o={o} t={t}
+                    lengthCell={<input className="w-num" type="number" step="any" value={adding.length_m} onChange={(e) => setAdding({ ...adding, length_m: Number(e.target.value) })} title={t("sld.lenData")} />} />
+                  <td colSpan={CALC_HEADS.length + 1}>
+                    <button className="primary" onClick={accept} disabled={running}>{t("sld.accept")}</button>{" "}
+                    <button onClick={() => { setAdding(null); setErrors({}); }}>{t("projects.cancel")}</button>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
+        {data.circuits.length === 0 && !adding && <div className="state">{t("sld.calcNone")}</div>}
       </div>
       {routeOf !== null && data.circuits[routeOf] && (
         <RouteEditor tag={data.circuits[routeOf].tag} route={data.circuits[routeOf].route ?? []} kinds={o.route_kinds} fallbackLength={data.circuits[routeOf].length_m}
           onChange={(r) => setRow(routeOf, { route: r, ...(r.length ? { length_m: Math.round(r.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 } : {}) })} onClose={() => setRouteOf(null)} />
       )}
-
-      <div className="card">
-        <h2>{t("sld.calc")}</h2>
-        <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("sld.calcHelp")}</p>
-        {!calc.data || calc.data.rows.length === 0 ? <div className="state">{t("sld.calcNone")}</div> : (
-          <>
-            <CalculationTable view={calc.data} />
-          </>
-        )}
-      </div>
 
       <div className="card">
         <h2>{t("memo.title")}</h2>
@@ -271,7 +317,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
 
       <div className="card">
         <div className="row" style={{ flexWrap: "wrap" }}>
-          <button onClick={save} disabled={!dirty || running}>{t("sld.save")}</button>
+          <button onClick={() => save()} disabled={!dirty || running}>{t("sld.save")}</button>
           <button className="primary" onClick={() => generate("sld")} disabled={running || !memoReady} title={memoReady ? "" : t("memo.needFirst")}>{t("sld.generateSldStep")}</button>
           <button onClick={() => generate("mld")} disabled={running || !memoReady} title={memoReady ? "" : t("memo.needFirst")}>{t("sld.generateMldStep")}</button>
           {dirty && <span className="muted small">{t("sld.unsaved")}</span>}
@@ -284,7 +330,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
           <div style={{ marginTop: 12 }}>
             {status.state === "running" && <div className="alert">{t("sld.running")}</div>}
             {status.state === "failed" && <div className="alert bad"><b>{t("sld.failed")}</b><pre className="eng-text" style={{ padding: 0 }}>{status.error}</pre></div>}
-            {status.state === "done" && (
+            {status.state === "done" && status.outputs.some((f) => /\.(svg|dxf)$/i.test(f)) && (
               <>
                 <div className={memo.data?.outdated ? "alert warn" : "alert ok"}>{memo.data?.outdated ? t("sld.outdated") : t("sld.done")} <button onClick={onOpenFiles} style={{ marginLeft: 8 }}>{t("sld.openFiles")}</button></div>
                 <div className="muted small" style={{ marginTop: 6 }}>{t("sld.outputs")}: {status.outputs.map((f) => <Badge key={f}>{f.split("/").pop()}</Badge>)}</div>

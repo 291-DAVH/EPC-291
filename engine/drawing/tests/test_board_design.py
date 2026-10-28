@@ -14,6 +14,17 @@ DATA = {"board": {"name": "TGBT-01", "voltage_v": 380, "system": "TN-S", "icc_ka
         "titleblock": {}}
 
 
+class TestCalcOnly(unittest.TestCase):
+    def test_the_calculation_alone_gives_the_sections_and_drops_and_no_memo_figures_or_diagrams(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = B.design(json.loads(json.dumps(DATA)), Path(tmp), "T1", None, None, 18, ("calc",))
+            made = {f.name for f in (Path(tmp) / "out").iterdir()}
+        self.assertTrue(summary["ok"])
+        self.assertEqual(summary["circuits"], 2)
+        self.assertIsNone(summary["memo"])
+        self.assertEqual({"T1_dimensionado.json", "T1_dimensionado_detalle.json", "T1_criterios.json", "summary.json"}, made)
+
+
 class TestBoardDesign(unittest.TestCase):
     @unittest.skipUnless(CATALOG.is_file(), "catalog is part of the repository, not of the installed plugin")
     def test_the_catalog_is_the_only_source_of_the_base_criteria(self):

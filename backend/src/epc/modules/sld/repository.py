@@ -140,18 +140,28 @@ def render_pdfs(out: Path, name: str) -> List[str]:
     return warnings
 
 
-def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: Optional[str] = None) -> List[str]:
+def _replaced(rel: str, name: str, previous_name: Optional[str], made: set, now_kinds: set, exact: bool) -> bool:
+    """Whether a file of the previous run is replaced by this one: all the ones of the same kind, or (`exact`) only the ones made again."""
+    fname = Path(rel).name
+    if previous_name != name:
+        return True
+    if exact:
+        return fname in made
+    return (fname.startswith(name + "_") and "calc/" in rel) or any(fname.startswith(p) for p in now_kinds)
+
+
+def publish(d: Path, out: Path, name: str, previous: List[str], previous_name: Optional[str] = None, exact: bool = False) -> List[str]:
     """Copy outputs into the engineering folders (SVG -> drawings/svg, DXF -> drawings/dxf, PDF -> drawings/pdf, calculation JSON -> calc).
-    The files of the previous run that this run replaces are removed (an MLD run keeps the SLD files of an earlier run, and vice versa)."""
+    The files of the previous run that this run replaces are removed (an MLD run keeps the SLD files of an earlier run, and vice versa); with `exact` only the files this run made again are replaced
+    (a calculation alone keeps the memo and the diagrams of an earlier run: they are stale, not gone)."""
     base = pkg(d)
     prefixes = ("SLD_" + name, "MLD_" + name, name + "_")
     mine = [f for f in sorted(out.iterdir()) if f.name.startswith(prefixes) and f.suffix.lower() in (".svg", ".dxf", ".pdf", ".json", ".md")]
     now_kinds = {p for f in mine for p in prefixes if f.name.startswith(p)}
+    made = {f.name for f in mine}
     kept: List[str] = []
     for rel in previous:
-        fname = Path(rel).name
-        replaced = (previous_name != name) or (fname.startswith(name + "_") and "calc/" in rel) or any(fname.startswith(p) for p in now_kinds)
-        if replaced:
+        if _replaced(rel, name, previous_name, made, now_kinds, exact):
             (base / rel).unlink(missing_ok=True)
         else:
             kept.append(rel)
