@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import characterization as C   # noqa: E402
 
-from epc_calc import solutions as S   # noqa: E402
+from epc_aea90364 import solutions as S   # noqa: E402
 
 
 def board():

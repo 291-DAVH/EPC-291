@@ -1,6 +1,6 @@
 # Guía para construir un motor compatible con EPC-291
 
-> Documento autocontenido: se puede pegar entero en otro chat. Explica qué es un motor en esta plataforma, cómo se estructura, qué recibe y qué entrega, qué patrones de diseño sigue, cómo se prueba y **todos los lugares del repositorio que hay que tocar para registrarlo**. Los motores de referencia son `engine/arch` (el más limpio y aislado), `engine/plan` (documento JSON de entrada, esquema, trabajos en segundo plano) y `engine/calc` (tablas como datos).
+> Documento autocontenido: se puede pegar entero en otro chat. Explica qué es un motor en esta plataforma, cómo se estructura, qué recibe y qué entrega, qué patrones de diseño sigue, cómo se prueba y **todos los lugares del repositorio que hay que tocar para registrarlo**. Los motores de referencia son `engine/arch` (el más limpio y aislado), `engine/plan` (documento JSON de entrada, esquema, trabajos en segundo plano) y `engine/aea90364` (tablas como datos).
 > El código, los comentarios, los identificadores, los esquemas y los textos del producto van **en inglés**; la explicación al usuario, en español.
 
 ---
@@ -58,6 +58,9 @@ Reglas de la carpeta:
 
 ---
 
+### 2.1 Si el motor es una norma (AEA 90364, IEC 60364, NFPA 70…)
+Una norma es **un motor propio** con la misma forma y, dentro de `src/epc_<norma>/`, además: el cálculo, las tablas y constantes (`*_tables.json`), las reglas (`rules/`), `data/` (soluciones, `design-criteria.json`, `review.json`, `review-log.jsonl`), `standards/<ID>/rules.json` (normas ingeridas) y `norm_data.py` con `criteria_file()` y las rutas del dato. El país lo enlaza en `engine/jurisdictions/<CC>/jurisdiction.json` (`packs`: `{"electrical": "<norma>"}`). Detalle y ejemplo en [GUIA_NORMAS.md](GUIA_NORMAS.md) (sección 2.5).
+
 ## 3. `pyproject.toml` (plantilla)
 
 ```toml
@@ -108,7 +111,7 @@ Convenciones:
 
 ## 5. Entradas
 
-### 5.1 Documento JSON (como `epc_plan`, `epc_calc`)
+### 5.1 Documento JSON (como `epc_plan`, `epc_aea90364`)
 - Objeto con `"schema_version": "1.0"` y los campos del dominio. El esquema vive en `schema/input.schema.json` (JSON Schema 2020-12) y la validación da **mensajes que dicen qué corregir** (`"discipline 'xx' is not valid: profiles are …"`).
 - Identificadores: `id` de nodo/línea/elemento son cadenas estables; `tag` es la etiqueta correlativa que pone el motor (`LU-001`); `kind` es un tipo del perfil de la disciplina.
 - Los datos que vienen del usuario son opcionales con valores por defecto razonables; lo que falta se dice en `warnings`.
@@ -173,7 +176,7 @@ if __name__ == "__main__":
 - El backend decide qué significa un código distinto de cero; la prueba del backend reemplaza el proceso con `engine.set_runner(fn)`.
 
 ### 7.2 En proceso (importación perezosa) — para cálculos rápidos y puros
-El módulo del backend hace `from epc_<area> import run` **dentro de una función** (`_engine()`), no al importar el módulo, para que el backend arranque aunque el motor falte. `epc_plan` y `epc_calc` se usan así.
+El módulo del backend hace `from epc_<area> import run` **dentro de una función** (`_engine()`), no al importar el módulo, para que el backend arranque aunque el motor falte. `epc_plan` y `epc_aea90364` se usan así.
 Criterio: **subproceso** si lee archivos externos o puede tardar/colgarse; **en proceso** si es una función pura sobre un documento pequeño.
 
 ### 7.3 Trabajos largos (`jobs.py`)
@@ -213,13 +216,13 @@ Impuestas por el contrato `engine-layers` de import-linter (generado por `tools/
 ```
 epc_drawing
 epc_mld | epc_sld
-epc_titleblock | epc_symbols | epc_plan | epc_calc | epc_arch
+epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch
 epc_dxf
 ```
-- `epc_standards` necesita `epc_calc`; `epc_rules`, `epc_documents` son independientes.
+- `epc_standards` necesita `epc_aea90364`; `epc_rules`, `epc_documents` son independientes.
 - Un motor nuevo que no dependa de nadie va en la capa `epc_titleblock | … | epc_arch` (la de los independientes). Si necesita DXF/capas, puede importar `epc_dxf`.
 - **Ningún motor importa `epc`** (el backend): contrato `engine-independent`.
-- Si tu motor necesita calcular, **usa `epc_calc`** en vez de recalcular por su cuenta (ADR-0022: los dibujos solo dibujan; los números vienen de `epc_calc`).
+- Si tu motor necesita calcular, **usa `epc_aea90364`** en vez de recalcular por su cuenta (ADR-0022: los dibujos solo dibujan; los números vienen de `epc_aea90364`).
 
 ---
 
@@ -278,7 +281,7 @@ Con el motor ya creado en `engine/<area>/`:
 1. **`tools/ci/run_gate.py`** → agregar `"<area>"` a la tupla `AREAS`.
 2. **`tools/ci/check_coverage.py`** → agregar `"engine-<area>": "/engine/<area>/src/"` en `AREAS`; **`tools/ci/coverage_floor.json`** → agregar `"engine-<area>": <cobertura medida>`. (No uses `--update` global: reescribe todos los pisos; agrega solo el tuyo.)
 3. **`tools/build/impact_map.py`** → agregar `"epc_<area>": "<area>"` en `ENGINE_PKGS` **y** el nombre en la expresión regular `NAME_REF` (lista cerrada de nombres).
-4. **`tools/ci/gen_importlinter.py`** → ubicar `epc_<area>` en `ENGINE_LAYERS` (normalmente en la capa de los independientes: `epc_titleblock | epc_symbols | epc_plan | epc_calc | epc_arch | epc_<area>`).
+4. **`tools/ci/gen_importlinter.py`** → ubicar `epc_<area>` en `ENGINE_LAYERS` (normalmente en la capa de los independientes: `epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch | epc_<area>`).
 5. Regenerar lo derivado:
    ```
    python tools/ci/gen_importlinter.py

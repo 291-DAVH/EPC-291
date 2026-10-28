@@ -93,7 +93,7 @@ EPC-291/
 | `platform/apps/api` | `backend/src/epc` (split into modules: `projects`, `deliverables`, `intake`, `requirements`, `identity`) |
 | `platform/core/rules` | `engine/rules` |
 | `platform/core/workflow` | `backend/src/epc/modules/deliverables` (state machine) + `docs/explanation` (rules prose) |
-| `platform/hub/aea-calc/scripts` | `engine/calc/aea` |
+| `platform/hub/aea-calc/scripts` | `engine/aea90364/aea` |
 | `platform/hub/{sld,mld,iec-symbols,iram-titleblock}` | `engine/drawing/*` (code, data) |
 | `platform/hub/standard-ingest/scripts` | `engine/standards` |
 | `platform/hub/{doc-quality,pm2-docs,spec-writer}` scripts | `engine/documents` and `management/` |

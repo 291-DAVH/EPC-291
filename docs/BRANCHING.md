@@ -39,4 +39,4 @@ The repository has an `origin` remote. Nothing is pushed automatically. Pushing 
 ## Versions
 - The applications (`backend`, `frontend/*`) and the repository release share one version (`vX.Y.Z`, tagged on `main`).
 - Each Claude plugin has its own `version` in `plugin.json` (bumped when the plugin or the engine it wraps changes; the registry hash checks it).
-- The packages under `engine/` have their own versions: `engine/calc` continues the numbering of the legacy calculator, the others start at 0.1.0 and change only when their public contract changes.
+- The packages under `engine/` have their own versions: `engine/aea90364` continues the numbering of the legacy calculator, the others start at 0.1.0 and change only when their public contract changes.

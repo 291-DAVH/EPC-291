@@ -13,16 +13,16 @@ Una norma es un PDF con copyright. La plataforma **no lo distribuye ni lo copia*
 | Capa | Qué es | Dónde vive | ¿Se versiona? |
 |---|---|---|---|
 | 1. Fuente | El PDF de la norma y el material de estudio | `local/dev-knowledge/standards/<CC>/<ID>/` | **Nunca** (carpeta ignorada, `*.pdf` bloqueado por el hook de git) |
-| 2. Conocimiento extraído | Lo entendido, redactado con palabras propias como datos estructurados | `engine/jurisdictions/<CC>/<dominio>/<ID>/rules.json`, tablas y constantes del motor, `design-criteria.json` | Sí |
-| 3. Ejecución | Código que aplica ese conocimiento | `engine/rules` (reglas verificables), `engine/calc` (fórmulas y tablas), módulos del backend `knowledge` y `norms` | Sí |
+| 2. Conocimiento extraído | Lo entendido, redactado con palabras propias como datos estructurados | dentro del **motor de la norma** (`engine/<norma>/`): `standards/<ID>/rules.json`, tablas y constantes, reglas, `data/design-criteria.json` | Sí |
+| 3. Ejecución | Código que aplica ese conocimiento | `engine/rules` (reglas verificables), `engine/aea90364` (fórmulas y tablas), módulos del backend `knowledge` y `norms` | Sí |
 
 Una norma, según lo que contenga, se convierte en **cuatro cosas** (una norma real suele dar varias):
 
 | Contenido de la norma | En qué se convierte | Quién lo usa | Sección |
 |---|---|---|---|
 | Requisitos que se pueden comprobar ("reserva ≥ 20 %", "altura ≤ 1,8 m") | `rules.json` con `check` | `epc_rules`, API `/api/rules`, skills | 4 |
-| Tablas y constantes numéricas (capacidad de corriente, factores) | JSON de datos del motor, con la cláusula al lado | `epc_calc` | 5 |
-| Fórmulas (caída de tensión, corriente admisible, cortocircuito) | Función Python pura + test con ejemplo resuelto | `epc_calc` | 5 |
+| Tablas y constantes numéricas (capacidad de corriente, factores) | JSON de datos del motor, con la cláusula al lado | `epc_aea90364` | 5 |
+| Fórmulas (caída de tensión, corriente admisible, cortocircuito) | Función Python pura + test con ejemplo resuelto | `epc_aea90364` | 5 |
 | Valores que el ingeniero elige por proyecto (alturas, límites de caída) | Catálogo `design-criteria.json` | pipeline de diseño, pantalla de criterios | 6 |
 
 ---
@@ -38,6 +38,28 @@ Una norma, según lo que contenga, se convierte en **cuatro cosas** (una norma r
 7. **Lo privado no viaja.** El hook de git rechaza PDF/DWG, archivos de más de 5 MB y cualquier cosa de `local/dev-knowledge/`.
 
 ---
+
+## 2.5 Dónde vive cada cosa: un motor por norma
+
+Todo lo de una norma está **dentro del motor de esa norma**; no se reparte por otras carpetas.
+
+```
+engine/aea90364/                              # el motor de la norma AEA 90364 (igual para engine/iec60364/, engine/nfpa70/...)
+├── README.md   pyproject.toml   tests/   docs/   examples/
+└── src/epc_aea90364/
+    ├── aea_*.py, board_*.py …                # el cálculo: demanda, protección, conductores, caída, cortocircuito, puesta a tierra
+    ├── aea_tables.json                       # tablas y constantes, cada valor con su cláusula
+    ├── rules/*.json  (+ _indice.json)        # las reglas de ingeniería derivadas de la norma (formato del motor de cálculo)
+    ├── data/
+    │   ├── standard-solutions.json           # soluciones normalizadas (qué símbolos arman cada circuito)
+    │   ├── design-criteria.json              # catálogo de criterios base (el revisor corrige aquí; el proyecto sobrescribe)
+    │   ├── review.json   review-log.jsonl    # quién aprobó qué punto, cuándo, y la huella del valor
+    ├── standards/<ID>/rules.json             # normas ingeridas y promovidas (esquema 1.1), una carpeta por parte de la norma
+    └── norm_data.py                          # dónde está el dato (el backend y el motor de dibujo preguntan aquí)
+engine/jurisdictions/<CC>/jurisdiction.json   # solo país: nombre, idioma, tensiones y `packs` (qué motor de norma usa cada dominio)
+shared/schemas/rules.schema.json              # el esquema del formato de reglas
+local/dev-knowledge/standards/<CC>/<ID>/      # PDF y estudio (privado, nunca versionado)
+```
 
 ## 3. Preparar la norma (una vez por norma)
 
@@ -150,7 +172,7 @@ Entrega al revisor una lista corta (en español) de: reglas con `confidence: low
 python -m epc_standards.promote_rules INTL/IEC-60364-5-52 --mark-verified "Nombre del revisor"
 ```
 Puerta de la promoción: pasa la validación sin ERROR; `source_status == "verified"` con `validated_by` y `validated_on` (el flag `--mark-verified` sella nombre y fecha **solo** cuando el humano dijo que validó); nada del PDF ni de `evidence.json` viaja.
-Resultado: `engine/jurisdictions/<CC>/<dominio>/<ID>/rules.json`, un `promotion.json` junto al borrador y la norma queda listada en `engine/jurisdictions/<CC>/jurisdiction.json`.
+Resultado: `engine/<norma>/src/epc_<norma>/standards/<ID>/rules.json` (el motor de norma que la jurisdicción nombra para ese dominio: `packs` en `jurisdiction.json`; si nombra varios, se elige con `--pack`), un `promotion.json` junto al borrador y la norma queda listada en `engine/jurisdictions/<CC>/jurisdiction.json` con su motor.
 
 ### 4.5 Usarlas
 ```python
@@ -164,14 +186,14 @@ report = rs.check({"tray_reserve_pct": 15}, installation_type="dwellings")   # P
 
 ---
 
-## 5. Camino B: fórmulas y tablas → `epc_calc`
+## 5. Camino B: fórmulas y tablas → `epc_aea90364`
 
 Aplica a normas con cálculo (la AEA 90364-7-771 es el ejemplo hecho; la IEC 60364-5-52 sería el siguiente).
 
-1. **Tablas y constantes** → un JSON de datos dentro de `engine/calc/src/epc_calc/` (hoy `aea_tables.json` con las secciones `tablas_capacidad`, `factores_correccion`, `constantes` y un bloque `meta` con norma, origen, estado y unidades). **Cada valor lleva la cláusula al lado.** Un cargador con caché (`aea_tables.cargar()` y `limpiar_cache_tablas()`) las expone; el código **no** trae números normativos sueltos.
-2. **Reglas del motor de cálculo** → `engine/calc/src/epc_calc/rules/*.json` (una por requisito, con `fuente`: norma, edición, cláusula, página; sin texto de la norma), indexadas en `_indice.json`.
-3. **Fórmulas** → función **pura** en un módulo de `epc_calc`, con el docstring que ya usan los demás: `OBJETIVO`, `FÓRMULAS`, `UNIDADES`, `LIMITACIONES`, `NORMA DE REFERENCIA` y la marca `[VERIFICAR]` mientras no esté validada.
-4. **Prueba con ejemplo resuelto** en `engine/calc/tests/`: el número esperado está calculado a mano de la norma (no del propio código). Sin test, la fórmula no entra.
+1. **Tablas y constantes** → un JSON de datos dentro de `engine/aea90364/src/epc_aea90364/` (hoy `aea_tables.json` con las secciones `tablas_capacidad`, `factores_correccion`, `constantes` y un bloque `meta` con norma, origen, estado y unidades). **Cada valor lleva la cláusula al lado.** Un cargador con caché (`aea_tables.cargar()` y `limpiar_cache_tablas()`) las expone; el código **no** trae números normativos sueltos.
+2. **Reglas del motor de cálculo** → `engine/aea90364/src/epc_aea90364/rules/*.json` (una por requisito, con `fuente`: norma, edición, cláusula, página; sin texto de la norma), indexadas en `_indice.json`.
+3. **Fórmulas** → función **pura** en un módulo de `epc_aea90364`, con el docstring que ya usan los demás: `OBJETIVO`, `FÓRMULAS`, `UNIDADES`, `LIMITACIONES`, `NORMA DE REFERENCIA` y la marca `[VERIFICAR]` mientras no esté validada.
+4. **Prueba con ejemplo resuelto** en `engine/aea90364/tests/`: el número esperado está calculado a mano de la norma (no del propio código). Sin test, la fórmula no entra.
 5. **Catálogo de módulos** (`aea_catalog.py`): agrega la línea del módulo con su norma y resumen para que aparezca en la documentación del motor.
 
 ### Estado actual (honesto)
@@ -183,7 +205,7 @@ Aplica a normas con cálculo (la AEA 90364-7-771 es el ejemplo hecho; la IEC 603
 
 ## 6. Criterios de diseño (valores por proyecto)
 
-Catálogo `engine/jurisdictions/<CC>/<dominio>/design-criteria.json` (hoy `AR/electrical`):
+Catálogo `engine/<norma>/src/epc_<norma>/data/design-criteria.json` (hoy `engine/aea90364`; se obtiene con `epc_aea90364.norm_data.criteria_file()`):
 ```json
 {
   "schema_version": "1.0",
@@ -211,11 +233,11 @@ Catálogo `engine/jurisdictions/<CC>/<dominio>/design-criteria.json` (hoy `AR/el
 
 - Rol de plataforma `standards` (el **revisor de normas**): una cuenta sin organización que solo alcanza `/api/norms/*`. La crea un administrador (`python -m epc.modules.identity.cli create-admin --role standards`).
 - El módulo `norms` lista los **puntos** (una regla, una tabla o constante, un criterio) y permite **corregir** el valor (se reescribe en el archivo de datos con su propio formato, para que git muestre solo ese cambio) y **aprobar** o **marcar** con una nota.
-- Estados: **pendiente** hasta aprobar; la aprobación guarda quién, cuándo, nota y la **huella** del valor aprobado en `engine/jurisdictions/AR/review.json`, y cada acción se agrega a `review-log.jsonl`. Un valor que cambia por otra vía después de aprobar (por ejemplo un merge) aparece como **desactualizado** y pide nueva aprobación.
+- Estados: **pendiente** hasta aprobar; la aprobación guarda quién, cuándo, nota y la **huella** del valor aprobado en `engine/aea90364/src/epc_aea90364/data/review.json`, y cada acción se agrega a `data/review-log.jsonl` (el estado de revisión es dato de la norma y viaja con su motor). Un valor que cambia por otra vía después de aprobar (por ejemplo un merge) aparece como **desactualizado** y pide nueva aprobación.
 - El revisor corrige **valores, no estructura**: las reglas conservan sus campos y tipos; las tablas, sus claves y tamaños.
 
 ### Estado actual (honesto)
-- La pantalla de revisión cubre hoy los **datos de cálculo AEA** (reglas de `epc_calc`, tablas/constantes, criterios de diseño). Las `rules.json` ingeridas con `epc_standards` se validan con `validate_rules` y `--mark-verified`, pero **aún no tienen pantalla de revisión punto por punto**.
+- La pantalla de revisión cubre hoy los **datos de cálculo AEA** (reglas de `epc_aea90364`, tablas/constantes, criterios de diseño). Las `rules.json` ingeridas con `epc_standards` se validan con `validate_rules` y `--mark-verified`, pero **aún no tienen pantalla de revisión punto por punto**.
 - No hay flujo de **dos aprobadores**.
 - En la imagen de contenedor (solo lectura) la revisión se hace en la copia de desarrollo y se versiona.
 
@@ -223,12 +245,12 @@ Catálogo `engine/jurisdictions/<CC>/<dominio>/design-criteria.json` (hoy `AR/el
 
 ## 8. Jurisdicciones, normas internacionales y relación entre normas
 
-- Una **jurisdicción** es una carpeta `engine/jurisdictions/<CC>/` con `jurisdiction.json` (copiado de `_template`): `id`, `name`, `default_locale`, `currency`, `frequency_hz`, `standards_bodies`, `voltages_lv`, `status`, `packs`. Las **subcarpetas** de dominio (`electrical`, `hvac`, `fire`, `civil`, `mechanical`, `instrumentation`, `telecom`) son las **disciplinas** que la creación de proyecto ofrece para ese país.
-- Una norma nueva de un país ya existente: se promueve a `engine/jurisdictions/<CC>/<dominio>/<ID>/rules.json`.
-- **IEC/ISO (internacional):** el esquema acepta `country: "INTL"`. En el repositorio solo existe `INTL` en el material privado (`local/dev-knowledge`); **no hay** `engine/jurisdictions/INTL/` todavía. Crearlo implica un `jurisdiction.json` propio y que `INTL` aparezca como opción al crear un proyecto.
+- Una **jurisdicción** es una carpeta `engine/jurisdictions/<CC>/` con `jurisdiction.json` (copiado de `_template`): `id`, `name`, `default_locale`, `currency`, `frequency_hz`, `standards_bodies`, `voltages_lv`, `status` y **`packs`**: qué motor de norma usa cada dominio (`{"electrical": "aea90364"}`; una lista si aplican varios). Las **subcarpetas** de dominio (`electrical`, `hvac`, `fire`, `civil`, `mechanical`, `instrumentation`, `telecom`) son las **disciplinas** que la creación de proyecto ofrece para ese país. **La jurisdicción no guarda normas: solo dice cuál motor usa.**
+- Una norma nueva de una familia que ya tiene motor (otra parte de la AEA 90364): se promueve a `engine/aea90364/.../standards/<ID>/rules.json`. Una norma de **otra familia** (IEC 60364, NFPA 70) tiene **su propio motor** (`engine/iec60364/`, `engine/nfpa70/`, con la misma forma que `engine/aea90364`) y se agrega al `packs` de la jurisdicción que la use.
+- **IEC/ISO (internacional):** al tener motor propio (`engine/iec60364/`), un país puede usarla listándola junto a la local: `"packs": {"electrical": ["aea90364", "iec60364"]}`; `RuleSet.load("AR", "electrical")` carga las reglas promovidas de **ambos** motores. El país `INTL` solo existe en el material privado (`local/dev-knowledge`).
 - **Relación entre normas:** el esquema define `standard.extends` (norma base) y `rule.overrides` (id de la regla que se reemplaza). 
   - `overrides` **funciona** dentro de una misma jurisdicción (`RuleSet` descarta la regla reemplazada).
-  - **Estado actual:** `extends` está en el esquema pero **el cargador no lo resuelve**, y `RuleSet.load("AR")` solo lee `jurisdictions/AR/*/*/rules.json`. Para que un proyecto argentino vea las reglas de IEC hay que implementar carga de varias jurisdicciones o la resolución de `extends`. Es un cambio del motor `epc_rules` con su ADR y sus tests.
+  - **Estado actual:** `extends` está en el esquema pero **el cargador no lo resuelve**; lo que sí hace falta ya está: una jurisdicción puede listar varios motores de norma en `packs`, así que las reglas de AEA e IEC se consultan juntas. La *herencia* entre normas (una regla de IEC que la AEA reemplaza) usa `overrides` por id de regla.
 
 ---
 
@@ -240,8 +262,8 @@ Catálogo `engine/jurisdictions/<CC>/<dominio>/design-criteria.json` (hoy `AR/el
 | Promoción | `promote_rules` (bloquea si hay ERROR o no está verificada) |
 | Motor de reglas | `engine/rules/tests` (`python -m unittest discover -s tests` con `PYTHONPATH=src`) |
 | Pipeline de ingesta | `engine/standards/tests` |
-| Fórmulas y tablas | `engine/calc/tests`: ejemplo resuelto a mano por cada función |
-| Todo junto | `python tools/ci/run_gate.py` en verde (hoy 35/35): `engine-rules`, `engine-standards`, `engine-calc`, `single-source`, `coverage`, `complexity` |
+| Fórmulas y tablas | `engine/aea90364/tests`: ejemplo resuelto a mano por cada función |
+| Todo junto | `python tools/ci/run_gate.py` en verde (hoy 35/35): `engine-rules`, `engine-standards`, `engine-aea90364`, `single-source`, `coverage`, `complexity` |
 
 Una norma que **solo** agrega datos (sin código) igual pasa por `single-source` (sin duplicados) y por el hook (sin PDF ni material privado).
 
@@ -264,7 +286,7 @@ Orden razonable de capítulos para 60364: **4** (protección: contactos, sobreco
 
 ## 11. Prompt sugerido para el otro chat
 
-> Voy a incorporar la norma **<ID>** (`<país>`, edición `<año>`, dominio `<dominio>`) a la plataforma EPC-291 sin distribuirla. El PDF queda en `local/dev-knowledge/standards/<CC>/<ID>/source/` y no se versiona. Quiero `draft/rules.json` (esquema 1.1 de `shared/schemas/rules.schema.json`) **capítulo por capítulo**: una regla por requisito con `id` en inglés, `clause`, `page`, `topic`, `summary` parafraseado (≤240 caracteres por idioma, nunca 12 palabras seguidas de la fuente), `type`, `applies_to`, `params` con la unidad en el sufijo y `check` solo cuando sea una comparación limpia; tablas en `tables[]`. Nunca inventes valores: si algo es ilegible baja `confidence`, marca `verification` y anótalo como duda. Valida con `python -m epc_standards.validate_rules` y entrégame una lista corta en español de dudas, checks derivados y páginas leídas visualmente. **No promuevas**: solo lo hago yo tras validar. Para lo que tenga tablas o fórmulas, propón datos con cláusula + función pura + test con ejemplo resuelto en `engine/calc`. Capítulos de esta pasada: **<lista>**.
+> Voy a incorporar la norma **<ID>** (`<país>`, edición `<año>`, dominio `<dominio>`) a la plataforma EPC-291 sin distribuirla. El PDF queda en `local/dev-knowledge/standards/<CC>/<ID>/source/` y no se versiona. Quiero `draft/rules.json` (esquema 1.1 de `shared/schemas/rules.schema.json`) **capítulo por capítulo**: una regla por requisito con `id` en inglés, `clause`, `page`, `topic`, `summary` parafraseado (≤240 caracteres por idioma, nunca 12 palabras seguidas de la fuente), `type`, `applies_to`, `params` con la unidad en el sufijo y `check` solo cuando sea una comparación limpia; tablas en `tables[]`. Nunca inventes valores: si algo es ilegible baja `confidence`, marca `verification` y anótalo como duda. Valida con `python -m epc_standards.validate_rules` y entrégame una lista corta en español de dudas, checks derivados y páginas leídas visualmente. **No promuevas**: solo lo hago yo tras validar. Para lo que tenga tablas o fórmulas, propón datos con cláusula + función pura + test con ejemplo resuelto en `engine/aea90364`. Capítulos de esta pasada: **<lista>**.
 
 ---
 

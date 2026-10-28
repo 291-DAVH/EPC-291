@@ -21,7 +21,7 @@ FLOOR = REPO / "tools" / "ci" / "coverage_floor.json"
 TOLERANCE = 0.3                      # points: runs are not byte-identical (threads, timing)
 AREAS = {                            # area -> path fragment of its production code
     "backend": "/backend/src/epc/",
-    "engine-calc": "/engine/calc/src/",
+    "engine-aea90364": "/engine/aea90364/src/",
     "engine-rules": "/engine/rules/src/",
     "engine-standards": "/engine/standards/src/",
     "engine-dxf": "/engine/dxf/src/",

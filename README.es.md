@@ -64,7 +64,7 @@ git config core.hooksPath tools/hooks
 # Python environment (desde la raíz del repositorio)
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
-.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
+.venv\Scripts\python -m pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/drawing -e engine/documents -e "backend[dev]"
 
 # Batería de pruebas (21 controles, antes de integrar cualquier cambio)
 .venv\Scripts\python tools\ci\run_gate.py
@@ -149,7 +149,7 @@ Lee [CONTRIBUTING.md](CONTRIBUTING.md), abre una rama desde `dev`, corre la bate
 
 ## 📜 Estado y licencia
 
-Versión 0.3.0. Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/calc/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
+Versión 0.3.0. Las tablas de cálculo y las reglas de normas están pendientes de validación contra los documentos oficiales (`engine/aea90364/docs/11-pendientes.md`). Todavía no se eligió una licencia: todos los derechos reservados hasta que el titular decida.
 
 <div align="center">
 

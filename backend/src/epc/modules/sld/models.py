@@ -18,7 +18,7 @@ class Board(BaseModel):
 
 class Segment(BaseModel):
     """One stretch of the real route of a cable: how it is installed there decides its capacity."""
-    kind: str                               # see epc_calc.aea_route.KINDS
+    kind: str                               # see epc_aea90364.aea_route.KINDS
     length_m: float
     label: str = ""
     ambient_c: Optional[float] = None       # air stretches (project value when empty)

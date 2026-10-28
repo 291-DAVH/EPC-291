@@ -54,8 +54,13 @@ class TestValidate(unittest.TestCase):
 
 class TestPromote(unittest.TestCase):
     def run_promote(self, sdir, plat, *extra):
+        """`plat` is an engine folder with the jurisdiction ZZ naming the norm engine `zznorm` for the electrical domain (made when it does not exist yet)."""
+        if not plat.exists():
+            (plat / "jurisdictions" / "ZZ").mkdir(parents=True)
+            (plat / "jurisdictions" / "ZZ" / "jurisdiction.json").write_text(json.dumps({"id": "ZZ", "packs": {"electrical": "zznorm"}}), encoding="utf-8")
+            (plat / "zznorm" / "src" / "epc_zznorm").mkdir(parents=True)
         old = sys.argv
-        sys.argv = ["promote_rules.py", str(sdir), "--jurisdictions", str(plat), *extra]
+        sys.argv = ["promote_rules.py", str(sdir), "--engine", str(plat), *extra]
         try:
             return promote_rules.main()
         finally:
@@ -66,18 +71,27 @@ class TestPromote(unittest.TestCase):
             sdir = make_standard(t, "Altura minima en interiores 2,2 m.")
             plat = Path(t) / "plat"
             self.assertEqual(self.run_promote(sdir, plat), 1)
-            self.assertFalse(plat.exists())
+            self.assertFalse(list(plat.rglob("rules.json")))                                   # nothing is promoted until a person validated it
 
     def test_verified_is_promoted_and_indexed(self):
         with tempfile.TemporaryDirectory() as t:
             sdir = make_standard(t, "Altura minima en interiores 2,2 m.")
             plat = Path(t) / "plat"
             self.assertEqual(self.run_promote(sdir, plat, "--mark-verified", "Reviewer"), 0)
-            dest = plat / "ZZ" / "electrical" / "TEST-1" / "rules.json"
+            dest = plat / "zznorm" / "src" / "epc_zznorm" / "standards" / "TEST-1" / "rules.json"          # inside the norm engine, not in the jurisdiction
             self.assertTrue(dest.exists())
-            j = json.loads((plat / "ZZ" / "jurisdiction.json").read_text(encoding="utf-8"))
-            self.assertEqual(j["standards"][0]["validated_by"], "Reviewer")
+            j = json.loads((plat / "jurisdictions" / "ZZ" / "jurisdiction.json").read_text(encoding="utf-8"))
+            self.assertEqual((j["standards"][0]["validated_by"], j["standards"][0]["engine"]), ("Reviewer", "zznorm"))
             self.assertTrue((sdir / "promotion.json").exists())
+
+    def test_a_jurisdiction_without_a_norm_engine_for_the_domain_blocks_the_promotion(self):
+        with tempfile.TemporaryDirectory() as t:
+            sdir = make_standard(t, "Altura minima en interiores 2,2 m.")
+            plat = Path(t) / "plat"
+            (plat / "jurisdictions" / "ZZ").mkdir(parents=True)
+            (plat / "jurisdictions" / "ZZ" / "jurisdiction.json").write_text(json.dumps({"id": "ZZ", "packs": {}}), encoding="utf-8")
+            self.assertEqual(self.run_promote(sdir, plat, "--mark-verified", "Reviewer"), 1)
+            self.assertFalse(list(plat.rglob("rules.json")))
 
     def test_verbatim_blocks_promotion_even_if_marked_verified(self):
         with tempfile.TemporaryDirectory() as t:

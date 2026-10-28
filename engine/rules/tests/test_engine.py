@@ -32,7 +32,10 @@ STD_B_DRAFT = {
 
 
 def make_root(tmp):
-    d = Path(tmp) / "jurisdictions" / "ZZ" / "electrical"
+    """A jurisdiction ZZ whose electrical norms live in the norm engine `zznorm`."""
+    (Path(tmp) / "jurisdictions" / "ZZ").mkdir(parents=True)
+    (Path(tmp) / "jurisdictions" / "ZZ" / "jurisdiction.json").write_text(json.dumps({"id": "ZZ", "packs": {"electrical": "zznorm"}}), encoding="utf-8")
+    d = Path(tmp) / "zznorm" / "src" / "epc_zznorm" / "standards"
     (d / "TEST-1").mkdir(parents=True)
     (d / "TEST-2").mkdir(parents=True)
     (d / "TEST-1" / "rules.json").write_text(json.dumps(STD_A), encoding="utf-8")
@@ -91,7 +94,7 @@ class TestRuleSet(unittest.TestCase):
         extra = dict(STD_B_DRAFT, source_status="verified")
         extra["rules"] = [{"id": "tray.reserve.v2", "overrides": "tray.reserve", "clause": "9", "topic": "trays", "type": "mandatory",
                            "summary": {"es": "x"}, "check": {"field": "reserve_pct", "op": ">=", "value": 25}}]
-        p = self.root / "jurisdictions" / "ZZ" / "electrical" / "TEST-2" / "rules.json"
+        p = self.root / "zznorm" / "src" / "epc_zznorm" / "standards" / "TEST-2" / "rules.json"
         p.write_text(json.dumps(extra), encoding="utf-8")
         rs = RuleSet.load("ZZ", root=self.root, env="production")
         self.assertIsNone(rs.get("tray.reserve"))

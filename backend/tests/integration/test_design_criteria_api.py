@@ -6,13 +6,14 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from epc_aea90364 import norm_data
 from epc.core.config import settings
 from epc.main import create_app
 
 
 def catalog() -> dict:
     """The real catalog: the tests follow its current state (the norm reviewer corrects and validates it), they do not freeze its values."""
-    return json.loads((settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json").read_text(encoding="utf-8"))
+    return json.loads((norm_data.criteria_file("electrical")).read_text(encoding="utf-8"))
 
 
 class TestDesignCriteria(unittest.TestCase):

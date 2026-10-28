@@ -222,7 +222,7 @@ w(PF / "methodologies/pm2/methodology.json", json.dumps({"id": "pm2", "name": "P
 w(PF / "methodologies/pmi/README.md", "# pmi\n\nPlaceholder for the PMI/PMBOK methodology pack. Must fill the same project entities as `pm2`. Not started.\n")
 w(PF / "methodologies/custom/README.md", "# custom\n\nEmpty skeleton for a company-specific methodology. Copy `pm2/methodology.json` as a starting point.\n")
 ar = {"id": "AR", "name": "Argentina", "default_locale": "es-AR", "currency": "ARS", "frequency_hz": 50, "standards_bodies": ["AEA", "IRAM"],
-      "voltages_lv": [230, 400], "status": "active", "packs": {"electrical": "electrical/"}, "legacy_index": "_legacy/standards-index.md"}
+      "voltages_lv": [230, 400], "status": "active", "packs": {"electrical": ""}, "legacy_index": "_legacy/standards-index.md"}
 w(PF / "jurisdictions/AR/jurisdiction.json", json.dumps(ar, indent=2, ensure_ascii=False) + "\n")
 w(PF / "jurisdictions/_template/jurisdiction.json", json.dumps({**ar, "id": "XX", "name": "", "default_locale": "", "currency": "", "status": "template", "standards_bodies": []}, indent=2) + "\n")
 w(PF / "jurisdictions/README.md", "# jurisdictions\n\nOne folder per country (ISO 3166 alpha-2). Each standard becomes `<domain>/<STANDARD-ID>/rules.json` promoted from `dev-knowledge/standards/<CC>/<STANDARD-ID>/draft/` (schema: `schemas/rules.schema.json`). Currently the AEA tables still live inside `hub/aea-calc/scripts/` (`aea_tables.json`, `rules/`) and must be moved here once validated.\n")

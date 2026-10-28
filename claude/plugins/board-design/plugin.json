@@ -2,7 +2,7 @@
   "id": "board-design",
   "version": "0.2.1",
   "kind": "workflow",
-  "description": "Designs a low-voltage board end to end: the project's design criteria govern the circuit calculation (epc_calc) and that calculation feeds the single-line (SLD) and multi-line (MLD) diagrams on IRAM sheets (SVG, DXF, PDF).",
+  "description": "Designs a low-voltage board end to end: the project's design criteria govern the circuit calculation (epc_aea90364) and that calculation feeds the single-line (SLD) and multi-line (MLD) diagrams on IRAM sheets (SVG, DXF, PDF).",
   "discipline": [
     "electrical"
   ],
@@ -58,16 +58,13 @@
   },
   "skills": [],
   "engine": [
-    "calc",
+    "aea90364",
     "drawing",
     "dxf",
     "mld",
     "sld",
     "symbols",
     "titleblock"
-  ],
-  "engine_data": [
-    "jurisdictions/AR/electrical/design-criteria.json"
   ],
   "owns": [
     "drawing"

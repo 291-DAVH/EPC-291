@@ -4,7 +4,7 @@
   python tools/build/impact_map.py            write docs/architecture/DEPENDENCIAS.md
   python tools/build/impact_map.py --check    fail if the file differs from what the code gives (the gate runs this)
 
-Units: the engine packages (calc, documents, standards, rules, plan and symbols, titleblock, sld, mld and drawing), the modules
+Units: the engine packages (aea90364, documents, standards, rules, plan and symbols, titleblock, sld, mld and drawing), the modules
 of the backend and the plugins. An edge is an import or a reference to an engine module by name (a subprocess `-m epc_drawing.export.pdf`). Nothing here is declared by hand:
 if the code changes, the map changes, and the gate asks for the file to be regenerated.
 """
@@ -19,11 +19,11 @@ from typing import Dict, Iterable, List, Set
 
 REPO = Path(__file__).resolve().parents[2]
 TARGET = REPO / "docs" / "architecture" / "DEPENDENCIAS.md"
-ENGINE_PKGS = {"epc_calc": "calc", "epc_documents": "documents", "epc_standards": "standards", "epc_rules": "rules", "epc_plan": "plan", "epc_symbols": "symbols", "epc_dxf": "dxf",
+ENGINE_PKGS = {"epc_aea90364": "aea90364", "epc_documents": "documents", "epc_standards": "standards", "epc_rules": "rules", "epc_plan": "plan", "epc_symbols": "symbols", "epc_dxf": "dxf",
                "epc_titleblock": "titleblock", "epc_sld": "sld", "epc_mld": "mld", "epc_drawing": "drawing", "epc_arch": "arch"}
 ENGINE_ROOTS = {a: f"engine/{a}/src/epc_{a}" for a in ENGINE_PKGS.values()}
 PYPROJECT = {a: f"engine/{a}" for a in ENGINE_PKGS.values()}
-NAME_REF = re.compile(r"\bepc_(?:calc|documents|standards|rules|plan|symbols|dxf|titleblock|sld|mld|drawing|arch)(?:\.[a-z_]+)*")
+NAME_REF = re.compile(r"\bepc_(?:aea90364|documents|standards|rules|plan|symbols|dxf|titleblock|sld|mld|drawing|arch)(?:\.[a-z_]+)*")
 STD = set(sys.stdlib_module_names)
 IGNORED_THIRD_PARTY = {"epc", "tests", "conftest", "pytest"}
 

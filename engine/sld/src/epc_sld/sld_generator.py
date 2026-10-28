@@ -2,7 +2,7 @@
 """Generador referencial de SLD (unifilar BT) desde plantilla MINIMAL v2.
 
 Una hoja (`_Sheet`) se arma por etapas, cada una una función corta: leer la entrada y el cálculo, dibujar acometida, barra, circuitos, cables y cargas,
-la tabla, las referencias, el rótulo, y entregar (SVG y DXF). El dibujo no calcula: todo número sale del cálculo de epc_calc.
+la tabla, las referencias, el rótulo, y entregar (SVG y DXF). El dibujo no calcula: todo número sale del cálculo de epc_aea90364.
 """
 import sys, os, math, json, textwrap, datetime, re
 from xml.sax.saxutils import escape as xesc
@@ -15,7 +15,7 @@ except (ImportError, OSError):
 from epc_dxf import roles as ROLES
 from epc_symbols import library_dir
 
-from epc_calc.aea_pipeline import TOPOLOGIAS_MOTOR         # which topologies are motors (the choice of symbols); the numbers come from the calculation
+from epc_aea90364.aea_pipeline import TOPOLOGIAS_MOTOR         # which topologies are motors (the choice of symbols); the numbers come from the calculation
 
 X0, YBAR, GAP = 58.0, 85.0, 3.0
 BLUE, RED, GREEN, BLACK = '#0000ff', '#ff0000', '#139b48', '#000000'
@@ -57,13 +57,13 @@ BOARD_KEYS = ('NOMBRE', 'TENSION_V', 'SISTEMA', 'ICC_KA', 'FP_DEFAULT', 'FRECUEN
 
 # ---------- entrada ----------
 def _calculo(env, var):
-    # El dibujo no calcula: todo número sale del cálculo de epc_calc (aea_pipeline y board_figures), que entrega board_design como archivos JSON.
+    # El dibujo no calcula: todo número sale del cálculo de epc_aea90364 (aea_pipeline y board_figures), que entrega board_design como archivos JSON.
     #   SLD_CALC_JSON    = {TAG: {In, Ib, icu, S, dU, disp}} (contrato de aea_export)
     #   SLD_CALC_DETAIL  = {TAG: {limite_pct, du_propia_pct, p_kw, pe_mm2, neutro_mm2, kind, ...}}
     #   SLD_FIGURES_JSON = cifras del tablero: barra, acometida, verificaciones y notas (board_figures)
     f = env.get(var)
     if not f:
-        sys.exit(f'FALTA {var}: el unifilar solo dibuja; el cálculo lo entrega epc_calc (board_design.design)')
+        sys.exit(f'FALTA {var}: el unifilar solo dibuja; el cálculo lo entrega epc_aea90364 (board_design.design)')
     return json.load(open(f, encoding='utf-8'))
 
 
@@ -188,7 +188,7 @@ class _Sheet:
 
     # ---------- cadenas de símbolos ----------
     def chain(self, t):
-        """Los símbolos del circuito, en el orden en que se dibujan: los elige el cálculo (solución estándar de epc_calc); aquí solo se les da lugar."""
+        """Los símbolos del circuito, en el orden en que se dibujan: los elige el cálculo (solución estándar de epc_aea90364); aquí solo se les da lugar."""
         return [(it['symbol'], {**({'poles': it['label']} if it['label'] else {}), **it['slots']}) for it in self.det[t]['cadena']]
 
     def load_of(self, t):

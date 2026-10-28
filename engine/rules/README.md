@@ -1,6 +1,6 @@
 # epc-rules
 
-Rules engine (pure Python, standard library only). Loads `rules.json` files per jurisdiction from `engine/jurisdictions/`, queries them and checks project data: PASS, FAIL or not evaluated (a missing datum is reported, never guessed). Production sees only verified standards.
+Rules engine (pure Python, standard library only). Loads the promoted `rules.json` of the norm engines a jurisdiction names (`engine/jurisdictions/<CC>/jurisdiction.json`, `packs`), queries them and checks project data: PASS, FAIL or not evaluated (a missing datum is reported, never guessed). Production sees only verified standards.
 
 ```
 from epc_rules import RuleSet

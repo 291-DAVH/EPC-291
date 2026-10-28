@@ -7,6 +7,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from epc_aea90364 import norm_data
 from epc.core.config import settings
 from epc.main import create_app
 from epc.modules.norms import repository
@@ -19,15 +20,15 @@ CRIT = "criterion:ar-electrical"
 
 class TestNorms(unittest.TestCase):
     def setUp(self):
-        import epc_calc
-        pkg = Path(epc_calc.__file__).parent
+        import epc_aea90364
+        pkg = Path(epc_aea90364.__file__).parent
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
         (self.root / "rules").mkdir()
         for f in (pkg / "rules").glob("*.json"):
             shutil.copy2(f, self.root / "rules" / f.name)
         shutil.copy2(pkg / "aea_tables.json", self.root / "aea_tables.json")
-        shutil.copy2(settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json", self.root / "design-criteria.json")
+        shutil.copy2(norm_data.criteria_file("electrical"), self.root / "design-criteria.json")
         cat = json.loads((self.root / "design-criteria.json").read_text(encoding="utf-8"))
         cat["validated"] = False                                            # start from an unreviewed catalog whatever the real one says now
         repository.write_atomic(self.root / "design-criteria.json", repository.dumps_criteria(cat))
@@ -94,7 +95,7 @@ class TestNorms(unittest.TestCase):
         self.assertEqual(self.c.put(url, json={"patch": {"tema": d_tema(self)}}).status_code, 422)     # nothing changed
 
     def test_tables_keep_their_shape_and_the_engine_reloads(self):
-        from epc_calc import aea_tables
+        from epc_aea90364 import aea_tables
         key = "const:771.13_pen_minima_mm2"
         url = f"{self.base}/units/{TABLES}/points/{key}"
         d = self.c.get(url).json()

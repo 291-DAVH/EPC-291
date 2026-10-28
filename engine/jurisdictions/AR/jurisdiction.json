@@ -14,7 +14,7 @@
   ],
   "status": "active",
   "packs": {
-    "electrical": "electrical/"
+    "electrical": "aea90364"
   },
   "legacy_index": "_legacy/standards-index.md"
 }
