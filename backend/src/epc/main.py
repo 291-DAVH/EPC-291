@@ -4,6 +4,8 @@ Run (from the repository root, engine on PYTHONPATH or installed):
   uvicorn epc.main:app --app-dir backend/src --port 8000 [--reload]
 """
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
@@ -32,6 +34,7 @@ from epc.modules.reporting import api as reporting_api
 from epc.modules.requirements import api as requirements_api
 from epc.modules.schedule import api as schedule_api
 from epc.modules.layout import api as layout_api
+from epc.modules.lighting import api as lighting_api
 from epc.modules.sld import api as sld_api
 from epc.modules.wbs import api as wbs_api
 
@@ -58,6 +61,11 @@ def create_app() -> FastAPI:
             response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         return response
 
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(_: Request, exc: RequestValidationError):
+        """The same 422 FastAPI gives, without echoing the input back: a value like Infinity cannot be written as JSON and would turn the refusal into a 500."""
+        return JSONResponse({"detail": jsonable_encoder([{k: v for k, v in e.items() if k not in ("input", "ctx")} for e in exc.errors()])}, status_code=422)
+
     @app.exception_handler(DomainError)
     async def domain_error(_: Request, exc: DomainError):
         return JSONResponse({"detail": exc.detail}, status_code=exc.status)
@@ -66,10 +74,11 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, coordination_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, lighting_api, coordination_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     app.include_router(catalogs_api.company)                     # layers and standard solutions of the company
     app.include_router(catalogs_api.project)                     # ... and of each project
+    app.include_router(lighting_api.company)                     # luminaires of the company (the project's are in the module router)
     app.include_router(layout_api.layers_router)                  # DXF layers by discipline
     app.include_router(layout_api.templates_router)               # templates of layout of the organization
     app.include_router(coordination_api.company)                 # separations between disciplines of the company (the project's are in the module router)

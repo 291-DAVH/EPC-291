@@ -13,7 +13,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `documents` | — | — | — |
 | `drawing` | `aea90364`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
 | `dxf` | — | `backend.catalogs`, `backend.layout`, `drawing`, `mld`, `plan`, `sld`, `titleblock` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `plan`, `sld`, `titleblock` |
-| `lighting` | — | — | — |
+| `lighting` | — | `backend.lighting` | `backend.app`, `backend.lighting` |
 | `mld` | `aea90364`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `plan` | `dxf` | `backend.coordination`, `backend.layout` | `backend.app`, `backend.coordination`, `backend.layout` |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
@@ -27,22 +27,23 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | Módulo | Usa | Lo usan |
 |---|---|---|
 | `backend.admin` | `backend.catalogs`, `backend.core`, `backend.deliverables`, `backend.identity`, `backend.knowledge`, `backend.projects`, `symbols` | `backend.app` |
-| `backend.app` | `backend.admin`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` | — |
+| `backend.app` | `backend.admin`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.lighting`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` | — |
 | `backend.backlog` | `backend.core`, `backend.projects`, `backend.wbs` | `backend.app`, `backend.reporting` |
 | `backend.catalogs` | `aea90364`, `backend.core`, `backend.identity`, `backend.projects`, `dxf`, `symbols` | `backend.admin`, `backend.app`, `backend.layout`, `backend.sld` |
 | `backend.coordination` | `backend.core`, `backend.identity`, `backend.layout`, `backend.projects`, `plan` | `backend.app` |
-| `backend.core` | — | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
+| `backend.core` | — | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.lighting`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
 | `backend.deliverables` | `backend.core`, `backend.projects` | `backend.admin`, `backend.app`, `backend.issuing`, `backend.management`, `backend.reporting` |
 | `backend.engineering` | `backend.core`, `backend.projects` | `backend.app`, `backend.issuing`, `backend.sld` |
-| `backend.identity` | `backend.core` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.layout`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements` |
+| `backend.identity` | `backend.core` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.layout`, `backend.lighting`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements` |
 | `backend.intake` | `backend.core`, `backend.projects` | `backend.app`, `backend.management`, `backend.reporting`, `backend.requirements` |
 | `backend.issuing` | `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.masterdata`, `backend.projects`, `drawing` | `backend.app` |
 | `backend.knowledge` | `backend.core`, `rules` | `backend.admin`, `backend.app` |
 | `backend.layout` | `arch`, `backend.catalogs`, `backend.core`, `backend.identity`, `backend.projects`, `backend.sld`, `drawing`, `dxf`, `plan` | `backend.app`, `backend.coordination` |
+| `backend.lighting` | `backend.core`, `backend.identity`, `backend.projects`, `lighting` | `backend.app` |
 | `backend.management` | `backend.core`, `backend.deliverables`, `backend.intake`, `backend.projects`, `backend.requirements` | `backend.app`, `backend.reporting` |
 | `backend.masterdata` | `backend.core`, `backend.identity`, `backend.projects` | `backend.app`, `backend.issuing`, `backend.sld` |
 | `backend.norms` | `aea90364`, `backend.core`, `backend.identity` | `backend.app` |
-| `backend.projects` | `backend.core`, `backend.identity` | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.deliverables`, `backend.engineering`, `backend.intake`, `backend.issuing`, `backend.layout`, `backend.management`, `backend.masterdata`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
+| `backend.projects` | `backend.core`, `backend.identity` | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.deliverables`, `backend.engineering`, `backend.intake`, `backend.issuing`, `backend.layout`, `backend.lighting`, `backend.management`, `backend.masterdata`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs` |
 | `backend.registers` | `backend.core`, `backend.identity`, `backend.projects` | `backend.app`, `backend.reporting` |
 | `backend.reporting` | `backend.backlog`, `backend.core`, `backend.deliverables`, `backend.identity`, `backend.intake`, `backend.management`, `backend.projects`, `backend.registers`, `backend.requirements`, `backend.schedule`, `backend.wbs`, `drawing` | `backend.app` |
 | `backend.requirements` | `backend.core`, `backend.identity`, `backend.intake`, `backend.projects` | `backend.app`, `backend.management`, `backend.reporting` |

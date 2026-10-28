@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "note": "Generic luminaires to start from. They are ILLUSTRATIVE: the flux and the power are typical of the kind of luminaire, not of a maker. The company and each project replace them with the luminaires they use (flux, power and, when they have it, the coefficient-of-utilisation table or the intensity curve of the maker).",
+  "luminaires": {
+    "led_panel_600": {
+      "name": {"es": "Panel LED 600 x 600 mm, 36 W", "en": "LED panel 600 x 600 mm, 36 W"},
+      "kind": "interior", "lamps": 1, "lamp_flux_lm": 3600, "power_w": 36, "illustrative": true
+    },
+    "led_downlight_20w": {
+      "name": {"es": "Embutido LED (downlight), 20 W", "en": "Recessed LED downlight, 20 W"},
+      "kind": "interior", "lamps": 1, "lamp_flux_lm": 2000, "power_w": 20, "illustrative": true
+    },
+    "led_batten_2x18w": {
+      "name": {"es": "Regleta LED, 2 x 18 W", "en": "LED batten, 2 x 18 W"},
+      "kind": "interior", "lamps": 2, "lamp_flux_lm": 1800, "power_w": 36, "illustrative": true
+    },
+    "fluorescent_2x36w": {
+      "name": {"es": "Artefacto fluorescente, 2 x 36 W (con balasto)", "en": "Fluorescent fitting, 2 x 36 W (with ballast)"},
+      "kind": "interior", "lamps": 2, "lamp_flux_lm": 3350, "power_w": 80, "illustrative": true
+    },
+    "led_highbay_150w": {
+      "name": {"es": "Campana LED industrial, 150 W", "en": "LED high-bay, 150 W"},
+      "kind": "interior", "lamps": 1, "lamp_flux_lm": 19500, "power_w": 150, "illustrative": true
+    },
+    "led_floodlight_100w": {
+      "name": {"es": "Proyector LED, 100 W", "en": "LED floodlight, 100 W"},
+      "kind": "exterior", "lamps": 1, "lamp_flux_lm": 11000, "power_w": 100, "illustrative": true
+    }
+  }
+}
