@@ -272,6 +272,28 @@ class TestSld(unittest.TestCase):
         self.assertEqual(self.wait()["state"], "done")
         self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                        # ...is not renewed by a calculation: it still has to be run again
 
+    def test_a_circuit_says_how_it_is_installed_and_with_what_and_the_calculation_follows_it(self):
+        feeder = {"tag": "ALIM-1", "description": "Alimentador", "load": 166, "unit": "A", "destination": "", "parent_tag": "", "topology": "single", "phase": "3F", "length_m": 20, "kind": "auto"}
+        board = {"board": BOARD, "titleblock": TB}
+
+        def section(**wiring):
+            self.assertEqual(self.c.put(self.base, json={**board, "circuits": [{**feeder, **wiring}]}).status_code, 200)
+            self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+            self.assertEqual(self.wait()["state"], "done")
+            return self.c.get(self.base + "/calculation").json()["rows"][0]["S"]
+
+        opts = self.c.get(self.base).json()["options"]
+        self.assertEqual(opts["methods"], ["B1", "B2", "C", "E", "F", "G", "D1", "D2"])
+        self.assertEqual((opts["insulations"], opts["materials"]), (["pvc", "xlpe"], ["cu", "al"]))
+        self.assertEqual(section(), 95)                                              # the criteria's Cu XLPE in a conduit (B2): 70 mm2 does not carry the 200 A of the protection there
+        self.assertEqual(section(method="E"), 70)                                    # the same cable on a perforated or ladder tray carries it
+        saved = self.c.get(self.base).json()["input"]["circuits"][0]
+        self.assertEqual((saved["method"], saved["insulation"], saved["material"]), ("E", "", ""))
+        self.assertGreater(section(method="E", insulation="pvc"), 70)                # PVC at 70 C carries less than XLPE at 90 C
+        bad = self.c.put(self.base, json={**board, "circuits": [{**feeder, "method": "Z9", "insulation": "rubber", "material": "fe"}]})
+        self.assertEqual(bad.status_code, 422)                                       # values the engine does not know are not saved
+        self.assertEqual({k.split(".")[-1] for k in bad.json()["detail"]["errors"]}, {"method", "insulation", "material"})
+
     def test_a_generation_without_memo_file_is_still_told_outdated_when_the_data_change(self):
         self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)

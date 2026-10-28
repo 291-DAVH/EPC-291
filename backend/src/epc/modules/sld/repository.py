@@ -14,7 +14,7 @@ BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "syste
               ("FRECUENCIA_HZ", "frequency_hz"), ("PROYECTO", "project"), ("LONG_ACOMETIDA_m", "feeder_length_m")]
 CIRCUIT_COLS = [("TAG", "tag"), ("DESCRIPCION", "description"), ("CARGA", "load"), ("UNIDAD_CARGA", "unit"), ("DESTINO", "destination"), ("PARENT_TAG", "parent_tag"),
                 ("TOPOLOGY", "topology"), ("FASE", "phase"), ("LONGITUD_m", "length_m"), ("FP", "fp"), ("RENDIMIENTO", "efficiency"), ("KIND", "kind"),
-                ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type")]
+                ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type"), ("METODO", "method"), ("AISLACION", "insulation"), ("MATERIAL", "material")]
 PACKAGE = "PQ-01"
 DISCIPLINE = "electrical"
 
@@ -26,6 +26,12 @@ def pkg(d: Path) -> Path:
 def solutions_digest(d: Path) -> str:
     """A short fingerprint of the document of standard solutions in force for the project: the default one plus the MASTER's, the company's and the project's changes."""
     return catalogs.solutions_digest(d)
+
+
+def installation() -> Dict[str, List[str]]:
+    """What a circuit may say of how and with what it is wired: the methods of installation of the tables (B1, B2, C, E, F, G, D1, D2), the insulations and the conductor materials."""
+    from epc_aea90364 import aea_ampacity                                  # the engine owns them (single source)
+    return {"methods": list(aea_ampacity.METODOS), "insulations": list(aea_ampacity.AISLACIONES), "materials": list(aea_ampacity.MATERIALES)}
 
 
 def route_kinds() -> List[str]:
