@@ -34,6 +34,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -77,6 +78,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -122,6 +124,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -165,6 +168,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -208,6 +212,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -251,6 +256,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -296,6 +302,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -342,6 +349,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -385,6 +393,7 @@ source_modules =
     epc.modules.intake
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -430,6 +439,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -475,6 +485,7 @@ source_modules =
     epc.modules.intake
     epc.modules.issuing
     epc.modules.knowledge
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -503,6 +514,52 @@ layers =
     epc.modules.layout.repository
     epc.modules.layout.models
 
+[importlinter:contract:lighting-encapsulated]
+name = lighting: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.catalogs
+    epc.modules.construction
+    epc.modules.coordination
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.layout
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.lighting.api
+    epc.modules.lighting.service
+    epc.modules.lighting.repository
+    epc.modules.lighting.models
+
+[importlinter:contract:lighting-layers]
+name = lighting: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.lighting.api
+    epc.modules.lighting.service
+    epc.modules.lighting.repository
+    epc.modules.lighting.models
+
 [importlinter:contract:management-encapsulated]
 name = management: other modules use only its public interface
 type = forbidden
@@ -521,6 +578,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.masterdata
     epc.modules.norms
     epc.modules.notifications
@@ -564,6 +622,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.norms
     epc.modules.notifications
@@ -609,6 +668,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.notifications
@@ -652,6 +712,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -697,6 +758,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -740,6 +802,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -785,6 +848,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -828,6 +892,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -873,6 +938,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
@@ -918,6 +984,7 @@ source_modules =
     epc.modules.issuing
     epc.modules.knowledge
     epc.modules.layout
+    epc.modules.lighting
     epc.modules.management
     epc.modules.masterdata
     epc.modules.norms
