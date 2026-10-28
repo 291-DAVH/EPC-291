@@ -29,7 +29,8 @@ OPTIONS = {"units": UNITS, "topologies": TOPOLOGIES, "phases": PHASES, "kinds": 
 
 
 def options() -> dict:
-    return {**OPTIONS, "route_kinds": repository.route_kinds()}
+    inst = repository.installation()
+    return {**OPTIONS, "route_kinds": repository.route_kinds(), **inst}
 
 
 MAX_CIRCUITS = 150
@@ -52,6 +53,14 @@ def _validate_board(b: dict, e: Dict[str, str]) -> None:
         e["board.feeder_length_m"] = "must be >= 0"
 
 
+def _validate_wiring(k: str, c: dict, e: Dict[str, str]) -> None:
+    """How the circuit is wired: each of method, insulation and material is empty (the design criteria decide) or one the engine knows."""
+    inst = repository.installation()
+    for field, allowed in (("method", inst["methods"]), ("insulation", inst["insulations"]), ("material", inst["materials"])):
+        if c.get(field, "") not in ("", *allowed):
+            e[f"{k}.{field}"] = "empty or one of " + ", ".join(allowed)
+
+
 def _validate_circuit(i: int, c: dict, tags: list, parents: set, e: Dict[str, str]) -> None:
     t = c["tag"].strip()
     k = f"circuit:{t or i + 1}"
@@ -64,6 +73,7 @@ def _validate_circuit(i: int, c: dict, tags: list, parents: set, e: Dict[str, st
                                     ("length_source", LENGTH_SOURCES, "one of " + ", ".join(LENGTH_SOURCES))):
         if c[field] not in allowed:
             e[f"{k}.{field}"] = message
+    _validate_wiring(k, c, e)
     if c["load"] is None and t not in parents:
         e[f"{k}.load"] = "required (a parent device may leave it empty)"
     if c["load"] is not None and c["load"] <= 0:

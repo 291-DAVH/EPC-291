@@ -30,7 +30,7 @@ BOARD_ROWS = [("NOMBRE", "name"), ("TENSION_V", "voltage_v"), ("SISTEMA", "syste
               ("FRECUENCIA_HZ", "frequency_hz"), ("PROYECTO", "project"), ("LONG_ACOMETIDA_m", "feeder_length_m")]
 CIRCUIT_COLS = [("TAG", "tag"), ("DESCRIPCION", "description"), ("CARGA", "load"), ("UNIDAD_CARGA", "unit"), ("DESTINO", "destination"), ("PARENT_TAG", "parent_tag"),
                 ("TOPOLOGY", "topology"), ("FASE", "phase"), ("LONGITUD_m", "length_m"), ("FP", "fp"), ("RENDIMIENTO", "efficiency"), ("KIND", "kind"),
-                ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type")]
+                ("NOTAS", "notes"), ("CABLE_TIPO", "cable_type"), ("METODO", "method"), ("AISLACION", "insulation"), ("MATERIAL", "material")]
 
 
 

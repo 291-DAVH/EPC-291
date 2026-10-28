@@ -3,10 +3,15 @@ import BoardMemo from "./BoardMemo";
 import RouteEditor from "./RouteEditor";
 import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
 
+/** How a circuit is wired, in a few words: the method of installation, the conductor and the insulation (what it leaves to the design criteria is read from them). */
+const wiringOf = (c: SldCircuit, crit?: { material: string; aislacion: string }): string =>
+  `${c.method || "–"} · ${(c.material || crit?.material || "").replace(/^./, (x) => x.toUpperCase())} ${(c.insulation || crit?.aislacion || "").toUpperCase()}`.trim();
+
 const blankCircuit = (): SldCircuit => ({
   tag: "", description: "", load: null, unit: "kW", destination: "", parent_tag: "", topology: "single", phase: "3F",
   length_m: 0, length_source: "auto", fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
 });
+interface Editing { index: number | null; draft: SldCircuit }
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
 
 type Options = SldView["options"];
@@ -14,6 +19,9 @@ type Options = SldView["options"];
 /** The data cells of a circuit (everything but its length, which the caller draws, and the delete button): the same for a circuit of the board and for the one being added. */
 function CircuitInputs({ c, set, parents, o, lengthCell, t, focus }: { c: SldCircuit; set: (patch: Partial<SldCircuit>) => void; parents: string[]; o: Options; lengthCell: ReactNode; t: (k: Key) => string; focus?: boolean }) {
   const sel = (value: string, items: string[], on: (v: string) => void) => <select value={value} onChange={(e) => on(e.target.value)}>{items.map((x) => <option key={x}>{x}</option>)}</select>;
+  /** A choice that may be left to the design criteria of the project (empty). */
+  const pick = (value: string, items: string[], on: (v: string) => void, label: (v: string) => string) =>
+    <select value={value} onChange={(e) => on(e.target.value)}><option value="">{t("sld.byCriteria")}</option>{items.map((x) => <option key={x} value={x}>{label(x)}</option>)}</select>;
   return (
     <>
       <td><input className="w-tag" value={c.tag} autoFocus={focus} onChange={(e) => set({ tag: e.target.value })} aria-label={t("sld.tag")} /></td>
@@ -34,6 +42,9 @@ function CircuitInputs({ c, set, parents, o, lengthCell, t, focus }: { c: SldCir
       <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => set({ efficiency: num(e.target.value) })} aria-label={t("sld.eff")} /></td>
       <td>{sel(c.kind, o.kinds, (v) => set({ kind: v }))}</td>
       <td>{sel(c.cable_type, o.cable_types, (v) => set({ cable_type: v }))}</td>
+      <td>{pick(c.method ?? "", o.methods ?? [], (v) => set({ method: v }), (m) => `${m} · ${t(("sld.method." + m) as Key)}`)}</td>
+      <td>{pick(c.insulation ?? "", o.insulations ?? [], (v) => set({ insulation: v }), (m) => m.toUpperCase())}</td>
+      <td>{pick(c.material ?? "", o.materials ?? [], (v) => set({ material: v }), (m) => t(("sld.material." + m) as Key))}</td>
     </>
   );
 }
@@ -120,8 +131,8 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const memo = useApi<BoardMemoView>(`${base}/memo?${q}&s=${status?.finished ?? ""}`);
   const calc = useApi<CalcView>(`${base}/calculation?${q}&s=${status?.finished ?? ""}`);
   const [msg, setMsg] = useState("");
-  const [routeOf, setRouteOf] = useState<number | null>(null);          // circuit whose real route is being edited
-  const [adding, setAdding] = useState<SldCircuit | null>(null);          // the circuit being typed in the row at the end of the table
+  const [editing, setEditing] = useState<Editing | null>(null);          // the circuit being added (index null) or edited, in the form under the table
+  const [routeOpen, setRouteOpen] = useState(false);                       // its real route is being edited
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -139,8 +150,6 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const o = view.data.options;
 
   const set = <K extends keyof SldData>(k: K, patch: Partial<SldData[K]>) => { setData({ ...data, [k]: { ...(data[k] as object), ...patch } } as SldData); setDirty(true); setMsg(""); };
-  const setRow = (i: number, patch: Partial<SldCircuit>) => { setData({ ...data, circuits: data.circuits.map((c, j) => (j === i ? { ...c, ...patch } : c)) }); setDirty(true); setMsg(""); };
-  const delRow = (i: number) => { setData({ ...data, circuits: data.circuits.filter((_, j) => j !== i) }); setDirty(true); setRouteOf(null); };
 
   const fail = (x: unknown) => { if (x instanceof ApiError) setErrors(x.fieldErrors); else setErrors({ error: String(x) }); };
   const save = async (payload: SldData = data): Promise<boolean> => {
@@ -176,15 +185,23 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
       setStatus(st); setErrors({}); poll();
     } catch (x) { fail(x); }
   };
-  /** Accept the circuit being typed: it joins the board, is saved and calculated at once. */
+  const draftSet = (patch: Partial<SldCircuit>) => setEditing((e) => (e ? { ...e, draft: { ...e.draft, ...patch } } : e));
+  const closeForm = () => { setEditing(null); setRouteOpen(false); setErrors({}); };
+  /** Accept the circuit being typed or edited: it joins the board (or replaces its older self), is saved and calculated at once. */
   const accept = async () => {
-    if (!adding) return;
-    const tag = adding.tag.trim();
+    if (!editing) return;
+    const tag = editing.draft.tag.trim();
     if (!tag) { setErrors({ tag: t("sld.tagNeeded") }); return; }
-    if (data.circuits.some((c) => c.tag.trim() === tag)) { setErrors({ tag: t("sld.tagTaken") }); return; }
-    const next = { ...data, circuits: [...data.circuits, { ...adding, tag }] };
-    setData(next); setAdding(null); setErrors({});
+    if (data.circuits.some((c, i) => i !== editing.index && c.tag.trim() === tag)) { setErrors({ tag: t("sld.tagTaken") }); return; }
+    const circuit = { ...editing.draft, tag };
+    const next = { ...data, circuits: editing.index === null ? [...data.circuits, circuit] : data.circuits.map((c, i) => (i === editing.index ? circuit : c)) };
+    setData(next); closeForm();
     await calculate(next);
+  };
+  const removeCircuit = async (i: number) => {
+    const next = { ...data, circuits: data.circuits.filter((_, j) => j !== i) };
+    setData(next); closeForm();
+    if (next.circuits.length) await calculate(next); else { setDirty(true); setMsg(""); }
   };
   const loadExample = async () => {
     if (data.circuits.length > 0 && !window.confirm(t("sld.exampleConfirm"))) return;
@@ -205,7 +222,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const errList = Object.entries(errors);
   const calcOf = new Map((calc.data?.rows ?? []).map((r) => [r.tag, r]));
   const inputTags = new Set(data.circuits.map((c) => c.tag.trim()));
-  const extra = (calc.data?.rows ?? []).filter((r) => !inputTags.has(r.tag));              // groups the standard solutions added: calculated, not typed
+  const extra = (calc.data?.rows ?? []).filter((r) => data.circuits.length > 0 && !inputTags.has(r.tag));              // groups the standard solutions added: calculated, not typed
 
   const remove = async () => {
     if (!window.confirm(t("sld.deleteConfirm"))) return;
@@ -256,54 +273,71 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
           <h2 style={{ margin: 0 }}>{t("sld.circuits")} <span className="muted small">({data.circuits.length})</span></h2>
           <div className="row">
             <button onClick={loadExample}>{t("sld.loadExample")}</button>
-            <button onClick={calculate.bind(null, data)} disabled={running || data.circuits.length === 0} title={t("sld.calcHelp")}>{t("sld.calcNow")}</button>
-            <button className={adding ? "" : "primary"} onClick={() => { setAdding(adding ? null : blankCircuit()); setErrors({}); }}>{adding ? t("projects.cancel") : `+ ${t("sld.addRow")}`}</button>
+            <button onClick={() => calculate(data)} disabled={running || data.circuits.length === 0} title={t("sld.calcHelp")}>{t("sld.calcNow")}</button>
+            <button className={editing?.index === null ? "" : "primary"} onClick={() => { if (editing?.index === null) closeForm(); else { setEditing({ index: null, draft: blankCircuit() }); setRouteOpen(false); setErrors({}); } }}>{editing?.index === null ? t("projects.cancel") : `+ ${t("sld.addRow")}`}</button>
           </div>
         </div>
         <p className="muted small" style={{ margin: "6px 0 8px" }}>{running ? t("sld.calcRunning") : dirty ? t("sld.calcPending") : t("sld.calcHelp")}</p>
         {calc.data && calc.data.rows.length > 0 && <CalcHeader view={calc.data} />}
-        <div style={{ overflowX: "auto", marginTop: 6 }}>
-          <table className="sldtable">
-            <thead>
-              <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.unit", "sld.dest", "sld.parent", "sld.topology", "sld.phase", "sld.length", "sld.fp", "sld.eff", "sld.kind", "sld.cable"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}{CALC_HEADS.map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
-            </thead>
-            <tbody>
-              {data.circuits.map((c, i) => (
-                <tr key={i}>
-                  <CircuitInputs c={c} set={(p) => setRow(i, p)} parents={data.circuits.filter((p, j) => j !== i && p.tag.trim()).map((p) => p.tag)} o={o} t={t} lengthCell={<>
-                    {(c.route?.length ?? 0) > 0
-                      ? <b className="mono" title={t("route.totalHint")}>{Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
-                      : <input className="w-num" type="number" step="any" value={c.length_m} onChange={(e) => setRow(i, { length_m: Number(e.target.value) })} title={t("sld.lenData")} />}
-                    {" "}<button className={routeOf === i ? "primary" : ""} onClick={() => setRouteOf(routeOf === i ? null : i)} title={t("route.title")}>{t("route.button")}{(c.route?.length ?? 0) > 0 ? ` (${c.route!.length})` : ""}</button>
-                    <LengthSource c={c} info={view.data?.lengths?.[c.tag.trim()]} sources={o.length_sources ?? ["auto", "plan", "data"]} onChange={(v) => setRow(i, { length_source: v })} t={t} />
+        {data.circuits.length > 0 && (
+          <div style={{ overflowX: "auto", marginTop: 6 }}>
+            <table className="sldtable">
+              <thead>
+                <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.length", "sld.install"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}{CALC_HEADS.map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
+              </thead>
+              <tbody>
+                {data.circuits.map((c, i) => (
+                  <tr key={i} className={editing?.index === i ? "draft" : undefined}>
+                    <td className="mono">{c.tag}</td><td>{c.description}</td>
+                    <td className="mono" style={{ whiteSpace: "nowrap" }}>{c.load ?? ""} {c.unit}</td>
+                    <td className="mono">{(c.route?.length ?? 0) > 0 ? Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 : c.length_m}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{wiringOf(c, calc.data?.criteria?.conductor)}</td>
+                    <CalcCells row={calcOf.get(c.tag.trim())} />
+                    <td style={{ whiteSpace: "nowrap" }}>
+                      <button onClick={() => { setEditing({ index: i, draft: JSON.parse(JSON.stringify(c)) }); setRouteOpen(false); setErrors({}); }} title={t("sld.editRow")} aria-label={t("sld.editRow")} disabled={running}>✎</button>{" "}
+                      <button onClick={() => removeCircuit(i)} title={t("sld.removeRow")} aria-label={t("sld.removeRow")} disabled={running}>✕</button>
+                    </td>
+                  </tr>
+                ))}
+                {extra.map((r) => (
+                  <tr key={"auto-" + r.tag} className="muted">
+                    <td className="mono">{r.tag}</td><td colSpan={4}>{r.description} · {t("sld.autoGroup")}</td><CalcCells row={r} /><td />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {data.circuits.length === 0 && !editing && <div className="state">{t("sld.calcNone")}</div>}
+        {editing && (
+          <div style={{ overflowX: "auto", marginTop: 12 }}>
+            <p className="small" style={{ margin: "0 0 4px" }}><b>{editing.index === null ? t("sld.newCircuit") : `${t("sld.editing")} ${data.circuits[editing.index]?.tag ?? ""}`}</b></p>
+            <table className="sldtable">
+              <thead>
+                <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.unit", "sld.dest", "sld.parent", "sld.topology", "sld.phase", "sld.length", "sld.fp", "sld.eff", "sld.kind", "sld.cable", "sld.install", "sld.insulation", "sld.conductor"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
+              </thead>
+              <tbody>
+                <tr className="draft" onKeyDown={(e) => { if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") { e.preventDefault(); accept(); } else if (e.key === "Escape") closeForm(); }}>
+                  <CircuitInputs focus c={editing.draft} set={draftSet} parents={data.circuits.filter((p, j) => j !== editing.index && p.tag.trim()).map((p) => p.tag)} o={o} t={t} lengthCell={<>
+                    {(editing.draft.route?.length ?? 0) > 0
+                      ? <b className="mono" title={t("route.totalHint")}>{Math.round(editing.draft.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
+                      : <input className="w-num" type="number" step="any" value={editing.draft.length_m} onChange={(e) => draftSet({ length_m: Number(e.target.value) })} title={t("sld.lenData")} aria-label={t("sld.length")} />}
+                    {" "}<button className={routeOpen ? "primary" : ""} onClick={() => setRouteOpen(!routeOpen)} title={t("route.title")}>{t("route.button")}{(editing.draft.route?.length ?? 0) > 0 ? ` (${editing.draft.route!.length})` : ""}</button>
+                    {editing.index !== null && <LengthSource c={editing.draft} info={view.data?.lengths?.[editing.draft.tag.trim()]} sources={o.length_sources ?? ["auto", "plan", "data"]} onChange={(v) => draftSet({ length_source: v })} t={t} />}
                   </>} />
-                  <CalcCells row={calcOf.get(c.tag.trim())} />
-                  <td><button onClick={() => delRow(i)} title={t("sld.removeRow")} aria-label={t("sld.removeRow")}>✕</button></td>
-                </tr>
-              ))}
-              {extra.map((r) => (
-                <tr key={"auto-" + r.tag} className="muted">
-                  <td className="mono">{r.tag}</td><td colSpan={12}>{r.description} · {t("sld.autoGroup")}</td><CalcCells row={r} /><td />
-                </tr>
-              ))}
-              {adding && (
-                <tr className="draft" onKeyDown={(e) => { if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") { e.preventDefault(); accept(); } else if (e.key === "Escape") setAdding(null); }}>
-                  <CircuitInputs focus c={adding} set={(p) => setAdding({ ...adding, ...p })} parents={data.circuits.filter((p) => p.tag.trim()).map((p) => p.tag)} o={o} t={t}
-                    lengthCell={<input className="w-num" type="number" step="any" value={adding.length_m} onChange={(e) => setAdding({ ...adding, length_m: Number(e.target.value) })} title={t("sld.lenData")} />} />
-                  <td colSpan={CALC_HEADS.length + 1}>
+                  <td style={{ whiteSpace: "nowrap" }}>
                     <button className="primary" onClick={accept} disabled={running}>{t("sld.accept")}</button>{" "}
-                    <button onClick={() => { setAdding(null); setErrors({}); }}>{t("projects.cancel")}</button>
+                    <button onClick={closeForm}>{t("projects.cancel")}</button>
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        {data.circuits.length === 0 && !adding && <div className="state">{t("sld.calcNone")}</div>}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-      {routeOf !== null && data.circuits[routeOf] && (
-        <RouteEditor tag={data.circuits[routeOf].tag} route={data.circuits[routeOf].route ?? []} kinds={o.route_kinds} fallbackLength={data.circuits[routeOf].length_m}
-          onChange={(r) => setRow(routeOf, { route: r, ...(r.length ? { length_m: Math.round(r.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 } : {}) })} onClose={() => setRouteOf(null)} />
+      {editing && routeOpen && (
+        <RouteEditor tag={editing.draft.tag} route={editing.draft.route ?? []} kinds={o.route_kinds} fallbackLength={editing.draft.length_m}
+          onChange={(r) => draftSet({ route: r, ...(r.length ? { length_m: Math.round(r.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 } : {}) })} onClose={() => setRouteOpen(false)} />
       )}
 
       <div className="card">

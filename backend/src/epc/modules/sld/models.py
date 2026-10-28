@@ -45,6 +45,9 @@ class Circuit(BaseModel):
     kind: str = "auto"
     notes: str = ""
     cable_type: str = "tetra_sep"
+    method: str = ""                        # method of installation of the tables (B1, B2, C, E, F, G, D1, D2); empty = the one of the criteria
+    insulation: str = ""                    # pvc | xlpe; empty = the one of the design criteria
+    material: str = ""                      # cu | al; empty = the one of the design criteria
     route: List[Segment] = []               # real route of the outgoing cable; empty = installed as the circuit says; its total is the length
 
 
