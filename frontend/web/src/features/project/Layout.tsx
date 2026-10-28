@@ -260,7 +260,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     keepStudy();
   };
   const keepStudy = async () => {                                      // what was applied is kept as the study of the sheet (the one its report is made from)
-    try { await api(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(""); setStudyError(""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
+    try { const kept = await api<{ report_file?: string; report_error?: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(kept.report_file ? tl("light.reported").replace("{file}", kept.report_file) : ""); setStudyError(kept.report_error ? tl("light.reportError") + " " + kept.report_error : ""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
   };
   const makeReport = async () => {
     try { const r = await api<{ file: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}/report?lang=${lang}`, { method: "POST" }); setReported(tl("light.reported").replace("{file}", r.file)); setStudyRev((n) => n + 1); setStudyError(""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
@@ -279,7 +279,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   };
   const useHintedScale = () => {
     const h = lv?.architecture?.scale_hint;
-    if (h && write) change({ ...drawing, scale: { p1: [0, 0], p2: [h.units_per_metre, 0], distance_m: 1 } });
+    if (h && write && drawing.discipline === "arquitectura") change({ ...drawing, scale: { p1: [0, 0], p2: [h.units_per_metre, 0], distance_m: 1 } });
   };
   const restore = async (id: string) => {
     try { const v = await api<LevelView>(`${root}/${level}/history/${id}/restore`, { method: "POST" }); setLv(v); setDrawing(v.drawing); setDerived(v.result); setCompare(null); setHrev((n) => n + 1); setRev((n) => n + 1); setStale(true); } catch (x) { setErr(errorText(x)); }
@@ -394,7 +394,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
             <option value="">{ov.data.default_dxf_version}</option>
             {ov.data.dxf_versions.map((v) => <option key={v} value={v}>{v}</option>)}
           </select>
-          <button className="tool-ico primary" disabled={busy || !drawing.scale || !write} onClick={beforeGenerate} title={!drawing.scale ? tl("layout.needScale") : tl("layout.makeFiles")} aria-label={tl("layout.makeFiles")}><Icon name="file" size={18} /></button>
+          <button className="tool-ico primary" disabled={busy || !drawing.scale || !write} onClick={beforeGenerate} title={!drawing.scale ? tl(drawing.discipline === "arquitectura" ? "layout.needScale" : "layout.needScalePlan") : tl("layout.makeFiles")} aria-label={tl("layout.makeFiles")}><Icon name="file" size={18} /></button>
           {lv?.files?.dxf && <a className="btn" href={download(lv.files.dxf)} title={`${tl("layout.downloadDxf")} (${lv.files.dxf_version})`}>DXF</a>}
           {lv?.files?.pdf && <a className="btn" href={download(lv.files.pdf)} title={tl("layout.downloadPdf")}>PDF</a>}
           {lv?.files && stale && <button className="badge warn" onClick={showChanges} title={tl("plan.changes")}>{tl("layout.filesOutdated")} ▸</button>}

@@ -141,7 +141,7 @@ def view(d: Path, level: str) -> dict:
     data = {**_blank(), **saved} if saved else _blank()                # a drawing saved before a field existed gets its default
     result = repository.load_result(d, level)
     up = repository.underlay_file(d, level)
-    return {"level": level, "saved": saved is not None, "drawing": data, "result": derive_data(level, data) if saved else None,
+    return {"level": level, "saved": saved is not None, "scale_locked": data["discipline"] != repository.ARCH_DISCIPLINE, "drawing": data, "result": derive_data(level, data) if saved else None,
             "underlay": {"kind": up.suffix.lstrip("."), "version": int(up.stat().st_mtime)} if up else None, "architecture": _architecture_summary(d, level),
             "files": (result or {}).get("files") if result else None, "generated_at": (result or {}).get("generated_at")}
 
@@ -199,9 +199,14 @@ def _check_sheet(d: Path, level: str, data: dict) -> None:
         raise Invalid({"discipline": f"{base} already has that plan of {data['discipline']}: give the new plan another name"})
 
 
+def _with_plan_scale(d: Path, level: str, data: dict) -> dict:
+    """The drawing with the scale of the plan: the Architecture sheet of the level is the only one that sets it, the others work with it."""
+    return data if data["discipline"] == repository.ARCH_DISCIPLINE else {**data, "scale": repository.architecture_scale(d, level)}
+
+
 def save(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
-    data = body.model_dump(by_alias=True)
+    data = _with_plan_scale(d, level, body.model_dump(by_alias=True))
     _check_sheet(d, level, data)
     _check_subdiscipline(data)
     _edit_guard(d, data["discipline"])
@@ -212,7 +217,7 @@ def save(d: Path, level: str, body: DrawingIn) -> dict:
 
 def derive(d: Path, level: str, body: DrawingIn) -> dict:
     level = _level(level)
-    return derive_data(level, body.model_dump(by_alias=True))
+    return derive_data(level, _with_plan_scale(d, level, body.model_dump(by_alias=True)))
 
 
 def remove(d: Path, level: str) -> dict:

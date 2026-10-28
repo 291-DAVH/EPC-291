@@ -34,27 +34,32 @@ def _centre(points: List[List[float]]) -> List[float]:
     return [sum(p[0] for p in points) / len(points), sum(p[1] for p in points) / len(points)]
 
 
+def _marks(calc: dict, radius: float) -> List[dict]:
+    """The luminaires (amber) and the emergency luminaires (red) as circles."""
+    shapes: List[dict] = []
+    for by, fill, stroke in ((calc.get("placements", {}), "#fbbf24", "#b45309"), (calc.get("emergency_placements", {}), "#f87171", "#b91c1c")):
+        for marks in by.values():
+            shapes += [{"s": "circle", "x": m["x"], "y": m["y"], "r": radius, "fill": fill, "stroke": stroke, "lw": 0.8} for m in marks]
+    return shapes
+
+
+def _names(rooms: List[dict], bounds: List[float]) -> List[dict]:
+    size = max(5.0, min(9.0, 0.9 * (bounds[2] - bounds[0]) / 60.0))
+    return [{"s": "text", "x": c[0], "y": c[1], "text": r.get("name") or r["id"], "size": size, "color": "#111827", "bold": True} for r in rooms for c in [_centre(r["points"])]]
+
+
+def _caption(caption: str, scale_caption: str, maps: List[dict]) -> str:
+    return f"{caption} · {scale_caption.format(low=min(m['min'] for m in maps), high=max(m['max'] for m in maps))}" if maps else caption
+
+
 def sheet_figure(rooms: List[dict], calc: dict, caption: str, scale_caption: str) -> Optional[dict]:
     """The figure of a sheet, or None when it has no rooms. `rooms` are the outlines of the sheet (`id`, `name`, `points`); `calc` is a calculation with its placements and (when asked for) maps."""
     if not rooms:
         return None
     bounds = _bounds(rooms)
-    maps: Dict[str, dict] = calc.get("maps", {})
-    drawn_maps = sum(len(m["values"]) for m in maps.values()) <= MAX_CELLS
-    shapes: List[dict] = []
-    if drawn_maps:
-        for m in maps.values():
-            shapes += _cells(m)
-    for r in rooms:
-        shapes.append({"s": "poly", "points": r["points"], "fill": None, "stroke": "#374151", "lw": 1.0})
-    radius = max(bounds[2] - bounds[0], bounds[3] - bounds[1]) * 0.012
-    for by, fill, stroke in ((calc.get("placements", {}), "#fbbf24", "#b45309"), (calc.get("emergency_placements", {}), "#f87171", "#b91c1c")):
-        for marks in by.values():
-            shapes += [{"s": "circle", "x": m["x"], "y": m["y"], "r": radius, "fill": fill, "stroke": stroke, "lw": 0.8} for m in marks]
-    size = max(5.0, min(9.0, 0.9 * (bounds[2] - bounds[0]) / 60.0))
-    for r in rooms:
-        c = _centre(r["points"])
-        shapes.append({"s": "text", "x": c[0], "y": c[1], "text": r.get("name") or r["id"], "size": size, "color": "#111827", "bold": True})
-    seen = [m for m in maps.values() if drawn_maps]
-    full = f"{caption} · {scale_caption.format(low=min(m['min'] for m in seen), high=max(m['max'] for m in seen))}" if seen else caption
-    return {"type": "figure", "caption": full, "bounds": bounds, "max_height": 330, "shapes": shapes}
+    maps: List[dict] = list(calc.get("maps", {}).values())
+    drawn = maps if sum(len(m["values"]) for m in maps) <= MAX_CELLS else []
+    shapes: List[dict] = [c for m in drawn for c in _cells(m)]
+    shapes += [{"s": "poly", "points": r["points"], "fill": None, "stroke": "#374151", "lw": 1.0} for r in rooms]
+    shapes += _marks(calc, max(bounds[2] - bounds[0], bounds[3] - bounds[1]) * 0.012) + _names(rooms, bounds)
+    return {"type": "figure", "caption": _caption(caption, scale_caption, drawn), "bounds": bounds, "max_height": 330, "shapes": shapes}

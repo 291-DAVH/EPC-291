@@ -1,7 +1,7 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
-import PlanEditor, { Profile } from "./PlanEditor";
+import PlanEditor, { Profile, toolAllowed } from "./PlanEditor";
 import { blank, Drawing, Ref } from "./planEditing";
 
 /** The editor as a person uses it: tools, clicks, keys and menus over a canvas. jsdom has no layout, so the browser's matrix of the SVG is replaced by the identity: a click at (x, y) lands on (x, y) of the view. */
@@ -188,5 +188,13 @@ describe("plan editor: commands", () => {
     tool("measure");
     down(svgOf(container), 0, 0); down(svgOf(container), 300, 400);
     expect(container.textContent).toContain("50.000 m");
+  });
+});
+
+describe("the scale of the plan", () => {
+  it("is calibrated only on the Architecture sheet: no other discipline has the tool", () => {
+    expect(toolAllowed("scale", "arquitectura")).toBe(true);
+    for (const discipline of ["electrica_BT", "sanitaria_cloacas", "civil"]) expect(toolAllowed("scale", discipline)).toBe(false);
+    expect(toolAllowed("node", "electrica_BT")).toBe(true);                                 // every other tool is as it was
   });
 });

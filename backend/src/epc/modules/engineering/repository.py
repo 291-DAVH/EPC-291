@@ -7,6 +7,8 @@ from typing import Dict, List
 SVG_DIR = ("drawings", "svg")
 TEXT_AREAS = ("calc", "docs")
 TEXT_EXT = {".md", ".txt", ".csv", ".json", ".xlsx"}
+PDF_EXT = ".pdf"                                       # a document made as a PDF (a calculation report): listed with the others and opened as it is
+LISTED_EXT = TEXT_EXT | {PDF_EXT}                           # what the engineering folder lists as a document
 MAX_TEXT_BYTES = 1_000_000
 MAX_ROWS, MAX_COLS = 300, 30
 
@@ -30,7 +32,7 @@ def scan(d: Path) -> List[Dict]:
         area = "/".join(parts[2:-1])
         if f.suffix.lower() == ".svg" and tuple(parts[2:4]) == SVG_DIR:
             what = "diagram"
-        elif parts[2] in TEXT_AREAS and f.suffix.lower() in TEXT_EXT:
+        elif parts[2] in TEXT_AREAS and f.suffix.lower() in LISTED_EXT:
             what = "document"
         else:
             continue

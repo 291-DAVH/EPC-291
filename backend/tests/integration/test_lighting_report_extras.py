@@ -4,7 +4,7 @@ from unittest import mock
 
 from epc.modules.lighting import figures, report
 from tests.integration.test_lighting_api import BASE, CLASSROOM, PARAMS, SCALE, Base, body
-from tests.integration.test_lighting_study import LAYOUT, STUDY, drawing
+from tests.integration.test_lighting_study import LAYOUT, PLAN, STUDY, drawing, plan
 
 EST = lambda v, c=0.9: {"value": v, "reason": "x", "confidence": c}                  # noqa: E731
 
@@ -82,6 +82,7 @@ class TestFigure(unittest.TestCase):
 class TestInTheReport(Base):
     def test_the_report_of_a_sheet_carries_the_plan_the_title_block_and_the_energy(self):
         self.with_own()
+        self.assertEqual(self.c.put(PLAN, json=plan()).status_code, 200)
         self.assertEqual(self.c.put(LAYOUT, json=drawing()).status_code, 200)
         asked = body(params={"R1": PARAMS}, options={"hours_default": 2000, "kwh_price": 0.15, "power_limit_w_m2": 20})
         self.assertEqual(self.c.put(STUDY, json=asked).status_code, 200)

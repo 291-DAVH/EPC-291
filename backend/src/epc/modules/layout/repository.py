@@ -44,8 +44,33 @@ def _order(sheet: str):
     return (int(level[1:]), discipline)
 
 
+ARCH_DISCIPLINE = "arquitectura"
+
+
+def _drawing_file(d: Path, level: str) -> Path:
+    return level_dir(d, level) / "src" / "drawing.json"
+
+
+def architecture_scale(d: Path, level: str) -> Optional[dict]:
+    """The scale of the Architecture sheet of the level a sheet belongs to (None when the level has none or it has no scale yet): the one scale every other discipline of the level works with."""
+    base = split(level)[0]
+    for other in levels(d):
+        if other != level and split(other)[0] == base:
+            found = read_json(_drawing_file(d, other), None) or {}
+            if found.get("discipline") == ARCH_DISCIPLINE:
+                return found.get("scale")
+    return None
+
+
+def _with_plan_scale(d: Path, level: str, data: Optional[dict]) -> Optional[dict]:
+    """The drawing with the scale of its plan: it is only set in the Architecture sheet of the level and travels with the plan to the other disciplines, whatever one of them has stored."""
+    if data and data.get("discipline", "electrica_BT") != ARCH_DISCIPLINE:
+        return {**data, "scale": architecture_scale(d, level)}
+    return data
+
+
 def load_drawing(d: Path, level: str) -> Optional[dict]:
-    return read_json(level_dir(d, level) / "src" / "drawing.json", None)
+    return _with_plan_scale(d, level, read_json(_drawing_file(d, level), None))
 
 
 HISTORY_EVERY_S = 300                                          # a snapshot of the previous state at most every five minutes of work

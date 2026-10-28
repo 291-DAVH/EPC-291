@@ -49,7 +49,17 @@ def save(d: Path, sheet: str, body: CalcIn) -> dict:
     stored = {"schema_version": "1.0", "sheet": sheet, "saved_at": clock.now_local(), "saved_by": _who(), "input": body.model_dump(exclude={"sheet": {"nodes"}}), **{k: out[k] for k in KEPT if k in out}}
     write_json(_path(d, sheet), stored)
     identity.audit_event("lighting_study_saved", target=f"{projects.project_id(d)}:{sheet}", org_slug=projects.read_meta(d).get("org", ""), detail={"rooms": len(out["result"]["rooms"])})
-    return view(d, sheet)
+    made = _auto_report(d, sheet, body.lang)
+    return {**view(d, sheet), **made}
+
+
+def _auto_report(d: Path, sheet: str, lang: str) -> dict:
+    """The report is made with the study: it is part of the engineering and has to be among its files (Engineering, Files) without anyone asking for it. A report that could not be made does not undo the study:
+    the reason is given and the person can ask for it again."""
+    try:
+        return {"report_file": make_report(d, sheet, lang)["file"], "report_error": ""}
+    except (Conflict, Failure, NotFound) as exc:
+        return {"report_file": "", "report_error": str(getattr(exc, "detail", exc))}
 
 
 def _asked_now(saved: dict, options: dict, lang: str) -> Optional[CalcIn]:

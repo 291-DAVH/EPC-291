@@ -169,7 +169,8 @@ function Study({ study, canWrite, reported, onReport }: { study: LightingStudy; 
       <div className="small muted">{study.saved_at}{study.saved_by ? ` · ${study.saved_by}` : ""}</div>
       <div className="small">{rooms.length} {tl("light.rooms")} · {meets} {tl("light.meets")}</div>
       {study.stale && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.study.staleHelp")}</div>}
-      {canWrite && <button style={{ marginTop: 6 }} disabled={study.stale} onClick={onReport}>{tl("light.report")}</button>}
+      {study.report && <div className="small" style={{ marginTop: 4 }}>{tl("light.reportIn")}</div>}
+      {canWrite && <button style={{ marginTop: 6 }} disabled={study.stale} onClick={onReport}>{tl(study.report ? "light.reportAgain" : "light.report")}</button>}
       {reported && !study.stale && <div className="small" style={{ marginTop: 4 }}>{reported}</div>}
     </div>
   );

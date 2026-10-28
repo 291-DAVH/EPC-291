@@ -22,6 +22,12 @@ def engineering_svg(client: str, code: str, path: str):
     return FileResponse(service.svg_file(projects.get_project_dir(client, code), path), media_type="image/svg+xml", headers=SVG_HEADERS)
 
 
+@router.get("/pdf")
+def engineering_pdf(client: str, code: str, path: str):
+    """A document of the workspace that is a PDF, shown as it is."""
+    return FileResponse(service.pdf_file(projects.get_project_dir(client, code), path), media_type="application/pdf", headers={"Content-Disposition": "inline", "X-Content-Type-Options": "nosniff"})
+
+
 @router.get("/text")
 def engineering_text(client: str, code: str, path: str, technical: bool = False):
     return service.text_view(projects.get_project_dir(client, code), path, technical)

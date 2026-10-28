@@ -9,6 +9,7 @@ from epc.modules.engineering.files import (  # noqa: F401
     _kind,
     calculation_view,
     overview,
+    pdf_file,
     svg_file,
     text_view,
 )

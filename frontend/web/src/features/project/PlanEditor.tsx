@@ -46,6 +46,9 @@ const FIXED_KEYS = [
   { keys: "Ctrl+L", action: "Bloquear" }, { keys: "Ctrl+K", action: "Paleta de comandos" }, { keys: "F / Z", action: "Ajustar vista / a la selección" }, { keys: "Espacio", action: "Mover la vista" },
   { keys: "Flechas", action: "Mover la selección" }, { keys: "Enter / Esc", action: "Terminar / cancelar" }, { keys: "?", action: "Esta ayuda" },
 ];
+/** The scale is calibrated only on the Architecture sheet and travels with the plan to the other disciplines: no other sheet has the tool. */
+export const toolAllowed = (tool: string, discipline: string): boolean => tool !== "scale" || discipline === "arquitectura";
+
 const SELECT_TOOLS: ToolDef[] = [
   { id: "select", icon: "select", write: false }, { id: "box", icon: "box", write: false }, { id: "pan", icon: "pan", write: false }, { id: "measure", icon: "measure", write: false }, { id: "pin", icon: "pin", write: false },
   { id: "scale", icon: "scale", write: true }, { id: "origin", icon: "origin", write: true }, { id: "node", icon: "node", write: true }, { id: "line", icon: "line", write: true }, { id: "split", icon: "split", write: true }, { id: "room", icon: "room", write: true },
@@ -480,7 +483,7 @@ export default function PlanEditor(props: Props) {
     else if (id === "distV") apply(distributeNodes(drawing, ok, "y"));
   };
   const commands: Command[] = [
-    ...SELECT_TOOLS.filter((x) => write || !x.write).map((x): Command => ({ id: "t." + x.id, group: t("plan.cmd.tools"), label: t("plan.tool." + x.id), hint: keyOf(prefs, x.id).replace("+", ""), run: () => choose(x.id) })),
+    ...SELECT_TOOLS.filter((x) => (write || !x.write) && toolAllowed(x.id, drawing.discipline)).map((x): Command => ({ id: "t." + x.id, group: t("plan.cmd.tools"), label: t("plan.tool." + x.id), hint: keyOf(prefs, x.id).replace("+", ""), run: () => choose(x.id) })),
     { id: "undo", group: t("plan.cmd.edit"), label: t("layout.undo"), hint: "Ctrl+Z", run: doUndo, disabled: !write }, { id: "redo", group: t("plan.cmd.edit"), label: t("layout.redo"), hint: "Ctrl+Y", run: doRedo, disabled: !write },
     { id: "copy", group: t("plan.cmd.edit"), label: t("plan.act.copy"), hint: "Ctrl+C", run: () => copy(), disabled: !selection.length }, { id: "paste", group: t("plan.cmd.edit"), label: t("plan.act.paste"), hint: "Ctrl+V", run: () => pasteAt(hover), disabled: !write }, { id: "dup", group: t("plan.cmd.edit"), label: t("plan.act.duplicate"), hint: "Ctrl+D", run: () => act("duplicate"), disabled: !selection.length || !write },
     { id: "all", group: t("plan.cmd.edit"), label: t("plan.act.selectAll"), hint: "Ctrl+A", run: () => onSelect([...drawing.nodes.map((n): Ref => ({ type: "node", id: n.id })), ...drawing.lines.map((l): Ref => ({ type: "line", id: l.id }))]) },
@@ -528,7 +531,7 @@ export default function PlanEditor(props: Props) {
     if (key === "f") { fit(); return; }
     if (key === "z") { zoomTo(selection.length ? selection : undefined); return; }
     const named = Object.keys(DEFAULT_KEYS).find((a) => keyOf(prefs, a).replace("+", "") === key && keyOf(prefs, a) !== "");
-    if (named && (!readOnly || !SELECT_TOOLS.find((x) => x.id === named)?.write)) { choose(named); return; }
+    if (named && toolAllowed(named, drawing.discipline) && (!readOnly || !SELECT_TOOLS.find((x) => x.id === named)?.write)) { choose(named); return; }
     if (profile?.shortcuts[key] && write) {
       const id = profile.shortcuts[key];
       if (nodeKinds.some((n) => n.id === id)) { cancel(); setTool("node"); setKindId(id); } else if (lineKinds.some((l) => l.id === id)) { cancel(true); setTool("line"); setKindId(id); }
@@ -545,7 +548,7 @@ export default function PlanEditor(props: Props) {
   };
 
   // ---------------------------------------------------------------- what the screen shows
-  const tools = SELECT_TOOLS.filter((x) => (x.id !== "route" || drawing.discipline === "electrica_BT") && (x.id !== "pin" || !!props.onNewPin));
+  const tools = SELECT_TOOLS.filter((x) => (x.id !== "route" || drawing.discipline === "electrica_BT") && (x.id !== "pin" || !!props.onNewPin) && toolAllowed(x.id, drawing.discipline));
   const palette2 = tool === "node" || tool === "split" ? nodeKinds : tool === "line" ? lineKinds : [];
   const ordered = [...palette2].sort((a, b) => Number(fav(b.id)) - Number(fav(a.id)));
   const stats = useMemo(() => selectionStats(drawing, selection, k), [drawing, selection, k]);
