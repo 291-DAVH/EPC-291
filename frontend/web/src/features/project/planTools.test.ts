@@ -302,13 +302,13 @@ describe("rooms and the automatic design", () => {
     const isBoard = (k: string) => k === "TB", isLoad = (k: string) => k === "LU";
     const empty = blank();
     expect(boardPlan(empty, [], "TB", isBoard, isLoad)).toEqual({ action: "missing" });              // make it in Engineering first
-    expect(boardPlan(empty, [A], "TB", isBoard, isLoad)).toEqual({ action: "set", board: A });
+    expect(boardPlan(empty, [A], "TB", isBoard, isLoad)).toEqual({ action: "ask", options: [A] });            // even with one: the person says which board it is
     expect(boardPlan(empty, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "ask", options: [A, B] });
     expect(boardPlan(empty, [A], "LU", isBoard, isLoad)).toEqual({ action: "none" });                 // no board on the plan yet: the load waits
     expect(boardPlan(empty, [A], "XX", isBoard, isLoad)).toEqual({ action: "none" });
     const one = withBoard(addNode(empty, "TB", [0, 0]), "n1", A, true);
     expect(one.nodes[0]).toMatchObject({ board: "b1", tag: "TGBT-01" });
-    expect(boardPlan(one, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "set", board: B });       // the other one is the only free
+    expect(boardPlan(one, [A, B], "TB", isBoard, isLoad)).toEqual({ action: "ask", options: [B] });       // only the other one is free
     expect(boardPlan(one, [A, B], "LU", isBoard, isLoad)).toEqual({ action: "set", board: A });
     const two = withBoard(addNode(one, "TB", [9, 9]), "n2", B, true);
     expect(boardPlan(two, [A, B], "LU", isBoard, isLoad)).toEqual({ action: "ask", options: [A, B] });

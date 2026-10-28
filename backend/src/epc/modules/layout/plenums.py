@@ -54,26 +54,32 @@ def _reach(value, name: str) -> Optional[int]:
     return value
 
 
-def _check(body: dict, vertical_kind: Callable[[str], Optional[str]]) -> dict:
+def _number(v) -> bool:
+    return not isinstance(v, bool) and isinstance(v, (int, float)) and math.isfinite(v)
+
+
+def _problems(body: dict, kind: Optional[str]) -> Dict[str, str]:
     errors: Dict[str, str] = {}
-    code = str(body.get("code", "")).strip()
-    if not CODE.match(code):
+    if not CODE.match(str(body.get("code", "")).strip()):
         errors["code"] = "letters, digits, - and _, up to 20"
     if not LEVEL.match(str(body.get("level", ""))):
         errors["level"] = "a level of the building: L-1, L0, L1..."
-    kind = vertical_kind(str(body.get("discipline", "")))
     if kind is None:
         errors["discipline"] = "this discipline has no kind of vertical shaft"
-    for key in ("x_m", "y_m"):
-        if isinstance(body.get(key), bool) or not isinstance(body.get(key), (int, float)) or not math.isfinite(body[key]):
-            errors[key] = "a number of metres from the origin of the plan"
+    errors.update({k: "a number of metres from the origin of the plan" for k in ("x_m", "y_m") if not _number(body.get(k))})
     height = body.get("altura_m", 3.0)
-    if isinstance(height, bool) or not isinstance(height, (int, float)) or not 0 < height <= 30:
+    if not _number(height) or not 0 < height <= 30:
         errors["altura_m"] = "the height the shaft adds, above 0 and up to 30 m"
+    return errors
+
+
+def _check(body: dict, vertical_kind: Callable[[str], Optional[str]]) -> dict:
+    kind = vertical_kind(str(body.get("discipline", "")))
+    errors = _problems(body, kind)
     if errors:
         raise Invalid(errors)
-    return {"code": code, "discipline": body["discipline"], "kind": kind, "level": body["level"], "x_m": round(float(body["x_m"]), 3), "y_m": round(float(body["y_m"]), 3), "altura_m": float(height),
-            "up": _reach(body.get("up"), "up"), "down": _reach(body.get("down"), "down")}
+    return {"code": str(body["code"]).strip(), "discipline": body["discipline"], "kind": kind, "level": body["level"], "x_m": round(float(body["x_m"]), 3), "y_m": round(float(body["y_m"]), 3),
+            "altura_m": float(body.get("altura_m", 3.0)), "up": _reach(body.get("up"), "up"), "down": _reach(body.get("down"), "down")}
 
 
 def _metres_per_unit(scale: Optional[dict]) -> Optional[float]:

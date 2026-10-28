@@ -27,11 +27,11 @@ afterEach(() => { cleanup(); window.localStorage.clear(); });
 let latest: Drawing = blank();
 let chosen: Ref[] = [];
 
-function Harness({ start = blank(), readOnly = false }: { start?: Drawing; readOnly?: boolean }) {
+function Harness({ start = blank(), readOnly = false, profile = PROFILE, boards, sheetKey }: { start?: Drawing; readOnly?: boolean; profile?: Profile; boards?: { id: string; name: string; level?: string; location?: string }[]; sheetKey?: string }) {
   const [d, setD] = useState(start);
   const [sel, setSel] = useState<Ref[]>([]);
   latest = d; chosen = sel;
-  return <PlanEditor drawing={d} onChange={setD} derived={null} profile={PROFILE} lang="es" underlayUrl={null} readOnly={readOnly} t={(k) => k} selection={sel} onSelect={setSel} />;
+  return <PlanEditor drawing={d} onChange={setD} derived={null} profile={profile} lang="es" underlayUrl={null} readOnly={readOnly} t={(k) => k} selection={sel} onSelect={setSel} boards={boards} sheetKey={sheetKey} />;
 }
 
 const svgOf = (c: HTMLElement) => c.querySelector("svg[preserveAspectRatio]") as SVGSVGElement;
@@ -196,5 +196,35 @@ describe("the scale of the plan", () => {
     expect(toolAllowed("scale", "arquitectura")).toBe(true);
     for (const discipline of ["electrica_BT", "sanitaria_cloacas", "civil"]) expect(toolAllowed("scale", discipline)).toBe(false);
     expect(toolAllowed("node", "electrica_BT")).toBe(true);                                 // every other tool is as it was
+  });
+});
+
+describe("plan editor: the board a board symbol stands for", () => {
+  const BOARD_PROFILE: Profile = { ...PROFILE, nodes: [{ id: "TB", etiqueta: { es: "Tablero", en: "Board" }, prefijo_tag: "TB", simbolo_2d: "tablero", capa_dxf: "ELEC", atributos: ["tablero"] }, ...PROFILE.nodes] };
+
+  it("lists the boards that are not on the plan, with their level and place, even when there is only one, and takes the one chosen", () => {
+    const boards = [{ id: "tgbt", name: "TGBT", level: "L-1", location: "Sala de tableros" }];
+    const { container } = render(<Harness profile={BOARD_PROFILE} boards={boards} sheetKey="L0@electrica_BT" />);
+    tool("node");
+    down(svgOf(container), 300, 200);
+    const dialog = screen.getByRole("dialog", { name: "plan.board.which" });
+    expect(dialog.textContent).toContain("plan.board.whichAdd");
+    expect(dialog.textContent).toContain("TGBT");
+    expect(dialog.textContent).toContain("L-1");
+    expect(dialog.textContent).toContain("Sala de tableros");
+    expect(dialog.textContent).toContain("plan.board.otherLevel");                       // the board is on L-1 and this plan is L0
+    expect(latest.nodes[0].board).toBeUndefined();                                       // nothing is tied until the person chooses
+    fireEvent.click(screen.getByRole("button", { name: /TGBT/ }));
+    expect(latest.nodes).toMatchObject([{ kind: "TB", board: "tgbt", tag: "TGBT" }]);
+    expect(screen.queryByRole("dialog", { name: "plan.board.which" })).toBeNull();
+  });
+
+  it("does not warn when the board is on the level of this plan, and cancelling takes the symbol back", () => {
+    const { container } = render(<Harness profile={BOARD_PROFILE} boards={[{ id: "tgbt", name: "TGBT", level: "L0" }]} sheetKey="L0@electrica_BT" />);
+    tool("node");
+    down(svgOf(container), 300, 200);
+    expect(screen.getByRole("dialog", { name: "plan.board.which" }).textContent).not.toContain("plan.board.otherLevel");
+    fireEvent.click(screen.getByRole("button", { name: "layout.cancel" }));
+    expect(latest.nodes).toEqual([]);
   });
 });

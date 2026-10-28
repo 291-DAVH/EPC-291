@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { assignCircuit, Drawing, ofKind, Ref, removeMany, setAttr, updateLine, updateNode } from "./planEditing";
-import { isLocked, setLocked, unlocked } from "./planTools";
+import { BoardRef, isLocked, setLocked, unlocked } from "./planTools";
 import { Derived, Kind, Profile } from "./PlanEditor";
 
 /** The side panels of the plan editor: the properties of what is selected (one element, or many to give them a circuit at once), and the circuits routed over the drawing.
@@ -8,7 +8,7 @@ import { Derived, Kind, Profile } from "./PlanEditor";
 export interface BoardCircuit { tag: string; description: string; board: string }
 
 interface PropsProps {
-  drawing: Drawing; selection: Ref[]; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; boardCircuits: BoardCircuit[];
+  drawing: Drawing; selection: Ref[]; derived: Derived | null; profile: Profile | undefined; lang: "es" | "en"; boardCircuits: BoardCircuit[]; boards?: BoardRef[];
   readOnly: boolean; onChange: (d: Drawing) => void; onSelect: (r: Ref[]) => void; t: (key: string) => string;
 }
 
@@ -66,7 +66,7 @@ function Many({ drawing, selection, profile, lang, boardCircuits, readOnly, onCh
 }
 
 export function Properties(props: PropsProps) {
-  const { drawing, selection, derived, profile, lang, boardCircuits, readOnly, onChange, onSelect, t } = props;
+  const { drawing, selection, derived, profile, lang, boardCircuits, boards, readOnly, onChange, onSelect, t } = props;
   if (selection.length > 1) return <Many {...props} />;
   if (selection.length === 0) {
     return <div className="card"><b>{t("layout.props")}</b><p className="muted small" style={{ margin: "6px 0 0" }}>{t("layout.props.none")}</p><ByKind drawing={drawing} profile={profile} lang={lang} onSelect={onSelect} t={t} /></div>;
@@ -85,10 +85,17 @@ export function Properties(props: PropsProps) {
     <label className="field"><span>{t("layout.col.circuit")}</span>
       <CircuitSelect value={value} boardCircuits={boardCircuits} disabled={readOnly} onPick={(c) => patch({ circuit: c })} empty="–" /></label>
   );
+  const boardField = node && kind?.carga && boards && boards.length > 0 && (
+    <label className="field"><span>{t("plan.board.feeds")}</span>
+      <select value={node.board ?? ""} disabled={readOnly} onChange={(e) => patch({ board: e.target.value })}>
+        <option value="">–</option>{boards.map((b) => <option key={b.id} value={b.id}>{b.name}{b.level ? ` · ${b.level}` : ""}{b.location ? ` · ${b.location}` : ""}</option>)}
+      </select></label>
+  );
   return (
     <div className="card">
       <div className="row" style={{ justifyContent: "space-between" }}><b>{t("layout.props")}</b><span className="muted small">{nameOf(kind, lang)}</span></div>
       <div className="fgrid" style={{ marginTop: 6 }}>
+        {boardField}
         <label className="field"><span>{t("layout.col.tag")}</span>
           <input disabled={readOnly} value={item.tag ?? ""} placeholder={derivedTag} onChange={(e) => patch({ tag: e.target.value })} /></label>
         {node && kind?.carga && circuitField(node.circuit ?? "")}

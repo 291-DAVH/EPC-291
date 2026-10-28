@@ -519,7 +519,7 @@ export function applyProposal(d: Drawing, p: Proposal): Drawing {
 }
 
 // ---------------------------------------------------------------- boards: the board symbol and the loads belong to a board made in Engineering
-export interface BoardRef { id: string; name: string }
+export interface BoardRef { id: string; name: string; level?: string; location?: string }          // a board of the project and, when it was said, the level and the place it is in
 /** What to do when something is placed: nothing; there is no board to stand for (make it in Engineering first); take this one; or ask which of these. */
 export type BoardPlan = { action: "none" } | { action: "missing" } | { action: "set"; board: BoardRef } | { action: "ask"; options: BoardRef[] };
 
@@ -535,7 +535,7 @@ export function boardPlan(d: Drawing, boards: BoardRef[], kind: string, isBoard:
   if (isBoard(kind)) {
     const placed = new Set(boardsOn(d, boards, isBoard).map((b) => b.id));
     const free = boards.filter((b) => !placed.has(b.id));
-    return free.length ? choose(free) : { action: "missing" };
+    return free.length ? { action: "ask", options: free } : { action: "missing" };               // a board symbol always asks which board it is: the list says where each one is
   }
   if (!isLoad(kind)) return { action: "none" };
   const on = boardsOn(d, boards, isBoard);
