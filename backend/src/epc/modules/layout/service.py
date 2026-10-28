@@ -540,3 +540,41 @@ def accept_circuits(d: Path, level: str, circuits: list, board: str = "") -> dic
     out = sld.add_circuits(d, [c.model_dump() for c in circuits], board)
     identity.audit_event("layout_circuits_created", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"added": len(out["added"])})
     return out
+
+
+def _route_facts(res: dict, tag: str) -> dict:
+    r = (res.get("circuits") or {}).get(tag) or {}
+    return {"length_m": r.get("length_m"), "plenums": r.get("plenums", []), "rise_m": r.get("rise_m", 0.0), "found": bool(r.get("found"))}
+
+
+def _saved_and_derived(d: Path, level: str) -> tuple:
+    """The saved drawing of a sheet and what the engine derives from it: sizing works on what is saved (the board measures its lengths there) and needs the scale."""
+    saved = repository.load_drawing(d, level)
+    if not saved:
+        raise Invalid({"level": "save the drawing first"})
+    data = {**_blank(), **saved}
+    res = derive_data(level, data)
+    if not res.get("ready"):
+        raise Invalid({"scale": "the plan has no scale: nothing can be measured"})
+    return data, res
+
+
+def _unsized_note(mine: list, cables: dict) -> list:
+    missing = [t for t in mine if t not in cables]
+    return [f"no cable could be sized for {', '.join(missing)}: the circuits are not in a calculated board"] if missing else []
+
+
+def design_sizing(d: Path, level: str, body) -> dict:
+    """Step 3 of the automatic design: the cable of each circuit of the saved drawing (calculated on its board with the length the plan measured, the height of the plenums it crosses included) and,
+    with them, the smallest conduit or tray that carries the cables of each stretch. Nothing is changed: the person looks at the detail and approves it."""
+    from epc_plan import sizing
+    level = _level(level)
+    data, res = _saved_and_derived(d, level)
+    cables, notes = sld.size_cables(d, body.board)
+    core = _engine()[0]
+    kinds = {k["id"]: k for k in core.load_profile(data["discipline"])["tramos"]}
+    mine = [c["tag"] for c in data["circuits"] if c.get("tag")]
+    ternas = {c["tag"]: int(c.get("ternas") or 1) for c in data["circuits"] if c.get("tag")}
+    sections = {t: cables[t]["section_mm2"] for t in mine if t in cables}
+    containers = sizing.size_containers(res["schedule"]["containers"], sections, ternas, kinds, core.PARAMS)
+    return {"containers": containers, "circuits": [{"tag": t, **cables.get(t, {}), **_route_facts(res, t)} for t in mine], "warnings": notes + _unsized_note(mine, cables)}

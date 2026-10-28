@@ -2,7 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, Badge, errorText, Icon, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
 import Coordination from "./Coordination";
 import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi";
+import AutoDesignDialog from "./AutoDesignDialog";
+import { applySizing } from "./autoDesign";
 import DesignPanel from "./DesignPanel";
+import { useAutoDesign } from "./useAutoDesign";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
 import type { CompareRow } from "./LightingExtras";
@@ -283,10 +286,18 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setRecognizing(false);
   };
+  const familyLimits = () => Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))]));
+  /** Save the drawing now (not a moment after the last change): the board reads the lengths the plan measured from what is saved. */
+  const commit = async (next: Drawing) => {
+    change(next);
+    if (timer.current) window.clearTimeout(timer.current);
+    await send(next);
+  };
+  const auto = useAutoDesign({ root, level, families: familyLimits as () => Record<string, Record<string, number>>, board: () => ({ node: boardNode?.id ?? "", id: boardNode?.board ?? "" }), commit, preview: setRuns });
   const designCall = async <T,>(step: "runs" | "wiring", then: (r: T) => void) => {
     setDesignBusy(true);
     try {
-      const families = Object.fromEntries(Object.entries(limits).map(([f, v]) => [f, Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "number"))]));
+      const families = familyLimits();
       then(await api<T>(`${root}/${level}/design/${step}`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ drawing, families, board: boardNode?.id ?? "" }) })); setErr("");
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
@@ -309,7 +320,8 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     change(out.drawing);
     setLighting(null);
     setLightApplied(tl("light.applied").replace("{n}", String(out.added)).replace("{r}", String(out.removed)));
-    keepStudy();
+    keepStudy();                                                       // the memo of the study is made now; the route of the conduits, the circuits and the sizing follow, each asking for its acceptance
+    auto.start(out.drawing);
   };
   const keepStudy = async () => {                                      // what was applied is kept as the study of the sheet (the one its report is made from)
     try { const kept = await api<{ report_file?: string; report_error?: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(kept.report_file ? tl("light.reported").replace("{file}", kept.report_file) : ""); setStudyError(kept.report_error ? tl("light.reportError") + " " + kept.report_error : ""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
@@ -403,6 +415,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
 
   return (
     <div className="workbench">
+      <AutoDesignDialog stage={auto.stage} onRuns={auto.acceptRuns} onWiring={auto.acceptWiring} onApprove={() => auto.approve(applySizing)} onClose={auto.close} />
       {dialog?.type === "setup" && <ElectricalSetupDialog levels={bases} busy={dialogBusy} onSubmit={submitSetup} onCancel={() => setDialog(null)} />}
       {dialog?.type === "plenum" && <PlenumDialog title={tl(dialog.mandatory ? "plenum.titleMandatory" : "plenum.title").replace("{discipline}", profName(dialog.discipline))} help={tl(dialog.mandatory ? "plenum.helpMandatory" : "plenum.help")}
         level={dialog.level} nextLevel={dialog.next} defaults={{ x_m: dialog.at[0], y_m: dialog.at[1] }} busy={dialogBusy} onSubmit={submitPlenum} onCancel={() => setDialog(null)} />}

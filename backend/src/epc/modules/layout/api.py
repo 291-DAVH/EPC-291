@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile
 from fastapi.responses import FileResponse
 
 from epc.modules.layout import service, templates
-from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, PlenumIn, TemplateIn
+from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, PlenumIn, SizingIn, TemplateIn
 from epc.modules.projects import public as projects
 
 # Internal engineering surface (the organization's own projects): never under /api/app.
@@ -115,6 +115,12 @@ def design_wiring(client: str, code: str, level: str, body: DesignIn):
 def design_circuits(client: str, code: str, level: str, body: NewCircuits):
     """Create in the board the circuits of an accepted proposal."""
     return service.accept_circuits(projects.get_project_dir(client, code), level, body.circuits, body.board)
+
+
+@router.post("/{level}/design/sizing")
+def design_sizing(client: str, code: str, level: str, body: SizingIn):
+    """The cables of the circuits of the saved drawing and the conduits and trays that carry them, sized (nothing is changed)."""
+    return service.design_sizing(projects.get_project_dir(client, code), level, body)
 
 
 @router.get("/{level}/changes")

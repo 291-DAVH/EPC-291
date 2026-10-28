@@ -578,7 +578,7 @@ def _loads(gnodes, load_kinds, routed: set, warnings: List[str]) -> Dict[str, An
 
 def _container(s, params) -> Dict[str, Any]:
     cables = sum(c["ternas"] for c in s["carries"])
-    out = {"tag": s["tag"], "kind": s["kind"], "circuits": [c["circuit"] for c in s["carries"]], "cables": cables}
+    out = {"tag": s["tag"], "line": s["line"], "kind": s["kind"], "circuits": [c["circuit"] for c in s["carries"]], "cables": cables}
     full = occupancy.fill(s.get("attrs") or {}, cables, params["occupancy"])
     return {**out, "fill": full} if full else out
 

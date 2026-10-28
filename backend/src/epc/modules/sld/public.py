@@ -4,7 +4,7 @@ from typing import List
 
 from epc.modules.sld import lengths, repository
 
-__all__ = ["circuits", "boards", "set_plan_lengths", "add_circuits"]
+__all__ = ["circuits", "boards", "set_plan_lengths", "add_circuits", "size_cables"]
 
 
 def circuits(d: Path) -> List[dict]:
@@ -32,3 +32,9 @@ def add_circuits(d: Path, specs: List[dict], board_id: str = "") -> dict:
     """Add circuits to a board of the project (the first one when none is named); see `boards.add_circuits`."""
     from epc.modules.sld import boards
     return boards.add_circuits(d, specs, board_id)
+
+
+def size_cables(d: Path, board_id: str = ""):
+    """Calculate the board (or all of them) and give the cable of each circuit: ({tag: {section_mm2, in_a, ib_a, du_pct, complies, board}}, warnings)."""
+    from epc.modules.sld import cables
+    return cables.size(d, board_id)
