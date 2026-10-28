@@ -94,10 +94,16 @@ def _limits(options: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, Dict[s
     return {f: {**v, **{k: x for k, x in ((options.get("families") or {}).get(f) or {}).items() if k in ("max_outlets", "va_per_outlet") and isinstance(x, (int, float)) and x > 0}} for f, v in base.items()}
 
 
+def _own_va(node: Dict[str, Any]) -> Optional[float]:
+    """The power a load says of itself (a luminaire placed by the lighting calculation carries `attrs.lighting.power_w`); None when it says nothing, and then the family's typical value is used."""
+    w = ((node.get("attrs") or {}).get("lighting") or {}).get("power_w")
+    return float(w) if isinstance(w, (int, float)) and not isinstance(w, bool) and w > 0 else None
+
+
 def _loads(document: Dict[str, Any], families: Dict[str, str], board: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """The loads of the drawing; when the board has a board of Engineering behind it, only the loads fed from that board (or from none yet)."""
     mine = (board or {}).get("board", "")
-    return [{"id": n["id"], "x": n["x"], "y": n["y"], "kind": n["kind"], "family": families[n["kind"]]} for n in document.get("nodes", [])
+    return [{"id": n["id"], "x": n["x"], "y": n["y"], "kind": n["kind"], "family": families[n["kind"]], "va": _own_va(n)} for n in document.get("nodes", [])
             if n.get("kind") in families and (not mine or n.get("board", mine) == mine)]
 
 
@@ -260,7 +266,12 @@ class _Wiring:
         order = [group[i]["id"] for i in chain(pts, (self.board["x"], self.board["y"]))]
         self.assignments.update({i: tag for i in order})
         self.circuits.append({"tag": tag, "family": family, "room": room["id"], "room_name": room.get("name", ""), "loads": order, "outlets": len(order), "from": self.board["id"], "to": order[-1], "via": [],
-                              "ternas": 1, "va": round(len(order) * float(lim["va_per_outlet"]), 1), "va_per_outlet": lim["va_per_outlet"], "description": f"{lim['label']['es']} {room.get('name', '')} ({len(order)})".strip()})
+                              "ternas": 1, "va": self._power(group, lim), "va_per_outlet": lim["va_per_outlet"], "description": f"{lim['label']['es']} {room.get('name', '')} ({len(order)})".strip()})
+
+    @staticmethod
+    def _power(group: List[Dict[str, Any]], lim: Dict[str, Any]) -> float:
+        """The power of a circuit: what each load says of itself, and the family's typical value for the ones that say nothing."""
+        return round(sum(l["va"] if l.get("va") is not None else float(lim["va_per_outlet"]) for l in group), 1)
 
     def verify(self) -> Dict[str, Any]:
         """Route what was proposed over the runs that are drawn, with the engine itself: for each circuit whether every load is reached and how far."""

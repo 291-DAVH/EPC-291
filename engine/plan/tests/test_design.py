@@ -151,6 +151,20 @@ class TestWiring(unittest.TestCase):
         self.assertEqual([c["tag"] for c in p["circuits"]], ["IUG-03", "IUG-04"])
         self.assertEqual([c["va"] for c in p["circuits"]], [300.0, 300.0])
 
+    def test_a_luminaire_that_says_its_power_brings_it_and_the_others_use_the_typical_value(self):
+        d = self.drawn([BOARD, *lights(ROOMS[0], 3)])
+        for n, w in zip([n for n in d["nodes"] if n["kind"] == "LU"], (40, 25.5, None)):
+            if w is not None:
+                n["attrs"] = {"lighting": {"power_w": w}}
+        self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [165.5])        # 40 + 25.5 + the 100 VA typical of the third one
+
+    def test_a_power_that_is_not_a_positive_number_is_not_taken(self):
+        d = self.drawn([BOARD, *lights(ROOMS[0], 2)])
+        luminaires = [n for n in d["nodes"] if n["kind"] == "LU"]
+        luminaires[0]["attrs"] = {"lighting": {"power_w": True}}
+        luminaires[1]["attrs"] = {"lighting": {"power_w": -5}}
+        self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [200.0])
+
     def test_without_runs_it_asks_for_them_and_a_load_the_runs_do_not_reach_is_said(self):
         bare = doc([BOARD, *lights(ROOMS[0], 3)])
         self.assertTrue(any("no runs" in w for w in design.propose_wiring(bare, ROOMS)["warnings"]))

@@ -78,6 +78,17 @@ class TestDesign(unittest.TestCase):
         limited = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": self.drawn(), "families": {"IUG": {"max_outlets": 5, "va_per_outlet": 200}}}).json()
         self.assertTrue(all(c["outlets"] <= 5 and c["va_per_outlet"] == 200 for c in limited["circuits"]))
 
+    def test_luminaires_placed_by_the_calculation_keep_their_power_through_the_sheet_and_into_the_circuits(self):
+        drawn = self.drawn()
+        for n in drawn["nodes"]:
+            if n["kind"] == "LU" and n["y"] < 200:
+                n["attrs"] = {"lighting": {"source": "calc", "room": "A", "luminaire": "led_panel_600", "power_w": 32}}
+        saved = self.c.put(f"{self.base}/L0", json=drawn).json()["drawing"]
+        self.assertEqual({n["attrs"]["lighting"]["power_w"] for n in saved["nodes"] if n["attrs"]}, {32})        # the sheet keeps it
+        p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": saved}).json()
+        self.assertEqual({c["room"]: c["va"] for c in p["circuits"] if c["room"] == "A"}, {"A": 9 * 32.0})        # a circuit adds what its luminaires say
+        self.assertEqual(sorted(c["va"] for c in p["circuits"] if c["room"] == "B"), [800.0, 900.0])               # the others use the typical value
+
     def test_the_wiring_without_runs_asks_for_them(self):
         p = self.c.post(f"{self.base}/L0/design/wiring", json={"drawing": DRAWING}).json()
         self.assertTrue(any("no runs" in w for w in p["warnings"]))

@@ -69,5 +69,16 @@ def to_view(rect: Rect, k: float, x_m: float, y_m: float) -> Tuple[float, float]
     return round(rect.x0 + x_m / k, 3), round(rect.y0 + y_m / k, 3)
 
 
+def contains(points: Sequence[Sequence[float]], x: float, y: float) -> bool:
+    """Whether a point of the view is inside an outline (a point on the edge counts as inside)."""
+    inside = False
+    for (x1, y1), (x2, y2) in zip(points, list(points[1:]) + [points[0]]):
+        if abs((x2 - x1) * (y - y1) - (y2 - y1) * (x - x1)) < 1e-9 and min(x1, x2) - 1e-9 <= x <= max(x1, x2) + 1e-9 and min(y1, y2) - 1e-9 <= y <= max(y1, y2) + 1e-9:
+            return True
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            inside = not inside
+    return inside
+
+
 def corner(rect: Rect) -> List[float]:
     return [rect.x0, rect.y0]

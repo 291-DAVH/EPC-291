@@ -63,3 +63,18 @@ class TestAcross(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestContains(unittest.TestCase):
+    L = [[0, 0], [60, 0], [60, 20], [20, 20], [20, 40], [0, 40]]
+
+    def test_a_point_is_inside_an_outline_that_is_not_a_rectangle_only_where_the_outline_is(self):
+        self.assertTrue(geometry.contains(self.L, 10, 30))
+        self.assertTrue(geometry.contains(self.L, 50, 10))
+        self.assertFalse(geometry.contains(self.L, 40, 30))          # in the bounding box, in the notch of the L
+        self.assertFalse(geometry.contains(self.L, 70, 10))
+
+    def test_a_point_on_an_edge_or_a_vertex_counts_as_inside(self):
+        self.assertTrue(geometry.contains(self.L, 30, 20))
+        self.assertTrue(geometry.contains(self.L, 0, 0))
+        self.assertTrue(geometry.contains(self.L, 60, 10))

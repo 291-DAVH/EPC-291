@@ -111,6 +111,16 @@ class TestCalc(Base):
         self.assertTrue(any("bounding box" in w for w in out["warnings"]))
         self.assertEqual(out["rooms"][0]["length_m"], 6.0)
 
+    def test_the_luminaires_that_fall_outside_the_outline_of_an_l_shaped_room_are_not_placed_and_it_is_said(self):
+        self.with_own()
+        l_shape = {"id": "R1", "name": "En L", "points": [[0, 0], [120, 0], [120, 20], [20, 20], [20, 80], [0, 80]]}
+        out = self.c.post(BASE + "/calc", json=body(rooms=(l_shape,))).json()
+        placed = out["placements"]["R1"]
+        every = out["result"]["rooms"][0]["layout"]["installed"]
+        self.assertTrue(0 < len(placed) < every, (len(placed), every))
+        self.assertTrue(all(0 <= p["x"] <= 120 and 0 <= p["y"] <= 80 and (p["x"] <= 20 or p["y"] <= 20) for p in placed), placed)
+        self.assertTrue(any("fall outside its outline" in w for w in out["warnings"]), out["warnings"])
+
     def test_a_sheet_without_scale_is_refused_and_a_polygon_without_area_is_left_out(self):
         self.with_own()
         no_scale = {"sheet": {"rooms": [CLASSROOM]}, "rooms": {"R1": PARAMS}}
