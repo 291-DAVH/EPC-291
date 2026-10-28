@@ -1,5 +1,7 @@
 # Guía para construir un motor compatible con EPC-291
 
+> **Estado del documento.** Describe lo que **existe hoy** y, marcado como **(objetivo)**, lo que fija el ADR-0028 (selector de norma, aún propuesto). Para el procedimiento de ingesta de una norma ver [GUIA_NORMAS.md](GUIA_NORMAS.md).
+
 > Documento autocontenido: se puede pegar entero en otro chat. Explica qué es un motor en esta plataforma, cómo se estructura, qué recibe y qué entrega, qué patrones de diseño sigue, cómo se prueba y **todos los lugares del repositorio que hay que tocar para registrarlo**. Los motores de referencia son `engine/arch` (el más limpio y aislado), `engine/plan` (documento JSON de entrada, esquema, trabajos en segundo plano) y `engine/aea90364` (tablas como datos).
 > El código, los comentarios, los identificadores, los esquemas y los textos del producto van **en inglés**; la explicación al usuario, en español.
 
@@ -20,6 +22,16 @@ Reglas que lo definen (el gate las verifica casi todas):
 7. **Entrega datos, no pantallas.** Devuelve JSON serializable y/o archivos. Quien muestra es el frontend; quien convierte a entregables (DXF, PDF) son `epc_dxf` y `epc_drawing`.
 
 ---
+
+### 1.1 Tres tipos de motor
+
+| Tipo | Qué hace | Ejemplos | Estado |
+|---|---|---|---|
+| **Motor de servicio** | Un trabajo técnico sobre una entrada (reconocer, dibujar, exportar, calcular geometría) | `epc_arch`, `epc_plan`, `epc_dxf`, `epc_titleblock`, `epc_sld`, `epc_mld`, `epc_drawing` | existe |
+| **Motor de cálculo genérico** (uno por disciplina) | Los algoritmos y la secuencia de un cálculo, **sin ningún número de norma**: todo lo normativo llega en una *política* que el llamador pasa | `epc_calc_electrical`, luego `epc_calc_hvac`, `epc_calc_civil`… | **(objetivo)**; hoy el cálculo eléctrico está mezclado dentro de `epc_aea90364` |
+| **Paquete de norma** | Una norma **completa por sí sola**: sus tablas y constantes, reglas, criterios de diseño, revisión, normas promovidas y la política que ofrece | `epc_aea90364`, luego `epc_iec60364`, `epc_nfpa70`… | existe en forma inicial (AEA) |
+
+Cómo decidir de qué tipo es el tuyo: si su razón de ser es **una norma** (sus valores, sus cláusulas, su revisión) es un paquete de norma; si es **un método de cálculo** que sirve a cualquier norma de una disciplina, es un motor de cálculo genérico; si es **cualquier otro trabajo**, es un motor de servicio. Las secciones 2 a 8 y 10 a 16 valen para los tres; la **2.1** y la **13.2** cubren lo que añade una norma.
 
 ## 2. Estructura de carpetas (exacta)
 
@@ -58,8 +70,38 @@ Reglas de la carpeta:
 
 ---
 
-### 2.1 Si el motor es una norma (AEA 90364, IEC 60364, NFPA 70…)
-Una norma es **un motor propio** con la misma forma y, dentro de `src/epc_<norma>/`, además: el cálculo, las tablas y constantes (`*_tables.json`), las reglas (`rules/`), `data/` (soluciones, `design-criteria.json`, `review.json`, `review-log.jsonl`), `standards/<ID>/rules.json` (normas ingeridas) y `norm_data.py` con `criteria_file()` y las rutas del dato. El país lo enlaza en `engine/jurisdictions/<CC>/jurisdiction.json` (`packs`: `{"electrical": "<norma>"}`). Detalle y ejemplo en [GUIA_NORMAS.md](GUIA_NORMAS.md) (sección 2.5).
+### 2.1 Paquete de norma (AEA 90364, IEC 60364, NFPA 70…)
+
+Una norma es **un motor propio**, nombrado por la **norma** y **nunca por el país** (`aea90364`, `iec60364`): el país es dato de la jurisdicción. Es **completa por sí sola**: no hereda de otra norma ni importa a otro paquete de norma; si dos normas coinciden en un valor, cada una guarda el suyo con su cláusula y edición.
+
+Forma de la carpeta (hoy, con lo marcado **(objetivo)** que añade el ADR-0028):
+```
+engine/<norma>/
+├── README.md   pyproject.toml   tests/   docs/   examples/
+└── src/epc_<norma>/
+    ├── <cálculo propio de la norma>.py     # solo lo que de verdad es de la norma; los algoritmos genéricos irán al motor de cálculo (objetivo)
+    ├── <norma>_tables.json                 # tablas y constantes, cada valor con su cláusula y edición
+    ├── rules/*.json  (+ _indice.json)      # reglas de ingeniería derivadas de la norma (paráfrasis; solo la referencia)
+    ├── data/
+    │   ├── design-criteria.json            # catálogo de criterios base por disciplina; el proyecto los sobrescribe
+    │   ├── review.json  review-log.jsonl   # quién aprobó qué punto, cuándo, y la huella del valor
+    │   └── standard-solutions.json         # soluciones normalizadas (si aplica)
+    ├── standards/<ID>/rules.json           # partes de la norma ingeridas y promovidas (esquema 1.1)
+    ├── norm_data.py                        # dónde está cada dato: criteria_file(), REVIEW, REVIEW_LOG…
+    ├── norm.json                           # (objetivo) manifiesto: id, familia, nombre {es,en}, ediciones, disciplinas, estado y el punto de entrada de su política por disciplina
+    └── policy.py                           # (objetivo) la política que implementa el protocolo del motor de cálculo de cada disciplina
+```
+Reglas del paquete de norma:
+- **Todo lo de la norma está dentro de su carpeta** (cálculo propio, datos, reglas, criterios, revisión, normas promovidas). Lo único fuera es el material privado (`local/dev-knowledge/standards/<CC>/<ID>/`: PDF y estudio, nunca versionado) y el esquema común (`shared/schemas/`).
+- **Los números van en JSON con cláusula y edición**; el código solo existe para lo que difiere en método y no solo en valores.
+- **El país la usa si lo dice su jurisdicción**: `engine/jurisdictions/<CC>/jurisdiction.json`, `packs` (`{"electrical": ["aea90364", "iec60364"]}` lista lo que el país acepta; el proyecto elige una por disciplina **(objetivo)**).
+- **Entrada de normas nuevas:** pipeline de ingesta y promoción de [GUIA_NORMAS.md](GUIA_NORMAS.md): `epc_standards.promote_rules` escribe en `standards/` del paquete que la jurisdicción nombra, y `epc_rules.RuleSet` las consulta.
+- **Se revisa punto por punto** (ADR-0011): sus valores quedan *pendientes* hasta que el revisor de normas los aprueba.
+- **Contrato que debe pasar (objetivo, `epc_norms.contract`):** manifiesto válido; todo archivo declarado existe y cumple su esquema; todo valor tiene cláusula y edición; la política responde todo lo que su motor pregunta; la revisión solo refiere puntos que existen; no importa a otro paquete de norma.
+- **Forma antigua:** el paquete AEA es anterior a esta guía (nombres en español, funciones sueltas, sin esquema ni `Options/Result`); un paquete de norma **nuevo** debe seguir la guía, y el AEA se lleva a ella por las fases del ADR-0028.
+
+### 2.2 Motor de cálculo genérico (objetivo)
+Un `calc_<disciplina>` tiene la forma de un motor de servicio (secciones 2 a 8) y, además: **no contiene ninguna constante normativa**. Define con `typing.Protocol` la **política** que necesita (`ElectricalPolicy`: tablas de capacidad, factores de corrección, límites de caída de tensión, constantes de protección, secciones mínimas, factores de cortocircuito…) y la recibe como parámetro: `calculate(board, policy)`. Mantiene la **secuencia** de pasos de la disciplina (para la eléctrica: demanda → corriente de proyecto → protección → capacidad → sección → caída → cortocircuito → verificaciones) y cada paso pregunta a la política; si una norma difiere en el *método*, la política ofrece un *hook* para ese paso. Se prueba con una política de mentira, sin norma alguna.
 
 ## 3. `pyproject.toml` (plantilla)
 
@@ -196,6 +238,7 @@ Si una operación tarda, el motor ofrece `run(...)` síncrono y `start(...)` que
 | **Result Object** | Se devuelve un objeto con datos + advertencias, no se imprime ni se lanza por lo recuperable. | `Result.as_dict()` |
 | **Null Object / resultado vacío con aviso** | Sin elementos reconocidos se devuelve resultado vacío + `warnings`, no una excepción. | `_empty_warnings` |
 | **Registro por clave (Factory)** | Perfiles/disciplinas cargados por id desde datos. | `core.load_profile(id)` |
+| **Strategy + Registro (política por norma)** | **(objetivo)** El cálculo de una disciplina recibe la política de una norma; `epc_norms.registry.policy(norma, disciplina)` la entrega importando el paquete por nombre, así que agregar una norma no toca código existente. | ADR-0028 |
 | **Seam de pruebas** | Un punto para reemplazar lo externo (proceso, cliente) sin red. | `engine.set_runner` |
 | **Job runner** | Trabajo largo con progreso en archivo de estado. | `jobs.py` |
 
@@ -222,7 +265,8 @@ epc_dxf
 - `epc_standards` necesita `epc_aea90364`; `epc_rules`, `epc_documents` son independientes.
 - Un motor nuevo que no dependa de nadie va en la capa `epc_titleblock | … | epc_arch` (la de los independientes). Si necesita DXF/capas, puede importar `epc_dxf`.
 - **Ningún motor importa `epc`** (el backend): contrato `engine-independent`.
-- Si tu motor necesita calcular, **usa `epc_aea90364`** en vez de recalcular por su cuenta (ADR-0022: los dibujos solo dibujan; los números vienen de `epc_aea90364`).
+- Si tu motor necesita calcular, **usa el motor de cálculo** en vez de recalcular por su cuenta (ADR-0022: los dibujos solo dibujan; hoy los números vienen de `epc_aea90364`, y con el ADR-0028 vendrán de `epc_calc_<disciplina>` con la política de la norma del proyecto).
+- **(objetivo, ADR-0028)** Capas: `epc_drawing` > `epc_mld | epc_sld` > los motores de cálculo genéricos y `epc_norms` (independientes entre sí) > `epc_dxf`. Los **paquetes de norma** quedan **al lado**, no debajo: importan `epc_norms` (para cargar sus datos) y nada más de la plataforma, y **nadie los importa de forma estática**: el registro los importa por nombre.
 
 ---
 
@@ -295,6 +339,15 @@ Con el motor ya creado en `engine/<area>/`:
 9. `python tools/ci/run_gate.py` → verde.
 
 ---
+
+### 13.2 Si es un paquete de norma (además de lo anterior)
+1. **Nombre** por la norma, sin país ni versión (`iec60364`); la edición va en `norm.json` **(objetivo)**.
+2. **`engine/jurisdictions/<CC>/jurisdiction.json`** → agregarlo a `packs` del dominio que cubre (lista si el país acepta varias normas).
+3. **Datos** con cláusula y edición, `data/design-criteria.json` si define criterios, y la carpeta `standards/` para lo que se promueva.
+4. **Ingesta** de la norma con [GUIA_NORMAS.md](GUIA_NORMAS.md) (PDF en `local/dev-knowledge`, borrador, validación, revisión humana, promoción).
+5. **Política** y **contrato** **(objetivo)**: `norm.json`, `policy.py` y pasar `epc_norms.contract`.
+6. **Revisión**: los puntos quedan pendientes hasta que el revisor de normas los apruebe.
+7. En el gate no hay cambios especiales: se registra con los pasos de la sección 13 (un paquete de norma es un motor más).
 
 ## 14. Si además necesita API o pantalla
 
@@ -406,6 +459,10 @@ if __name__ == "__main__":
 
 ---
 
+### 17.1 Variante para un paquete de norma
+
+> Voy a crear el paquete de norma **<norma>** (`engine/<norma>/`, paquete `epc_<norma>`, dominio `<dominio>`) para EPC-291. Debe ser **completo por sí solo**: sus tablas y constantes en JSON con cláusula y edición, sus reglas, `data/design-criteria.json`, `data/review.json` vacío, `standards/` para lo promovido y `norm_data.py`. Nada de números normativos en código fuera de la política; **no importa a otro paquete de norma**. Nombre por la norma, no por el país. Sigue las secciones 2 a 8, 10 a 13.2 de esta guía y entrégame al final: la lista de datos creados, lo que falta ingerir con la guía de normas y qué se agrega a `packs` de qué jurisdicción.
+
 ## 18. Qué decirme al volver de ese chat
 
-Para integrarlo al programa necesito: el **nombre del área**, **qué recibe** (JSON o archivos y de qué tipo), **qué entrega** (claves del JSON y archivos), **de qué depende**, si va **en proceso o como subproceso**, qué **disciplina/subdisciplina** sirve (para registrar capas, símbolos y tipos), y si tendrá **pantalla** en el editor de planos o en la consola.
+Para integrarlo al programa necesito (y, si es una norma, también las partes de la norma ingeridas y a qué jurisdicción se agrega): el **nombre del área**, **qué recibe** (JSON o archivos y de qué tipo), **qué entrega** (claves del JSON y archivos), **de qué depende**, si va **en proceso o como subproceso**, qué **disciplina/subdisciplina** sirve (para registrar capas, símbolos y tipos), y si tendrá **pantalla** en el editor de planos o en la consola.

@@ -1,5 +1,6 @@
 # Guía para agregar normas nuevas (AEA 90364, IEC 60364, NFPA, IRAM…)
 
+> **Una norma es un motor** (paquete de norma): estructura, patrones, entradas y salidas y checklist de registro están en [GUIA_MOTORES.md](GUIA_MOTORES.md) (secciones 1.1, 2.1, 2.2 y 13.2). **Esta guía es el procedimiento de entrada de una norma**: de PDF a datos revisados y promovidos. El plan para elegir norma en el cálculo es el [ADR-0028](decisions/ADR-0028-norm-selector.md).
 > Documento autocontenido: se puede pegar entero en otro chat. Explica cómo entra una norma a la plataforma **sin distribuirla**, en qué formas se convierte (reglas verificables, tablas, fórmulas, criterios de diseño), qué comandos se usan, cómo se valida y se aprueba, y **qué límites tiene hoy el sistema** (están marcados como "Estado actual").
 > Fuentes en el repositorio: `docs/explanation/knowledge.md`, `ADR-0011`, `ADR-0012`, `engine/standards`, `engine/rules`, `engine/jurisdictions`, `shared/schemas/rules.schema.json`, `claude/skills/analyze-standard/SKILL.md`.
 > El código, los ids, los esquemas y los parámetros van **en inglés**; el texto de resumen de cada regla va por idioma (`es`, `en`); a quien usa el programa se le explica en español.
@@ -196,10 +197,10 @@ Aplica a normas con cálculo (la AEA 90364-7-771 es el ejemplo hecho; la IEC 603
 4. **Prueba con ejemplo resuelto** en `engine/aea90364/tests/`: el número esperado está calculado a mano de la norma (no del propio código). Sin test, la fórmula no entra.
 5. **Catálogo de módulos** (`aea_catalog.py`): agrega la línea del módulo con su norma y resumen para que aparezca en la documentación del motor.
 
-### Estado actual (honesto)
-- El motor de cálculo está escrito **para AEA**: los módulos se llaman `aea_*` y las tablas son las de AEA 771. **No hay todavía un selector de norma** (por ejemplo "calcular con IEC 60364-5-52 en vez de AEA"). Agregar IEC al cálculo exige **diseñar ese selector**.
-- Camino recomendado (hay que escribirlo en un ADR antes de implementarlo): una **política por norma** como dato (límites, factores, constantes, con norma y cláusula) cargada por una fábrica; los algoritmos reciben la política y no números sueltos; agregar una norma pasa a ser declarar datos. Mínimo viable: un archivo de datos por norma (`iec_tables.json`) + un criterio de diseño `standard` + un parámetro `norm` en la tubería de cálculo que elige qué archivo leer.
-- Mientras tanto, lo que sí se puede hacer sin tocar el motor: ingerir IEC como `rules.json` (camino A) para **consulta y verificación**, y agregar sus tablas como datos nuevos.
+### Estado actual y camino (ADR-0028)
+- El motor de cálculo está escrito **para AEA**: los módulos se llaman `aea_*` y las tablas son las de AEA 771. **No hay todavía un selector de norma.**
+- El camino acordado (ADR-0028, **propuesto**): un **motor de cálculo genérico** por disciplina (`epc_calc_electrical`) sin números de norma, que recibe una **política** (Strategy); cada norma es un **paquete completo** que ofrece su política; un **registro** (`epc_norms`) la entrega por id y el proyecto elige la norma **por disciplina**. **No hay herencia entre normas**: cada una es completa y guarda sus propios valores con su cláusula y edición. Seis fases, cada una con el gate en verde y los dibujos de referencia sin cambios.
+- Mientras tanto, lo que sí se puede hacer sin tocar el motor: ingerir una norma como `rules.json` (camino A) para **consulta y verificación**, y dejar sus tablas como datos con cláusula dentro de su paquete, listas para cuando exista la política.
 
 ---
 
@@ -248,9 +249,7 @@ Catálogo `engine/<norma>/src/epc_<norma>/data/design-criteria.json` (hoy `engin
 - Una **jurisdicción** es una carpeta `engine/jurisdictions/<CC>/` con `jurisdiction.json` (copiado de `_template`): `id`, `name`, `default_locale`, `currency`, `frequency_hz`, `standards_bodies`, `voltages_lv`, `status` y **`packs`**: qué motor de norma usa cada dominio (`{"electrical": "aea90364"}`; una lista si aplican varios). Las **subcarpetas** de dominio (`electrical`, `hvac`, `fire`, `civil`, `mechanical`, `instrumentation`, `telecom`) son las **disciplinas** que la creación de proyecto ofrece para ese país. **La jurisdicción no guarda normas: solo dice cuál motor usa.**
 - Una norma nueva de una familia que ya tiene motor (otra parte de la AEA 90364): se promueve a `engine/aea90364/.../standards/<ID>/rules.json`. Una norma de **otra familia** (IEC 60364, NFPA 70) tiene **su propio motor** (`engine/iec60364/`, `engine/nfpa70/`, con la misma forma que `engine/aea90364`) y se agrega al `packs` de la jurisdicción que la use.
 - **IEC/ISO (internacional):** al tener motor propio (`engine/iec60364/`), un país puede usarla listándola junto a la local: `"packs": {"electrical": ["aea90364", "iec60364"]}`; `RuleSet.load("AR", "electrical")` carga las reglas promovidas de **ambos** motores. El país `INTL` solo existe en el material privado (`local/dev-knowledge`).
-- **Relación entre normas:** el esquema define `standard.extends` (norma base) y `rule.overrides` (id de la regla que se reemplaza). 
-  - `overrides` **funciona** dentro de una misma jurisdicción (`RuleSet` descarta la regla reemplazada).
-  - **Estado actual:** `extends` está en el esquema pero **el cargador no lo resuelve**; lo que sí hace falta ya está: una jurisdicción puede listar varios motores de norma en `packs`, así que las reglas de AEA e IEC se consultan juntas. La *herencia* entre normas (una regla de IEC que la AEA reemplaza) usa `overrides` por id de regla.
+- **Relación entre normas: ninguna.** Cada norma es un paquete **completo por sí solo** (no hereda ni importa a otra). Un país que acepta varias las lista en `packs` y el proyecto elige una por disciplina (ADR-0028). El campo `standard.extends` del esquema 1.1 **no se usa**; `rule.overrides` solo sirve **dentro** de un mismo paquete (una regla que reemplaza a otra de la misma norma).
 
 ---
 
@@ -277,7 +276,7 @@ Una norma que **solo** agrega datos (sin código) igual pasa por `single-source`
 4. Mientras tanto, para lo que tenga **tablas o fórmulas**: datos con cláusula + función + test con ejemplo resuelto (sección 5).
 5. Valores por proyecto → `design-criteria.json` (sección 6).
 6. Con la validación humana: `promote_rules --mark-verified` (4.4).
-7. Si es una norma de otro ente (IEC, NFPA): decidir **jurisdicción** (sección 8) y, si debe usarse en el cálculo, escribir el **ADR del selector de norma** (sección 5).
+7. Si es una norma de otro ente (IEC, NFPA): crear **su paquete** (`engine/<norma>/`, GUIA_MOTORES 2.1 y 13.2), agregarlo a `packs` de la jurisdicción que lo use (sección 8) y, si debe usarse en el cálculo, esperar o sumarse a las **fases del ADR-0028** (la política y el selector).
 8. Línea en `CHANGELOG.md`; si cambió código, ADR y gate en verde; fusionar con `--no-ff` y **sin subir a GitHub** hasta que el dueño lo pida.
 
 Orden razonable de capítulos para 60364: **4** (protección: contactos, sobrecorriente), **5-52** (canalizaciones y conductores), **5-54** (puesta a tierra), **5-53** (aparamenta), luego los **7-xxx** (locales especiales).
