@@ -4,7 +4,7 @@ import Layout from "./Layout";
 import SldInput from "./SldInput";
 import Issuing from "./Issuing";
 import Parties from "./Parties";
-import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, State, useApi, useI18n } from "@epc/ui";
+import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, PdfViewer, State, useApi, useI18n } from "@epc/ui";
 
 /** Engineering workspace of a project: its files, the drawings (every discipline over the plan), the parties, the technical information (single-line data), the design criteria and the issue. Engineer/admin only. */
 export default function Engineering({ client, code, onOpenDeliverables, sub: subParam, onSub, canWrite }: { client: string; code: string; onOpenDeliverables: () => void; sub: string; onSub: (x: string) => void; canWrite: boolean }) {
@@ -66,16 +66,9 @@ function Files({ client, code }: { client: string; code: string }) {
   );
 }
 
-/** A document made as a PDF (a calculation report): shown as it is, with a link to open it on its own. */
+/** A document made as a PDF (a calculation report), shown by the program's PDF reader. */
 function PdfView({ base, f }: { base: string; f: EngFile }) {
-  const { t } = useI18n();
-  const src = `/api${base}/pdf?path=${encodeURIComponent(f.path)}`;
-  return (
-    <>
-      <div className="row" style={{ marginBottom: 8 }}><a className="btn" href={src} target="_blank" rel="noreferrer">{t("eng.openPdf")}</a></div>
-      <iframe key={f.path} src={src} title={f.name} style={{ width: "100%", height: "75vh", border: "1px solid var(--line, #ccc)", borderRadius: 6 }} />
-    </>
-  );
+  return <PdfViewer key={f.path} path={`${base}/pdf?path=${encodeURIComponent(f.path)}`} title={f.name} />;
 }
 
 function SvgView({ base, f }: { base: string; f: EngFile }) {
