@@ -145,6 +145,14 @@ class TestWiring(unittest.TestCase):
         got = sorted((c["family"], c["outlets"]) for c in design.propose_wiring(d, ROOMS)["circuits"])
         self.assertEqual(got, [("IUG", 4), ("TUE", 1), ("TUE", 1), ("TUG", 3)])               # a special socket is a circuit of its own
 
+    def test_the_emergency_luminaires_of_a_room_are_a_circuit_of_their_own_with_the_power_they_say(self):
+        d = self.drawn([BOARD, *lights(ROOMS[0], 3), *lights(ROOMS[0], 2, "LE", "e")])
+        for n in [n for n in d["nodes"] if n["kind"] == "LE"]:
+            n["attrs"] = {"lighting": {"power_w": 3, "power_va": 4}}
+        p = design.propose_wiring(d, ROOMS)
+        got = sorted((c["family"], c["tag"][:3], c["outlets"], c["va"]) for c in p["circuits"])
+        self.assertEqual(got, [("IUE", "IUE", 2, 8.0), ("IUG", "IUG", 3, 300.0)])
+
     def test_tags_skip_the_ones_already_taken_and_the_limits_can_be_changed(self):
         d = self.drawn([BOARD, *lights(ROOMS[0], 4)])
         p = design.propose_wiring(d, ROOMS, {"taken": ["IUG-01", "IUG-02"], "families": {"IUG": {"max_outlets": 2, "va_per_outlet": 150}}})
@@ -157,6 +165,13 @@ class TestWiring(unittest.TestCase):
             if w is not None:
                 n["attrs"] = {"lighting": {"power_w": w}}
         self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [165.5])        # 40 + 25.5 + the 100 VA typical of the third one
+
+    def test_the_apparent_power_of_a_luminaire_wins_over_its_watts(self):
+        d = self.drawn([BOARD, *lights(ROOMS[0], 2)])
+        luminaires = [n for n in d["nodes"] if n["kind"] == "LU"]
+        luminaires[0]["attrs"] = {"lighting": {"power_w": 36, "power_va": 40}}
+        luminaires[1]["attrs"] = {"lighting": {"power_w": 36, "power_va": -1}}                      # not a power: the watts are taken
+        self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [76.0])
 
     def test_a_power_that_is_not_a_positive_number_is_not_taken(self):
         d = self.drawn([BOARD, *lights(ROOMS[0], 2)])

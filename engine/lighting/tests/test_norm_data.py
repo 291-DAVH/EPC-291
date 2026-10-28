@@ -7,6 +7,17 @@ from epc_lighting.model import LightingError
 
 
 class NormDataTest(unittest.TestCase):
+    def setUp(self):
+        """The shipped rules as if none had been reviewed yet, so that approving one in the repository does not break these tests."""
+        from unittest import mock
+        real = json.loads((norm_data.RULES_DIR / "D351-79.rules.json").read_text("utf-8"))["rules"]
+        pending = tuple({**r, "review": "pending"} for r in real)
+        reader = lambda norm_id: pending                                              # noqa: E731
+        reader.cache_clear = lambda: None
+        patcher = mock.patch.object(norm_data, "_rules", reader)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_pending_rules_hidden_by_default(self):
         self.assertEqual(norm_data.rules("D351-79"), [])
 

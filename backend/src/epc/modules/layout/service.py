@@ -132,7 +132,7 @@ def overview(d: Path) -> dict:
 
 
 def _blank() -> dict:
-    return {"discipline": "electrica_BT", "subdiscipline": "", "plan_name": "", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": []}
+    return {"discipline": "electrica_BT", "subdiscipline": "", "plan_name": "", "scale": None, "origin": [0.0, 0.0], "nodes": [], "lines": [], "circuits": [], "outlet": "", "outlet_invert_m": None, "dxf_version": "", "underlay_opts": {}, "rooms": [], "lighting_settings": {}}
 
 
 def view(d: Path, level: str) -> dict:

@@ -13,7 +13,7 @@ from epc_lighting.model import LightingError
 
 LANGUAGES = ("es", "en")
 KINDS = ("interior", "exterior")
-_NOT_IN_DOCUMENT = ("name", "kind", "illustrative", "disabled")
+_NOT_IN_DOCUMENT = ("name", "kind", "illustrative", "disabled", "power_factor", "favorite", "group")          # what the platform keeps about a luminaire and the engine does not read
 
 
 def defaults() -> Dict[str, Dict[str, Any]]:
@@ -43,11 +43,26 @@ def check(lid: str, entry: Any) -> List[str]:
         problems.append(f"{lid}.name: give the name in both languages ({', '.join(LANGUAGES)})")
     if entry.get("kind", "interior") not in KINDS:
         problems.append(f"{lid}.kind: must be one of {', '.join(KINDS)}")
+    problems += _check_extras(lid, entry)
     try:
         parse_luminaire(as_document(lid, entry), "luminaire")
     except LightingError as exc:
         problems.append(str(exc))
     return problems
+
+
+def _check_extras(lid: str, entry: Dict[str, Any]) -> List[str]:
+    """The fields the platform keeps with a luminaire: the power factor of its driver, whether it is a favourite and the group it is listed under."""
+    found = []
+    factor = entry.get("power_factor")
+    if factor is not None and (isinstance(factor, bool) or not isinstance(factor, (int, float)) or not 0 < factor <= 1):
+        found.append(f"{lid}.power_factor: a number above 0 and up to 1")
+    if entry.get("favorite") is not None and not isinstance(entry["favorite"], bool):
+        found.append(f"{lid}.favorite: true or false")
+    group = entry.get("group")
+    if group is not None and (not isinstance(group, str) or len(group) > 40):
+        found.append(f"{lid}.group: text, up to 40 characters")
+    return found
 
 
 def as_document(lid: str, entry: Dict[str, Any], lang: str = "en") -> Dict[str, Any]:

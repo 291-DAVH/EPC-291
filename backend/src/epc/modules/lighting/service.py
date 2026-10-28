@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 from epc.core.errors import Invalid
 from epc.modules.identity import public as identity
 from epc.modules.lighting import geometry, repository
+from epc.modules.lighting.energy import energy_checks
 from epc.modules.lighting.models import CalcIn, PlanRoom, RoomParams
 from epc.modules.norms import public as norms
 from epc.modules.projects import public as projects
@@ -140,7 +141,8 @@ def engine_version() -> str:
 def _luminaire_rows(project_dir: Path, lang: str) -> List[dict]:
     entries, origin = _resolve(project_dir)
     return [{"id": lid, "name": _pick(e.get("name"), lang) or lid, "kind": e.get("kind", "interior"), "lamps": e.get("lamps", 1), "lamp_flux_lm": e.get("lamp_flux_lm"), "power_w": e.get("power_w"),
-             "illustrative": bool(e.get("illustrative")), "level": origin.get(lid, "factory")} for lid, e in entries.items()]
+             "illustrative": bool(e.get("illustrative")), "level": origin.get(lid, "factory"), "power_factor": e.get("power_factor"), "favorite": bool(e.get("favorite")), "group": e.get("group", "")}
+            for lid, e in entries.items()]
 
 
 def options(project_dir: Path, lang: str = "en") -> dict:
@@ -198,9 +200,13 @@ def _calculable(room: PlanRoom, params: Optional[RoomParams], luminaires: Dict[s
     return None
 
 
-def _engine_room(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float) -> dict:
-    length, width = geometry.to_engine(rect, k)
-    body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or default_height, "luminaire": params.luminaire, "method": params.method}
+def _engine_room(room: PlanRoom, params: RoomParams, rect: geometry.Rect, ctx: "_Ctx", drawn: Optional[list] = None) -> dict:
+    length, width = geometry.to_engine(rect, ctx.k)
+    body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or ctx.default_height, "luminaire": params.luminaire, "method": params.method}
+    if drawn:
+        body["positions"] = drawn
+    if params.operating_hours_per_year is None and ctx.hours is not None:
+        body["operating_hours_per_year"] = ctx.hours
     for key in ("activity", "target_lux", "coefficient_of_utilisation", "work_plane_height_m", "operating_hours_per_year", "reflectances", "ugr_calculated"):
         value = getattr(params, key)
         if value not in (None, ""):
@@ -210,8 +216,10 @@ def _engine_room(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: flo
     return body
 
 
-def _engine_area(room: PlanRoom, params: RoomParams, k: float) -> dict:
-    body = {"id": room.id, "name": room.name or room.id, "area_m2": round(geometry.area_m2(room.points, k), 4), "luminaire": params.luminaire, "target_lux": params.target_lux, "enclosure": params.enclosure}
+def _engine_area(room: PlanRoom, params: RoomParams, ctx: "_Ctx") -> dict:
+    body = {"id": room.id, "name": room.name or room.id, "area_m2": round(geometry.area_m2(room.points, ctx.k), 4), "luminaire": params.luminaire, "target_lux": params.target_lux, "enclosure": params.enclosure}
+    if params.operating_hours_per_year is None and ctx.hours is not None:
+        body["operating_hours_per_year"] = ctx.hours
     for key in ("beam_utilisation", "maintenance_factor", "operating_hours_per_year"):
         value = getattr(params, key)
         if value is not None:
@@ -219,9 +227,9 @@ def _engine_area(room: PlanRoom, params: RoomParams, k: float) -> dict:
     return body
 
 
-def _engine_emergency(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float) -> dict:
-    length, width = geometry.to_engine(rect, k)
-    body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or default_height, "luminaire": params.emergency_luminaire}
+def _engine_emergency(room: PlanRoom, params: RoomParams, rect: geometry.Rect, ctx: "_Ctx") -> dict:
+    length, width = geometry.to_engine(rect, ctx.k)
+    body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or ctx.default_height, "luminaire": params.emergency_luminaire}
     if params.emergency_e_min_lux is not None:
         body["e_min_lux"] = params.emergency_e_min_lux
     return body
@@ -257,7 +265,7 @@ def _rule_stamp(rule_id: str) -> Optional[list]:
 def _fingerprint(body: CalcIn, luminaires: Dict[str, dict], used: List[str]) -> str:
     """What a calculation was made from: the rooms, their parameters, the options and the luminaires used. A later change of any of them makes the study stale."""
     rules = {r.norm_rule: _rule_stamp(r.norm_rule) for r in body.rooms.values() if r.norm_rule}                     # a rule that changes or is withdrawn makes the study stale too
-    seen = {"sheet": body.sheet.model_dump(), "rooms": {k: v.model_dump() for k, v in sorted(body.rooms.items())}, "options": body.options.model_dump(), "luminaires": {lid: luminaires[lid] for lid in used}, "rules": rules}
+    seen = {"sheet": body.sheet.model_dump(exclude={"nodes"}), "rooms": {k: v.model_dump() for k, v in sorted(body.rooms.items())}, "options": body.options.model_dump(), "luminaires": {lid: luminaires[lid] for lid in used}, "rules": rules}
     return hashlib.sha256(json.dumps(seen, sort_keys=True).encode("utf-8")).hexdigest()[:16]
 
 
@@ -285,53 +293,79 @@ class _Prepared:
         return sorted({x["luminaire"] for x in self.rooms + self.areas + self.emergency})
 
 
-def _add_room(out: _Prepared, room: PlanRoom, params: RoomParams, k: float, default_height: float, luminaires: Dict[str, dict]) -> None:
+@dataclass
+class _Ctx:
+    """What the rooms of a sheet are prepared with: the scale, the default height and hours, the catalogue and (to check a room as it is drawn) the nodes of the drawing."""
+    k: float
+    default_height: float
+    luminaires: Dict[str, dict]
+    hours: Optional[float] = None
+    nodes: Optional[list] = None
+
+
+def _drawn(out: _Prepared, room: PlanRoom, rect: geometry.Rect, ctx: _Ctx) -> Optional[list]:
+    """The luminaires drawn in a room when the room is checked as it is drawn; None when it is not, and an empty list (the room is left out) when none is drawn in it."""
+    if ctx.nodes is None:
+        return None
+    found = geometry.drawn_positions(ctx.nodes, room.points, rect, ctx.k)
+    if not found:
+        out.skipped.append(_skip(room, "there are no luminaires drawn in this room: apply the luminaires to the plan first"))
+    return found
+
+
+def _add_room(out: _Prepared, room: PlanRoom, params: RoomParams, ctx: _Ctx) -> None:
     try:
         rect = geometry.rectangle(room.points)
     except geometry.GeometryError as exc:
         out.skipped.append(_skip(room, str(exc)))
         return
+    k = ctx.k
     if max(geometry.to_engine(rect, k)) > MAX_ROOM_M:
         out.skipped.append(_skip(room, f"the room is longer than {MAX_ROOM_M:g} m: check the scale of the sheet and the outline"))
         return
     if not rect.exact:
         out.warnings.append(f"room '{room.name or room.id}' is not a rectangle with its sides along the axes: its bounding box was used")
+    drawn = _drawn(out, room, rect, ctx)
+    if drawn is not None and not drawn:
+        return
     out.rects[room.id] = rect
-    out.rooms.append(_engine_room(room, params, rect, k, default_height))
-    _add_emergency(out, room, params, rect, k, default_height, luminaires)
+    out.rooms.append(_engine_room(room, params, rect, ctx, drawn))
+    _add_emergency(out, room, params, rect, ctx)
 
 
-def _add_emergency(out: _Prepared, room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float, luminaires: Dict[str, dict]) -> None:
+def _add_emergency(out: _Prepared, room: PlanRoom, params: RoomParams, rect: geometry.Rect, ctx: _Ctx) -> None:
     if not params.emergency_luminaire:
         return
-    chosen = luminaires.get(params.emergency_luminaire)
+    chosen = ctx.luminaires.get(params.emergency_luminaire)
     if chosen is None or chosen.get("kind", "interior") != "interior":
         out.warnings.append(f"room '{room.name or room.id}': the emergency luminaire '{params.emergency_luminaire}' is not an interior luminaire of the catalogue: no emergency lighting was calculated")
         return
-    out.emergency.append(_engine_emergency(room, params, rect, k, default_height))
+    out.emergency.append(_engine_emergency(room, params, rect, ctx))
 
 
-def _add_area(out: _Prepared, room: PlanRoom, params: RoomParams, k: float) -> None:
-    area = geometry.area_m2(room.points, k)
+def _add_area(out: _Prepared, room: PlanRoom, params: RoomParams, ctx: _Ctx) -> None:
+    area = geometry.area_m2(room.points, ctx.k)
     if area <= 0:
         out.skipped.append(_skip(room, "the outline has no area"))
     elif area > MAX_AREA_M2:
         out.skipped.append(_skip(room, f"the area is larger than {MAX_AREA_M2:g} m²: check the scale of the sheet and the outline"))
     else:
-        out.areas.append(_engine_area(room, params, k))
+        out.areas.append(_engine_area(room, params, ctx))
 
 
 def _prepare(body: CalcIn, k: float, luminaires: Dict[str, dict]) -> _Prepared:
     out = _Prepared()
+    o = body.options
+    ctx = _Ctx(k, o.default_height_m, luminaires, o.hours_default, body.sheet.nodes if o.use_drawn else None)
     for room in body.sheet.rooms:
         params = body.rooms.get(room.id)
         why = _calculable(room, params, luminaires)
         if why:
             out.skipped.append(_skip(room, why))
         elif params.exterior:
-            _add_area(out, room, params, k)
+            _add_area(out, room, params, ctx)
         else:
-            _add_room(out, room, params, k, body.options.default_height_m, luminaires)
+            _add_room(out, room, params, ctx)
     return out
 
 
@@ -368,23 +402,42 @@ def _run(body: CalcIn, prepared: _Prepared, luminaires: Dict[str, dict]) -> dict
         raise Invalid({"lighting": str(exc)})
 
 
-def calc(project_dir: Path, body: CalcIn) -> dict:
-    """Luminaires for the rooms and floodlights for the exterior areas of a sheet. Answers `{result, placements, maps, rooms, areas, skipped, warnings, fingerprint}`; `result` is the engine's (None when nothing could be
-    calculated), `placements` are the luminaires of each room in view units and `maps` (only when asked) the illuminance of the cells of each room."""
+def _scale(body: CalcIn) -> float:
     try:
-        k = geometry.metres_per_unit(body.sheet.scale)
+        return geometry.metres_per_unit(body.sheet.scale)
     except geometry.GeometryError as exc:
         raise Invalid({"scale": str(exc)})
-    luminaires = effective(project_dir)
-    prepared = _prepare(body, k, luminaires)
-    if not (prepared.rooms or prepared.areas):
-        return {"result": None, "placements": {}, "emergency_placements": {}, "maps": {}, "rooms": [], "areas": [], "skipped": prepared.skipped, "fingerprint": "",
-                "warnings": prepared.warnings + ["nothing could be calculated: give each room a luminaire and an activity or a target"]}
+
+
+def _shown(prepared: _Prepared, luminaires: Dict[str, dict]) -> List[dict]:
+    """Each calculated room as the screen needs it: its size, whether it is a rectangle, where its corner is and the power factor of its luminaire and of its emergency luminaire."""
+    escape = {e["id"]: e["luminaire"] for e in prepared.emergency}
+    return [{"id": r["id"], "name": r["name"], "length_m": r["length_m"], "width_m": r["width_m"], "exact": prepared.rects[r["id"]].exact, "corner": geometry.corner(prepared.rects[r["id"]]),
+             "power_factor": luminaires[r["luminaire"]].get("power_factor"), "emergency_power_factor": luminaires.get(escape.get(r["id"], ""), {}).get("power_factor")} for r in prepared.rooms]
+
+
+def _answer(body: CalcIn, prepared: _Prepared, luminaires: Dict[str, dict], k: float) -> dict:
     result = _run(body, prepared, luminaires)
     outlines = {r.id: r.points for r in body.sheet.rooms if r.id in prepared.rects and not prepared.rects[r.id].exact}
     placements, outside = _placements(result["rooms"], prepared.rects, k, outlines)
     escape, escape_outside = _placements(result["emergency"], prepared.rects, k, outlines)
-    shown = [{"id": r["id"], "name": r["name"], "length_m": r["length_m"], "width_m": r["width_m"], "exact": prepared.rects[r["id"]].exact, "corner": geometry.corner(prepared.rects[r["id"]])} for r in prepared.rooms]
-    return {"result": result, "placements": placements, "emergency_placements": escape, "maps": _maps(result, prepared.rects, k, outlines) if body.options.map else {}, "rooms": shown,
-            "areas": [{"id": a["id"], "name": a["name"], "area_m2": a["area_m2"]} for a in prepared.areas], "skipped": prepared.skipped,
+    return {"result": result, "placements": placements, "emergency_placements": escape, "maps": _maps(result, prepared.rects, k, outlines) if body.options.map else {}, "rooms": _shown(prepared, luminaires),
+            "areas": [{"id": a["id"], "name": a["name"], "area_m2": a["area_m2"]} for a in prepared.areas], "skipped": prepared.skipped, "energy_checks": energy_checks(result, body.options),
             "warnings": prepared.warnings + list(result["warnings"]) + outside + escape_outside, "fingerprint": _fingerprint(body, luminaires, prepared.used())}
+
+
+def calc(project_dir: Path, body: CalcIn) -> dict:
+    """Luminaires for the rooms and floodlights for the exterior areas of a sheet. Answers `{result, placements, maps, rooms, areas, skipped, warnings, fingerprint}`; `result` is the engine's (None when nothing could be
+    calculated), `placements` are the luminaires of each room in view units and `maps` (only when asked) the illuminance of the cells of each room."""
+    k = _scale(body)
+    luminaires = effective(project_dir)
+    notes: List[str] = []
+    if body.options.auto_luminaire:
+        from epc.modules.lighting import compare
+        body, notes = compare.apply_auto(project_dir, body)
+    prepared = _prepare(body, k, luminaires)
+    prepared.warnings[:0] = notes
+    if prepared.rooms or prepared.areas:
+        return _answer(body, prepared, luminaires, k)
+    return {"result": None, "placements": {}, "emergency_placements": {}, "energy_checks": {}, "maps": {}, "rooms": [], "areas": [], "skipped": prepared.skipped, "fingerprint": "",
+            "warnings": prepared.warnings + ["nothing could be calculated: give each room a luminaire and an activity or a target"]}

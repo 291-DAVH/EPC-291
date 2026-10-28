@@ -6,6 +6,7 @@
   "occupancy": {"default_cable_mm": 14.0, "tray_pct": 50, "conduit_pct": {"1": 53, "2": 31, "many": 40}, "note": "Typical fill limits and cable diameter; confirm against the standard of the project."},
   "design": {"note": "Typical limits and powers for the automatic design of circuits; confirm them against the standard of the project (the families are those of the profile: lighting, general sockets, special sockets, air conditioning).",
              "families": {"IUG": {"prefix": "IUG", "max_outlets": 15, "va_per_outlet": 100, "label": {"es": "Iluminación", "en": "Lighting"}},
+                         "IUE": {"prefix": "IUE", "max_outlets": 15, "va_per_outlet": 10, "label": {"es": "Iluminación de emergencia", "en": "Emergency lighting"}},
                           "TUG": {"prefix": "TUG", "max_outlets": 15, "va_per_outlet": 100, "label": {"es": "Tomas generales", "en": "General sockets"}},
                           "TUE": {"prefix": "TUE", "max_outlets": 1, "va_per_outlet": 2200, "label": {"es": "Toma especial", "en": "Special socket"}},
                           "ACU": {"prefix": "ACU", "max_outlets": 1, "va_per_outlet": 1500, "label": {"es": "Climatización", "en": "Air conditioning"}}}},

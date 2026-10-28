@@ -154,6 +154,22 @@ def _parse_normal(raw: Any, path: str) -> Tuple[float, float, float]:
     return (vec[0] / norm, vec[1] / norm, vec[2] / norm)
 
 
+def _parse_positions(raw: Any, width: float, length: float, path: str) -> Tuple[Tuple[float, float, Optional[float], Optional[str]], ...]:
+    """Luminaires that are already placed (for example drawn on a plan): the room is then checked as it is, not as the engine would arrange it."""
+    if raw is None:
+        return ()
+    if not isinstance(raw, list) or not raw:
+        _fail(path, "must be a non-empty list of luminaires {x_m, y_m}")
+    if len(raw) > 2000:
+        _fail(path, f"has {len(raw)} luminaires: up to 2000")
+    found = []
+    for i, p in enumerate(raw):
+        here = f"{path}[{i}]"
+        p = _object(p, here)
+        found.append((_num(p, "x_m", here, required=True, minimum=0, maximum=length), _num(p, "y_m", here, required=True, minimum=0, maximum=width), _num(p, "z_m", here, positive=True), _text(p, "tag", here)))
+    return tuple(found)
+
+
 def _parse_points(raw: Any, width: float, length: float, path: str) -> Tuple[PointSpec, ...]:
     if raw is None:
         return ()
@@ -215,6 +231,7 @@ def parse_room(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Room:
         operating_hours=_num(raw, "operating_hours_per_year", here, minimum=0, maximum=8760),
         ugr_calculated=_num(raw, "ugr_calculated", here, minimum=0),
         target_rule=rule,
+        positions=_parse_positions(raw.get("positions"), width, length, f"{here}.positions"),
     )
 
 

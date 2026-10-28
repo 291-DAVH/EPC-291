@@ -1,27 +1,34 @@
 import { Badge, Icon, Key, useI18n } from "@epc/ui";
 import type { Drawing } from "./planEditing";
-import { AreaResult, areaCardOf, Card, cardOf, EmergencyResult, emergencyCardOf, hasPlacements, LightingStudy, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
+import { CompareRow, CompareTable, RoomTools, SettingsBox } from "./LightingExtras";
+import { exportMapPng } from "./lightMapExport";
+import { settingsOf } from "./lightingTools";
+import { AreaResult, areaCardOf, Card, cardOf, EmergencyResult, emergencyCardOf, EnergyCheck, hasPlacements, isDrawn, LightingStudy, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
 
 /** Lighting: for each room marked on the plan, what it is for and which luminaire; the program calculates how many go in and where, and shows it over the plan and as a card per room until the
  *  person decides. The numbers are the backend's (`epc_lighting`); this panel only asks and shows. */
 interface Props {
   drawing: Drawing; options: LightingOptions | undefined; proposal: LightingProposal | null; busy: boolean; canWrite: boolean;
-  onChange: (d: Drawing) => void; onCalc: () => void; onApply: () => void; showMap: boolean; onMap: (on: boolean) => void; applied: string; study: LightingStudy | undefined; onReport: () => void; reported: string; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
+  onChange: (d: Drawing) => void; onCalc: () => void; onApply: () => void; showMap: boolean; onMap: (on: boolean) => void; onVerify: () => void; compare: { room: string; options: CompareRow[]; best: string | null } | null; onCompare: (room: string) => void; onUse: (room: string, luminaire: string) => void; onCloseCompare: () => void; studyError: string; applied: string; study: LightingStudy | undefined; onReport: () => void; reported: string; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
 }
 
 const ESTIMATES = ["target", "cu", "maintenance", "ceiling", "walls", "floor"];
 
-export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onApply, showMap, onMap, applied, study, onReport, reported, onDiscard, onNewRoom, onLook }: Props) {
+export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onApply, showMap, onMap, onVerify, compare, onCompare, onUse, onCloseCompare, studyError, applied, study, onReport, reported, onDiscard, onNewRoom, onLook }: Props) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   const rooms = drawing.rooms ?? [];
   const interior = (options?.luminaires ?? []).filter((l) => l.kind === "interior");
   const exterior = (options?.luminaires ?? []).filter((l) => l.kind === "exterior");
   const set = (id: string, patch: Partial<Record<keyof RoomLighting, unknown>>) => onChange(setRoomLighting(drawing, id, patch));
-  const ready = rooms.some((r) => isReady(r.lighting));
+  const auto = !!settingsOf(drawing).auto_luminaire;
+  const ready = rooms.some((r) => isReady(r.lighting, auto));
+  const hasDrawn = drawing.nodes.some((n) => n.kind === "LU");
   return (
     <div className="lighting">
       <p className="muted small" style={{ margin: "0 0 8px" }}>{tl("light.help")}</p>
+      {studyError && <div className="alert bad small" style={{ marginBottom: 8 }}>{studyError}</div>}
+      <SettingsBox drawing={drawing} canWrite={canWrite} onChange={onChange} />
       {!drawing.scale && <div className="alert warn small">{tl("light.needScale")}</div>}
       {rooms.length === 0 && <p className="muted small">{tl("design.noRooms")}</p>}
       <ul className="coord-list">
@@ -79,6 +86,8 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
               {activity && !l.norm_rule && <div className="small muted" title={activity.source}>{tl("light.targetFrom")}: {activity.source}</div>}
               {l.norm_rule && !l.target_lux && <div className="small muted">{tl("light.targetFrom")}: {options?.norm_rules?.find((n) => n.id === l.norm_rule)?.norm ?? ""} · {options?.norm_rules?.find((n) => n.id === l.norm_rule)?.clause ?? l.norm_rule}</div>}
               {lum?.illustrative && <div className="small muted">{tl("light.illustrative")}</div>}
+              <RoomTools drawing={drawing} roomId={r.id} activities={options?.activities ?? []} canWrite={canWrite} onChange={onChange} onCompare={() => onCompare(r.id)} comparable={isReady({ ...l, luminaire: l.luminaire || "-" })} />
+              {compare?.room === r.id && <CompareTable rows={compare.options} best={compare.best} onUse={(id) => onUse(r.id, id)} onClose={onCloseCompare} />}
             </li>
           );
         })}
@@ -86,6 +95,7 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
       {canWrite && <button onClick={onNewRoom}><Icon name="room" size={14} /> {tl("design.newRoom")}</button>}
       {canWrite && <div className="row" style={{ gap: 6, marginTop: 8 }}>
         <button className="primary" disabled={busy || !drawing.scale || !ready} onClick={onCalc}>{busy ? tl("design.working") : tl("light.calc")}</button>
+        {hasDrawn && <button disabled={busy || !drawing.scale || !ready} onClick={onVerify} title={tl("light.verifyHelp")}>{tl("light.verify")}</button>}
         {proposal && hasPlacements(proposal) && <button className="primary" onClick={onApply}>{tl("light.apply")}</button>}
         <label className="small"><input type="checkbox" checked={showMap} onChange={(e) => onMap(e.target.checked)} /> {tl("light.map")}</label>
         {proposal && <button onClick={onDiscard}>{tl("design.discard")}</button>}
@@ -102,11 +112,13 @@ function Result({ proposal }: { proposal: LightingProposal }) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   const cards = (proposal.result?.rooms ?? []).map(cardOf);
+  const energy = proposal.energy_checks ?? {};
   return (
     <div style={{ marginTop: 10 }}>
       {proposal.skipped.map((s) => <div key={s.id} className="alert small" style={{ margin: "4px 0" }}><b>{s.name || s.id}</b>: {s.reason}</div>)}
-      {cards.map((c) => <RoomCard key={c.id} c={c} />)}
-      {(proposal.result?.areas ?? []).map((a) => <AreaCard key={a.id} a={a} />)}
+      {isDrawn(proposal) && <div className="alert small" style={{ margin: "4px 0" }}>{tl("light.drawnNote")}</div>}
+      {cards.map((c) => <RoomCard key={c.id} c={c} energy={energy[c.id]} />)}
+      {(proposal.result?.areas ?? []).map((a) => <AreaCard key={a.id} a={a} energy={energy[a.id]} />)}
       {(proposal.result?.emergency ?? []).map((e) => <EmergencyCard key={e.id} e={e} />)}
       {Object.keys(proposal.maps ?? {}).length > 0 && <MapLegend proposal={proposal} />}
       {proposal.warnings.length > 0 && (
@@ -118,7 +130,7 @@ function Result({ proposal }: { proposal: LightingProposal }) {
   );
 }
 
-function RoomCard({ c }: { c: Card }) {
+function RoomCard({ c, energy }: { c: Card; energy?: EnergyCheck }) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   return (
@@ -128,7 +140,9 @@ function RoomCard({ c }: { c: Card }) {
         <Badge tone={c.complies ? "ok" : "bad"}>{c.complies ? tl("light.meets") : tl("light.notMeets")}</Badge>
       </div>
       <div className="small">{c.average.toFixed(0)} lx {c.complies ? "≥" : "<"} {c.target.toFixed(0)} lx ({c.margin > 0 ? "+" : ""}{c.margin.toFixed(1)} %)</div>
-      <div className="small">{c.installed} {tl("light.luminaires")} ({tl("light.needed")}: {c.required})</div>
+      <div className="small">{c.installed} {c.drawn ? tl("light.drawn") : tl("light.luminaires")} ({tl("light.needed")}: {c.required})</div>
+      {c.source && <div className="small muted" title={c.source}>{tl("light.targetFrom")}: {c.source.length > 70 ? c.source.slice(0, 70) + "…" : c.source}</div>}
+      <EnergyLine energy={energy} />
       <div className="small muted">
         {c.spacing !== "na" && <>{tl("light.spacing")}: {tl(`light.spacing.${c.spacing}`)} · </>}
         {c.uniformity !== null && <>{tl("light.uniformity")}: {c.uniformity.toFixed(2)} · </>}
@@ -161,7 +175,7 @@ function Study({ study, canWrite, reported, onReport }: { study: LightingStudy; 
   );
 }
 
-function AreaCard({ a }: { a: AreaResult }) {
+function AreaCard({ a, energy }: { a: AreaResult; energy?: EnergyCheck }) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   const c = areaCardOf(a);
@@ -174,6 +188,7 @@ function AreaCard({ a }: { a: AreaResult }) {
       </div>
       <div className="small">{c.average.toFixed(0)} lx {c.complies ? "≥" : "<"} {c.target.toFixed(0)} lx ({c.margin > 0 ? "+" : ""}{c.margin.toFixed(1)} %)</div>
       <div className="small">{tl("light.floodlights")}: {c.floodlights} · {c.area_m2.toFixed(0)} m²{c.power_w !== null && <> · {c.power_w.toFixed(0)} W</>}</div>
+      <EnergyLine energy={energy} />
       <div className="small muted">{tl("light.floodlightsNote")}</div>
       {c.unsure.length > 0 && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.confirm")}: {c.unsure.map((k) => tl(`light.est.${k}`)).join(", ")}</div>}
     </div>
@@ -183,12 +198,16 @@ function AreaCard({ a }: { a: AreaResult }) {
 /** The scale of the colours of the illuminance map: from the darkest cell of the rooms to the brightest. */
 function MapLegend({ proposal }: { proposal: LightingProposal }) {
   const { t } = useI18n();
+  const tl = (k: string) => t(k as Key);
   const maps = Object.values(proposal.maps ?? {});
   const low = Math.min(...maps.map((m) => m.min)), high = Math.max(...maps.map((m) => m.max));
   return (
     <div className="small" style={{ margin: "6px 0" }}>
       <div style={{ height: 8, borderRadius: 4, background: "linear-gradient(to right, hsl(240 80% 50%), hsl(120 80% 50%), hsl(0 80% 50%))" }} />
       <div className="row" style={{ justifyContent: "space-between" }}><span>{low.toFixed(0)} lx</span><span>{t("light.map" as Key)}</span><span>{high.toFixed(0)} lx</span></div>
+      <div className="row" style={{ gap: 4, flexWrap: "wrap", marginTop: 4 }}>
+        {Object.entries(proposal.maps ?? {}).map(([id, m]) => <button key={id} onClick={() => exportMapPng(m, `${tl("light.map")}_${proposal.result?.rooms.find((r) => r.id === id)?.name ?? id}`)}>{tl("light.exportMap")}: {proposal.result?.rooms.find((r) => r.id === id)?.name ?? id}</button>)}
+      </div>
     </div>
   );
 }
@@ -207,6 +226,19 @@ function EmergencyCard({ e }: { e: EmergencyResult }) {
       <div className="small">{c.installed} {tl("light.luminaires")}{c.min !== null && <> · {c.min.toFixed(2)} lx min{c.ratio !== null && <> · max/min {c.ratio.toFixed(1)}</>}</>}{c.routes > 0 && <> · {tl("light.routes")}: {c.routesOk}/{c.routes}</>}</div>
       <div className="small muted">{tl("light.emergencyNote")}</div>
       {c.unsure.length > 0 && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.confirm")}: {c.unsure.map((k) => tl(`light.est.${k}`)).join(", ")}</div>}
+    </div>
+  );
+}
+
+/** What the installed power means: against the limit the person set, and the energy and cost of a year when the hours and the tariff are known. */
+function EnergyLine({ energy }: { energy?: EnergyCheck }) {
+  const { t } = useI18n();
+  const tl = (k: string) => t(k as Key);
+  if (!energy || (energy.limit_w_m2 === null && energy.annual_kwh === null)) return null;
+  return (
+    <div className="small muted">
+      {energy.limit_w_m2 !== null && <>{energy.density_w_m2?.toFixed(1)} W/m² {energy.complies ? "≤" : ">"} {energy.limit_w_m2} <Badge tone={energy.complies ? "ok" : "bad"}>{energy.complies ? tl("light.underLimit") : tl("light.overLimit")}</Badge> </>}
+      {energy.annual_kwh !== null && <>{energy.annual_kwh.toFixed(0)} kWh/{tl("light.year")}</>}{energy.annual_cost !== null && <> · {energy.annual_cost.toFixed(2)}</>}
     </div>
   );
 }

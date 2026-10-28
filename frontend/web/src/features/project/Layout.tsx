@@ -5,6 +5,9 @@ import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
+import type { CompareRow } from "./LightingExtras";
+import { setRoomLighting } from "./lightingApi";
+import { setSetting } from "./lightingTools";
 import { applyLighting, emergencyMarksOf, LightingOptions, mapsOf, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
 import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
@@ -70,7 +73,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [runs, setRuns] = useState<RunsProposal | null>(null);
   const [lighting, setLighting] = useState<LightingProposal | null>(null);          // luminaires proposed for the rooms, shown over the plan until the person decides
   const [lightBusy, setLightBusy] = useState(false);
-  const [lightMap, setLightMap] = useState(false);                                // also draw the illuminance of the rooms over the plan
+  const lightMap = !!drawing.lighting_settings?.map;                              // also draw the illuminance of the rooms over the plan: the sheet remembers it
+  const [lightCompare, setLightCompare] = useState<{ room: string; options: CompareRow[]; best: string | null } | null>(null);
+  const [studyError, setStudyError] = useState("");
   const [lightApplied, setLightApplied] = useState("");
   const [studyRev, setStudyRev] = useState(0);
   const [reported, setReported] = useState("");
@@ -234,13 +239,18 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     } catch (x) { setErr(errorText(x)); }
     setDesignBusy(false);
   };
-  const calcLighting = async (on?: boolean) => {
+  const calcLighting = async (on?: boolean, drawn = false) => {
     setLightBusy(true);
-    try { setLighting(await api<LightingProposal>(`/projects/${client}/${code}/lighting/calc`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang, { map: on ?? lightMap })) })); setErr(""); } catch (x) { setErr(errorText(x)); }
+    try { setLighting(await api<LightingProposal>(`/projects/${client}/${code}/lighting/calc`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang, { map: on ?? lightMap, use_drawn: drawn })) })); setErr(""); } catch (x) { setErr(errorText(x)); }
     setLightBusy(false);
   };
   const lightKey = useMemo(() => JSON.stringify(requestOf(drawing, lang)), [drawing, lang]);
   useEffect(() => { setLighting(null); setLightApplied(""); }, [level, discipline, lightKey]);        // a proposal is only good for the rooms and parameters it was calculated with
+  const verifyLighting = () => calcLighting(undefined, true);
+  const compareLight = async (room: string) => {
+    try { const r = await api<{ options: CompareRow[]; best: string | null }>(`/projects/${client}/${code}/lighting/compare`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ ...requestOf(drawing, lang), room }) }); setLightCompare({ room, options: r.options, best: r.best }); setErr(""); } catch (x) { setErr(errorText(x)); }
+  };
+  const useLuminaire = (room: string, luminaire: string) => { change(setRoomLighting(drawing, room, { luminaire })); setLightCompare(null); };
   const applyLight = () => {
     if (!lighting) return;
     const out = applyLighting(drawing, lighting);
@@ -250,10 +260,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     keepStudy();
   };
   const keepStudy = async () => {                                      // what was applied is kept as the study of the sheet (the one its report is made from)
-    try { await api(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(""); } catch (x) { setErr(errorText(x)); }
+    try { await api(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(""); setStudyError(""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
   };
   const makeReport = async () => {
-    try { const r = await api<{ file: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}/report?lang=${lang}`, { method: "POST" }); setReported(tl("light.reported").replace("{file}", r.file)); setStudyRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
+    try { const r = await api<{ file: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}/report?lang=${lang}`, { method: "POST" }); setReported(tl("light.reported").replace("{file}", r.file)); setStudyRev((n) => n + 1); setStudyError(""); } catch (x) { setStudyError(tl("light.studyError") + " " + errorText(x)); }
   };
   const proposeRuns = () => designCall<RunsProposal>("runs", setRuns);
   const proposeWiring = () => designCall<Proposal>("wiring", setProposal);
@@ -425,7 +435,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
-              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={() => calcLighting()} showMap={lightMap} onMap={(on) => { setLightMap(on); if (lighting) calcLighting(on); }} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} onReport={makeReport} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
+              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={() => calcLighting()} showMap={lightMap} onMap={(on) => { change(setSetting(drawing, "map", on)); if (lighting) calcLighting(on); }} onVerify={verifyLighting} compare={lightCompare} onCompare={compareLight} onUse={useLuminaire} onCloseCompare={() => setLightCompare(null)} studyError={studyError || (study.error ? tl("light.studyError") + " " + String(study.error) : "")} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} onReport={makeReport} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}

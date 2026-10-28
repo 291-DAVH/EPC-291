@@ -111,8 +111,19 @@ def _positions(rows: int, cols: int, room: Room, z: float, tags: Iterator[int]) 
     ]
 
 
+def _drawn(room: Room, n_required: int, h: float, tags: Iterator[int]) -> Dict[str, Any]:
+    """The luminaires the person placed, as the layout of the room: there is no grid or spacing to speak of, only how many there are and where."""
+    z_default = room.work_plane_m + h
+    positions = [{"tag": tag or f"LU-{next(tags):03d}", "x_m": rnd(x), "y_m": rnd(y), "z_m": rnd(z if z is not None else z_default)} for x, y, z, tag in room.positions]
+    note = {"checked": False, "reason": "the luminaires are the ones already placed: there is no grid to check"}
+    return {"drawn": True, "rows_across_width": 0, "columns_along_length": 0, "installed": len(positions), "required": n_required, "max_spacing": None,
+            "spacing_check": {"along_length": note, "across_width": note}, "positions": positions}
+
+
 def plan(room: Room, lum: Luminaire, n_required: int, h: float, options: Options, tags: Iterator[int], warnings: List[str]) -> Dict[str, Any]:
-    """The grid for the room, its spacing checks and the position of every luminaire."""
+    """The grid for the room, its spacing checks and the position of every luminaire (or, when the room brings its own luminaires, those)."""
+    if room.positions:
+        return _drawn(room, n_required, h, tags)
     rows, cols = grid_counts(n_required, room.width_m, room.length_m)
     ratio = spacing_ratio(room, lum, options)
     if options.enforce_spacing:

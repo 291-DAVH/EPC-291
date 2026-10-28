@@ -23,9 +23,20 @@ class PlanRoom(Strict):
     points: List[List[float]] = Field(min_length=3, max_length=500)
 
 
+class PlanNode(Strict):
+    """An element of the drawing that may be a luminaire (`LU`): where it is and what the calculation said of it when it was placed."""
+    id: str = Field(min_length=1, max_length=64)
+    kind: str = Field(max_length=16)
+    x: float
+    y: float
+    tag: str = Field("", max_length=40)
+    attrs: Dict[str, Any] = {}
+
+
 class Sheet(Strict):
     scale: Optional[Scale] = None
     rooms: List[PlanRoom] = Field([], max_length=500)
+    nodes: List[PlanNode] = Field([], max_length=5000)                      # only read to check the room as it is drawn (`use_drawn`)
 
 
 class RoomParams(Strict):
@@ -54,6 +65,11 @@ class CalcOptions(Strict):
     enforce_spacing: bool = False
     spacing_basis: Literal["height", "distribution"] = "height"
     compute_points: bool = True
+    use_drawn: bool = False                                              # check each room with the luminaires drawn in it, not with the grid the engine would arrange
+    auto_luminaire: bool = False                                         # choose the luminaire of a room that has a target but no luminaire: the one that complies with the least power
+    power_limit_w_m2: Optional[float] = Field(None, gt=0, le=1000)       # installed power density that a room should not exceed (the person's, the engine has none)
+    kwh_price: Optional[float] = Field(None, ge=0, le=100000)
+    hours_default: Optional[float] = Field(None, ge=0, le=8760)          # operating hours per year of the rooms that do not say their own
     map: bool = False                                                    # also give the illuminance of every cell of the grid, to draw it over the plan
     point_step_m: float = Field(0.5, gt=0, le=5)
     default_height_m: float = Field(2.6, gt=0, le=60)                    # for a room whose height was not given
@@ -64,6 +80,11 @@ class CalcIn(Strict):
     rooms: Dict[str, RoomParams] = {}                                    # by room id
     options: CalcOptions = CalcOptions()
     lang: Literal["es", "en"] = "en"
+
+
+class CompareIn(CalcIn):
+    """The calculation of one room with each luminaire of the catalogue in turn."""
+    room: str = Field(min_length=1, max_length=64)
 
 
 class LuminairesIn(BaseModel):

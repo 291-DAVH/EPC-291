@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from epc.modules.lighting import service, study
-from epc.modules.lighting.models import CalcIn, LuminairesIn
+from epc.modules.lighting import compare, service, study
+from epc.modules.lighting.models import CalcIn, CompareIn, LuminairesIn
 from epc.modules.projects import public as projects
 
 router = APIRouter(prefix="/api/projects/{client}/{code}/lighting")
@@ -18,6 +18,12 @@ def options(client: str, code: str, lang: str = "en"):
 def calc(client: str, code: str, body: CalcIn):
     """Luminaires for the rooms of a sheet, as a proposal (nothing is saved)."""
     return service.calc(projects.get_project_dir(client, code), body)
+
+
+@router.post("/compare")
+def compare_luminaires(client: str, code: str, body: CompareIn):
+    """One room calculated with each luminaire of the catalogue, best first: what to choose, not a change."""
+    return compare.compare(projects.get_project_dir(client, code), body)
 
 
 @router.get("/study/{sheet}")

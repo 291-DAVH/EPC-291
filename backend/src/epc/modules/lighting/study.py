@@ -14,8 +14,10 @@ from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import read_json, write_json
 from epc.modules.identity import public as identity
 from epc.modules.layout import public as layout
-from epc.modules.lighting import report, service
+from epc.modules.lighting import figures, report, service
+from epc.modules.lighting.energy import energy_checks
 from epc.modules.lighting.models import CalcIn, CalcOptions, PlanRoom, RoomParams, Sheet
+from epc.modules.masterdata import public as masterdata
 from epc.modules.projects import public as projects
 
 FILE = "lighting.json"
@@ -44,7 +46,7 @@ def save(d: Path, sheet: str, body: CalcIn) -> dict:
     out = service.calc(d, body)
     if out["result"] is None:
         raise Invalid({"study": "no room could be calculated: give each one a luminaire and an activity or a target"})
-    stored = {"schema_version": "1.0", "sheet": sheet, "saved_at": clock.now_local(), "saved_by": _who(), "input": body.model_dump(), **{k: out[k] for k in KEPT if k in out}}
+    stored = {"schema_version": "1.0", "sheet": sheet, "saved_at": clock.now_local(), "saved_by": _who(), "input": body.model_dump(exclude={"sheet": {"nodes"}}), **{k: out[k] for k in KEPT if k in out}}
     write_json(_path(d, sheet), stored)
     identity.audit_event("lighting_study_saved", target=f"{projects.project_id(d)}:{sheet}", org_slug=projects.read_meta(d).get("org", ""), detail={"rooms": len(out["result"]["rooms"])})
     return view(d, sheet)
@@ -79,6 +81,16 @@ def view(d: Path, sheet: str) -> dict:
     return {"exists": True, "sheet": sheet, "stale": _stale(d, sheet, stored), "report": report_path(d, sheet).is_file(), **{k: stored[k] for k in KEPT}}
 
 
+def _extras(d: Path, stored: dict, lang: str) -> dict:
+    """What the report has besides the study: the title block of the project, the energy against what the person set and the plan of the sheet with the luminaires and the illuminance of its rooms (calculated again
+    from what the study was made from, so the figures are the ones of the study)."""
+    asked = CalcIn(**stored["input"])
+    fresh = service.calc(d, asked.model_copy(update={"options": asked.options.model_copy(update={"map": True})}))
+    t = report.TEXT["es" if lang == "es" else "en"]
+    outlines = [{"id": r.id, "name": r.name, "points": r.points} for r in asked.sheet.rooms]
+    return {"titleblock": masterdata.titleblock(d, "electrical"), "energy_checks": energy_checks(stored["result"], asked.options), "figure": figures.sheet_figure(outlines, fresh, t["figure"], t["scale"])}
+
+
 def make_report(d: Path, sheet: str, lang: str) -> dict:
     """The report of the study as a PDF in the documents of the engineering workspace. A stale study has none: calculate it again first."""
     stored = read_json(_path(d, sheet), None)
@@ -91,7 +103,7 @@ def make_report(d: Path, sheet: str, lang: str) -> dict:
     names = {lid: service.label(luminaires[lid], lang) for lid in used if lid in luminaires}
     meta = projects.read_meta(d)
     doc = report.document(stored, {"code": meta.get("project_code", ""), "name": meta.get("project_name", "")}, lang, names,
-                          any(luminaires.get(lid, {}).get("illustrative") for lid in used), service.engine_version())
+                          any(luminaires.get(lid, {}).get("illustrative") for lid in used), service.engine_version(), _extras(d, stored, lang))
     dst = report_path(d, sheet)
     dst.parent.mkdir(parents=True, exist_ok=True)
     try:
