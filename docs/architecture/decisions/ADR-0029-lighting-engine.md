@@ -14,6 +14,6 @@ A lighting engine was built apart (another chat, following `docs/architecture/GU
 
 ## Consequences
 - (+) A real lighting calculation with its worked examples (158 tests), usable from the backend, the plugins and, later, the plan editor (luminaire positions and tags come out as data).
-- (-) **Overlap kept on purpose for now:** `epc_aea90364.lighting` stays because it holds what `epc_lighting` does not do yet (antipanic emergency lighting, escape-route illuminance, the UGR check). When that is ported to the new engine the old module and its test are removed (ADR-0028, phase 3).
+- (-) **Overlap kept on purpose for a while:** `epc_aea90364.lighting` stayed because it held what `epc_lighting` did not do yet (antipanic emergency lighting, escape-route illuminance, the UGR check). That was ported with the same worked cases in ADR-0030 phase 6 and the old module and its test were removed (ADR-0028, phase 3).
 - (-) The rules of `D351-79` keep their review state **inside** the rules file (`review: pending|approved`), unlike the norm packages, whose review state is a separate file with the fingerprint of each approved value (ADR-0011). When the norm selector of ADR-0028 is built, `D351-79` becomes a norm package of its own (named after the norm, complete by itself) and its review goes through the same screen.
 - Open: no backend module, no screen and no plugin yet; interior rooms are rectangular only; no daylight, no UGR, no inter-reflections, no photometry-driven placement (see the engine's README, "Known limits").

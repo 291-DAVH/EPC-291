@@ -44,6 +44,9 @@ class RoomParams(Strict):
     beam_utilisation: Optional[float] = Field(None, gt=0, le=1)
     enclosure: Literal["open", "closed"] = "open"
     maintenance_factor: Optional[float] = Field(None, gt=0, le=1)
+    emergency_luminaire: str = Field("", max_length=64)                    # an interior luminaire for the antipanic emergency lighting of the room: the grid that keeps the minimum illuminance on the floor
+    emergency_e_min_lux: Optional[float] = Field(None, gt=0, le=1000)
+    ugr_calculated: Optional[float] = Field(None, ge=0, le=100)           # the UGR of the room calculated outside: it is compared with the limit of the activity
 
 
 class CalcOptions(Strict):

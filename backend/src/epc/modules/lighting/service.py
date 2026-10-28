@@ -175,7 +175,7 @@ def _calculable(room: PlanRoom, params: Optional[RoomParams], luminaires: Dict[s
 def _engine_room(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float) -> dict:
     length, width = geometry.to_engine(rect, k)
     body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or default_height, "luminaire": params.luminaire, "method": params.method}
-    for key in ("activity", "target_lux", "coefficient_of_utilisation", "work_plane_height_m", "operating_hours_per_year", "reflectances"):
+    for key in ("activity", "target_lux", "coefficient_of_utilisation", "work_plane_height_m", "operating_hours_per_year", "reflectances", "ugr_calculated"):
         value = getattr(params, key)
         if value not in (None, ""):
             body[key] = value
@@ -191,15 +191,24 @@ def _engine_area(room: PlanRoom, params: RoomParams, k: float) -> dict:
     return body
 
 
-def _document(body: CalcIn, rooms: List[dict], areas: List[dict], used: List[str], luminaires: Dict[str, dict]) -> dict:
+def _engine_emergency(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float) -> dict:
+    length, width = geometry.to_engine(rect, k)
+    body = {"id": room.id, "name": room.name or room.id, "width_m": width, "length_m": length, "height_m": params.height_m or default_height, "luminaire": params.emergency_luminaire}
+    if params.emergency_e_min_lux is not None:
+        body["e_min_lux"] = params.emergency_e_min_lux
+    return body
+
+
+def _document(body: CalcIn, prepared: "_Prepared", luminaires: Dict[str, dict]) -> dict:
     _, catalogue = _engine()
-    return {"schema_version": "1.0", "luminaires": [catalogue.as_document(lid, luminaires[lid], body.lang) for lid in used], "rooms": rooms, "areas": areas}
+    return {"schema_version": "1.0", "luminaires": [catalogue.as_document(lid, luminaires[lid], body.lang) for lid in prepared.used()], "rooms": prepared.rooms, "areas": prepared.areas, "emergency": prepared.emergency}
 
 
-def _placements(result: dict, rects: Dict[str, geometry.Rect], k: float, outlines: Dict[str, list]) -> tuple:
-    """The luminaires of each room as points of the view (the engine's tag is kept to follow them back), and a warning for each room whose outline is not its rectangle and left some of them outside."""
+def _placements(items: List[dict], rects: Dict[str, geometry.Rect], k: float, outlines: Dict[str, list]) -> tuple:
+    """The luminaires of each room (or its emergency luminaires) as points of the view (the engine's tag is kept to follow them back), and a warning for each room whose outline is not its rectangle
+    and left some of them outside."""
     out, warnings = {}, []
-    for room in result["rooms"]:
+    for room in items:
         points = []
         for p in room["layout"]["positions"]:
             x, y = geometry.to_view(rects[room["id"]], k, p["x_m"], p["y_m"])
@@ -233,15 +242,16 @@ class _Prepared:
     """What the sheet gives the engine: its rooms and exterior areas, the rectangle of each room, what was left out and the warnings of the geometry."""
     rooms: List[dict] = field(default_factory=list)
     areas: List[dict] = field(default_factory=list)
+    emergency: List[dict] = field(default_factory=list)
     rects: Dict[str, geometry.Rect] = field(default_factory=dict)
     skipped: List[dict] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
     def used(self) -> List[str]:
-        return sorted({x["luminaire"] for x in self.rooms + self.areas})
+        return sorted({x["luminaire"] for x in self.rooms + self.areas + self.emergency})
 
 
-def _add_room(out: _Prepared, room: PlanRoom, params: RoomParams, k: float, default_height: float) -> None:
+def _add_room(out: _Prepared, room: PlanRoom, params: RoomParams, k: float, default_height: float, luminaires: Dict[str, dict]) -> None:
     try:
         rect = geometry.rectangle(room.points)
     except geometry.GeometryError as exc:
@@ -254,6 +264,17 @@ def _add_room(out: _Prepared, room: PlanRoom, params: RoomParams, k: float, defa
         out.warnings.append(f"room '{room.name or room.id}' is not a rectangle with its sides along the axes: its bounding box was used")
     out.rects[room.id] = rect
     out.rooms.append(_engine_room(room, params, rect, k, default_height))
+    _add_emergency(out, room, params, rect, k, default_height, luminaires)
+
+
+def _add_emergency(out: _Prepared, room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: float, default_height: float, luminaires: Dict[str, dict]) -> None:
+    if not params.emergency_luminaire:
+        return
+    chosen = luminaires.get(params.emergency_luminaire)
+    if chosen is None or chosen.get("kind", "interior") != "interior":
+        out.warnings.append(f"room '{room.name or room.id}': the emergency luminaire '{params.emergency_luminaire}' is not an interior luminaire of the catalogue: no emergency lighting was calculated")
+        return
+    out.emergency.append(_engine_emergency(room, params, rect, k, default_height))
 
 
 def _add_area(out: _Prepared, room: PlanRoom, params: RoomParams, k: float) -> None:
@@ -276,7 +297,7 @@ def _prepare(body: CalcIn, k: float, luminaires: Dict[str, dict]) -> _Prepared:
         elif params.exterior:
             _add_area(out, room, params, k)
         else:
-            _add_room(out, room, params, k, body.options.default_height_m)
+            _add_room(out, room, params, k, body.options.default_height_m, luminaires)
     return out
 
 
@@ -308,7 +329,7 @@ def _options(body: CalcIn):
 def _run(body: CalcIn, prepared: _Prepared, luminaires: Dict[str, dict]) -> dict:
     engine, _ = _engine()
     try:
-        return engine.run(_document(body, prepared.rooms, prepared.areas, prepared.used(), luminaires), _options(body)).as_dict()
+        return engine.run(_document(body, prepared, luminaires), _options(body)).as_dict()
     except engine.LightingError as exc:
         raise Invalid({"lighting": str(exc)})
 
@@ -323,12 +344,13 @@ def calc(project_dir: Path, body: CalcIn) -> dict:
     luminaires = effective(project_dir)
     prepared = _prepare(body, k, luminaires)
     if not (prepared.rooms or prepared.areas):
-        return {"result": None, "placements": {}, "maps": {}, "rooms": [], "areas": [], "skipped": prepared.skipped, "fingerprint": "",
+        return {"result": None, "placements": {}, "emergency_placements": {}, "maps": {}, "rooms": [], "areas": [], "skipped": prepared.skipped, "fingerprint": "",
                 "warnings": prepared.warnings + ["nothing could be calculated: give each room a luminaire and an activity or a target"]}
     result = _run(body, prepared, luminaires)
     outlines = {r.id: r.points for r in body.sheet.rooms if r.id in prepared.rects and not prepared.rects[r.id].exact}
-    placements, outside = _placements(result, prepared.rects, k, outlines)
+    placements, outside = _placements(result["rooms"], prepared.rects, k, outlines)
+    escape, escape_outside = _placements(result["emergency"], prepared.rects, k, outlines)
     shown = [{"id": r["id"], "name": r["name"], "length_m": r["length_m"], "width_m": r["width_m"], "exact": prepared.rects[r["id"]].exact, "corner": geometry.corner(prepared.rects[r["id"]])} for r in prepared.rooms]
-    return {"result": result, "placements": placements, "maps": _maps(result, prepared.rects, k, outlines) if body.options.map else {}, "rooms": shown,
+    return {"result": result, "placements": placements, "emergency_placements": escape, "maps": _maps(result, prepared.rects, k, outlines) if body.options.map else {}, "rooms": shown,
             "areas": [{"id": a["id"], "name": a["name"], "area_m2": a["area_m2"]} for a in prepared.areas], "skipped": prepared.skipped,
-            "warnings": prepared.warnings + list(result["warnings"]) + outside, "fingerprint": _fingerprint(body, luminaires, prepared.used())}
+            "warnings": prepared.warnings + list(result["warnings"]) + outside + escape_outside, "fingerprint": _fingerprint(body, luminaires, prepared.used())}

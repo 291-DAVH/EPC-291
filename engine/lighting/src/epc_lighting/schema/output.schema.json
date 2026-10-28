@@ -4,22 +4,24 @@
   "title": "EPC-291 lighting engine result",
   "description": "Stable keys. Every estimated number carries a reason and a confidence (0-1). No dates, paths or random ids: two runs on the same input are byte-identical.",
   "type": "object",
-  "required": ["schema_version", "engine", "counts", "rooms", "areas", "warnings"],
+  "required": ["schema_version", "engine", "counts", "rooms", "areas", "emergency", "warnings"],
   "properties": {
     "schema_version": {"const": "1.0"},
     "engine": {"type": "object", "required": ["name", "version"], "properties": {"name": {"const": "epc_lighting"}, "version": {"type": "string"}}},
     "counts": {
       "type": "object",
-      "required": ["rooms", "areas", "luminaires", "warnings"],
+      "required": ["rooms", "areas", "emergency", "luminaires", "warnings"],
       "properties": {
         "rooms": {"type": "integer"},
         "areas": {"type": "integer"},
+        "emergency": {"type": "integer"},
         "luminaires": {"type": "integer"},
         "warnings": {"type": "integer"}
       }
     },
     "rooms": {"type": "array", "items": {"$ref": "#/$defs/room"}},
     "areas": {"type": "array", "items": {"$ref": "#/$defs/area"}},
+    "emergency": {"type": "array", "items": {"$ref": "#/$defs/emergency"}},
     "warnings": {"type": "array", "items": {"type": "string"}}
   },
   "$defs": {
@@ -55,6 +57,7 @@
           }
         },
         "verification": {"$ref": "#/$defs/verification"},
+        "ugr": {"$ref": "#/$defs/ugr"},
         "points": {"type": "object", "required": ["computed"]},
         "energy": {"type": ["object", "null"]}
       }
@@ -68,6 +71,29 @@
         "verification": {"$ref": "#/$defs/verification"},
         "tags": {"type": "array", "items": {"type": "string", "pattern": "^LU-[0-9]{3,}$"}}
       }
+    },
+    "emergency": {
+      "type": "object",
+      "required": ["id", "name", "method", "luminaire", "criteria", "layout", "verification", "routes", "energy"],
+      "properties": {
+        "method": {"const": "antipanic grid"},
+        "criteria": {"type": "object", "required": ["min_lux", "max_over_min"], "properties": {"min_lux": {"$ref": "#/$defs/estimate"}, "max_over_min": {"$ref": "#/$defs/estimate"}}},
+        "layout": {
+          "type": "object",
+          "required": ["installed", "columns_along_length", "rows_across_width", "positions"],
+          "properties": {
+            "positions": {"type": "array", "items": {"type": "object", "required": ["tag", "x_m", "y_m", "z_m"], "properties": {"tag": {"type": "string", "pattern": "^LE-[0-9]{3,}$"}}}}
+          }
+        },
+        "verification": {"type": "object", "required": ["complies"], "properties": {"complies": {"type": "boolean"}}},
+        "routes": {"type": "array", "items": {"type": "object", "required": ["id", "points", "min_lux", "average_lux", "max_lux", "target_min_lux", "complies"]}},
+        "energy": {"type": "object"}
+      }
+    },
+    "ugr": {
+      "type": "object",
+      "required": ["result", "complies", "limit", "calculated"],
+      "properties": {"result": {"enum": ["not_verifiable", "meets", "does_not_meet"]}, "complies": {"type": ["boolean", "null"]}}
     }
   }
 }

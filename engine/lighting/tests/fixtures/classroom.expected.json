@@ -7,6 +7,7 @@
  "counts": {
   "rooms": 2,
   "areas": 1,
+  "emergency": 0,
   "luminaires": 7,
   "warnings": 7
  },
@@ -128,7 +129,21 @@
     "average_lux": 310.4,
     "target_lux": 300.0,
     "complies": true,
-    "margin_pct": 3.467
+    "margin_pct": 3.467,
+    "direct_check": {
+     "complies": false,
+     "flux_ok": true,
+     "direct_ok": false,
+     "direct_factor": 0.9,
+     "direct_min_acceptable_lux": 270.0
+    }
+   },
+   "ugr": {
+    "result": "not_verifiable",
+    "complies": null,
+    "limit": 19,
+    "calculated": null,
+    "reason": "UGR needs the photometry of the luminaires and an external calculation: give 'ugr_calculated' to compare it with the limit of the activity"
    },
    "points": {
     "computed": true,
@@ -269,7 +284,21 @@
     "average_lux": 309.217,
     "target_lux": 300.0,
     "complies": true,
-    "margin_pct": 3.072
+    "margin_pct": 3.072,
+    "direct_check": {
+     "complies": false,
+     "flux_ok": true,
+     "direct_ok": false,
+     "direct_factor": 0.9,
+     "direct_min_acceptable_lux": 270.0
+    }
+   },
+   "ugr": {
+    "result": "not_verifiable",
+    "complies": null,
+    "limit": null,
+    "calculated": null,
+    "reason": "UGR needs the photometry of the luminaires and an external calculation: give 'ugr_calculated' to compare it with the limit of the activity"
    },
    "points": {
     "computed": true,
@@ -348,6 +377,7 @@
    }
   }
  ],
+ "emergency": [],
  "warnings": [
   "room 'R1': spacing along the length (3.0 m) is above the maximum 2.8 m (1.6 x h) but within the 10% tolerance (the UPV article accepts 3 m against 2.8 m); acceptable",
   "room 'R1': min/avg illuminance 0.139 is below 0.333: the darkest zone is too dark",

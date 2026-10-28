@@ -9,7 +9,7 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 from epc_lighting import methods
 from epc_lighting.config import PARAMS, data
-from epc_lighting.model import Area, Estimate, LightingError, Luminaire, PointSpec, Project, Room
+from epc_lighting.model import Area, Emergency, Estimate, LightingError, Luminaire, PointSpec, Project, Room, Route
 from epc_lighting.tables import number, parse_cu_table, parse_photometry
 
 SCHEMA_VERSION = "1.0"
@@ -212,6 +212,7 @@ def parse_room(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Room:
         points=_parse_points(raw.get("points"), width, length, f"{here}.points"),
         point_step_m=_num(raw, "point_step_m", here, positive=True),
         operating_hours=_num(raw, "operating_hours_per_year", here, minimum=0, maximum=8760),
+        ugr_calculated=_num(raw, "ugr_calculated", here, minimum=0),
     )
 
 
@@ -241,6 +242,48 @@ def parse_area(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Area:
     )
 
 
+def _parse_xy(raw: Any, width: float, length: float, path: str) -> Tuple[float, float]:
+    if not isinstance(raw, list) or len(raw) != 2:
+        _fail(path, "must be a point [x_m, y_m] in metres from the corner of the room")
+    return (number(raw[0], f"{path}[0]", minimum=0, maximum=length), number(raw[1], f"{path}[1]", minimum=0, maximum=width))
+
+
+def _parse_routes(raw: Any, width: float, length: float, path: str) -> Tuple[Route, ...]:
+    if raw is None:
+        return ()
+    if not isinstance(raw, list):
+        _fail(path, "must be a list of escape routes")
+    routes = []
+    for i, r in enumerate(raw):
+        here = f"{path}[{i}]"
+        r = _object(r, here)
+        routes.append(Route(_text(r, "id", here, default=f"RT{i + 1}"), _parse_xy(r.get("start_m"), width, length, f"{here}.start_m"), _parse_xy(r.get("end_m"), width, length, f"{here}.end_m"),
+                            _num(r, "e_min_lux", here, positive=True)))
+    return tuple(routes)
+
+
+def parse_emergency(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Emergency:
+    raw = _object(raw, path)
+    eid = _text(raw, "id", path, required=True)
+    here = f"{path} ('{eid}')"
+    width = _num(raw, "width_m", here, required=True, positive=True)
+    length = _num(raw, "length_m", here, required=True, positive=True)
+    return Emergency(
+        id=eid,
+        name=_text(raw, "name", here, default=eid),
+        width_m=width,
+        length_m=length,
+        height_m=_num(raw, "height_m", here, required=True, positive=True),
+        luminaire_id=_luminaire_ref(raw, here, luminaire_ids),
+        e_min_lux=_num(raw, "e_min_lux", here, positive=True),
+        ratio_max=_num(raw, "max_over_min", here, minimum=1),
+        maintenance=_num(raw, "maintenance_factor", here, positive=True, maximum=1),
+        band_m=_num(raw, "band_m", here, minimum=0),
+        step_m=_num(raw, "point_step_m", here, positive=True),
+        routes=_parse_routes(raw.get("routes"), width, length, f"{here}.routes"),
+    )
+
+
 def _parse_list(doc: Dict[str, Any], key: str, parser: Callable[..., Any], *extra: Any) -> Tuple[Any, ...]:
     return tuple(parser(raw, f"{key}[{i}]", *extra) for i, raw in enumerate(_items(doc, key)))
 
@@ -254,6 +297,8 @@ def parse_project(doc: Dict[str, Any]) -> Project:
     ids = [lum.id for lum in luminaires]
     rooms = _parse_list(doc, "rooms", parse_room, ids)
     areas = _parse_list(doc, "areas", parse_area, ids)
+    emergency = _parse_list(doc, "emergency", parse_emergency, ids)
     _check_unique([r.id for r in rooms], "rooms")
     _check_unique([a.id for a in areas], "areas")
-    return Project({lum.id: lum for lum in luminaires}, rooms, areas)
+    _check_unique([e.id for e in emergency], "emergency")
+    return Project({lum.id: lum for lum in luminaires}, rooms, areas, emergency)

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addRoom } from "./planTools";
 import { blank, Drawing, setScale } from "./planEditing";
-import { applyLighting, areaCardOf, cardOf, cellsOf, hasPlacements, isReady, mapsOf, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
+import { applyLighting, areaCardOf, cardOf, cellsOf, emergencyCardOf, emergencyMarksOf, hasPlacements, isReady, mapsOf, LightingProposal, marksOf, parsePositive, requestOf, RoomResult, setRoomLighting } from "./lightingApi";
 
 const square = (d: Drawing, name: string): Drawing => addRoom(d, name, [[0, 0], [60, 0], [60, 40], [0, 40]]);
 const twoRooms = (): Drawing => square(square(setScale(blank(), [0, 0], [100, 0], 10), "Aula"), "Pasillo");
@@ -158,5 +158,33 @@ describe("exterior areas and the illuminance map", () => {
     const card = areaCardOf({ id: "a", name: "Patio", area_m2: 40, target: est(20, 1), factors: { beam_utilisation: est(0.75, 0.4), maintenance: est(0.65, 0.9) }, flux: { luminaires_required: 3 },
                               verification: { average_lux: 24, target_lux: 20, complies: true, margin_pct: 20 }, energy: { installed_power_w: 300 } });
     expect(card).toMatchObject({ floodlights: 3, complies: true, power_w: 300, unsure: ["beam"] });
+  });
+});
+
+describe("emergency lighting and glare", () => {
+  const est = (v: number, c: number) => ({ value: v, reason: "x", confidence: c });
+  const emergency = { id: "r1", name: "Aula", layout: { installed: 2, columns_along_length: 2, rows_across_width: 1 }, criteria: { min_lux: est(0.5, 0.5), max_over_min: est(40, 1) },
+                      verification: { complies: true, min_lux: 0.61, max_over_min: 12 }, routes: [{ id: "a", complies: true }, { id: "b", complies: false }], energy: { installed_power_w: 6 } };
+
+  it("keeps what a room says of its emergency luminaire and of its UGR, and sends them", () => {
+    const d = setRoomLighting(twoRooms(), "r1", { activity: "a", luminaire: "x", emergency_luminaire: "led_emergency_3w", ugr_calculated: 17 });
+    expect(requestOf(d, "en").rooms.r1).toEqual({ activity: "a", luminaire: "x", emergency_luminaire: "led_emergency_3w", ugr_calculated: 17 });
+  });
+
+  it("an emergency card says the luminaires, the lowest lux, the routes that comply and what was assumed", () => {
+    expect(emergencyCardOf(emergency)).toMatchObject({ installed: 2, complies: true, min: 0.61, ratio: 12, routesOk: 1, routes: 2, unsure: ["emin"] });
+    expect(emergencyCardOf({ ...emergency, verification: { complies: false }, routes: [] })).toMatchObject({ complies: false, min: null, ratio: null, routes: 0 });
+  });
+
+  it("draws the emergency luminaires as marks of their own, and nothing without a proposal", () => {
+    const p: LightingProposal = { result: null, rooms: [], skipped: [], warnings: [], fingerprint: "x", placements: {}, emergency_placements: { r1: [{ tag: "LE-001", x: 5, y: 6, z_m: 3 }] } };
+    expect(emergencyMarksOf(p)).toEqual([{ room: "r1", tag: "LE-001", at: [5, 6], emergency: true }]);
+    expect(emergencyMarksOf(null)).toEqual([]);
+    expect(marksOf(p)).toEqual([]);
+  });
+
+  it("reads the UGR of a room against its limit and says it is not verifiable when the engine could not", () => {
+    expect(cardOf(result({ ugr: { result: "meets", limit: 19, calculated: 17 } }))).toMatchObject({ ugr: "meets", ugrLimit: 19 });
+    expect(cardOf(result())).toMatchObject({ ugr: "not_verifiable", ugrLimit: null });
   });
 });
