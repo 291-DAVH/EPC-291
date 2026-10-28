@@ -1,6 +1,6 @@
-"""Board design: design criteria -> circuit calculation (epc_calc) -> single-line diagram (SLD) of a board.
+"""Board design: design criteria -> circuit calculation (epc_aea90364) -> single-line diagram (SLD) of a board.
 
-The calculation is the single source of truth: the project's design criteria govern `epc_calc.aea_pipeline`, and its result
+The calculation is the single source of truth: the project's design criteria govern `epc_aea90364.aea_pipeline`, and its result
 (In, Ib, Icu, section, accumulated voltage drop, device) is what the SLD generator draws, with the same limits in its notes.
 
   python -m epc_drawing.board_design --input board.json --out DIR --name TGBT-01 [--criteria criteria.json] [--diagrams sld,mld]
@@ -35,13 +35,10 @@ CIRCUIT_COLS = [("TAG", "tag"), ("DESCRIPCION", "description"), ("CARGA", "load"
 
 
 def catalog_file(discipline: str = "electrical") -> Optional[Path]:
-    """The design-criteria catalog: the only place where the base values live (the norms reviewer corrects them there). In the repository it is
-    engine/jurisdictions/AR/<discipline>/; a built plugin carries a copy generated from it under lib/ (see `engine_data` in the plugin manifest)."""
-    for base in Path(__file__).resolve().parents[:5]:
-        f = base / "jurisdictions" / "AR" / discipline / "design-criteria.json"
-        if f.is_file():
-            return f
-    return None
+    """The design-criteria catalog: the only place where the base values live (the norms reviewer corrects them there). It is data of the norm
+    (`epc_aea90364.norm_data`), so it travels with the engine, in the repository and in a built plugin alike."""
+    from epc_aea90364 import norm_data
+    return norm_data.criteria_file(discipline)
 
 
 def catalog_defaults(discipline: str = "electrical") -> dict:
@@ -130,7 +127,7 @@ def write_excel(path: Path, tablero: dict, circuitos: List[dict]) -> None:
 
 def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
     """aea_pipeline with the design criteria: {"datos": contract JSON, "avisos": [...], "detalle": {...}, "limites": {...}}."""
-    from epc_calc import aea_pipeline as P
+    from epc_aea90364 import aea_pipeline as P
     tablero, circuitos = excel_rows(data)
     detalle: Dict[str, dict] = {}
     datos, avisos = P.calculate(tablero, circuitos, criterios=criteria, detalle=detalle)
@@ -146,13 +143,13 @@ def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
 def calc_note(res: dict) -> str:
     lim, cond = res["limites"], res["conductor"]
     mat = {"cu": "cobre", "al": "aluminio"}[cond["material"]]
-    return (f"Cálculo con los criterios de diseño del proyecto (epc_calc): ΔU seccionales {lim['seccional']:g} %, terminales {lim['terminal']:g} %, "
+    return (f"Cálculo con los criterios de diseño del proyecto (AEA 90364): ΔU seccionales {lim['seccional']:g} %, terminales {lim['terminal']:g} %, "
             f"motores {lim['motor']:g} %; {mat}, aislación {cond['aislacion'].upper()}.")
 
 
 def groups_in(data: dict, criteria: Optional[dict] = None) -> dict:
-    """The board data with the differential groups the rules of the standard solutions ask for (epc_calc.grouping); the same data when no rule applies."""
-    from epc_calc import grouping
+    """The board data with the differential groups the rules of the standard solutions ask for (epc_aea90364.grouping); the same data when no rule applies."""
+    from epc_aea90364 import grouping
     tablero, rows = excel_rows(data)
     groups = grouping.plan(tablero, rows, criteria)
     if not groups:
@@ -204,13 +201,13 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     calc_json = out / f"{name}_dimensionado.json"
     detail_json = out / f"{name}_dimensionado_detalle.json"
     crit_json = out / f"{name}_criterios.json"
-    from epc_calc import aea_export as EX
+    from epc_aea90364 import aea_export as EX
     avisos = list(res["avisos"]) + list(EX.export_calculation(res["datos"], str(calc_json)))
     detail_json.write_text(json.dumps(res["detalle"], ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     crit_json.write_text(json.dumps({"criterios": criteria or {}, "limites_pct": res["limites"], "conductor": res["conductor"], "rcd_ma": res["rcd_ma"]},
                                     ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
-    from epc_calc import board_memo as BM                 # memoria de cálculo y síntesis del tablero: mismos números que el unifilar (fuente única)
+    from epc_aea90364 import board_memo as BM                 # memoria de cálculo y síntesis del tablero: mismos números que el unifilar (fuente única)
     memo = BM.build(data["board"], data["circuits"], res["datos"], res["detalle"], res["limites"], res["conductor"], res["rcd_ma"],
                     upstream=data.get("upstream"), validated=bool(data.get("validated", True)))
     (out / f"{name}_memoria.json").write_text(json.dumps(memo, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
@@ -223,7 +220,7 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     except Exception as exc:                               # noqa: BLE001 - the calculation stands; the PDF is reported as a warning
         avisos.append(f"no se pudo generar el PDF de la memoria: {exc}")
 
-    from epc_calc import board_figures as BF               # what the drawings show beyond each circuit: bar, feeder, checks and notes (the drawings only draw)
+    from epc_aea90364 import board_figures as BF               # what the drawings show beyond each circuit: bar, feeder, checks and notes (the drawings only draw)
     figures = BF.build(data["board"], res["datos"], res["detalle"], res["limites"], res["rcd_ma"], memo["acometida"])
     figures["note"] += " " + calc_note(res)
     figures_json = out / f"{name}_cifras.json"

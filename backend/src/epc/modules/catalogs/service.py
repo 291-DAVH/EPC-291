@@ -94,7 +94,7 @@ def sld_symbols() -> list:
 
 def solutions_view(level: str, project_dir: Optional[Path] = None) -> dict:
     """The document of standard solutions as this level sees it, what it inherits, what it changed and what the editor offers."""
-    from epc_calc import solutions as S
+    from epc_aea90364 import solutions as S
     chain = _files("solutions", level, project_dir)
     base, doc = S.load(chain[:-1]), S.load(chain)
     changed = S.override_of(doc, base)
@@ -106,7 +106,7 @@ def solutions_view(level: str, project_dir: Optional[Path] = None) -> dict:
 def solutions_save(level: str, body: dict, project_dir: Optional[Path] = None) -> dict:
     """Store the document this level sent (solutions, add-ons and rules of groups by id; a part that is not sent stays as it is). Only what differs from what it inherits is kept.
     A document that would leave a circuit without a solution is refused."""
-    from epc_calc import solutions as S
+    from epc_aea90364 import solutions as S
     chain = _files("solutions", level, project_dir)
     base, current = S.load(chain[:-1]), S.load(chain)
     doc = {part: current.get(part, {}) if body.get(part) is None else body[part] for part in S.PARTS}
@@ -129,5 +129,5 @@ def solutions_digest(project_dir: Optional[Path] = None) -> str:
     """A short fingerprint of the document of standard solutions in force for a project: what a calculation was made with."""
     import hashlib
     import json
-    from epc_calc import solutions
+    from epc_aea90364 import solutions
     return hashlib.sha256(json.dumps(solutions.load(files(project_dir)["solutions"]), sort_keys=True).encode("utf-8")).hexdigest()[:12]

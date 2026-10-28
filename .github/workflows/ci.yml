@@ -24,7 +24,7 @@ jobs:
       - name: Install
         run: |
           pip install -r requirements-dev.txt -r database/requirements.txt import-linter
-          pip install -e engine/calc -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents -e backend
+          pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents -e backend
           cd frontend && npm ci
       - name: Gate (the same battery as on a developer machine)
         run: python tools/ci/run_gate.py
@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements-dev.txt -r database/requirements.txt
-      - run: pip install -e engine/calc -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents -e backend
+      - run: pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents -e backend
       - name: upgrade, downgrade, upgrade
         run: |
           alembic -c database/alembic.ini upgrade head

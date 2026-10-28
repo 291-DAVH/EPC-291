@@ -26,11 +26,11 @@ Owner plugin: `standard-ingest`. The code is the `epc_standards` package (`engin
    - put the verbatim quote (if you need one for traceability) in `analysis/evidence.json` under the same key as `evidence_ref`.
 5. **Validate.** `python -m epc_standards.validate_rules <draft>`. Fix every ERROR. Review WARNINGs: derived checks need human confirmation; informative rules have no check.
 6. **Hand to the human.** Give the reviewer a short Spanish list: rules with `confidence: low`, derived checks, scanned pages, open questions. Do not promote on your own.
-7. **Promote** (only after the reviewer validated): `python -m epc_standards.promote_rules <CC>/<ID> --mark-verified "<name>"`. Result: `engine/jurisdictions/<CC>/<domain>/<ID>/rules.json`.
+7. **Promote** (only after the reviewer validated): `python -m epc_standards.promote_rules <CC>/<ID> --mark-verified "<name>"`. Result: `engine/<norm>/src/epc_<norm>/standards/<ID>/rules.json` (the norm engine the jurisdiction names, e.g. `engine/aea90364`).
 8. **Use.** Calculation plugins load rules through `engine/rules` (`epc_rules`) (`RuleSet.load("AR", "electrical")`); production builds only see `verified` standards.
 
 ## Legacy
-The 177 rules previously kept in `engine/calc/src/epc_calc/rules/*.json` were imported with `epc_standards.import_legacy_rules` as drafts of six standards. Their ids and parameter names are still Spanish (`i18n_pending`).
+The 177 rules previously kept in `engine/aea90364/src/epc_aea90364/rules/*.json` were imported with `epc_standards.import_legacy_rules` as drafts of six standards. Their ids and parameter names are still Spanish (`i18n_pending`).
 
 ## Runtime
 The code is a Python package from `engine/` (`epc_standards, epc_rules`). In a repository checkout set `PYTHONPATH=engine/standards/src;engine/rules/src` (use `;` as separator on Windows) or run `pip install -e engine/<area>`; in an installed plugin set `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}/lib"`. Run modules with `python -m <module>`.

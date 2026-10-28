@@ -1,13 +1,13 @@
 """Generador de multifilar (MLD) de un tablero en láminas IRAM.
 
-Parte del mismo dato que el unifilar y del cálculo de epc_calc (que ya aplica los criterios de diseño): cada línea del unifilar se "despliega" en
+Parte del mismo dato que el unifilar y del cálculo de epc_aea90364 (que ya aplica los criterios de diseño): cada línea del unifilar se "despliega" en
 sus conductores (L1 L2 L3 N) a paso uniforme de 10 mm, con los símbolos MLD_LV de la biblioteca (`<id>_<n>p_mld`) sin escalar.
 
   from epc_mld import mld_generator
   mld_generator.generate(data, calc, out_dir, "MLD_TGBT-01")
 
 `data` = {"board": {...}, "circuits": [...], "titleblock": {...}} (el JSON del formulario); `calc` = {"datos": {TAG: {In, Ib, icu, S, dU, disp}},
-"detalle": {...}} (resultado de epc_calc.aea_pipeline). Devuelve la lista de hojas generadas (SVG y DXF).
+"detalle": {...}} (resultado de epc_aea90364.aea_pipeline). Devuelve la lista de hojas generadas (SVG y DXF).
 Rótulo y láminas: se piden al servicio de epc_titleblock (los datos del proyecto: EPC_TITLEBLOCK_JSON, o el rótulo del propio dato de entrada).
 """
 import datetime
@@ -142,7 +142,7 @@ def poles_of(c: dict, has_kids: bool) -> int:
 
 
 def chain_of(cadena: List[dict], n: int) -> List[tuple]:
-    """[(base_id, slots, n_polos)] de la cadena que eligió el cálculo (solución estándar de epc_calc); un dispositivo sin polos propios toma los `n` del circuito."""
+    """[(base_id, slots, n_polos)] de la cadena que eligió el cálculo (solución estándar de epc_aea90364); un dispositivo sin polos propios toma los `n` del circuito."""
     return [(it["symbol"], dict(it["slots"]), it["poles"] or n) for it in cadena]
 
 
@@ -326,7 +326,7 @@ class Generator:
             sh, _ = self.draw_sheet(roots, i, len(sheets))
             title = f"{self.board.get('name', '')} (multifilar)" + (f" · hoja {i} de {len(sheets)}" if len(sheets) > 1 else "")
             sh.text(X0 - 16, 38, title, size=FS_TIT, bold=True)
-            sh.text(X0 - 16, 44, "Referencial: conductores desplegados del unifilar; cálculo de epc_calc con los criterios de diseño del proyecto.", size=FS_TXT)
+            sh.text(X0 - 16, 44, "Referencial: conductores desplegados del unifilar; cálculo de epc_aea90364 con los criterios de diseño del proyecto.", size=FS_TXT)
             svg, dxf = self.write_sheet(sh, i - 1, nm, out_dir)
             made.append({"name": nm, "svg": svg, "dxf": dxf})
         return made

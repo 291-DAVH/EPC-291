@@ -7,8 +7,8 @@ How the platform learns from standards (NFPA, AEA, IEC, IRAM...) without distrib
 | Layer | What it is | Where | Versioned / public |
 |---|---|---|---|
 | **1. Sources** | The standards themselves (PDF) and study material. Protected by copyright: they cannot be distributed. | `local/dev-knowledge/` | **Never** (ignored folder, `*.pdf` ignored, pre-commit hook) |
-| **2. Extracted knowledge** | What Claude learns by reading, analysing and understanding a standard, written in our own words as structured data: requirements, parameters, formulas, tables of values, checks. | `engine/jurisdictions/<country>/<domain>/<standard>/rules.json` and the calculation data inside `engine/calc` | **Yes**: it belongs to the engine and ships with it |
-| **3. Execution** | Python code that applies that knowledge: it evaluates checks, runs formulas and queries tables. | `engine/rules`, `engine/calc`, exposed by the backend module `knowledge` and by the Claude skills | Yes |
+| **2. Extracted knowledge** | What Claude learns by reading, analysing and understanding a standard, written in our own words as structured data: requirements, parameters, formulas, tables of values, checks. | `engine/<norm>/src/epc_<norm>/standards/<ID>/rules.json` (the norm engine the jurisdiction names, e.g. `engine/aea90364`) and the calculation data inside `engine/aea90364` | **Yes**: it belongs to the engine and ships with it |
+| **3. Execution** | Python code that applies that knowledge: it evaluates checks, runs formulas and queries tables. | `engine/rules`, `engine/aea90364`, exposed by the backend module `knowledge` and by the Claude skills | Yes |
 
 The backend module `backend/src/epc/modules/knowledge` is only the API over layer 2 (search, topics, check an installation against the rules). It is source code, not study material.
 
@@ -22,10 +22,10 @@ The backend module `backend/src/epc/modules/knowledge` is only the API over laye
 ## Python first, so tokens are not spent on arithmetic
 Claude reads and interprets the standard **once**; from then on the numbers are produced by Python, not by the model:
 - a requirement with a numeric limit becomes a `check` evaluated by `epc_rules`;
-- a formula becomes a function in `epc_calc` (voltage drop, ampacity, short circuit, protection, hydraulics...);
+- a formula becomes a function in `epc_aea90364` (voltage drop, ampacity, short circuit, protection, hydraulics...);
 - a table becomes data queried by code (`aea_tables.json`).
 
-Each of these has tests in `engine/<area>/tests` (`engine/calc/tests`: 15 test files over the calculation modules, run by `python tools/ci/run_gate.py`). When a new calculation is derived from a standard, the rule is: Python function + test with a worked example first, then the skill that calls it.
+Each of these has tests in `engine/<area>/tests` (`engine/aea90364/tests`: 15 test files over the calculation modules, run by `python tools/ci/run_gate.py`). When a new calculation is derived from a standard, the rule is: Python function + test with a worked example first, then the skill that calls it.
 
 ## Rules for what is committed
 - No PDF, no scanned page, no text copied from a standard. Extracted rules are paraphrased; a short reference (standard, edition, clause, page) is enough to locate the source.
@@ -33,4 +33,4 @@ Each of these has tests in `engine/<area>/tests` (`engine/calc/tests`: 15 test f
 - Everything unverified is marked `draft` and is not used in production.
 
 ## Literal quotations
-The early AEA rules in `engine/calc/src/epc_calc/rules/*.json` used to carry a `cita` field with a short literal quotation. It was removed (2026-10-23): a rule keeps only the reference (standard, edition, clause, page). The original rules with their quotations, and the scripts that verified them against the PDFs, are kept privately under `local/dev-knowledge/extracted/`. A test prevents literal text from coming back.
+The early AEA rules in `engine/aea90364/src/epc_aea90364/rules/*.json` used to carry a `cita` field with a short literal quotation. It was removed (2026-10-23): a rule keeps only the reference (standard, edition, clause, page). The original rules with their quotations, and the scripts that verified them against the PDFs, are kept privately under `local/dev-knowledge/extracted/`. A test prevents literal text from coming back.

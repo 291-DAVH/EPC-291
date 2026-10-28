@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 ENGINE = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ENGINE / a / "src") for a in ("mld", "sld", "calc", "symbols", "titleblock")]
+sys.path[:0] = [str(ENGINE / a / "src") for a in ("mld", "sld", "aea90364", "symbols", "titleblock")]
 
 from epc_mld import mld_generator as M   # noqa: E402
 

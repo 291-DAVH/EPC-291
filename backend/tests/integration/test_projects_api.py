@@ -26,6 +26,13 @@ class TestCreateProject(unittest.TestCase):
     body = {"client_name": "Ford Argentina", "client_code": "FORD", "project_code": "PRJ-001", "project_name": "Planta",
             "jurisdiction": "AR", "methodology": "pm2", "disciplines": ["electrical", "hvac"]}
 
+    def test_the_jurisdiction_names_the_norm_engine_of_each_domain(self):
+        from epc.modules.projects import public as projects
+        self.assertEqual(projects.norm_engine("AR", "electrical"), "aea90364")
+        self.assertIsNone(projects.norm_engine("AR", "hvac"))                       # no norm engine for it yet
+        self.assertIsNone(projects.norm_engine("ZZ", "electrical"))                 # no such jurisdiction
+        self.assertIsNone(projects.norm_engine("../x", "electrical"))               # never a path
+
     def test_options(self):
         o = self.c.get("/api/projects/options").json()
         self.assertEqual(o["jurisdictions"][0]["id"], "AR")

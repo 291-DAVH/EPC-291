@@ -11,7 +11,7 @@
   ],
   "status": "template",
   "packs": {
-    "electrical": "electrical/"
+    "electrical": ""
   },
   "legacy_index": "_legacy/standards-index.md"
 }

@@ -29,7 +29,7 @@ class TestPoles(unittest.TestCase):
 
     def test_poles_and_chains(self):
         self.assertEqual((M.poles_of({"phase": "3F"}, False), M.poles_of({"phase": "1F"}, False), M.poles_of({"phase": "3F"}, True), M.poles_of({"phase": "3F+N"}, False)), (3, 2, 4, 4))
-        from epc_calc import solutions as S
+        from epc_aea90364 import solutions as S
 
         def chain(topology, kind, in_a, phase="3F"):
             f = S.facts("C", "", "", topology, kind, phase, "seccional", in_a, in_a * 0.8, 25, 30, False, topology != "single")

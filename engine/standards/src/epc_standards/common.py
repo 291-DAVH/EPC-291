@@ -12,6 +12,24 @@ SCHEMAS = WORKSPACE / "shared" / "schemas"
 SHINGLE = 12                                              # consecutive words that count as verbatim copying
 
 
+def _pack_names(jurisdiction, domain, pack=None):
+    """The norm engines a jurisdiction names for a domain (one string or a list), narrowed to `pack` when one is asked."""
+    value = (jurisdiction.get("packs") or {}).get(domain)
+    names = [n for n in ([value] if isinstance(value, str) else list(value or [])) if n]
+    return ([pack] if pack in names else []) if pack else names
+
+
+def pack_standards_dir(engine, jurisdiction, domain, pack=None):
+    """Where the promoted standards of a domain go: the `standards/` folder of the norm engine the jurisdiction names for it. Returns (folder, problem); `problem` says what to fix."""
+    names = _pack_names(jurisdiction, domain, pack)
+    if not names:
+        return None, f"the jurisdiction names no norm engine for {domain!r} (packs.{domain} in jurisdiction.json)"
+    if len(names) > 1:
+        return None, f"the jurisdiction names several norm engines for {domain!r} ({', '.join(names)}): choose one with --pack"
+    folder = Path(engine) / names[0] / "src" / f"epc_{names[0]}"
+    return (folder / "standards", None) if folder.is_dir() else (None, f"the norm engine {names[0]!r} does not exist under {engine}")
+
+
 def read_json(p):
     return json.loads(Path(p).read_text(encoding="utf-8-sig"))
 

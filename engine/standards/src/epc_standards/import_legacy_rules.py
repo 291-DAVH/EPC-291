@@ -57,7 +57,7 @@ def derive_check(rtype, params):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--rules-dir", default=str(ENGINE / "calc" / "src" / "epc_calc" / "rules"))
+    ap.add_argument("--rules-dir", default=str(ENGINE / "aea90364" / "src" / "epc_aea90364" / "rules"))
     ap.add_argument("--dev-knowledge", default=str(DEV_KNOWLEDGE))
     ap.add_argument("--force", action="store_true", help="overwrite existing drafts (they may contain human edits)")
     a = ap.parse_args()

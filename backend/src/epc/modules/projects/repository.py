@@ -1,5 +1,6 @@
 """File-system access for projects: <projects_dir>/<client>/<code>/{.epc, workspace, deliverables}."""
 import importlib.util
+import re
 import shutil
 from pathlib import Path
 from typing import List, Optional
@@ -54,6 +55,14 @@ def jurisdictions() -> List[dict]:
                         "status": j.get("status", "active"),
                         "disciplines": sorted(x.name for x in d.iterdir() if x.is_dir() and not x.name.startswith("_"))})
     return out
+
+
+def norm_engine(jurisdiction: str, discipline: str) -> Optional[str]:
+    """The norm engine (an area of `engine/`, like `aea90364`) that holds the norm data of a discipline in a jurisdiction: `jurisdiction.json` says it in `packs`."""
+    if not re.match(r"^[A-Z]{2}$", jurisdiction or ""):
+        return None
+    packs = read_json(settings.engine / "jurisdictions" / jurisdiction / "jurisdiction.json", {}).get("packs", {})
+    return packs.get(discipline) or None
 
 
 def methodologies() -> List[dict]:

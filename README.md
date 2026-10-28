@@ -64,7 +64,7 @@ git config core.hooksPath tools/hooks
 # Python environment (from the repository root)
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-dev.txt -r database/requirements.txt import-linter
-.venv\Scripts\python -m pip install -e engine/calc -e engine/rules -e engine/standards -e engine/drawing -e engine/arch -e engine/documents -e "backend[dev]"
+.venv\Scripts\python -m pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/drawing -e engine/arch -e engine/documents -e "backend[dev]"
 
 # Test battery (21 checks, run before merging anything)
 .venv\Scripts\python tools\ci\run_gate.py
@@ -149,7 +149,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), open a branch from `dev`, run the test 
 
 ## 📜 Status and license
 
-Release 0.3.0. Calculation tables and standards rules are pending validation against the official documents (`engine/calc/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
+Release 0.3.0. Calculation tables and standards rules are pending validation against the official documents (`engine/aea90364/docs/11-pendientes.md`). No license has been chosen yet: all rights reserved until the owner decides.
 
 <div align="center">
 

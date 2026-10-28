@@ -16,7 +16,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ENGINE = HERE.parents[1]
-sys.path[:0] = [str(ENGINE / a / "src") for a in ("drawing", "sld", "mld", "symbols", "titleblock", "calc")]
+sys.path[:0] = [str(ENGINE / a / "src") for a in ("drawing", "sld", "mld", "symbols", "titleblock", "aea90364")]
 
 from epc_drawing import board_design as B   # noqa: E402
 

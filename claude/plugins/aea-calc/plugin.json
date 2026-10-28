@@ -51,9 +51,9 @@
     "status": "draft: norm tables pending validation (see docs/11-pendientes.md)"
   },
   "engine": [
-    "calc"
+    "aea90364"
   ],
   "owns": [
-    "calc"
+    "aea90364"
   ]
 }

@@ -8,9 +8,9 @@
       "requires": {},
       "skills": [],
       "engine": [
-        "calc"
+        "aea90364"
       ],
-      "hash": "dcf5995f07956390"
+      "hash": "9619902b5ccbb613"
     },
     "board-design": {
       "version": "0.2.1",
@@ -25,7 +25,7 @@
       },
       "skills": [],
       "engine": [
-        "calc",
+        "aea90364",
         "drawing",
         "dxf",
         "mld",
@@ -33,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "de2fbc7607660abc"
+      "hash": "43c37c5b1db4dd06"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -114,13 +114,13 @@
       },
       "skills": [],
       "engine": [
-        "calc",
+        "aea90364",
         "dxf",
         "mld",
         "symbols",
         "titleblock"
       ],
-      "hash": "5ff0bff8fe884c69"
+      "hash": "4517738ba05dd8af"
     },
     "plan-drawing": {
       "version": "0.1.0",
@@ -176,13 +176,13 @@
       },
       "skills": [],
       "engine": [
-        "calc",
+        "aea90364",
         "dxf",
         "sld",
         "symbols",
         "titleblock"
       ],
-      "hash": "aa35a37067137675"
+      "hash": "c0e1ed93b868ef19"
     },
     "spec-writer": {
       "version": "0.1.0",
@@ -210,11 +210,11 @@
         "analyze-standard"
       ],
       "engine": [
-        "calc",
+        "aea90364",
         "rules",
         "standards"
       ],
-      "hash": "af962ba6309dd372"
+      "hash": "67b8cf41116c79a6"
     }
   },
   "skills": {

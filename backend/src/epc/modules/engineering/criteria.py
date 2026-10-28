@@ -1,11 +1,11 @@
 """Design criteria of a project: the catalog, the value in force, changes with their source and the report of the criteria."""
 
+import importlib
 import re
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from epc.core import clock
-from epc.core.config import settings
 from epc.core.errors import Invalid, NotFound, first_or_404
 from epc.modules.engineering import repository
 from epc.modules.projects import public as projects
@@ -17,11 +17,23 @@ SOURCES = ("client", "standard", "project")
 SLUG_RE = re.compile(r"^[a-z][a-z0-9_-]{0,40}$")
 
 
+def _criteria_file(pack: Optional[str], discipline: str) -> Optional[Path]:
+    """The design-criteria catalog is data of the norm engine the jurisdiction names for the discipline (`epc_<pack>.norm_data`)."""
+    if not pack or not re.match(r"^[a-z0-9_]+$", pack):
+        return None
+    try:
+        module = importlib.import_module(f"epc_{pack}.norm_data")
+    except ImportError:
+        return None
+    return module.criteria_file(discipline)
+
+
 def _catalog(d: Path, discipline: str) -> Dict:
     if not SLUG_RE.match(discipline):
         raise Invalid({"discipline": "invalid"})
     jur = projects.read_meta(d).get("jurisdiction", "AR")
-    cat = repository.load_catalog(settings.engine / "jurisdictions" / jur / discipline / "design-criteria.json") if re.match(r"^[A-Z]{2}$", jur) else {}
+    file = _criteria_file(projects.norm_engine(jur, discipline), discipline)
+    cat = repository.load_catalog(file) if file else {}
     if not cat:
         raise NotFound(f"no design criteria catalog for {jur}/{discipline}")
     return {**cat, "jurisdiction": jur}

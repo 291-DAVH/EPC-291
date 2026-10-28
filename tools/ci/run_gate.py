@@ -12,7 +12,7 @@ Checks
   complexity        no function becomes more complex than its baseline; a new function stays at or below 10 (tools/ci/complexity_baseline.json)
   board             planning/BOARD.md is up to date
   api               API tests (user surface, role guard, uploads, project creation)
-  engine-calc       LV calculation tests
+  engine-aea90364   AEA 90364 norm engine tests (calculation, rules, data)
   engine-rules      rules engine tests
   engine-standards  standards ingestion and promotion tests
   engine-drawing    symbol library tests
@@ -46,7 +46,7 @@ def first(*paths):
 PYTHON = first(REPO / ".venv" / "Scripts" / "python.exe", REPO / ".venv" / "bin" / "python") or Path(sys.executable)
 PLUGINS = REPO / "claude" / "plugins"
 ENGINE = REPO / "engine"
-AREAS = ("calc", "rules", "standards", "dxf", "symbols", "titleblock", "plan", "arch", "sld", "mld", "drawing", "documents")
+AREAS = ("aea90364", "rules", "standards", "dxf", "symbols", "titleblock", "plan", "arch", "sld", "mld", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")

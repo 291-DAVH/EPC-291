@@ -1,8 +1,8 @@
 """Files of the norms review: the engine's norm data (rules, calculation tables, design-criteria catalog), the review state next to them and the review log.
 
 The data files stay the single source of truth and are rewritten with the same formatting they have (so git shows only what the reviewer changed).
-The review state lives in `jurisdictions/AR/review.json` (who approved which point, when, and the fingerprint of the approved value) and every action is appended to
-`jurisdictions/AR/review-log.jsonl`.
+The review state lives in the norm package (`epc_aea90364/data/review.json`) (who approved which point, when, and the fingerprint of the approved value) and every action is appended to
+`epc_aea90364/data/review-log.jsonl`.
 """
 import json
 import os
@@ -23,10 +23,8 @@ def override(paths: Optional[dict]) -> None:
 def paths() -> dict:
     if _override:
         return _override
-    from epc_calc import aea_rules, aea_tables
-    criteria = settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json"
-    ar = criteria.parents[1]
-    return {"rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": criteria, "review": ar / "review.json", "log": ar / "review-log.jsonl"}
+    from epc_aea90364 import aea_rules, aea_tables, norm_data
+    return {"rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG}
 
 
 def read(path: Path):
@@ -98,7 +96,7 @@ def log_read(point_id: Optional[str] = None, limit: int = 100) -> List[dict]:
 def clear_engine_cache() -> None:
     """The calculation engine keeps the data in memory: after a correction it reads the files again."""
     try:
-        from epc_calc import aea_rules, aea_tables
+        from epc_aea90364 import aea_rules, aea_tables
         aea_rules.limpiar_cache_reglas()
         aea_tables.limpiar_cache_tablas()
     except ImportError:

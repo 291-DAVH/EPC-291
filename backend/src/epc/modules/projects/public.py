@@ -1,6 +1,6 @@
 """Public interface of the projects module (the only thing other modules may import)."""
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from epc.modules.projects import repository, service
 
@@ -23,6 +23,11 @@ def project_id(d: Path) -> str:
 
 def read_meta(d: Path) -> dict:
     return repository.read_meta(d)
+
+
+def norm_engine(jurisdiction: str, discipline: str) -> Optional[str]:
+    """The norm engine that holds the norm data of a discipline in a jurisdiction (None when it has none)."""
+    return repository.norm_engine(jurisdiction, discipline)
 
 
 def read_status(d: Path) -> dict:

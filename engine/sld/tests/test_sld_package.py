@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ENGINE = HERE.parents[1]
-SRC = [str(ENGINE / a / "src") for a in ("sld", "calc", "symbols", "titleblock")]
+SRC = [str(ENGINE / a / "src") for a in ("sld", "aea90364", "symbols", "titleblock")]
 
 
 class TestSldPackage(unittest.TestCase):

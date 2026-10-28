@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-aea90364"
+version = "1.8.0"
+description = "EPC-291 calculation engine: LV sizing (AEA 90364 / IEC 60364), voltage drop, short circuit, protection, earthing"
+requires-python = ">=3.10"
+dependencies = ["openpyxl>=3.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+epc_aea90364 = ["*.json", "rules/*.json", "templates/*.md", "data/*.json", "data/*.jsonl"]

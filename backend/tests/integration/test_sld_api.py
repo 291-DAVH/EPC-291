@@ -7,6 +7,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from epc_aea90364 import norm_data
 from epc.core.config import settings
 from epc.main import create_app
 
@@ -134,7 +135,7 @@ class TestSld(unittest.TestCase):
         self.assertTrue(row1["cumple"])
         self.assertEqual(r1["criteria"]["limits_pct"], {"seccional": 1.0, "terminal": 3.0, "motor": 5.0})
         # a different feeder limit in the project's design criteria (the widest the catalog allows) changes the section, and the drawing says so
-        crit = next(c for c in __import__("json").loads((settings.engine / "jurisdictions" / "AR" / "electrical" / "design-criteria.json").read_text(encoding="utf-8"))["criteria"] if c["id"] == "vd_sectional_pct")
+        crit = next(c for c in __import__("json").loads((norm_data.criteria_file("electrical")).read_text(encoding="utf-8"))["criteria"] if c["id"] == "vd_sectional_pct")
         loose = crit["max"]
         self.assertGreater(loose, crit["default"])
         self.c.put("/api/projects/ACME/P-1/engineering/criteria/vd_sectional_pct", json={"value": loose, "source": "client", "note": "pedido del cliente"})

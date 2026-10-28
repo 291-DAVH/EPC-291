@@ -1,7 +1,8 @@
 """Rule engine: load rules.json files for a jurisdiction and query/check them.
 
 Sources, in order:
-  1. engine/jurisdictions/<CC>/<domain>/<STANDARD-ID>/rules.json   (promoted, product)
+  1. engine/<norm engine>/src/epc_<norm engine>/standards/<STANDARD-ID>/rules.json   (promoted, product). The norm engines of a domain are the ones the jurisdiction
+     names in `engine/jurisdictions/<CC>/jurisdiction.json` (`packs`: {"electrical": "aea90364"}, or a list when more than one norm applies).
   2. optional extra roots (e.g. dev-knowledge/standards/<CC>/<ID>/draft/rules.json) when
      `include_drafts_from` is given. Drafts are for development only.
 
@@ -88,18 +89,29 @@ class RuleSet:
         self._by_id = {r["id"]: r for r in self.rules}
 
     # ---- loading ----
+    @staticmethod
+    def _standard_dirs(root: Path, jurisdiction: str, domain: Optional[str]) -> List[Path]:
+        """The `standards/` folders of the norm engines the jurisdiction uses for the domain (all its domains when none is asked)."""
+        jf = root / "jurisdictions" / jurisdiction / "jurisdiction.json"
+        packs = json.loads(jf.read_text(encoding="utf-8")).get("packs", {}) if jf.is_file() else {}
+        out: List[Path] = []
+        for dom, value in sorted(packs.items()):
+            for pack in ([value] if isinstance(value, str) else list(value or [])):
+                if pack and (not domain or dom == domain):
+                    out.append(root / pack / "src" / f"epc_{pack}" / "standards")
+        return out
+
     @classmethod
     def load(cls, jurisdiction: str = "AR", domain: Optional[str] = None, env: Optional[str] = None,
              root: Optional[Path] = None, include_drafts_from: Optional[Path] = None) -> "RuleSet":
         env = env or os.environ.get("EPC_ENV", "dev")
         root = Path(root) if root else ENGINE_ROOT
         files = []
-        base = root / "jurisdictions" / jurisdiction
-        if base.is_dir():
-            for f in sorted(base.glob("*/*/rules.json")):
-                if domain and f.parent.parent.name != domain:
-                    continue
-                files.append(json.loads(f.read_text(encoding="utf-8")))
+        for standards in cls._standard_dirs(root, jurisdiction, domain):
+            for f in sorted(standards.glob("*/rules.json")):
+                doc = json.loads(f.read_text(encoding="utf-8"))
+                if not domain or doc["standard"].get("domain") == domain:
+                    files.append(doc)
         if include_drafts_from:
             seen = {d["standard"]["id"] for d in files}
             for f in sorted(Path(include_drafts_from).glob(f"standards/{jurisdiction}/*/draft/rules.json")):

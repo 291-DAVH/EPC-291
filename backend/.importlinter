@@ -2,8 +2,8 @@
 [importlinter]
 root_packages =
     epc
+    epc_aea90364
     epc_arch
-    epc_calc
     epc_documents
     epc_drawing
     epc_dxf
@@ -968,8 +968,8 @@ name = engine packages never import the backend
 type = forbidden
 allow_indirect_imports = True
 source_modules =
+    epc_aea90364
     epc_arch
-    epc_calc
     epc_documents
     epc_drawing
     epc_dxf
@@ -989,5 +989,5 @@ type = layers
 layers =
     epc_drawing
     epc_mld | epc_sld
-    epc_titleblock | epc_symbols | epc_plan | epc_calc | epc_arch
+    epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch
     epc_dxf
