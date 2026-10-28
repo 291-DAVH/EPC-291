@@ -253,6 +253,25 @@ class TestSld(unittest.TestCase):
         self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                         # the data changed after the memo
         self.assertEqual(self.c.post(self.base + "/generate").status_code, 409)                                  # and the diagram needs the memo of the current data
 
+    def test_the_calculation_alone_gives_the_sections_without_the_memo_and_the_diagram_still_needs_the_memo(self):
+        self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+        st = self.wait()
+        self.assertEqual(st["state"], "done", st)
+        rows = self.c.get(self.base + "/calculation").json()["rows"]
+        self.assertTrue({"C-01", "M-01"} <= {r["tag"] for r in rows})
+        self.assertTrue(rows and all(r["S"] and r["In"] for r in rows))                                        # a section and a protection for each circuit
+        self.assertFalse(any(o.endswith(("_MC.md", "_SP.md", ".svg", ".dxf")) for o in st["outputs"]), st["outputs"])
+        self.assertFalse(self.c.get(self.base + "/memo").json()["available"])                                   # the memo is its own step
+        self.assertEqual(self.c.post(self.base + "/generate").status_code, 409)
+        self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)                                       # the memo, once made...
+        self.assertEqual(self.wait()["state"], "done")
+        self.assertFalse(self.c.get(self.base + "/memo").json()["stale"])
+        self.c.put(self.base, json={"board": {**BOARD, "icc_ka": 36}, "circuits": CIRCUITS, "titleblock": TB})
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                        # ...is not renewed by a calculation: it still has to be run again
+
     def test_a_generation_without_memo_file_is_still_told_outdated_when_the_data_change(self):
         self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)

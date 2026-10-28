@@ -7,9 +7,9 @@ from epc.modules.sld import jobs, repository, results
 
 
 def _rows(d: Path, bid: str) -> Tuple[Dict[str, dict], List[str]]:
-    """Calculate one board (no diagrams) and read what it gave: {tag: {section_mm2, in_a, ib_a, du_pct, complies, board}} and the reasons it could not be done."""
+    """Calculate one board (the calculation alone: no memo, no diagrams) and read what it gave: {tag: {section_mm2, in_a, ib_a, du_pct, complies, board}} and the reasons it could not be done."""
     try:
-        jobs.generate(d, wait=True, diagrams="none", bid=bid)
+        jobs.generate(d, wait=True, diagrams="calc", bid=bid)
     except DomainError as e:
         return {}, [f"{bid}: {e}"]
     rows = results.calculation(d, bid)["rows"]

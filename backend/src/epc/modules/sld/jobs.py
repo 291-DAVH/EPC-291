@@ -23,6 +23,11 @@ def _lock(d: Path, bid: str) -> threading.Lock:
     return _LOCKS.setdefault(f"{d.resolve()}::{bid}", threading.Lock())
 
 
+def _fingerprint(d: Path, data: dict, diagrams: str, prior: dict):
+    """What a run says it was made from. A calculation alone does not renew it: the memo and the diagrams of the run before are still of the data they were made from."""
+    return prior.get("input_hash") if diagrams == "calc" else _hash(d, data)
+
+
 def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> None:
     prior = repository.load_status(d, bid)
     previous, previous_name = prior.get("outputs", []), prior.get("name")
@@ -47,7 +52,7 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
         else:
             log += repository.render_pdfs(out, "SLD_" + name) if "sld" in diagrams else []
             log += repository.render_pdfs(out, "MLD_" + name) if "mld" in diagrams else []
-            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name), name=name, input_hash=_hash(d, data),
+            st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name, exact=diagrams == "calc"), name=name, input_hash=_fingerprint(d, data, diagrams, prior),
                       calculation={"limits_pct": summary.get("limites_pct"), "conductor": summary.get("conductor"), "non_compliant": summary.get("non_compliant", [])})
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status
         st.update(state="failed", error=str(exc)[:600])
@@ -56,8 +61,8 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
 
 
 def generate(d: Path, wait: bool = False, diagrams: str = "sld", bid: str = "") -> dict:
-    if diagrams not in ("sld", "mld", "sld,mld", "none"):
-        raise Invalid({"diagrams": "sld, mld, sld,mld or none (calculation and memo only)"})
+    if diagrams not in ("sld", "mld", "sld,mld", "none", "calc"):
+        raise Invalid({"diagrams": "sld, mld, sld,mld, none (calculation and memo only) or calc (the calculation alone)"})
     bid = _resolve(d, bid)
     saved = repository.load_input(d, bid) if bid else None
     if not saved:
@@ -65,7 +70,7 @@ def generate(d: Path, wait: bool = False, diagrams: str = "sld", bid: str = "") 
     errors = validate(saved)
     if errors:
         raise Invalid(errors)
-    if diagrams != "none":                                       # the memo and summary come before the diagram, calculated on the data as they are now
+    if diagrams not in ("none", "calc"):                         # the memo and summary come before the diagram, calculated on the data as they are now
         m = memo(d, bid)
         if not m["available"] or m["stale"]:
             raise Conflict({"memo": "calculate the memo and summary of the board first"})

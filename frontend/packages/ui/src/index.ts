@@ -2,7 +2,7 @@ export * from "./api";
 export { AuthGate, signOut } from "./auth";
 export { default as CompanySignup } from "./CompanySignup";
 export * from "./components";
-export { CalculationTable } from "./calculation";
+export { CalcCells, CALC_HEADS, CalcHeader, CalculationTable } from "./calculation";
 export { Markdown } from "./markdown";
 export { PdfViewer, usePdfUrl } from "./pdf";
 export type { PdfViewerProps } from "./pdf";
