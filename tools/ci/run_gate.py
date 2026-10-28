@@ -15,6 +15,7 @@ Checks
   engine-aea90364   AEA 90364 norm engine tests (calculation, rules, data)
   engine-rules      rules engine tests
   engine-standards  standards ingestion and promotion tests
+  engine-lighting   lighting engine tests (luminaire count, layout, point illuminance)
   engine-drawing    symbol library tests
   engine-documents  document verifiers, CCPM, exporters (environment-dependent tests are skipped)
   intake            customer-input pipeline tests
@@ -46,7 +47,7 @@ def first(*paths):
 PYTHON = first(REPO / ".venv" / "Scripts" / "python.exe", REPO / ".venv" / "bin" / "python") or Path(sys.executable)
 PLUGINS = REPO / "claude" / "plugins"
 ENGINE = REPO / "engine"
-AREAS = ("aea90364", "rules", "standards", "dxf", "symbols", "titleblock", "plan", "arch", "sld", "mld", "drawing", "documents")
+AREAS = ("aea90364", "rules", "standards", "dxf", "symbols", "titleblock", "plan", "arch", "lighting", "sld", "mld", "drawing", "documents")
 BUILD = first(REPO / "tools" / "build" / "epc_build.py")
 CONFLICTS = first(REPO / "tools" / "ci" / "check_skill_conflicts.py")
 BOARD = first(REPO / "tools" / "planning" / "board.py")

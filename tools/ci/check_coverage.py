@@ -29,6 +29,7 @@ AREAS = {                            # area -> path fragment of its production c
     "engine-titleblock": "/engine/titleblock/src/",
     "engine-plan": "/engine/plan/src/",
     "engine-arch": "/engine/arch/src/",
+    "engine-lighting": "/engine/lighting/src/",
     "engine-sld": "/engine/sld/src/",
     "engine-mld": "/engine/mld/src/",
     "engine-drawing": "/engine/drawing/src/",

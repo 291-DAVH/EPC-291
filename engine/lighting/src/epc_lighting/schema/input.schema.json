@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "epc_lighting/input.schema.json",
+  "title": "EPC-291 lighting engine input document",
+  "description": "Luminaires, interior rooms and exterior areas. Lengths in metres, flux in lumens, illuminance in lux. The engine validates the same rules with messages that say what to correct.",
+  "type": "object",
+  "required": ["schema_version"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "luminaires": {"type": "array", "items": {"$ref": "#/$defs/luminaire"}},
+    "rooms": {"type": "array", "items": {"$ref": "#/$defs/room"}},
+    "areas": {"type": "array", "items": {"$ref": "#/$defs/area"}}
+  },
+  "$defs": {
+    "positive": {"type": "number", "exclusiveMinimum": 0},
+    "fraction": {"type": "number", "minimum": 0, "maximum": 1},
+    "luminaire": {
+      "type": "object",
+      "required": ["id", "lamp_flux_lm"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "lamps": {"type": "integer", "minimum": 1, "default": 1},
+        "lamp_flux_lm": {"$ref": "#/$defs/positive"},
+        "efficiency": {"type": "number", "exclusiveMinimum": 0, "maximum": 1, "default": 1, "description": "Light output ratio; leave at 1 when the CU table or intensity table already includes it"},
+        "power_w": {"type": "number", "minimum": 0, "description": "Circuit power of one luminaire including its control gear"},
+        "cu": {"$ref": "#/$defs/positive"},
+        "cu_table": {"$ref": "#/$defs/cu_table"},
+        "photometry": {"$ref": "#/$defs/photometry"},
+        "distribution": {"enum": ["direct", "semi_direct", "general_diffuse", "direct_indirect", "semi_indirect", "indirect"]},
+        "spacing_ratio": {"$ref": "#/$defs/positive", "description": "Maximum spacing as a multiple of h, from the manufacturer"}
+      }
+    },
+    "cu_table": {
+      "type": "object",
+      "required": ["axis_values", "reflectances", "values"],
+      "properties": {
+        "axis": {"enum": ["k", "rcr"], "default": "k"},
+        "unit": {"enum": ["fraction", "percent"], "default": "fraction"},
+        "axis_values": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0}},
+        "reflectances": {"type": "array", "minItems": 1, "items": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/$defs/fraction"}}, "description": "Columns as [ceiling, walls, floor]"},
+        "values": {"type": "array", "minItems": 1, "items": {"type": "array", "items": {"type": "number", "minimum": 0}}, "description": "One row per axis value, one number per reflectance column"}
+      }
+    },
+    "photometry": {
+      "type": "object",
+      "required": ["gamma_deg", "intensity_cd_per_klm"],
+      "properties": {
+        "gamma_deg": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0, "maximum": 180}},
+        "c_deg": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0, "exclusiveMaximum": 360}},
+        "intensity_cd_per_klm": {"type": "array", "description": "A list of numbers (rotational symmetry) or one list per C plane"}
+      }
+    },
+    "reflectance": {
+      "oneOf": [
+        {"$ref": "#/$defs/fraction"},
+        {"type": "object", "required": ["material"], "properties": {"material": {"type": "string"}}}
+      ]
+    },
+    "target": {
+      "anyOf": [{"required": ["target_lux"]}, {"required": ["activity"]}]
+    },
+    "room": {
+      "type": "object",
+      "required": ["id", "width_m", "length_m", "height_m", "luminaire"],
+      "allOf": [{"$ref": "#/$defs/target"}],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "width_m": {"$ref": "#/$defs/positive"},
+        "length_m": {"$ref": "#/$defs/positive"},
+        "height_m": {"$ref": "#/$defs/positive"},
+        "work_plane_height_m": {"type": "number", "minimum": 0, "default": 0.85},
+        "suspension_m": {"type": "number", "minimum": 0, "default": 0},
+        "suspension_mode": {"enum": ["auto_min", "auto_optimal"]},
+        "luminaire": {"type": "string"},
+        "method": {"enum": ["lumen", "zonal"], "default": "lumen"},
+        "lighting_system": {"enum": ["direct", "semi_direct", "general_diffuse", "direct_indirect", "semi_indirect", "indirect"], "default": "direct"},
+        "target_lux": {"$ref": "#/$defs/positive"},
+        "activity": {"type": "string"},
+        "reflectances": {
+          "type": "object",
+          "properties": {"ceiling": {"$ref": "#/$defs/reflectance"}, "walls": {"$ref": "#/$defs/reflectance"}, "floor": {"$ref": "#/$defs/reflectance"}},
+          "additionalProperties": false
+        },
+        "environment": {"enum": ["clean", "dirty"], "default": "clean"},
+        "maintenance_factor": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "coefficient_of_utilisation": {"$ref": "#/$defs/positive"},
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["x_m", "y_m"],
+            "properties": {
+              "id": {"type": "string"},
+              "x_m": {"type": "number", "minimum": 0},
+              "y_m": {"type": "number", "minimum": 0},
+              "normal": {"oneOf": [{"const": "horizontal"}, {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}}]}
+            }
+          }
+        },
+        "point_step_m": {"$ref": "#/$defs/positive"},
+        "operating_hours_per_year": {"type": "number", "minimum": 0, "maximum": 8760}
+      }
+    },
+    "area": {
+      "type": "object",
+      "required": ["id", "area_m2", "luminaire"],
+      "allOf": [{"$ref": "#/$defs/target"}],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "area_m2": {"$ref": "#/$defs/positive"},
+        "luminaire": {"type": "string"},
+        "target_lux": {"$ref": "#/$defs/positive"},
+        "activity": {"type": "string"},
+        "beam_utilisation": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "enclosure": {"enum": ["open", "closed"], "default": "closed"},
+        "maintenance_factor": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "operating_hours_per_year": {"type": "number", "minimum": 0, "maximum": 8760}
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "note": "Maximum spacing between luminaires as a multiple of the mounting height h over the work plane (e <= ratio * h). by_room_height: UPV article table 7, chosen by the height H of the room. The ratio by lighting system lives in lighting_systems.json (UNAC chapter III, 2.6). A luminaire can declare its own spacing_ratio (its photometric data wins over both).",
+  "by_room_height": [
+    {"id": "intensive", "height_over_m": 10, "ratio": 1.2, "label": {"es": "Intensiva (> 10 m)", "en": "Intensive (> 10 m)"}},
+    {"id": "extensive_6_10", "height_over_m": 6, "ratio": 1.5, "label": {"es": "Extensiva (6 - 10 m)", "en": "Extensive (6 - 10 m)"}},
+    {"id": "semi_extensive", "height_over_m": 4, "ratio": 1.5, "label": {"es": "Semiextensiva (4 - 6 m)", "en": "Semi-extensive (4 - 6 m)"}},
+    {"id": "extensive_low", "height_over_m": 0, "ratio": 1.6, "label": {"es": "Extensiva (<= 4 m)", "en": "Extensive (<= 4 m)"}}
+  ],
+  "source": "UPV lumen-method article, table 7"
+}

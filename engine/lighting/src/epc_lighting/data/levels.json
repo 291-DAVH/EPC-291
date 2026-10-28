@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "note": "Recommended maintained illuminance by activity, as quoted in the supplied teaching material. They are reference values, not the standard itself (the standard is copyrighted and is not stored here): the engineer confirms them with the project standard. Pass target_lux in the document to override.",
+  "activities": [
+    {
+      "id": "education.classroom",
+      "label": {"es": "Aulas, aulas de tutoría", "en": "Classrooms, tutorial rooms"},
+      "em_lux": 300, "ugr_l": 19, "ra": 80,
+      "source": "UNE-EN 12464-1:2003 table 6.2.1, as quoted in the UPV lumen-method article (fig. 2)"
+    },
+    {
+      "id": "education.evening_classroom",
+      "label": {"es": "Aulas para clases nocturnas y educación de adultos", "en": "Evening and adult education classrooms"},
+      "em_lux": 500, "ugr_l": 19, "ra": 80,
+      "source": "UNE-EN 12464-1:2003 table 6.2.2, as quoted in the UPV lumen-method article (fig. 2)"
+    },
+    {
+      "id": "education.reading_room",
+      "label": {"es": "Sala de lectura", "en": "Reading room"},
+      "em_lux": 500, "ugr_l": 19, "ra": 80,
+      "source": "UNE-EN 12464-1:2003 table 6.2.3, as quoted in the UPV lumen-method article (fig. 2)"
+    },
+    {
+      "id": "task.very_fine",
+      "label": {"es": "Tareas muy finas", "en": "Very fine tasks"},
+      "em_lux": 1000, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "task.fine",
+      "label": {"es": "Tareas finas", "en": "Fine tasks"},
+      "em_lux": 750, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "task.drawing",
+      "label": {"es": "Dibujo", "en": "Drawing"},
+      "em_lux": 500, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "task.reading",
+      "label": {"es": "Lectura", "en": "Reading"},
+      "em_lux": 300, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "room.living",
+      "label": {"es": "Estancia", "en": "Living / general room"},
+      "em_lux": 220, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "room.storage",
+      "label": {"es": "Almacenaje", "en": "Storage"},
+      "em_lux": 150, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    },
+    {
+      "id": "circulation.indoor",
+      "label": {"es": "Circulaciones", "en": "Circulation areas"},
+      "em_lux": 100, "ugr_l": null, "ra": null,
+      "source": "ICARO manual, I.1 Comodidad, 2.1 Nivel de iluminación"
+    }
+  ]
+}

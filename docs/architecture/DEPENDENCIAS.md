@@ -13,6 +13,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `documents` | — | — | — |
 | `drawing` | `aea90364`, `dxf`, `mld`, `sld`, `titleblock` | `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
 | `dxf` | — | `backend.catalogs`, `backend.layout`, `drawing`, `mld`, `plan`, `sld`, `titleblock` | `backend.admin`, `backend.app`, `backend.catalogs`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing`, `mld`, `plan`, `sld`, `titleblock` |
+| `lighting` | — | — | — |
 | `mld` | `aea90364`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.app`, `backend.coordination`, `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld`, `drawing` |
 | `plan` | `dxf` | `backend.coordination`, `backend.layout` | `backend.app`, `backend.coordination`, `backend.layout` |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
@@ -60,6 +61,7 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | `documents` | `playwright`, `pypdf`, `python-docx` | `playwright`, `pypdf`, `python-docx` | — |
 | `drawing` | `ezdxf`, `matplotlib`, `openpyxl` | `epc-aea90364`, `epc-mld`, `epc-sld`, `epc-titleblock`, `ezdxf`, `matplotlib`, `openpyxl` | — |
 | `dxf` | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` | `ezdxf`, `lxml`, `shapely`, `svgelements`, `vtracer` | — |
+| `lighting` | — | — | — |
 | `mld` | `lxml` | `epc-aea90364`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `lxml` | — |
 | `plan` | `ezdxf` | `epc-dxf`, `ezdxf` | — |
 | `rules` | — | — | — |
