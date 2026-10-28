@@ -1,6 +1,4 @@
 """Files of the reporting step: the methodology's report catalog, the generated reports and their log."""
-import json
-import tempfile
 from pathlib import Path
 from typing import List, Optional
 
@@ -35,9 +33,4 @@ def write_text(path: Path, text: str) -> None:
 
 def render_pdf(doc: dict, dst: Path) -> None:
     """PDF through the engine exporter."""
-    with tempfile.TemporaryDirectory() as tmp:
-        src = Path(tmp) / "report.json"
-        src.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
-        res = engine.run_module("epc_drawing.export.report_pdf", [src, dst], timeout=180)
-    if res.returncode != 0:
-        raise RuntimeError(f"could not render the report: {engine.tail(res, 300)}")
+    engine.render_report_pdf(doc, dst)

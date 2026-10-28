@@ -125,6 +125,15 @@ def _pick(label: Any, lang: str) -> str:
     return (label.get(lang) or label.get("en") or "") if isinstance(label, dict) else str(label or "")
 
 
+def label(entry: dict, lang: str) -> str:
+    """The name of a luminaire of the catalogue in the language asked."""
+    return _pick(entry.get("name"), lang)
+
+
+def engine_version() -> str:
+    return _engine()[0].__version__
+
+
 def _luminaire_rows(project_dir: Path, lang: str) -> List[dict]:
     entries, origin = _resolve(project_dir)
     return [{"id": lid, "name": _pick(e.get("name"), lang) or lid, "kind": e.get("kind", "interior"), "lamps": e.get("lamps", 1), "lamp_flux_lm": e.get("lamp_flux_lm"), "power_w": e.get("power_w"),
@@ -194,6 +203,17 @@ def _fingerprint(body: CalcIn, luminaires: Dict[str, dict], used: List[str]) -> 
     """What a calculation was made from: the rooms, their parameters, the options and the luminaires used. A later change of any of them makes the study stale."""
     seen = {"sheet": body.sheet.model_dump(), "rooms": {k: v.model_dump() for k, v in sorted(body.rooms.items())}, "options": body.options.model_dump(), "luminaires": {lid: luminaires[lid] for lid in used}}
     return hashlib.sha256(json.dumps(seen, sort_keys=True).encode("utf-8")).hexdigest()[:16]
+
+
+def fingerprint(project_dir: Path, body: CalcIn) -> str:
+    """The fingerprint a calculation of this request would have, without calculating (empty when the sheet has no usable scale)."""
+    try:
+        k = geometry.metres_per_unit(body.sheet.scale)
+    except geometry.GeometryError:
+        return ""
+    luminaires = effective(project_dir)
+    rooms, *_ = _prepare(body, k, luminaires)
+    return _fingerprint(body, luminaires, sorted({r["luminaire"] for r in rooms}))
 
 
 def _prepare(body: CalcIn, k: float, luminaires: Dict[str, dict]) -> tuple:

@@ -1,17 +1,17 @@
 import { Badge, Icon, Key, useI18n } from "@epc/ui";
 import type { Drawing } from "./planEditing";
-import { Card, cardOf, hasPlacements, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
+import { Card, cardOf, hasPlacements, LightingStudy, isReady, LightingOptions, LightingProposal, parsePositive, RoomLighting, setRoomLighting } from "./lightingApi";
 
 /** Lighting: for each room marked on the plan, what it is for and which luminaire; the program calculates how many go in and where, and shows it over the plan and as a card per room until the
  *  person decides. The numbers are the backend's (`epc_lighting`); this panel only asks and shows. */
 interface Props {
   drawing: Drawing; options: LightingOptions | undefined; proposal: LightingProposal | null; busy: boolean; canWrite: boolean;
-  onChange: (d: Drawing) => void; onCalc: () => void; onApply: () => void; applied: string; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
+  onChange: (d: Drawing) => void; onCalc: () => void; onApply: () => void; applied: string; study: LightingStudy | undefined; onReport: () => void; reported: string; onDiscard: () => void; onNewRoom: () => void; onLook: (at: [number, number]) => void;
 }
 
 const ESTIMATES = ["target", "cu", "maintenance", "ceiling", "walls", "floor"];
 
-export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onApply, applied, onDiscard, onNewRoom, onLook }: Props) {
+export default function LightingPanel({ drawing, options, proposal, busy, canWrite, onChange, onCalc, onApply, applied, study, onReport, reported, onDiscard, onNewRoom, onLook }: Props) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
   const rooms = drawing.rooms ?? [];
@@ -67,6 +67,7 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
         {proposal && <button onClick={onDiscard}>{tl("design.discard")}</button>}
       </div>}
       {!ready && rooms.length > 0 && <p className="muted small">{tl("light.needFields")}</p>}
+      {study?.exists && <Study study={study} canWrite={canWrite} reported={reported} onReport={onReport} />}
       {applied && <div className="alert ok small" style={{ marginTop: 8 }}>{applied}</div>}
       {proposal && <Result proposal={proposal} />}
     </div>
@@ -107,6 +108,27 @@ function RoomCard({ c }: { c: Card }) {
         {c.power_w !== null && <>{c.power_w.toFixed(0)} W{c.density !== null && <> ({c.density.toFixed(1)} W/m²)</>}</>}
       </div>
       {c.unsure.length > 0 && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.confirm")}: {c.unsure.filter((k) => ESTIMATES.includes(k)).map((k) => tl(`light.est.${k}`)).join(", ")}</div>}
+    </div>
+  );
+}
+
+/** The study kept with the sheet: when it was made, whether it is still good for the rooms as they are drawn now, and its report. */
+function Study({ study, canWrite, reported, onReport }: { study: LightingStudy; canWrite: boolean; reported: string; onReport: () => void }) {
+  const { t } = useI18n();
+  const tl = (k: string) => t(k as Key);
+  const rooms = study.result?.rooms ?? [];
+  const meets = rooms.filter((r) => r.verification.complies).length;
+  return (
+    <div className="coord-item" style={{ marginTop: 10 }}>
+      <div className="row" style={{ gap: 6, flexWrap: "wrap" }}>
+        <b>{tl("light.study")}</b>
+        <Badge tone={study.stale ? "warn" : "ok"}>{study.stale ? tl("light.study.stale") : tl("light.study.fresh")}</Badge>
+      </div>
+      <div className="small muted">{study.saved_at}{study.saved_by ? ` · ${study.saved_by}` : ""}</div>
+      <div className="small">{rooms.length} {tl("light.rooms")} · {meets} {tl("light.meets")}</div>
+      {study.stale && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.study.staleHelp")}</div>}
+      {canWrite && <button style={{ marginTop: 6 }} disabled={study.stale} onClick={onReport}>{tl("light.report")}</button>}
+      {reported && !study.stale && <div className="small" style={{ marginTop: 4 }}>{reported}</div>}
     </div>
   );
 }

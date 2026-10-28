@@ -3,9 +3,12 @@
 `set_runner` is the seam for tests: a function with the signature of `subprocess.run` replaces the real process (None restores it), as
 `intake.analyzer.set_client_factory` does for the AI client.
 """
+import json
 import os
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 from typing import Callable, Optional, Sequence
 
 from epc.core.config import settings
@@ -34,3 +37,13 @@ def run_module(module: str, args: Sequence, timeout: int, catalogs: Optional[dic
 def tail(res: subprocess.CompletedProcess, chars: int) -> str:
     """The end of what the process wrote (stderr, else stdout): where its error message is."""
     return (res.stderr or res.stdout).strip()[-chars:]
+
+
+def render_report_pdf(doc: dict, dst: Path, timeout: int = 180) -> None:
+    """A structured report (see `epc_drawing.export.report_pdf`: title, key/value blocks, headings, paragraphs, bullets, tables) as an A4 PDF. Raises RuntimeError with the end of the engine's message."""
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "report.json"
+        src.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+        res = run_module("epc_drawing.export.report_pdf", [src, dst], timeout=timeout)
+    if res.returncode != 0:
+        raise RuntimeError(f"could not render the report: {tail(res, 300)}")

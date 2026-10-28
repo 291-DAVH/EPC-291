@@ -1,0 +1,120 @@
+"""Lighting: the study kept with a sheet, when it goes stale, and its report as a document that is issued."""
+import unittest
+
+from epc.core.fsutil import read_json
+from tests.integration.test_lighting_api import BASE, CLASSROOM, OWN, PARAMS, SCALE, Base, body
+
+LAYOUT = "/api/projects/ACME/P-1/layout/L0"
+STUDY = BASE + "/study/L0"
+
+
+def drawing(params=PARAMS, scale=SCALE):
+    return {"discipline": "electrica_BT", "scale": scale, "origin": [0, 0], "nodes": [], "lines": [], "circuits": [], "rooms": [{**CLASSROOM, "lighting": params}]}
+
+
+class Study(Base):
+    def setUp(self):
+        super().setUp()
+        self.with_own()
+        self.assertEqual(self.c.put(LAYOUT, json=drawing()).status_code, 200)
+
+    def save(self):
+        return self.c.put(STUDY, json=body())
+
+
+class TestKeeping(Study):
+    def test_a_sheet_without_study_says_so(self):
+        self.assertEqual(self.c.get(STUDY).json(), {"exists": False})
+
+    def test_the_study_is_kept_with_the_sheet_and_is_good_for_the_rooms_as_they_are(self):
+        r = self.save()
+        self.assertEqual(r.status_code, 200, r.text)
+        s = r.json()
+        self.assertTrue(s["exists"] and not s["stale"] and not s["report"])
+        self.assertEqual(s["result"]["rooms"][0]["id"], "R1")
+        self.assertTrue(s["placements"]["R1"])
+        kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0" / "src" / "lighting.json", None)
+        self.assertEqual(kept["fingerprint"], s["fingerprint"])
+        self.assertEqual(self.c.get(STUDY).json()["fingerprint"], s["fingerprint"])                      # it survives a reload
+
+    def test_a_sheet_that_does_not_exist_and_a_request_with_nothing_to_calculate_are_refused(self):
+        self.assertEqual(self.c.put(BASE + "/study/L9", json=body()).status_code, 404)
+        self.assertEqual(self.c.put(STUDY, json=body(params={})).status_code, 422)
+        self.assertEqual(self.c.get(STUDY).json(), {"exists": False})                                     # nothing was kept
+
+    def test_a_second_study_replaces_the_first(self):
+        first = self.save().json()
+        second = self.c.put(STUDY, json=body(params={"R1": {**PARAMS, "height_m": 3.2}})).json()
+        self.assertNotEqual(first["fingerprint"], second["fingerprint"])
+        self.assertEqual(self.c.get(STUDY).json()["fingerprint"], second["fingerprint"])
+
+
+class TestStale(Study):
+    def test_it_goes_stale_when_what_a_room_says_changes_and_is_good_again_when_the_study_is_remade(self):
+        self.save()
+        self.c.put(LAYOUT, json=drawing({**PARAMS, "height_m": 3.4}))
+        self.assertTrue(self.c.get(STUDY).json()["stale"])
+        self.c.put(STUDY, json=body(params={"R1": {**PARAMS, "height_m": 3.4}}))
+        self.assertFalse(self.c.get(STUDY).json()["stale"])
+
+    def test_it_goes_stale_when_the_scale_changes(self):
+        self.save()
+        self.c.put(LAYOUT, json=drawing(scale={"p1": [0, 0], "p2": [100, 0], "distance_m": 12}))
+        self.assertTrue(self.c.get(STUDY).json()["stale"])
+
+    def test_it_goes_stale_when_a_luminaire_of_the_catalogue_it_used_changes(self):
+        self.save()
+        self.c.put(BASE + "/luminaires", json={"luminaires": {"mine": {**OWN, "lamp_flux_lm": 3000}}})
+        self.assertTrue(self.c.get(STUDY).json()["stale"])
+
+    def test_it_stays_good_when_the_sheet_changes_in_what_the_study_does_not_read(self):
+        self.save()
+        self.c.put(LAYOUT, json={**drawing(), "nodes": [{"id": "n1", "kind": "LU", "x": 10, "y": 10}]})
+        self.assertFalse(self.c.get(STUDY).json()["stale"])
+
+    def test_a_room_with_something_the_study_cannot_read_makes_it_stale_instead_of_failing(self):
+        self.save()
+        self.c.put(LAYOUT, json=drawing({**PARAMS, "height_m": -1}))
+        self.assertTrue(self.c.get(STUDY).json()["stale"])
+
+
+class TestReport(Study):
+    def test_the_report_of_a_study_is_a_pdf_among_the_documents_and_is_offered_for_issue(self):
+        self.save()
+        r = self.c.post(STUDY + "/report?lang=es")
+        self.assertEqual(r.status_code, 200, r.text)
+        pdf = self.d / r.json()["path"]
+        self.assertTrue(pdf.read_bytes().startswith(b"%PDF"))
+        self.assertTrue(self.c.get(STUDY).json()["report"])
+        offered = [c for c in self.c.get("/api/projects/ACME/P-1/issuing").json()["candidates"] if c["name"].startswith("LIGHTING_")]
+        self.assertEqual([(c["kind"], c["formats"]) for c in offered], [("document", ["pdf"])])
+
+    def test_a_stale_study_has_no_report_and_a_sheet_without_study_neither(self):
+        self.assertEqual(self.c.post(STUDY + "/report").status_code, 404)
+        self.save()
+        self.c.put(LAYOUT, json=drawing({**PARAMS, "height_m": 3.4}))
+        r = self.c.post(STUDY + "/report")
+        self.assertEqual(r.status_code, 409, r.text)
+
+
+class TestDocument(unittest.TestCase):
+    def test_the_texts_are_in_the_language_asked_and_what_was_estimated_with_little_confidence_is_marked(self):
+        from epc.modules.lighting import report
+        est = lambda v, c: {"value": v, "reason": "x", "confidence": c}                                      # noqa: E731
+        room = {"id": "R1", "name": "Aula", "target": est(300, 0.9), "factors": {"cu": est(0.5, 0.3), "maintenance": est(0.8, 0.9)},
+                "layout": {"installed": 4, "required": 4}, "verification": {"average_lux": 378.4, "target_lux": 300, "complies": True}, "energy": {"installed_power_w": 144, "power_density_w_m2": 6.0}}
+        stored = {"sheet": "L0", "saved_at": "2026-01-01 10:00", "saved_by": "a@b.c", "input": {"rooms": {"R1": {"activity": "education.classroom", "luminaire": "mine"}}},
+                  "result": {"rooms": [room]}, "skipped": [{"id": "R2", "name": "Pasillo", "reason": "no luminaire chosen"}], "warnings": ["w1"]}
+        es = report.document(stored, {"code": "P-1", "name": "Planta"}, "es", {"mine": "Doble 2400"}, True, "1.0")
+        self.assertEqual(es["title"], "Memoria de cálculo de iluminación")
+        table = next(b for b in es["blocks"] if b["type"] == "table")
+        self.assertEqual(table["rows"][0], ["Aula", "education.classroom", "Doble 2400", "4 / 4", "378", "300", "cumple", "6.0"])
+        bullets = next(b for b in es["blocks"] if b["type"] == "bullets")["items"]
+        self.assertEqual(len(bullets), 2)                                                                     # the target, and the factor that was not sure
+        self.assertIn("[confirmar]", bullets[1])
+        self.assertTrue(any("valores típicos" in b.get("text", "") for b in es["blocks"]))
+        self.assertEqual(report.document(stored, {}, "en", {}, False, "1.0")["title"], "Lighting calculation report")
+
+
+if __name__ == "__main__":
+    unittest.main()
