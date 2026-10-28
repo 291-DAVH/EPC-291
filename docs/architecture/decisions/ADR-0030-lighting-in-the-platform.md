@@ -64,4 +64,4 @@ Each phase ends with the gate green; nothing changes for the user before phase 3
 - (-) Room parameters add fields to the drawing model (optional, ignored by the plan engine).
 - (-) The targets of the activities are the typical ones quoted in the engine's material, which the screen says on each card; the ones of the Decreto 351/79 reach the panel only when a person approves them in the norms review (phase 7). Until then the rooms use the activity or a target given by hand.
 - (-) The review state of the lighting rules is kept with the others in the AEA norm package (`epc_aea90364/data/review.json`), because the norms review has one file for it; the engine reads the `review` flag of each rule, which the review keeps in step.
-- (-) Emergency luminaires are previewed and reported but not drawn as nodes of the plan: the electrical profile has no kind for them (a later profile change).
+- (+) Emergency luminaires are applied to the plan as nodes `LE` (a kind of the electrical profile with its own family of circuit `IUE`), added after phase 7 together with the improvements of `docs/BACKLOG_ILUMINACION.md`.

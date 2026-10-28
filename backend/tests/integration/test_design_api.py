@@ -47,6 +47,14 @@ class TestDesign(unittest.TestCase):
         runs = self.c.post(f"{self.base}/L0/design/runs", json={"drawing": {**DRAWING, "rooms": rooms}})
         self.assertEqual(runs.status_code, 200, runs.text)                                    # the plan engine never reads it
 
+    def test_what_the_person_set_for_the_lighting_panel_is_kept_with_the_sheet_and_is_bounded(self):
+        settings_ = {"power_limit_w_m2": 12, "kwh_price": 0.15, "templates": {"Office": {"activity": "task.reading", "luminaire": "led_panel_600"}}}
+        r = self.c.put(f"{self.base}/L0", json={**DRAWING, "lighting_settings": settings_})
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertEqual(r.json()["drawing"]["lighting_settings"], settings_)
+        self.assertEqual(self.c.get(f"{self.base}/L0").json()["drawing"]["lighting_settings"], settings_)
+        self.assertEqual(self.c.put(f"{self.base}/L0", json={**DRAWING, "lighting_settings": {"x": "y" * 21000}}).status_code, 422)
+
     def test_the_rooms_are_kept_with_the_sheet(self):
         r = self.c.put(f"{self.base}/L0", json=DRAWING)
         self.assertEqual(r.status_code, 200, r.text)

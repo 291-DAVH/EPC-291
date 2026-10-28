@@ -13,6 +13,7 @@
       },
       "tipos": [
         "LU",
+        "LE",
         "IN",
         "CP",
         "TB",
@@ -269,6 +270,27 @@
         "alto_m": 0.1
       },
       "circuito": "IUG"
+    },
+    {
+      "id": "LE",
+      "carga": true,
+      "etiqueta": {
+        "es": "Luminaria de emergencia",
+        "en": "Emergency luminaire"
+      },
+      "prefijo_tag": "LE",
+      "atributos": [
+        "potencia_w",
+        "tipo"
+      ],
+      "simbolo_2d": "luminaria",
+      "capa_dxf": "ELEC-LUM",
+      "geom": {
+        "z_m": 2.8,
+        "ancho_m": 0.4,
+        "alto_m": 0.1
+      },
+      "circuito": "IUE"
     },
     {
       "id": "TG",

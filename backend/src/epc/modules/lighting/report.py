@@ -1,5 +1,5 @@
 """The lighting calculation report of a sheet: what was asked, what each room got and what was estimated with how much confidence, as the structure the engine's PDF exporter draws."""
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 SURE = 0.6                                         # under this confidence an estimate is listed as something to confirm
 
@@ -7,13 +7,17 @@ TEXT: Dict[str, Dict[str, str]] = {
     "en": {"title": "Lighting calculation report", "project": "Project", "sheet": "Sheet", "calculated": "Calculated on", "by": "Calculated by", "engine": "Engine", "summary": "Summary",
            "totals": "{rooms} room(s), {luminaires} luminaire(s), {power} W installed.", "rooms": "Rooms", "room": "Room", "activity": "Activity", "luminaire": "Luminaire", "count": "Qty",
            "average": "Avg (lx)", "target": "Target (lx)", "verdict": "Result", "density": "W/m²", "areas": "Exterior areas", "emergency": "Emergency lighting", "min_lux": "Min. (lx)", "ratio": "Max/min", "routes": "Routes", "floodlights": "Floodlights", "power": "Power (W)", "meets": "meets", "fails": "does not meet", "none": "No room was calculated",
-           "assumptions": "Assumptions and estimates", "est_target": "target", "est_emin": "minimum illuminance", "est_ratio": "max/min ratio", "est_beam": "beam utilisation", "est_cu": "utilisation factor", "est_maintenance": "maintenance factor", "confirm": "confirm",
+           "assumptions": "Assumptions and estimates", "company": "Issuer", "client": "Client", "drawn_by": "Drawn by", "checked_by": "Checked by", "approved_by": "Approved by", "energy": "Energy", "power": "Power (W)", "limit": "Limit (W/m²)",
+           "within": "within the limit", "over": "over the limit", "kwh": "kWh/year", "cost": "Cost per year", "figure": "Plan of the sheet with the luminaires", "scale": "illuminance {low:.0f} lx (blue) to {high:.0f} lx (red)",
+           "est_target": "target", "est_emin": "minimum illuminance", "est_ratio": "max/min ratio", "est_beam": "beam utilisation", "est_cu": "utilisation factor", "est_maintenance": "maintenance factor", "confirm": "confirm",
            "left_out": "Rooms left out", "warnings": "Warnings", "illustrative": "The luminaires of this study are typical values, not a maker's: replace them with the ones of the project before issuing.",
            "footer": "Lighting calculation", "page": "Page {n} of {total}"},
     "es": {"title": "Memoria de cálculo de iluminación", "project": "Proyecto", "sheet": "Hoja", "calculated": "Calculado el", "by": "Calculado por", "engine": "Motor", "summary": "Resumen",
            "totals": "{rooms} ambiente(s), {luminaires} luminaria(s), {power} W instalados.", "rooms": "Ambientes", "room": "Ambiente", "activity": "Actividad", "luminaire": "Luminaria", "count": "Cant.",
            "average": "Prom. (lx)", "target": "Meta (lx)", "verdict": "Resultado", "density": "W/m²", "areas": "Áreas exteriores", "emergency": "Iluminación de emergencia", "min_lux": "Mín. (lx)", "ratio": "Máx/mín", "routes": "Rutas", "floodlights": "Proyectores", "power": "Potencia (W)", "meets": "cumple", "fails": "no cumple", "none": "No se calculó ningún ambiente",
-           "assumptions": "Supuestos y estimaciones", "est_target": "la meta", "est_emin": "la iluminancia mínima", "est_ratio": "la relación máx/mín", "est_beam": "el aprovechamiento del haz", "est_cu": "el factor de utilización", "est_maintenance": "el factor de mantenimiento", "confirm": "confirmar",
+           "assumptions": "Supuestos y estimaciones", "company": "Emisora", "client": "Cliente", "drawn_by": "Dibujó", "checked_by": "Revisó", "approved_by": "Aprobó", "energy": "Energía", "power": "Potencia (W)", "limit": "Límite (W/m²)",
+           "within": "dentro del límite", "over": "excede el límite", "kwh": "kWh/año", "cost": "Costo por año", "figure": "Plano de la hoja con las luminarias", "scale": "iluminancia de {low:.0f} lx (azul) a {high:.0f} lx (rojo)",
+           "est_target": "la meta", "est_emin": "la iluminancia mínima", "est_ratio": "la relación máx/mín", "est_beam": "el aprovechamiento del haz", "est_cu": "el factor de utilización", "est_maintenance": "el factor de mantenimiento", "confirm": "confirmar",
            "left_out": "Ambientes omitidos", "warnings": "Avisos", "illustrative": "Las luminarias de este estudio son valores típicos, no de un fabricante: reemplázalas por las del proyecto antes de emitir.",
            "footer": "Cálculo de iluminación", "page": "Página {n} de {total}"},
 }
@@ -73,12 +77,20 @@ def _area_assumptions(result_areas: List[dict], t: Dict[str, str]) -> List[str]:
     return lines
 
 
-def _head(stored: dict, project: dict, t: Dict[str, str], engine_version: str) -> List[dict]:
+TITLEBLOCK = ("company", "client", "drawn_by", "checked_by", "approved_by")
+
+
+def _titleblock_rows(titleblock: Dict[str, str], t: Dict[str, str]) -> List[List[str]]:
+    """The fields of the project's title block that have something: issuer, client and the people of the discipline."""
+    return [[t[k], titleblock[k]] for k in TITLEBLOCK if titleblock.get(k)]
+
+
+def _head(stored: dict, project: dict, t: Dict[str, str], engine_version: str, titleblock: Dict[str, str]) -> List[dict]:
     result = stored["result"]
     rooms, areas = result["rooms"], result.get("areas", [])
     power = sum(x["energy"].get("installed_power_w") or 0 for x in rooms + areas)
     luminaires = sum(r["layout"]["installed"] for r in rooms) + sum(a["flux"]["luminaires_required"] for a in areas)
-    return [{"type": "kv", "rows": [[t["project"], f"{project.get('code', '')} {project.get('name', '')}".strip()], [t["sheet"], stored["sheet"]], [t["calculated"], stored["saved_at"]],
+    return [{"type": "kv", "rows": [[t["project"], f"{project.get('code', '')} {project.get('name', '')}".strip()], *_titleblock_rows(titleblock, t), [t["sheet"], stored["sheet"]], [t["calculated"], stored["saved_at"]],
                                     [t["by"], stored.get("saved_by") or "–"], [t["engine"], f"epc_lighting {engine_version}"]]},
             {"type": "h", "text": t["summary"]},
             {"type": "p", "text": t["totals"].format(rooms=len(rooms) + len(areas), luminaires=luminaires, power=_number(power))}]
@@ -102,6 +114,23 @@ def _tables(stored: dict, t: Dict[str, str], luminaire_names: Dict[str, str]) ->
     return blocks
 
 
+def _energy_rows(stored: dict, checks: Dict[str, dict], t: Dict[str, str]) -> List[List[str]]:
+    names = {x["id"]: x["name"] for x in stored["result"]["rooms"] + stored["result"].get("areas", [])}
+    rows = []
+    for rid, c in checks.items():
+        verdict = "–" if c["complies"] is None else t["within"] if c["complies"] else t["over"]
+        rows.append([names.get(rid, rid), _number(c["power_w"]), _number(c["density_w_m2"], 1), _number(c["limit_w_m2"], 1), verdict, _number(c["annual_kwh"]), _number(c["annual_cost"], 2)])
+    return rows
+
+
+def _energy(stored: dict, checks: Dict[str, dict], t: Dict[str, str]) -> List[dict]:
+    """The energy table, when the person gave a limit, hours or a tariff (without any of them the power of each room is already in the rooms table)."""
+    if not any(c["complies"] is not None or c["annual_kwh"] is not None for c in checks.values()):
+        return []
+    return [{"type": "h", "text": t["energy"]},
+            {"type": "table", "columns": [[t["room"], 0.16], [t["power"], 0.14], [t["density"], 0.1], [t["limit"], 0.17], [t["verdict"], 0.16], [t["kwh"], 0.13], [t["cost"], 0.14]], "rows": _energy_rows(stored, checks, t), "empty": t["none"]}]
+
+
 def _notes(stored: dict, t: Dict[str, str], illustrative: bool) -> List[dict]:
     rooms, areas = stored["result"]["rooms"], stored["result"].get("areas", [])
     blocks: List[dict] = [{"type": "h", "text": t["assumptions"]}, {"type": "bullets", "items": _assumptions(rooms, t) + _area_assumptions(areas, t) + _emergency_assumptions(stored["result"].get("emergency", []), t)}]
@@ -114,8 +143,12 @@ def _notes(stored: dict, t: Dict[str, str], illustrative: bool) -> List[dict]:
     return blocks
 
 
-def document(stored: dict, project: dict, lang: str, luminaire_names: Dict[str, str], illustrative: bool, engine_version: str) -> dict:
-    """The report of a stored study: `stored` is what `study.save` keeps; `project` has `name` and `code`; `luminaire_names` and `illustrative` come from the catalogue in force."""
+def document(stored: dict, project: dict, lang: str, luminaire_names: Dict[str, str], illustrative: bool, engine_version: str, extras: Optional[dict] = None) -> dict:
+    """The report of a stored study: `stored` is what `study.save` keeps; `project` has `name` and `code`; `luminaire_names` and `illustrative` come from the catalogue in force.
+    `extras` may bring the project's `titleblock` (company, client, people), the `energy_checks` of the calculation and a `figure` (see `figures.sheet_figure`)."""
     t = TEXT["es" if lang == "es" else "en"]
-    blocks = _head(stored, project, t, engine_version) + _tables(stored, t, luminaire_names) + _notes(stored, t, illustrative)
+    extras = extras or {}
+    figure = [extras["figure"]] if extras.get("figure") else []
+    blocks = (_head(stored, project, t, engine_version, extras.get("titleblock") or {}) + _tables(stored, t, luminaire_names) + _energy(stored, extras.get("energy_checks") or {}, t)
+              + [{**f, "title": t["figure"]} for f in figure] + _notes(stored, t, illustrative))
     return {"title": t["title"], "subtitle": stored["sheet"], "footer": f"{t['footer']} · {project.get('code', '')}", "page_label": t["page"], "blocks": blocks}

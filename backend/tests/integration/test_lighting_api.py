@@ -68,7 +68,7 @@ class TestCalc(Base):
         self.assertAlmostEqual(room["verification"]["average_lux"], 310.4, places=1)           # the worked example of the article
         self.assertTrue(room["verification"]["complies"])
         self.assertEqual([(p["x"], p["y"]) for p in out["placements"]["R1"]], [(15.0, 20.0), (45.0, 20.0)])      # 1.5 m and 4.5 m along the length, 2 m across, in view units
-        self.assertEqual(out["rooms"][0], {"id": "R1", "name": "Aula", "length_m": 6.0, "width_m": 4.0, "exact": True, "corner": [0, 0]})
+        self.assertEqual(out["rooms"][0], {"id": "R1", "name": "Aula", "length_m": 6.0, "width_m": 4.0, "exact": True, "corner": [0, 0], "power_factor": None, "emergency_power_factor": None})
         self.assertEqual(out["skipped"], [])
 
     def test_a_room_that_is_not_at_the_origin_gets_its_luminaires_from_its_own_corner(self):

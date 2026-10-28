@@ -10,6 +10,7 @@ export interface UnderlayOpts { opacity?: number; rotation?: number; locked?: bo
 export interface Room { id: string; name: string; points: Pt[]; lighting?: import("./lightingApi").RoomLighting }
 export interface Drawing {
   discipline: string; subdiscipline?: string; plan_name?: string; scale: Scale | null; origin: Pt; nodes: DNode[]; lines: DLine[]; circuits: DCircuit[]; outlet: string; outlet_invert_m: number | null; dxf_version: string; underlay_opts?: UnderlayOpts; rooms?: Room[];
+  lighting_settings?: import("./lightingTools").LightSettings;          // what the person set for the lighting panel of this sheet
 }
 export type Ref = { type: "node" | "line"; id: string };
 

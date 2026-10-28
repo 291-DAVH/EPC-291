@@ -85,5 +85,21 @@ def contains(points: Sequence[Sequence[float]], x: float, y: float) -> bool:
     return inside
 
 
+def drawn_positions(nodes: Sequence, outline: Sequence[Sequence[float]], rect: Rect, k: float) -> List[dict]:
+    """The luminaires drawn inside an outline (nodes of kind `LU`) as positions of the engine: metres from the corner of the room, with the height and the tag they carry."""
+    found = []
+    for n in nodes:
+        if n.kind != "LU" or not contains(outline, n.x, n.y):
+            continue
+        item = {"x_m": round(min(max((n.x - rect.x0) * k, 0.0), rect.width_u * k), 4), "y_m": round(min(max((n.y - rect.y0) * k, 0.0), rect.height_u * k), 4)}
+        height = (n.attrs.get("lighting") or {}).get("height_m") if isinstance(n.attrs.get("lighting"), dict) else None
+        if isinstance(height, (int, float)) and not isinstance(height, bool) and height > 0:
+            item["z_m"] = height
+        if n.tag:
+            item["tag"] = n.tag
+        found.append(item)
+    return found
+
+
 def corner(rect: Rect) -> List[float]:
     return [rect.x0, rect.y0]

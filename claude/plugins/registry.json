@@ -33,7 +33,7 @@
         "symbols",
         "titleblock"
       ],
-      "hash": "94662e41b70df5b5"
+      "hash": "2fbb0e7798b490a5"
     },
     "doc-quality": {
       "version": "0.1.0",
@@ -134,7 +134,7 @@
         "dxf",
         "plan"
       ],
-      "hash": "d95625dcfe364791"
+      "hash": "edc952ffb7bd97e1"
     },
     "pm2-docs": {
       "version": "0.1.0",

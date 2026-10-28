@@ -42,3 +42,42 @@ class TestReportPdf(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestFigure(unittest.TestCase):
+    FIGURE = {"type": "figure", "title": "Plano", "caption": "Plano de la hoja", "bounds": [0, 0, 200, 100],
+              "shapes": [{"s": "poly", "points": [[0, 0], [200, 0], [200, 100], [0, 100]], "fill": None, "stroke": "#222222"}, {"s": "rect", "x": 10, "y": 10, "w": 50, "h": 20, "fill": "#88aaff"},
+                         {"s": "circle", "x": 100, "y": 50, "r": 5, "fill": "#fbbf24", "stroke": "#d97706"}, {"s": "line", "points": [[0, 50], [200, 50]], "stroke": "#999999"},
+                         {"s": "text", "x": 20, "y": 90, "text": "Aula", "size": 9}]}
+
+    def test_a_figure_is_scaled_to_the_page_and_drawn_with_its_shapes_and_caption(self):
+        from epc_drawing.export.report_pdf import layout
+        pages = layout({"title": "T", "blocks": [self.FIGURE]})
+        kinds = [op[0] for op in pages[0]]
+        for kind in ("poly", "circle", "rect", "line", "text"):
+            self.assertIn(kind, kinds)
+        circle = next(op for op in pages[0] if op[0] == "circle")
+        self.assertAlmostEqual(circle[3], 5 * (595 - 100) / 200, places=6)                             # the radius follows the scale of the figure (page width 495 pt for 200 units)
+        poly = next(op for op in pages[0] if op[0] == "poly")
+        self.assertAlmostEqual(poly[1][2][0] - poly[1][0][0], 495, places=6)
+        self.assertTrue(any(op[0] == "text" and op[3] == "Plano" for op in pages[0]))                  # the heading is part of the figure
+
+    def test_a_tall_figure_is_limited_in_height_and_a_figure_that_does_not_fit_starts_a_page(self):
+        from epc_drawing.export.report_pdf import layout
+        tall = {**self.FIGURE, "bounds": [0, 0, 100, 1000], "max_height": 200}
+        pages = layout({"title": "T", "blocks": [tall]})
+        self.assertLessEqual(max(op[4] for op in pages[0] if op[0] == "rect" and op[5] == "#fbfbfd"), 200.0001)
+        many = layout({"title": "T", "blocks": [self.FIGURE] * 6})
+        self.assertGreater(len(many), 1)
+
+    def test_it_renders_to_a_pdf_with_the_caption(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        from epc_drawing.export.report_pdf import render
+        out = Path(self.tmp.name) / "f.pdf"
+        render({"title": "Memoria", "blocks": [self.FIGURE]}, out)
+        import pypdfium2 as pdfium
+        doc = pdfium.PdfDocument(str(out))
+        text = doc[0].get_textpage().get_text_range()
+        doc.close()
+        self.tmp.cleanup()
+        self.assertIn("Plano de la hoja", text)

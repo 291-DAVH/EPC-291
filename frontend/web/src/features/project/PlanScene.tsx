@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { cellsOf } from "./lightingApi";
+import { contoursOf, levelsOf } from "./lightingTools";
 import { DLine, Drawing, Pt, Ref, sameRef } from "./planEditing";
 import type { Derived, Kind, Prim, Profile } from "./PlanEditor";
 import type { PlanPrefs } from "./planPrefs";
@@ -51,6 +52,7 @@ export default function PlanScene(p: SceneProps) {
   const colorOf = (id: string) => PALETTE[Math.max(0, (profile?.lines ?? []).findIndex((x) => x.id === id)) % PALETTE.length];
   const circuitColor = (tag: string) => { const i = drawing.circuits.findIndex((c) => c.tag === tag); return i < 0 ? "#999" : CIRCUIT_PALETTE[i % CIRCUIT_PALETTE.length]; };
   const isSel = (r: Ref) => selection.some((q) => sameRef(q, r));
+  const lightLines = useMemo(() => p.lightMaps.flatMap((m) => levelsOf(m.min, m.max).map((level) => { const segments = contoursOf(m, level); return { level, segments, at: segments[0]?.[0] ?? ([0, 0] as Pt) }; }).filter((l) => l.segments.length)), [p.lightMaps]);
   const nodeTag = useMemo(() => Object.fromEntries((derived?.nodes ?? []).map((n) => [n.id, n.tag])), [derived]);
   const lineTag = useMemo(() => Object.fromEntries((derived?.stretches ?? []).map((s) => [s.line, s.line_tag])), [derived]);
   const lengthOf = useMemo(() => { const m: Record<string, number> = {}; (derived?.stretches ?? []).forEach((s) => { m[s.line] = (m[s.line] ?? 0) + s.length_m; }); return m; }, [derived]);
@@ -116,10 +118,15 @@ export default function PlanScene(p: SceneProps) {
       {p.roomDraft.length > 0 && <polyline data-ui points={polyline([...p.roomDraft, ...(p.hover ? [p.hover] : [])])} fill="none" stroke="#7c3aed" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" />}
       {p.lightMaps.length > 0 && <g data-ui pointerEvents="none">
         {p.lightMaps.flatMap((m, i) => cellsOf(m).map((c, n) => <rect key={`${i}-${n}`} x={c.x} y={c.y} width={c.w} height={c.h} fill={`hsl(${Math.round(240 - 240 * c.t)} 80% 50%)`} fillOpacity={0.42} />))}
+        {lightLines.map((l, i) => <g key={`c${i}`} stroke="#111827" strokeWidth={1} strokeOpacity={0.75} vectorEffect="non-scaling-stroke">
+          {l.segments.map(([a, b], n) => <line key={n} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} vectorEffect="non-scaling-stroke" />)}
+          <text x={l.at[0]} y={l.at[1]} fontSize={9 * u} fill="#111827" stroke="none">{l.level}</text>
+        </g>)}
       </g>}
       {p.lightMarks.length > 0 && <g data-ui pointerEvents="none">
         {p.lightMarks.map((m, i) => <g key={i} stroke={m.emergency ? "#dc2626" : "#d97706"} strokeWidth={1.5} vectorEffect="non-scaling-stroke" fill={m.emergency ? "#f87171" : "#fbbf24"} fillOpacity={0.3}>
           <circle cx={m.at[0]} cy={m.at[1]} r={6 * u} strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />
+          <text x={m.at[0] + 7 * u} y={m.at[1] - 5 * u} fontSize={8 * u} fill={m.emergency ? "#991b1b" : "#92400e"} stroke="none">{m.tag}</text>
           <line x1={m.at[0] - 4 * u} y1={m.at[1] - 4 * u} x2={m.at[0] + 4 * u} y2={m.at[1] + 4 * u} vectorEffect="non-scaling-stroke" /><line x1={m.at[0] - 4 * u} y1={m.at[1] + 4 * u} x2={m.at[0] + 4 * u} y2={m.at[1] - 4 * u} vectorEffect="non-scaling-stroke" />
         </g>)}
       </g>}

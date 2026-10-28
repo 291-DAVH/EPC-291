@@ -1,4 +1,5 @@
 import { addNode, DNode, Drawing, Pt, Room } from "./planEditing";
+import { settingsOptions } from "./lightingTools";
 
 /** The lighting of the rooms of a sheet: what the person says about each room, the request to the calculation, and what comes back reduced to what the panel and the plan show.
  *  The calculation is the backend's (`epc_lighting`); nothing here computes light. */
@@ -9,7 +10,7 @@ export interface RoomLighting {
   exterior?: boolean; beam_utilisation?: number; enclosure?: "open" | "closed";        // an exterior area: floodlights from its area and its target
 }
 export interface LightActivity { id: string; label: string; em_lux: number; ugr_l: number | null; ra: number | null; source: string }
-export interface LightLuminaire { id: string; name: string; kind: "interior" | "exterior"; lamps: number; lamp_flux_lm: number; power_w: number | null; illustrative: boolean; level: string }
+export interface LightLuminaire { id: string; name: string; kind: "interior" | "exterior"; lamps: number; lamp_flux_lm: number; power_w: number | null; illustrative: boolean; level: string; power_factor?: number | null; favorite?: boolean; group?: string }
 export interface NormRule { id: string; norm: string; clause: string; summary: string; value: number; status: "pending" | "approved" | "rejected" | "stale" }
 export interface LightingOptions { norm_rules?: NormRule[]; activities: LightActivity[]; materials: { id: string; label: string; range: [number, number] }[]; systems: { id: string; label: string }[]; methods: string[]; luminaires: LightLuminaire[] }
 
@@ -21,7 +22,7 @@ export interface RoomResult {
   target: Estimate & { activity?: string; norm_rule?: string; norm?: string; clause?: string };
   factors: { cu: Estimate; maintenance: Estimate };
   reflectances: { ceiling: Estimate; walls: Estimate; floor: Estimate };
-  layout: { installed: number; required: number; rows_across_width: number; columns_along_length: number; spacing_check: { along_length: SpacingAxis; across_width: SpacingAxis } };
+  layout: { drawn?: boolean; installed: number; required: number; rows_across_width: number; columns_along_length: number; spacing_check: { along_length: SpacingAxis; across_width: SpacingAxis } };
   verification: { average_lux: number; target_lux: number; complies: boolean; margin_pct: number };
   points: { computed: boolean; min_over_avg?: number; avg_lux?: number };
   energy: { installed_power_w: number | null; power_density_w_m2: number | null };
@@ -42,13 +43,16 @@ export interface AreaResult {
 }
 /** The illuminance of the cells of a room, row by row from its corner (view units), `null` where a cell is outside the outline. */
 export interface LightMap { x0: number; y0: number; dx: number; dy: number; nx: number; ny: number; values: (number | null)[]; min: number; max: number }
+/** What the installed power of a room or area means for the person: against the limit they set, and what a year costs (None where the limit, the hours or the tariff were not given). */
+export interface EnergyCheck { power_w: number | null; density_w_m2: number | null; limit_w_m2: number | null; complies: boolean | null; annual_kwh: number | null; annual_cost: number | null }
 export interface Placement { tag: string; x: number; y: number; z_m: number }
 export interface LightingProposal {
   emergency_placements?: Record<string, Placement[]>;
   result: { rooms: RoomResult[]; areas?: AreaResult[]; emergency?: EmergencyResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;
   maps?: Record<string, LightMap>;
   placements: Record<string, Placement[]>;
-  rooms: { id: string; name: string; length_m: number; width_m: number; exact: boolean; corner: Pt }[];
+  rooms: { id: string; name: string; length_m: number; width_m: number; exact: boolean; corner: Pt; power_factor?: number | null; emergency_power_factor?: number | null }[];
+  energy_checks?: Record<string, EnergyCheck>;
   skipped: { id: string; name: string; reason: string }[];
   warnings: string[];
   fingerprint: string;
@@ -73,7 +77,7 @@ export function setRoomLighting(d: Drawing, roomId: string, patch: Partial<Recor
 }
 
 /** A room can be calculated when it has a luminaire and either an activity or a target; an exterior area needs its target (there is no table of typical ones). */
-export const isReady = (l: RoomLighting | undefined): boolean => !!l?.luminaire && (l.exterior ? !!l.target_lux : !!(l.activity || l.target_lux || l.norm_rule));
+export const isReady = (l: RoomLighting | undefined, auto = false): boolean => (!!l?.luminaire || (auto && !l?.exterior && !!l)) && (l!.exterior ? !!l!.target_lux : !!(l!.activity || l!.target_lux || l!.norm_rule));
 
 /** Number typed in a field: a decimal comma is allowed; anything that is not a positive number is nothing. */
 export function parsePositive(text: string): number | undefined {
@@ -82,12 +86,13 @@ export function parsePositive(text: string): number | undefined {
 }
 
 /** The request of the calculation for the rooms of a sheet: their outlines and what each says about its lighting (only the rooms that say something). */
-export function requestOf(d: Drawing, lang: "es" | "en", options: { compute_points?: boolean; point_step_m?: number; map?: boolean } = {}) {
+export function requestOf(d: Drawing, lang: "es" | "en", options: { compute_points?: boolean; point_step_m?: number; map?: boolean; use_drawn?: boolean } = {}) {
   const rooms = d.rooms ?? [];
+  const nodes = options.use_drawn ? d.nodes.filter((n) => n.kind === "LU").map((n) => ({ id: n.id, kind: n.kind, x: n.x, y: n.y, tag: n.tag ?? "", attrs: n.attrs ?? {} })) : undefined;
   return {
-    sheet: { scale: d.scale, rooms: rooms.map((r) => ({ id: r.id, name: r.name, points: r.points })) },
+    sheet: { scale: d.scale, rooms: rooms.map((r) => ({ id: r.id, name: r.name, points: r.points })), ...(nodes ? { nodes } : {}) },
     rooms: Object.fromEntries(rooms.filter((r) => r.lighting).map((r) => [r.id, pick(r.lighting!)])),
-    options,
+    options: { ...settingsOptions(d.lighting_settings), ...options },
     lang,
   };
 }
@@ -97,7 +102,7 @@ const pick = (l: RoomLighting): Record<string, unknown> => Object.fromEntries(KE
 export type SpacingState = "ok" | "tolerance" | "over" | "na";
 export interface Card {
   id: string; name: string; installed: number; required: number; average: number; target: number; complies: boolean; margin: number;
-  spacing: SpacingState; uniformity: number | null; power_w: number | null; density: number | null; unsure: string[]; ugr: UgrResult["result"]; ugrLimit: number | null;
+  spacing: SpacingState; uniformity: number | null; power_w: number | null; density: number | null; unsure: string[]; ugr: UgrResult["result"]; ugrLimit: number | null; drawn: boolean; source: string;
 }
 
 const SURE = 0.6;                                         // under this confidence an estimate is shown as something to confirm
@@ -110,14 +115,14 @@ export function cardOf(r: RoomResult): Card {
   return {
     id: r.id, name: r.name, installed: r.layout.installed, required: r.layout.required, average: r.verification.average_lux, target: r.verification.target_lux, complies: r.verification.complies,
     margin: r.verification.margin_pct, spacing, uniformity: r.points.computed ? r.points.min_over_avg ?? null : null, power_w: r.energy.installed_power_w, density: r.energy.power_density_w_m2,
-    unsure: estimates.filter(([, e]) => e.confidence < SURE).map(([k]) => k), ugr: r.ugr?.result ?? "not_verifiable", ugrLimit: r.ugr?.limit ?? null,
+    unsure: estimates.filter(([, e]) => e.confidence < SURE).map(([k]) => k), ugr: r.ugr?.result ?? "not_verifiable", ugrLimit: r.ugr?.limit ?? null, drawn: !!r.layout.drawn, source: r.target.reason,
   };
 }
 
 /** The luminaires of every room as marks to draw over the plan. */
 export interface LightMark { room: string; tag: string; at: Pt; emergency?: boolean }
 export function marksOf(p: LightingProposal | null): LightMark[] {
-  return p ? Object.entries(p.placements).flatMap(([room, list]) => list.map((m) => ({ room, tag: m.tag, at: [m.x, m.y] as Pt }))) : [];
+  return p && !isDrawn(p) ? Object.entries(p.placements).flatMap(([room, list]) => list.map((m) => ({ room, tag: m.tag, at: [m.x, m.y] as Pt }))) : [];
 }
 
 /** The emergency luminaires of every room as marks to draw over the plan (they are not nodes of the drawing: the profile has no kind for them). */
@@ -131,37 +136,65 @@ export function emergencyCardOf(e: EmergencyResult) {
            routesOk: e.routes.filter((r) => r.complies).length, routes: e.routes.length, unsure: ([["emin", e.criteria.min_lux], ["ratio", e.criteria.max_over_min]] as [string, Estimate][]).filter(([, x]) => x.confidence < SURE).map(([k]) => k) };
 }
 
-export const hasPlacements = (p: LightingProposal): boolean => Object.values(p.placements).some((l) => l.length > 0);
+export const hasPlacements = (p: LightingProposal): boolean => [p.placements, p.emergency_placements ?? {}].some((by) => Object.values(by).some((l) => l.length > 0)) && !isDrawn(p);
+
+/** A proposal made by checking the plan as it is drawn: there is nothing to apply, the luminaires are the ones already there. */
+export const isDrawn = (p: LightingProposal): boolean => (p.result?.rooms ?? []).length > 0 && (p.result?.rooms ?? []).every((r) => r.layout.drawn);
 
 export const CALC = "calc";                               // `attrs.lighting.source` of a luminaire that the calculation placed: the one the next calculation of its room replaces
 
-const isCalc = (n: DNode, room: string): boolean => {
+const isCalc = (n: DNode, room: string, kind: string): boolean => {
   const l = (n.attrs?.lighting ?? {}) as { source?: string; room?: string };
-  return n.kind === "LU" && l.source === CALC && l.room === room;
+  return n.kind === kind && l.source === CALC && l.room === room;
 };
 
+/** The luminaire a calculation replaced that was nearest to a new one and had a circuit: the new one takes its place in that circuit (and its board), so recalculating does not undo the circuits. */
+function nearestWithCircuit(old: DNode[], at: Pt): DNode | undefined {
+  return old.filter((n) => n.circuit).sort((a, b) => Math.hypot(a.x - at[0], a.y - at[1]) - Math.hypot(b.x - at[0], b.y - at[1]))[0];
+}
+
+interface Kind { node: string; placements: Record<string, Placement[]>; watts: (room: string) => number | undefined; factor: (room: string) => number | undefined; luminaire: (room: string) => string | undefined }
+
+/** The kinds of luminaire a proposal places: the ones of the lighting (`LU`) and the ones of the emergency lighting (`LE`), each with the power of one and the luminaire its room chose. */
+function kindsOf(d: Drawing, p: LightingProposal): Kind[] {
+  const per = (installed: number, w: number | null | undefined) => (installed > 0 && w ? w / installed : undefined);
+  const lighting = (room: string) => (d.rooms ?? []).find((x) => x.id === room)?.lighting;
+  const lu = new Map((p.result?.rooms ?? []).map((r) => [r.id, per(r.layout.installed, r.energy.installed_power_w)]));
+  const le = new Map((p.result?.emergency ?? []).map((e) => [e.id, per(e.layout.installed, e.energy.installed_power_w)]));
+  const factor = (room: string, key: "power_factor" | "emergency_power_factor") => p.rooms.find((x) => x.id === room)?.[key] || undefined;
+  return [
+    { node: "LU", placements: p.placements, watts: (r) => lu.get(r), factor: (r) => factor(r, "power_factor"), luminaire: (r) => lighting(r)?.luminaire },
+    { node: "LE", placements: p.emergency_placements ?? {}, watts: (r) => le.get(r), factor: (r) => factor(r, "emergency_power_factor"), luminaire: (r) => lighting(r)?.emergency_luminaire },
+  ];
+}
+
 /** Put the luminaires of a proposal in the drawing: in each room that was calculated the ones a previous calculation placed are replaced (the ones the person drew or moved by hand are not touched), and each new
- *  one carries its room, its luminaire and its power so that the design of the circuits can use it. Tags go on from the highest `LU-` of the drawing. */
+ *  one carries its room, its luminaire and its power (and its apparent power when the luminaire has a power factor) so that the design of the circuits can use it. Tags go on from the highest of the drawing, by kind
+ *  (`LU-` for the lighting, `LE-` for the emergency lighting). */
 export function applyLighting(d: Drawing, p: LightingProposal): { drawing: Drawing; added: number; removed: number } {
-  const rooms = Object.keys(p.placements).filter((id) => p.placements[id].length > 0);
-  const results = new Map((p.result?.rooms ?? []).map((r) => [r.id, r]));
-  const dropped = d.nodes.filter((n) => rooms.some((r) => isCalc(n, r)));
-  let work: Drawing = { ...d, nodes: d.nodes.filter((n) => !dropped.includes(n)) };
-  let tag = work.nodes.reduce((m, n) => Math.max(m, Number(/^LU-(\d+)$/.exec(n.tag ?? "")?.[1] ?? 0)), 0);
-  let added = 0;
-  for (const room of rooms) {
-    const r = results.get(room);
-    const watts = r && r.layout.installed > 0 && r.energy.installed_power_w ? r.energy.installed_power_w / r.layout.installed : undefined;
-    const luminaire = (d.rooms ?? []).find((x) => x.id === room)?.lighting?.luminaire;
-    for (const m of p.placements[room]) {
-      work = addNode(work, "LU", [m.x, m.y]);
-      const id = work.nodes[work.nodes.length - 1].id;
-      const lighting = { source: CALC, room, ...(luminaire ? { luminaire } : {}), ...(watts ? { power_w: Math.round(watts * 10) / 10 } : {}), height_m: m.z_m };
-      work = { ...work, nodes: work.nodes.map((n) => (n.id === id ? { ...n, tag: `LU-${String(++tag).padStart(3, "0")}`, attrs: { lighting } } : n)) };
-      added++;
+  let work: Drawing = d;
+  let added = 0, removed = 0;
+  for (const kind of kindsOf(d, p)) {
+    const rooms = Object.keys(kind.placements).filter((id) => kind.placements[id].length > 0);
+    const dropped = work.nodes.filter((n) => rooms.some((r) => isCalc(n, r, kind.node)));
+    work = { ...work, nodes: work.nodes.filter((n) => !dropped.includes(n)) };
+    removed += dropped.length;
+    const numberOf = (tag: string | undefined): number => (tag?.startsWith(`${kind.node}-`) ? Number(tag.slice(kind.node.length + 1)) || 0 : 0);
+    let tag = work.nodes.reduce((m, n) => Math.max(m, numberOf(n.tag)), 0);
+    for (const room of rooms) {
+      const watts = kind.watts(room), factor = kind.factor(room), luminaire = kind.luminaire(room);
+      const replaced = dropped.filter((n) => isCalc(n, room, kind.node));
+      for (const m of kind.placements[room]) {
+        work = addNode(work, kind.node, [m.x, m.y]);
+        const id = work.nodes[work.nodes.length - 1].id;
+        const lighting = { source: CALC, room, ...(luminaire ? { luminaire } : {}), ...(watts ? { power_w: Math.round(watts * 10) / 10 } : {}), ...(watts && factor ? { power_va: Math.round((watts / factor) * 10) / 10 } : {}), height_m: m.z_m };
+        const inherited = nearestWithCircuit(replaced, [m.x, m.y]);
+        work = { ...work, nodes: work.nodes.map((n) => (n.id === id ? { ...n, tag: `${kind.node}-${String(++tag).padStart(3, "0")}`, attrs: { lighting }, ...(inherited ? { circuit: inherited.circuit, ...(inherited.board ? { board: inherited.board } : {}) } : {}) } : n)) };
+        added++;
+      }
     }
   }
-  return { drawing: work, added, removed: dropped.length };
+  return { drawing: work, added, removed };
 }
 
 /** The cells of a map to draw: each with its place and size (view units) and where its lux falls between the lowest and the highest of the room (0 to 1). */

@@ -1,6 +1,7 @@
+import json
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Scale(BaseModel):
@@ -63,6 +64,14 @@ class DrawingIn(BaseModel):
     outlet_invert_m: Optional[float] = None
     dxf_version: str = ""
     underlay_opts: Dict[str, Any] = {}      # how the plan underlay is shown (opacity, rotation, locked, hidden, crop): editor-only, the engine never reads it
+    lighting_settings: Dict[str, Any] = {}  # what the person set for the lighting panel of this sheet (limit, tariff, hours, templates...): the panel reads it, the engine never does
+
+    @field_validator("lighting_settings")
+    @classmethod
+    def _small(cls, v):
+        if len(json.dumps(v)) > 20000:
+            raise ValueError("up to 20 000 characters")
+        return v
 
 
 class TemplateIn(BaseModel):

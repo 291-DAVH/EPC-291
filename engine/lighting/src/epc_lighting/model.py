@@ -106,6 +106,7 @@ class Room:
     operating_hours: Optional[float] = None
     ugr_calculated: Optional[float] = None
     target_rule: Optional[str] = None
+    positions: Tuple[Tuple[float, float, Optional[float], Optional[str]], ...] = ()          # luminaires already drawn: (x_m, y_m, z_m, tag)
 
     @property
     def area_m2(self) -> float:
