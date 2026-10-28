@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Key, LayersEditor, SolutionsEditor, useI18n } from "@epc/ui";
+import { Key, LayersEditor, LuminairesEditor, SolutionsEditor, useI18n } from "@epc/ui";
 
-type Sub = "layers" | "solutions";
+type Sub = "layers" | "solutions" | "luminaires";
 
 /** The catalogs of drawing of this project: DXF layers and standard solutions. They start as the company's (and the MASTER's); what is changed here applies to this project only. */
 export default function Catalogs({ client, code }: { client: string; code: string }) {
@@ -12,12 +12,13 @@ export default function Catalogs({ client, code }: { client: string; code: strin
     <>
       <p className="help">{t("catalogs.project.help")}</p>
       <div className="subtabs" role="tablist">
-        {(["layers", "solutions"] as Sub[]).map((x) => (
+        {(["layers", "solutions", "luminaires"] as Sub[]).map((x) => (
           <button key={x} role="tab" aria-selected={sub === x} className={sub === x ? "on" : ""} onClick={() => setSub(x)}>{t(`catalogs.tab.${x}` as Key)}</button>
         ))}
       </div>
       {sub === "layers" && <LayersEditor bare path={`${base}/drawing-layers`} />}
       {sub === "solutions" && <SolutionsEditor bare path={`${base}/standard-solutions`} />}
+      {sub === "luminaires" && <LuminairesEditor bare path={`${base}/lighting/luminaires`} />}
     </>
   );
 }

@@ -375,6 +375,16 @@ def documents(d: Path) -> list:
     return out
 
 
+def saved_drawing(d: Path, level: str) -> Optional[dict]:
+    """The drawing of a sheet as it was last saved (None when the sheet has none): what a study made from it is compared with."""
+    return repository.load_drawing(d, _level(level))
+
+
+def source_file(d: Path, level: str, name: str) -> Path:
+    """A file of what is kept with the sheet (`<sheet>/src/<name>`): another module keeps there what it made from the sheet."""
+    return repository.level_dir(d, _level(level)) / "src" / name
+
+
 def changes_since_files(d: Path, level: str) -> dict:
     """What changed in the drawing since the DXF and PDF were last made (nothing to compare with when they were never made, or were made before this was kept)."""
     level = _level(level)

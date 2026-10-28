@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from epc.modules.lighting import service
+from epc.modules.lighting import service, study
 from epc.modules.lighting.models import CalcIn, LuminairesIn
 from epc.modules.projects import public as projects
 
@@ -18,6 +18,24 @@ def options(client: str, code: str, lang: str = "en"):
 def calc(client: str, code: str, body: CalcIn):
     """Luminaires for the rooms of a sheet, as a proposal (nothing is saved)."""
     return service.calc(projects.get_project_dir(client, code), body)
+
+
+@router.get("/study/{sheet}")
+def study_view(client: str, code: str, sheet: str):
+    """The study kept with the sheet and whether it is still good for the rooms as they are drawn now."""
+    return study.view(projects.get_project_dir(client, code), sheet)
+
+
+@router.put("/study/{sheet}")
+def study_save(client: str, code: str, sheet: str, body: CalcIn):
+    """Calculate and keep the study of the sheet."""
+    return study.save(projects.get_project_dir(client, code), sheet, body)
+
+
+@router.post("/study/{sheet}/report")
+def study_report(client: str, code: str, sheet: str, lang: str = "en"):
+    """The report of the study as a PDF among the documents of the project, from where it is issued."""
+    return study.make_report(projects.get_project_dir(client, code), sheet, "es" if lang == "es" else "en")
 
 
 @router.get("/luminaires")

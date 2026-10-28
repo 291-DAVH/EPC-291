@@ -36,7 +36,7 @@ This plugin is packaging only. The code lives in `engine/aea90364`, `engine/draw
 | Necesita (plugins) | `aea-calc`, `dxf-output`, `iram-titleblock`, `mld`, `sld` |
 | Lo necesitan | — |
 | Paquetes de Python | `ezdxf`, `lxml`, `matplotlib`, `openpyxl`, `shapely`, `svgelements`, `vtracer` |
-| Si lo modificas, revisa | plugins —; módulos del backend `backend.issuing`, `backend.layout`, `backend.reporting`, `backend.sld` |
+| Si lo modificas, revisa | plugins —; módulos del backend `backend.core`, `backend.issuing`, `backend.layout`, `backend.sld` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

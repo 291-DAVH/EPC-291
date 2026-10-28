@@ -21,6 +21,11 @@ export interface RoomResult {
   points: { computed: boolean; min_over_avg?: number; avg_lux?: number };
   energy: { installed_power_w: number | null; power_density_w_m2: number | null };
 }
+/** The study kept with a sheet: what the last calculation applied to the plan gave, and whether the rooms and luminaires are still the ones it was made for. */
+export interface LightingStudy {
+  exists: boolean; stale?: boolean; report?: boolean; saved_at?: string; saved_by?: string;
+  result?: LightingProposal["result"]; skipped?: LightingProposal["skipped"]; warnings?: string[];
+}
 export interface Placement { tag: string; x: number; y: number; z_m: number }
 export interface LightingProposal {
   result: { rooms: RoomResult[]; warnings: string[]; counts: { rooms: number; luminaires: number } } | null;

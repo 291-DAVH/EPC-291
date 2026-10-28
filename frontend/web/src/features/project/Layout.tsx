@@ -5,7 +5,7 @@ import { base as coordBase, levelOf, pinsFor, useCoordination } from "./coordApi
 import DesignPanel from "./DesignPanel";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
-import { applyLighting, LightingOptions, LightingProposal, marksOf, requestOf } from "./lightingApi";
+import { applyLighting, LightingOptions, LightingStudy, LightingProposal, marksOf, requestOf } from "./lightingApi";
 import PlansPanel from "./PlansPanel";
 import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from "./LayoutPanels";
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
@@ -71,6 +71,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [lighting, setLighting] = useState<LightingProposal | null>(null);          // luminaires proposed for the rooms, shown over the plan until the person decides
   const [lightBusy, setLightBusy] = useState(false);
   const [lightApplied, setLightApplied] = useState("");
+  const [studyRev, setStudyRev] = useState(0);
+  const [reported, setReported] = useState("");
+  const study = useApi<LightingStudy>(panel === "lighting" && level ? `/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}?rev=${rev}&s=${studyRev}` : null);
   const lightOptions = useApi<LightingOptions>(`/projects/${client}/${code}/lighting/options?lang=${lang}`);
   const [designBusy, setDesignBusy] = useState(false);
   const [limits, setLimits] = useState<Record<string, Partial<Limits>>>({});
@@ -243,6 +246,13 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     change(out.drawing);
     setLighting(null);
     setLightApplied(tl("light.applied").replace("{n}", String(out.added)).replace("{r}", String(out.removed)));
+    keepStudy();
+  };
+  const keepStudy = async () => {                                      // what was applied is kept as the study of the sheet (the one its report is made from)
+    try { await api(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) }); setStudyRev((n) => n + 1); setReported(""); } catch (x) { setErr(errorText(x)); }
+  };
+  const makeReport = async () => {
+    try { const r = await api<{ file: string }>(`/projects/${client}/${code}/lighting/study/${encodeURIComponent(level)}/report?lang=${lang}`, { method: "POST" }); setReported(tl("light.reported").replace("{file}", r.file)); setStudyRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
   };
   const proposeRuns = () => designCall<RunsProposal>("runs", setRuns);
   const proposeWiring = () => designCall<Proposal>("wiring", setProposal);
@@ -414,7 +424,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "props" && <Properties drawing={drawing} selection={selection} derived={dp} profile={profile} lang={lang} boardCircuits={ov.data.circuits} readOnly={!write} onChange={change} onSelect={setSelection} t={tl} />}
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
-              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={calcLighting} onApply={applyLight} applied={lightApplied} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
+              {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={calcLighting} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} onReport={makeReport} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}
