@@ -4,6 +4,9 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 
 ## [Unreleased]
 
+### Fixed
+- Reading the walls of a vector PDF no longer fails with "the PDF has too many strokes to read" on a plan with hatching, ticks and furniture: over 60,000 strokes the door swings and the longest strokes are read and a warning says how many of the shortest were left out. Only a PDF beyond 1,500,000 strokes is refused, now saying how to export it lighter. A plan of 200,000 strokes is read in about 2 seconds.
+
 ### Added
 - Final phase of a project: the new-project form has an **ending phase** next to the starting one (it cannot be before it; the default is as-built), because not every project goes through detail engineering or as-built. Both lists show the full names (Conceptual engineering, Basic engineering, Detail engineering, Execution engineering, As-built) instead of IC / IB / ID / IE, and as-built is now a phase the project can start or end at. The end phase is kept with the project and shown beside the current phase; the management workflow does not use it yet.
 - In the circuit form, "Project criteria" now shows the value it stands for in brackets (for example "XLPE", "B2 · Multicore cable in conduit") and a note says where to change the default (Engineering → Design criteria).

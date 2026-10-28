@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "note": "Thresholds of the recognition. Lengths in metres apply when the source says its units (or a scale is given); otherwise they are fractions of the longest side of the plan (the `relative` block).",
-  "plan": {"target_side": 3000, "max_primitives": 60000},
+  "plan": {"target_side": 3000, "max_primitives": 60000, "hard_max_primitives": 1500000},
   "metres": {"wall_thickness": [0.05, 0.6], "door_radius": [0.45, 1.4], "opening_width": [0.45, 3.6], "typical_door_leaf": 0.9},
   "relative": {"wall_thickness": [0.0015, 0.05], "min_wall_length_factor": 2.5, "opening_width_in_walls": [2.5, 24.0], "door_radius_in_walls": [2.5, 12.0]},
   "walls": {"angle_tolerance_deg": 1.5, "thickness_tolerance": [0.6, 1.5], "min_overlap_factor": 3.0, "merge_gap_factor": 1.0, "min_votes": 3, "thick_stroke_min_factor": 0.0012, "bins": 48},
