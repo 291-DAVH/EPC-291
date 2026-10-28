@@ -13,6 +13,7 @@ Engineering libraries: pure Python, no web and no Claude dependency. The backend
 | [sld](sld/README.md) | `epc_sld` | Single-line diagram generator: it draws what `epc_aea90364` calculated | 2 + smoke |
 | [mld](mld/README.md) | `epc_mld` | Multi-line diagram generator: each line expanded into its conductors | 2 |
 | [plan](plan/README.md) | `epc_plan` | Plan-drawing engine: graph, tags, circuit routes (moment method), schedules, DXF | 56 |
+| [lighting](lighting/README.md) | `epc_lighting` | Lighting engine: luminaire count (lumen and zonal-cavity methods), layout, point-by-point illuminance, exterior floodlights, power and energy; standard-library only | 158 |
 | [arch](arch/README.md) | `epc_arch` | Architecture recognition: walls, doors and windows from a DXF, a vector PDF or an image, as JSON and an SVG with layers | 33 |
 | [drawing](drawing/README.md) | `epc_drawing` | Board design (calculation + SLD + MLD in one go) and the exports: PDF, stamped DXF, report and transmittal PDF | 17 |
 | [documents](documents/README.md) | `epc_documents` | Document and specification verifiers, input converter, CCPM, PM2 exporters | 216 (11 skipped by environment) |
@@ -21,11 +22,11 @@ Engineering libraries: pure Python, no web and no Claude dependency. The backend
 ## Use
 ```
 # from the repository root, without installing (Windows uses ; as separator)
-set PYTHONPATH=engine/aea90364/src;engine/rules/src;engine/standards/src;engine/dxf/src;engine/symbols/src;engine/titleblock/src;engine/plan/src;engine/sld/src;engine/mld/src;engine/drawing/src;engine/documents/src
+set PYTHONPATH=engine/aea90364/src;engine/rules/src;engine/standards/src;engine/dxf/src;engine/symbols/src;engine/titleblock/src;engine/plan/src;engine/arch/src;engine/lighting/src;engine/sld/src;engine/mld/src;engine/drawing/src;engine/documents/src
 python -m epc_aea90364.aea_pipeline input.xlsx
 
 # or install them editable into your environment
-pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/sld -e engine/mld -e engine/drawing -e engine/documents
+pip install -e engine/aea90364 -e engine/rules -e engine/standards -e engine/dxf -e engine/symbols -e engine/titleblock -e engine/plan -e engine/arch -e engine/lighting -e engine/sld -e engine/mld -e engine/drawing -e engine/documents
 ```
 Layout of every area: `pyproject.toml`, `src/epc_<area>/`, `tests/`, `README.md` (plus `docs/`, `examples/` where relevant).
 Dependencies between areas (enforced by the `engine-layers` contract and listed in `docs/architecture/DEPENDENCIAS.md`): `epc_drawing` > `epc_mld`, `epc_sld` > `epc_titleblock`, `epc_symbols`, `epc_plan`, `epc_aea90364` > `epc_dxf`; `epc_standards` needs `epc_aea90364`; the rest are independent. Each area installs and is updated on its own. `python tools/ci/run_gate.py` runs every area's tests.

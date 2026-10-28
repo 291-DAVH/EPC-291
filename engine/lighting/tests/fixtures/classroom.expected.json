@@ -1,0 +1,360 @@
+{
+ "schema_version": "1.0",
+ "engine": {
+  "name": "epc_lighting",
+  "version": "0.1.0"
+ },
+ "counts": {
+  "rooms": 2,
+  "areas": 1,
+  "luminaires": 7,
+  "warnings": 7
+ },
+ "rooms": [
+  {
+   "id": "R1",
+   "name": "Classroom (UPV article: CU as printed there)",
+   "method": "lumen",
+   "lighting_system": "direct",
+   "geometry": {
+    "area_m2": 24.0,
+    "width_m": 4.0,
+    "length_m": 6.0,
+    "height_m": 2.6,
+    "work_plane_height_m": 0.85,
+    "mounting_height_m": {
+     "value": 1.75,
+     "reason": "luminaires as high as possible (UPV table 1)",
+     "confidence": 1.0
+    },
+    "room_index_k": 1.371,
+    "index_formula": "direct"
+   },
+   "target": {
+    "value": 300.0,
+    "reason": "activity 'education.classroom': UNE-EN 12464-1:2003 table 6.2.1, as quoted in the UPV lumen-method article (fig. 2)",
+    "confidence": 0.9,
+    "activity": "education.classroom",
+    "ugr_l_max": 19,
+    "ra_min": 80
+   },
+   "reflectances": {
+    "ceiling": {
+     "value": 0.575,
+     "reason": "material 'white_acoustic_ceiling' (UPV table 4, range 0.5-0.65), midpoint taken",
+     "confidence": 0.7
+    },
+    "walls": {
+     "value": 0.775,
+     "reason": "material 'white_paint' (UPV table 4, range 0.7-0.85), midpoint taken",
+     "confidence": 0.7
+    },
+    "floor": {
+     "value": 0.15,
+     "reason": "material 'dark_grey' (UPV table 4, range 0.1-0.2), midpoint taken",
+     "confidence": 0.7
+    }
+   },
+   "factors": {
+    "cu": {
+     "value": 0.97,
+     "reason": "given in the room (project or manufacturer value)",
+     "confidence": 1.0
+    },
+    "maintenance": {
+     "value": 0.8,
+     "reason": "Clean environment: UPV article, table 6",
+     "confidence": 0.8
+    }
+   },
+   "luminaire": {
+    "id": "L1",
+    "name": "Recessed downlight, 2 x 32 W compact fluorescent, 2400 lm per lamp (UPV article example; the intensity curve is illustrative and keeps only the article reading of 525 cd/klm at 25.64 deg)",
+    "lamps": 2,
+    "lamp_flux_lm": 2400.0,
+    "flux_lm": 4800.0,
+    "efficiency": 1.0
+   },
+   "flux": {
+    "required_lm": 9278.351,
+    "required_installed_lm": 9278.351,
+    "luminaires_exact": 1.933,
+    "luminaires_required": 2
+   },
+   "layout": {
+    "rows_across_width": 1,
+    "columns_along_length": 2,
+    "installed": 2,
+    "required": 2,
+    "spacing_x_m": 3.0,
+    "spacing_y_m": 4.0,
+    "wall_distance_x_m": 1.5,
+    "wall_distance_y_m": 2.0,
+    "max_spacing": {
+     "value": 1.6,
+     "reason": "UPV table 7, Extensive (<= 4 m), room height 2.6 m",
+     "confidence": 0.9
+    },
+    "spacing_check": {
+     "along_length": {
+      "checked": true,
+      "spacing_m": 3.0,
+      "max_spacing_m": 2.8,
+      "ratio_used": 1.714,
+      "status": "within_tolerance"
+     },
+     "across_width": {
+      "checked": false,
+      "reason": "a single luminaire on this axis: no spacing to check (UNAC 2.6)"
+     }
+    },
+    "positions": [
+     {
+      "tag": "LU-001",
+      "x_m": 1.5,
+      "y_m": 2.0,
+      "z_m": 2.6
+     },
+     {
+      "tag": "LU-002",
+      "x_m": 4.5,
+      "y_m": 2.0,
+      "z_m": 2.6
+     }
+    ]
+   },
+   "verification": {
+    "method": "average illuminance E_m = N * n * Phi_L * C_u * C_m / S",
+    "average_lux": 310.4,
+    "target_lux": 300.0,
+    "complies": true,
+    "margin_pct": 3.467
+   },
+   "points": {
+    "computed": true,
+    "component": "direct only (inter-reflections not included)",
+    "plane_height_m": 0.85,
+    "grid_points": 96,
+    "maintenance_factor": 0.8,
+    "min_lux": 35.083,
+    "avg_lux": 252.54,
+    "max_lux": 635.561,
+    "min_over_avg": 0.139,
+    "max_over_avg": 2.517,
+    "max_over_min": 18.116,
+    "points": [],
+    "photometry_output_ratio": 0.863
+   },
+   "energy": {
+    "installed_power_w": 128.0,
+    "power_density_w_m2": 5.333,
+    "power_density_w_m2_per_100lx": 1.718,
+    "annual_energy_kwh": 230.4
+   }
+  },
+  {
+   "id": "R2",
+   "name": "Classroom by the zonal cavity method (CU from the generic table)",
+   "method": "zonal",
+   "lighting_system": "direct",
+   "geometry": {
+    "area_m2": 24.0,
+    "width_m": 4.0,
+    "length_m": 6.0,
+    "height_m": 2.6,
+    "work_plane_height_m": 0.85,
+    "mounting_height_m": {
+     "value": 1.75,
+     "reason": "luminaires as high as possible (UPV table 1)",
+     "confidence": 1.0
+    },
+    "room_cavity_ratio": 3.646,
+    "ceiling_cavity_ratio": 0.0,
+    "floor_cavity_ratio": 1.771,
+    "effective_ceiling_reflectance": 0.6,
+    "effective_floor_reflectance": 0.28
+   },
+   "target": {
+    "value": 300.0,
+    "reason": "given in the document",
+    "confidence": 1.0
+   },
+   "reflectances": {
+    "ceiling": {
+     "value": 0.6,
+     "reason": "given",
+     "confidence": 1.0
+    },
+    "walls": {
+     "value": 0.75,
+     "reason": "given",
+     "confidence": 1.0
+    },
+    "floor": {
+     "value": 0.15,
+     "reason": "given",
+     "confidence": 1.0
+    }
+   },
+   "factors": {
+    "cu": {
+     "value": 0.966,
+     "reason": "generic illustrative table, interpolated between reflectance columns of the table (inverse-distance weighting) (k = 1.371, ceiling/walls/floor = 0.600/0.750/0.280)",
+     "confidence": 0.4
+    },
+    "maintenance": {
+     "value": 0.8,
+     "reason": "Clean environment: UPV article, table 6",
+     "confidence": 0.8
+    }
+   },
+   "luminaire": {
+    "id": "L1",
+    "name": "Recessed downlight, 2 x 32 W compact fluorescent, 2400 lm per lamp (UPV article example; the intensity curve is illustrative and keeps only the article reading of 525 cd/klm at 25.64 deg)",
+    "lamps": 2,
+    "lamp_flux_lm": 2400.0,
+    "flux_lm": 4800.0,
+    "efficiency": 1.0
+   },
+   "flux": {
+    "required_lm": 9313.854,
+    "required_installed_lm": 9313.854,
+    "luminaires_exact": 1.94,
+    "luminaires_required": 2
+   },
+   "layout": {
+    "rows_across_width": 1,
+    "columns_along_length": 2,
+    "installed": 2,
+    "required": 2,
+    "spacing_x_m": 3.0,
+    "spacing_y_m": 4.0,
+    "wall_distance_x_m": 1.5,
+    "wall_distance_y_m": 2.0,
+    "max_spacing": {
+     "value": 1.6,
+     "reason": "UPV table 7, Extensive (<= 4 m), room height 2.6 m",
+     "confidence": 0.9
+    },
+    "spacing_check": {
+     "along_length": {
+      "checked": true,
+      "spacing_m": 3.0,
+      "max_spacing_m": 2.8,
+      "ratio_used": 1.714,
+      "status": "within_tolerance"
+     },
+     "across_width": {
+      "checked": false,
+      "reason": "a single luminaire on this axis: no spacing to check (UNAC 2.6)"
+     }
+    },
+    "positions": [
+     {
+      "tag": "LU-003",
+      "x_m": 1.5,
+      "y_m": 2.0,
+      "z_m": 2.6
+     },
+     {
+      "tag": "LU-004",
+      "x_m": 4.5,
+      "y_m": 2.0,
+      "z_m": 2.6
+     }
+    ]
+   },
+   "verification": {
+    "method": "average illuminance E_m = N * n * Phi_L * C_u * C_m / S",
+    "average_lux": 309.217,
+    "target_lux": 300.0,
+    "complies": true,
+    "margin_pct": 3.072
+   },
+   "points": {
+    "computed": true,
+    "component": "direct only (inter-reflections not included)",
+    "plane_height_m": 0.85,
+    "grid_points": 96,
+    "maintenance_factor": 0.8,
+    "min_lux": 35.083,
+    "avg_lux": 252.54,
+    "max_lux": 635.561,
+    "min_over_avg": 0.139,
+    "max_over_avg": 2.517,
+    "max_over_min": 18.116,
+    "points": [],
+    "photometry_output_ratio": 0.863
+   },
+   "energy": {
+    "installed_power_w": 128.0,
+    "power_density_w_m2": 5.333,
+    "power_density_w_m2_per_100lx": 1.725,
+    "annual_energy_kwh": null
+   }
+  }
+ ],
+ "areas": [
+  {
+   "id": "A1",
+   "name": "Yard",
+   "method": "floodlight",
+   "area_m2": 800.0,
+   "target": {
+    "value": 50.0,
+    "reason": "given in the document",
+    "confidence": 1.0
+   },
+   "luminaire": {
+    "id": "F1",
+    "name": "Floodlight, 1 x 400 W metal halide, 36000 lm (illustrative)",
+    "lamps": 1,
+    "lamp_flux_lm": 36000.0,
+    "flux_lm": 36000.0
+   },
+   "factors": {
+    "beam_utilisation": {
+     "value": 0.7,
+     "reason": "given in the document",
+     "confidence": 1.0
+    },
+    "maintenance": {
+     "value": 0.65,
+     "reason": "Open fixture: UNAC chapter III, section 5",
+     "confidence": 0.8
+    }
+   },
+   "flux": {
+    "luminaires_exact": 2.442,
+    "luminaires_required": 3,
+    "beam_flux_per_luminaire_lm": 36000.0
+   },
+   "tags": [
+    "LU-005",
+    "LU-006",
+    "LU-007"
+   ],
+   "verification": {
+    "average_lux": 61.425,
+    "target_lux": 50.0,
+    "complies": true,
+    "margin_pct": 22.85
+   },
+   "energy": {
+    "installed_power_w": 1290.0,
+    "power_density_w_m2": 1.613,
+    "power_density_w_m2_per_100lx": 2.625,
+    "annual_energy_kwh": null
+   }
+  }
+ ],
+ "warnings": [
+  "room 'R1': spacing along the length (3.0 m) is above the maximum 2.8 m (1.6 x h) but within the 10% tolerance (the UPV article accepts 3 m against 2.8 m); acceptable",
+  "room 'R1': min/avg illuminance 0.139 is below 0.333: the darkest zone is too dark",
+  "room 'R1': max/min illuminance is above 10.0: strong contrast between zones",
+  "room 'R2': luminaire 'L1' has no cu or cu_table: an illustrative table from the UPV article was used; give the manufacturer's CU table for a reliable result",
+  "room 'R2': spacing along the length (3.0 m) is above the maximum 2.8 m (1.6 x h) but within the 10% tolerance (the UPV article accepts 3 m against 2.8 m); acceptable",
+  "room 'R2': min/avg illuminance 0.139 is below 0.333: the darkest zone is too dark",
+  "room 'R2': max/min illuminance is above 10.0: strong contrast between zones"
+ ]
+}

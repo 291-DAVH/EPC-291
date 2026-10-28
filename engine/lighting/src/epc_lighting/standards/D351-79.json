@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "id": "D351-79",
+  "title": "Decreto 351/79, Reglamentacion de la Ley 19587, Cap. 12 Iluminacion y color, Anexo IV",
+  "jurisdiction": "AR",
+  "edition": "1979 (texto vigente a verificar)",
+  "based_on": "IRAM-AADL J 20-06 (segun el propio decreto)",
+  "rules_file": "rules/D351-79.rules.json",
+  "source": {
+    "kept_in_repo": false,
+    "local_path": "local/dev-knowledge/standards/AR/D351-79/source/"
+  },
+  "review_status": "pending_human_review",
+  "engine_use": "none yet: values are not read by the pipeline until reviewed and promoted",
+  "notes": [
+    "Valores y clausulas resumidos, sin copiar el texto de la norma.",
+    "Filas industriales de la Tabla 2 sin cargar."
+  ]
+}

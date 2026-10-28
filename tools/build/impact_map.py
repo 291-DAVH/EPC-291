@@ -20,10 +20,10 @@ from typing import Dict, Iterable, List, Set
 REPO = Path(__file__).resolve().parents[2]
 TARGET = REPO / "docs" / "architecture" / "DEPENDENCIAS.md"
 ENGINE_PKGS = {"epc_aea90364": "aea90364", "epc_documents": "documents", "epc_standards": "standards", "epc_rules": "rules", "epc_plan": "plan", "epc_symbols": "symbols", "epc_dxf": "dxf",
-               "epc_titleblock": "titleblock", "epc_sld": "sld", "epc_mld": "mld", "epc_drawing": "drawing", "epc_arch": "arch"}
+               "epc_titleblock": "titleblock", "epc_sld": "sld", "epc_mld": "mld", "epc_drawing": "drawing", "epc_arch": "arch", "epc_lighting": "lighting"}
 ENGINE_ROOTS = {a: f"engine/{a}/src/epc_{a}" for a in ENGINE_PKGS.values()}
 PYPROJECT = {a: f"engine/{a}" for a in ENGINE_PKGS.values()}
-NAME_REF = re.compile(r"\bepc_(?:aea90364|documents|standards|rules|plan|symbols|dxf|titleblock|sld|mld|drawing|arch)(?:\.[a-z_]+)*")
+NAME_REF = re.compile(r"\bepc_(?:aea90364|documents|standards|rules|plan|symbols|dxf|titleblock|sld|mld|drawing|arch|lighting)(?:\.[a-z_]+)*")
 STD = set(sys.stdlib_module_names)
 IGNORED_THIRD_PARTY = {"epc", "tests", "conftest", "pytest"}
 

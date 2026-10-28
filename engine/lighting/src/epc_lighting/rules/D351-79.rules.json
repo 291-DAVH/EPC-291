@@ -1,0 +1,247 @@
+{
+  "schema_version": "1.1",
+  "norm": "D351-79",
+  "review_status": "pending_human_review",
+  "rules": [
+    {
+      "id": "D351-AIV-T2-oficina-general",
+      "clause": "Anexo IV, Tabla 2, Oficinas",
+      "summary": "Trabajo general de oficina: valor minimo de servicio.",
+      "value": 500,
+      "unit": "lx",
+      "plane": "horizontal",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-oficina-especial",
+      "clause": "Anexo IV, Tabla 2, Oficinas",
+      "summary": "Trabajos especiales de oficina (computacion de datos).",
+      "value": 750,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-oficina-hall",
+      "clause": "Anexo IV, Tabla 2, Oficinas",
+      "summary": "Halls para el publico.",
+      "value": 200,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-oficina-conferencias",
+      "clause": "Anexo IV, Tabla 2, Oficinas",
+      "summary": "Sala de conferencias.",
+      "value": 300,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-oficina-circulacion",
+      "clause": "Anexo IV, Tabla 2, Oficinas",
+      "summary": "Circulacion.",
+      "value": 200,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-banco-general",
+      "clause": "Anexo IV, Tabla 2, Bancos",
+      "summary": "Iluminacion general.",
+      "value": 500,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-banco-cajas",
+      "clause": "Anexo IV, Tabla 2, Bancos",
+      "summary": "Zonas de escritura y cajas.",
+      "value": 750,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-hotel-circulacion",
+      "clause": "Anexo IV, Tabla 2, Hoteles",
+      "summary": "Pasillos, palier y ascensor; escalera.",
+      "value": 100,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-hotel-hall",
+      "clause": "Anexo IV, Tabla 2, Hoteles",
+      "summary": "Hall de entrada.",
+      "value": 300,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-vivienda-bano",
+      "clause": "Anexo IV, Tabla 2, Vivienda",
+      "summary": "Bano, iluminacion general.",
+      "value": 100,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-vivienda-dormitorio",
+      "clause": "Anexo IV, Tabla 2, Vivienda",
+      "summary": "Dormitorio, general y localizada.",
+      "value": 200,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-vivienda-cocina",
+      "clause": "Anexo IV, Tabla 2, Vivienda",
+      "summary": "Cocina, zona de trabajo.",
+      "value": 200,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-garaje-general",
+      "clause": "Anexo IV, Tabla 2, Garajes",
+      "summary": "Iluminacion general.",
+      "value": 100,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-mecanica-banco-general",
+      "clause": "Anexo IV, Tabla 2, Mecanica general",
+      "summary": "Maquinas y bancos, iluminacion general.",
+      "value": 300,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-mecanica-deposito",
+      "clause": "Anexo IV, Tabla 2, Mecanica general",
+      "summary": "Deposito de materiales.",
+      "value": 100,
+      "unit": "lx",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T2-industria-otros",
+      "clause": "Anexo IV, Tabla 2",
+      "summary": "Cientos de filas industriales (alimenticia, textil, vidrio, etc.): cargar por lote tras confirmar alcance.",
+      "value": null,
+      "unit": "lx",
+      "pending": true,
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-uniformidad",
+      "clause": "Anexo IV, 1 (iluminacion general)",
+      "summary": "Relacion minima entre iluminancia minima y media.",
+      "value": 0.5,
+      "unit": "ratio",
+      "verify_clause": true,
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T3-central",
+      "clause": "Anexo IV, Tabla 3",
+      "summary": "Relacion maxima de luminancias, campo visual central (cono 30 grados), con la tarea.",
+      "value": 3,
+      "unit": "ratio",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T3-periferico",
+      "clause": "Anexo IV, Tabla 3",
+      "summary": "Campo visual periferico (cono 90 grados).",
+      "value": 10,
+      "unit": "ratio",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T3-fuente-fondo",
+      "clause": "Anexo IV, Tabla 3",
+      "summary": "Entre fuente de luz y fondo.",
+      "value": 20,
+      "unit": "ratio",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T3-dos-puntos",
+      "clause": "Anexo IV, Tabla 3",
+      "summary": "Entre dos puntos cualesquiera del campo visual.",
+      "value": 40,
+      "unit": "ratio",
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-AIV-T4",
+      "clause": "Anexo IV, Tabla 4",
+      "summary": "Iluminacion general minima segun la localizada.",
+      "table": [
+        [
+          250,
+          125
+        ],
+        [
+          500,
+          250
+        ],
+        [
+          1000,
+          300
+        ],
+        [
+          2500,
+          500
+        ],
+        [
+          5000,
+          600
+        ],
+        [
+          10000,
+          700
+        ]
+      ],
+      "unit": "lx",
+      "columns": [
+        "localizada",
+        "general"
+      ],
+      "review": "pending",
+      "norm": "D351-79"
+    },
+    {
+      "id": "D351-art76-emergencia",
+      "clause": "Art. 76",
+      "summary": "Iluminacion de emergencia minima a 0,80 m del suelo.",
+      "value": 40,
+      "unit": "lx",
+      "verify_clause": true,
+      "review": "pending",
+      "norm": "D351-79"
+    }
+  ]
+}

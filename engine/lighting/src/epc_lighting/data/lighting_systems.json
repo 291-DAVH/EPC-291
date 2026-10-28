@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "note": "Lighting systems. index_formula selects the room index k (UPV article table 3; UNAC chapter III agrees: direct, semi-direct and mixed use the direct formula, semi-indirect and indirect use the indirect one). spacing_ratio is the maximum spacing as a multiple of h (UNAC 2.6); null where the sources give none. suspension_group tells which row of UPV table 2 applies when suspension_mode is auto_min or auto_optimal; null where the table says nothing. h_fraction is the fraction of (H - h') that h takes.",
+  "systems": {
+    "direct": {"label": {"es": "Directa", "en": "Direct"}, "index_formula": "direct", "spacing_ratio": 1.2, "suspension_group": "direct"},
+    "semi_direct": {"label": {"es": "Semidirecta", "en": "Semi-direct"}, "index_formula": "direct", "spacing_ratio": 1.5, "suspension_group": "direct"},
+    "general_diffuse": {"label": {"es": "General difusa", "en": "General diffuse"}, "index_formula": "direct", "spacing_ratio": null, "suspension_group": "direct"},
+    "direct_indirect": {"label": {"es": "Directa-indirecta (mixta)", "en": "Direct-indirect (mixed)"}, "index_formula": "direct", "spacing_ratio": null, "suspension_group": null},
+    "semi_indirect": {"label": {"es": "Semiindirecta", "en": "Semi-indirect"}, "index_formula": "indirect", "spacing_ratio": 1.5, "suspension_group": null},
+    "indirect": {"label": {"es": "Indirecta", "en": "Indirect"}, "index_formula": "indirect", "spacing_ratio": 1.6, "suspension_group": "indirect"}
+  },
+  "suspension_rules": {
+    "direct": {
+      "auto_min": {"h_fraction": 0.6666666667, "note": "h = 2/3 (H - h')"},
+      "auto_optimal": {"h_fraction": 0.8, "note": "h = 4/5 (H - h')"}
+    },
+    "indirect": {
+      "auto_min": {"h_fraction": 0.8, "note": "d' = 1/5 (H - h'), so h = 4/5 (H - h')"},
+      "auto_optimal": {"h_fraction": 0.75, "note": "h = 3/4 (H - h')"}
+    }
+  },
+  "source": "UPV lumen-method article tables 1-3; UNAC chapter III 1 and 2.6"
+}

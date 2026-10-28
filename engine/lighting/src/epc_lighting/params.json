@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "note": "Algorithm settings of the lighting engine. Lengths in metres, illuminance in lux, flux in lumens, angles in degrees. Values quoted from the teaching articles (levels, reflectances, maintenance, spacing) live in data/*.json with their citation; typical values here are NOT normative, the engineer confirms them with the project standard.",
+  "rounding_digits": 3,
+  "ceil_epsilon": 1e-9,
+  "defaults": {
+    "work_plane_height_m": 0.85,
+    "suspension_m": 0.0,
+    "method": "lumen",
+    "lighting_system": "direct",
+    "environment": "clean",
+    "enclosure": "closed",
+    "luminaire_efficiency": 1.0,
+    "area_beam_utilisation": 0.75
+  },
+  "cavity": {
+    "rcr_factor": 5.0
+  },
+  "spacing": {
+    "tolerance": 0.1,
+    "enforce_max_steps": 200
+  },
+  "cu": {
+    "idw_power": 2,
+    "exact_match_tolerance": 0.005,
+    "warn_above": 1.0,
+    "confidence": {
+      "given": 1.0,
+      "table_exact": 1.0,
+      "table_interpolated_axis": 0.9,
+      "table_interpolated_reflectance": 0.7,
+      "table_out_of_range": 0.5,
+      "generic_table": 0.4
+    }
+  },
+  "reflectance_confidence": {
+    "given": 1.0,
+    "material_midpoint": 0.7,
+    "default": 0.5
+  },
+  "beam_utilisation_range": [0.6, 0.9],
+  "uniformity_limits": {
+    "min_over_avg": 0.3333333333,
+    "max_over_avg": 3.0,
+    "max_over_min": 10.0
+  },
+  "photometry_max_output_ratio": 1.02,
+  "point_grid": {
+    "step_m": 0.5,
+    "max_points": 2500
+  }
+}

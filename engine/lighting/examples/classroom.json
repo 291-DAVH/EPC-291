@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "luminaires": [
+    {
+      "id": "L1",
+      "name": "Recessed downlight, 2 x 32 W compact fluorescent, 2400 lm per lamp (UPV article example; the intensity curve is illustrative and keeps only the article reading of 525 cd/klm at 25.64 deg)",
+      "lamps": 2,
+      "lamp_flux_lm": 2400,
+      "power_w": 64,
+      "photometry": {
+        "gamma_deg": [0, 15, 25.64, 30, 45, 60, 75, 90],
+        "intensity_cd_per_klm": [530, 530, 525, 430, 160, 30, 0, 0]
+      }
+    },
+    {
+      "id": "F1",
+      "name": "Floodlight, 1 x 400 W metal halide, 36000 lm (illustrative)",
+      "lamps": 1,
+      "lamp_flux_lm": 36000,
+      "power_w": 430
+    }
+  ],
+  "rooms": [
+    {
+      "id": "R1",
+      "name": "Classroom (UPV article: CU as printed there)",
+      "width_m": 4,
+      "length_m": 6,
+      "height_m": 2.6,
+      "activity": "education.classroom",
+      "luminaire": "L1",
+      "coefficient_of_utilisation": 0.97,
+      "reflectances": {
+        "ceiling": {"material": "white_acoustic_ceiling"},
+        "walls": {"material": "white_paint"},
+        "floor": {"material": "dark_grey"}
+      },
+      "operating_hours_per_year": 1800
+    },
+    {
+      "id": "R2",
+      "name": "Classroom by the zonal cavity method (CU from the generic table)",
+      "width_m": 4,
+      "length_m": 6,
+      "height_m": 2.6,
+      "target_lux": 300,
+      "method": "zonal",
+      "luminaire": "L1",
+      "reflectances": {"ceiling": 0.6, "walls": 0.75, "floor": 0.15}
+    }
+  ],
+  "areas": [
+    {
+      "id": "A1",
+      "name": "Yard",
+      "area_m2": 800,
+      "target_lux": 50,
+      "luminaire": "F1",
+      "beam_utilisation": 0.7,
+      "enclosure": "open"
+    }
+  ]
+}
