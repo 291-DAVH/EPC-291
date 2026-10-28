@@ -24,7 +24,7 @@ def summary(d: Path) -> dict:
     return {
         "id": projects.project_id(d), "name": meta.get("project_name") or meta.get("project_code") or d.name,
         "client": meta.get("client", d.parent.name), "code": meta.get("project_code", d.name), "disciplines": meta.get("disciplines", []),
-        "methodology": meta.get("methodology"), "state": st.get("state", "active"), "phase": st.get("phase") or meta.get("phase"),
+        "methodology": meta.get("methodology"), "state": st.get("state", "active"), "phase": st.get("phase") or meta.get("phase"), "end_phase": meta.get("end_phase"),
         "progress": st.get("progress_pct", 0), "health": st.get("health", "on_track"), "manager": st.get("manager", ""),
         "location": st.get("location", ""), "start": st.get("start"), "due": st.get("due"), "next_milestone": st.get("next_milestone"),
         "updated": st.get("updated"), "created": meta.get("created"),

@@ -13,7 +13,7 @@ export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Pro
   const issuers = useApi<{ id: string; legal_name: string; default: boolean }[]>("/data/issuers");      // staff only: for customers the list is just empty           // saved clients (master data); not available to end users: the list is just empty
   const [f, setF] = useState<NewProjectBody>({
     client_name: "", client_code: "", project_code: "", project_name: "", jurisdiction: "AR", methodology: "pm2",
-    locale: "", disciplines: ["electrical"], phase: "IC",
+    locale: "", disciplines: ["electrical"], phase: "IC", end_phase: "ASB",
   });
   const [codeTouched, setCodeTouched] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -112,8 +112,13 @@ export default function NewProject({ onCreated, onCancel }: { onCreated: (p: Pro
               </select>
             </Field>
             <Field label={t("projects.phase")} error={errors.phase}>
-              <select value={f.phase} onChange={(e) => set({ phase: e.target.value })}>
-                {opts.data.phases.map((p) => <option key={p}>{p}</option>)}
+              <select value={f.phase} onChange={(e) => set({ phase: e.target.value, end_phase: opts.data!.phases.indexOf(f.end_phase ?? "ASB") < opts.data!.phases.indexOf(e.target.value) ? e.target.value : f.end_phase })}>
+                {opts.data.phases.map((p) => <option key={p} value={p}>{t(("phase.full." + p) as Key)}</option>)}
+              </select>
+            </Field>
+            <Field label={t("projects.phaseEnd")} error={errors.end_phase}>
+              <select value={f.end_phase ?? "ASB"} onChange={(e) => set({ end_phase: e.target.value })}>
+                {opts.data.phases.filter((p) => opts.data!.phases.indexOf(p) >= opts.data!.phases.indexOf(f.phase)).map((p) => <option key={p} value={p}>{t(("phase.full." + p) as Key)}</option>)}
               </select>
             </Field>
           </div>

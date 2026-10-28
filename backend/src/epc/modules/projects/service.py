@@ -10,7 +10,7 @@ from epc.modules.identity import public as identity
 from epc.modules.projects import repository
 from epc.modules.projects.models import NewProject
 
-PHASES = ["IC", "IB", "ID", "IE"]
+PHASES = ["IC", "IB", "ID", "IE", "ASB"]          # conceptual, basic, detail, execution engineering and as-built, in the order they are worked
 LOCALES = ["es-AR", "es", "en"]
 
 
@@ -60,7 +60,17 @@ def _validate(p: NewProject, opts: dict) -> dict:
         errors["disciplines"] = "choose at least one discipline of the jurisdiction"
     if p.phase not in PHASES:
         errors["phase"] = "unknown phase"
+    errors.update(_end_phase_errors(p))
     return errors
+
+
+def _end_phase_errors(p: NewProject) -> dict:
+    """The phase a project ends at: one of the phases, not before the one it starts at (not every project goes through detail engineering or as-built)."""
+    if p.end_phase not in PHASES:
+        return {"end_phase": "unknown phase"}
+    if p.phase in PHASES and PHASES.index(p.end_phase) < PHASES.index(p.phase):
+        return {"end_phase": "cannot be before the starting phase"}
+    return {}
 
 
 def create(p: NewProject) -> dict:
@@ -80,7 +90,7 @@ def create(p: NewProject) -> dict:
         created = clock.now_local()
         meta = {"schema_version": "1.0", "client": p.client_name.strip(), "client_code": p.client_code, "project_code": p.project_code,
                 "project_name": p.project_name.strip(), "jurisdiction": p.jurisdiction, "locale": p.locale or jur["default_locale"],
-                "methodology": p.methodology, "disciplines": p.disciplines, "phase": p.phase, "engine_min_version": "0.1.0", "created": created}
+                "methodology": p.methodology, "disciplines": p.disciplines, "phase": p.phase, "end_phase": p.end_phase, "engine_min_version": "0.1.0", "created": created}
         if owner:
             meta["org"] = owner
         repository.write_meta(target, meta)

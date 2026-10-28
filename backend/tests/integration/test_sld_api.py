@@ -285,6 +285,8 @@ class TestSld(unittest.TestCase):
         opts = self.c.get(self.base).json()["options"]
         self.assertEqual(opts["methods"], ["B1", "B2", "C", "E", "F", "G", "D1", "D2"])
         self.assertEqual((opts["insulations"], opts["materials"]), (["pvc", "xlpe"], ["cu", "al"]))
+        d = self.c.get(self.base).json()["wiring_defaults"]                          # what "project criteria" means in the form
+        self.assertEqual((d["material"], d["insulation"], d["method"]), ("cu", "xlpe", "B2"))
         self.assertEqual(section(), 95)                                              # the criteria's Cu XLPE in a conduit (B2): 70 mm2 does not carry the 200 A of the protection there
         self.assertEqual(section(method="E"), 70)                                    # the same cable on a perforated or ladder tray carries it
         saved = self.c.get(self.base).json()["input"]["circuits"][0]

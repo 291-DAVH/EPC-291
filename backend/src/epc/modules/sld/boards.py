@@ -53,7 +53,7 @@ def view(d: Path, bid: str = "") -> dict:
         data["board"] = {**Board().model_dump(), **data["board"]}
     else:
         data = _blank(d)
-    return {"input": data, "saved": bool(saved), "board_id": bid, "lengths": lengths.info(d, data["circuits"]), "options": options(), "status": status(d, bid),
+    return {"input": data, "saved": bool(saved), "board_id": bid, "lengths": lengths.info(d, data["circuits"]), "options": options(), "wiring_defaults": repository.wiring_defaults(engineering.criteria_values(d)), "status": status(d, bid),
             "boards": [{"id": b["id"], "name": b["name"]} for b in boards(d)],
             "people": [p["name"] for p in masterdata.people()], "parties": _parties_line(d),
             "logos": {k: v is not None for k, v in (("company", masterdata.logos(d)["provider"]), ("client", masterdata.logos(d)["client"]))}}

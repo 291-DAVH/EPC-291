@@ -34,6 +34,13 @@ def installation() -> Dict[str, List[str]]:
     return {"methods": list(aea_ampacity.METODOS), "insulations": list(aea_ampacity.AISLACIONES), "materials": list(aea_ampacity.MATERIALES)}
 
 
+def wiring_defaults(criteria: dict) -> Dict[str, str]:
+    """What a circuit that leaves its conductor, insulation or method empty gets: the design criteria of the project (and the method the engine takes with that insulation)."""
+    from epc_aea90364 import aea_pipeline                                  # the engine decides it (single source)
+    _, _, material, insulation, _ = aea_pipeline.resolver_criterios(criteria)
+    return {"material": material, "insulation": insulation, "method": "B2" if insulation == "xlpe" else "B1"}
+
+
 def route_kinds() -> List[str]:
     from epc_aea90364 import aea_route                                     # the engine owns the kinds of installation (single source)
     return list(aea_route.KINDS)
