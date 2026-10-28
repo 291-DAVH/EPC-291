@@ -1,6 +1,6 @@
 # ADR-0030: Lighting in the platform: backend module and plan-editor integration
 
-Status: proposed (a plan: nothing of this is built yet). Date: 2026-10-27. Builds on ADR-0029 (the `epc_lighting` engine), ADR-0021 (plan editor), ADR-0026 (automatic design of circuits and runs) and ADR-0028 (norm selector).
+Status: accepted and built in seven phases (2026-10-27/28; the defaults of "Decisions I need from the owner" were confirmed). Date: 2026-10-27. Builds on ADR-0029 (the `epc_lighting` engine), ADR-0021 (plan editor), ADR-0026 (automatic design of circuits and runs) and ADR-0028 (norm selector).
 
 ## Context
 `epc_lighting` calculates, from a small JSON document (luminaires, rectangular interior rooms, exterior areas), how many luminaires a room needs, where they go, whether the room reaches its target illuminance and what the light looks like on the work plane. It is pure, in-process callable and has no connection to the platform yet.
@@ -62,4 +62,6 @@ Each phase ends with the gate green; nothing changes for the user before phase 3
 - (+) A closed loop in the editor: rooms → luminaires with their calculation → runs → circuits, using the pieces that already exist.
 - (+) The engine stays pure and testable; the platform owns the geometry glue, the catalogue and the screens.
 - (-) Room parameters add fields to the drawing model (optional, ignored by the plan engine).
-- (-) Until phase 7 the targets are typical values, which the screen says on each card.
+- (-) The targets of the activities are the typical ones quoted in the engine's material, which the screen says on each card; the ones of the Decreto 351/79 reach the panel only when a person approves them in the norms review (phase 7). Until then the rooms use the activity or a target given by hand.
+- (-) The review state of the lighting rules is kept with the others in the AEA norm package (`epc_aea90364/data/review.json`), because the norms review has one file for it; the engine reads the `review` flag of each rule, which the review keeps in step.
+- (-) Emergency luminaires are previewed and reported but not drawn as nodes of the plan: the electrical profile has no kind for them (a later profile change).

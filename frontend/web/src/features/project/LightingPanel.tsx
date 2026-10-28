@@ -40,6 +40,10 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
                 <input type="checkbox" disabled={!canWrite} checked={ext} onChange={(e) => set(r.id, { exterior: e.target.checked, luminaire: "", activity: "" })} /> {tl("light.exterior")}
               </label>
               <div className="light-fields">
+                {!ext && (options?.norm_rules?.length ?? 0) > 0 && <label>{tl("light.normRule")}
+                  <select disabled={!canWrite} value={l.norm_rule ?? ""} onChange={(e) => set(r.id, { norm_rule: e.target.value })}>
+                    <option value="">–</option>{options!.norm_rules!.map((n) => <option key={n.id} value={n.id} disabled={n.status !== "approved"}>{n.norm} · {n.summary} ({n.value} lx){n.status !== "approved" ? ` — ${tl("light.normRule.pending")}` : ""}</option>)}
+                  </select></label>}
                 {!ext && <label>{tl("light.activity")}
                   <select disabled={!canWrite} value={l.activity ?? ""} onChange={(e) => set(r.id, { activity: e.target.value })}>
                     <option value="">–</option>{options?.activities.map((a) => <option key={a.id} value={a.id}>{a.label} ({a.em_lux} lx)</option>)}
@@ -72,7 +76,8 @@ export default function LightingPanel({ drawing, options, proposal, busy, canWri
                     </select></label></>}
               </div>
               {ext && !l.target_lux && <div className="small" style={{ color: "var(--warn)" }}>{tl("light.exteriorTarget")}</div>}
-              {activity && <div className="small muted" title={activity.source}>{tl("light.targetFrom")}: {activity.source}</div>}
+              {activity && !l.norm_rule && <div className="small muted" title={activity.source}>{tl("light.targetFrom")}: {activity.source}</div>}
+              {l.norm_rule && !l.target_lux && <div className="small muted">{tl("light.targetFrom")}: {options?.norm_rules?.find((n) => n.id === l.norm_rule)?.norm ?? ""} · {options?.norm_rules?.find((n) => n.id === l.norm_rule)?.clause ?? l.norm_rule}</div>}
               {lum?.illustrative && <div className="small muted">{tl("light.illustrative")}</div>}
             </li>
           );

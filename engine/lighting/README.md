@@ -59,7 +59,7 @@ Lumen method result for the article classroom: `k = 1.371`, `Phi_T = 9278.35 lm`
 
 ## Normative data
 
-Engine data is JSON, not code: `params.json`, `schema/`, `data/`. Norms live apart: `rules/<NORM>.rules.json` (values with clause and summary, one `review` state per rule), `standards/<NORM>.json` (title, jurisdiction, edition, where the source is kept) and `norm_data.py` (reads them; approved rules only unless `include_pending=True`). The first one is `D351-79` (Argentina, Decreto 351/79, Annex IV), all rules `pending`: the pipeline does not use them until a person reviews and approves them. The source PDF is not in the repository.
+Engine data is JSON, not code: `params.json`, `schema/`, `data/`. Norms live apart: `rules/<NORM>.rules.json` (values with clause and summary, one `review` state per rule), `standards/<NORM>.json` (title, jurisdiction, edition, where the source is kept) and `norm_data.py` (reads them; approved rules only unless `include_pending=True`). The first one is `D351-79` (Argentina, Decreto 351/79, Annex IV), all rules `pending` until a person reviews them in the norms review of the platform. A room (or an exterior area) can say `target_rule: "<rule id>"` and take its target from an **approved** rule that gives a level in lux: the target then carries the norm, the clause and confidence 1; a pending rule, one that is not a level in lux or an unknown one is refused with what to do. `target_lux` wins over the rule and the rule over the activity. The source PDF is not in the repository.
 
 ## Depends on
 

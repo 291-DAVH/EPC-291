@@ -105,6 +105,7 @@ class Room:
     point_step_m: Optional[float] = None
     operating_hours: Optional[float] = None
     ugr_calculated: Optional[float] = None
+    target_rule: Optional[str] = None
 
     @property
     def area_m2(self) -> float:
@@ -123,6 +124,7 @@ class Area:
     enclosure: str
     maintenance: Optional[float]
     operating_hours: Optional[float] = None
+    target_rule: Optional[str] = None
 
 
 @dataclass(frozen=True)

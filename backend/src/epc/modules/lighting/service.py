@@ -15,6 +15,7 @@ from epc.core.errors import Invalid
 from epc.modules.identity import public as identity
 from epc.modules.lighting import geometry, repository
 from epc.modules.lighting.models import CalcIn, PlanRoom, RoomParams
+from epc.modules.norms import public as norms
 from epc.modules.projects import public as projects
 
 PARENT = {"company": "factory", "project": "company"}
@@ -150,6 +151,7 @@ def options(project_dir: Path, lang: str = "en") -> dict:
         "materials": [{"id": k, "label": _pick(v["label"], lang), "range": v["range"]} for k, v in data("reflectances")["materials"].items()],
         "systems": [{"id": k, "label": _pick(v["label"], lang)} for k, v in data("lighting_systems")["systems"].items()],
         "methods": ["lumen", "zonal"],
+        "norm_rules": [{k: r[k] for k in ("id", "norm", "clause", "summary", "value", "status")} for r in norms.lighting_rules()],
         "luminaires": _luminaire_rows(project_dir, lang),
     }
 
@@ -159,12 +161,36 @@ def _skip(room: PlanRoom, reason: str) -> dict:
     return {"id": room.id, "name": room.name, "reason": reason}
 
 
+def _rule_problem(rule_id: str) -> Optional[str]:
+    """Why a rule of a norm cannot give the target of a room (it has to be there, approved in the norms review and a level in lux), or None when it can."""
+    rule = norms.lighting_rule(rule_id)
+    if rule is None:
+        return f"the rule '{rule_id}' is not in any norm of the engine"
+    if rule["status"] != "approved":
+        return f"the rule '{rule_id}' of {rule['norm']} is {rule['status']}: approve it in the norms review or give the target"
+    if rule["unit"] != "lx" or not isinstance(rule["value"], (int, float)) or rule["value"] <= 0:
+        return f"the rule '{rule_id}' of {rule['norm']} is not a level in lux"
+    return None
+
+
+def _target_problem(params: RoomParams) -> Optional[str]:
+    """Why a room has no target to calculate with: the target, the activity or an approved rule of a norm (an exterior area needs the target itself: there is no table of typical ones yet)."""
+    if params.exterior:
+        return None if params.target_lux else "an exterior area needs its target illuminance"
+    if params.target_lux:
+        return None
+    if params.norm_rule:
+        return _rule_problem(params.norm_rule)
+    return None if params.activity else "no activity or target illuminance"
+
+
 def _calculable(room: PlanRoom, params: Optional[RoomParams], luminaires: Dict[str, dict]) -> Optional[str]:
-    """Why a room is left out of the calculation, or None when it can be calculated. An exterior area needs its target (there is no table of typical ones yet) and a luminaire for exterior use."""
+    """Why a room is left out of the calculation, or None when it can be calculated."""
     if params is None or not params.luminaire:
         return "no luminaire chosen"
-    if not (params.target_lux if params.exterior else params.activity or params.target_lux):
-        return "an exterior area needs its target illuminance" if params.exterior else "no activity or target illuminance"
+    problem = _target_problem(params)
+    if problem:
+        return problem
     if params.luminaire not in luminaires:
         return f"luminaire '{params.luminaire}' is not in the catalogue"
     if (luminaires[params.luminaire].get("kind", "interior") == "exterior") != params.exterior:
@@ -179,6 +205,8 @@ def _engine_room(room: PlanRoom, params: RoomParams, rect: geometry.Rect, k: flo
         value = getattr(params, key)
         if value not in (None, ""):
             body[key] = value
+    if params.norm_rule:
+        body["target_rule"] = params.norm_rule
     return body
 
 
@@ -221,9 +249,15 @@ def _placements(items: List[dict], rects: Dict[str, geometry.Rect], k: float, ou
     return out, warnings
 
 
+def _rule_stamp(rule_id: str) -> Optional[list]:
+    rule = norms.lighting_rule(rule_id)
+    return None if rule is None else [rule["value"], rule["status"]]
+
+
 def _fingerprint(body: CalcIn, luminaires: Dict[str, dict], used: List[str]) -> str:
     """What a calculation was made from: the rooms, their parameters, the options and the luminaires used. A later change of any of them makes the study stale."""
-    seen = {"sheet": body.sheet.model_dump(), "rooms": {k: v.model_dump() for k, v in sorted(body.rooms.items())}, "options": body.options.model_dump(), "luminaires": {lid: luminaires[lid] for lid in used}}
+    rules = {r.norm_rule: _rule_stamp(r.norm_rule) for r in body.rooms.values() if r.norm_rule}                     # a rule that changes or is withdrawn makes the study stale too
+    seen = {"sheet": body.sheet.model_dump(), "rooms": {k: v.model_dump() for k, v in sorted(body.rooms.items())}, "options": body.options.model_dump(), "luminaires": {lid: luminaires[lid] for lid in used}, "rules": rules}
     return hashlib.sha256(json.dumps(seen, sort_keys=True).encode("utf-8")).hexdigest()[:16]
 
 

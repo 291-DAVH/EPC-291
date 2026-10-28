@@ -249,7 +249,7 @@ export interface AnalysisResult { analyzed: number; created: string[]; merged: s
 export interface NormUnit { id: string; kind: "rule" | "table" | "criterion"; name: string; counts: { total: number; approved: number; rejected: number; pending: number; stale: number } }
 export interface NormPointRow { key: string; title: string; group: string; ref: string; status: "pending" | "approved" | "rejected" | "stale"; by: string | null; at: string | null }
 export interface NormPoint {
-  unit: string; kind: "rule" | "table" | "criterion"; key: string; title: string; group: string; ref: string; value: unknown; editable: string[];
+  unit: string; kind: "rule" | "table" | "criterion" | "lighting_rule"; key: string; title: string; group: string; ref: string; value: unknown; editable: string[];
   status: "pending" | "approved" | "rejected" | "stale"; review: { status: string; by: string; at: string; note: string } | null;
   history: { at: string; by: string; action: string; note: string; changes?: [string, unknown, unknown][] }[];
 }

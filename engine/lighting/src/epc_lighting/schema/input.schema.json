@@ -59,7 +59,7 @@
       ]
     },
     "target": {
-      "anyOf": [{"required": ["target_lux"]}, {"required": ["activity"]}]
+      "anyOf": [{"required": ["target_lux"]}, {"required": ["activity"]}, {"required": ["target_rule"]}]
     },
     "room": {
       "type": "object",
@@ -78,6 +78,7 @@
         "method": {"enum": ["lumen", "zonal"], "default": "lumen"},
         "lighting_system": {"enum": ["direct", "semi_direct", "general_diffuse", "direct_indirect", "semi_indirect", "indirect"], "default": "direct"},
         "target_lux": {"$ref": "#/$defs/positive"},
+        "target_rule": {"type": "string", "description": "Id of an approved rule of a norm that gives the maintained illuminance in lux (used when target_lux is not given)"},
         "activity": {"type": "string"},
         "reflectances": {
           "type": "object",
@@ -115,6 +116,7 @@
         "area_m2": {"$ref": "#/$defs/positive"},
         "luminaire": {"type": "string"},
         "target_lux": {"$ref": "#/$defs/positive"},
+        "target_rule": {"type": "string", "description": "Id of an approved rule of a norm that gives the maintained illuminance in lux (used when target_lux is not given)"},
         "activity": {"type": "string"},
         "beam_utilisation": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
         "enclosure": {"enum": ["open", "closed"], "default": "closed"},

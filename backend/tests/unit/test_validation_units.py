@@ -131,8 +131,21 @@ class TestNormsEdits(unittest.TestCase):
         self.assertEqual(self.errors(norms._edit_table, old, {"value": {"a": 2}}), {"value": "value: the keys cannot change"})
 
     def test_every_point_kind_has_an_editor_and_a_store(self):
-        self.assertEqual(sorted(norms._EDITORS), ["criterion", "rule", "table"])
-        self.assertEqual(sorted(norms._STORERS), ["criterion", "rule", "table"])
+        self.assertEqual(sorted(norms._EDITORS), ["criterion", "lighting_rule", "rule", "table"])
+        self.assertEqual(sorted(norms._STORERS), ["criterion", "lighting_rule", "rule", "table"])
+
+    LIGHTING = {"id": "T-1", "clause": "Annex, table 2", "summary": "General office work.", "value": 500, "unit": "lx", "norm": "X"}
+
+    def test_edit_lighting_rule_accepts_text_a_value_and_a_unit_and_keeps_the_rest(self):
+        new = norms._edit_lighting_rule(self.LIGHTING, {"summary": " Offices ", "value": 450, "plane": "horizontal"})
+        self.assertEqual((new["summary"], new["value"], new["plane"], new["id"], new["norm"]), ("Offices", 450, "horizontal", "T-1", "X"))
+        self.assertEqual(norms._edit_lighting_rule(self.LIGHTING, {"unit": "ratio", "value": 0.5})["unit"], "ratio")
+
+    def test_edit_lighting_rule_says_what_to_correct(self):
+        self.assertEqual(self.errors(norms._edit_lighting_rule, self.LIGHTING, {"summary": "", "value": -1, "unit": "ft", "id": "x"}),
+                         {"summary": "text, up to 240 characters", "value": "a number from 0 up", "unit": "one of lx, ratio", "id": "not editable"})
+        self.assertEqual(self.errors(norms._edit_lighting_rule, self.LIGHTING, {"value": 0}), {"value": "a level in lux is above 0"})
+        self.assertEqual(self.errors(norms._edit_lighting_rule, self.LIGHTING, {"value": True}), {"value": "a number from 0 up"})
 
     def test_slug_and_hash(self):
         self.assertEqual(norms.sha({"b": 1, "a": 2}), norms.sha({"a": 2, "b": 1}))

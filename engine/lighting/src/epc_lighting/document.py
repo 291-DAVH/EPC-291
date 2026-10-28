@@ -169,15 +169,16 @@ def _parse_points(raw: Any, width: float, length: float, path: str) -> Tuple[Poi
     return tuple(points)
 
 
-def _parse_target(raw: Dict[str, Any], path: str) -> Tuple[Optional[float], Optional[str]]:
+def _parse_target(raw: Dict[str, Any], path: str) -> Tuple[Optional[float], Optional[str], Optional[str]]:
     target = _num(raw, "target_lux", path, positive=True)
+    rule = _text(raw, "target_rule", path)
     activity = raw.get("activity")
     if activity is not None:
         ids = [a["id"] for a in data("levels")["activities"]]
         _choice(activity, ids, f"{path}.activity")
-    if target is None and activity is None:
-        _fail(path, "'target_lux' or 'activity' is required: give the maintained illuminance in lux, or one of the activity ids " + str(sorted(a["id"] for a in data("levels")["activities"])))
-    return target, activity
+    if target is None and activity is None and rule is None:
+        _fail(path, "'target_lux', 'activity' or 'target_rule' is required: give the maintained illuminance in lux, one of the activity ids " + str(sorted(a["id"] for a in data("levels")["activities"])) + ", or the id of an approved rule of a norm")
+    return target, activity, rule
 
 
 def parse_room(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Room:
@@ -186,7 +187,7 @@ def parse_room(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Room:
     here = f"{path} ('{rid}')"
     width = _num(raw, "width_m", here, required=True, positive=True)
     length = _num(raw, "length_m", here, required=True, positive=True)
-    target, activity = _parse_target(raw, here)
+    target, activity, rule = _parse_target(raw, here)
     systems = list(data("lighting_systems")["systems"])
     mode = raw.get("suspension_mode")
     if mode is not None:
@@ -213,6 +214,7 @@ def parse_room(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Room:
         point_step_m=_num(raw, "point_step_m", here, positive=True),
         operating_hours=_num(raw, "operating_hours_per_year", here, minimum=0, maximum=8760),
         ugr_calculated=_num(raw, "ugr_calculated", here, minimum=0),
+        target_rule=rule,
     )
 
 
@@ -227,7 +229,7 @@ def parse_area(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Area:
     raw = _object(raw, path)
     aid = _text(raw, "id", path, required=True)
     here = f"{path} ('{aid}')"
-    target, activity = _parse_target(raw, here)
+    target, activity, rule = _parse_target(raw, here)
     return Area(
         id=aid,
         name=_text(raw, "name", here, default=aid),
@@ -239,6 +241,7 @@ def parse_area(raw: Any, path: str, luminaire_ids: Sequence[str]) -> Area:
         enclosure=_choice(raw.get("enclosure", DEFAULTS["enclosure"]), list(data("maintenance")["exterior"]), f"{here}.enclosure"),
         maintenance=_num(raw, "maintenance_factor", here, positive=True, maximum=1),
         operating_hours=_num(raw, "operating_hours_per_year", here, minimum=0, maximum=8760),
+        target_rule=rule,
     )
 
 

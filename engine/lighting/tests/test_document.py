@@ -73,7 +73,7 @@ class TestMessagesSayWhatToFix(unittest.TestCase):
         room = helpers.room_dict()
         del room["target_lux"]
         msg = refused(helpers.document([room]))
-        self.assertIn("'target_lux' or 'activity' is required", msg)
+        self.assertIn("'target_lux', 'activity' or 'target_rule' is required", msg)
         self.assertIn("education.classroom", msg)
 
     def test_unknown_activity(self):
