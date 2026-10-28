@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
 import RouteEditor from "./RouteEditor";
-import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, WiringDefaults, useApi, useI18n } from "@epc/ui";
 
 /** How a circuit is wired, in a few words: the method of installation, the conductor and the insulation (what it leaves to the design criteria is read from them). */
 const wiringOf = (c: SldCircuit, crit?: { material: string; aislacion: string }): string =>
@@ -17,11 +17,11 @@ const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.rep
 type Options = SldView["options"];
 
 /** The data cells of a circuit (everything but its length, which the caller draws, and the delete button): the same for a circuit of the board and for the one being added. */
-function CircuitInputs({ c, set, parents, o, lengthCell, t, focus }: { c: SldCircuit; set: (patch: Partial<SldCircuit>) => void; parents: string[]; o: Options; lengthCell: ReactNode; t: (k: Key) => string; focus?: boolean }) {
+function CircuitInputs({ c, set, parents, o, lengthCell, t, focus, defaults }: { c: SldCircuit; set: (patch: Partial<SldCircuit>) => void; parents: string[]; o: Options; lengthCell: ReactNode; t: (k: Key) => string; focus?: boolean; defaults?: WiringDefaults }) {
   const sel = (value: string, items: string[], on: (v: string) => void) => <select value={value} onChange={(e) => on(e.target.value)}>{items.map((x) => <option key={x}>{x}</option>)}</select>;
   /** A choice that may be left to the design criteria of the project (empty). */
-  const pick = (value: string, items: string[], on: (v: string) => void, label: (v: string) => string) =>
-    <select value={value} onChange={(e) => on(e.target.value)}><option value="">{t("sld.byCriteria")}</option>{items.map((x) => <option key={x} value={x}>{label(x)}</option>)}</select>;
+  const pick = (value: string, items: string[], on: (v: string) => void, label: (v: string) => string, byDefault?: string) =>
+    <select value={value} onChange={(e) => on(e.target.value)}><option value="">{t("sld.byCriteria")}{byDefault ? ` (${label(byDefault)})` : ""}</option>{items.map((x) => <option key={x} value={x}>{label(x)}</option>)}</select>;
   return (
     <>
       <td><input className="w-tag" value={c.tag} autoFocus={focus} onChange={(e) => set({ tag: e.target.value })} aria-label={t("sld.tag")} /></td>
@@ -42,9 +42,9 @@ function CircuitInputs({ c, set, parents, o, lengthCell, t, focus }: { c: SldCir
       <td><input className="w-num" type="number" step="0.01" value={c.efficiency ?? ""} onChange={(e) => set({ efficiency: num(e.target.value) })} aria-label={t("sld.eff")} /></td>
       <td>{sel(c.kind, o.kinds, (v) => set({ kind: v }))}</td>
       <td>{sel(c.cable_type, o.cable_types, (v) => set({ cable_type: v }))}</td>
-      <td>{pick(c.method ?? "", o.methods ?? [], (v) => set({ method: v }), (m) => `${m} · ${t(("sld.method." + m) as Key)}`)}</td>
-      <td>{pick(c.insulation ?? "", o.insulations ?? [], (v) => set({ insulation: v }), (m) => m.toUpperCase())}</td>
-      <td>{pick(c.material ?? "", o.materials ?? [], (v) => set({ material: v }), (m) => t(("sld.material." + m) as Key))}</td>
+      <td>{pick(c.method ?? "", o.methods ?? [], (v) => set({ method: v }), (m) => `${m} · ${t(("sld.method." + m) as Key)}`, defaults?.method)}</td>
+      <td>{pick(c.insulation ?? "", o.insulations ?? [], (v) => set({ insulation: v }), (m) => m.toUpperCase(), defaults?.insulation)}</td>
+      <td>{pick(c.material ?? "", o.materials ?? [], (v) => set({ material: v }), (m) => t(("sld.material." + m) as Key), defaults?.material)}</td>
     </>
   );
 }
@@ -318,7 +318,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
               </thead>
               <tbody>
                 <tr className="draft" onKeyDown={(e) => { if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") { e.preventDefault(); accept(); } else if (e.key === "Escape") closeForm(); }}>
-                  <CircuitInputs focus c={editing.draft} set={draftSet} parents={data.circuits.filter((p, j) => j !== editing.index && p.tag.trim()).map((p) => p.tag)} o={o} t={t} lengthCell={<>
+                  <CircuitInputs focus defaults={view.data.wiring_defaults} c={editing.draft} set={draftSet} parents={data.circuits.filter((p, j) => j !== editing.index && p.tag.trim()).map((p) => p.tag)} o={o} t={t} lengthCell={<>
                     {(editing.draft.route?.length ?? 0) > 0
                       ? <b className="mono" title={t("route.totalHint")}>{Math.round(editing.draft.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100}</b>
                       : <input className="w-num" type="number" step="any" value={editing.draft.length_m} onChange={(e) => draftSet({ length_m: Number(e.target.value) })} title={t("sld.lenData")} aria-label={t("sld.length")} />}
@@ -332,6 +332,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
                 </tr>
               </tbody>
             </table>
+            <p className="muted small" style={{ margin: "6px 0 0" }}>{t("sld.installHelp")}</p>
           </div>
         )}
       </div>

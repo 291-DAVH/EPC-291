@@ -93,7 +93,7 @@ export interface ProjectOptions {
 }
 export interface NewProjectBody {
   client_name: string; client_code: string; project_code: string; project_name: string; jurisdiction: string;
-  methodology: string; locale: string; disciplines: string[]; phase: string; issuer?: string;
+  methodology: string; locale: string; disciplines: string[]; phase: string; end_phase?: string; issuer?: string;
 }
 
 export type AccountType = "staff" | "reviewer" | "inspector" | "auditor" | "individual" | "corporate_owner" | "corporate_admin" | "corporate_member" | "";
@@ -106,7 +106,7 @@ export interface Me {
   organizations?: { slug: string; name: string; kind: "individual" | "company"; role: "owner" | "admin" | "member"; current: boolean }[];
 }
 export interface PortfolioProject {
-  id: string; name: string; client: string; code: string; disciplines: string[]; state: string; phase: string; progress: number;
+  id: string; name: string; client: string; code: string; disciplines: string[]; state: string; phase: string; end_phase?: string | null; progress: number;
   health: "on_track" | "at_risk" | "delayed"; manager: string; location: string; start?: string; due?: string;
   next_milestone?: { name: string; date: string; done: boolean } | null; updated?: string;
   deliverables: { total: number; delivered: number; overdue: number }; inputs: { total: number; open: number };
@@ -217,9 +217,10 @@ export interface BoardMemoView {
     resumen: { circuits: number; cumplen: number; no_cumplen: number; transiciones: number; global: boolean; observaciones: string[] };
   } | null;
 }
+export interface WiringDefaults { material: string; insulation: string; method: string }
 export interface SldView {
   parties?: { issuer: string; client: string; team: Partial<TeamRow> };
-  input: SldData; lengths?: Record<string, LengthInfo>; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
+  input: SldData; wiring_defaults?: WiringDefaults; lengths?: Record<string, LengthInfo>; saved: boolean; board_id: string; boards: { id: string; name: string }[]; status: SldStatus; people: string[]; logos: { company: boolean; client: boolean };
   options: { units: string[]; topologies: string[]; phases: string[]; kinds: string[]; cable_types: string[]; systems: string[]; route_kinds: string[]; length_sources?: string[]; methods?: string[]; insulations?: string[]; materials?: string[] };
 }
 

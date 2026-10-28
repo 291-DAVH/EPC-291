@@ -64,7 +64,7 @@ export default function Project() {
           <h1 style={{ margin: "2px 0 6px" }}>{d.name}</h1>
           <div className="row">
             <HealthBadge health={d.health} closed={closed} />
-            <Badge>{t(phaseKey(d.phase))}</Badge>
+            <Badge>{t(phaseKey(d.phase))}</Badge>{d.end_phase && d.end_phase !== d.phase && <span className="muted small"> → {t("projects.phaseEnd")}: {t(("phase.full." + d.end_phase) as Key)}</span>}
             {d.disciplines.map((x) => <Badge key={x}>{t(("projects.disc." + x) as Key)}</Badge>)}
           </div>
         </div>
