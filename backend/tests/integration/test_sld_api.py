@@ -307,6 +307,33 @@ class TestSld(unittest.TestCase):
         self.assertEqual((memo["board"]["system"], memo["board"]["voltage_v"]), ("TT", 400))
         self.assertEqual(memo["acometida"]["desde"], "Tablero general del edificio")                          # not "Red / fuente externa" when the person named the source
 
+    def test_a_board_has_several_acometidas_each_with_its_own_cable_calculated_with_the_board(self):
+        red = {"name": "ACOM-RED", "source": "Red de distribución", "phase": "3F", "length_m": 40, "load_a": 166, "method": "E", "insulation": "xlpe", "material": "cu"}
+        grupo = {"name": "ACOM-GE", "source": "Grupo electrógeno", "phase": "3F", "length_m": 20, "method": "B2", "insulation": "pvc", "material": "al"}
+        body = {"board": BOARD, "circuits": CIRCUITS, "titleblock": TB, "feeders": [red, grupo]}
+        self.assertEqual(self.c.put(self.base, json=body).status_code, 200)
+        self.assertEqual([f["name"] for f in self.c.get(self.base).json()["input"]["feeders"]], ["ACOM-RED", "ACOM-GE"])
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        a, b = self.c.get(self.base + "/calculation").json()["feeders"]
+        self.assertEqual((a["name"], a["S_mm2"], a["In"], a["Ib"], a["load_given"], a["metodo"]), ("ACOM-RED", 95, 200, 166.0, True, "E"))
+        self.assertEqual((b["name"], b["load_given"], b["aislacion"], b["material"]), ("ACOM-GE", False, "pvc", "al"))
+        self.assertGreater(b["Ib"], 0)                                                                         # no current given: what the head of the board draws
+        self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        ac = self.c.get(self.base + "/memo").json()["memo"]["acometida"]
+        self.assertEqual((ac["propia"], ac["desde"], [f["name"] for f in ac["lista"]]), (True, "Red de distribución", ["ACOM-RED", "ACOM-GE"]))
+        self.c.put(self.base, json={**body, "feeders": []})                                                    # without them the old result is not left behind
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        self.assertEqual(self.c.get(self.base + "/calculation").json()["feeders"], [])
+
+    def test_the_acometidas_are_checked_when_the_board_is_saved(self):
+        bad = {"name": "X", "phase": "9F", "length_m": -1, "load_a": 0, "method": "Z9"}
+        r = self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB, "feeders": [bad, {"name": "X"}]})
+        self.assertEqual(r.status_code, 422)
+        self.assertEqual({k.rsplit(".", 1)[1] for k in r.json()["detail"]["errors"]}, {"method", "phase", "length_m", "load_a", "name"})
+
     def test_a_generation_without_memo_file_is_still_told_outdated_when_the_data_change(self):
         self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)

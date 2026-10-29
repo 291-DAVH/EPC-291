@@ -125,6 +125,14 @@ def write_excel(path: Path, tablero: dict, circuitos: List[dict]) -> None:
     wb.save(path)
 
 
+def _acometidas(data: dict, tablero: dict, res: dict, criteria: Optional[dict]) -> list:
+    """The acometidas of the board (the cables that feed it), sized from what the circuits of its head draw; none when the person defined none."""
+    from epc_aea90364 import board_feeders
+    feeders = data.get("feeders") or []
+    head = board_feeders.head_current(res["datos"], res["detalle"]) if feeders else 0.0
+    return board_feeders.calculate(tablero, feeders, head, criteria, str(data["board"].get("name") or "")) if feeders else []
+
+
 def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
     """aea_pipeline with the design criteria: {"datos": contract JSON, "avisos": [...], "detalle": {...}, "limites": {...}}."""
     from epc_aea90364 import aea_pipeline as P
@@ -135,7 +143,7 @@ def calculate(data: dict, criteria: Optional[dict] = None) -> dict:
         if c.get("tag") in detalle:
             detalle[c["tag"]]["descripcion"] = str(c.get("description", ""))
     limites, _, material, aislacion, sens = P.resolver_criterios(criteria)
-    return {"datos": datos, "avisos": avisos, "detalle": detalle,
+    return {"datos": datos, "avisos": avisos, "detalle": detalle, "acometidas": _acometidas(data, tablero, {"datos": datos, "detalle": detalle}, criteria),
             "limites": {"seccional": limites["seccional"], "terminal": limites["iluminacion"], "motor": limites["motor"]},
             "conductor": {"material": material, "aislacion": aislacion}, "rcd_ma": sens}
 
@@ -216,12 +224,13 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     detail_json.write_text(json.dumps(res["detalle"], ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     crit_json.write_text(json.dumps({"criterios": criteria or {}, "limites_pct": res["limites"], "conductor": res["conductor"], "rcd_ma": res["rcd_ma"]},
                                     ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    (out / f"{name}_acometidas.json").write_text(json.dumps(res["acometidas"], ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")      # always written: a run without them replaces an earlier one
 
     if "calc" in diagrams:                                    # the calculation alone (sections, protections, drops): no memo, no figures, no diagrams
         return _finish(out, _summary(name, avisos, [], res, data, diagrams, None, None))
     from epc_aea90364 import board_memo as BM                 # memoria de cálculo y síntesis del tablero: mismos números que el unifilar (fuente única)
     memo = BM.build(data["board"], data["circuits"], res["datos"], res["detalle"], res["limites"], res["conductor"], res["rcd_ma"],
-                    upstream=data.get("upstream"), validated=bool(data.get("validated", True)))
+                    upstream=data.get("upstream"), validated=bool(data.get("validated", True)), feeders=res["acometidas"])
     (out / f"{name}_memoria.json").write_text(json.dumps(memo, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     (out / f"{name}_MC.md").write_text(BM.memoria_md(memo), encoding="utf-8", newline="\n")
     (out / f"{name}_SP.md").write_text(BM.sintesis_md(memo), encoding="utf-8", newline="\n")

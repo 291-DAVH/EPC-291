@@ -380,6 +380,10 @@
     "pdf_pages": 1,
     "starts_with_pdf": true
    },
+   "T1_acometidas.json": {
+    "lines": 1,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+   },
    "T1_cifras.json": {
     "lines": 63,
     "sha256": "3b34e8f11e7449831992b37b5d55e73866b007ee394726280f5895fd349c336b"
@@ -642,6 +646,10 @@
     "pdf_pages": 1,
     "starts_with_pdf": true
    },
+   "T1_acometidas.json": {
+    "lines": 1,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+   },
    "T1_cifras.json": {
     "lines": 63,
     "sha256": "fcc6568f2a2418c435f93b90d8ba3ceca29bcab6e6a45fd1236fc6291b6b471e"
@@ -846,6 +854,10 @@
    "T1_SP.pdf": {
     "pdf_pages": 1,
     "starts_with_pdf": true
+   },
+   "T1_acometidas.json": {
+    "lines": 1,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
    },
    "T1_cifras.json": {
     "lines": 61,

@@ -476,6 +476,7 @@
       ],
       "max_distance_m": 60.0,
       "moment_length_m": 60.0,
+      "destination_distance_m": 60.0,
       "plenums": [],
       "rise_m": 0,
       "stretches": [
@@ -517,6 +518,7 @@
       ],
       "max_distance_m": 30.0,
       "moment_length_m": 25.0,
+      "destination_distance_m": null,
       "plenums": [],
       "rise_m": 0,
       "stretches": [

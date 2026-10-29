@@ -102,9 +102,33 @@ def _validate_parent_cycles(cs: list, e: Dict[str, str]) -> None:
             cur = par[cur]
 
 
+MAX_FEEDERS = 6
+
+
+def _validate_feeder(i: int, f: dict, names: list, e: Dict[str, str]) -> None:
+    name = f["name"].strip()
+    k = f"feeder:{name or i + 1}"
+    _validate_wiring(k, f, e)
+    for field, bad, message in (("phase", f["phase"] not in PHASES, "one of " + ", ".join(PHASES)), ("length_m", f["length_m"] < 0, "must be >= 0"),
+                                ("load_a", f["load_a"] is not None and f["load_a"] <= 0, "must be > 0 (or empty: what the head of the board draws)"),
+                                ("name", bool(name) and names.count(name) > 1, "duplicated")):
+        if bad:
+            e[f"{k}.{field}"] = message
+
+
+def _validate_feeders(feeders: list, e: Dict[str, str]) -> None:
+    """The acometidas of a board: each with a known phase, a length, a current (or none) and a wiring the engine knows; names do not repeat."""
+    if len(feeders) > MAX_FEEDERS:
+        e["feeders"] = f"up to {MAX_FEEDERS} acometidas"
+    names = [f["name"].strip() for f in feeders if f["name"].strip()]
+    for i, f in enumerate(feeders):
+        _validate_feeder(i, f, names, e)
+
+
 def validate(data: dict) -> Dict[str, str]:
     e: Dict[str, str] = {}
     _validate_board(data["board"], e)
+    _validate_feeders(data.get("feeders", []), e)
     cs = data["circuits"]
     if not cs:
         e["circuits"] = "at least one circuit"

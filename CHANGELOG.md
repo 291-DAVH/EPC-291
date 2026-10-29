@@ -5,6 +5,14 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ## [Unreleased]
 
 ### Fixed
+- The Technical data screen no longer goes blank when it is opened while a calculation is still running ("Cannot access 'poll' before initialization"): the function that resumes the wait is declared before the screen's early return.
+
+### Added
+- Acometidas of a board (Engineering → Technical data): a board has one or several cables that feed it (the utility and a generator, for example), each with name, source, phase, length, current (empty: the sum of the circuits at the head of the board), installation, insulation and conductor. Each is sized like a circuit (`epc_aea90364.board_feeders`, with the same Iz ≥ In and seccional drop), shown with its section, protection and drop, calculated together with the board, and listed in the calculation memo ("Acometida ACOM-RED (Red de distribución): 95 mm²…") instead of "Pending". A board fed from another board of the project still takes its cable from that board's circuit.
+- Circuits across levels: a circuit drawn on several sheets with the same tag (from the board to a plenum on the board's sheet, from the plenum to the loads on each other level) is now measured by the plans: the lengths are chained through the plenums, the height of each counted once, and the board uses the moment length and the maximum distance of all its loads. A circuit that does not chain keeps the length typed. The engine now reports the distance to a circuit's destination.
+- Backlog of electrical engineering (`docs/BACKLOG_INGENIERIA_ELECTRICA.md`): the twelve ideas for circuits, cables, raceways and project data, with 1 and 3 marked done.
+
+### Fixed
 - Reading the walls of a vector PDF no longer fails with "the PDF has too many strokes to read" on a plan with hatching, ticks and furniture: over 60,000 strokes the door swings and the longest strokes are read and a warning says how many of the shortest were left out. Only a PDF beyond 1,500,000 strokes is refused, now saying how to export it lighter. A plan of 200,000 strokes is read in about 2 seconds.
 
 ### Added

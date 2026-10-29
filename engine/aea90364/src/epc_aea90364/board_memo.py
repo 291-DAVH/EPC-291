@@ -188,13 +188,27 @@ def _selectividad(circuits: List[dict], by_tag: Dict[str, dict], icc_a: float, u
     return pairs
 
 
-def _fed_from(upstream: Optional[dict], board: dict) -> str:
-    """Where the board is fed from: the upstream board of the project, else the source the person named, else the utility or a source outside the project."""
-    return (upstream or {}).get("board") or str(board.get("supply_name") or "").strip() or "Red / fuente externa al proyecto"
+def _fed_from(upstream: Optional[dict], board: dict, feeders: List[dict]) -> str:
+    """Where the board is fed from: the upstream board of the project, else the source of its first acometida, else the source the person named, else the utility or a source outside the project."""
+    named = (feeders[0].get("source") if feeders else "") or str(board.get("supply_name") or "").strip()
+    return (upstream or {}).get("board") or named or "Red / fuente externa al proyecto"
+
+
+def _from_feeder(f: Optional[dict]) -> dict:
+    """An acometida of the board seen as the circuit that feeds it (the names the memo reads)."""
+    return {} if not f else {"tag": f["name"], "length_m": f["length_m"], "S": f["S_mm2"], "In": f["In"], "dU": f["du_pct"], "disp": f["disp"]}
+
+
+def _acometida(upstream: Optional[dict], board: dict, feeders: List[dict]) -> dict:
+    """The cable that feeds the board: the circuit of the upstream board, else the first acometida the person defined (all of them go in `lista`), else nothing yet."""
+    src = upstream or _from_feeder(feeders[0] if feeders else None)
+    return {"desde": _fed_from(upstream, board, feeders), "tag": src.get("tag", ""), "length_m": src.get("length_m", board.get("feeder_length_m")), "S_mm2": src.get("S"), "In": src.get("In"),
+            "du_pct": src.get("dU"), "disp": src.get("disp"), "ruta": src.get("ruta") or [], "ruta_limitante": src.get("ruta_limitante"), "dato_faltante": not src,
+            **({"propia": not upstream, "lista": feeders} if feeders else {})}
 
 
 def build(board: dict, circuits_in: List[dict], datos: dict, detalle: dict, limites: dict, conductor: dict, rcd_ma: float,
-          upstream: Optional[dict] = None, validated: bool = True) -> dict:
+          upstream: Optional[dict] = None, validated: bool = True, feeders: Optional[List[dict]] = None) -> dict:
     """Memoria completa del tablero como datos. `board`/`circuits_in` son los datos del formulario; `datos`/`detalle` el resultado del cálculo."""
     circ = {c["tag"]: c for c in circuits_in}
     system = board.get("system", "TN-S")
@@ -203,11 +217,7 @@ def build(board: dict, circuits_in: List[dict], datos: dict, detalle: dict, limi
     by_tag = {c["tag"]: c for c in items}
     sel = _selectividad(items, by_tag, icc_a, upstream)
     curvas = {c["tag"]: {"curva": c["proteccion"]["curva"], "In": c["In"], **curve_band(c["In"], c["proteccion"]["curva"])} for c in items}
-    ac = {"desde": _fed_from(upstream, board), "tag": (upstream or {}).get("tag", ""),
-          "length_m": (upstream or {}).get("length_m", board.get("feeder_length_m")), "S_mm2": (upstream or {}).get("S"),
-          "In": (upstream or {}).get("In"), "du_pct": (upstream or {}).get("dU"), "disp": (upstream or {}).get("disp"), "ruta": (upstream or {}).get("ruta") or [],
-          "ruta_limitante": (upstream or {}).get("ruta_limitante"),
-          "dato_faltante": not upstream}
+    ac = _acometida(upstream, board, feeders or [])
     obs = _observations(items, sel, ac, validated)
     resumen = {"circuits": len(items), "cumplen": sum(1 for c in items if c["cumple"]), "no_cumplen": sum(1 for c in items if not c["cumple"]),
                "transiciones": sum(1 for c in items if c["transicion"]), "global": all(c["cumple"] for c in items),
@@ -271,6 +281,21 @@ def _route_blocks(title: str, ruta: list, limitante, s_mm2) -> list:
                        f"{t['f_temp']:.2f}".replace(".", ","), f"{t['f_agrup']:.2f}".replace(".", ","), f"{t['f_suelo']:.2f}".replace(".", ","), "✓" if t.get("limitante") else ""] for t in ruta]}]
 
 
+def _acometida_blocks(ac: dict) -> list:
+    """The text of 3.1: where the board is fed from and what the cable is (pending, the circuit of the upstream board, or the acometidas defined here), with the route when there is one."""
+    if ac["dato_faltante"]:
+        blocks = [{"type": "p", "text": f"Alimentación desde: {ac['desde']}. Longitud de acometida: {sig2(ac['length_m'])} m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior)."}]
+    elif ac.get("propia"):
+        blocks = [{"type": "p", "text": f"Alimentación desde: {ac['desde']}. Acometida(s) del tablero, dimensionadas como cualquier circuito (Iz ≥ In y caída de tensión del seccional):"},
+                  {"type": "bullets", "items": [f"{f['name']}{' (' + f['source'] + ')' if f.get('source') else ''}: {mm(f['S_mm2'])} mm², {sig2(f['length_m'])} m, Ib {sig2(f['Ib'])} A, protección {f['disp']}, caída de tensión {p1(f['du_pct'])} %."
+                                                for f in ac["lista"]]}]
+    else:
+        blocks = [{"type": "p", "text": f"Alimentación desde el circuito {ac['tag']} de {ac['desde']}: {mm(ac['S_mm2'])} mm², {sig2(ac['length_m'])} m, protección {ac['disp']}, caída de tensión {p1(ac['du_pct'])} %."}]
+    if ac.get("ruta"):
+        blocks += _route_blocks(f"Acometida: circuito {ac['tag']} de {ac['desde']}", ac["ruta"], ac.get("ruta_limitante"), ac.get("S_mm2"))
+    return blocks
+
+
 def memoria_doc(m: dict) -> dict:
     b, cr, ac, r = m["board"], m["criteria"], m["acometida"], m["resumen"]
     lim, cond = cr["limits_pct"], cr["conductor"]
@@ -288,12 +313,7 @@ def memoria_doc(m: dict) -> dict:
                                   ["Caída de tensión máxima", f"seccionales {p1(lim['seccional'])} %, iluminación y tomas {p1(lim['terminal'])} %, motores {p1(lim['motor'])} %"],
                                   ["Sensibilidad del diferencial", f"{sig2(cr['rcd_ma'])} mA"]]},
           {"type": "h", "text": "3. Cables"}, {"type": "h", "text": "3.1 Cable de acometida (alimenta al tablero)"}]
-    if ac["dato_faltante"]:
-        B += [{"type": "p", "text": f"Alimentación desde: {ac['desde']}. Longitud de acometida: {sig2(ac['length_m'])} m. Sección y protección de cabecera: Pendiente (se definen en el tablero superior)."}]
-    else:
-        B += [{"type": "p", "text": f"Alimentación desde el circuito {ac['tag']} de {ac['desde']}: {mm(ac['S_mm2'])} mm², {sig2(ac['length_m'])} m, protección {ac['disp']}, caída de tensión {p1(ac['du_pct'])} %."}]
-    if ac.get("ruta"):
-        B += _route_blocks(f"Acometida: circuito {ac['tag']} de {ac['desde']}", ac["ruta"], ac.get("ruta_limitante"), ac.get("S_mm2"))
+    B += _acometida_blocks(ac)
     B += [{"type": "h", "text": "3.2 Cableado interno y cableado externo de cada circuito"},
           {"type": "p", "text": "El cableado interno (dentro del tablero) se dimensiona por capacidad térmica: Iz ≥ In. El cableado externo (de salida hacia la carga) se dimensiona además por caída de tensión sobre la longitud real; "
                                 "si resulta mayor que el interno, se indica la bornera de transición."},

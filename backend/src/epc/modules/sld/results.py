@@ -14,6 +14,11 @@ def _description(tag: str, saved: dict, detail: dict) -> str:
     return saved.get(tag) or detail.get(tag, {}).get("descripcion", "")
 
 
+def _feeders(base: Path, name: str) -> list:
+    """The acometidas of the last calculation (none when the board has none or it was calculated before they existed)."""
+    return read_json(base / f"{name}_acometidas.json", []) or []
+
+
 def calculation(d: Path, bid: str = "") -> dict:
     """Result of the last calculation: one row per circuit (what the diagram was drawn from) and the criteria that governed it."""
     bid = _resolve(d, bid)
@@ -28,7 +33,8 @@ def calculation(d: Path, bid: str = "") -> dict:
     saved = (repository.load_input(d, bid) if bid else None) or {"circuits": []}
     desc = {c["tag"]: c.get("description", "") for c in saved.get("circuits", [])}
     rows = [{"tag": t, "description": _description(t, desc, detail), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}} for t, v in calc.items()]
-    return {"rows": rows, "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
+    return {"rows": rows, "feeders": _feeders(base, name),
+            "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
 
 
 def _hash(d: Path, data: dict) -> str:
