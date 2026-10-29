@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class Board(BaseModel):
     name: str = ""
     voltage_v: float = 380
-    system: str = "TN-S"                    # TN-S | TN-C-S | IT
+    system: str = "TN-S"                    # TN-S | TN-C-S | TT | IT
     icc_ka: float = 10
     fp_default: float = 0.85
     frequency_hz: float = 50
@@ -14,6 +14,7 @@ class Board(BaseModel):
     feeder_length_m: float = 20             # supply cable length (acometida)
     supplied_from: str = ""                 # id of the upstream board that feeds this one (empty: fed from the utility or a source outside the project)
     supply_tag: str = ""                    # circuit of the upstream board that is this board's supply
+    supply_name: str = ""                   # optional: the name of the board or source that feeds this one when it is not a board of the project (the memo says "fed from: ...")
     level: str = ""                         # the level of the building the board is on (`L-1`, `L0`, `L2`...): the plenum of the building starts there
 
 

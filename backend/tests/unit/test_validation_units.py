@@ -23,7 +23,7 @@ class TestSldValidate(unittest.TestCase):
 
     def test_board_fields(self):
         e = sld.validate(data(voltage_v=20, system="XX", icc_ka=0, fp_default=2, frequency_hz=45, feeder_length_m=-1))
-        self.assertEqual(e, {"board.voltage_v": "between 50 and 1000 V", "board.system": "one of TN-S, TN-C-S, IT", "board.icc_ka": "between 0.1 and 100 kA",
+        self.assertEqual(e, {"board.voltage_v": "between 50 and 1000 V", "board.system": "one of TN-S, TN-C-S, TT, IT", "board.icc_ka": "between 0.1 and 100 kA",
                              "board.fp_default": "between 0.1 and 1", "board.frequency_hz": "50 or 60", "board.feeder_length_m": "must be >= 0"})
         d = data()
         d["board"]["name"] = " "

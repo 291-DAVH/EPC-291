@@ -22,7 +22,7 @@ CABLE_TYPES = ("tetra_sep", "tetra_inc", "unifilar")
 LENGTH_SOURCES = lengths.SOURCES
 
 
-SYSTEMS = ("TN-S", "TN-C-S", "IT")
+SYSTEMS = ("TN-S", "TN-C-S", "TT", "IT")
 
 
 OPTIONS = {"units": UNITS, "topologies": TOPOLOGIES, "phases": PHASES, "kinds": KINDS, "cable_types": CABLE_TYPES, "systems": SYSTEMS, "length_sources": LENGTH_SOURCES}

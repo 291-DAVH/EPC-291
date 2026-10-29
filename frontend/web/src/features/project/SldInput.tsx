@@ -12,6 +12,9 @@ const blankCircuit = (): SldCircuit => ({
   length_m: 0, length_source: "auto", fp: null, efficiency: null, kind: "auto", notes: "", cable_type: "tetra_sep",
 });
 interface Editing { index: number | null; draft: SldCircuit }
+/** The usual nominal voltages as line / phase pairs (V): a board is typed by its line voltage, the phase voltage is what a single-phase circuit sees. */
+const VOLTAGES: [number, number][] = [[380, 220], [400, 230], [220, 127], [440, 254], [690, 400]];
+const OTHER_VOLTAGE = "other";
 const num = (v: string): number | null => (v.trim() === "" ? null : Number(v.replace(",", ".")));
 
 type Options = SldView["options"];
@@ -133,6 +136,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const [msg, setMsg] = useState("");
   const [editing, setEditing] = useState<Editing | null>(null);          // the circuit being added (index null) or edited, in the form under the table
   const [routeOpen, setRouteOpen] = useState(false);                       // its real route is being edited
+  const [customVoltage, setCustomVoltage] = useState(false);               // the voltage is typed, not one of the usual pairs
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -220,6 +224,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const running = status?.state === "running";
   const memoReady = !!memo.data?.available && !memo.data.stale && !dirty;                // the diagram is drawn only from a memo calculated on the current data
   const errList = Object.entries(errors);
+  const hasBoard = data.board.name.trim().length > 0;                                      // a circuit belongs to a board: without one there is nothing to add it to
   const calcOf = new Map((calc.data?.rows ?? []).map((r) => [r.tag, r]));
   const inputTags = new Set(data.circuits.map((c) => c.tag.trim()));
   const extra = (calc.data?.rows ?? []).filter((r) => data.circuits.length > 0 && !inputTags.has(r.tag));              // groups the standard solutions added: calculated, not typed
@@ -238,7 +243,14 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
         <h2>{t("sld.board")}</h2>
         <div className="fgrid">
           {text("name", "board", "sld.name")}
-          {numeric("voltage_v", "sld.voltage")}
+          {field("sld.voltage", <>
+            <select value={VOLTAGES.some(([l]) => l === data.board.voltage_v) && !customVoltage ? String(data.board.voltage_v) : OTHER_VOLTAGE}
+              onChange={(e) => { if (e.target.value === OTHER_VOLTAGE) setCustomVoltage(true); else { setCustomVoltage(false); set("board", { voltage_v: Number(e.target.value) }); } }}>
+              {VOLTAGES.map(([l, p]) => <option key={l} value={l}>{l} / {p} V</option>)}
+              <option value={OTHER_VOLTAGE}>{t("sld.voltageOther")}</option>
+            </select>
+            {(customVoltage || !VOLTAGES.some(([l]) => l === data.board.voltage_v)) && <input type="number" step="any" value={String(data.board.voltage_v)} onChange={(e) => set("board", { voltage_v: Number(e.target.value) })} aria-label={t("sld.voltage")} />}
+          </>)}
           {field("sld.system", sel(data.board.system, o.systems, (v) => set("board", { system: v })))}
           {numeric("icc_ka", "sld.icc")}
           {numeric("fp_default", "sld.fp", "0.01")}
@@ -248,6 +260,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
           {field("sld.suppliedFrom", <select value={data.board.supplied_from} onChange={(e) => set("board", { supplied_from: e.target.value, supply_tag: e.target.value ? data.board.supply_tag : "" })}>
             <option value="">{t("sld.suppliedNone")}</option>{boards.filter((b) => b.id !== board).map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select>)}
           {data.board.supplied_from && text("supply_tag", "board", "sld.supplyTag")}
+          {!data.board.supplied_from && field("sld.supplyName", <input maxLength={80} value={data.board.supply_name ?? ""} onChange={(e) => set("board", { supply_name: e.target.value })} placeholder={t("sld.supplyNameHint")} />)}
         </div>
         {board && <div className="row" style={{ marginTop: 8 }}><button onClick={remove}>{t("sld.deleteBoard")}</button></div>}
       </div>
@@ -273,10 +286,11 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
           <h2 style={{ margin: 0 }}>{t("sld.circuits")} <span className="muted small">({data.circuits.length})</span></h2>
           <div className="row">
             <button onClick={loadExample}>{t("sld.loadExample")}</button>
-            <button onClick={() => calculate(data)} disabled={running || data.circuits.length === 0} title={t("sld.calcHelp")}>{t("sld.calcNow")}</button>
-            <button className={editing?.index === null ? "" : "primary"} onClick={() => { if (editing?.index === null) closeForm(); else { setEditing({ index: null, draft: blankCircuit() }); setRouteOpen(false); setErrors({}); } }}>{editing?.index === null ? t("projects.cancel") : `+ ${t("sld.addRow")}`}</button>
+            <button onClick={() => calculate(data)} disabled={running || !hasBoard || data.circuits.length === 0} title={t("sld.calcHelp")}>{t("sld.calcNow")}</button>
+            <button className={editing?.index === null ? "" : "primary"} disabled={!hasBoard} title={hasBoard ? "" : t("sld.needBoard")} onClick={() => { if (editing?.index === null) closeForm(); else { setEditing({ index: null, draft: blankCircuit() }); setRouteOpen(false); setErrors({}); } }}>{editing?.index === null ? t("projects.cancel") : `+ ${t("sld.addRow")}`}</button>
           </div>
         </div>
+        {!hasBoard && <p className="small" role="alert" style={{ margin: "6px 0 8px", color: "var(--bad, #b3261e)" }}>{t("sld.needBoard")}</p>}
         <p className="muted small" style={{ margin: "6px 0 8px" }}>{running ? t("sld.calcRunning") : dirty ? t("sld.calcPending") : t("sld.calcHelp")}</p>
         {calc.data && calc.data.rows.length > 0 && <CalcHeader view={calc.data} />}
         {data.circuits.length > 0 && (

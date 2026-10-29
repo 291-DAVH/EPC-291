@@ -296,6 +296,17 @@ class TestSld(unittest.TestCase):
         self.assertEqual(bad.status_code, 422)                                       # values the engine does not know are not saved
         self.assertEqual({k.split(".")[-1] for k in bad.json()["detail"]["errors"]}, {"method", "insulation", "material"})
 
+    def test_a_tt_board_with_a_named_source_says_where_it_is_fed_from_in_the_memo(self):
+        self.assertIn("TT", self.c.get(self.base).json()["options"]["systems"])
+        board = {**BOARD, "system": "TT", "voltage_v": 400, "supply_name": "Tablero general del edificio"}
+        self.assertEqual(self.c.put(self.base, json={"board": board, "circuits": CIRCUITS, "titleblock": TB}).status_code, 200)
+        self.assertEqual(self.c.get(self.base).json()["input"]["board"]["supply_name"], "Tablero general del edificio")
+        self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        memo = self.c.get(self.base + "/memo").json()["memo"]
+        self.assertEqual((memo["board"]["system"], memo["board"]["voltage_v"]), ("TT", 400))
+        self.assertEqual(memo["acometida"]["desde"], "Tablero general del edificio")                          # not "Red / fuente externa" when the person named the source
+
     def test_a_generation_without_memo_file_is_still_told_outdated_when_the_data_change(self):
         self.c.put(self.base, json={"board": BOARD, "circuits": CIRCUITS, "titleblock": TB})
         self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
