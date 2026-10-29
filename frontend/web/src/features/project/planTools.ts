@@ -451,7 +451,7 @@ export interface ProposalCircuit { tag: string; family: string; room: string; ro
 export interface RunLine { kind: string; points: Pt[]; role: "trunk" | "stub" }
 export interface RunStats { orientation: string; trunks: number; stubs: number; bends: number; trunk_length: number; stub_length: number; in_metres: boolean }
 /** Step 1 of the design: the straight trays and conduits proposed for the loads (shown on the plan until accepted). */
-export interface RunsProposal { orientation: string; lines: RunLine[]; stats: RunStats | Record<string, never>; warnings: string[] }
+export interface RunsProposal { orientation: string; lines: RunLine[]; stats: RunStats | Record<string, never>; warnings: string[]; closed?: number }          // `closed`: conduits added to join loads the layout left apart
 export interface Limits { prefix: string; max_outlets: number; va_per_outlet: number; label: { es: string; en: string } }
 /** Step 2: the circuits by room over the runs already drawn, and whether the engine reaches every load of each one. */
 export interface Proposal { board: string; circuits: ProposalCircuit[]; assignments: Record<string, string>; unassigned: string[]; warnings: string[]; limits: Record<string, Limits>; routes: Record<string, { found: boolean; unreached?: string[] }> }

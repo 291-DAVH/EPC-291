@@ -48,5 +48,18 @@ class TestProjectPhases(unittest.TestCase):
         self.assertFalse((self.root / "ACME" / "P-1").exists())                  # nothing was created
 
 
+    def test_the_issuing_screen_offers_only_the_emissions_up_to_the_final_phase(self):
+        for end, offered in (("ASB", ["ifa", "ifc", "as-built"]), ("IE", ["ifa", "ifc"]), ("ID", ["ifa"]), ("IB", [])):
+            code = f"P-{end}"
+            self.assertEqual(self.c.post("/api/projects", json={**BODY, "project_code": code, "end_phase": end}).status_code, 201)
+            issue = f"/api/projects/ACME/{code}/issuing"
+            v = self.c.get(issue).json()
+            self.assertEqual((v["emissions"], v["end_phase"]), (offered, end))
+            for emission in [e for e in ("ifa", "ifc", "as-built") if e not in offered]:
+                r = self.c.post(issue, json={"emission": emission, "client_rev": "00", "internal_rev": "00.0.1", "items": [{"source": "x"}]})
+                self.assertEqual(r.status_code, 422, (end, emission))
+                self.assertIn("ends at " + end, r.json()["detail"]["errors"]["emission"])
+
+
 if __name__ == "__main__":
     unittest.main()

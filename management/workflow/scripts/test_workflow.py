@@ -380,5 +380,62 @@ class TestCicloCompleto(Base):
         self.assertTrue(self.existe("03_ENGINEERING/Calculations/AB01-E-MC-001_Rev00.0.md"))
 
 
+class TestFaseFinal(Base):
+    """Un proyecto que termina antes de la última fase no ofrece ni permite lo que viene después (la fase final está en .epc/project.json)."""
+
+    def termina_en(self, fase):
+        esc(self.d, ".epc/project.json", json.dumps({"end_phase": fase}))
+
+    def emitir_ifa(self):
+        self.sample()
+        for nn, pq in ((1, "PQ-01"), (2, "PQ-02")):
+            self.pasar_a_auditoria(pq, nn)
+        aud(self.d, 1, "IFA", ["PQ-01", "PQ-02"], "APPROVED")
+        F.approve_audit(self.d, "IFA")
+        F.release_documents(self.d, "IFA")
+        tr, _ = F.issue(self.d, "IFA")
+        F.confirm_sent(self.d, tr)
+
+    def test_la_fase_final_se_lee_del_proyecto_y_sin_ella_se_pasa_por_todas(self):
+        self.assertIsNone(W.fase_final(self.d))
+        self.assertTrue(W.fase_alcanzada(self.d, "ASB"))
+        self.termina_en("ID")
+        self.assertEqual(W.fase_final(self.d), "ID")
+        self.assertTrue(W.fase_alcanzada(self.d, "ID"))
+        self.assertFalse(W.fase_alcanzada(self.d, "IE"))
+        self.termina_en("XX")
+        self.assertIsNone(W.fase_final(self.d))                      # una fase desconocida no limita nada
+
+    def test_no_se_prepara_ni_se_emite_lo_que_esta_despues_de_la_fase_final(self):
+        self.termina_en("ID")
+        for llamada in (lambda: W.exigir_fase(self.d, "IFC"), lambda: F.release_documents(self.d, "IFC"), lambda: F.approve_audit(self.d, "AS_BUILT"),
+                        lambda: F.issue(self.d, "IFC"), lambda: F.start_asbuilt(self.d)):
+            with self.assertRaises(FwError) as e:
+                llamada()
+            self.assertIn("termina en la fase ID", str(e.exception))
+        W.exigir_fase(self.d, "IFA")                                  # la de su propia fase sí
+
+    def test_la_proxima_puerta_no_ofrece_pasos_mas_alla_de_la_fase_final(self):
+        self.emitir_ifa()
+        ledgers = W.todos_los_ledgers(self.d)
+        self.assertEqual(W.fase_limitada(ledgers, self.d), ("IE", "IFA", "entregar IFC o iniciar as-built"))
+        self.termina_en("ID")
+        self.assertEqual(W.fase_limitada(ledgers, self.d), ("ID", "IFA", "fase final (ID) alcanzada: CLOSE_PROJECT.py"))
+        self.termina_en("IE")
+        self.assertEqual(W.fase_limitada(ledgers, self.d), ("IE", "IFA", "entregar IFC"))             # el as-built ya no se ofrece
+        self.termina_en("ASB")
+        self.assertEqual(W.fase_limitada(ledgers, self.d), ("IE", "IFA", "entregar IFC o iniciar as-built"))
+
+    def test_un_proyecto_que_termina_en_detalle_se_cierra_con_el_ifa_sin_decision_de_as_built(self):
+        self.emitir_ifa()
+        with self.assertRaises(FwError):
+            F.close_project(self.d)                                   # sin fase final se pide el as-built
+        self.termina_en("ID")
+        F.close_project(self.d)
+        self.assertEqual(W.LME(self.d).valor(W.LME(self.d).filas[0], "estado"), "CLOSED")
+        with open(os.path.join(self.d, "90_MANAGEMENT/LEDGER/CLOSURE.md"), encoding="utf-8") as f:
+            self.assertIn("Emisión final: IFA (sin as-built, el proyecto termina en la fase ID)", f.read())
+
+
 if __name__ == "__main__":
     unittest.main()

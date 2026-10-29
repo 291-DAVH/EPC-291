@@ -57,6 +57,7 @@ def send_to_review(raiz, pq, emision=None, extras=(), permitir_varios=None):
     emision = (emision or led["emision"] or lme.emision(pq) or "").upper()
     if emision not in W.EMISIONES:
         raise FwError(f"{pq}: indique la emisión objetivo con --emision ({', '.join(W.EMISIONES)}); la LME no la define.")
+    W.exigir_fase(raiz, emision)                                     # un proyecto que termina antes no prepara las emisiones que vienen después
     for dep in lme.dependencias(pq):
         d = W.leer_ledger(raiz, dep)
         if d is None or d["estado"] == "ENGINEERING":
@@ -234,6 +235,7 @@ def cli_send_to_audit(argv=None):
 # --------------------------------------------------------------------------------- APPROVE_AUDIT
 def approve_audit(raiz, emision, aud=None):
     emision = emision.upper()
+    W.exigir_fase(raiz, emision)
     lme = W.LME(raiz)
     pend, faltan = estado_conjunto(raiz, lme, emision)
     if not pend:
@@ -284,6 +286,7 @@ def cli_approve_audit(argv=None):
 # --------------------------------------------------------------------------------- RELEASE_DOCUMENTS
 def release_documents(raiz, emision):
     emision = emision.upper()
+    W.exigir_fase(raiz, emision)
     lme = W.LME(raiz)
     pend = W.conjunto_pendiente(raiz, emision)
     if not pend:
@@ -337,6 +340,7 @@ def _destino_emision(rel):
 
 def issue(raiz, emision, tr=None):
     emision = emision.upper()
+    W.exigir_fase(raiz, emision)
     rev = "01" if emision == "AS_BUILT" else "00"
     regp = os.path.join(raiz, W.DIR_REL, f"RELEASE_{emision}.json")
     if not os.path.exists(regp):
@@ -463,6 +467,7 @@ def cli_confirm_sent(argv=None):
 
 # --------------------------------------------------------------------------------- START_ASBUILT
 def start_asbuilt(raiz):
+    W.exigir_fase(raiz, "AS_BUILT")
     lme = W.LME(raiz)
     movidos = []
     for pq, led in W.todos_los_ledgers(raiz).items():
@@ -493,18 +498,31 @@ def cli_start_asbuilt(argv=None):
 
 
 # --------------------------------------------------------------------------------- CLOSE_PROJECT
+def _emision_de_cierre(raiz, sin_asbuilt):
+    """(emisión que debe estar confirmada para cerrar, decisión por la que no hay as-built): la de la fase final del proyecto, o IFC si se cierra sin as-built por una decisión registrada."""
+    fin = W.fase_final(raiz)
+    if fin is None:
+        return ("IFC" if sin_asbuilt else "AS_BUILT"), sin_asbuilt
+    return W.EMISION_FINAL[fin], sin_asbuilt or (f"el proyecto termina en la fase {fin}" if fin != "ASB" else None)
+
+
+def _sin_emision(led, req):
+    """Si al paquete le falta la emisión final confirmada en su ronda (sin emisión de cierre, no le falta nada)."""
+    return bool(req) and not any(e["emision"] == req and e["confirmado"] and e["ronda"] == led["ronda"] for e in led["emitido"])
+
+
 def close_project(raiz, sin_asbuilt=None):
     lme = W.LME(raiz)
     ledgers = W.todos_los_ledgers(raiz)
     falt = [q for q in lme.paquetes() if q not in ledgers]
     if falt:
         raise FwError(f"Paquetes sin registro de flujo (nunca enviados): {', '.join(falt)}.")
-    req = "IFC" if sin_asbuilt else "AS_BUILT"
+    req, sin_asbuilt = _emision_de_cierre(raiz, sin_asbuilt)
     mal = []
     for pq, led in ledgers.items():
         if led["estado"] != "RELEASED":
             mal.append(f"{pq} está en {led['estado']}")
-        elif not any(e["emision"] == req and e["confirmado"] and e["ronda"] == led["ronda"] for e in led["emitido"]):
+        elif _sin_emision(led, req):
             mal.append(f"{pq} sin {req} emitido y confirmado")
         else:
             dif = W.hash_ok(raiz, led, "RELEASED")
@@ -519,7 +537,7 @@ def close_project(raiz, sin_asbuilt=None):
         W.escribir_ledger(raiz, led)
     lme.guardar()
     cuerpo = ["# CIERRE DEL PROYECTO", "", f"Fecha: {W.hoy()} · Generado por CLOSE_PROJECT.py", "",
-              f"Emisión final: {req}" + (f" (sin as-built, {sin_asbuilt})" if sin_asbuilt else ""), "",
+              f"Emisión final: {req or '—'}" + (f" (sin as-built, {sin_asbuilt})" if sin_asbuilt else ""), "",
               "| Paquete | Rondas | Emisiones |", "|---|---|---|"]
     for pq, led in sorted(ledgers.items()):
         cuerpo.append(f"| {pq} | {led['ronda']} | " + ", ".join(f"{e['emision']} {e['tr']}" for e in led["emitido"]) + " |")
@@ -599,7 +617,7 @@ def check_state(raiz, escribir=False):
     estados = [f[1] for f in filas]
     derivado = ("ENGINEERING" if "ENGINEERING" in estados else "FOR_REVIEW" if "FOR_REVIEW" in estados else
                 "FOR_AUDIT" if "FOR_AUDIT" in estados else "RELEASED" if estados else "PLANNING")
-    fase, emision_activa, proxima_puerta = W.fase_proyecto(ledgers)
+    fase, emision_activa, proxima_puerta = W.fase_limitada(ledgers, raiz)
     avisos_ver = W.verificar_version()  # M7: alerta de drift de versión
     out = ["# ESTADO CALCULADO (vista derivada de la ubicación de los paquetes)", "",
            f"Fecha: {W.hoy()} · Generado por CHECK_STATE.py; no se edita.", "",
@@ -694,7 +712,7 @@ def progress_report(raiz, salida=None):
     lme = W.LME(raiz)
     ledgers = W.todos_los_ledgers(raiz)
     hoy = W.hoy()
-    fase, emision_activa, proxima_puerta = W.fase_proyecto(ledgers)
+    fase, emision_activa, proxima_puerta = W.fase_limitada(ledgers, raiz)
     paquetes = sorted(set(lme.paquetes()) | set(ledgers))
     filas = []
     en_ing = en_rev = en_aud = liberados = 0
@@ -929,7 +947,7 @@ def dashboard(raiz, salida=None):
     lme = W.LME(raiz)
     ledgers = W.todos_los_ledgers(raiz)
     hoy = W.hoy()
-    fase, emision_activa, proxima_puerta = W.fase_proyecto(ledgers)
+    fase, emision_activa, proxima_puerta = W.fase_limitada(ledgers, raiz)
     paquetes = sorted(set(lme.paquetes()) | set(ledgers))
     total = len(paquetes)
     conteo = {"ENGINEERING": 0, "FOR_REVIEW": 0, "FOR_AUDIT": 0, "RELEASED": 0}

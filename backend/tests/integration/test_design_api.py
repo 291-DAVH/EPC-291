@@ -72,6 +72,7 @@ class TestDesign(unittest.TestCase):
         r = self.c.post(f"{self.base}/L0/design/runs", json={"drawing": DRAWING})
         self.assertEqual(r.status_code, 200, r.text)
         p = r.json()
+        self.assertEqual((p["closed"], p["warnings"]), (0, []))                                  # every load is reached by what is proposed
         self.assertIn("BN", {ln["kind"] for ln in p["lines"]})
         self.assertTrue(all(ln["kind"] == ("BN" if ln["role"] == "trunk" else "CN") for ln in p["lines"]))
         self.assertTrue(all(len(ln["points"]) == 2 for ln in p["lines"]))                      # no bends

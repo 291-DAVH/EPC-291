@@ -8,11 +8,12 @@ interface Props { stage: AutoStage; onRuns: () => void; onWiring: () => void; on
 const num = (v: number | null | undefined, digits = 1): string => (v === null || v === undefined ? "–" : String(Math.round(v * 10 ** digits) / 10 ** digits));
 
 /** A card at the bottom of the plan (the proposal stays visible behind it) for the steps that ask for an acceptance. */
-function Step({ title, help, accept, acceptLabel, onClose, closeLabel }: { title: string; help: string; accept: () => void; acceptLabel: string; onClose: () => void; closeLabel: string }) {
+function Step({ title, help, warnings = [], accept, acceptLabel, onClose, closeLabel }: { title: string; help: string; warnings?: string[]; accept: () => void; acceptLabel: string; onClose: () => void; closeLabel: string }) {
   return (
     <div role="dialog" aria-label={title} className="card" style={{ position: "fixed", left: "50%", bottom: 18, transform: "translateX(-50%)", width: "min(560px, 92vw)", zIndex: 40, padding: 14 }}>
       <b>{title}</b>
       <p className="muted small" style={{ margin: "6px 0 10px" }}>{help}</p>
+      {warnings.map((w) => <div key={w} className="alert warn small" role="alert" style={{ margin: "0 0 8px" }}>{w}</div>)}
       <div className="row" style={{ gap: 8, justifyContent: "flex-end" }}>
         <button onClick={onClose}>{closeLabel}</button>
         <button className="primary" onClick={accept}>{acceptLabel}</button>
@@ -64,8 +65,9 @@ export default function AutoDesignDialog({ stage, onRuns, onWiring, onApprove, o
   if (stage.step === "busy") return <div role="status" className="card" style={{ position: "fixed", left: "50%", bottom: 18, transform: "translateX(-50%)", padding: 12, zIndex: 40 }}>{tl(`auto.busy.${stage.what}`)}</div>;
   if (stage.step === "runs") {
     const s = stage.proposal.stats as { trunks?: number; stubs?: number; trunk_length?: number; stub_length?: number };
-    const help = tl("auto.runs.help").replace("{trunks}", String(s.trunks ?? 0)).replace("{stubs}", String(s.stubs ?? 0)).replace("{m}", num((s.trunk_length ?? 0) + (s.stub_length ?? 0)));
-    return <Step title={tl("auto.runs.title")} help={help} accept={onRuns} acceptLabel={tl("auto.runs.accept")} onClose={onClose} closeLabel={tl("auto.stop")} />;
+    const closed = stage.proposal.closed ? ` ${tl("auto.runs.closed").replace("{n}", String(stage.proposal.closed))}` : "";
+    const help = tl("auto.runs.help").replace("{trunks}", String(s.trunks ?? 0)).replace("{stubs}", String(s.stubs ?? 0)).replace("{m}", num((s.trunk_length ?? 0) + (s.stub_length ?? 0))) + closed;
+    return <Step title={tl("auto.runs.title")} help={help} warnings={stage.proposal.warnings} accept={onRuns} acceptLabel={tl("auto.runs.accept")} onClose={onClose} closeLabel={tl("auto.stop")} />;
   }
   if (stage.step === "wiring") {
     const help = tl("auto.wiring.help").replace("{n}", String(stage.proposal.circuits.length));

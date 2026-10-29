@@ -25,6 +25,16 @@ def read_meta(d: Path) -> dict:
     return repository.read_meta(d)
 
 
+def emissions_allowed(d: Path) -> List[str]:
+    """The emissions to the client (`ifa`, `ifc`, `as-built`) the project goes through, up to the final phase it chose."""
+    return service.emissions_allowed(repository.read_meta(d))
+
+
+def end_phase(d: Path) -> str:
+    """The last phase the project goes through (empty for a project made before the end phase existed)."""
+    return repository.read_meta(d).get("end_phase") or ""
+
+
 def norm_engine(jurisdiction: str, discipline: str) -> Optional[str]:
     """The norm engine that holds the norm data of a discipline in a jurisdiction (None when it has none)."""
     return repository.norm_engine(jurisdiction, discipline)
@@ -43,4 +53,4 @@ def project_tree(project_id: str, area: str, depth: int, formats: dict) -> dict:
 
 
 __all__ = ["PUBLIC_PATHS", "PUBLIC_POST_PATHS", "get_project_dir", "list_project_dirs", "project_id", "read_meta", "read_status",
-           "project_count", "project_tree"]
+           "project_count", "project_tree", "emissions_allowed", "end_phase"]
