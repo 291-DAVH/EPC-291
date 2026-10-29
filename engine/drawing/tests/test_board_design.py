@@ -22,7 +22,7 @@ class TestCalcOnly(unittest.TestCase):
         self.assertTrue(summary["ok"])
         self.assertEqual(summary["circuits"], 2)
         self.assertIsNone(summary["memo"])
-        self.assertEqual({"T1_dimensionado.json", "T1_dimensionado_detalle.json", "T1_criterios.json", "summary.json"}, made)
+        self.assertEqual({"T1_dimensionado.json", "T1_dimensionado_detalle.json", "T1_criterios.json", "T1_acometidas.json", "summary.json"}, made)
 
 
 class TestBoardDesign(unittest.TestCase):

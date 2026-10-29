@@ -39,7 +39,7 @@ def titleblock(d: Path, own: dict) -> dict:
 def _blank(d: Path, name: str = "") -> dict:
     meta = projects.read_meta(d)
     volt = engineering.criterion_value(d, "nominal_voltage_v") or 380
-    return {"board": Board(voltage_v=volt, project=meta.get("project_code", ""), name=name).model_dump(), "circuits": [],
+    return {"board": Board(voltage_v=volt, project=meta.get("project_code", ""), name=name).model_dump(), "circuits": [], "feeders": [],
             "titleblock": titleblock(d, {"description": meta.get("project_name", "")})}
 
 
@@ -48,7 +48,8 @@ def view(d: Path, bid: str = "") -> dict:
     saved = repository.load_input(d, bid) if bid else None
     meta = projects.read_meta(d)
     if saved:
-        data = {k: saved[k] for k in ("board", "circuits") if k in saved}
+        data = {k: saved[k] for k in ("board", "circuits", "feeders") if k in saved}
+        data.setdefault("feeders", [])                                  # a board saved before the acometidas existed
         data["titleblock"] = titleblock(d, saved.get("titleblock"))
         data["board"] = {**Board().model_dump(), **data["board"]}
     else:

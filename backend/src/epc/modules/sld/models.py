@@ -73,9 +73,22 @@ class Titleblock(BaseModel):
     internal_code: str = ""                 # the drawing's internal code (plano N°)
 
 
+class Feeder(BaseModel):
+    """An acometida: a cable that feeds the board (a board may have several, from the utility and from a generator, for example). It is sized like any circuit."""
+    name: str = ""                          # empty: ACOMETIDA-1, -2...
+    source: str = ""                        # what feeds it (the utility, a generator, a board outside the project): free text, optional
+    phase: str = "3F"                       # 3F | 1F | 3F+N
+    length_m: float = 0
+    load_a: Optional[float] = None          # the current it carries; empty = what the circuits at the head of the board draw
+    method: str = ""                        # method of installation; empty = the one of the design criteria
+    insulation: str = ""                    # pvc | xlpe; empty = the design criteria
+    material: str = ""                      # cu | al; empty = the design criteria
+
+
 class SldIn(BaseModel):
     board: Board
     circuits: List[Circuit]
+    feeders: List[Feeder] = []
     titleblock: Titleblock = Titleblock()
 
 

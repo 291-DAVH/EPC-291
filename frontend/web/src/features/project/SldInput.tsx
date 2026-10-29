@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import BoardMemo from "./BoardMemo";
+import FeedersCard from "./FeedersCard";
 import RouteEditor from "./RouteEditor";
 import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, WiringDefaults, useApi, useI18n } from "@epc/ui";
 
@@ -139,6 +140,15 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const [customVoltage, setCustomVoltage] = useState(false);               // the voltage is typed, not one of the usual pairs
   const timer = useRef<number | undefined>(undefined);
 
+  /** Ask for the status again in a moment while a calculation runs. Declared before the early return below: the effect that resumes a run found at load time uses it. */
+  const poll = () => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(async () => {
+      const st = await api<SldStatus>(`${base}/status?${q}`);
+      setStatus(st);
+      if (st.state === "running") poll();
+    }, 1500);
+  };
   useEffect(() => {
     if (view.data) {
       setData((d) => d ?? view.data!.input);
@@ -163,14 +173,6 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
       onSaved(v.board_id);
       return true;
     } catch (x) { fail(x); return false; }
-  };
-  const poll = () => {
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(async () => {
-      const st = await api<SldStatus>(`${base}/status?${q}`);
-      setStatus(st);
-      if (st.state === "running") poll();
-    }, 1500);
   };
   const generate = async (diagrams: "sld" | "mld" | "none" = "sld") => {
     if (dirty && !(await save())) return;
@@ -264,6 +266,9 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
         </div>
         {board && <div className="row" style={{ marginTop: 8 }}><button onClick={remove}>{t("sld.deleteBoard")}</button></div>}
       </div>
+
+      <FeedersCard feeders={data.feeders ?? []} rows={calc.data?.feeders ?? []} phases={o.phases} methods={o.methods ?? []} insulations={o.insulations ?? []} materials={o.materials ?? []} defaults={view.data.wiring_defaults}
+        blocked={!hasBoard ? t("sld.needBoard") : data.circuits.length === 0 ? t("feeder.needCircuits") : ""} busy={running} onChange={(next) => { const nd = { ...data, feeders: next }; setData(nd); calculate(nd); }} />
 
       <div className="card">
         <h2>{t("sld.titleblock")}</h2>

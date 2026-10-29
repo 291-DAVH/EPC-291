@@ -195,7 +195,7 @@ def _route_one(c, ways, adj, stretches, taken, single_kinds, tag_of, gnode_of, l
     rise = sum(risers[n] for n in through)
     return {"found": not lost, "from": c["from"], "to": c.get("to", ""), "ternas": ternas, "loads": len(mine), "unreached": [tag_of[n] for n in lost],
             "distance_to_load_m": {tag_of[n]: d for n, d in reach.items() if n in mine}, **_moments(_measured(c, mine), reach, tag_of, gnode_of),
-            "plenums": [tag_of[n] for n in through], "rise_m": round(rise, 4), **_record(tag, ternas, used, stretches, rise)}
+            "destination_distance_m": reach.get(c.get("to", "")), "plenums": [tag_of[n] for n in through], "rise_m": round(rise, 4), **_record(tag, ternas, used, stretches, rise)}
 
 
 def _risers(gnodes, vertical_kinds: Set[str], warnings: List[str]) -> Dict[str, float]:

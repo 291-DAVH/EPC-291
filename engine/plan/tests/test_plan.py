@@ -484,6 +484,7 @@ class TestRouteThroughPlenums(unittest.TestCase):
         self.assertEqual((two["plenums"], two["rise_m"], two["length_m"]), (["PL-001", "PL-002"], 5.2, 35.2))
         self.assertEqual((one["plenums"], one["length_m"]), (["PL-001"], 13.2))
         self.assertEqual(two["cable_length_m"], 35.2)
+        self.assertEqual((one["destination_distance_m"], two["destination_distance_m"]), (13.2, 35.2))           # the way to the destination counts the heights it passes: what a part of a circuit over several levels hands on
 
     def test_a_route_that_goes_through_no_plenum_is_unchanged(self):
         out = self.run_plan([3.2, 2.0], [{"tag": "C-01", "from": "A", "to": "A"}])

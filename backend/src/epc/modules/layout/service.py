@@ -13,7 +13,7 @@ from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside, read_json
 from epc.modules.catalogs import public as catalogs
 from epc.modules.identity import public as identity
-from epc.modules.layout import changes, plenums as shafts, repository
+from epc.modules.layout import changes, levels as across, plenums as shafts, repository
 from epc.modules.layout.models import DrawingIn, PlenumIn
 from epc.modules.projects import public as projects
 from epc.modules.sld import public as sld
@@ -146,8 +146,30 @@ def view(d: Path, level: str) -> dict:
             "files": (result or {}).get("files") if result else None, "generated_at": (result or {}).get("generated_at")}
 
 
+def _entry_rise(saved: dict, route: dict, vertical: set) -> Optional[float]:
+    """The height of the plenum a circuit starts at on a sheet (None when it starts anywhere else, such as the board)."""
+    node = next((n for n in saved.get("nodes", []) if n.get("id") == route.get("from")), None)
+    if not node or node.get("kind") not in vertical:
+        return None
+    try:
+        return float((node.get("attrs") or {}).get("altura_m"))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _vertical_kinds(discipline: str) -> set:
+    core = _engine()[0]
+    return {k["id"] for k in core.load_profile(discipline)["nodos"] if k.get("vertical")}
+
+
+def _parts_of(lv: str, saved: Optional[dict], res: dict) -> list:
+    """The parts of circuits a sheet measured: (tag, part), each with the plenum it starts at when it starts at one."""
+    vertical = _vertical_kinds(saved["discipline"]) if saved else set()
+    return [(tag, across.Part(lv, r, _entry_rise(saved, r, vertical))) for tag, r in (res.get("circuits") or {}).items()]
+
+
 def _circuits_by_level(d: Path) -> Dict[str, list]:
-    """Every circuit routed on any drawing: tag -> [(level, route)]."""
+    """Every circuit routed on any drawing: tag -> [the part of it each sheet measured]."""
     seen: Dict[str, list] = {}
     for lv in repository.levels(d):
         saved = repository.load_drawing(d, lv)
@@ -155,21 +177,23 @@ def _circuits_by_level(d: Path) -> Dict[str, list]:
             res = derive_data(lv, {**_blank(), **saved}) if saved else {}
         except Invalid:
             continue
-        for tag, r in (res.get("circuits") or {}).items():
-            seen.setdefault(tag, []).append((lv, r))
+        for tag, part in _parts_of(lv, saved, res):
+            seen.setdefault(tag, []).append(part)
     return seen
 
 
 def _measure(found: list) -> dict:
-    lv, r = found[0]
+    if len(found) > 1:
+        return across.combine(found)                            # drawn over several levels: the parts are chained through the plenums
+    lv, r, _ = found[0]
     complete = bool(r.get("found")) and not r.get("unreached") and r.get("moment_length_m", 0) > 0
-    return {"levels": [x[0] for x in found], "usable": complete and len(found) == 1, "reason": "levels" if len(found) > 1 else "" if complete else "incomplete",
+    return {"levels": [lv], "usable": complete, "reason": "" if complete else "incomplete",
             "loads_n": len(r.get("loads_detail", [])), "moment_length_m": r.get("moment_length_m", 0.0), "max_distance_m": r.get("max_distance_m", 0.0), "length_m": r.get("length_m", 0.0)}
 
 
 def plan_lengths(d: Path) -> Dict[str, dict]:
-    """What the drawings measured for each circuit, by tag, for the board to use as its length (see `sld.lengths`). A circuit is usable when it is routed completely on
-    one level and reaches at least one load or destination; one drawn over several levels is not (the way between levels is not measured yet)."""
+    """What the drawings measured for each circuit, by tag, for the board to use as its length (see `sld.lengths`). A circuit is usable when it is routed completely and reaches at least one
+    load or destination; one drawn over several levels is usable when its parts chain through the plenums (see `levels`)."""
     return {tag: _measure(found) for tag, found in _circuits_by_level(d).items()}
 
 

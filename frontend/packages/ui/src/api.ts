@@ -204,7 +204,11 @@ export interface SldTitleblock {
 }
 /** Where the length of a circuit comes from now: `used` is what the calculation takes (the plan's or the board's), the other value is shown beside it. */
 export interface LengthInfo { setting: string; used: "plan" | "data"; data_m: number; plan_m: number | null; plan_max_m: number | null; plan_total_m: number | null; levels: string[]; moments: boolean; reason: string; fallback: boolean }
-export interface SldData { board: SldBoard; circuits: SldCircuit[]; titleblock: SldTitleblock }
+/** An acometida: a cable that feeds the board (empty method, insulation or material: the design criteria). */
+export interface SldFeeder { name: string; source: string; phase: string; length_m: number; load_a: number | null; method?: string; insulation?: string; material?: string }
+/** What the calculation gave for an acometida. */
+export interface FeederRow { name: string; source: string; phase: string; length_m: number; load_given: boolean; S_mm2: number; In: number; Ib: number; du_pct: number; disp: string; iz_a?: number | null; limite_pct?: number | null; cumple?: boolean | null; metodo?: string; aislacion?: string; material?: string; avisos?: string[] }
+export interface SldData { board: SldBoard; circuits: SldCircuit[]; feeders?: SldFeeder[]; titleblock: SldTitleblock }
 export interface SldStatus { state: "idle" | "running" | "done" | "failed"; name?: string; outputs: string[]; log: string[]; error?: string; started?: string; finished?: string }
 export interface BoardRow { id: string; name: string; voltage_v: number; system: string; icc_ka: number; circuits: number; supplied_from: string; supply_tag: string; state: string; finished?: string }
 export interface MemoCurve { curva: string; In: number; min: number[][]; max: number[][] }
@@ -240,7 +244,7 @@ export interface IssueCandidate { id: string; name: string; discipline: string; 
 export interface TransmittalSummary { id: string; emission: string; client_rev: string; internal_rev: string; status: "prepared" | "sent"; created: string; sent_on: string | null; items: number }
 export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; next_transmittal: string; transmittals: TransmittalSummary[] }
 export interface CalcRow { tag: string; description: string; In: number; Ib: number; icu: number; S: number; dU: number; disp: string; tipo?: string; limite_pct?: number; du_propia_pct?: number; iz_a?: number; cumple?: boolean }
-export interface CalcView { name?: string; summary?: { circuits: number; compliant: number; non_compliant: number }; rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }
+export interface CalcView { name?: string; feeders?: FeederRow[]; summary?: { circuits: number; compliant: number; non_compliant: number }; rows: CalcRow[]; criteria: { limits_pct: { seccional: number; terminal: number; motor: number }; conductor: { material: string; aislacion: string }; rcd_ma: number } | null }
 
 /* ---- automatic analysis of customer input (admin/engineer) ---- */
 export interface AnalysisStatus { configured: boolean; model: string; pending: number; usage: { calls: number; input_tokens: number; output_tokens: number } }
