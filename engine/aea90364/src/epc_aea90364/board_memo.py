@@ -188,6 +188,11 @@ def _selectividad(circuits: List[dict], by_tag: Dict[str, dict], icc_a: float, u
     return pairs
 
 
+def _fed_from(upstream: Optional[dict], board: dict) -> str:
+    """Where the board is fed from: the upstream board of the project, else the source the person named, else the utility or a source outside the project."""
+    return (upstream or {}).get("board") or str(board.get("supply_name") or "").strip() or "Red / fuente externa al proyecto"
+
+
 def build(board: dict, circuits_in: List[dict], datos: dict, detalle: dict, limites: dict, conductor: dict, rcd_ma: float,
           upstream: Optional[dict] = None, validated: bool = True) -> dict:
     """Memoria completa del tablero como datos. `board`/`circuits_in` son los datos del formulario; `datos`/`detalle` el resultado del cálculo."""
@@ -198,7 +203,7 @@ def build(board: dict, circuits_in: List[dict], datos: dict, detalle: dict, limi
     by_tag = {c["tag"]: c for c in items}
     sel = _selectividad(items, by_tag, icc_a, upstream)
     curvas = {c["tag"]: {"curva": c["proteccion"]["curva"], "In": c["In"], **curve_band(c["In"], c["proteccion"]["curva"])} for c in items}
-    ac = {"desde": (upstream or {}).get("board") or "Red / fuente externa al proyecto", "tag": (upstream or {}).get("tag", ""),
+    ac = {"desde": _fed_from(upstream, board), "tag": (upstream or {}).get("tag", ""),
           "length_m": (upstream or {}).get("length_m", board.get("feeder_length_m")), "S_mm2": (upstream or {}).get("S"),
           "In": (upstream or {}).get("In"), "du_pct": (upstream or {}).get("dU"), "disp": (upstream or {}).get("disp"), "ruta": (upstream or {}).get("ruta") or [],
           "ruta_limitante": (upstream or {}).get("ruta_limitante"),
