@@ -155,6 +155,12 @@ def partitions(pts: List[Tuple[float, float]], most: int = MAX_TRUNKS) -> Dict[i
     return out
 
 
+def _across(lo: float, hi: float, spine_x: float) -> List[Tuple[float, float]]:
+    """The stretches of a trunk from lo to hi (none when it has no length), cut where the spine crosses it: lines only connect at their ends, so a trunk that went through the spine would not touch it."""
+    cut = lo + EPS < spine_x < hi - EPS
+    return [(lo, spine_x), (spine_x, hi)] if cut else [(lo, hi)] if hi - lo > EPS else []
+
+
 def _layout(groups: List[List[Tuple[float, float]]], board: Point, spine_x: float) -> Dict[str, Any]:
     """The lines of one way of cutting the loads: a horizontal trunk per group at the median y of its loads reaching the spine, the spine, the feeder from the board and a vertical stub per load."""
     trunks, stubs = [], []
@@ -163,8 +169,7 @@ def _layout(groups: List[List[Tuple[float, float]]], board: Point, spine_x: floa
         y = statistics.median(p[1] for p in g)
         ys.append(y)
         lo, hi = min(min(p[0] for p in g), spine_x), max(max(p[0] for p in g), spine_x)
-        if hi - lo > EPS:
-            trunks.append([(lo, y), (hi, y)])
+        trunks += [[(a, y), (b, y)] for a, b in _across(lo, hi, spine_x)]
         stubs += [[(p[0], y), (p[0], p[1])] for p in g if abs(p[1] - y) > 1e-6]
     top, bottom = min(ys + [board[1]]), max(ys + [board[1]])
     if bottom - top > EPS:
@@ -209,6 +214,56 @@ def _stats(orientation: str, lines: List[Dict[str, Any]], document: Dict[str, An
     return {"orientation": orientation, "trunks": len(trunks), "stubs": len(stubs), "bends": 0, "trunk_length": round(_length(trunks) * unit, 2), "stub_length": round(_length(stubs) * unit, 2), "in_metres": bool(k)}
 
 
+def _one_circuit_to_every_load(document: Dict[str, Any], board: Dict[str, Any], ids: set, runs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """The drawing with these runs added and one circuit from the board to every load: what the engine routes to see what is reached."""
+    doc = copy.deepcopy(document)
+    doc["lines"] = list(doc.get("lines", [])) + [{"id": f"run{i}", "kind": r["kind"], "points": r["points"]} for i, r in enumerate(runs, 1)]
+    doc["nodes"] = [{**n, "circuit": "RUNS"} if n["id"] in ids else n for n in doc["nodes"]]
+    doc["circuits"] = [{"tag": "RUNS", "from": board["id"], "to": "", "via": [], "ternas": 1}]
+    return doc
+
+
+def _unreached(document: Dict[str, Any], board: Dict[str, Any], loads: List[Dict[str, Any]], runs: List[Dict[str, Any]]) -> List[Tuple[str, str]]:
+    """The loads (id, tag) the board does not reach over the drawing's lines and these runs: the engine itself routes one circuit from the board to all of them."""
+    ids = {l["id"] for l in loads}
+    try:
+        done = core.process(_one_circuit_to_every_load(document, board, ids, runs))
+    except core.PlanError:
+        return []
+    tag_of = {n["id"]: n["tag"] for n in done["nodes"]}
+    lost = set(((done.get("circuits") or {}).get("RUNS") or {}).get("unreached", []))
+    return [(i, tag_of[i]) for i in sorted(ids) if tag_of.get(i) in lost]
+
+
+def _foot(p: Point, line: Dict[str, Any]) -> Optional[Tuple[float, Point]]:
+    """(distance, foot) of the perpendicular from a point to a straight horizontal or vertical line, when the foot falls on it."""
+    (x0, y0), (x1, y1) = line["points"][0], line["points"][-1]
+    if abs(x0 - x1) < EPS and min(y0, y1) - EPS <= p[1] <= max(y0, y1) + EPS:
+        return abs(p[0] - x0), (x0, p[1])
+    if abs(y0 - y1) < EPS and min(x0, x1) - EPS <= p[0] <= max(x0, x1) + EPS:
+        return abs(p[1] - y0), (p[0], y0)
+    return None
+
+
+def _closing_line(load: Dict[str, Any], runs: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """A straight conduit from the nearest run (perpendicular to it) to a load nothing reaches; None when no run has a foot to it."""
+    feet = [f for f in (_foot((load["x"], load["y"]), r) for r in runs) if f]
+    if not feet:
+        return None
+    dist, foot = min(feet)
+    return {"kind": "CN", "points": [list(foot), [load["x"], load["y"]]], "role": "stub"} if dist > EPS else None
+
+
+def _close_runs(document: Dict[str, Any], board: Dict[str, Any], loads: List[Dict[str, Any]], runs: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[str]]:
+    """The conduits that join the loads the runs left apart, and what still cannot be reached (said, with the loads' tags, so the person draws a run to them)."""
+    lost = _unreached(document, board, loads, runs)
+    by_id = {l["id"]: l for l in loads}
+    extra = [c for c in (_closing_line(by_id[i], runs) for i, _ in lost) if c]
+    left = _unreached(document, board, loads, runs + extra) if extra else lost
+    shown = ", ".join(tag for _, tag in left[:8]) + (" ..." if len(left) > 8 else "")
+    return extra, ([f"{len(left)} load(s) cannot be reached from the board with straight runs: {shown}: draw a run to them"] if left else [])
+
+
 def propose_runs(document: Dict[str, Any], options: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """The trays and conduits for the loads of the drawing: straight trunks hanging from one spine that starts at the board, and a short straight conduit to each load. Both orientations are tried
     (horizontal trunks, or vertical ones) and the shorter wins. Returns {orientation, lines, stats, warnings}; a line is {kind, points, role} with role trunk (tray) or stub (conduit)."""
@@ -227,8 +282,10 @@ def propose_runs(document: Dict[str, Any], options: Optional[Dict[str, Any]] = N
     cols = {**cols, "trunks": _transpose(cols["trunks"]), "stubs": _transpose(cols["stubs"])}
     orientation, lay = ("horizontal", rows) if rows["length"] <= cols["length"] + 1e-9 else ("vertical", cols)
     lines = _runs(lay)
+    extra, warnings = _close_runs(document, board, loads, lines)
+    lines += extra
     stats = _stats(orientation, lines, document, params)
-    return {"orientation": orientation, "lines": lines, "stats": stats, "warnings": []}
+    return {"orientation": orientation, "lines": lines, "stats": stats, "closed": len(extra), "warnings": warnings}
 
 
 # ---------------------------------------------------------------- step 2: the wiring over the runs that are drawn

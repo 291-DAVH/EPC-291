@@ -64,6 +64,20 @@ def _validate(p: NewProject, opts: dict) -> dict:
     return errors
 
 
+EMISSION_PHASE = {"ifa": "ID", "ifc": "IE", "as-built": "ASB"}       # the phase each emission to the client belongs to (the basic engineering review, IFR, is internal)
+
+
+def phase_reached(meta: dict, phase: str) -> bool:
+    """Whether a project goes as far as a phase: a project that says where it ends stops there; one that does not (made before the end phase existed) goes through all of them."""
+    end = meta.get("end_phase")
+    return end not in PHASES or PHASES.index(phase) <= PHASES.index(end)
+
+
+def emissions_allowed(meta: dict) -> List[str]:
+    """The emissions to the client the project still goes through, in the order they are made."""
+    return [e for e, phase in EMISSION_PHASE.items() if phase_reached(meta, phase)]
+
+
 def _end_phase_errors(p: NewProject) -> dict:
     """The phase a project ends at: one of the phases, not before the one it starts at (not every project goes through detail engineering or as-built)."""
     if p.end_phase not in PHASES:

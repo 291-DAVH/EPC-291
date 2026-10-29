@@ -7,6 +7,12 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ### Fixed
 - The Technical data screen no longer goes blank when it is opened while a calculation is still running ("Cannot access 'poll' before initialization"): the function that resumes the wait is declared before the screen's early return.
 
+### Fixed
+- The runs proposed by the automatic design now reach every load: a trunk that crossed the main spine went through it without touching it (lines only connect at their ends), leaving loads apart ("the runs do not reach LU-001…" at the wiring step). The trunk is now cut where the spine crosses it. The proposal is also checked with the engine before it is shown: loads left apart are joined to the nearest run by a perpendicular conduit (and the step says how many), and any that still cannot be reached are named in the route card, before it is accepted.
+
+### Changed
+- The final phase of a project now governs what is offered: the Issue screen lists only the emissions up to it (IFA = detail, IFC = execution, AS-BUILT = as-built) and the server rejects the others; the management workflow scripts do not prepare, audit, release or issue what comes after it, do not offer the as-built at the next gate, and close the project with the emission of its final phase without asking for an as-built decision.
+
 ### Added
 - Acometidas of a board (Engineering → Technical data): a board has one or several cables that feed it (the utility and a generator, for example), each with name, source, phase, length, current (empty: the sum of the circuits at the head of the board), installation, insulation and conductor. Each is sized like a circuit (`epc_aea90364.board_feeders`, with the same Iz ≥ In and seccional drop), shown with its section, protection and drop, calculated together with the board, and listed in the calculation memo ("Acometida ACOM-RED (Red de distribución): 95 mm²…") instead of "Pending". A board fed from another board of the project still takes its cable from that board's circuit.
 - Circuits across levels: a circuit drawn on several sheets with the same tag (from the board to a plenum on the board's sheet, from the plenum to the loads on each other level) is now measured by the plans: the lengths are chained through the plenums, the height of each counted once, and the board uses the moment length and the maximum distance of all its loads. A circuit that does not chain keeps the length typed. The engine now reports the distance to a circuit's destination.

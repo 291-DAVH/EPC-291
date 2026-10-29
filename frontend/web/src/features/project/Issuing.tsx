@@ -20,13 +20,14 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
   const [copied, setCopied] = useState("");
   if (!view.data) return <State loading={view.loading} error={view.error} />;
   const v = view.data;
+  const chosen = v.emissions.includes(emission) ? emission : v.emissions[0] ?? "";                  // the project may not go through the one that was picked first
 
   const toggle = (id: string) => { const n = new Set(pick); n.has(id) ? n.delete(id) : n.add(id); setPick(n); };
   const prepare = async () => {
     if (pick.size === 0) { setErr({ items: t("issue.pickOne") }); return; }
     setBusy(true);
     try {
-      await api(base, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ emission, client_rev: clientRev, internal_rev: internalRev, notes, items: [...pick].map((source) => ({ source })) }) });
+      await api(base, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ emission: chosen, client_rev: clientRev, internal_rev: internalRev, notes, items: [...pick].map((source) => ({ source })) }) });
       setPick(new Set()); setErr({}); setMsg(t("issue.prepared")); setRev((n) => n + 1);
     } catch (x) {
       setErr(x instanceof ApiError ? x.fieldErrors : { error: String(x) });
@@ -64,14 +65,17 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
             </tbody>
           </table>
         )}
+        {v.end_phase && v.emissions.length < 3 && (
+          <p className="alert warn" style={{ margin: "0 0 8px" }}>{t(v.emissions.length ? "issue.endsAt" : "issue.noneAllowed").replace("{phase}", t(("phase.full." + v.end_phase) as Key))}</p>
+        )}
         <div className="fgrid">
-          <label className="field"><span>{t("issue.emission")}</span><select value={emission} onChange={(e) => setEmission(e.target.value)}>{v.emissions.map((x) => <option key={x} value={x}>{x.toUpperCase()}</option>)}</select></label>
+          <label className="field"><span>{t("issue.emission")}</span><select value={chosen} onChange={(e) => setEmission(e.target.value)} disabled={v.emissions.length === 0}>{v.emissions.map((x) => <option key={x} value={x}>{x.toUpperCase()}</option>)}</select></label>
           <label className="field"><span>{t("issue.clientRev")}</span><input value={clientRev} onChange={(e) => setClientRev(e.target.value)} /></label>
           <label className="field"><span>{t("issue.internalRev")}</span><input value={internalRev} onChange={(e) => setInternalRev(e.target.value)} /></label>
           <label className="field"><span>{t("issue.notes")}</span><input value={notes} onChange={(e) => setNotes(e.target.value)} /></label>
         </div>
         <div className="row" style={{ marginTop: 12, flexWrap: "wrap" }}>
-          <button className="primary" disabled={busy || v.candidates.length === 0} onClick={prepare}>{t("issue.prepare")} {v.next_transmittal}</button>
+          <button className="primary" disabled={busy || v.candidates.length === 0 || !chosen} onClick={prepare}>{t("issue.prepare")} {v.next_transmittal}</button>
           <span className="muted small">{msg}</span>
         </div>
         <div className="muted small" style={{ marginTop: 6 }}>{t("issue.rule")}</div>

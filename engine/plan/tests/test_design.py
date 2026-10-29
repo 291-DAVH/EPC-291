@@ -82,6 +82,33 @@ class TestRuns(unittest.TestCase):
         found, unreached, loads = reaches_every_load(with_runs(d, design.propose_runs(d)))
         self.assertEqual((found, unreached, loads), (True, [], len(BANDS) + 2))
 
+    def test_a_trunk_that_crosses_the_spine_is_cut_there_so_it_touches_it(self):
+        # three rooms as the lighting calculation fills them: the loads of the first two straddle the row of the board, so a trunk of columns goes through the spine
+        spots = [(115, 110), (145, 110), (115, 130), (145, 130), (215, 110), (245, 110), (215, 130), (111.4, 170), (134.3, 170), (157.1, 170), (180, 170), (202.9, 170), (225.7, 170), (248.6, 170)]
+        d = doc([node("tb", "TB", 60, 150)] + [node(f"l{i}", "LU", x, y) for i, (x, y) in enumerate(spots, 1)])
+        p = design.propose_runs(d, {"board": "tb"})
+        self.assertEqual(p["warnings"], [])
+        self.assertEqual(p["closed"], 0)                                                                  # nothing had to be added: the layout itself touches everything
+        self.assertTrue(reaches_every_load(with_runs(d, p)))
+        spine = [ln["points"] for ln in p["lines"] if ln["role"] == "trunk" and abs(ln["points"][0][1] - ln["points"][-1][1]) < 1e-6 and abs(ln["points"][0][1] - 150) < 1e-6]
+        for ln in p["lines"]:
+            if ln["role"] == "trunk" and abs(ln["points"][0][0] - ln["points"][-1][0]) < 1e-6:           # a column
+                ys = sorted(y for _, y in ln["points"])
+                self.assertFalse(ys[0] + 1e-6 < 150 < ys[1] - 1e-6, ln["points"])                         # none of them goes through the row of the spine
+        self.assertTrue(spine)
+
+    def test_a_load_the_layout_left_apart_is_joined_to_the_nearest_run_and_one_that_cannot_be_is_said(self):
+        d = doc([node("tb", "TB", 0, 0), node("a", "LU", 50, 0), node("near", "LU", 50, 30), node("far", "LU", 400, 300)])
+        trunk = {"kind": "BN", "points": [[0, 0], [100, 0]], "role": "trunk"}
+        board = d["nodes"][0]
+        loads = [{"id": i, "x": x, "y": y} for i, x, y in (("a", 50, 0), ("near", 50, 30), ("far", 400, 300))]
+        extra, warnings = design._close_runs(d, board, loads, [trunk])
+        self.assertEqual([e["points"] for e in extra], [[[50, 0], [50, 30]]])                           # perpendicular to the trunk, ending on the load
+        self.assertEqual(extra[0]["kind"], "CN")
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("1 load(s) cannot be reached", warnings[0])
+        self.assertIn("LU-003", warnings[0])                                                              # the tag the person sees on the plan
+
     def test_a_single_row_is_one_trunk_and_stubs(self):
         row = [node(f"r{i}", "LU", 100 + i * 60, 100 + (30 if i in (1, 4) else 0)) for i in range(6)]
         p = design.propose_runs(doc([node("tb", "TB", 40, 100), *row]))

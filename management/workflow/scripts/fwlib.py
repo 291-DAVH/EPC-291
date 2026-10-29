@@ -540,8 +540,59 @@ def validar_dec_existe(raiz, dec_id):
         )
 
 
+ORDEN_FASES = ("IC", "IB", "ID", "IE", "ASB")
+FASE_DE_EMISION = {"IFR": "IB", "IFA": "ID", "IFC": "IE", "AS_BUILT": "ASB"}
+EMISION_FINAL = {"IC": None, "IB": None, "ID": "IFA", "IE": "IFC", "ASB": "AS_BUILT"}       # la emisión con que termina un proyecto según su fase final (IB e IC: ninguna al cliente)
+
+
+def fase_final(raiz):
+    """La fase en que termina el proyecto, si lo dice su `.epc/project.json` (se busca desde la raíz hacia arriba); None si no lo dice (un proyecto anterior a la fase final pasa por todas)."""
+    d = os.path.abspath(raiz)
+    while True:
+        f = os.path.join(d, ".epc", "project.json")
+        if os.path.isfile(f):
+            try:
+                with open(f, encoding="utf-8") as fh:
+                    fin = json.load(fh).get("end_phase")
+            except (OSError, ValueError):
+                return None
+            return fin if fin in ORDEN_FASES else None
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+
+def fase_alcanzada(raiz, fase):
+    """Si el proyecto llega hasta esa fase (los que no dicen dónde terminan llegan hasta la última)."""
+    fin = fase_final(raiz)
+    return fin is None or ORDEN_FASES.index(fase) <= ORDEN_FASES.index(fin)
+
+
+def exigir_fase(raiz, emision):
+    """Falla si la emisión es de una fase posterior a la final del proyecto."""
+    fase = FASE_DE_EMISION.get(emision)
+    if fase and not fase_alcanzada(raiz, fase):
+        raise FwError(f"Este proyecto termina en la fase {fase_final(raiz)}: no pasa por la emisión {emision} (fase {fase}).")
+
+
+def _limitar_a_fase_final(fin, fase, emision_activa, puerta):
+    """La fase, la emisión activa y la próxima puerta de un proyecto que termina en `fin`: no se ofrece nada más allá."""
+    if fin is None:
+        return fase, emision_activa, puerta
+    if ORDEN_FASES.index(fase) > ORDEN_FASES.index(fin):
+        return fin, emision_activa, f"fase final ({fin}) alcanzada: CLOSE_PROJECT.py"
+    return fase, emision_activa, puerta if fin == "ASB" else puerta.replace(" o iniciar as-built", "")
+
+
+def fase_limitada(ledgers, raiz):
+    """La fase del proyecto (ver `fase_proyecto`) limitada a la fase final que dice su `.epc/project.json`: lo que se muestra y se ofrece no pasa de ahí."""
+    fase, activa, puerta = fase_proyecto(ledgers)
+    return _limitar_a_fase_final(fase_final(raiz), fase, activa, puerta)
+
+
 def fase_proyecto(ledgers):
-    """Infiere la fase PM² del proyecto desde el estado de los ledgers.
+    """Infiere la fase PM² del proyecto desde el estado de los ledgers, sin límite de fase final (ver `fase_limitada`).
     Devuelve ("IC"|"IB"|"ID"|"IE"|"ASB", emision_activa, proxima_puerta).
     """
     if not ledgers:

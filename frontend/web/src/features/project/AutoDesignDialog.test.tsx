@@ -36,6 +36,14 @@ describe("automatic design dialog", () => {
     expect(f.onClose).toHaveBeenCalledTimes(1);
   });
 
+  it("says what the layout closed and which loads it still cannot reach, before the route is accepted", () => {
+    const stats = { orientation: "vertical", trunks: 7, stubs: 11, bends: 0, trunk_length: 34, stub_length: 14, in_metres: true };
+    show({ step: "runs", proposal: { orientation: "vertical", lines: [], stats, closed: 1, warnings: ["2 load(s) cannot be reached from the board with straight runs: LU-004, LU-009: draw a run to them"] } });
+    expect(screen.getByRole("dialog").textContent).toContain("Se agregaron 1 conduit(s)");
+    expect(screen.getByRole("alert").textContent).toContain("LU-004, LU-009");
+    expect(screen.getByRole("button", { name: "Aceptar recorrido" })).toBeTruthy();                      // the person decides: accept as it is or draw the missing run first
+  });
+
   it("gives the detail of cables, plenums and sizes, points at what needs a look and approves on request", () => {
     const f = show({ step: "sizing", sizing });
     const text = screen.getByRole("dialog").textContent ?? "";

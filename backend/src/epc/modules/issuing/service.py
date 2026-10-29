@@ -41,14 +41,22 @@ def candidates(d: Path) -> dict:
             items.append({"id": c["id"], "name": c["name"], "discipline": c["discipline"], "package": c["package"], "kind": c["kind"],
                           "formats": formats, "pdf_will_be_rendered": c["kind"] == "drawing" and "pdf" not in c["files"], "last_issue": issued.get(c["id"])})
     trs = repository.list_transmittals(d)
-    return {"candidates": items, "emissions": list(EMISSIONS), "next_transmittal": f"TR-{repository.next_transmittal_number(d):03d}",
+    return {"candidates": items, "emissions": projects.emissions_allowed(d), "end_phase": projects.end_phase(d), "next_transmittal": f"TR-{repository.next_transmittal_number(d):03d}",
             "transmittals": [{k: t[k] for k in ("id", "emission", "client_rev", "internal_rev", "status", "created", "sent_on")} | {"items": len(t["items"])} for t in trs]}
 
 
-def _validate(body: IssueIn) -> None:
+def _emission_error(d: Path, emission: str) -> Optional[str]:
+    if emission not in EMISSIONS:
+        return "one of " + ", ".join(EMISSIONS)
+    allowed = projects.emissions_allowed(d)
+    return None if emission in allowed else f"this project ends at {projects.end_phase(d)}: it does not go through this emission (it issues {', '.join(allowed) or 'none to the client'})"
+
+
+def _validate(d: Path, body: IssueIn) -> None:
     e: Dict[str, str] = {}
-    if body.emission not in EMISSIONS:
-        e["emission"] = "one of " + ", ".join(EMISSIONS)
+    problem = _emission_error(d, body.emission)
+    if problem:
+        e["emission"] = problem
     if not CLIENT_REV.match(body.client_rev):
         e["client_rev"] = "two digits, e.g. 00"
     if not INTERNAL_REV.match(body.internal_rev):
@@ -62,7 +70,7 @@ def _validate(body: IssueIn) -> None:
 
 
 def issue(d: Path, body: IssueIn) -> dict:
-    _validate(body)
+    _validate(d, body)
     cands = {c["id"]: c for c in engineering.issuable(d)}
     missing = [i.source for i in body.items if i.source not in cands]
     if missing:
