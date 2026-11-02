@@ -8,7 +8,7 @@
 Cables are not lines of their own: a circuit's cable follows the runs it is routed through.
 
 Pure: a drawing document (and the rooms for the wiring) in, a proposal out; it changes nothing. Units are those of the view. The limits per circuit and the power per outlet are typical values in
-`params.json` (`design`): the engineer confirms them against the standard of the project.
+`typical-values.json` (`design`): the engineer confirms them against the standard of the project.
 """
 import copy
 import math

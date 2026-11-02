@@ -27,7 +27,8 @@ def paths() -> dict:
         return _override
     from epc_aea90364 import aea_rules, aea_tables, norm_data
     from epc_lighting import norm_data as lighting_norms
-    return {"rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG,
+    from epc_plan import core as plan_core
+    return {"plan_values": Path(plan_core.TYPICAL), "rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG,
             "lighting_rules": lighting_norms.RULES_DIR}
 
 
@@ -103,7 +104,7 @@ def log_read(point_id: Optional[str] = None, limit: int = 100) -> List[dict]:
     return rows[-limit:][::-1]
 
 
-_ENGINE_CACHES = (("epc_aea90364.aea_rules", "limpiar_cache_reglas"), ("epc_aea90364.aea_tables", "limpiar_cache_tablas"), ("epc_lighting.norm_data", "clear_cache"))
+_ENGINE_CACHES = (("epc_aea90364.aea_rules", "limpiar_cache_reglas"), ("epc_aea90364.aea_tables", "limpiar_cache_tablas"), ("epc_lighting.norm_data", "clear_cache"), ("epc_plan.core", "reload_params"))
 
 
 def _clear(module: str, function: str) -> None:

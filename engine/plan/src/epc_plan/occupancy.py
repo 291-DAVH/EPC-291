@@ -1,6 +1,6 @@
 """How full a tray or a conduit is: the cross-section of the cables it carries against the free section it offers, and the share the rules allow.
 
-Typical values (in params.json, `occupancy`): the engineer confirms them against the standard of the project. The diameter of a cable is the one written on the line
+Typical values (in typical-values.json, `occupancy`): the engineer confirms them against the standard of the project. The diameter of a cable is the one written on the line
 (`diametro_cable_mm`) or the default; the size of the container is read from its attributes: a tray has `ancho_mm` and `alto_mm`, a conduit `diametro_mm` (internal).
 """
 import math
