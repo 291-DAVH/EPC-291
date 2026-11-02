@@ -10,6 +10,7 @@ root_packages =
     epc_lighting
     epc_mld
     epc_plan
+    epc_receptacles
     epc_rules
     epc_sld
     epc_standards
@@ -42,6 +43,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -86,6 +88,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -132,6 +135,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -176,6 +180,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -220,6 +225,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -264,6 +270,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -310,6 +317,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -357,6 +365,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -401,6 +410,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -447,6 +457,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -493,6 +504,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -539,6 +551,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -585,6 +598,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -629,6 +643,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -675,6 +690,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -719,6 +735,7 @@ source_modules =
     epc.modules.notifications
     epc.modules.procurement
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -739,6 +756,53 @@ layers =
     epc.modules.projects.service
     epc.modules.projects.repository
     epc.modules.projects.models
+
+[importlinter:contract:receptacles-encapsulated]
+name = receptacles: other modules use only its public interface
+type = forbidden
+allow_indirect_imports = True
+source_modules =
+    epc.modules.admin
+    epc.modules.backlog
+    epc.modules.billing
+    epc.modules.catalogs
+    epc.modules.construction
+    epc.modules.coordination
+    epc.modules.deliverables
+    epc.modules.engineering
+    epc.modules.identity
+    epc.modules.intake
+    epc.modules.issuing
+    epc.modules.knowledge
+    epc.modules.layout
+    epc.modules.lighting
+    epc.modules.management
+    epc.modules.masterdata
+    epc.modules.norms
+    epc.modules.notifications
+    epc.modules.procurement
+    epc.modules.projects
+    epc.modules.quality
+    epc.modules.registers
+    epc.modules.reporting
+    epc.modules.requirements
+    epc.modules.schedule
+    epc.modules.sld
+    epc.modules.wbs
+forbidden_modules =
+    epc.modules.receptacles.api
+    epc.modules.receptacles.service
+    epc.modules.receptacles.repository
+    epc.modules.receptacles.models
+
+[importlinter:contract:receptacles-layers]
+name = receptacles: api -> service -> repository -> models
+type = layers
+layers =
+    epc.modules.receptacles.api
+    epc.modules.receptacles.service
+    epc.modules.receptacles.repository
+    epc.modules.receptacles.models
 
 [importlinter:contract:registers-encapsulated]
 name = registers: other modules use only its public interface
@@ -766,6 +830,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.reporting
     epc.modules.requirements
     epc.modules.schedule
@@ -810,6 +875,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.requirements
     epc.modules.schedule
@@ -856,6 +922,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.schedule
@@ -900,6 +967,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -946,6 +1014,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -992,6 +1061,7 @@ source_modules =
     epc.modules.procurement
     epc.modules.projects
     epc.modules.quality
+    epc.modules.receptacles
     epc.modules.registers
     epc.modules.reporting
     epc.modules.requirements
@@ -1044,6 +1114,7 @@ source_modules =
     epc_lighting
     epc_mld
     epc_plan
+    epc_receptacles
     epc_rules
     epc_sld
     epc_standards
@@ -1058,5 +1129,5 @@ type = layers
 layers =
     epc_drawing
     epc_mld | epc_sld
-    epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch | epc_lighting
+    epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch | epc_lighting | epc_receptacles
     epc_dxf

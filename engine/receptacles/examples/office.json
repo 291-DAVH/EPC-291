@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "receptacles": [
+    {"id": "tug", "name": "Socket outlet 2x10 A + E", "kind": "general", "poles": 2, "rated_a": 10, "power_va": 100, "height_m": 0.3, "ip": "IP20"},
+    {"id": "tue", "name": "Special-use socket outlet 2x20 A + E", "kind": "special", "poles": 2, "rated_a": 20, "power_va": 2200, "height_m": 1.2, "ip": "IP20"}
+  ],
+  "rooms": [
+    {"id": "R1", "name": "Open office", "use": "office", "length_m": 8, "width_m": 5, "receptacle": "tug"},
+    {"id": "R2", "name": "Warehouse", "use": "warehouse", "length_m": 20, "width_m": 12, "receptacle": "tug"},
+    {"id": "R3", "name": "Kitchen", "use": "kitchen", "length_m": 3, "width_m": 3, "receptacle": "tug", "height_m": 1.1},
+    {"id": "R4", "name": "Server room", "use": "general", "length_m": 4, "width_m": 3, "receptacle": "tue", "count": 2}
+  ]
+}

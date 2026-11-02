@@ -1,7 +1,7 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
-import { api, Badge, ClientRecord, errorText, IssuerRecord, JSON_HEADERS, Key, LayersEditor, LuminairesEditor, Me, Page, PersonRecord, SolutionsEditor, State, useApi, useI18n } from "@epc/ui";
+import { api, Badge, ClientRecord, errorText, IssuerRecord, JSON_HEADERS, Key, LayersEditor, LuminairesEditor, Me, Page, PersonRecord, ReceptaclesEditor, SolutionsEditor, State, useApi, useI18n } from "@epc/ui";
 
-type Tab = "issuers" | "clients" | "people" | "layers" | "solutions" | "luminaires";
+type Tab = "issuers" | "clients" | "people" | "layers" | "solutions" | "luminaires" | "receptacles";
 
 /** Information that does not change between projects, entered once (company, clients, people, logos). Admin/engineer role only. */
 export default function Data() {
@@ -12,7 +12,7 @@ export default function Data() {
   return (
     <Page title={t("data.title")} help={t("data.help")}>
       <div className="subtabs" role="tablist">
-        {(["issuers", "clients", "people", "layers", "solutions", "luminaires"] as Tab[]).map((x) => (
+        {(["issuers", "clients", "people", "layers", "solutions", "luminaires", "receptacles"] as Tab[]).map((x) => (
           <button key={x} role="tab" aria-selected={tab === x} className={tab === x ? "on" : ""} onClick={() => setTab(x)}>{t(("data.tab." + x) as Key)}</button>
         ))}
       </div>
@@ -22,6 +22,7 @@ export default function Data() {
       {tab === "layers" && <LayersEditor bare path="/data/drawing-layers" />}
       {tab === "solutions" && <SolutionsEditor bare path="/data/standard-solutions" />}
       {tab === "luminaires" && <LuminairesEditor bare path="/data/luminaires" />}
+      {tab === "receptacles" && <ReceptaclesEditor bare path="/data/receptacles" />}
     </Page>
   );
 }

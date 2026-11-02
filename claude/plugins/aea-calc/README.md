@@ -34,7 +34,7 @@ This plugin is packaging only. The code lives in `engine/aea90364` and is copied
 | Necesita (plugins) | — |
 | Lo necesitan | `board-design`, `mld`, `sld`, `standard-ingest` |
 | Paquetes de Python | `openpyxl` |
-| Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`, `standard-ingest`; módulos del backend `backend.catalogs`, `backend.engineering`, `backend.lighting`, `backend.norms`, `backend.sld` |
+| Si lo modificas, revisa | plugins `board-design`, `mld`, `sld`, `standard-ingest`; módulos del backend `backend.catalogs`, `backend.engineering`, `backend.lighting`, `backend.norms`, `backend.receptacles`, `backend.sld` |
 
 Generado por `python tools/build/regen_plugins.py`; el mapa completo está en `docs/architecture/DEPENDENCIAS.md`.
 <!-- deps:end -->

@@ -79,6 +79,26 @@ def _plan_points() -> List[dict]:
             for section, group in PLAN_GROUPS.items() for k, v in data.get(section, {}).items() if k != "note"]
 
 
+REC_UNIT = "table:receptacles-valores-tipicos"
+REC_TITLES = {"mounting:771": "Altura de montaje de tomacorrientes, AEA 90364-7-771 (m)", "mounting:770": "Altura de montaje de tomacorrientes en viviendas, AEA 90364-7-770 (m)", "mounting:wet_min_m": "Altura mínima en locales con agua o baldeo (m)",
+              "circuits:TUG": "Tomacorrientes de uso general: máximo por circuito", "circuits:TUE": "Tomacorrientes de uso especial: máximo por circuito"}
+REC_GROUPS = {"uses": "Cantidad de tomacorrientes por uso del ambiente", "mounting": "Alturas de montaje", "circuits": "Tomacorrientes por circuito"}
+
+
+def _receptacle_points() -> List[dict]:
+    """The typical values of the receptacles engine (outlets per use of a room, mounting heights, outlets per circuit): confirmed once, here, for every project."""
+    path = repository.paths().get("receptacle_values")
+    data = repository.read(path) if path else {}
+    return [{"unit": REC_UNIT, "kind": "table", "key": f"{section}:{k}", "title": REC_TITLES.get(f"{section}:{k}") or (v.get("label", {}).get("es", k) if isinstance(v, dict) and isinstance(v.get("label"), dict) else f"{section}.{k}"),
+             "group": group, "ref": v.get("source", "valor típico a confirmar") if isinstance(v, dict) else "valor típico a confirmar", "value": v}
+            for section, group in REC_GROUPS.items() for k, v in data.get(section, {}).items() if k != "note"]
+
+
+def _receptacle_unit() -> Dict[str, dict]:
+    points = _receptacle_points()
+    return {REC_UNIT: {"id": REC_UNIT, "kind": "table", "name": "Tomacorrientes · valores típicos (a confirmar)", "points": points}} if points else {}
+
+
 def _plan_unit() -> Dict[str, dict]:
     points = _plan_points()
     return {PLAN_UNIT: {"id": PLAN_UNIT, "kind": "table", "name": "Cables, canalizaciones y diseño automático · valores típicos (a confirmar)", "points": points}} if points else {}
@@ -127,6 +147,7 @@ def _all_units() -> Dict[str, dict]:
         units[uid] = {"id": uid, "kind": "rule", "name": pts[0]["unit_name"], "points": pts}
     units["table:aea-calculo"] = {"id": "table:aea-calculo", "kind": "table", "name": "Tablas y constantes de cálculo (AEA 90364-7-771, 2006)", "points": _table_points()}
     units.update(_plan_unit())
+    units.update(_receptacle_unit())
     units["criterion:ar-electrical"] = {"id": "criterion:ar-electrical", "kind": "criterion", "name": "Criterios de diseño · valores base (AR, eléctrica)", "points": _criterion_points()}
     return units
 
@@ -360,12 +381,21 @@ def _store_rule(p: dict, new_value) -> None:
                 return
 
 
-def _store_plan_value(p: dict, new_value) -> None:
+def _store_section_value(p: dict, new_value, which: str) -> None:
+    """A typical value of an engine whose data file is `{section: {key: value}}`: `which` says which file (`plan_values`, `receptacle_values`)."""
     section, key = p["key"].split(":", 1)
-    f = repository.paths()["plan_values"]
+    f = repository.paths()[which]
     data = repository.read(f)
     data[section][key] = new_value
     repository.write_like(f, data)
+
+
+def _store_plan_value(p: dict, new_value) -> None:
+    _store_section_value(p, new_value, "plan_values")
+
+
+def _store_receptacle_value(p: dict, new_value) -> None:
+    _store_section_value(p, new_value, "receptacle_values")
 
 
 def _store_table(p: dict, new_value) -> None:
@@ -415,7 +445,7 @@ _STORERS = {"rule": _store_rule, "table": _store_table, "criterion": _store_crit
 def _store(p: dict, new_value) -> None:
     """Write the corrected value into its data file."""
     try:
-        {PLAN_UNIT: _store_plan_value}.get(p["unit"], _STORERS[p["kind"]])(p, new_value)       # the typical values of the plan engine have their own file
+        {PLAN_UNIT: _store_plan_value, REC_UNIT: _store_receptacle_value}.get(p["unit"], _STORERS[p["kind"]])(p, new_value)       # the typical values of the plan engine have their own file
     except OSError:
         raise Conflict({"filesystem": "this installation is read-only: review the norms in the development copy of the repository"})
     repository.clear_engine_cache()

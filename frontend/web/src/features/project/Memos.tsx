@@ -57,15 +57,15 @@ function BoardLine({ board, base, client, code, canWrite, rev, refresh }: { boar
 }
 
 /** One sheet with lighting: its study and its report, calculated again from the drawing as it is saved. */
-function LightLine({ sheet, base, canWrite, lang, rev, refresh, onOpenFiles }: { sheet: string; base: string; canWrite: boolean; lang: string; rev: number; refresh: () => void; onOpenFiles: () => void }) {
+function LightLine({ sheet, base, canWrite, lang, rev, refresh, onOpenFiles, what = "lighting" }: { sheet: string; base: string; canWrite: boolean; lang: string; rev: number; refresh: () => void; onOpenFiles: () => void; what?: "lighting" | "receptacles" }) {
   const { t } = useI18n();
   const tl = (k: string) => t(k as Key);
-  const study = useApi<LightingStudy>(`${base}/lighting/study/${encodeURIComponent(sheet)}?r=${rev}`);
+  const study = useApi<LightingStudy>(`${base}/${what}/study/${encodeURIComponent(sheet)}?r=${rev}`);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const remake = async () => {
     setBusy(true); setErr("");
-    try { await api(`${base}/lighting/study/${encodeURIComponent(sheet)}/remake?lang=${lang}`, { method: "POST" }); refresh(); } catch (x) { setErr(errorText(x)); }
+    try { await api(`${base}/${what}/study/${encodeURIComponent(sheet)}/remake?lang=${lang}`, { method: "POST" }); refresh(); } catch (x) { setErr(errorText(x)); }
     setBusy(false);
   };
   const s = study.data;
@@ -105,6 +105,9 @@ export default function Memos({ client, code, canWrite, onOpenFiles }: Props) {
       <h3>{tl("memos.lighting")}</h3>
       {electrical.length === 0 ? <div className="state">{tl("memos.noSheets")}</div>
         : electrical.map((x) => <LightLine key={x.level} sheet={x.level} base={base} canWrite={canWrite} lang={lang} rev={rev} refresh={refresh} onOpenFiles={onOpenFiles} />)}
+      <h3>{tl("memos.receptacles")}</h3>
+      {electrical.length === 0 ? <div className="state">{tl("memos.noSheets")}</div>
+        : electrical.map((x) => <LightLine key={x.level} what="receptacles" sheet={x.level} base={base} canWrite={canWrite} lang={lang} rev={rev} refresh={refresh} onOpenFiles={onOpenFiles} />)}
       <p className="muted small" style={{ marginTop: 10 }}>{tl("memos.cablesNote")}</p>
     </>
   );

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epc-receptacles"
+version = "0.1.0"
+description = "EPC-291 receptacles engine: how many socket outlets a room needs, where they go along its walls and whether their mounting height complies"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+epc_receptacles = ["params.json", "data/*.json", "schema/*.json"]

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "epc_receptacles output",
+  "type": "object",
+  "required": ["schema_version", "engine_version", "rooms", "warnings", "counts"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "engine_version": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "counts": {
+      "type": "object",
+      "required": ["rooms", "outlets", "required", "warnings"],
+      "properties": {"rooms": {"type": "integer"}, "outlets": {"type": "integer"}, "required": {"type": "integer"}, "warnings": {"type": "integer"}}
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "use", "basis", "family", "required", "installed", "load_va", "circuits_min", "layout", "checks", "estimate"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "use": {"type": "string"},
+          "basis": {"enum": ["area", "perimeter", "fixed"]},
+          "family": {"enum": ["TUG", "TUE"]},
+          "receptacle": {"type": "string"},
+          "area_m2": {"type": "number"},
+          "perimeter_m": {"type": "number"},
+          "required": {"type": "integer", "minimum": 0},
+          "installed": {"type": "integer", "minimum": 0},
+          "power_va_each": {"type": "number"},
+          "load_va": {"type": "number"},
+          "circuits_min": {"type": "integer", "minimum": 0},
+          "layout": {
+            "type": "object",
+            "required": ["mode", "positions"],
+            "properties": {"mode": {"enum": ["proposed", "drawn"]}, "positions": {"type": "array", "items": {"type": "object", "required": ["x_m", "y_m"]}}}
+          },
+          "checks": {"type": "array", "items": {"type": "object", "required": ["id", "ok", "message"], "properties": {"id": {"type": "string"}, "ok": {"type": "boolean"}, "message": {"type": "string"}}}},
+          "estimate": {"type": "object", "required": ["reason", "confidence", "source"], "properties": {"reason": {"type": "string"}, "confidence": {"type": "number"}, "source": {"type": "string"}}}
+        }
+      }
+    }
+  }
+}

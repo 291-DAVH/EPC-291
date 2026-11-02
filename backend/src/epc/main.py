@@ -35,6 +35,7 @@ from epc.modules.requirements import api as requirements_api
 from epc.modules.schedule import api as schedule_api
 from epc.modules.layout import api as layout_api
 from epc.modules.lighting import api as lighting_api
+from epc.modules.receptacles import api as receptacles_api
 from epc.modules.sld import api as sld_api
 from epc.modules.wbs import api as wbs_api
 
@@ -74,10 +75,11 @@ def create_app() -> FastAPI:
     def health():
         return {"ok": True, "env": settings.env}
 
-    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, lighting_api, coordination_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
+    for module_api in (identity_api, projects_api, management_api, deliverables_api, intake_api, intake_analysis_api, requirements_api, engineering_api, issuing_api, registers_api, reporting_api, sld_api, layout_api, lighting_api, receptacles_api, coordination_api, masterdata_api, norms_api, wbs_api, schedule_api, backlog_api, knowledge_api, admin_api):
         app.include_router(module_api.router)
     app.include_router(catalogs_api.company)                     # layers and standard solutions of the company
     app.include_router(catalogs_api.project)                     # ... and of each project
+    app.include_router(receptacles_api.company)                   # outlets of the company (the project's are in the module router)
     app.include_router(lighting_api.company)                     # luminaires of the company (the project's are in the module router)
     app.include_router(layout_api.layers_router)                  # DXF layers by discipline
     app.include_router(layout_api.templates_router)               # templates of layout of the organization

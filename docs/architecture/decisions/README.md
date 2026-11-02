@@ -34,3 +34,4 @@ Format: `ADR-NNNN-title.md` with Status, Context, Decision, Consequences. A deci
 | [0028](ADR-0028-norm-selector.md) | Norm selector: generic calculation engines, norms as complete packages, one registry | Proposed |
 | [0029](ADR-0029-lighting-engine.md) | Lighting engine | Accepted |
 | [0030](ADR-0030-lighting-in-the-platform.md) | Lighting in the platform: backend module and plan-editor integration | Proposed |
+| [0031](ADR-0031-receptacles-engine.md) | Receptacles engine and its place in the platform | Accepted |

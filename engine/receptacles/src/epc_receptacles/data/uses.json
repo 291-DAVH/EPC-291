@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "note": "How many socket outlets a room of each use needs. They are TYPICAL values to confirm in the norms review (they are not data of a project): only the warehouse perimeter rule comes from a clause of the norm (AEA 90364-7-771), the rest are the usual practice. `basis` says what the count follows: `area` (one outlet per `per_m2`), `perimeter` (one per `per_m` of wall) or `fixed` (`min` outlets); `min` is the least a room of that use gets.",
+  "uses": {
+    "general":   {"label": {"es": "Local de uso general", "en": "General room"}, "basis": "area", "per_m2": 10, "min": 2, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "office":    {"label": {"es": "Oficina", "en": "Office"}, "basis": "area", "per_m2": 9, "min": 3, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "classroom": {"label": {"es": "Aula", "en": "Classroom"}, "basis": "perimeter", "per_m": 4, "min": 4, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "bedroom":   {"label": {"es": "Dormitorio", "en": "Bedroom"}, "basis": "perimeter", "per_m": 3, "min": 3, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "living":    {"label": {"es": "Estar / comedor", "en": "Living room"}, "basis": "perimeter", "per_m": 3, "min": 4, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "kitchen":   {"label": {"es": "Cocina", "en": "Kitchen"}, "basis": "fixed", "min": 4, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify", "wet": true},
+    "bathroom":  {"label": {"es": "Baño", "en": "Bathroom"}, "basis": "fixed", "min": 1, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify", "wet": true},
+    "corridor":  {"label": {"es": "Pasillo / circulación", "en": "Corridor"}, "basis": "perimeter", "per_m": 12, "min": 1, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "workshop":  {"label": {"es": "Taller", "en": "Workshop"}, "basis": "perimeter", "per_m": 6, "min": 2, "family": "TUG", "confidence": 0.4, "source": "typical value, to verify"},
+    "warehouse": {"label": {"es": "Depósito (salón general)", "en": "Warehouse (general hall)"}, "basis": "perimeter", "per_m": 9, "min": 2, "family": "TUG", "confidence": 0.7, "source": "AEA 90364-7-771, rule tomacorrientes.deposito_perimetro (one outlet per 9 m of perimeter, at least 2)"}
+  },
+  "mounting": {
+    "note": "Mounting height of the lower edge of the box above the finished floor. Typical limits to verify; the rules they come from are in the AEA rules of sockets.",
+    "771": {"min_m": 0.15, "max_m": null, "source": "AEA 90364-7-771, rule tomacorrientes.altura_arista_inferior_771"},
+    "770": {"min_m": 0.2, "max_m": 0.3, "source": "AEA 90364-7-770, rule tomacorrientes.altura_arista_inferior_770"},
+    "wet_min_m": 0.2
+  },
+  "circuits": {
+    "TUG": {"max_outlets": 15, "source": "typical value, to verify"},
+    "TUE": {"max_outlets": 1, "source": "typical value, to verify"}
+  }
+}
