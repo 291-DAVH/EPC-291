@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Badge, DeliverableItem, Key, PackagesView, State, api, useApi, useFmt, useI18n } from "@epc/ui";
 
 export default function Deliverables({ base }: { base: string }) {
@@ -8,8 +8,8 @@ export default function Deliverables({ base }: { base: string }) {
   const pkgs = useApi<PackagesView>(base + "/deliverables/packages");
   const revLabel = (r: string) => r.replace(/Rev(\d+)/, "Rev $1");
   const [status, setStatus] = useState("");
-  const order: Record<string, number> = { in_review: 0, in_progress: 1, planned: 2, delivered: 3 };
-  const rows = (data ?? []).filter((x) => !status || x.status === status).sort((a, b) => order[a.status] - order[b.status] || (a.due ?? "").localeCompare(b.due ?? ""));
+  const rows = (data ?? []).filter((x) => !status || x.status === status).sort((a, b) => a.order - b.order || a.subject.localeCompare(b.subject) || a.revision.localeCompare(b.revision));          // by discipline and by the sequence of engineering
+  const docName = (x: DeliverableItem) => (x.doc_type === "other" ? x.name : `${t(("u.d.type." + x.doc_type) as Key)} · ${x.subject}`);          // the document, not the file
   const tone = (s: string) => (s === "delivered" ? "ok" : s === "in_review" ? "accent" : s === "in_progress" ? "warn" : undefined);
   return (
     <>
@@ -44,12 +44,13 @@ export default function Deliverables({ base }: { base: string }) {
           )}
           <div className="card scroll">
             <table>
-              <thead><tr><th>{t("u.d.name")}</th><th>{t("u.d.discipline")}</th><th>{t("u.d.format")}</th><th>{t("u.d.rev")}</th><th>{t("u.d.status")}</th><th>{t("u.d.due")}</th><th /></tr></thead>
+              <thead><tr><th>{t("u.d.name")}</th><th>{t("u.d.format")}</th><th>{t("u.d.rev")}</th><th>{t("u.d.status")}</th><th>{t("u.d.due")}</th><th /></tr></thead>
               <tbody>
-                {rows.map((x) => (
-                  <tr key={x.id}>
-                    <td><b>{x.name}</b><div className="muted mono small">{x.code}</div></td>
-                    <td>{t(("projects.disc." + x.discipline) as Key)}</td>
+                {rows.map((x, i) => (
+                  <Fragment key={x.id}>
+                  {(i === 0 || rows[i - 1].discipline !== x.discipline) && <tr><th colSpan={6} style={{ textAlign: "left" }}>{t(("projects.disc." + x.discipline) as Key)}</th></tr>}
+                  <tr>
+                    <td><b>{docName(x)}</b><div className="muted mono small">{x.code}</div></td>
                     <td><Badge>.{x.format}</Badge></td>
                     <td>{x.revision}</td>
                     <td><Badge tone={tone(x.status)}>{t(("u.ds." + x.status) as Key)}</Badge></td>
@@ -63,6 +64,7 @@ export default function Deliverables({ base }: { base: string }) {
                       ) : x.downloadable ? <a className="btn" href={`/api${base}/deliverables/${x.id}/download`}>{t("u.d.download")}</a> : <span className="muted">{x.status === "delivered" ? t("u.d.na") : ""}</span>}
                     </td>
                   </tr>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
