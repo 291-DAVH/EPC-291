@@ -38,6 +38,18 @@ def _head(stored: dict, project: dict, t: Dict[str, str], engine_version: str, t
             {"type": "p", "text": t["totals"].format(rooms=len(rooms), outlets=counts["outlets"], required=counts["required"], load=f"{sum(r['load_va'] for r in rooms):g}")}]
 
 
+def _section(title: str, items: List[str]) -> List[dict]:
+    """A heading and its list, or nothing when there is nothing to list."""
+    return [{"type": "h", "text": title}, {"type": "bullets", "items": items}] if items else []
+
+
+def _findings(stored: dict, rooms: List[dict], t: Dict[str, str]) -> List[dict]:
+    """What the person has to look at: the checks that failed, the rooms left out and the warnings (each section only when it has something)."""
+    problems = [f"{r['name']}: {c['message']}" for r in rooms for c in r["checks"] if not c["ok"]]
+    left_out = [f"{x['name'] or x['id']}: {x['reason']}" for x in stored.get("skipped", [])]
+    return _section(t["checks"], problems) + _section(t["left_out"], left_out) + _section(t["warnings"], stored.get("warnings", []))
+
+
 def document(stored: dict, project: dict, lang: str, names: Dict[str, str], uses: Dict[str, str], engine_version: str, titleblock: Dict[str, str]) -> dict:
     """The report of a stored study: `stored` is what `study.save` keeps; `names` are the outlets and `uses` the uses of the rooms in the language asked."""
     t = TEXT["es" if lang == "es" else "en"]
@@ -47,11 +59,4 @@ def document(stored: dict, project: dict, lang: str, names: Dict[str, str], uses
         {"type": "table", "columns": [[t["room"], 0.17], [t["use"], 0.15], [t["outlet"], 0.22], [t["count"], 0.08], [t["family"], 0.08], [t["load"], 0.1], [t["circuits"], 0.08], [t["verdict"], 0.12]],
          "rows": [_row(r, names, uses, t) for r in rooms]},
         {"type": "h", "text": t["assumptions"]}, {"type": "bullets", "items": _assumptions(rooms, t)}, {"type": "p", "text": t["typical"]}]
-    problems = [f"{r['name']}: {c['message']}" for r in rooms for c in r["checks"] if not c["ok"]]
-    if problems:
-        blocks += [{"type": "h", "text": t["checks"]}, {"type": "bullets", "items": problems}]
-    if stored.get("skipped"):
-        blocks += [{"type": "h", "text": t["left_out"]}, {"type": "bullets", "items": [f"{s['name'] or s['id']}: {s['reason']}" for s in stored["skipped"]]}]
-    if stored.get("warnings"):
-        blocks += [{"type": "h", "text": t["warnings"]}, {"type": "bullets", "items": stored["warnings"]}]
-    return {"title": t["title"], "subtitle": stored["sheet"], "footer": f"{t['footer']} · {project.get('code', '')}", "page_label": t["page"], "blocks": blocks}
+    return {"title": t["title"], "subtitle": stored["sheet"], "footer": f"{t['footer']} · {project.get('code', '')}", "page_label": t["page"], "blocks": blocks + _findings(stored, rooms, t)}
