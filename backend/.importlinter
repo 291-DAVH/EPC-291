@@ -10,6 +10,7 @@ root_packages =
     epc_lighting
     epc_mld
     epc_plan
+    epc_receptacles
     epc_rules
     epc_sld
     epc_standards
@@ -1044,6 +1045,7 @@ source_modules =
     epc_lighting
     epc_mld
     epc_plan
+    epc_receptacles
     epc_rules
     epc_sld
     epc_standards
@@ -1058,5 +1060,5 @@ type = layers
 layers =
     epc_drawing
     epc_mld | epc_sld
-    epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch | epc_lighting
+    epc_titleblock | epc_symbols | epc_plan | epc_aea90364 | epc_arch | epc_lighting | epc_receptacles
     epc_dxf

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "note": "Generic socket outlets to start from. They are ILLUSTRATIVE: the rating and the power are typical of the kind of outlet, not of a maker. The company and each project replace them with the outlets they use.",
+  "receptacles": {
+    "tug_2x10_t": {"name": {"es": "Tomacorriente 2x10 A + T (IRAM 2071)", "en": "Socket outlet 2x10 A + E (IRAM 2071)"}, "kind": "general", "poles": 2, "rated_a": 10, "power_va": 100, "height_m": 0.3, "ip": "IP20", "illustrative": true},
+    "tug_2x20_t": {"name": {"es": "Tomacorriente 2x20 A + T (IRAM 2071)", "en": "Socket outlet 2x20 A + E (IRAM 2071)"}, "kind": "general", "poles": 2, "rated_a": 20, "power_va": 100, "height_m": 0.3, "ip": "IP20", "illustrative": true},
+    "tug_double": {"name": {"es": "Tomacorriente doble 2x10 A + T", "en": "Double socket outlet 2x10 A + E"}, "kind": "general", "poles": 2, "rated_a": 10, "power_va": 200, "height_m": 0.3, "ip": "IP20", "illustrative": true},
+    "tug_ip54": {"name": {"es": "Tomacorriente 2x10 A + T, IP54", "en": "Socket outlet 2x10 A + E, IP54"}, "kind": "general", "poles": 2, "rated_a": 10, "power_va": 100, "height_m": 0.3, "ip": "IP54", "illustrative": true},
+    "tue_2x20_t": {"name": {"es": "Tomacorriente de uso especial 2x20 A + T", "en": "Special-use socket outlet 2x20 A + E"}, "kind": "special", "poles": 2, "rated_a": 20, "power_va": 2200, "height_m": 1.2, "ip": "IP20", "illustrative": true}
+  }
+}

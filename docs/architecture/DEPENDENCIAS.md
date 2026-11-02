@@ -16,6 +16,7 @@ Cómo leerlo: **Usa** = de qué depende la unidad; **Lo usan** = quién se rompe
 | `lighting` | `aea90364` | `backend.lighting`, `backend.norms` | `backend.app`, `backend.lighting`, `backend.norms` |
 | `mld` | `aea90364`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.lighting`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs`, `drawing` |
 | `plan` | `dxf` | `backend.coordination`, `backend.layout`, `backend.norms` | `backend.app`, `backend.coordination`, `backend.layout`, `backend.lighting`, `backend.norms` |
+| `receptacles` | — | — | — |
 | `rules` | — | `backend.knowledge` | `backend.admin`, `backend.app`, `backend.knowledge` |
 | `sld` | `aea90364`, `dxf`, `symbols`, `titleblock` | `drawing` | `backend.admin`, `backend.app`, `backend.backlog`, `backend.catalogs`, `backend.coordination`, `backend.core`, `backend.deliverables`, `backend.engineering`, `backend.identity`, `backend.intake`, `backend.issuing`, `backend.knowledge`, `backend.layout`, `backend.lighting`, `backend.management`, `backend.masterdata`, `backend.norms`, `backend.projects`, `backend.registers`, `backend.reporting`, `backend.requirements`, `backend.schedule`, `backend.sld`, `backend.wbs`, `drawing` |
 | `standards` | `aea90364` | — | — |
@@ -65,6 +66,7 @@ Lo declarado en `pyproject.toml` frente a lo que el código importa de verdad.
 | `lighting` | — | — | — |
 | `mld` | `lxml` | `epc-aea90364`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `lxml` | — |
 | `plan` | `ezdxf` | `epc-dxf`, `ezdxf` | — |
+| `receptacles` | — | — | — |
 | `rules` | — | — | — |
 | `sld` | `cairosvg`, `lxml`, `openpyxl` | `cairosvg`, `epc-aea90364`, `epc-dxf`, `epc-symbols`, `epc-titleblock`, `lxml`, `openpyxl` | — |
 | `standards` | `jsonschema`, `pypdf`, `pypdfium2` | `jsonschema`, `pillow`, `pypdf`, `pypdfium2` | — |

@@ -23,6 +23,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 - The final phase of a project now governs what is offered: the Issue screen lists only the emissions up to it (IFA = detail, IFC = execution, AS-BUILT = as-built) and the server rejects the others; the management workflow scripts do not prepare, audit, release or issue what comes after it, do not offer the as-built at the next gate, and close the project with the emission of its final phase without asking for an as-built decision.
 
 ### Added
+- Receptacles engine (`epc_receptacles`, ADR-0031): from the use of each room it says how many socket outlets it needs, where they go along the walls, whether the mounting height complies, and the load and circuits; with a catalogue of outlets like the one of the luminaires. The counts per use are typical values to verify in the norms page.
 - "Why this section" in the circuits table (Engineering → Technical data): the ⓘ button of each circuit says what decided its section (the current, the minimum of its kind or the voltage drop) with the figures.
 - Bulk wiring edit: several circuits (or all) can be selected in the circuits table to change their installation, insulation and conductor at once; the board is saved and calculated once.
 - The board is saved and calculated by itself a few seconds after the last change in its data; "Calculate" still does it at once.

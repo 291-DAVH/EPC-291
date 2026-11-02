@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "note": "Settings of the algorithm. The numbers a norm or a catalogue decides (outlets per room, heights) are in data/, not here.",
+  "corner_clearance_m": 0.3,
+  "default_mount_height_m": 0.3,
+  "default_wall_inset_m": 0.0,
+  "max_rooms": 2000,
+  "max_outlets_per_room": 500
+}

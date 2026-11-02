@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "epc_receptacles input",
+  "type": "object",
+  "required": ["rooms"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "receptacles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string"},
+          "kind": {"enum": ["general", "special"]},
+          "poles": {"type": "integer", "minimum": 1},
+          "rated_a": {"type": "number", "exclusiveMinimum": 0},
+          "power_va": {"type": "number", "minimum": 0},
+          "height_m": {"type": "number", "minimum": 0},
+          "ip": {"type": "string"}
+        }
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "length_m", "width_m"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string"},
+          "length_m": {"type": "number", "exclusiveMinimum": 0},
+          "width_m": {"type": "number", "exclusiveMinimum": 0},
+          "use": {"type": "string"},
+          "receptacle": {"type": "string"},
+          "count": {"type": "integer", "minimum": 0},
+          "height_m": {"type": "number", "minimum": 0},
+          "norm": {"enum": ["771", "770"]},
+          "wet": {"type": "boolean"},
+          "positions": {
+            "type": "array",
+            "items": {"type": "object", "required": ["x_m", "y_m"], "properties": {"x_m": {"type": "number"}, "y_m": {"type": "number"}, "z_m": {"type": "number"}, "tag": {"type": "string"}}}
+          }
+        }
+      }
+    }
+  }
+}
