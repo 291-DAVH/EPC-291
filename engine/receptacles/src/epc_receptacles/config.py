@@ -1,6 +1,6 @@
-"""Loads params.json (algorithm settings) and the data catalogues once.
+"""Loads params.json (the settings of the algorithm) and the data of the engine (uses of a room, outlets) once.
 
-The catalogues are read-only: callers must never mutate what `data()` returns.
+What `data()` returns is shared and read-only: a caller that needs to change it copies it first.
 """
 import json
 from functools import lru_cache

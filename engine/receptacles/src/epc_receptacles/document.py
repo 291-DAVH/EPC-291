@@ -53,23 +53,36 @@ def _positions(where: str, value: Any) -> List[Dict[str, Any]]:
     return value
 
 
-def _room(entry: Any, index: int, outlets: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-    where = f"rooms[{index}]"
-    if not isinstance(entry, dict) or not str(entry.get("id", "")).strip():
-        raise ReceptaclesError(f"{where}: each room needs an `id`")
+def _use(where: str, entry: Dict[str, Any]) -> str:
     use = entry.get("use") or "general"
     if use not in data("uses")["uses"]:
         raise ReceptaclesError(f"{where}.use: '{use}' is not a known use ({', '.join(data('uses')['uses'])})")
+    return use
+
+
+def _count(where: str, count: Any) -> Any:
+    """The number of outlets the person fixed: a whole number up to the limit, or nothing."""
+    if count is not None and (isinstance(count, bool) or not isinstance(count, int) or not 0 <= count <= PARAMS["max_outlets_per_room"]):
+        raise ReceptaclesError(f"{where}.count: a whole number from 0 to {PARAMS['max_outlets_per_room']}")
+    return count
+
+
+def _choices(where: str, entry: Dict[str, Any], outlets: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    """What the person chose for the room: the outlet, the section of the norm and a fixed count (each one optional)."""
     outlet = entry.get("receptacle") or ""
     if outlet and outlet not in outlets:
         raise ReceptaclesError(f"{where}.receptacle: '{outlet}' is not among the outlets of the document")
     norm = entry.get("norm") or None
     if norm is not None and norm not in NORMS:
         raise ReceptaclesError(f"{where}.norm: one of {', '.join(NORMS)}")
-    count = entry.get("count")
-    if count is not None and (isinstance(count, bool) or not isinstance(count, int) or not 0 <= count <= PARAMS["max_outlets_per_room"]):
-        raise ReceptaclesError(f"{where}.count: a whole number from 0 to {PARAMS['max_outlets_per_room']}")
-    return {**entry, "id": str(entry["id"]), "name": str(entry.get("name") or entry["id"]), "use": use, "receptacle": outlet, "norm": norm, "count": count,
+    return {"receptacle": outlet, "norm": norm, "count": _count(where, entry.get("count"))}
+
+
+def _room(entry: Any, index: int, outlets: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    where = f"rooms[{index}]"
+    if not isinstance(entry, dict) or not str(entry.get("id", "")).strip():
+        raise ReceptaclesError(f"{where}: each room needs an `id`")
+    return {**entry, "id": str(entry["id"]), "name": str(entry.get("name") or entry["id"]), "use": _use(where, entry), **_choices(where, entry, outlets),
             "length_m": _number(f"{where}.length_m", entry.get("length_m"), 0, MAX_SIDE_M), "width_m": _number(f"{where}.width_m", entry.get("width_m"), 0, MAX_SIDE_M),
             "height_m": _number(f"{where}.height_m", entry.get("height_m"), -1, 5, optional=True), "positions": _positions(where, entry.get("positions")), "wet": entry.get("wet")}
 
