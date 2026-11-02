@@ -207,6 +207,8 @@ export const en = {
     "mgmt.sub.issue": "Issue",
     "rep.sub.reports": "Reports",
     "rep.sub.observations": "Observations",
+    "crit.none": "There are no design criteria loaded for this discipline yet.",
+    "eng.discipline": "Discipline",
     "mgmt.sub.registers": "Registers",
     "eng.sub.files": "Files",
     "eng.sub.criteria": "Design criteria",

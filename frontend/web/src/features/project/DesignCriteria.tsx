@@ -4,12 +4,14 @@ import { ApiError, Badge, CriteriaView, Criterion, Key, Markdown, State, api, us
 const SOURCES = ["client", "standard", "project"] as const;
 
 /** Quick editing of the design criteria of a project (e.g. socket height requested by the client). */
-export default function DesignCriteria({ client, code }: { client: string; code: string }) {
+export default function DesignCriteria({ client, code, discipline }: { client: string; code: string; discipline: string }) {
   const { t, lang } = useI18n();
   const base = `/projects/${client}/${code}/engineering/criteria`;
   const [rev, setRev] = useState(0);
-  const view = useApi<CriteriaView>(`${base}?r=${rev}`);
-  const report = useApi<{ markdown: string }>(`${base}/report?lang=${lang}&r=${rev}`);
+  const of = `discipline=${encodeURIComponent(discipline)}`;                      // the criteria of each discipline are its own
+  const view = useApi<CriteriaView>(`${base}?${of}&r=${rev}`);
+  const report = useApi<{ markdown: string }>(`${base}/report?${of}&lang=${lang}&r=${rev}`);
+  if (view.error && !view.data) return <div className="state">{t("crit.none")}</div>;                // no catalog of criteria for this discipline yet
   if (!view.data) return <State loading={view.loading} error={view.error} />;
   const v = view.data;
   const reload = () => setRev((n) => n + 1);
@@ -19,7 +21,7 @@ export default function DesignCriteria({ client, code }: { client: string; code:
     const g = c.group[lang];
     const head = g !== group ? [<tr key={"g" + g}><td colSpan={5} className="crit-group">{g}</td></tr>] : [];
     group = g;
-    return [...head, <Row key={c.id} c={c} base={base} onSaved={reload} />];
+    return [...head, <Row key={c.id} c={c} base={base} of={of} onSaved={reload} />];
   });
 
   return (
@@ -56,7 +58,7 @@ export default function DesignCriteria({ client, code }: { client: string; code:
   );
 }
 
-function Row({ c, base, onSaved }: { c: Criterion; base: string; onSaved: () => void }) {
+function Row({ c, base, of, onSaved }: { c: Criterion; base: string; of: string; onSaved: () => void }) {
   const { t, lang } = useI18n();
   const [value, setValue] = useState<string>(String(c.value));
   const [source, setSource] = useState<string>(c.overridden ? c.source : "client");
@@ -66,7 +68,7 @@ function Row({ c, base, onSaved }: { c: Criterion; base: string; onSaved: () => 
 
   const send = async (method: "PUT" | "DELETE") => {
     try {
-      await api(`${base}/${c.id}`, { method, headers: { "Content-Type": "application/json" }, body: method === "PUT" ? JSON.stringify({ value: c.type === "number" ? Number(value.replace(",", ".")) : value, source, note }) : undefined });
+      await api(`${base}/${c.id}?${of}`, { method, headers: { "Content-Type": "application/json" }, body: method === "PUT" ? JSON.stringify({ value: c.type === "number" ? Number(value.replace(",", ".")) : value, source, note }) : undefined });
       setErr("");
       onSaved();
     } catch (x) {
