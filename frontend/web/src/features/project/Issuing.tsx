@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api, ApiError, Badge, IssuingView, JSON_HEADERS, Key, State, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, IssuingView, JSON_HEADERS, Key, State, docName, useApi, useI18n } from "@epc/ui";
 
 
 /** Issue engineering outputs to the client: prepare a transmittal (stamped DXF + PDF + workbooks), then confirm it was sent. */
@@ -53,10 +53,10 @@ export default function Issuing({ client, code, onOpenDeliverables }: { client: 
         {v.candidates.length === 0 ? <div className="state">{t("issue.none")}</div> : (
           <table>
             <tbody>
-              {v.candidates.map((c) => (
+              {[...v.candidates].sort((a, b) => a.order - b.order || a.subject.localeCompare(b.subject)).map((c) => (
                 <tr key={c.id}>
-                  <td style={{ width: 28 }}><input type="checkbox" checked={pick.has(c.id)} onChange={() => toggle(c.id)} aria-label={c.name} /></td>
-                  <td><b>{c.name}</b><div className="muted small">{c.discipline} / {c.package}{c.pdf_will_be_rendered ? ` · ${t("issue.pdfRendered")}` : ""}</div></td>
+                  <td style={{ width: 28 }}><input type="checkbox" checked={pick.has(c.id)} onChange={() => toggle(c.id)} aria-label={docName(c, t)} /></td>
+                  <td><b>{docName(c, t)}</b><div className="muted small">{c.discipline} / {c.package}{c.pdf_will_be_rendered ? ` · ${t("issue.pdfRendered")}` : ""}</div></td>
                   <td><Badge>{t(("issue.k." + c.kind) as Key)}</Badge></td>
                   <td>{c.formats.map((f) => <Badge key={f}>.{f}</Badge>)}</td>
                   <td className="muted small">{t("issue.lastIssue")}: {c.last_issue ?? t("issue.never")}</td>

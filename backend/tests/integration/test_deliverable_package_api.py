@@ -94,16 +94,16 @@ class TestDocumentOfADeliverable(unittest.TestCase):
     """The deliverables are shown by document (not by file name) and in the sequence engineering develops them, by discipline."""
 
     def test_the_kind_of_document_and_what_it_is_about_come_from_the_file_name(self):
-        from epc.modules.deliverables.service import document_of
+        from epc.core.documents import document_of
         cases = {"TGBT_MC": ("memo", "TGBT"), "TGBT_SP": ("summary", "TGBT"), "SLD_TGBT": ("sld", "TGBT"), "MLD_TGBT": ("mld", "TGBT"), "PLAN_L0": ("layout", "L0"),
                  "LIGHTING_Sala_1": ("lighting", "Sala_1"), "Planilla de cargas": ("other", "Planilla de cargas")}
         for name, (kind, subject) in cases.items():
-            got = document_of({"name": name, "discipline": "electrical"})
+            got = document_of(name, "electrical")
             self.assertEqual((got["doc_type"], got["subject"]), (kind, subject), name)
 
     def test_the_list_follows_the_discipline_and_then_the_sequence_of_engineering(self):
-        from epc.modules.deliverables.service import document_of
-        order = lambda name, disc: document_of({"name": name, "discipline": disc})["order"]
+        from epc.core.documents import document_of
+        order = lambda name, disc: document_of(name, disc)["order"]
         electrical = [order(n, "electrical") for n in ("TGBT_MC", "TGBT_SP", "LIGHTING_S", "SLD_TGBT", "MLD_TGBT", "PLAN_L0", "Otro")]
         self.assertEqual(electrical, sorted(electrical))
         self.assertLess(order("PLAN_L0", "civil"), order("TGBT_MC", "electrical"))

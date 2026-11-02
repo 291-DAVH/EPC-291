@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from epc.core import clock
+from epc.core.documents import document_of
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.deliverables import public as deliverables
@@ -39,7 +40,7 @@ def candidates(d: Path) -> dict:
         formats = [f for f in c["files"] if f in ok]
         if formats:
             items.append({"id": c["id"], "name": c["name"], "discipline": c["discipline"], "package": c["package"], "kind": c["kind"],
-                          "formats": formats, "pdf_will_be_rendered": c["kind"] == "drawing" and "pdf" not in c["files"], "last_issue": issued.get(c["id"])})
+                          "formats": formats, "pdf_will_be_rendered": c["kind"] == "drawing" and "pdf" not in c["files"], "last_issue": issued.get(c["id"]), **document_of(c["name"], c["discipline"])})
     trs = repository.list_transmittals(d)
     return {"candidates": items, "emissions": projects.emissions_allowed(d), "end_phase": projects.end_phase(d), "next_transmittal": f"TR-{repository.next_transmittal_number(d):03d}",
             "transmittals": [{k: t[k] for k in ("id", "emission", "client_rev", "internal_rev", "status", "created", "sent_on")} | {"items": len(t["items"])} for t in trs]}

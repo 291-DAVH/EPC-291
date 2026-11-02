@@ -1,4 +1,5 @@
 export * from "./api";
+export { docName } from "./docName";
 export { AuthGate, signOut } from "./auth";
 export { default as CompanySignup } from "./CompanySignup";
 export * from "./components";

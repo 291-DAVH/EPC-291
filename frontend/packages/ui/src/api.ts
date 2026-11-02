@@ -158,6 +158,7 @@ export interface BacklogView { items: BacklogItem[]; counts: Record<string, numb
 export interface EngFile {
   path: string; discipline: string; package: string; area: string; name: string; ext: string; what: "diagram" | "document";
   size: number; modified: string; kind: string;
+  doc_type?: string; subject?: string; order?: number;       // the kind of document, what it is about and its place in the sequence of development
 }
 export interface EngOverview { diagrams: EngFile[]; documents: EngFile[]; counts: { diagrams: number; documents: number; by_kind: Record<string, number> } }
 export type EngText =
@@ -241,7 +242,7 @@ export interface ClientRecord { id: string; name: string; tax_id: string; email:
 export interface PersonRecord { id: string; name: string; role: string; registration: string; roles: string[] }
 
 /* ---- issuing (engineering -> deliverables) ---- */
-export interface IssueCandidate { id: string; name: string; discipline: string; package: string; kind: "drawing" | "document"; formats: string[]; pdf_will_be_rendered: boolean; last_issue: string | null }
+export interface IssueCandidate { id: string; name: string; discipline: string; package: string; kind: "drawing" | "document"; formats: string[]; pdf_will_be_rendered: boolean; last_issue: string | null; doc_type: string; subject: string; order: number }
 export interface TransmittalSummary { id: string; emission: string; client_rev: string; internal_rev: string; status: "prepared" | "sent"; created: string; sent_on: string | null; items: number }
 export interface IssuingView { candidates: IssueCandidate[]; emissions: string[]; end_phase?: string; next_transmittal: string; transmittals: TransmittalSummary[] }
 /** What decided the section of a circuit: its current (thermal), the minimum of its kind or the voltage drop. */

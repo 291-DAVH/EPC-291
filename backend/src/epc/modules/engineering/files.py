@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Dict, Optional
 
+from epc.core.documents import document_of
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside
 from epc.modules.engineering import repository
@@ -33,14 +34,14 @@ def _doc(item: dict) -> Optional[dict]:
 
 def overview(d: Path, technical: bool = False) -> dict:
     items = repository.scan(d)
-    diagrams = [{**i, "kind": _kind(i["name"])} for i in items if i["what"] == "diagram"]
+    diagrams = [{**i, "kind": _kind(i["name"]), **document_of(i["name"], i.get("discipline", ""))} for i in items if i["what"] == "diagram"]
     documents = []
     for i in items:
         if i["what"] != "document":
             continue
         doc = _doc(i)
         if doc:
-            documents.append(doc)
+            documents.append({**doc, **document_of(doc["name"], doc.get("discipline", ""))})
         elif technical:
             documents.append({**i, "kind": "technical"})
     return {"diagrams": diagrams, "documents": documents,

@@ -1,14 +1,17 @@
 import { Key, useI18n } from "@epc/ui";
 import Deliverables from "./Deliverables";
+import Issuing from "./Issuing";
+import Parties from "./Parties";
 import Plan from "./Plan";
 import Registers from "./Registers";
 
-const SUBS = ["plan", "deliverables", "registers"] as const;
+const SUBS = ["plan", "team", "issue", "deliverables", "registers"] as const;
+const INTERNAL = ["team", "issue", "registers"];                        // the engineering team and the owner see them; the client sees the plan and what was delivered
 
-/** Management of the project: its plan (schedule and breakdown), its deliverables and its registers (risks, changes, issues, decisions...). The registers are internal work: the engineering team and the owner see them. */
+/** Management of the project: its plan (schedule and breakdown), the team that signs the drawings, the issue of what engineering made (a transmittal), what was delivered and its registers (risks, changes, issues, decisions...). */
 export default function Management({ base, client, code, engineer, sub, onSub }: { base: string; client: string; code: string; engineer: boolean; sub: string; onSub: (x: string) => void }) {
   const { t } = useI18n();
-  const shown = SUBS.filter((x) => x === "plan" || engineer);
+  const shown = SUBS.filter((x) => engineer || !INTERNAL.includes(x));
   const current = shown.find((x) => x === sub) ?? "plan";
   return (
     <>
@@ -18,6 +21,8 @@ export default function Management({ base, client, code, engineer, sub, onSub }:
         </div>
       )}
       {current === "plan" && <Plan base={base} />}
+      {current === "team" && <Parties client={client} code={code} />}
+      {current === "issue" && <Issuing client={client} code={code} onOpenDeliverables={() => onSub("deliverables")} />}
       {current === "deliverables" && <Deliverables base={base} />}
       {current === "registers" && <Registers client={client} code={code} />}
     </>
