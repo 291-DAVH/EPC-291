@@ -95,9 +95,10 @@ def _limits(options: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, Dict[s
 
 
 def _own_va(node: Dict[str, Any]) -> Optional[float]:
-    """The apparent power a load says of itself (a luminaire placed by the lighting calculation carries `attrs.lighting.power_va`, or its `power_w` when its power factor is not known); None when it says nothing,
-    and then the family's typical value is used."""
-    said = (node.get("attrs") or {}).get("lighting") or {}
+    """The apparent power a load says of itself (a luminaire placed by the lighting calculation carries `attrs.lighting.power_va`, or its `power_w` when its power factor is not known; a socket outlet placed
+    by the receptacles calculation carries `attrs.receptacles.power_va`); None when it says nothing, and then the family's typical value is used."""
+    attrs = node.get("attrs") or {}
+    said = {**(attrs.get("receptacles") or {}), **(attrs.get("lighting") or {})}
     for key in ("power_va", "power_w"):
         v = said.get(key)
         if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:

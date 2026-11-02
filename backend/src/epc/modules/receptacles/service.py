@@ -192,6 +192,21 @@ def _engine_room(room: PlanRoomAlias, params: RoomParams, rect, k: float, drawn:
     return body
 
 
+def _rectangle(room: PlanRoomAlias, k: float, out: _Prepared):
+    """The rectangle of a room for the engine, or None (with the reason in `skipped`) when its outline cannot be used."""
+    try:
+        rect = geometry.rectangle(room.points)
+    except geometry.GeometryError as exc:
+        out.skipped.append(_skip(room, str(exc)))
+        return None
+    if max(geometry.to_engine(rect, k)) > MAX_ROOM_M:
+        out.skipped.append(_skip(room, f"the room is longer than {MAX_ROOM_M:g} m: check the scale of the sheet and the outline"))
+        return None
+    if not rect.exact:
+        out.warnings.append(f"room '{room.name or room.id}' is not a rectangle with its sides along the axes: its bounding box was used")
+    return rect
+
+
 def _prepare(body: CalcIn, k: float, outlets: Dict[str, dict]) -> _Prepared:
     out = _Prepared()
     nodes = body.sheet.nodes if body.options.use_drawn else None
@@ -201,20 +216,13 @@ def _prepare(body: CalcIn, k: float, outlets: Dict[str, dict]) -> _Prepared:
         if why:
             out.skipped.append(_skip(room, why))
             continue
-        try:
-            rect = geometry.rectangle(room.points)
-        except geometry.GeometryError as exc:
-            out.skipped.append(_skip(room, str(exc)))
-            continue
-        if max(geometry.to_engine(rect, k)) > MAX_ROOM_M:
-            out.skipped.append(_skip(room, f"the room is longer than {MAX_ROOM_M:g} m: check the scale of the sheet and the outline"))
+        rect = _rectangle(room, k, out)
+        if rect is None:
             continue
         drawn = _drawn(nodes, room.points, rect, k) if nodes is not None else None
         if drawn is not None and not drawn:
             out.skipped.append(_skip(room, "there are no outlets drawn in this room: apply the outlets to the plan first"))
             continue
-        if not rect.exact:
-            out.warnings.append(f"room '{room.name or room.id}' is not a rectangle with its sides along the axes: its bounding box was used")
         out.rects[room.id] = rect
         out.rooms.append(_engine_room(room, params, rect, k, drawn))
     return out

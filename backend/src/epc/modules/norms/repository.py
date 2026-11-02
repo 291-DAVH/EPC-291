@@ -28,7 +28,8 @@ def paths() -> dict:
     from epc_aea90364 import aea_rules, aea_tables, norm_data
     from epc_lighting import norm_data as lighting_norms
     from epc_plan import core as plan_core
-    return {"plan_values": Path(plan_core.TYPICAL), "rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG,
+    from epc_receptacles import config as receptacles_config
+    return {"plan_values": Path(plan_core.TYPICAL), "receptacle_values": Path(receptacles_config.USES), "rules": Path(aea_rules.CARPETA), "tables": Path(aea_tables.RUTA_JSON), "criteria": norm_data.criteria_file("electrical"), "review": norm_data.REVIEW, "log": norm_data.REVIEW_LOG,
             "lighting_rules": lighting_norms.RULES_DIR}
 
 
@@ -104,7 +105,7 @@ def log_read(point_id: Optional[str] = None, limit: int = 100) -> List[dict]:
     return rows[-limit:][::-1]
 
 
-_ENGINE_CACHES = (("epc_aea90364.aea_rules", "limpiar_cache_reglas"), ("epc_aea90364.aea_tables", "limpiar_cache_tablas"), ("epc_lighting.norm_data", "clear_cache"), ("epc_plan.core", "reload_params"))
+_ENGINE_CACHES = (("epc_aea90364.aea_rules", "limpiar_cache_reglas"), ("epc_aea90364.aea_tables", "limpiar_cache_tablas"), ("epc_lighting.norm_data", "clear_cache"), ("epc_plan.core", "reload_params"), ("epc_receptacles.config", "clear_cache"))
 
 
 def _clear(module: str, function: str) -> None:

@@ -3,7 +3,7 @@ import re
 from typing import Dict
 
 # The kinds of document in the order engineering develops them (the calculation first, the drawings that come from it after), and the disciplines in the order they usually work.
-DOC_TYPES = (("memo", r"(.+)[_-]MC"), ("summary", r"(.+)[_-]SP"), ("lighting", r"LIGHTING[_-](.+)"), ("sld", r"SLD[_-](.+)"), ("mld", r"MLD[_-](.+)"), ("layout", r"PLAN[_-](.+)"))
+DOC_TYPES = (("memo", r"(.+)[_-]MC"), ("summary", r"(.+)[_-]SP"), ("lighting", r"LIGHTING[_-](.+)"), ("receptacles", r"RECEPTACLES[_-](.+)"), ("sld", r"SLD[_-](.+)"), ("mld", r"MLD[_-](.+)"), ("layout", r"PLAN[_-](.+)"))
 DISCIPLINE_ORDER = ("civil", "mechanical", "electrical", "instrumentation", "hvac", "fire", "telecom")
 
 

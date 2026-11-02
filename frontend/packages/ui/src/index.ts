@@ -18,4 +18,5 @@ export { Gantt } from "./plan/Gantt";
 export { LayersEditor } from "./catalogs/LayersEditor";
 export { SolutionsEditor } from "./catalogs/SolutionsEditor";
 export { LuminairesEditor } from "./catalogs/LuminairesEditor";
+export { ReceptaclesEditor } from "./catalogs/ReceptaclesEditor";
 export { Icon } from "./icons";

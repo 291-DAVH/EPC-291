@@ -8,6 +8,9 @@ import DesignPanel from "./DesignPanel";
 import { useAutoDesign } from "./useAutoDesign";
 import LayersPanel from "./LayersPanel";
 import LightingPanel from "./LightingPanel";
+import ReceptaclesPanel from "./ReceptaclesPanel";
+import { marksOf as receptacleMarks } from "./receptaclesApi";
+import { useReceptacles } from "./useReceptacles";
 import type { CompareRow } from "./LightingExtras";
 import { setRoomLighting } from "./lightingApi";
 import { setSetting } from "./lightingTools";
@@ -28,7 +31,7 @@ interface Overview { levels: Sheet[]; plenums: PlenumDef[]; profiles: Profile[];
 interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
-type Panel = "props" | "plans" | "design" | "lighting" | "warnings" | "coord" | "layers" | "history";
+type Panel = "props" | "plans" | "design" | "lighting" | "receptacles" | "warnings" | "coord" | "layers" | "history";
 
 const SNAP_TOL_M = 0.15;                                                       // what the engine joins as one point (params.json, geometry.snap_tolerance_m)
 
@@ -169,6 +172,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => send(next), 700);                    // saved a moment after the last change
   };
+  const rec = useReceptacles({ client, code, lang, drawing, onChange: change, sheet: level });
   const createSheet = async (name: string, discipline = "arquitectura", planName = "", subdiscipline = "") => {
     try { await api(`${root}/${name}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify({ ...blank(discipline), plan_name: planName, subdiscipline }) }); setRev((n) => n + 1); setLevel(name); } catch (x) { setErr(errorText(x)); }
   };
@@ -385,7 +389,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const ago = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
   const tabs: { id: Panel; label: string; icon: string; badge?: number }[] = [
     { id: "props", label: tl("layout.tab.props"), icon: "select", badge: selection.length }, { id: "plans", label: tl("plan.plans"), icon: "file", badge: plansHere.length > 1 ? plansHere.length : 0 }, { id: "warnings", label: tl("layout.tab.warnings"), icon: "warn", badge: warnings.length },
-    { id: "design", label: tl("design.tab"), icon: "star" }, ...(discipline === "electrica_BT" ? [{ id: "lighting" as Panel, label: tl("light.tab"), icon: "sun" }] : []), { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
+    { id: "design", label: tl("design.tab"), icon: "star" }, ...(discipline === "electrica_BT" ? [{ id: "lighting" as Panel, label: tl("light.tab"), icon: "sun" }, { id: "receptacles" as Panel, label: tl("rec.tab"), icon: "node" }] : []), { id: "layers", label: tl("layers.tab"), icon: "layers" }, { id: "coord", label: tl("coord.tab"), icon: "clash", badge: coord.count }, { id: "history", label: tl("plan.history"), icon: "history" },
   ];
   const boardNodes = drawing.nodes.filter((n) => (profile?.nodes ?? []).some((k) => k.id === n.kind && k.atributos?.includes("tablero")));
   const boardNode = boardNodes.find((n) => n.id === designBoard) ?? boardNodes[0];          // the board symbol the design starts from
@@ -465,7 +469,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
             underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
-            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={[...marksOf(lighting), ...emergencyMarksOf(lighting)]} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
+            allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={[...marksOf(lighting), ...emergencyMarksOf(lighting), ...receptacleMarks(rec.proposal)]} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}
             onCopyLevels={(c) => { setCopying(c); setTargets([]); }} onNewPin={(at) => { setPinAt(at); setPinText(""); }} onReserve={reserve} onTemplateSave={saveTemplate} pendingClip={clip} onClipUsed={() => setClip(null)} />
           <aside className="wb-side" aria-label={tl("layout.panel")}>
@@ -485,6 +489,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
               {panel === "warnings" && <WarningsPanel warnings={warnings} onJump={jump} tl={tl} />}
               {panel === "plans" && <PlansPanel discipline={profName(discipline)} plans={plansHere} current={level} canWrite={write} subdisciplines={subs.map((x) => ({ id: x.id, name: x.name[lang] ?? x.name.es }))} currentSub={drawing.subdiscipline ?? ""} onSub={setSubdiscipline} onOpen={setLevel} onAdd={addPlan} onRename={renamePlan} onDelete={deleteSheet} />}
               {panel === "lighting" && <LightingPanel drawing={drawing} options={lightOptions.data ?? undefined} proposal={lighting} busy={lightBusy} canWrite={write} onChange={change} onCalc={() => calcLighting()} showMap={lightMap} onMap={(on) => { change(setSetting(drawing, "map", on)); if (lighting) calcLighting(on); }} onVerify={verifyLighting} compare={lightCompare} onCompare={compareLight} onUse={useLuminaire} onCloseCompare={() => setLightCompare(null)} studyError={studyError || (study.error ? tl("light.studyError") + " " + String(study.error) : "")} onApply={applyLight} applied={lightApplied} study={study.data ?? undefined} reported={reported} onDiscard={() => setLighting(null)} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} />}
+              {panel === "receptacles" && <ReceptaclesPanel drawing={drawing} options={rec.options} proposal={rec.proposal} busy={rec.busy} canWrite={write} error={rec.error} applied={rec.applied} onChange={change} onCalc={() => rec.calc()} onVerify={() => rec.calc(true)} onApply={rec.apply} onLook={(at) => look(undefined, undefined, at)} />}
               {panel === "design" && <DesignPanel drawing={drawing} profile={profile} proposal={proposal} runs={runs} busy={designBusy} canWrite={write} limitsOverride={limits} onLimits={setLimits} onProposeRuns={proposeRuns} onApplyRuns={applyDesignRuns} onDiscardRuns={() => setRuns(null)} onPropose={proposeWiring} onApply={applyDesign} onDiscard={() => setProposal(null)}
                 boards={boardNodes.map((n) => ({ id: n.id, name: n.tag || n.id }))} board={boardNode?.id ?? ""} onBoard={setDesignBoard} onChange={change} onNewRoom={() => setRoomRequest((n) => n + 1)} onLook={(at) => look(undefined, undefined, at)} derived={dp} />}
               {panel === "layers" && <LayersPanel client={client} code={code} rev={rev} current={discipline} prefs={prefs} setPrefs={setPrefs} counts={layerCounts} />}

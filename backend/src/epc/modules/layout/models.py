@@ -47,6 +47,7 @@ class RoomIn(BaseModel):
     name: str = ""
     points: List[List[float]] = Field(min_length=3)
     lighting: Optional[Dict[str, Any]] = None        # what the person says about its lighting (activity, luminaire, method...): the lighting panel reads it, the engine never does
+    receptacles: Optional[Dict[str, Any]] = None     # what the person says about its socket outlets (use, outlet, count, height...): the receptacles panel reads it, the engine never does
 
 
 class DrawingIn(BaseModel):

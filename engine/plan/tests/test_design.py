@@ -200,6 +200,13 @@ class TestWiring(unittest.TestCase):
         luminaires[1]["attrs"] = {"lighting": {"power_w": 36, "power_va": -1}}                      # not a power: the watts are taken
         self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [76.0])
 
+    def test_a_socket_outlet_that_says_its_power_brings_it(self):
+        d = self.drawn([BOARD, *lights(ROOMS[0], 3, "TG", "t")])
+        for n, va in zip([n for n in d["nodes"] if n["kind"] == "TG"], (150, 150, None)):
+            if va is not None:
+                n["attrs"] = {"receptacles": {"power_va": va}}
+        self.assertEqual([c["va"] for c in design.propose_wiring(d, ROOMS)["circuits"]], [400.0])        # 150 + 150 + the 100 VA typical of the third one
+
     def test_a_power_that_is_not_a_positive_number_is_not_taken(self):
         d = self.drawn([BOARD, *lights(ROOMS[0], 2)])
         luminaires = [n for n in d["nodes"] if n["kind"] == "LU"]
