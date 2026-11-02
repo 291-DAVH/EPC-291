@@ -207,6 +207,8 @@ export const es = {
     "mgmt.sub.issue": "Emitir",
     "rep.sub.reports": "Informes",
     "rep.sub.observations": "Observaciones",
+    "crit.none": "Todavía no hay criterios de diseño cargados para esta disciplina.",
+    "eng.discipline": "Disciplina",
     "mgmt.sub.registers": "Registros",
     "eng.sub.files": "Archivos",
     "eng.sub.criteria": "Criterios de diseño",

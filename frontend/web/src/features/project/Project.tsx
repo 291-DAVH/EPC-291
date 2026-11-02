@@ -74,7 +74,7 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Management base={base} client={client} code={code} engineer={engineer} sub={sub} onSub={goSub} />}
-      {tab === "engineering" && <Engineering client={client} code={code} onOpenTeam={() => go("plan", { sub: "team" })} sub={sub} onSub={goSub} canWrite={can("workspace", "write")} />}
+      {tab === "engineering" && <Engineering client={client} code={code} disciplines={d.disciplines} onOpenTeam={() => go("plan", { sub: "team" })} sub={sub} onSub={goSub} canWrite={can("workspace", "write")} />}
       {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
       {tab === "requirements" && <Requirements canWrite={canWrite} base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}
       {tab === "reports" && <Reports base={base} go={go} engineer={engineer} client={client} code={code} sub={sub} onSub={goSub} can={can} />}
