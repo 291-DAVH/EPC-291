@@ -58,6 +58,15 @@ def dist_point_segment(p: Pt, a: Pt, b: Pt) -> float:
     return math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy))
 
 
+def segment_distance(a: Pt, b: Pt, c: Pt, d: Pt) -> float:
+    """Smallest distance between two segments (zero when they cross)."""
+    def side(p: Pt, q: Pt, r: Pt) -> float:
+        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+    if side(a, b, c) * side(a, b, d) < 0 and side(c, d, a) * side(c, d, b) < 0:
+        return 0.0
+    return min(dist_point_segment(a, c, d), dist_point_segment(b, c, d), dist_point_segment(c, a, b), dist_point_segment(d, a, b))
+
+
 def dist_point_line(p: Pt, a: Pt, b: Pt) -> float:
     """Distance from a point to the infinite line through a and b."""
     n = seg_length(a, b)

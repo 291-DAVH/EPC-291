@@ -1,0 +1,206 @@
+{
+ "schema_version": "1.0",
+ "unidades": "cm",
+ "simbolos": [
+  {
+   "nombre": "cama-individual",
+   "categoria": "dormitorio",
+   "ancho_cm": 90,
+   "alto_cm": 200,
+   "archivo": "svg/cama-individual.svg",
+   "descripcion": "Cama individual 0,90 x 2,00 m, cabecera arriba."
+  },
+  {
+   "nombre": "cama-matrimonial",
+   "categoria": "dormitorio",
+   "ancho_cm": 160,
+   "alto_cm": 200,
+   "archivo": "svg/cama-matrimonial.svg",
+   "descripcion": "Cama matrimonial 1,60 x 2,00 m con dos almohadas."
+  },
+  {
+   "nombre": "cama-king",
+   "categoria": "dormitorio",
+   "ancho_cm": 200,
+   "alto_cm": 200,
+   "archivo": "svg/cama-king.svg",
+   "descripcion": "Cama king 2,00 x 2,00 m."
+  },
+  {
+   "nombre": "placard",
+   "categoria": "dormitorio",
+   "ancho_cm": 180,
+   "alto_cm": 60,
+   "archivo": "svg/placard.svg",
+   "descripcion": "Placard / ropero de 1,80 x 0,60 m con tres puertas."
+  },
+  {
+   "nombre": "escritorio",
+   "categoria": "dormitorio",
+   "ancho_cm": 120,
+   "alto_cm": 111,
+   "archivo": "svg/escritorio.svg",
+   "descripcion": "Escritorio de 1,20 x 0,60 m con cajonera y silla."
+  },
+  {
+   "nombre": "sofa-3",
+   "categoria": "estar",
+   "ancho_cm": 200,
+   "alto_cm": 90,
+   "archivo": "svg/sofa-3.svg",
+   "descripcion": "Sofá de tres cuerpos 2,00 x 0,90 m."
+  },
+  {
+   "nombre": "sofa-2",
+   "categoria": "estar",
+   "ancho_cm": 150,
+   "alto_cm": 90,
+   "archivo": "svg/sofa-2.svg",
+   "descripcion": "Sofá de dos cuerpos 1,50 x 0,90 m."
+  },
+  {
+   "nombre": "sillon",
+   "categoria": "estar",
+   "ancho_cm": 90,
+   "alto_cm": 90,
+   "archivo": "svg/sillon.svg",
+   "descripcion": "Sillón individual 0,90 x 0,90 m."
+  },
+  {
+   "nombre": "mueble-tv",
+   "categoria": "estar",
+   "ancho_cm": 160,
+   "alto_cm": 40,
+   "archivo": "svg/mueble-tv.svg",
+   "descripcion": "Mueble de TV de 1,60 x 0,40 m."
+  },
+  {
+   "nombre": "mesa-comedor-6",
+   "categoria": "comedor",
+   "ancho_cm": 260,
+   "alto_cm": 190,
+   "archivo": "svg/mesa-comedor-6.svg",
+   "descripcion": "Mesa rectangular 1,60 x 0,90 m con seis sillas."
+  },
+  {
+   "nombre": "mesa-comedor-4",
+   "categoria": "comedor",
+   "ancho_cm": 220,
+   "alto_cm": 190,
+   "archivo": "svg/mesa-comedor-4.svg",
+   "descripcion": "Mesa rectangular 1,20 x 0,90 m con cuatro sillas."
+  },
+  {
+   "nombre": "mesa-redonda-4",
+   "categoria": "comedor",
+   "ancho_cm": 200,
+   "alto_cm": 200,
+   "archivo": "svg/mesa-redonda-4.svg",
+   "descripcion": "Mesa redonda de 0,90 m con cuatro sillas."
+  },
+  {
+   "nombre": "silla",
+   "categoria": "comedor",
+   "ancho_cm": 45,
+   "alto_cm": 53,
+   "archivo": "svg/silla.svg",
+   "descripcion": "Silla de comedor 0,45 m."
+  },
+  {
+   "nombre": "inodoro",
+   "categoria": "bano",
+   "ancho_cm": 50,
+   "alto_cm": 70,
+   "archivo": "svg/inodoro.svg",
+   "descripcion": "Inodoro con depósito, 0,50 x 0,70 m."
+  },
+  {
+   "nombre": "lavabo",
+   "categoria": "bano",
+   "ancho_cm": 60,
+   "alto_cm": 45,
+   "archivo": "svg/lavabo.svg",
+   "descripcion": "Lavabo de 0,60 x 0,45 m."
+  },
+  {
+   "nombre": "banera",
+   "categoria": "bano",
+   "ancho_cm": 170,
+   "alto_cm": 70,
+   "archivo": "svg/banera.svg",
+   "descripcion": "Bañera de 1,70 x 0,70 m."
+  },
+  {
+   "nombre": "ducha",
+   "categoria": "bano",
+   "ancho_cm": 90,
+   "alto_cm": 90,
+   "archivo": "svg/ducha.svg",
+   "descripcion": "Receptáculo de ducha de 0,90 x 0,90 m."
+  },
+  {
+   "nombre": "cocina-4-hornallas",
+   "categoria": "cocina",
+   "ancho_cm": 60,
+   "alto_cm": 60,
+   "archivo": "svg/cocina-4-hornallas.svg",
+   "descripcion": "Cocina de cuatro hornallas, 0,60 x 0,60 m."
+  },
+  {
+   "nombre": "heladera",
+   "categoria": "cocina",
+   "ancho_cm": 70,
+   "alto_cm": 70,
+   "archivo": "svg/heladera.svg",
+   "descripcion": "Heladera de 0,70 x 0,70 m."
+  },
+  {
+   "nombre": "mesada-fregadero",
+   "categoria": "cocina",
+   "ancho_cm": 150,
+   "alto_cm": 60,
+   "archivo": "svg/mesada-fregadero.svg",
+   "descripcion": "Mesada con pileta doble y escurridor, 1,50 x 0,60 m."
+  },
+  {
+   "nombre": "escalera-recta",
+   "categoria": "circulacion",
+   "ancho_cm": 90,
+   "alto_cm": 270,
+   "archivo": "svg/escalera-recta.svg",
+   "descripcion": "Escalera recta de 0,90 m de ancho, 14 escalones, con flecha de subida."
+  },
+  {
+   "nombre": "puerta-batiente",
+   "categoria": "abertura",
+   "ancho_cm": 90,
+   "alto_cm": 100,
+   "archivo": "svg/puerta-batiente.svg",
+   "descripcion": "Puerta batiente de 0,90 m con arco de giro y hoja (lo que el motor reconoce como puerta)."
+  },
+  {
+   "nombre": "ventana",
+   "categoria": "abertura",
+   "ancho_cm": 120,
+   "alto_cm": 12,
+   "archivo": "svg/ventana.svg",
+   "descripcion": "Ventana de 1,20 m: dos trazos entre las caras del muro."
+  },
+  {
+   "nombre": "arbol",
+   "categoria": "exterior",
+   "ancho_cm": 200,
+   "alto_cm": 200,
+   "archivo": "svg/arbol.svg",
+   "descripcion": "Árbol en planta, copa de 2,00 m."
+  },
+  {
+   "nombre": "auto",
+   "categoria": "exterior",
+   "ancho_cm": 180,
+   "alto_cm": 450,
+   "archivo": "svg/auto.svg",
+   "descripcion": "Auto en planta (garaje), 1,80 x 4,50 m."
+  }
+ ]
+}

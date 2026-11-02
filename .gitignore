@@ -36,3 +36,7 @@ _out/
 *.tmp
 Thumbs.db
 *.egg-info/
+
+# Architecture engine: training samples (third-party plans and books) and what the scripts generate from them
+/engine/arch/samples/
+/engine/arch/out/

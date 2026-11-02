@@ -4,9 +4,10 @@ import math
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
-from epc_arch.geometry import angle_gap, arc_point, arc_span, axis_of, dist_point_line, dist_point_segment, seg_angle, seg_length
+from epc_arch.geometry import angle_gap, arc_point, arc_span, axis_of, dist_point_line, dist_point_segment, seg_angle, seg_length, segment_distance
 from epc_arch.model import Arc, Block, Line, Opening, Primitives, Wall
 from epc_arch.recognizers import Context
+from epc_arch.recognizers.swings import doors_at_wall_ends
 
 Pt = Tuple[float, float]
 
@@ -20,6 +21,7 @@ class Gap:
     t0: float
     t1: float
     wall: str
+    at_end: bool = False                  # between the end of a wall and a wall across it: only a door or a window there is taken, not an empty gap
 
 
 def _wall_axis(w: Wall):
@@ -67,6 +69,47 @@ def find_gaps(walls: List[Wall], T: float, ctx: Context) -> List[Gap]:
         for (_, e0, wid), (s1, _, _) in zip(spans, spans[1:]):
             if lo <= s1 - e0 <= hi:
                 out.append(Gap(ax.at((e0 + s1) / 2, off), s1 - e0, theta, off, e0, s1, wid))
+    return out + end_gaps(walls, T, ctx)
+
+
+def end_gaps(walls: List[Wall], T: float, ctx: Context) -> List[Gap]:
+    """Where a wall stops a door's width short of a wall that crosses its line: the door or window is between the end of the one and the face of the other (at a corner or a T, which is where
+    most doors of a plan are)."""
+    lo, hi = opening_range(T, ctx)
+    tol = ctx.params["walls"]["angle_tolerance_deg"]
+    out: List[Gap] = []
+    for w in walls:
+        theta, ax, off, t0, t1 = _wall_axis(w)
+        for t_end, sign in ((t1, 1.0), (t0, -1.0)):
+            nearest: Optional[float] = None
+            goes_on = False
+            for q in walls:
+                if q is w:
+                    continue
+                qtheta, qax, qoff, q0, q1 = _wall_axis(q)
+                gap_angle = angle_gap(qtheta, theta)
+                if gap_angle <= tol:
+                    ahead = q0 - t_end if sign > 0 else t_end - q1
+                    if abs(qoff - off) <= 0.5 * T and -0.5 * T <= ahead < hi:                  # the line of wall goes on: that gap is found as an ordinary one
+                        goes_on = True
+                        break
+                    continue
+                if gap_angle < 60.0:
+                    continue
+                den = ax.ux * qax.nx + ax.uy * qax.ny                                       # how fast the position across the other wall changes along this one
+                if abs(den) < 1e-9:
+                    continue
+                t_hit = t_end + (qoff - qax.o(ax.at(t_end, off))) / den                    # where this wall's axis meets the other wall's axis
+                if not q0 - 0.5 * T <= qax.t(ax.at(t_hit, off)) <= q1 + 0.5 * T:
+                    continue
+                face = (t_hit - t_end) * sign - q.thickness / 2                             # from this wall's end to the near face of the other
+                if face > -0.25 * T and (nearest is None or face < nearest):
+                    nearest = face
+            if goes_on or nearest is None or not lo <= nearest <= hi:
+                continue
+            width = nearest
+            a, b = (t_end, t_end + width) if sign > 0 else (t_end - width, t_end)
+            out.append(Gap(ax.at((a + b) / 2, off), width, theta, off, a, b, w.id, True))
     return out
 
 
@@ -115,7 +158,8 @@ def _door_from_arc(a: Arc, walls: List[Wall], index: LineIndex, T: float, ctx: C
     at = ((a.c[0] + on_wall[0]) / 2, (a.c[1] + on_wall[1]) / 2)
     angle = seg_angle(wall.a, wall.b) if wall else seg_angle(a.c, on_wall)
     reason = "arc and leaf" if leaf else "arc"
-    return Opening("", "door", at, a.r, angle, wall.id if wall else "", conf["door_arc_gap_leaf"] if leaf else conf["door_arc_only"], reason, hinge=a.c, swing=on_wall if on_wall != leaf else None)
+    in_room = e1 if on_wall == e0 else e0                                                           # the free end of the open leaf: where the swing reaches into the room
+    return Opening("", "door", at, a.r, angle, wall.id if wall else "", conf["door_arc_gap_leaf"] if leaf else conf["door_arc_only"], reason, hinge=a.c, swing=in_room)
 
 
 def door_arcs(prims: Primitives, T: float, ctx: Context) -> List[Arc]:
@@ -149,14 +193,31 @@ def _window_evidence(g: Gap, lines: List[Line], T: float, ctx: Context) -> int:
     return len(seen)
 
 
-def _opening_from_gap(g: Gap, lines: List[Line], T: float, ctx: Context) -> Opening:
+def on_the_outside(g: Gap, walls: List[Wall], T: float) -> bool:
+    """Does one side of the gap look out of the building: a line drawn across the wall from the gap reaches past all the walls without meeting another?"""
+    xs = [c for w in walls for c in (w.a[0], w.b[0])]
+    ys = [c for w in walls for c in (w.a[1], w.b[1])]
+    reach = math.hypot(max(xs) - min(xs), max(ys) - min(ys)) + T
+    ax = axis_of(g.theta)
+    for s in (1.0, -1.0):
+        start = (g.at[0] + ax.nx * s * T, g.at[1] + ax.ny * s * T)
+        end = (g.at[0] + ax.nx * s * reach, g.at[1] + ax.ny * s * reach)
+        if not any(segment_distance(start, end, w.a, w.b) <= 0.25 * T for w in walls):
+            return True
+    return False
+
+
+def _opening_from_gap(g: Gap, lines: List[Line], walls: List[Wall], T: float, ctx: Context) -> Opening:
+    """What lies in a gap. Windows are in the walls that face outside (every sample plan agrees): thin lines across a gap between two rooms are a sill, a sliding door or a piece of
+    furniture, and the gap is a plain opening."""
     conf, cfg = ctx.params["confidence"], ctx.params["windows"]
     n = _window_evidence(g, lines, T, ctx)
-    if n >= cfg["min_lines"]:
+    outside = on_the_outside(g, walls, T)
+    if n >= cfg["min_lines"] and outside:
         return Opening("", "window", g.at, g.width, g.theta, g.wall, conf["window_lines"], f"{n} lines across the gap")
-    if n == 1:
+    if n == 1 and outside:
         return Opening("", "window", g.at, g.width, g.theta, g.wall, conf["window_one_line"], "1 line across the gap")
-    return Opening("", "opening", g.at, g.width, g.theta, g.wall, conf["opening_gap"], "gap in the wall")
+    return Opening("", "opening", g.at, g.width, g.theta, g.wall, conf["opening_gap"], "gap in the wall" if not n else f"gap between rooms ({n} lines across)")
 
 
 def _from_gap_with_door(door: Opening, g: Gap) -> Opening:
@@ -193,6 +254,21 @@ def _number(found: List[Opening], T: float) -> List[Opening]:
     return out
 
 
+def _alike(doors: List[Opening], T: float, ctx: Context) -> List[Opening]:
+    """The doors of one plan are of a few standard widths (0.70 to 1.00 m): a swing far wider or narrower than the usual one of the plan is a curve of furniture, a planter or a car.
+    With few doors, the usual width is the one the sample plans agree on, a few wall thicknesses."""
+    if not doors:
+        return doors
+    cfg = ctx.params["swings"]
+    if len(doors) >= 3:
+        lo, hi = cfg["width_spread"]
+        usual = sorted(d.width for d in doors)[len(doors) // 2]
+    else:                                                                     # few doors: a looser band around the usual width (a thin partition makes a door many thicknesses wide)
+        lo, hi = cfg["width_spread_few"]
+        usual = cfg["usual_width_in_walls"] * T
+    return [d for d in doors if lo * usual <= d.width <= hi * usual]
+
+
 def recognize_openings(prims: Primitives, walls: List[Wall], T: float, ctx: Context) -> List[Opening]:
     gaps = find_gaps(walls, T, ctx)
     index = LineIndex(prims.lines, T)
@@ -206,6 +282,15 @@ def recognize_openings(prims: Primitives, walls: List[Wall], T: float, ctx: Cont
         else:
             used.add(i)
             found.append(_from_gap_with_door(d, gaps[i]))
-    found += [_opening_from_gap(g, prims.lines, T, ctx) for i, g in enumerate(gaps) if i not in used]
+    if prims.ink is not None:                                                  # a picture: each door is looked for where it hinges, at a wall end; the gap it stands in is then taken
+        candidates = doors_at_wall_ends(prims, walls, T, ctx)
+        if prims.faint is not None:                                           # swings drawn in a pale grey: looked for again among every mark on the paper
+            candidates += doors_at_wall_ends(Primitives(**{**prims.__dict__, "ink": prims.faint}), walls, T, ctx)
+        for d in _alike(_dedupe(candidates, T, ctx), T, ctx):
+            found.append(d)
+            for i, g in enumerate(gaps):
+                if i not in used and math.hypot(g.at[0] - d.at[0], g.at[1] - d.at[1]) <= 0.6 * max(g.width, d.width):
+                    used.add(i)
+    found += [o for i, g in enumerate(gaps) if i not in used for o in [_opening_from_gap(g, prims.lines, walls, T, ctx)] if not (g.at_end and o.kind == "opening")]
     found += [_from_block(b, kind, walls, T, ctx) for b in prims.blocks for kind in [ctx.hints.of(b.name)] if kind in ("door", "window")]
     return _number(_dedupe(found, T, ctx), T)

@@ -69,7 +69,7 @@ class TestDxf(unittest.TestCase):
         r = recognize(helpers.room_dxf(layer="MUROS", extra=[furniture]), "f.dxf")
         self.assertEqual(counts(r)["walls"], 6)
 
-    def test_the_svg_has_one_group_per_kind_of_element_in_the_frame_of_the_plan(self):
+    def test_the_svg_has_one_group_per_kind_of_element_framed_on_the_building(self):
         r = recognize(helpers.room_dxf(), "flat.dxf")
         root = ET.fromstring(r.svg)
         ns = "{http://www.w3.org/2000/svg}"
@@ -77,9 +77,20 @@ class TestDxf(unittest.TestCase):
         self.assertEqual(set(groups) & {"ARQ-FONDO", "ARQ-MUROS", "ARQ-PUERTAS", "ARQ-VENTANAS", "ARQ-HUECOS"}, {"ARQ-FONDO", "ARQ-MUROS", "ARQ-PUERTAS", "ARQ-VENTANAS", "ARQ-HUECOS"})
         self.assertEqual(len(list(groups["ARQ-MUROS"])), 6)
         self.assertEqual(len(list(groups["ARQ-PUERTAS"])), 1)
-        self.assertEqual([float(v) for v in root.get("viewBox").split()], [0.0, 0.0, float(root.get("width")), float(root.get("height"))])
+        vx, vy, vw, vh = (float(v) for v in root.get("viewBox").split())
+        self.assertEqual((vw, vh), (float(root.get("width")), float(root.get("height"))))     # one unit of the SVG is one unit of the plan space
+        for w in r.architecture.walls:                                                        # framed on the building: every wall is inside
+            for x, y in (w.a, w.b):
+                self.assertTrue(vx <= x <= vx + vw and vy <= y <= vy + vh)
         no_bg = ET.fromstring(recognize(helpers.room_dxf(), "flat.dxf", Options(background=False)).svg)
         self.assertNotIn("ARQ-FONDO", {g.get("id") for g in no_bg.iter(f"{ns}g")})
+
+    def test_the_walls_with_their_door_and_window_shut_close_one_room_with_its_area(self):
+        a = recognize(helpers.room_dxf(), "flat.dxf").architecture
+        self.assertEqual(len(a.rooms), 1)
+        inner = (helpers.W - 2 * helpers.T) * (helpers.H - 2 * helpers.T)
+        self.assertAlmostEqual(a.rooms[0].area_m2, inner, delta=0.08 * inner)
+        self.assertIn("ARQ-AMBIENTES", recognize(helpers.room_dxf(), "flat.dxf").svg)
 
     def test_a_flat_turned_to_any_angle_is_the_same_flat(self):
         for angle in (30.0, 90.0, 137.0):
@@ -148,6 +159,71 @@ class TestImage(unittest.TestCase):
         self.assertEqual((c["windows"], c["openings"], c["doors"]), (1, 1, 0))             # an image has no door arcs: the door is an opening
         self.assertAlmostEqual(r.architecture.wall_thickness, 12.0, delta=2.0)
         self.assertTrue(any("horizontal and vertical" in w for w in r.architecture.warnings))
+
+    def test_a_door_swing_drawn_in_the_picture_makes_the_gap_a_door(self):
+        r = recognize(helpers.room_png(swing=True), "flat.png")
+        c = counts(r)
+        self.assertEqual((c["doors"], c["openings"], c["windows"]), (1, 0, 1))
+        door = next(o for o in r.architecture.openings if o.kind == "door")
+        self.assertIsNotNone(door.hinge)
+        self.assertIsNotNone(door.swing)
+        self.assertAlmostEqual(door.width, (helpers.DOOR[1] - helpers.DOOR[0]) * 150, delta=15)
+        self.assertLess(door.swing[1], door.hinge[1])                                       # the leaf opens into the room (up the picture)
+
+    def test_light_strokes_on_a_dark_ground_are_read_as_a_blueprint(self):
+        r = recognize(helpers.room_png(invert=True), "blueprint.png")
+        self.assertEqual(counts(r)["walls"], 6)
+        self.assertTrue(any("blueprint" in w for w in r.architecture.warnings))
+
+    def test_a_render_or_a_photo_is_refused_with_a_way_out(self):
+        import io
+        import random
+        from PIL import Image
+        rnd = random.Random(1)
+        img = Image.new("L", (200, 200))
+        img.putdata([rnd.randint(0, 30) if rnd.random() < 0.15 else rnd.randint(100, 190) for _ in range(200 * 200)])
+        out = io.BytesIO()
+        img.save(out, format="PNG")
+        with self.assertRaises(ArchError) as caught:
+            recognize(out.getvalue(), "photo.png")
+        self.assertIn("not a drawing in lines", str(caught.exception))
+
+    def test_strokes_that_touch_no_wall_are_not_walls(self):
+        from epc_arch.model import Wall
+        from epc_arch.recognizers import Context
+        from epc_arch.config import Hints, scale_for
+        from epc_arch.recognizers.walls import drop_stray
+        ctx = Context(size=(1000.0, 1000.0), scale=scale_for((1000.0, 1000.0), None), hints=Hints())
+        walls = [Wall(f"w{i}", a, b, 10.0, 0.7, "thick") for i, (a, b) in enumerate([((0, 0), (400, 0)), ((400, 0), (400, 300)), ((400, 300), (0, 300)), ((0, 300), (0, 0)), ((500, 900), (560, 900))])]
+        kept = drop_stray(walls, 10.0, ctx)
+        self.assertEqual(len(kept), 4)                                                      # the stray stroke far from the building goes
+
+    def test_on_a_sheet_with_several_views_the_plan_is_kept(self):
+        from epc_arch.config import Hints, scale_for
+        from epc_arch.model import Opening, Room, Wall
+        from epc_arch.recognizers import Context
+        from epc_arch.recognizers.views import keep_the_plan
+        ctx = Context(size=(2000.0, 1000.0), scale=scale_for((2000.0, 1000.0), None), hints=Hints())
+        box = [((0, 0), (400, 0)), ((400, 0), (400, 300)), ((400, 300), (0, 300)), ((0, 300), (0, 0))]
+        section = [((1200, 600), (1800, 600)), ((1800, 600), (1800, 700)), ((1800, 700), (1200, 700))]   # a section, far from the plan
+        walls = [Wall(f"w{i}", a, b, 10.0, 0.7, "thick") for i, (a, b) in enumerate(box + section)]
+        rooms = [Room("r1", 100000.0, None, (200, 150))]
+        doors = [Opening("d1", "door", (200, 300), 80, 0, "w2", 0.8, "swing")]
+        kept, openings, kept_rooms, left_out = keep_the_plan(walls, doors, rooms, 10.0, ctx)
+        self.assertEqual((len(kept), len(openings), len(kept_rooms), left_out), (4, 1, 1, 1))
+
+    def test_structural_axes_crossing_the_plan_are_not_walls(self):
+        import io
+        from PIL import Image, ImageDraw
+        img = Image.open(io.BytesIO(helpers.room_png())).convert("L")
+        d = ImageDraw.Draw(img)
+        w, h = img.size
+        for k in range(1, 5):                                                                # a grid of axes across the whole sheet
+            d.line([(k * w // 5, 5), (k * w // 5, h - 5)], fill=0, width=1)
+            d.line([(5, k * h // 5), (w - 5, k * h // 5)], fill=0, width=1)
+        out = io.BytesIO()
+        img.save(out, format="PNG")
+        self.assertEqual(counts(recognize(out.getvalue(), "axes.png"))["walls"], 6)
 
     def test_the_coordinates_are_those_of_the_picture(self):
         png = helpers.room_png()

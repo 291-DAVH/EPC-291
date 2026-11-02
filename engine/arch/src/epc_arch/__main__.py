@@ -13,10 +13,11 @@ def main(argv=None) -> int:
     ap.add_argument("--out", default="out")
     ap.add_argument("--units-per-metre", type=float, default=None)
     ap.add_argument("--page", type=int, default=0)
+    ap.add_argument("--background", action="store_true", help="draw the original linework faintly under the plan")
     a = ap.parse_args(argv)
     src = Path(a.plan)
     try:
-        result = recognize(src.read_bytes(), src.name, Options(units_per_metre=a.units_per_metre, page=a.page))
+        result = recognize(src.read_bytes(), src.name, Options(units_per_metre=a.units_per_metre, page=a.page, background=a.background))
     except ArchError as e:
         print(f"ERROR {e}", file=sys.stderr)
         return 1

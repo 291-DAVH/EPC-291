@@ -4,9 +4,10 @@ import math
 from dataclasses import dataclass
 from typing import List, Optional, Protocol, Tuple
 
-from epc_arch.geometry import Axis, angle_gap, axis_of, seg_angle, seg_length
+from epc_arch.geometry import Axis, angle_gap, axis_of, seg_angle, seg_length, segment_distance
 from epc_arch.model import Line, Primitives, Wall
 from epc_arch.recognizers import Context
+from epc_arch.recognizers.tidy import tidy_walls
 
 Pt = Tuple[float, float]
 MAX_STRIPS = 20000
@@ -109,12 +110,14 @@ def _bin(thickness: float, lo: float, k: float, bins: int) -> int:
 
 
 def _peak(cands: List[Candidate], lo: float, k: float, bins: int) -> int:
-    """The bin where most of the length of the candidates is, counting a little of its neighbours."""
+    """The bin where the candidates put most ink (their length times their thickness, counting a little of the neighbours). Dimension lines, ticks, trees and lettering are strokes too, but thin:
+    weighing by thickness as well as by length lets a wall outweigh them even when there is less of it."""
     weight = [0.0] * bins
     for c in cands:
         weight[_bin(c.thickness, lo, k, bins)] += c.weight
     smooth = [weight[i] + 0.5 * (weight[i - 1] if i else 0.0) + 0.5 * (weight[i + 1] if i + 1 < bins else 0.0) for i in range(bins)]
-    return max(range(bins), key=lambda i: smooth[i])
+    area = [smooth[i] * lo * math.exp((i + 0.5) / k) for i in range(bins)]                 # length times thickness: the ink a thickness puts on the page, which favours walls over fine lines
+    return max(range(bins), key=lambda i: area[i])
 
 
 def calibrate(cands: List[Candidate], ctx: Context) -> Optional[float]:
@@ -165,20 +168,69 @@ def _confidence(cands: List[Candidate], length: float, T: float, ctx: Context) -
     return min(0.95, base + min(0.2, length / (60.0 * T)))
 
 
-def build_walls(cands: List[Candidate], T: float, ctx: Context) -> List[Wall]:
+def build_walls(cands: List[Candidate], T: float, ctx: Context, tolerance: Optional[Tuple[float, float]] = None) -> List[Wall]:
     """Candidates of the thickness the plan agreed on, merged along their lines into walls with a centre line, a thickness and a confidence."""
     cfg = ctx.params["walls"]
-    lo, hi = cfg["thickness_tolerance"]
+    lo, hi = tolerance or cfg["thickness_tolerance"]
     kept = [c for c in cands if lo * T <= c.thickness <= hi * T]
     walls: List[Wall] = []
     for group in _cluster(kept, cfg["angle_tolerance_deg"], 0.5 * T):
         for theta, offset, t0, t1, thick in _merge(group, cfg["merge_gap_factor"] * T):
-            if t1 - t0 < ctx.params["relative"]["min_wall_length_factor"] * T:
+            if t1 - t0 < ctx.params["relative"]["min_wall_length_factor"] * min(T, thick):
                 continue
             ax = axis_of(theta)
             walls.append(Wall("", ax.at(t0, offset), ax.at(t1, offset), thick, _confidence(group, t1 - t0, T, ctx), "+".join(sorted({c.reason for c in group}))))
     walls.sort(key=lambda w: (round(w.a[1] / T), w.a[0]))
     return [Wall(f"w{i + 1}", w.a, w.b, w.thickness, w.confidence, w.reason) for i, w in enumerate(walls)]
+
+
+def _components(walls: List[Wall], reach: float, bridge: float = 0.0, tol: float = 1.5) -> List[List[int]]:
+    """Walls that touch (or nearly) one another, as groups of indices: the walls of a building form one network. Walls in line with a gap of up to `bridge` between them belong together too: the gap is
+    a door or a window."""
+    parent = list(range(len(walls)))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    boxes = [(min(w.a[0], w.b[0]) - reach, min(w.a[1], w.b[1]) - reach, max(w.a[0], w.b[0]) + reach, max(w.a[1], w.b[1]) + reach) for w in walls]
+    order = sorted(range(len(walls)), key=lambda i: boxes[i][0])
+    for k, i in enumerate(order):
+        for j in order[k + 1:]:
+            if boxes[j][0] > boxes[i][2]:
+                break
+            if boxes[j][1] > boxes[i][3] or boxes[j][3] < boxes[i][1] or find(i) == find(j):
+                continue
+            if segment_distance(walls[i].a, walls[i].b, walls[j].a, walls[j].b) <= reach:
+                parent[find(i)] = find(j)
+    if bridge:
+        for i in range(len(walls)):
+            ai = axis_of(seg_angle(walls[i].a, walls[i].b))
+            ti = sorted((ai.t(walls[i].a), ai.t(walls[i].b)))
+            for j in range(i + 1, len(walls)):
+                if find(i) == find(j) or angle_gap(seg_angle(walls[i].a, walls[i].b), seg_angle(walls[j].a, walls[j].b)) > tol or abs(ai.o(walls[i].a) - ai.o(walls[j].a)) > 0.5 * reach:
+                    continue
+                tj = sorted((ai.t(walls[j].a), ai.t(walls[j].b)))
+                if max(ti[0], tj[0]) - min(ti[1], tj[1]) <= bridge:
+                    parent[find(i)] = find(j)
+    groups: dict = {}
+    for i in range(len(walls)):
+        groups.setdefault(find(i), []).append(i)
+    return list(groups.values())
+
+
+def drop_stray(walls: List[Wall], T: float, ctx: Context) -> List[Wall]:
+    """Dimension lines, frames and lettering leave strokes that look like walls but touch nothing: a group of walls much smaller than the main building is left out."""
+    cfg = ctx.params["walls"]
+    if len(walls) < 4:
+        return walls
+    groups = _components(walls, cfg["touch_factor"] * T, ctx.params["relative"]["opening_width_in_walls"][1] * T, cfg["angle_tolerance_deg"])
+    size = [sum(seg_length(walls[i].a, walls[i].b) for i in g) for g in groups]
+    biggest = max(size)
+    keep = {i for g, s in zip(groups, size) if s >= cfg["stray_share"] * biggest for i in g}
+    return [w for i, w in enumerate(walls) if i in keep]
 
 
 def usable_lines(prims: Primitives, ctx: Context) -> Tuple[List[Line], bool]:
@@ -199,10 +251,49 @@ def strongest(lines: List[Line], ctx: Context) -> List[Candidate]:
     return []
 
 
+def _covered(c: Candidate, same: List[Candidate]) -> float:
+    """The share of a candidate's length that the candidates on its line already draw."""
+    done, end = 0.0, c.t0
+    for p in sorted(same, key=lambda p: p.t0):
+        lo, hi = max(p.t0, c.t0, end), min(p.t1, c.t1)
+        if hi > lo:
+            done += hi - lo
+            end = hi
+    return done / max(c.t1 - c.t0, 1e-9)
+
+
+def _new_lines(extra: List[Candidate], primary: List[Candidate], T: float, ctx: Context) -> List[Candidate]:
+    """Of what another strategy found, what is not inside a wall the first one already drew: on a line where it found walls, a stretch lying between them is a gap (the panes of a window are two
+    strokes a wall's thickness apart and would close it); a stretch that goes beyond them, mostly lies where they are not, or is on a line where it found nothing, is another wall."""
+    tol = ctx.params["walls"]["angle_tolerance_deg"]
+    out = []
+    for c in extra:
+        same = [p for p in primary if angle_gap(p.theta, c.theta) <= tol and abs(p.offset - c.offset) <= 0.5 * T]
+        if same and c.t0 >= min(p.t0 for p in same) - T and c.t1 <= max(p.t1 for p in same) + T and _covered(c, same) < 0.5:
+            continue
+        out.append(c)
+    return out
+
+
 def recognize_walls(prims: Primitives, ctx: Context) -> Tuple[List[Wall], Optional[float], bool]:
     lines, vouched = usable_lines(prims, ctx)
     cands = strongest(lines, ctx)
     T = calibrate(cands, ctx)
     if T is None:
         return [], None, vouched
-    return build_walls(cands, T, ctx), T, vouched
+    # A plan often draws some walls as bands (interior, solid) and others as two lines (exterior, hollow): once the thickness is known, every strategy contributes the stretches of that thickness.
+    wide = tuple(ctx.params["walls"]["band_tolerance"]) if vouched else None      # walls a layer or a picture vouches for keep their own thickness: the outer wall is thicker than the inner ones
+    if wide is not None and prims.ink is None:
+        # A drawing's wall layer: the walls of the plan's thickness first, then thinner or thicker ones (a partition, a party wall) where they do not lie in the line of those
+        # (two lines a little apart in the gap of a wall are the panes of a window).
+        lo, hi = ctx.params["walls"]["thickness_tolerance"]
+        primary = [c for c in cands if lo * T <= c.thickness <= hi * T]
+        cands = primary + _new_lines([c for c in cands if not lo * T <= c.thickness <= hi * T], primary, T, ctx)
+    if wide is None:
+        first = cands[0].reason if cands else ""
+        primary = cands
+        for strategy in STRATEGIES:
+            if strategy.name != first:
+                cands = cands + _new_lines([c for c in strategy.candidates(lines, ctx) if abs(c.thickness - T) <= 0.35 * T], primary, T, ctx)
+    walls = drop_stray(tidy_walls(drop_stray(build_walls(cands, T, ctx, wide), T, ctx), T, ctx), T, ctx)
+    return [Wall(f"w{i + 1}", w.a, w.b, w.thickness, w.confidence, w.reason) for i, w in enumerate(walls)], T, vouched

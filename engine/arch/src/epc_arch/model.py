@@ -45,8 +45,13 @@ class Primitives:
     y_up: bool = False
     fit: bool = False                     # a vector source is scaled to a standard size; an image keeps its pixels
     units_per_metre: Optional[float] = None
+    scale: Optional[int] = None           # the scale the sheet says it is drawn at (1:scale), when it says so
     extent: Optional[Tuple[float, float]] = None   # the size of the picture when the source is one (an image keeps its own frame)
     warnings: List[str] = field(default_factory=list)
+    ink: Optional[Any] = None             # an image keeps its ink mask (numpy bool, rows = y) so that what a stroke list cannot say, the swing of a door, can be looked for in the picture
+    faint: Optional[Any] = None           # every mark on the paper, however light (door swings drawn in a pale grey)
+    ink_scale: float = 1.0                # picture pixels per mask pixel (the mask may be a reduced copy)
+    alternatives: List[List[Line]] = field(default_factory=list)    # other readings of the same picture (walls drawn as pairs of lines, shut into bands)
 
 
 @dataclass(frozen=True)
@@ -73,6 +78,15 @@ class Opening:
     swing: Optional[Pt] = None
 
 
+@dataclass(frozen=True)
+class Room:
+    id: str
+    area: float                           # in plan units squared
+    area_m2: Optional[float]              # when the units are known
+    at: Pt                                # where to write its name or area
+    rects: List[Tuple[float, float, float, float]] = field(default_factory=list)    # its floor as rectangles (x0, y0, x1, y1)
+
+
 def _r3(p: Pt) -> List[float]:
     return [round(p[0], 3), round(p[1], 3)]
 
@@ -90,6 +104,10 @@ def _opening_dict(o: "Opening") -> Dict[str, Any]:
     return out
 
 
+def _room_dict(r: "Room") -> Dict[str, Any]:
+    return {"id": r.id, "area": round(r.area, 1), "area_m2": None if r.area_m2 is None else round(r.area_m2, 2), "at": _r3(r.at)}
+
+
 @dataclass
 class Architecture:
     source: str
@@ -100,15 +118,17 @@ class Architecture:
     walls: List[Wall] = field(default_factory=list)
     openings: List[Opening] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
+    rooms: List[Room] = field(default_factory=list)
+    drawing_scale: Optional[int] = None
 
     def counts(self) -> Dict[str, int]:
         return {"walls": len(self.walls), "doors": sum(1 for o in self.openings if o.kind == "door"), "windows": sum(1 for o in self.openings if o.kind == "window"),
                 "openings": sum(1 for o in self.openings if o.kind == "opening")}
 
     def as_dict(self) -> Dict[str, Any]:
-        return {"schema_version": "1.0", "source": self.source, "size": [round(self.size[0], 3), round(self.size[1], 3)], "units_per_metre": self.units_per_metre, "scale_hint": self.scale_hint,
+        return {"schema_version": "1.0", "source": self.source, "size": [round(self.size[0], 3), round(self.size[1], 3)], "units_per_metre": self.units_per_metre, "drawing_scale": self.drawing_scale, "scale_hint": self.scale_hint,
                 "wall_thickness": None if self.wall_thickness is None else round(self.wall_thickness, 3), "walls": [_wall_dict(w) for w in self.walls],
-                "openings": [_opening_dict(o) for o in self.openings], "counts": self.counts(), "warnings": self.warnings}
+                "openings": [_opening_dict(o) for o in self.openings], "rooms": [_room_dict(r) for r in self.rooms], "counts": self.counts(), "warnings": self.warnings}
 
 
 @dataclass(frozen=True)

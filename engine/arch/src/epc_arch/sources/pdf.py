@@ -3,6 +3,8 @@ picture of its page, read like any image. Page, rotation of the page and nested 
 import ctypes
 import io
 import math
+import re
+from collections import Counter
 from typing import List, Optional, Tuple
 
 import pypdfium2 as pdfium
@@ -16,6 +18,8 @@ from epc_arch.sources import register
 from epc_arch.sources.raster import read_image
 from epc_arch.sources.render import render_or_fail
 
+SCALES = (20, 25, 50, 75, 100, 125, 150, 200, 250, 500)        # the scales a plan is drawn at
+POINTS_PER_METRE = 72 / 0.0254
 MIN_VECTOR = 12                                          # fewer strokes than this and the page is a picture
 Seg = Tuple[int, float, float, bool]                     # type, x, y, closes the subpath
 
@@ -125,12 +129,28 @@ def _thin(prims: Primitives, limit: int) -> None:
     prims.lines = [prims.lines[i] for i in chosen]
 
 
+def written_scale(page) -> Optional[int]:
+    """The scale the sheet says it is drawn at ("ESCALA 1:50", "1/100"): the one written most often, when it is a usual scale."""
+    try:
+        text = page.get_textpage().get_text_range()
+    except Exception:                                         # noqa: BLE001 - a page with no text layer
+        return None
+    found = Counter(int(d) for d in re.findall(r"(?<![\d.,])1\s*[:/]\s*(\d{2,3})(?![\d.,])", text) if int(d) in SCALES)
+    return found.most_common(1)[0][0] if found else None
+
+
 def read_vector(data: bytes, options: Options) -> Primitives:
     try:
         page = pdfium.PdfDocument(data)[options.page]
     except Exception:                                         # noqa: BLE001 - damaged, protected or no such page
         raise ArchError("the PDF cannot be read: it may be damaged or protected")
-    prims = Primitives(source="pdf", y_up=True, fit=True, units_per_metre=options.units_per_metre)
+    units = options.units_per_metre
+    scale = None if units else written_scale(page)
+    if scale:
+        units = POINTS_PER_METRE / scale                                   # a metre of the building is 1/scale of a metre of paper
+    prims = Primitives(source="pdf", y_up=True, fit=True, units_per_metre=units, scale=scale)
+    if scale:
+        prims.warnings.append(f"pdf: the sheet says it is drawn at 1:{scale}; sizes are in metres from that")
     skipped: List[int] = []
     for obj in page.get_objects(filter=[raw.FPDF_PAGEOBJ_PATH]):
         _path_geometry(obj.raw, prims, skipped)
