@@ -137,6 +137,9 @@ Pliegos similares aprendidos: [sí/no — si sí, rutas en memory/]
 
 El agente Document Writer redacta siguiendo sus propias reglas (`.claude/agents/document-writer.md`).
 
+> **Nota (2026-11-01).** El agente Document Writer ahora trabaja en etapas: primero presenta disciplinas, interfaces, entregables, vacíos y la estructura propuesta, espera la validación del usuario y recién entonces redacta el pliego completo (estructura objetivo de 16 secciones) y lo guarda como **un solo archivo** `[SIGLA]-[DISC]-PG-[nnn]_Rev[00.0.ID].md` en `02-engineering/TECHNICAL_SPECS/`.
+> Los pasos 2, 5 y 6 de este skill (capítulo por capítulo, `specification_verifier`) siguen describiendo el pliego modular de 9 o 10 capítulos y todavía no se aplican a ese archivo: la alineación está pendiente en `docs/BACKLOG_PLIEGOS.md`.
+
 ---
 
 ## Paso 5 — Guardar y registrar
