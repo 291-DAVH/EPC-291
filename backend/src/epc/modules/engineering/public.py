@@ -32,8 +32,13 @@ def criteria_validated(project_dir: Path, discipline: str = "electrical") -> boo
 
 
 def issuable(project_dir: Path) -> list:
-    """Sources that can be issued: [{id, name, discipline, package, kind: drawing|document, files: {format: Path}}]."""
+    """Sources that can be issued: [{id, name, discipline, package, kind: drawing|document, files: {format: Path or make(dst)}}]."""
     return repository.issuable(project_dir)
 
 
-__all__ = ["criterion_value", "criteria_values", "criteria_validated", "issuable"]
+def register_issuable(provider) -> None:
+    """A module offers what it can issue: `provider(project_dir)` gives candidates; a file may be a function that makes it when the transmittal is issued."""
+    repository.register_issuable(provider)
+
+
+__all__ = ["criterion_value", "criteria_values", "criteria_validated", "issuable", "register_issuable"]

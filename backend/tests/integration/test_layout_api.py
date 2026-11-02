@@ -181,14 +181,34 @@ class TestLayout(unittest.TestCase):
     def test_a_pdf_becomes_an_image_underlay(self):
         self.c.put(f"{self.base}/L0", json={**ARCH, "scale": DRAWING["scale"]})
         self.c.put(f"{self.base}/L0@electrica_BT", json=DRAWING)
-        made = self.c.post(f"{self.base}/L0@electrica_BT/generate").json()          # the PDF the platform itself makes is a real, valid PDF
-        pdf = self.c.get(f"{self.base}/L0@electrica_BT/files/{made['files']['pdf']}").content
+        made = self.c.post(f"{self.base}/L0@electrica_BT/generate").json()          # the PDF the platform makes (when a transmittal is issued) from a DXF is a real, valid PDF
+        from epc.core import engine
+        with tempfile.TemporaryDirectory() as tmp:
+            dxf, out = Path(tmp) / "plan.dxf", Path(tmp) / "plan.pdf"
+            dxf.write_bytes(self.c.get(f"{self.base}/L0@electrica_BT/files/{made['files']['dxf']}").content)
+            self.assertEqual(engine.run_module("epc_drawing.export.pdf", [dxf, out], timeout=300).returncode, 0)
+            pdf = out.read_bytes()
         r = self.c.post(f"{self.base}/L0/underlay", files={"file": ("plano.pdf", pdf, "application/pdf")})
         self.assertEqual(r.status_code, 200, r.text)
         self.assertEqual(r.json()["underlay"]["kind"], "png")
         self.assertEqual(self.c.get(f"{self.base}/L0/underlay").content[1:4], b"PNG")
         bad = self.c.post(f"{self.base}/L0/underlay", files={"file": ("roto.pdf", b"%PDF-1.4 broken", "application/pdf")})
         self.assertEqual(bad.status_code, 422)
+
+    def test_a_sheet_with_a_scale_is_offered_for_issue_and_its_dxf_and_pdf_are_made_only_then(self):
+        self.with_plan()
+        self.c.put(f"{self.base}/L0", json=DRAWING)
+        d = self.root / "ACME" / "P-1"
+        issuing = "/api/projects/ACME/P-1/issuing"
+        offered = [c for c in self.c.get(issuing).json()["candidates"] if c["package"] == "layout"]
+        self.assertTrue(offered and all(c["formats"] == ["dxf"] and c["pdf_will_be_rendered"] for c in offered), offered)
+        self.assertEqual(list((d / "deliverables").rglob("*.dxf")) + list((d / "workspace").rglob("*.pdf")), [])       # nothing was made by looking at the screen
+        made = self.c.post(issuing, json={"emission": "ifa", "client_rev": "00", "internal_rev": "00.0.1", "items": [{"source": offered[0]["id"]}]})
+        self.assertEqual(made.status_code, 201, made.text)
+        files = {p.suffix: p for p in (d / "deliverables").rglob("*") if p.suffix in (".dxf", ".pdf")}
+        self.assertEqual(set(files), {".dxf", ".pdf"})
+        self.assertTrue(files[".pdf"].read_bytes().startswith(b"%PDF"))
+        self.assertIn("IFA", files[".dxf"].read_text(encoding="utf-8", errors="replace"))                              # stamped with the emission of the transmittal
 
     def test_generate_writes_a_dxf_in_the_chosen_version_and_it_downloads(self):
         self.with_plan()

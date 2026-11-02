@@ -107,7 +107,8 @@ class TestSld(unittest.TestCase):
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
         outs = st["outputs"]
-        self.assertTrue(all(any(o.endswith(ext) for o in outs) for ext in (".svg", ".dxf", ".pdf")), outs)
+        self.assertTrue(all(any(o.endswith(ext) for o in outs) for ext in (".svg", ".dxf")), outs)
+        self.assertFalse(any(o.endswith(".pdf") for o in outs), outs)                                        # PDFs are made when a transmittal is issued, not kept in the work environment
         for o in outs:
             self.assertTrue((self.pkg / o).exists(), o)
         ov = self.c.get("/api/projects/ACME/P-1/engineering").json()
@@ -162,8 +163,9 @@ class TestSld(unittest.TestCase):
         self.assertEqual(st["state"], "done", st)
         outs = st["outputs"]
         self.assertTrue(any("/SLD_" in o and o.endswith(".dxf") for o in outs), outs)                     # the SLD of the earlier run is kept
-        for ext in (".svg", ".dxf", ".pdf"):
+        for ext in (".svg", ".dxf"):
             self.assertTrue(any("/MLD_" in o and o.endswith(ext) for o in outs), (ext, outs))
+        self.assertFalse(any(o.endswith(".pdf") for o in outs), outs)
         for o in outs:
             self.assertTrue((self.pkg / o).exists(), o)
         ov = self.c.get("/api/projects/ACME/P-1/engineering").json()
@@ -230,8 +232,17 @@ class TestSld(unittest.TestCase):
         self.assertEqual(self.gen({"diagrams": "none"}).status_code, 202)
         st = self.wait()
         self.assertEqual(st["state"], "done", st)
+        issuing = "/api/projects/ACME/P-1/issuing"
+        memos = {c["name"][len(st["name"]) + 1:]: c for c in self.c.get(issuing).json()["candidates"] if c["name"].startswith(st["name"] + "_")}
+        self.assertEqual({k: v["formats"] for k, v in memos.items()}, {"MC": ["pdf"], "SP": ["pdf"]})            # the memo and the summary are offered, their PDF is made when issued
+        made = self.c.post(issuing, json={"emission": "ifa", "client_rev": "00", "internal_rev": "00.0.1", "items": [{"source": memos["MC"]["id"]}]})
+        self.assertEqual(made.status_code, 201, made.text)
+        pdfs = list((self.root / "ACME" / "P-1" / "deliverables").rglob("*.pdf"))
+        self.assertEqual(len(pdfs), 1)
+        self.assertTrue(pdfs[0].read_bytes().startswith(b"%PDF"))
         self.assertFalse(any(o.endswith((".svg", ".dxf")) for o in st["outputs"]), st["outputs"])               # no diagram yet
-        self.assertTrue(all(any(o.endswith(x) for o in st["outputs"]) for x in ("_MC.md", "_SP.md", "docs/" + st["name"] + "_MC.pdf", "docs/" + st["name"] + "_SP.pdf")), st["outputs"])
+        self.assertTrue(all(any(o.endswith(x) for o in st["outputs"]) for x in ("_MC.md", "_SP.md")), st["outputs"])
+        self.assertFalse(any(o.endswith(".pdf") for o in st["outputs"]), st["outputs"])
         m = self.c.get(self.base + "/memo").json()
         self.assertTrue(m["available"] and not m["stale"])
         memo = m["memo"]

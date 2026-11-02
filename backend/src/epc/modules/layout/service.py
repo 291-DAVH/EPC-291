@@ -12,6 +12,7 @@ from epc.core import clock, engine
 from epc.core.errors import Invalid, NotFound
 from epc.core.fsutil import is_inside, read_json
 from epc.modules.catalogs import public as catalogs
+from epc.modules.engineering import public as engineering
 from epc.modules.identity import public as identity
 from epc.modules.layout import changes, levels as across, plenums as shafts, repository
 from epc.modules.layout.models import DrawingIn, PlenumIn
@@ -373,19 +374,36 @@ def generate(d: Path, level: str, version: str = "") -> dict:
         result = jobs.run(_document(level, saved, version or saved.get("dxf_version", "")), out, layers_file=catalogs.files(d)["layers"])
     except core.PlanError as e:
         raise Invalid({"drawing": str(e)})
-    dxf = out / result["files"]["dxf"]
-    problem = repository.render_pdf(dxf, dxf.with_suffix(".pdf"))
-    files = {"dxf": dxf.name, "dxf_version": result["files"]["dxf_version"]}
-    if problem is None:
-        files["pdf"] = dxf.with_suffix(".pdf").name
-    else:
-        result["warnings"].append(f"the PDF could not be made: {problem}")
+    files = {"dxf": result["files"]["dxf"], "dxf_version": result["files"]["dxf_version"]}           # the PDF is made when a transmittal is issued, from the stamped DXF
     result["files"], result["generated_at"] = files, clock.now_local()
     from epc.core.fsutil import write_json
     write_json(out / "result.json", result)
     write_json(out / "drawing.json", saved)                       # what the files were made from, to show later what changed
     identity.audit_event("layout_generated", target=f"{projects.project_id(d)}:{level}", org_slug=projects.read_meta(d).get("org", ""), detail={"dxf_version": files["dxf_version"]})
     return view(d, level)
+
+
+def _dxf_maker(d: Path, level: str):
+    def make(dst: Path) -> None:
+        generate(d, level)
+        shutil.copy2(repository.out_dir(d, level) / repository.load_result(d, level)["files"]["dxf"], dst)
+    return make
+
+
+def issuable(d: Path) -> list:
+    """The sheets of the plans that have a scale, offered to be issued: the DXF of each is made, from the drawing as it is then, when the transmittal is issued."""
+    core = _engine()[0]
+    out = []
+    for lv in repository.levels(d):
+        saved = repository.load_drawing(d, lv)
+        if saved and saved.get("scale"):
+            disc = core.load_profile(saved["discipline"]).get("disciplina_proyecto") or saved["discipline"]
+            stem = lv.replace("@", "_")
+            out.append({"id": f"{disc}/layout/drawing/{stem}", "name": f"PLAN_{stem}", "discipline": disc, "package": "layout", "kind": "drawing", "files": {"dxf": _dxf_maker(d, lv)}})
+    return out
+
+
+engineering.register_issuable(issuable)
 
 
 def output_file(d: Path, level: str, name: str) -> Tuple[Path, str]:

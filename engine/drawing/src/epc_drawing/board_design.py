@@ -234,12 +234,6 @@ def design(data: dict, out_dir: Path, name: str, criteria: Optional[dict] = None
     (out / f"{name}_memoria.json").write_text(json.dumps(memo, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     (out / f"{name}_MC.md").write_text(BM.memoria_md(memo), encoding="utf-8", newline="\n")
     (out / f"{name}_SP.md").write_text(BM.sintesis_md(memo), encoding="utf-8", newline="\n")
-    try:                                                   # the memo and the summary as PDF (what is issued to the client)
-        from epc_drawing.export import report_pdf
-        report_pdf.render(BM.memoria_doc(memo), out / f"{name}_MC.pdf")
-        report_pdf.render(BM.sintesis_doc(memo), out / f"{name}_SP.pdf")
-    except Exception as exc:                               # noqa: BLE001 - the calculation stands; the PDF is reported as a warning
-        avisos.append(f"no se pudo generar el PDF de la memoria: {exc}")
 
     from epc_aea90364 import board_figures as BF               # what the drawings show beyond each circuit: bar, feeder, checks and notes (the drawings only draw)
     figures = BF.build(data["board"], res["datos"], res["detalle"], res["limites"], res["rcd_ma"], memo["acometida"])

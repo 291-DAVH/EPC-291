@@ -1,14 +1,15 @@
 """Reads the engineering workspace of a project: workspace/02-engineering/<discipline>/<package>/{drawings/svg,calc,docs}."""
 import csv
 import datetime as dt
+import json
 from pathlib import Path
-from typing import Dict, List
+from typing import Callable, Dict, List
 
 SVG_DIR = ("drawings", "svg")
 TEXT_AREAS = ("calc", "docs")
 TEXT_EXT = {".md", ".txt", ".csv", ".json", ".xlsx"}
-PDF_EXT = ".pdf"                                       # a document made as a PDF (a calculation report): listed with the others and opened as it is
-LISTED_EXT = TEXT_EXT | {PDF_EXT}                           # what the engineering folder lists as a document
+PDF_EXT = ".pdf"                                       # how a PDF is recognised (a document that was issued is opened as it is); the work environment does not list PDFs
+LISTED_EXT = TEXT_EXT                                       # what the engineering folder lists as a document: PDFs and DXFs are made when a transmittal is issued, not kept in the work environment
 MAX_TEXT_BYTES = 1_000_000
 MAX_ROWS, MAX_COLS = 300, 30
 
@@ -91,11 +92,46 @@ def save_criteria(d: Path, data: Dict) -> None:
 
 
 # ---- sources that can be issued to the client ----
-DELIVERABLE_DOC_EXT = (".xlsx", ".docx", ".pdf")
+DELIVERABLE_DOC_EXT = (".xlsx", ".docx")
+
+Provider = Callable[[Path], List[Dict]]
+_PROVIDERS: List[Provider] = []
+
+
+def register_issuable(provider: Provider) -> None:
+    """Another module offers what it can issue (the sheets of the plans, the lighting studies...): `provider(project_dir)` gives candidates like those of `issuable`. A file of a candidate may be a
+    function `make(dst: Path)` instead of a path: the file is made when the transmittal is issued, not before."""
+    if provider not in _PROVIDERS:
+        _PROVIDERS.append(provider)
+
+
+def _offered_by_modules(d: Path) -> List[Dict]:
+    """What the other modules offer to be issued."""
+    return [c for provider in _PROVIDERS for c in provider(d)]
+
+
+def _memo_pdf(memo_json: Path, builder: str) -> Callable[[Path], None]:
+    """The PDF of a board memo or summary, made from its calculation when it is issued."""
+    def make(dst: Path) -> None:
+        from epc.core import engine
+        from epc_aea90364 import board_memo
+        engine.render_report_pdf(getattr(board_memo, builder)(json.loads(memo_json.read_text(encoding="utf-8"))), dst)
+    return make
+
+
+def _memo_documents(pkg: Path, disc: str) -> List[Dict]:
+    """The memo (MC) and the summary (SP) of each calculated board: their PDF is made at issue time from the calculation that is kept."""
+    out = []
+    for memo in sorted((pkg / "calc").glob("*_memoria.json")):
+        name = memo.name[: -len("_memoria.json")]
+        for suffix, builder in (("MC", "memoria_doc"), ("SP", "sintesis_doc")):
+            if (pkg / "docs" / f"{name}_{suffix}.md").is_file():
+                out.append({"id": f"{disc}/{pkg.name}/docs/{name}_{suffix}.pdf", "name": f"{name}_{suffix}", "discipline": disc, "package": pkg.name, "kind": "document", "files": {"pdf": _memo_pdf(memo, builder)}})
+    return out
 
 
 def issuable(d: Path) -> List[Dict]:
-    """Drawings (DXF master + its PDF) and documents of the engineering workspace that may become deliverables."""
+    """Drawings (DXF master + its PDF), documents of the engineering workspace and what the other modules offer, that may become deliverables."""
     root = base(d)
     out: List[Dict] = []
     if not root.is_dir():
@@ -115,4 +151,5 @@ def issuable(d: Path) -> List[Dict]:
                 if f.is_file() and f.suffix.lower() in DELIVERABLE_DOC_EXT:
                     out.append({"id": f"{disc}/{pkg.name}/{area}/{f.stem}{f.suffix.lower()}", "name": f.stem, "discipline": disc, "package": pkg.name,
                                 "kind": "document", "files": {f.suffix.lstrip(".").lower(): f}})
-    return out
+        out += _memo_documents(pkg, disc)
+    return out + _offered_by_modules(d)

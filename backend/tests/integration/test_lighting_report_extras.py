@@ -87,20 +87,21 @@ class TestInTheReport(Base):
         asked = body(params={"R1": PARAMS}, options={"hours_default": 2000, "kwh_price": 0.15, "power_limit_w_m2": 20})
         self.assertEqual(self.c.put(STUDY, json=asked).status_code, 200)
         seen = {}
-        from epc.core import engine
-        original = engine.render_report_pdf
+        from epc.modules.lighting import study
+        original = study._report_document
 
-        def spy(doc, dst, timeout=180):
-            seen["doc"] = doc
-            return original(doc, dst, timeout)
+        def spy(d, sheet, lang):
+            seen["doc"] = original(d, sheet, lang)
+            return seen["doc"]
 
-        with mock.patch.object(engine, "render_report_pdf", spy):
+        with mock.patch.object(study, "_report_document", spy):
             r = self.c.post(STUDY + "/report?lang=es")
         self.assertEqual(r.status_code, 200, r.text)
         blocks = seen["doc"]["blocks"]
         self.assertTrue(any(b["type"] == "figure" and any(s["s"] == "poly" for s in b["shapes"]) for b in blocks))
         self.assertTrue(any(b.get("text") == "Energía" for b in blocks))
-        self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
+        text = (self.d / r.json()["path"]).read_text(encoding="utf-8")                              # what the work environment keeps: the report to read, as Markdown
+        self.assertTrue(r.json()["path"].endswith(".md") and "Energía" in text)
 
 
 if __name__ == "__main__":

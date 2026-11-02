@@ -45,6 +45,15 @@ def candidates(d: Path) -> dict:
             "transmittals": [{k: t[k] for k in ("id", "emission", "client_rev", "internal_rev", "status", "created", "sent_on")} | {"items": len(t["items"])} for t in trs]}
 
 
+def _made(src, work: Path, fmt: str) -> Path:
+    """The file of a candidate: the path it has, or the one a function makes now (in the work folder of this issue)."""
+    if not callable(src):
+        return src
+    out = work / f"made-{len(list(work.iterdir())) + 1}.{fmt}"
+    src(out)
+    return out
+
+
 def _emission_error(d: Path, emission: str) -> Optional[str]:
     if emission not in EMISSIONS:
         return "one of " + ", ".join(EMISSIONS)
@@ -91,6 +100,7 @@ def issue(d: Path, body: IssueIn) -> dict:
     base = d / "deliverables"
     written: List[Path] = []
     tr_items, new_items = [], []
+    work = Path(tempfile.mkdtemp(prefix="issue-"))
     try:
         for it in body.items:
             c = cands[it.source]
@@ -103,6 +113,7 @@ def issue(d: Path, body: IssueIn) -> dict:
             for fmt, src in c["files"].items():
                 if fmt not in ok:
                     continue
+                src = _made(src, work, fmt)
                 dst = target / f"{code}.{fmt}"
                 if fmt == "dxf":
                     repository.stamp_dxf(src, dst, stamp)
@@ -125,6 +136,8 @@ def issue(d: Path, body: IssueIn) -> dict:
         for f in written:
             f.unlink(missing_ok=True)
         raise Failure(f"could not prepare the issue: {exc}")
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
     registered = deliverables.add_items(d, new_items)
     for r, t in zip(registered, tr_items):
         t["deliverable_id"] = r["id"]

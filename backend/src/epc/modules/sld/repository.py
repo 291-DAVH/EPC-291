@@ -143,16 +143,6 @@ def read_summary(work: Path) -> dict:
     return read_json(work / "out" / "summary.json", {}) or {}
 
 
-def render_pdfs(out: Path, name: str) -> List[str]:
-    """PDF of every DXF produced (the deliverable rendering of the drawing), through the engine's exporter. Returns warnings, never raises."""
-    warnings: List[str] = []
-    for dxf in sorted(out.glob(f"{name}*.dxf")):
-        res = engine.run_module("epc_drawing.export.pdf", [dxf, dxf.with_suffix(".pdf")], timeout=300)
-        if res.returncode != 0:
-            warnings.append(f"AVISO no se pudo generar el PDF de {dxf.name}: {engine.tail(res, 200)}")
-    return warnings
-
-
 def _replaced(rel: str, name: str, previous_name: Optional[str], made: set, now_kinds: set, exact: bool) -> bool:
     """Whether a file of the previous run is replaced by this one: all the ones of the same kind, or (`exact`) only the ones made again."""
     fname = Path(rel).name
