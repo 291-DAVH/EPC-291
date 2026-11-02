@@ -2,16 +2,16 @@ import { useState } from "react";
 import DesignCriteria from "./DesignCriteria";
 import Layout from "./Layout";
 import SldInput from "./SldInput";
-import Issuing from "./Issuing";
 import Memos from "./Memos";
-import Parties from "./Parties";
-import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, PdfViewer, State, useApi, useI18n } from "@epc/ui";
+import Catalogs from "./Catalogs";
+import Coordination from "./Coordination";
+import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, PdfViewer, State, docName, useApi, useI18n } from "@epc/ui";
 
-/** Engineering workspace of a project: its files, the drawings (every discipline over the plan), the parties, the technical information (single-line data), the design criteria and the issue. Engineer/admin only. */
-export default function Engineering({ client, code, onOpenDeliverables, sub: subParam, onSub, canWrite }: { client: string; code: string; onOpenDeliverables: () => void; sub: string; onSub: (x: string) => void; canWrite: boolean }) {
+/** Engineering workspace of a project: in the order the work goes: the design criteria, the technical information (single-line data), the memos, the drawings (every discipline over the plan), the coordination between disciplines, the catalogs of the project and, at the end, the files. Engineer/admin only. */
+export default function Engineering({ client, code, onOpenTeam, sub: subParam, onSub, canWrite }: { client: string; code: string; onOpenTeam: () => void; sub: string; onSub: (x: string) => void; canWrite: boolean }) {
   const { t } = useI18n();
-  const SUBS = ["files", "layout", "parties", "sld", "memos", "criteria", "issue"] as const;
-  const sub = (SUBS as readonly string[]).includes(subParam) ? (subParam as (typeof SUBS)[number]) : "files";
+  const SUBS = ["criteria", "sld", "memos", "layout", "coordination", "catalogs", "files"] as const;
+  const sub = (SUBS as readonly string[]).includes(subParam) ? (subParam as (typeof SUBS)[number]) : "criteria";
   const setSub = (x: (typeof SUBS)[number]) => onSub(x);
   return (
     <>
@@ -22,11 +22,11 @@ export default function Engineering({ client, code, onOpenDeliverables, sub: sub
       </div>
       {sub === "files" && <Files client={client} code={code} />}
       {sub === "layout" && <Layout client={client} code={code} canWrite={canWrite} />}
-      {sub === "parties" && <Parties client={client} code={code} />}
-      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={() => setSub("parties")} onOpenMemos={() => setSub("memos")} />}
+      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={onOpenTeam} onOpenMemos={() => setSub("memos")} />}
       {sub === "memos" && <Memos client={client} code={code} canWrite={canWrite} onOpenFiles={() => setSub("files")} />}
       {sub === "criteria" && <DesignCriteria client={client} code={code} />}
-      {sub === "issue" && <Issuing client={client} code={code} onOpenDeliverables={onOpenDeliverables} />}
+      {sub === "coordination" && <Coordination client={client} code={code} discipline="" canWrite={canWrite} standalone />}
+      {sub === "catalogs" && <Catalogs client={client} code={code} />}
     </>
   );
 }
@@ -44,7 +44,7 @@ function Files({ client, code }: { client: string; code: string }) {
 
   const item = (f: EngFile) => (
     <button key={f.path} className={current.path === f.path ? "on" : ""} onClick={() => setSel(f)} title={f.path}>
-      <span>{f.name}<br /><small className="muted">{f.discipline}</small></span>
+      <span>{docName(f, t)}<br /><small className="muted">{f.discipline}</small></span>
       <Badge>{t(("eng.k." + f.kind) as Key)}</Badge>
     </button>
   );

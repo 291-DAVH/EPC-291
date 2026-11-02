@@ -1,15 +1,22 @@
 import { useState } from "react";
-import { ReportItem, State, api, useApi, useFmt, useI18n } from "@epc/ui";
+import { Key, ReportItem, State, api, useApi, useFmt, useI18n } from "@epc/ui";
+import Observations from "./Observations";
 import Reporting from "./Reporting";
 import type { Tab } from "./tabs";
 
-export default function Reports({ base, go, engineer, client, code }: { base: string; go: (t: Tab, x?: Record<string, string>) => void; engineer: boolean; client: string; code: string }) {
+export default function Reports({ base, go, engineer, client, code, sub, onSub, can }: { base: string; go: (t: Tab, x?: Record<string, string>) => void; engineer: boolean; client: string; code: string; sub: string; onSub: (x: string) => void; can: (subject: string, action: string) => boolean }) {
   const { t } = useI18n();
+  const current = sub === "observations" ? "observations" : "reports";
   const fmt = useFmt();
   const [rev, setRev] = useState(0);
   const { data, loading, error } = useApi<ReportItem[]>(base + "/reports?r=" + rev);
   return (
     <>
+    <div className="subtabs" role="tablist">
+      {(["reports", "observations"] as const).map((x) => <button key={x} role="tab" aria-selected={current === x} className={current === x ? "on" : ""} onClick={() => onSub(x)}>{t(("rep.sub." + x) as Key)}</button>)}
+    </div>
+    {current === "observations" && <Observations base={base} can={can} />}
+    {current === "reports" && <>
     {engineer && <Reporting client={client} code={code} onPublished={() => setRev((n) => n + 1)} />}
     <div className="cols2">
       <div className="card">
@@ -33,6 +40,7 @@ export default function Reports({ base, go, engineer, client, code }: { base: st
         <button className="primary" onClick={() => go("inputs", { kind: "report" })}>{t("u.rp.report")}</button>
       </div>
     </div>
+    </>}
     </>
   );
 }

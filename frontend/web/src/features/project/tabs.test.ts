@@ -6,12 +6,17 @@ describe("where the screens that were tabs live now", () => {
     expect(TABS as readonly string[]).not.toContain("deliverables");
     expect(TABS as readonly string[]).not.toContain("layout");
     expect(TABS as readonly string[]).not.toContain("registers");
-    expect(ENGINEER_TABS).toEqual(["engineering", "coordination", "catalogs"]);
+    expect(ENGINEER_TABS).toEqual(["engineering"]);
+    for (const gone of ["coordination", "catalogs", "observations"]) expect(TABS as readonly string[]).not.toContain(gone);
   });
 
   it("an old link to the drawings or the registers lands on the section that holds them", () => {
     expect(placeOf("layout", null)).toEqual({ tab: "engineering", sub: "layout" });
     expect(placeOf("registers", null)).toEqual({ tab: "plan", sub: "registers" });
+    expect(placeOf("coordination", null)).toEqual({ tab: "engineering", sub: "coordination" });
+    expect(placeOf("observations", null)).toEqual({ tab: "reports", sub: "observations" });
+    expect(placeOf("engineering", "issue")).toEqual({ tab: "plan", sub: "issue" });
+    expect(placeOf("engineering", "parties")).toEqual({ tab: "plan", sub: "team" });
     expect(placeOf("deliverables", null)).toEqual({ tab: "plan", sub: "deliverables" });
   });
 
