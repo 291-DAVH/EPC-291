@@ -283,6 +283,22 @@ class TestSld(unittest.TestCase):
         self.assertEqual(self.wait()["state"], "done")
         self.assertTrue(self.c.get(self.base + "/memo").json()["stale"])                                        # ...is not renewed by a calculation: it still has to be run again
 
+    def test_the_calculation_says_what_decided_each_section(self):
+        board = {"board": BOARD, "titleblock": TB}
+        near = {"tag": "A-1", "description": "Corto", "load": 20, "unit": "A", "destination": "", "parent_tag": "", "topology": "single", "phase": "3F", "length_m": 5, "kind": "auto"}
+        far = {**near, "tag": "A-2", "description": "Lejos", "length_m": 200}
+        self.assertEqual(self.c.put(self.base, json={**board, "circuits": [near, far]}).status_code, 200)
+        self.assertEqual(self.c.post(self.base + "/generate", params={"diagrams": "calc"}).status_code, 202)
+        self.assertEqual(self.wait()["state"], "done")
+        why = {r["tag"]: (r["S"], r["why"]) for r in self.c.get(self.base + "/calculation").json()["rows"]}
+        s_near, w_near = why["A-1"]
+        s_far, w_far = why["A-2"]
+        self.assertEqual(w_near["governs"], "thermal")                                                       # a short run: the current decides
+        self.assertEqual(w_far["governs"], "voltage_drop")                                                   # 200 m: more than the current needs, to keep the drop within its limit
+        self.assertGreater(s_far, w_far["thermal_mm2"])
+        self.assertLessEqual(w_far["du_pct"], w_far["limit_pct"])
+        self.assertEqual(w_far["in_a"], w_near["in_a"])
+
     def test_a_circuit_says_how_it_is_installed_and_with_what_and_the_calculation_follows_it(self):
         feeder = {"tag": "ALIM-1", "description": "Alimentador", "load": 166, "unit": "A", "destination": "", "parent_tag": "", "topology": "single", "phase": "3F", "length_m": 20, "kind": "auto"}
         board = {"board": BOARD, "titleblock": TB}

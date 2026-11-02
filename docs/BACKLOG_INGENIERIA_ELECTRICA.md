@@ -10,14 +10,14 @@ Estado: `[ ]` pendiente, `[~]` hecho en parte (se dice qué falta), `[x]` hecho.
 4. [x] **Recorrido incompleto en el diseño automático** (2026-10-29). La causa era que un tronco que cruzaba la columna principal la atravesaba sin tocarla (las líneas solo se unen en sus extremos): ahora se corta ahí. Además la propuesta se comprueba con el motor antes de mostrarla: une con un conduit perpendicular las cargas que quedaran aparte, y las que no se puedan alcanzar se nombran (por su TAG) en la tarjeta del recorrido, antes de aceptar.
 
 ## Calidad del cálculo
-5. [ ] **Vista de "por qué esta sección".** En cada circuito, qué la determinó: In, Iz, caída de tensión o sección mínima.
-6. [ ] **Agrupamiento tomado del plano.** El motor ya baja la Iz por agrupamiento (circuitos juntos); hoy se carga a mano. Contar los circuitos que comparten tramo en la bandeja o el conduit.
+5. [x] **Vista de «por qué esta sección»** (2026-11-01). En la tabla de circuitos, el botón ⓘ de cada fila explica qué decidió la sección: la corriente (Iz ≥ In), la mínima del tipo de circuito o la caída de tensión, con los valores. Sale del cálculo (`why` en `/sld/calculation`).
+6. [ ] **Agrupamiento tomado del plano.** El motor ya baja la Iz por agrupamiento; hoy se carga a mano. Falta un campo de agrupamiento por circuito (no existe en el formulario ni en las columnas que lee el cálculo, `AGRUP_CIRCUITOS`) y que el plano lo cuente por tramo de bandeja o conduit (`carries`).
 7. [~] **Valores típicos a confirmar, globales** (2026-11-01). Decisión: lo que hay que verificar no vive en el proyecto sino en la página de normas, igual que los datos de las normas, porque no cambia de un proyecto a otro. Hecho: diámetros de cable por sección, medidas comerciales de conduits y bandejas, límites de llenado y límites por circuito del diseño automático pasaron a `engine/plan/src/epc_plan/typical-values.json` y se revisan en la unidad «Cables, canalizaciones y diseño automático · valores típicos (a confirmar)» (corregir, aprobar, historial); el motor los lee de nuevo al corregirlos, sin reiniciar. Falta: llevar a la misma página los valores marcados `[VERIFICAR]` que hoy están escritos en el código del motor AEA (reactancia del cable 0,08 Ω/km, resistencias del aluminio, sección mínima del aluminio, temperaturas de conductor, k térmicos y tiempos de `cable_thermal`) y los criterios de emergencia antipánico y el factor 0,9 del motor de iluminación; y poder agregar medidas a las listas comerciales (hoy se corrigen, no se agregan).
 
 ## Uso diario
-8. [ ] **Edición en bloque de circuitos.** Cambiar conductor, aislación e instalación de varios circuitos a la vez (por ejemplo, todas las luminarias de un nivel).
-9. [ ] **Recalcular solo al editar.** Hoy se calcula al aceptar un circuito o con "Calcular"; que corra solo, con una espera breve después del último cambio.
-10. [ ] **Plantillas de circuitos por familia** (iluminación, tomas, climatización, motores) con cable y protección típicos del proyecto.
+8. [x] **Edición en bloque de circuitos** (2026-11-01). Se marcan varios circuitos (o todos) y se cambia de una vez instalación, aislación y conductor; solo se escribe lo que se cambió y la placa se guarda y calcula una vez.
+9. [x] **Recalcular solo al editar** (2026-11-01). Un cambio en los datos del tablero se guarda y calcula solo unos segundos después del último cambio; «Calcular» sigue para hacerlo al momento.
+10. [ ] **Plantillas de circuitos por familia** (iluminación, tomas, climatización, motores) con cable y protección típicos. Falta decidir dónde viven: por lo decidido el 2026-11-01, los valores típicos a confirmar van a la página de normas (globales), no al proyecto.
 
 ## Decisiones del 2026-11-01 (pendientes de hacer)
 13. [x] **Los archivos se generan desde un solo lugar: Emitir** (2026-11-01). En el trabajo solo se ven SVG y documentos; los DXF y los PDF se generan al preparar un transmittal. Hecho: Planos no genera ni descarga archivos (la versión de DXF es una propiedad del plano); los trabajos del unifilar y las memorias ya no hacen PDF; las memorias del tablero (MC y SP) y el estudio de iluminación se guardan para leer (Markdown) y su PDF se hace al emitir; las hojas de Planos con escala aparecen en Emitir y su DXF se genera, sellado, al emitir (y su PDF desde ese DXF); Archivos no lista PDF. Queda: los DXF del unifilar se siguen generando con el SVG y quedan guardados sin mostrarse (Emitir los toma de ahí): hacer que también se generen al emitir; y el mapa de lux a DXF sigue en espera.
@@ -25,5 +25,5 @@ Estado: `[ ]` pendiente, `[~]` hecho en parte (se dice qué falta), `[x]` hecho.
 15. [ ] **Más valores a verificar en la página de normas** (ver el punto 7): constantes `[VERIFICAR]` del motor AEA y criterios de emergencia del motor de iluminación.
 
 ## Entregables y pruebas
-11. [ ] **Memoria en Word y logos en el rótulo de la memoria** (ya estaban en el backlog de iluminación). El **mapa de lux a DXF** queda **en espera** (2026-11-01), con todo lo que sea optimizar el DXF.
-12. [ ] **Casos de prueba con planos reales** (PDF de CAD con mucho rayado, como el que superó el límite de trazos) para ajustar el reconocimiento de muros.
+11. [ ] **Memoria en Word y logos en el rótulo de la memoria.** El **mapa de lux a DXF** queda **en espera** (2026-11-01), con todo lo de optimizar el DXF.
+12. [ ] **Casos de prueba con planos reales** (PDF de CAD con mucho rayado) para ajustar el reconocimiento de muros. Hacen falta los archivos reales del dueño; el caso sintético de 200.000 trazos ya está cubierto.

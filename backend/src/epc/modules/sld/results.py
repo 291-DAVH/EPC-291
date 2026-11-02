@@ -19,6 +19,14 @@ def _feeders(base: Path, name: str) -> list:
     return read_json(base / f"{name}_acometidas.json", []) or []
 
 
+def _why(section, d: dict) -> dict:
+    """What decided the section of a circuit: the thermal one (Iz >= In), the minimum of its kind of circuit, or the voltage drop (a section larger than both)."""
+    thermal, minimum = d.get("s_termica_mm2"), d.get("seccion_min_mm2")
+    floor = max(x for x in (thermal, minimum, 0) if x is not None)
+    governs = "voltage_drop" if section and section > floor else "minimum" if minimum is not None and minimum > (thermal or 0) else "thermal"
+    return {"governs": governs, "thermal_mm2": thermal, "minimum_mm2": minimum, "in_a": d.get("in_a"), "iz_a": d.get("iz_a"), "limit_pct": d.get("limite_pct"), "du_pct": d.get("du_propia_pct")}
+
+
 def calculation(d: Path, bid: str = "") -> dict:
     """Result of the last calculation: one row per circuit (what the diagram was drawn from) and the criteria that governed it."""
     bid = _resolve(d, bid)
@@ -32,7 +40,7 @@ def calculation(d: Path, bid: str = "") -> dict:
     crit = read_json(base / f"{name}_criterios.json", {}) or {}
     saved = (repository.load_input(d, bid) if bid else None) or {"circuits": []}
     desc = {c["tag"]: c.get("description", "") for c in saved.get("circuits", [])}
-    rows = [{"tag": t, "description": _description(t, desc, detail), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}} for t, v in calc.items()]
+    rows = [{"tag": t, "description": _description(t, desc, detail), **v, **{k: detail.get(t, {}).get(k) for k in ("tipo", "limite_pct", "du_propia_pct", "iz_a", "cumple")}, "why": _why(v.get("S"), detail.get(t, {}))} for t, v in calc.items()]
     return {"rows": rows, "feeders": _feeders(base, name),
             "criteria": {"limits_pct": crit.get("limites_pct"), "conductor": crit.get("conductor"), "rcd_ma": crit.get("rcd_ma")}}
 
