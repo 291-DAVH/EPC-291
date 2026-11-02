@@ -7,6 +7,9 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ### Fixed
 - The Technical data screen no longer goes blank when it is opened while a calculation is still running ("Cannot access 'poll' before initialization"): the function that resumes the wait is declared before the screen's early return.
 
+### Changed
+- The typical values that have to be confirmed (outside diameter of cables by section, commercial sizes of conduits and trays, fill limits, outlets per circuit and power per outlet of the automatic design) are no longer part of the plan engine's code settings: they live in `typical-values.json` and are reviewed once, for every project, in the norms review page (new unit "Cables, canalizaciones y diseño automático · valores típicos (a confirmar)"): correct, approve, history. The engine reads a corrected value at once, without restarting.
+
 ### Fixed
 - The runs proposed by the automatic design now reach every load: a trunk that crossed the main spine went through it without touching it (lines only connect at their ends), leaving loads apart ("the runs do not reach LU-001…" at the wiring step). The trunk is now cut where the spine crosses it. The proposal is also checked with the engine before it is shown: loads left apart are joined to the nearest run by a perpendicular conduit (and the step says how many), and any that still cannot be reached are named in the route card, before it is accepted.
 

@@ -14,7 +14,24 @@ from typing import Any, Dict, List, Optional, Tuple
 from epc_plan import occupancy, svgsymbol
 
 HERE = Path(__file__).resolve().parent
-PARAMS = json.loads((HERE / "params.json").read_text(encoding="utf-8"))
+TYPICAL = HERE / "typical-values.json"         # the values the engineer confirms (cable diameters, commercial sizes, fill limits, limits per circuit): reviewed once, in the norms review
+
+
+def load_params() -> Dict[str, Any]:
+    """`params.json` and, over it, the typical values."""
+    params = json.loads((HERE / "params.json").read_text(encoding="utf-8"))
+    typical = json.loads(TYPICAL.read_text(encoding="utf-8"))
+    return {**params, **{k: v for k, v in typical.items() if k not in ("schema_version", "note")}}
+
+
+PARAMS = load_params()
+
+
+def reload_params() -> None:
+    """After the norms review corrected a typical value: the same dict is updated in place, so everything that holds it sees the new values."""
+    fresh = load_params()
+    PARAMS.clear()
+    PARAMS.update(fresh)
 SYMBOLS = json.loads((HERE / "symbols.json").read_text(encoding="utf-8"))["symbols"]
 for _entry in SYMBOLS.values():                         # a symbol may be an SVG file: its primitives are read from it
     if "svg" in _entry:

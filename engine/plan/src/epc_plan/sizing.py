@@ -1,7 +1,7 @@
 """The size of each conduit and tray, from the cables that go through it.
 
 A container carries the cables of the circuits routed over it (see `core._containers`); once the cables are sized (the section of each circuit comes from the calculation of its board), the smallest
-commercial size whose free section holds them within the fill limit is the one to draw. Typical values (in params.json, `sizing`): the engineer confirms them against the catalogue of the project.
+commercial size whose free section holds them within the fill limit is the one to draw. Typical values (in typical-values.json, `sizing`): the engineer confirms them against the catalogue of the project.
 """
 import math
 from typing import Any, Dict, List, Optional

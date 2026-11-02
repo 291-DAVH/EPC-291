@@ -64,6 +64,26 @@ def _table_points() -> List[dict]:
     return out
 
 
+PLAN_UNIT = "table:plan-valores-tipicos"
+PLAN_TITLES = {"sizing:cable_mm_by_section": "Diámetro exterior del cable multipolar por sección (mm)", "sizing:conduit_mm": "Conduits: diámetros interiores comerciales (mm)",
+               "sizing:tray_mm": "Bandejas: medidas comerciales, ancho × alto (mm)", "occupancy:default_cable_mm": "Diámetro de cable por defecto (mm)", "occupancy:tray_pct": "Llenado máximo de una bandeja (%)",
+               "occupancy:conduit_pct": "Llenado máximo de un conduit según los cables que lleva (%)", "design:families": "Diseño automático: salidas por circuito y potencia por salida de cada familia"}
+PLAN_GROUPS = {"sizing": "Cables y canalizaciones", "occupancy": "Llenado de canalizaciones", "design": "Diseño automático de circuitos"}
+
+
+def _plan_points() -> List[dict]:
+    """The typical values of the plan engine (cable diameters, commercial sizes, fill limits, limits per circuit): the engineer confirms them once, here, for every project."""
+    path = repository.paths().get("plan_values")
+    data = repository.read(path) if path else {}
+    return [{"unit": PLAN_UNIT, "kind": "table", "key": f"{section}:{k}", "title": PLAN_TITLES.get(f"{section}:{k}", f"{section}.{k}"), "group": group, "ref": "valor típico a confirmar", "value": v}
+            for section, group in PLAN_GROUPS.items() for k, v in data.get(section, {}).items() if k != "note"]
+
+
+def _plan_unit() -> Dict[str, dict]:
+    points = _plan_points()
+    return {PLAN_UNIT: {"id": PLAN_UNIT, "kind": "table", "name": "Cables, canalizaciones y diseño automático · valores típicos (a confirmar)", "points": points}} if points else {}
+
+
 def _criterion_points() -> List[dict]:
     cat = repository.read(repository.paths()["criteria"])
     return [{"unit": "criterion:ar-electrical", "kind": "criterion", "key": c["id"], "title": c["label"].get("es", c["id"]), "group": c["group"].get("es", ""),
@@ -106,6 +126,7 @@ def _all_units() -> Dict[str, dict]:
     for uid, pts in sorted(_rule_points().items()):
         units[uid] = {"id": uid, "kind": "rule", "name": pts[0]["unit_name"], "points": pts}
     units["table:aea-calculo"] = {"id": "table:aea-calculo", "kind": "table", "name": "Tablas y constantes de cálculo (AEA 90364-7-771, 2006)", "points": _table_points()}
+    units.update(_plan_unit())
     units["criterion:ar-electrical"] = {"id": "criterion:ar-electrical", "kind": "criterion", "name": "Criterios de diseño · valores base (AR, eléctrica)", "points": _criterion_points()}
     return units
 
@@ -339,6 +360,14 @@ def _store_rule(p: dict, new_value) -> None:
                 return
 
 
+def _store_plan_value(p: dict, new_value) -> None:
+    section, key = p["key"].split(":", 1)
+    f = repository.paths()["plan_values"]
+    data = repository.read(f)
+    data[section][key] = new_value
+    repository.write_like(f, data)
+
+
 def _store_table(p: dict, new_value) -> None:
     short, tid = p["key"].split(":", 1)
     f = repository.paths()["tables"]
@@ -386,7 +415,7 @@ _STORERS = {"rule": _store_rule, "table": _store_table, "criterion": _store_crit
 def _store(p: dict, new_value) -> None:
     """Write the corrected value into its data file."""
     try:
-        _STORERS[p["kind"]](p, new_value)
+        {PLAN_UNIT: _store_plan_value}.get(p["unit"], _STORERS[p["kind"]])(p, new_value)       # the typical values of the plan engine have their own file
     except OSError:
         raise Conflict({"filesystem": "this installation is read-only: review the norms in the development copy of the repository"})
     repository.clear_engine_cache()
