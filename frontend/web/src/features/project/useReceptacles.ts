@@ -31,6 +31,7 @@ export function useReceptacles({ client, code, lang, drawing, onChange, sheet }:
     setApplied({ added: out.added, removed: out.removed });
     api(`/projects/${client}/${code}/receptacles/study/${encodeURIComponent(sheet)}`, { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(requestOf(drawing, lang)) })       // what was applied is kept as the study of the sheet (the one its report is made from)
       .catch((x) => setError(errorText(x)));
+    return out.drawing;                                                            // the design goes on from it: runs, circuits, sizing and memo
   };
   return { options: options.data ?? undefined, proposal, busy, error, applied, calc, apply };
 }

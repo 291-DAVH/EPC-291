@@ -84,7 +84,7 @@ export default function AutoDesignDialog({ stage, onRuns, onWiring, onApprove, o
       </Modal>
     );
   }
-  const text = stage.step === "done" ? tl("auto.done") : stage.why === "noBoard" ? tl("auto.noBoard") : `${tl("auto.stopped")} ${stage.why}`;
+  const text = stage.step === "done" ? [tl("auto.done"), stage.memo ? tl("auto.memo." + stage.memo) : ""].filter(Boolean).join(" ") : stage.why === "noBoard" ? tl("auto.noBoard") : `${tl("auto.stopped")} ${stage.why}`;
   return (
     <Modal title={tl("auto.title")} onClose={onClose}>
       <p style={{ marginTop: 0 }}>{text}</p>

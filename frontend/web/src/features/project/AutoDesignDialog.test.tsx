@@ -21,6 +21,17 @@ const show = (stage: AutoStage) => {
 };
 
 describe("automatic design dialog", () => {
+  it("says, when the design is done, that the memo of the board was asked for, or that it could not be", () => {
+    show({ step: "done", memo: "started" });
+    expect(screen.getByRole("dialog").textContent).toContain("Se está generando la memoria de cálculo");
+    cleanup();
+    show({ step: "done", memo: "failed" });
+    expect(screen.getByRole("dialog").textContent).toContain("No se pudo pedir la memoria de cálculo");
+    cleanup();
+    show({ step: "done" });
+    expect(screen.getByRole("dialog").textContent).not.toContain("memoria");
+  });
+
   it("shows nothing when the design is not running", () => {
     show(null);
     expect(screen.queryByRole("dialog")).toBeNull();
