@@ -3,13 +3,14 @@ import DesignCriteria from "./DesignCriteria";
 import Layout from "./Layout";
 import SldInput from "./SldInput";
 import Issuing from "./Issuing";
+import Memos from "./Memos";
 import Parties from "./Parties";
 import { Badge, CalcView, CalculationTable, EngFile, EngOverview, EngText, Key, Markdown, PdfViewer, State, useApi, useI18n } from "@epc/ui";
 
 /** Engineering workspace of a project: its files, the drawings (every discipline over the plan), the parties, the technical information (single-line data), the design criteria and the issue. Engineer/admin only. */
 export default function Engineering({ client, code, onOpenDeliverables, sub: subParam, onSub, canWrite }: { client: string; code: string; onOpenDeliverables: () => void; sub: string; onSub: (x: string) => void; canWrite: boolean }) {
   const { t } = useI18n();
-  const SUBS = ["files", "layout", "parties", "sld", "criteria", "issue"] as const;
+  const SUBS = ["files", "layout", "parties", "sld", "memos", "criteria", "issue"] as const;
   const sub = (SUBS as readonly string[]).includes(subParam) ? (subParam as (typeof SUBS)[number]) : "files";
   const setSub = (x: (typeof SUBS)[number]) => onSub(x);
   return (
@@ -22,7 +23,8 @@ export default function Engineering({ client, code, onOpenDeliverables, sub: sub
       {sub === "files" && <Files client={client} code={code} />}
       {sub === "layout" && <Layout client={client} code={code} canWrite={canWrite} />}
       {sub === "parties" && <Parties client={client} code={code} />}
-      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={() => setSub("parties")} />}
+      {sub === "sld" && <SldInput client={client} code={code} onOpenFiles={() => setSub("files")} onOpenParties={() => setSub("parties")} onOpenMemos={() => setSub("memos")} />}
+      {sub === "memos" && <Memos client={client} code={code} canWrite={canWrite} onOpenFiles={() => setSub("files")} />}
       {sub === "criteria" && <DesignCriteria client={client} code={code} />}
       {sub === "issue" && <Issuing client={client} code={code} onOpenDeliverables={onOpenDeliverables} />}
     </>
