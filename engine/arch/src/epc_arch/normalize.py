@@ -33,7 +33,7 @@ def _flip_arc(a: Arc) -> Arc:
 
 
 def _map(prims: Primitives, fn, scale: float, flip: bool, units: Optional[float]) -> Primitives:
-    out = Primitives(source=prims.source, y_up=False, fit=False, units_per_metre=units, warnings=list(prims.warnings))
+    out = Primitives(source=prims.source, y_up=False, fit=False, units_per_metre=units, scale=prims.scale, warnings=list(prims.warnings))
     out.lines = [Line(fn(l.a), fn(l.b), l.width * scale, l.layer) for l in prims.lines]
     arcs = [_flip_arc(a) if flip else a for a in prims.arcs]
     out.arcs = [Arc(fn(a.c), a.r * scale, a.start, a.end, a.layer) for a in arcs]

@@ -102,8 +102,8 @@ def room_pdf(scale: float = 100.0, arc: bool = True) -> bytes:
     return make_pdf("\n".join(ops))
 
 
-def room_png(px_per_m: float = 150.0, thick: int = 12) -> bytes:
-    """The room as a picture: walls as thick black bands, the door as a gap, the window as a gap with two thin lines."""
+def room_png(px_per_m: float = 150.0, thick: int = 12, swing: bool = False, invert: bool = False) -> bytes:
+    """The room as a picture: walls as thick black bands, the door as a gap, the window as a gap with two thin lines. `swing` draws the door's leaf and quarter circle; `invert` makes a blueprint."""
     ox, oy = 100, 100
     w, h = int(W * px_per_m) + 2 * ox, int(H * px_per_m) + 2 * oy
     img = Image.new("L", (w, h), 255)
@@ -125,6 +125,13 @@ def room_png(px_per_m: float = 150.0, thick: int = 12) -> bytes:
     band(W - mid, 0, W - mid, H)
     for dy in (-0.05, 0.05):
         d.line([X(WINDOW[0]), Y(H - mid + dy), X(WINDOW[1]), Y(H - mid + dy)], fill=0, width=2)
+    if swing:
+        r = (DOOR[1] - DOOR[0]) * px_per_m
+        hx, hy = X(DOOR[0]), Y(mid)
+        d.line([hx, hy, hx, hy - r], fill=0, width=2)
+        d.arc([hx - r, hy - r, hx + r, hy + r], start=270, end=360, fill=0, width=2)
+    if invert:
+        img = Image.eval(img, lambda v: 255 - v)
     out = io.BytesIO()
     img.save(out, format="PNG")
     return out.getvalue()

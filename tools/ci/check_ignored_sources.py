@@ -13,6 +13,7 @@ REPO = Path(__file__).resolve().parents[2]
 ALLOWED_PARTS = {"node_modules", ".venv", "__pycache__", "dist", ".import_linter_cache", ".pytest_cache", "_out", ".mypy_cache", ".cov"}
 ALLOWED_TOP = {"local", ".claude", "respuestas.md"}
 ALLOWED_SUFFIX = (".egg-info", ".pyc", ".bak", ".tmp", ".plugin")
+ALLOWED_PREFIX = ("engine/arch/samples", "engine/arch/out")       # third-party training plans and what the arch scripts generate from them
 
 
 def main() -> int:
@@ -26,7 +27,7 @@ def main() -> int:
         parts = set(p.parts)
         if parts & ALLOWED_PARTS or p.parts[0] in ALLOWED_TOP or any(s.endswith(ALLOWED_SUFFIX) for s in p.parts):
             continue
-        if p.name.startswith(".env"):
+        if p.as_posix().startswith(ALLOWED_PREFIX) or p.name.startswith(".env"):
             continue
         bad.append(line)
     for b in bad:
