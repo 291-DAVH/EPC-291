@@ -38,8 +38,8 @@ export function HistoryPanel({ root, level, rev, canWrite, comparing, onCompare,
 }
 
 /** What to look at before making the files: the errors stop it, the warnings can be accepted. */
-export function ChecksPanel({ problems, describe, onGo, onForce, onClose, tl }: {
-  problems: Problem[]; describe: (p: Problem) => string; onGo: (p: Problem) => void; onForce: () => void; onClose: () => void; tl: T;
+export function ChecksPanel({ problems, describe, onGo, onClose, tl }: {
+  problems: Problem[]; describe: (p: Problem) => string; onGo: (p: Problem) => void; onClose: () => void; tl: T;
 }) {
   const errors = problems.filter((p) => p.severity === "error");
   return (
@@ -50,7 +50,7 @@ export function ChecksPanel({ problems, describe, onGo, onForce, onClose, tl }: 
         {problems.map((p, i) => <li key={i}><Badge tone={p.severity === "error" ? "bad" : "warn"}>{tl(p.severity === "error" ? "plan.checks.error" : "plan.checks.warn")}</Badge> <button className="linkbtn" onClick={() => onGo(p)}>{describe(p)}</button></li>)}
       </ul>
       <div className="row" style={{ gap: 6 }}>
-        {problems.length > 0 && <button className="primary" disabled={errors.length > 0} onClick={onForce}>{tl("plan.checks.go")}</button>}<button onClick={onClose}>{tl(problems.length > 0 ? "layout.cancel" : "plan.checks.close")}</button>
+        <button onClick={onClose}>{tl(problems.length > 0 ? "layout.cancel" : "plan.checks.close")}</button>
       </div>
     </div>
   );

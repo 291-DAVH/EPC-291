@@ -1,7 +1,7 @@
 """The study of a sheet: the lighting calculation kept with the sheet, whether it is still good for the rooms as they are drawn now, and its report as a document of the project.
 
   <project>/workspace/02-engineering/layout/<sheet>/src/lighting.json            the study (what was asked, what came out, the fingerprint of both)
-  <project>/workspace/02-engineering/electrical/PQ-01/docs/LIGHTING_<sheet>.pdf  its report: from there the issuing flow offers it as a deliverable
+  <project>/workspace/02-engineering/electrical/PQ-01/docs/LIGHTING_<sheet>.md   its report, to read in the work environment; its PDF is made when a transmittal is issued
 """
 import re
 from pathlib import Path
@@ -12,6 +12,7 @@ from pydantic import ValidationError
 from epc.core import clock, engine
 from epc.core.errors import Conflict, Failure, Invalid, NotFound
 from epc.core.fsutil import read_json, write_json
+from epc.modules.engineering import public as engineering
 from epc.modules.identity import public as identity
 from epc.modules.layout import public as layout
 from epc.modules.lighting import figures, report, service
@@ -36,7 +37,7 @@ def _who() -> str:
 
 
 def report_path(d: Path, sheet: str) -> Path:
-    return d / DOCS / f"LIGHTING_{UNSAFE.sub('_', sheet)}.pdf"
+    return d / DOCS / f"LIGHTING_{UNSAFE.sub('_', sheet)}.md"
 
 
 def save(d: Path, sheet: str, body: CalcIn) -> dict:
@@ -101,8 +102,8 @@ def _extras(d: Path, stored: dict, lang: str) -> dict:
     return {"titleblock": masterdata.titleblock(d, "electrical"), "energy_checks": energy_checks(stored["result"], asked.options), "figure": figures.sheet_figure(outlines, fresh, t["figure"], t["scale"])}
 
 
-def make_report(d: Path, sheet: str, lang: str) -> dict:
-    """The report of the study as a PDF in the documents of the engineering workspace. A stale study has none: calculate it again first."""
+def _report_document(d: Path, sheet: str, lang: str) -> dict:
+    """The report of the study as a structured document (what the Markdown and the PDF are made from). A stale study has none: calculate it again first."""
     stored = read_json(_path(d, sheet), None)
     if not stored:
         raise NotFound("this sheet has no study")
@@ -112,13 +113,40 @@ def make_report(d: Path, sheet: str, lang: str) -> dict:
     used = {name for r in stored["input"]["rooms"].values() for name in (r.get("luminaire", ""), r.get("emergency_luminaire", ""))}
     names = {lid: service.label(luminaires[lid], lang) for lid in used if lid in luminaires}
     meta = projects.read_meta(d)
-    doc = report.document(stored, {"code": meta.get("project_code", ""), "name": meta.get("project_name", "")}, lang, names,
-                          any(luminaires.get(lid, {}).get("illustrative") for lid in used), service.engine_version(), _extras(d, stored, lang))
+    return report.document(stored, {"code": meta.get("project_code", ""), "name": meta.get("project_name", "")}, lang, names,
+                           any(luminaires.get(lid, {}).get("illustrative") for lid in used), service.engine_version(), _extras(d, stored, lang))
+
+
+def make_report(d: Path, sheet: str, lang: str) -> dict:
+    """The report of the study as a Markdown document in the engineering workspace (to read there; the PDF is made when it is issued)."""
+    from epc_aea90364.board_memo import doc_markdown                       # the shared conversion of a structured document to Markdown
+    meta = projects.read_meta(d)
     dst = report_path(d, sheet)
     dst.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        engine.render_report_pdf(doc, dst)
-    except RuntimeError as exc:
-        raise Failure(str(exc))
+    dst.write_text(doc_markdown(_report_document(d, sheet, lang)), encoding="utf-8", newline="\n")
     identity.audit_event("lighting_report_made", target=f"{projects.project_id(d)}:{sheet}", org_slug=meta.get("org", ""), detail={"file": dst.name})
     return {"file": dst.name, "path": dst.relative_to(d).as_posix()}
+
+
+def _pdf_maker(d: Path, sheet: str, lang: str):
+    def make(dst: Path) -> None:
+        try:
+            engine.render_report_pdf(_report_document(d, sheet, lang), dst)
+        except RuntimeError as exc:
+            raise Failure(str(exc))
+    return make
+
+
+def issuable(d: Path) -> list:
+    """The studies still good for their sheet, offered to be issued: the PDF of each report is made when the transmittal is issued."""
+    lang = "es" if str(projects.read_meta(d).get("locale", "")).startswith("es") else "en"
+    out = []
+    for item in layout.sheets(d):
+        stored = read_json(_path(d, item["sheet"]), None)
+        if stored and not _stale(d, item["sheet"], stored):
+            stem = f"LIGHTING_{UNSAFE.sub('_', item['sheet'])}"
+            out.append({"id": f"electrical/PQ-01/docs/{stem}.pdf", "name": stem, "discipline": "electrical", "package": "PQ-01", "kind": "document", "files": {"pdf": _pdf_maker(d, item["sheet"], lang)}})
+    return out
+
+
+engineering.register_issuable(issuable)

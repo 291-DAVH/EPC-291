@@ -50,8 +50,6 @@ def _job(d: Path, bid: str, data: dict, name: str, diagrams: str = "sld") -> Non
         if res.returncode != 0 or not summary.get("ok"):
             st.update(state="failed", log=log, error=(summary.get("error") or res.stderr or res.stdout).strip()[-600:])
         else:
-            log += repository.render_pdfs(out, "SLD_" + name) if "sld" in diagrams else []
-            log += repository.render_pdfs(out, "MLD_" + name) if "mld" in diagrams else []
             st.update(state="done", log=log, outputs=repository.publish(d, out, name, previous, previous_name, exact=diagrams == "calc"), name=name, input_hash=_fingerprint(d, data, diagrams, prior),
                       calculation={"limits_pct": summary.get("limites_pct"), "conductor": summary.get("conductor"), "non_compliant": summary.get("non_compliant", [])})
     except Exception as exc:                                         # noqa: BLE001 - reported to the user through the status

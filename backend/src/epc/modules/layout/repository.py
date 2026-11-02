@@ -245,9 +245,3 @@ def load_result(d: Path, level: str) -> Optional[dict]:
 def load_made_from(d: Path, level: str) -> Optional[dict]:
     """The drawing the last DXF and PDF were made from."""
     return read_json(out_dir(d, level) / "drawing.json", None)
-
-
-def render_pdf(dxf: Path, dst: Path) -> Optional[str]:
-    """PDF of the DXF through the engine exporter; the reason in text when it could not be made."""
-    res = engine.run_module("epc_drawing.export.pdf", [dxf, dst], timeout=300)
-    return None if res.returncode == 0 else engine.tail(res, 200)

@@ -368,17 +368,9 @@
     "lines": 141,
     "sha256": "5c24fa92721f310307b8fa3fc1891c24d0352885109f304c3f3cf582487698b7"
    },
-   "T1_MC.pdf": {
-    "pdf_pages": 4,
-    "starts_with_pdf": true
-   },
    "T1_SP.md": {
     "lines": 22,
     "sha256": "bbfbdec0b10737063e3838c98bae796e327b621be04b749aac96faf518e907f3"
-   },
-   "T1_SP.pdf": {
-    "pdf_pages": 1,
-    "starts_with_pdf": true
    },
    "T1_acometidas.json": {
     "lines": 1,
@@ -634,17 +626,9 @@
     "lines": 141,
     "sha256": "18d11425285a990388748a79ba4fd4436c11da7c1c162635646dcad7dbddd2d2"
    },
-   "T1_MC.pdf": {
-    "pdf_pages": 4,
-    "starts_with_pdf": true
-   },
    "T1_SP.md": {
     "lines": 22,
     "sha256": "06c940dd1aecdefba970139f6bc05182ff512703cda82354bb239cd410e9686c"
-   },
-   "T1_SP.pdf": {
-    "pdf_pages": 1,
-    "starts_with_pdf": true
    },
    "T1_acometidas.json": {
     "lines": 1,
@@ -843,17 +827,9 @@
     "lines": 84,
     "sha256": "fc5727fa523c1591086b68b3ae904c9dfe7603a8412ad3aa8c7df89878fa66f8"
    },
-   "T1_MC.pdf": {
-    "pdf_pages": 2,
-    "starts_with_pdf": true
-   },
    "T1_SP.md": {
     "lines": 21,
     "sha256": "581216612dfa2f3c834a338e2f8c2fb8dff2206422265cb51e7011e04317e6d3"
-   },
-   "T1_SP.pdf": {
-    "pdf_pages": 1,
-    "starts_with_pdf": true
    },
    "T1_acometidas.json": {
     "lines": 1,

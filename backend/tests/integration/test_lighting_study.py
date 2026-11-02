@@ -37,7 +37,7 @@ class TestKeeping(Study):
         self.assertEqual(r.status_code, 200, r.text)
         s = r.json()
         self.assertTrue(s["exists"] and not s["stale"] and s["report"])                                      # the report is made with the study
-        self.assertEqual((s["report_file"], s["report_error"]), ("LIGHTING_L0_electrica_BT.pdf", ""))
+        self.assertEqual((s["report_file"], s["report_error"]), ("LIGHTING_L0_electrica_BT.md", ""))
         self.assertEqual(s["result"]["rooms"][0]["id"], "R1")
         self.assertTrue(s["placements"]["R1"])
         kept = read_json(self.d / "workspace" / "02-engineering" / "layout" / "L0@electrica_BT" / "src" / "lighting.json", None)
@@ -57,14 +57,13 @@ class TestKeeping(Study):
 
 
 class TestReportWithTheStudy(Study):
-    def test_the_report_is_among_the_files_of_engineering_as_a_pdf_the_moment_the_study_is_kept(self):
+    def test_the_report_is_among_the_files_of_engineering_as_a_text_the_moment_the_study_is_kept_and_has_no_pdf(self):
         self.save()
         eng = "/api/projects/ACME/P-1/engineering"
         docs = [x for x in self.c.get(eng).json()["documents"] if x["name"].startswith("LIGHTING_")]
-        self.assertEqual([(x["kind"], x["ext"], x["discipline"]) for x in docs], [("pdf", ".pdf", "electrical")])
-        shown = self.c.get(eng + "/pdf", params={"path": docs[0]["path"]})
-        self.assertEqual((shown.status_code, shown.headers["content-type"]), (200, "application/pdf"))
-        self.assertTrue(shown.content.startswith(b"%PDF"))
+        self.assertEqual([(x["kind"], x["ext"], x["discipline"]) for x in docs], [("text", ".md", "electrical")])        # PDFs are made when a transmittal is issued
+        shown = self.c.get(eng + "/text", params={"path": docs[0]["path"]}).json()["text"]
+        self.assertIn("Aula", shown)
 
     def test_the_pdf_endpoint_only_serves_pdfs_the_workspace_lists(self):
         eng = "/api/projects/ACME/P-1/engineering/pdf"
@@ -111,15 +110,19 @@ class TestStale(Study):
 
 
 class TestReport(Study):
-    def test_the_report_of_a_study_is_a_pdf_among_the_documents_and_is_offered_for_issue(self):
+    def test_the_report_of_a_study_is_kept_as_text_and_offered_for_issue_where_its_pdf_is_made(self):
         self.save()
         r = self.c.post(STUDY + "/report?lang=es")
         self.assertEqual(r.status_code, 200, r.text)
-        pdf = self.d / r.json()["path"]
-        self.assertTrue(pdf.read_bytes().startswith(b"%PDF"))
+        self.assertTrue((self.d / r.json()["path"]).read_text(encoding="utf-8").startswith("#"))
         self.assertTrue(self.c.get(STUDY).json()["report"])
         offered = [c for c in self.c.get("/api/projects/ACME/P-1/issuing").json()["candidates"] if c["name"].startswith("LIGHTING_")]
         self.assertEqual([(c["kind"], c["formats"]) for c in offered], [("document", ["pdf"])])
+        made = self.c.post("/api/projects/ACME/P-1/issuing", json={"emission": "ifa", "client_rev": "00", "internal_rev": "00.0.1", "items": [{"source": offered[0]["id"]}]})
+        self.assertEqual(made.status_code, 201, made.text)
+        pdfs = list((self.d / "deliverables").rglob("*.pdf"))
+        self.assertEqual(len(pdfs), 1)
+        self.assertTrue(pdfs[0].read_bytes().startswith(b"%PDF"))                                           # the PDF exists since the transmittal was prepared, not before
 
     def test_a_stale_study_has_no_report_and_a_sheet_without_study_neither(self):
         self.assertEqual(self.c.post(STUDY + "/report").status_code, 404)
@@ -140,7 +143,7 @@ class TestExterior(Study):
         self.assertFalse(self.c.get(STUDY).json()["stale"])
         r = self.c.post(STUDY + "/report?lang=en")
         self.assertEqual(r.status_code, 200, r.text)
-        self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
+        self.assertTrue((self.d / r.json()["path"]).read_text(encoding="utf-8").startswith("#"))
 
 
 class TestEmergencyReport(Study):
@@ -152,7 +155,7 @@ class TestEmergencyReport(Study):
         self.assertFalse(self.c.get(STUDY).json()["stale"])
         r = self.c.post(STUDY + "/report?lang=es")
         self.assertEqual(r.status_code, 200, r.text)
-        self.assertTrue((self.d / r.json()["path"]).read_bytes().startswith(b"%PDF"))
+        self.assertTrue((self.d / r.json()["path"]).read_text(encoding="utf-8").startswith("#"))
 
     def test_the_report_document_lists_the_emergency_rooms_and_marks_the_criteria_that_were_assumed(self):
         from epc_lighting.config import PARAMS as ENGINE

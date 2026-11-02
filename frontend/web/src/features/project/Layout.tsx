@@ -50,7 +50,6 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   const [savedAt, setSavedAt] = useState(0);
   const [, tick] = useState(0);
   const [err, setErr] = useState("");
-  const [version, setVersion] = useState("");
   const [busy, setBusy] = useState(false);
   const [selection, setSelection] = useState<Ref[]>([]);
   const [focus, setFocus] = useState("");               // the circuit whose route is highlighted
@@ -238,13 +237,6 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     try { const v = await api<LevelView>(`${root}/${level}/underlay`, { method: "POST", body }); setLv(v); setStamp((n) => n + 1); setErr(""); setRev((n) => n + 1); } catch (x) { setErr(errorText(x)); }
     setBusy(false);
   };
-  const generate = async () => {
-    setBusy(true);
-    setChecks(null);
-    if (timer.current) { window.clearTimeout(timer.current); timer.current = null; await send(drawing); }       // what is on the screen is what gets drawn
-    try { const v = await api<LevelView>(`${root}/${level}/generate${version ? `?version=${version}` : ""}`, { method: "POST" }); setLv(v); setDerived(v.result); setStale(false); setErr(""); } catch (x) { setErr(errorText(x)); }
-    setBusy(false);
-  };
   /** Everything worth a look before making files: the checks of the drawing and the links of its shafts with their twins on other levels. */
   const collectProblems = async (): Promise<Problem[]> => {
     const found = generationChecks(drawing, derived?.circuits, k ? SNAP_TOL_M / k : 3);
@@ -257,10 +249,6 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
     return [...found, ...linkProblems(drawing, base, k, (lvl) => fetched[lvl])];
   };
   const runChecks = async () => setChecks(await collectProblems());
-  const beforeGenerate = async () => {
-    const found = await collectProblems();
-    if (found.length) setChecks(found); else generate();
-  };
   const showChanges = async () => { try { setChanges(await api<Changes>(`${root}/${level}/changes`)); } catch (x) { setErr(errorText(x)); } };
   const copyTo = async () => {
     if (!copying || !k) return;
@@ -386,7 +374,6 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   if (ov.error) return <div className="state err">{ov.error}</div>;
   if (!ov.data) return <State loading={ov.loading} />;
   const d = derived;
-  const download = (name?: string) => (name ? `/api/projects/${client}/${code}/layout/${level}/files/${name}` : "");
   const dp = d?.ready ? d : null;
   const warnings = d?.warnings ?? [];
   const bases = [...new Set(sheets.map((x) => x.base))];
@@ -458,13 +445,10 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
         {state === "saved" && <span className="muted small" title={tl("plan.savedAgo")}>{tl("layout.saved")} {ago < 60 ? `${ago}s` : `${Math.round(ago / 60)} min`}</span>}
         {state === "error" && <Badge tone="bad">{tl("plan.notSaved")}</Badge>}
         {level && <>
-          <select className="compact-select" value={version} title={`${tl("layout.dxfVersion")}: ${tl("layout.latest")}`} aria-label={tl("layout.dxfVersion")} onChange={(e) => setVersion(e.target.value)}>
+          <select className="compact-select" value={drawing.dxf_version ?? ""} title={`${tl("layout.dxfVersion")}: ${tl("layout.latest")}`} aria-label={tl("layout.dxfVersion")} disabled={!write} onChange={(e) => change({ ...drawing, dxf_version: e.target.value })}>
             <option value="">{ov.data.default_dxf_version}</option>
             {ov.data.dxf_versions.map((v) => <option key={v} value={v}>{v}</option>)}
           </select>
-          <button className="tool-ico primary" disabled={busy || !drawing.scale || !write} onClick={beforeGenerate} title={!drawing.scale ? tl(drawing.discipline === "arquitectura" ? "layout.needScale" : "layout.needScalePlan") : tl("layout.makeFiles")} aria-label={tl("layout.makeFiles")}><Icon name="file" size={18} /></button>
-          {lv?.files?.dxf && <a className="btn" href={download(lv.files.dxf)} title={`${tl("layout.downloadDxf")} (${lv.files.dxf_version})`}>DXF</a>}
-          {lv?.files?.pdf && <a className="btn" href={download(lv.files.pdf)} title={tl("layout.downloadPdf")}>PDF</a>}
           {lv?.files && stale && <button className="badge warn" onClick={showChanges} title={tl("plan.changes")}>{tl("layout.filesOutdated")} ▸</button>}
           <button className="tool-ico" onClick={runChecks} title={`${tl("plan.check")} — ${tl("plan.check.help")}`} aria-label={tl("plan.check")}><Icon name="check" size={18} /></button>
         </>}
@@ -520,7 +504,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
             </div>
           )}
           {changes && <ChangesPanel data={changes} tl={tl} onClose={() => setChanges(null)} onGo={(r) => { look([r]); setChanges(null); }} />}
-          {checks && <ChecksPanel problems={checks} describe={describeProblem} onGo={goProblem} onForce={generate} onClose={() => setChecks(null)} tl={tl} />}
+          {checks && <ChecksPanel problems={checks} describe={describeProblem} onGo={goProblem} onClose={() => setChecks(null)} tl={tl} />}
         </div>
       )}
     </div>
