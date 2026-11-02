@@ -1,10 +1,19 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import BulkWiring, { WiringPatch } from "./BulkWiring";
 import BoardMemo from "./BoardMemo";
 import FeedersCard from "./FeedersCard";
 import RouteEditor from "./RouteEditor";
-import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, WiringDefaults, useApi, useI18n } from "@epc/ui";
+import { api, ApiError, Badge, BoardMemoView, BoardRow, CALC_HEADS, CalcCells, CalcHeader, CalcRow, CalcView, JSON_HEADERS, Key, LengthInfo, SldCircuit, SldData, SldStatus, SldView, State, WiringDefaults, useApi, useI18n } from "@epc/ui";
 
 /** How a circuit is wired, in a few words: the method of installation, the conductor and the insulation (what it leaves to the design criteria is read from them). */
+/** In a few words, what decided the section of a circuit. */
+const whyText = (r: CalcRow, t: (k: Key) => string): string => {
+  const w = r.why!;
+  const fill = (s: string) => s.replace("{s}", String(r.S)).replace("{in}", String(w.in_a ?? "–")).replace("{thermal}", String(w.thermal_mm2 ?? "–")).replace("{min}", String(w.minimum_mm2 ?? "–"))
+    .replace("{limit}", String(w.limit_pct ?? "–")).replace("{du}", String(w.du_pct ?? "–"));
+  return fill(t(("why." + w.governs) as Key));
+};
+
 const wiringOf = (c: SldCircuit, crit?: { material: string; aislacion: string }): string =>
   `${c.method || "–"} · ${(c.material || crit?.material || "").replace(/^./, (x) => x.toUpperCase())} ${(c.insulation || crit?.aislacion || "").toUpperCase()}`.trim();
 
@@ -137,7 +146,9 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
   const [msg, setMsg] = useState("");
   const [editing, setEditing] = useState<Editing | null>(null);          // the circuit being added (index null) or edited, in the form under the table
   const [routeOpen, setRouteOpen] = useState(false);                       // its real route is being edited
-  const [customVoltage, setCustomVoltage] = useState(false);               // the voltage is typed, not one of the usual pairs
+  const [customVoltage, setCustomVoltage] = useState(false);
+  const [whyOf, setWhyOf] = useState<number | null>(null);                 // the circuit whose "why this section" is open
+  const [picked, setPicked] = useState<Set<number>>(new Set());              // the circuits selected to change their wiring together               // the voltage is typed, not one of the usual pairs
   const timer = useRef<number | undefined>(undefined);
 
   /** Ask for the status again in a moment while a calculation runs. Declared before the early return below: the effect that resumes a run found at load time uses it. */
@@ -156,6 +167,12 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
     }
   }, [view.data]);
   useEffect(() => () => window.clearTimeout(timer.current), []);
+  const autoCalc = useRef<() => void>(() => undefined);
+  useEffect(() => {                                                       // a change typed in the board is saved and calculated a moment after the last key, without asking
+    if (!dirty || !data || !data.board.name.trim() || data.circuits.length === 0 || status?.state === "running") return;
+    const id = window.setTimeout(() => autoCalc.current(), 2500);
+    return () => window.clearTimeout(id);
+  }, [data, dirty, status?.state]);                                       // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (view.data?.status.state === "running") poll();
   }, [view.data]);                                                      // eslint-disable-line react-hooks/exhaustive-deps
@@ -191,6 +208,7 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
       setStatus(st); setErrors({}); poll();
     } catch (x) { fail(x); }
   };
+  autoCalc.current = () => { if (!editing) calculate(data); };
   const draftSet = (patch: Partial<SldCircuit>) => setEditing((e) => (e ? { ...e, draft: { ...e.draft, ...patch } } : e));
   const closeForm = () => { setEditing(null); setRouteOpen(false); setErrors({}); };
   /** Accept the circuit being typed or edited: it joins the board (or replaces its older self), is saved and calculated at once. */
@@ -204,9 +222,15 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
     setData(next); closeForm();
     await calculate(next);
   };
+  /** The wiring the person chose, written on every selected circuit; the board is saved and calculated once. */
+  const applyBulk = async (patch: WiringPatch) => {
+    const next = { ...data, circuits: data.circuits.map((c, i) => (picked.has(i) ? { ...c, ...patch } : c)) };
+    setData(next); setPicked(new Set());
+    await calculate(next);
+  };
   const removeCircuit = async (i: number) => {
     const next = { ...data, circuits: data.circuits.filter((_, j) => j !== i) };
-    setData(next); closeForm();
+    setData(next); closeForm(); setPicked(new Set()); setWhyOf(null);
     if (next.circuits.length) await calculate(next); else { setDirty(true); setMsg(""); }
   };
   const loadExample = async () => {
@@ -298,29 +322,35 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
         {!hasBoard && <p className="small" role="alert" style={{ margin: "6px 0 8px", color: "var(--bad, #b3261e)" }}>{t("sld.needBoard")}</p>}
         <p className="muted small" style={{ margin: "6px 0 8px" }}>{running ? t("sld.calcRunning") : dirty ? t("sld.calcPending") : t("sld.calcHelp")}</p>
         {calc.data && calc.data.rows.length > 0 && <CalcHeader view={calc.data} />}
+        {picked.size > 0 && <BulkWiring count={picked.size} methods={o.methods ?? []} insulations={o.insulations ?? []} materials={o.materials ?? []} defaults={view.data.wiring_defaults} busy={running} onApply={applyBulk} onClear={() => setPicked(new Set())} />}
         {data.circuits.length > 0 && (
           <div style={{ overflowX: "auto", marginTop: 6 }}>
             <table className="sldtable">
               <thead>
-                <tr>{(["sld.tag", "sld.desc", "sld.load", "sld.length", "sld.install"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}{CALC_HEADS.map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
+                <tr><th><input type="checkbox" aria-label={t("bulk.all")} checked={picked.size === data.circuits.length && picked.size > 0} onChange={(e) => setPicked(e.target.checked ? new Set(data.circuits.map((_, i) => i)) : new Set())} /></th>{(["sld.tag", "sld.desc", "sld.load", "sld.length", "sld.install"] as Key[]).map((h) => <th key={h}>{t(h)}</th>)}{CALC_HEADS.map((h) => <th key={h}>{t(h)}</th>)}<th /></tr>
               </thead>
               <tbody>
                 {data.circuits.map((c, i) => (
-                  <tr key={i} className={editing?.index === i ? "draft" : undefined}>
+                  <Fragment key={i}>
+                  <tr className={editing?.index === i ? "draft" : undefined}>
+                    <td><input type="checkbox" aria-label={`${t("bulk.pick")} ${c.tag}`} checked={picked.has(i)} onChange={(e) => setPicked((p) => { const n = new Set(p); if (e.target.checked) n.add(i); else n.delete(i); return n; })} /></td>
                     <td className="mono">{c.tag}</td><td>{c.description}</td>
                     <td className="mono" style={{ whiteSpace: "nowrap" }}>{c.load ?? ""} {c.unit}</td>
                     <td className="mono">{(c.route?.length ?? 0) > 0 ? Math.round(c.route!.reduce((a, s) => a + (Number(s.length_m) || 0), 0) * 100) / 100 : c.length_m}</td>
                     <td style={{ whiteSpace: "nowrap" }}>{wiringOf(c, calc.data?.criteria?.conductor)}</td>
                     <CalcCells row={calcOf.get(c.tag.trim())} />
                     <td style={{ whiteSpace: "nowrap" }}>
+                      {calcOf.get(c.tag.trim())?.why && <><button onClick={() => setWhyOf(whyOf === i ? null : i)} aria-pressed={whyOf === i} title={t("why.title")} aria-label={t("why.title")}>ⓘ</button>{" "}</>}
                       <button onClick={() => { setEditing({ index: i, draft: JSON.parse(JSON.stringify(c)) }); setRouteOpen(false); setErrors({}); }} title={t("sld.editRow")} aria-label={t("sld.editRow")} disabled={running}>✎</button>{" "}
                       <button onClick={() => removeCircuit(i)} title={t("sld.removeRow")} aria-label={t("sld.removeRow")} disabled={running}>✕</button>
                     </td>
                   </tr>
+                  {whyOf === i && calcOf.get(c.tag.trim())?.why && <tr className="muted"><td /><td colSpan={5 + CALC_HEADS.length}>{whyText(calcOf.get(c.tag.trim())!, t)}</td></tr>}
+                  </Fragment>
                 ))}
                 {extra.map((r) => (
                   <tr key={"auto-" + r.tag} className="muted">
-                    <td className="mono">{r.tag}</td><td colSpan={4}>{r.description} · {t("sld.autoGroup")}</td><CalcCells row={r} /><td />
+                    <td /><td className="mono">{r.tag}</td><td colSpan={4}>{r.description} · {t("sld.autoGroup")}</td><CalcCells row={r} /><td />
                   </tr>
                 ))}
               </tbody>
