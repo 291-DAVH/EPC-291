@@ -72,7 +72,7 @@ function LengthSource({ c, info, sources, onChange, t }: { c: SldCircuit; info?:
 }
 
 /** The boards of the project: each one has its own data, calculation and diagrams, and a project can start with one and add others later. */
-export default function SldInput({ client, code, onOpenFiles, onOpenParties }: { client: string; code: string; onOpenFiles: () => void; onOpenParties: () => void }) {
+export default function SldInput({ client, code, onOpenFiles, onOpenParties, onOpenMemos }: { client: string; code: string; onOpenFiles: () => void; onOpenParties: () => void; onOpenMemos: () => void }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/sld`;
   const [tick, setTick] = useState(0);
@@ -115,15 +115,15 @@ export default function SldInput({ client, code, onOpenFiles, onOpenParties }: {
           </div>
         </div>
       )}
-      <BoardEditor key={id} client={client} code={code} board={id} boards={boards} onOpenFiles={onOpenFiles} onOpenParties={onOpenParties}
+      <BoardEditor key={id} client={client} code={code} board={id} boards={boards} onOpenFiles={onOpenFiles} onOpenParties={onOpenParties} onOpenMemos={onOpenMemos}
         onSaved={(bid) => { if (bid !== id) setCur(bid); setTick((n) => n + 1); }}
         onDeleted={() => { setCur(""); setTick((n) => n + 1); }} />
     </div>
   );
 }
 
-function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, onSaved, onDeleted }:
-  { client: string; code: string; board: string; boards: BoardRow[]; onOpenFiles: () => void; onOpenParties: () => void; onSaved: (id: string) => void; onDeleted: () => void }) {
+function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, onOpenMemos, onSaved, onDeleted }:
+  { client: string; code: string; board: string; boards: BoardRow[]; onOpenFiles: () => void; onOpenParties: () => void; onOpenMemos: () => void; onSaved: (id: string) => void; onDeleted: () => void }) {
   const { t } = useI18n();
   const base = `/projects/${client}/${code}/sld`;
   const q = board ? `board=${encodeURIComponent(board)}` : "";
@@ -364,7 +364,8 @@ function BoardEditor({ client, code, board, boards, onOpenFiles, onOpenParties, 
         <h2>{t("memo.title")}</h2>
         <p className="muted small" style={{ margin: "2px 0 8px" }}>{t("memo.help")}</p>
         <div className="row" style={{ marginBottom: 8 }}>
-          <button className={memoReady ? "" : "primary"} onClick={() => generate("none")} disabled={running || data.circuits.length === 0}>{t("memo.run")}</button>
+          <Badge tone={memoReady ? "ok" : "warn"}>{t(memo.data?.available ? (memo.data.stale ? "memos.memo.stale" : "memos.memo.fresh") : "memos.memo.none")}</Badge>{" "}
+          <button className={memoReady ? "" : "primary"} onClick={onOpenMemos}>{t("memo.goMemos")}</button>
         </div>
         {memo.data ? <BoardMemo client={client} code={code} v={memo.data} /> : <State loading={memo.loading} error={memo.error} />}
       </div>

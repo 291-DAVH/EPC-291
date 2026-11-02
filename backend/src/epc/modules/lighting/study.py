@@ -75,6 +75,27 @@ def _asked_now(saved: dict, options: dict, lang: str) -> Optional[CalcIn]:
         return None
 
 
+OPTION_NUMBERS = ("power_limit_w_m2", "kwh_price", "hours_default")           # the options a sheet keeps in its lighting settings
+
+
+def _settings_options(saved: dict) -> dict:
+    """The calculation options the sheet itself says (limit of power density, tariff, hours, automatic luminaire): what the plan editor sends with every request."""
+    s = saved.get("lighting_settings") or {}
+    out = {k: s[k] for k in OPTION_NUMBERS if isinstance(s.get(k), (int, float)) and not isinstance(s.get(k), bool)}
+    return {**out, "auto_luminaire": True} if s.get("auto_luminaire") else out
+
+
+def remake(d: Path, sheet: str, lang: str) -> dict:
+    """Calculate and keep the study of a sheet again from the drawing as it is saved (the rooms, what each says of its lighting and the options of the sheet), and make its report."""
+    saved = layout.saved_drawing(d, sheet)
+    if saved is None:
+        raise NotFound("sheet not found")
+    asked = _asked_now(saved, _settings_options(saved), lang)
+    if asked is None:
+        raise Invalid({"study": "the rooms of the sheet cannot be calculated: give each one an outline, a luminaire and an activity or a target"})
+    return save(d, sheet, asked)
+
+
 def _stale(d: Path, sheet: str, stored: dict) -> bool:
     """The study no longer matches the sheet: a room, its parameters, the scale, the options or a luminaire of the catalogue changed since."""
     saved = layout.saved_drawing(d, sheet)

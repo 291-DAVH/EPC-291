@@ -109,6 +109,24 @@ class TestStale(Study):
         self.assertTrue(self.c.get(STUDY).json()["stale"])
 
 
+class TestRemake(Study):
+    def test_a_stale_study_is_calculated_again_from_the_saved_sheet_with_its_report(self):
+        self.save()
+        self.c.put(LAYOUT, json=drawing({**PARAMS, "height_m": 3.4}))                                          # the rooms changed after the study
+        self.assertTrue(self.c.get(STUDY).json()["stale"])
+        r = self.c.post(STUDY + "/remake?lang=es")
+        self.assertEqual(r.status_code, 200, r.text)
+        out = r.json()
+        self.assertEqual((out["exists"], out["stale"], out["report_error"]), (True, False, ""))
+        self.assertEqual(out["report_file"], "LIGHTING_L0_electrica_BT.md")
+        self.assertFalse(self.c.get(STUDY).json()["stale"])                                                    # good again, with no data sent from the screen of the plan
+
+    def test_a_sheet_that_does_not_exist_or_has_nothing_to_calculate_is_refused(self):
+        self.assertEqual(self.c.post(BASE + "/study/L9@electrica_BT/remake").status_code, 404)
+        self.c.put(LAYOUT, json={**drawing(), "rooms": []})
+        self.assertEqual(self.c.post(STUDY + "/remake").status_code, 422)
+
+
 class TestReport(Study):
     def test_the_report_of_a_study_is_kept_as_text_and_offered_for_issue_where_its_pdf_is_made(self):
         self.save()
