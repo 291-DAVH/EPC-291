@@ -49,7 +49,7 @@ Estado: `[ ]` pendiente, `[~]` hecho en parte (se dice qué falta), `[x]` hecho.
 - [x] Proponer la actividad según el nombre del ambiente.
 - [x] Rotular cada luminaria con su etiqueta en la vista previa.
 - [x] Mapa de iluminancia: curvas de nivel con su valor, el interruptor se recuerda en la hoja y exportación a imagen (PNG).
-- [ ] Exportar el mapa a DXF.
+- [ ] Exportar el mapa a DXF. **En espera** (2026-11-01): todo lo que sea optimizar el DXF queda para después.
 - [x] Mostrar la fuente de la meta (norma y cláusula, o la actividad) en la tarjeta de cada ambiente.
 - [ ] Arrastrar las luminarias de la vista previa antes de aplicar (hoy se arrastran después, ya como nodos).
 

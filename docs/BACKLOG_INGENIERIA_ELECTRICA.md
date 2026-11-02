@@ -19,6 +19,11 @@ Estado: `[ ]` pendiente, `[~]` hecho en parte (se dice qué falta), `[x]` hecho.
 9. [ ] **Recalcular solo al editar.** Hoy se calcula al aceptar un circuito o con "Calcular"; que corra solo, con una espera breve después del último cambio.
 10. [ ] **Plantillas de circuitos por familia** (iluminación, tomas, climatización, motores) con cable y protección típicos del proyecto.
 
+## Decisiones del 2026-11-01 (pendientes de hacer)
+13. [ ] **Los archivos se generan desde un solo lugar: Emitir.** En el entorno de trabajo (Planos, Información técnica, Iluminación, Archivos) solo se ven y se generan **SVG**; los DXF y los PDF se generan únicamente al preparar un transmittal en Emitir (con el rótulo y la revisión). Implica: quitar «Generar DXF y PDF» de Planos y los PDF que hoy producen los trabajos del unifilar y las memorias; hacer que Emitir ofrezca como fuentes las hojas de Planos y los unifilares y genere sus DXF y PDF al emitir; mostrar solo SVG y documentos en Archivos.
+14. [ ] **Una sección «Memorias» en Ingeniería** con todos los generadores en un solo lugar (memoria y síntesis del tablero, estudio de iluminación, cables y canalizaciones), con el estado de cada uno y un botón por cada uno. Hoy están repartidos (iluminación en el panel del plano, tablero en Información técnica, dimensionado en el diseño automático). Emitir solo convierte esas memorias a PDF dentro de un transmittal.
+15. [ ] **Más valores a verificar en la página de normas** (ver el punto 7): constantes `[VERIFICAR]` del motor AEA y criterios de emergencia del motor de iluminación.
+
 ## Entregables y pruebas
-11. [ ] **Memoria en Word, logos en el rótulo de la memoria y mapa de lux a DXF** (ya estaban en el backlog de iluminación).
+11. [ ] **Memoria en Word y logos en el rótulo de la memoria** (ya estaban en el backlog de iluminación). El **mapa de lux a DXF** queda **en espera** (2026-11-01), con todo lo que sea optimizar el DXF.
 12. [ ] **Casos de prueba con planos reales** (PDF de CAD con mucho rayado, como el que superó el límite de trazos) para ajustar el reconocimiento de muros.
