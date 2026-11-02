@@ -16,15 +16,36 @@ from epc.modules.deliverables import repository
 from epc.modules.projects import public as projects
 
 
+# The kinds of document in the order engineering develops them (the calculation first, the drawings that come from it after), and the disciplines in the order they usually work.
+DOC_TYPES = (("memo", r"(.+)_MC"), ("summary", r"(.+)_SP"), ("lighting", r"LIGHTING_(.+)"), ("sld", r"SLD_(.+)"), ("mld", r"MLD_(.+)"), ("layout", r"PLAN_(.+)"))
+DISCIPLINE_ORDER = ("civil", "mechanical", "electrical", "instrumentation", "hvac", "fire", "telecom")
+
+
+def document_of(item: dict) -> dict:
+    """What the deliverable is, for people: its kind of document (`doc_type`), what it is about (`subject`) and its place in the sequence of development (`order`).
+    A name the person typed at issue time that does not follow the file name stays as it is (`doc_type` is "other")."""
+    name = str(item.get("name") or "")
+    kind, subject = "other", name
+    for key, pattern in DOC_TYPES:
+        m = re.fullmatch(pattern, name)
+        if m:
+            kind, subject = key, m.group(1)
+            break
+    disc = str(item.get("discipline") or "")
+    rank = DISCIPLINE_ORDER.index(disc) if disc in DISCIPLINE_ORDER else len(DISCIPLINE_ORDER)
+    step = [k for k, _ in DOC_TYPES].index(kind) if kind != "other" else len(DOC_TYPES)
+    return {"doc_type": kind, "subject": subject, "order": rank * 100 + step}
+
+
 def list_items(d: Path) -> list:
     base, now = repository.deliverables_dir(d), today().isoformat()
     out = []
     for x in repository.read_items(d):
         f = x.get("file")
         ok = bool(f and is_inside(base, f))
-        out.append({**x, "downloadable": ok, "formats": _formats(base, x) if ok else [],
+        out.append({**x, **document_of(x), "downloadable": ok, "formats": _formats(base, x) if ok else [],
                     "overdue": x.get("status") != "delivered" and bool(x.get("due")) and x["due"] < now})
-    return out
+    return sorted(out, key=lambda x: (x["order"], x["subject"].lower(), x.get("revision", "")))
 
 
 def _deliverable_exts() -> set:

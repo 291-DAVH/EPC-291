@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Badge, HealthBadge, Key, Me, PortfolioProject, Progress, State, phaseKey, useApi, useFmt, useI18n } from "@epc/ui";
 import AnalysisPanel from "./AnalysisPanel";
-import Deliverables from "./Deliverables";
 import Engineering from "./Engineering";
 import Inputs from "./Inputs";
 import Observations from "./Observations";
@@ -78,10 +77,9 @@ export default function Project() {
 
       {tab === "overview" && <Overview d={d} base={base} rev={rev} go={go} />}
       {tab === "plan" && <Management base={base} client={client} code={code} engineer={engineer} sub={sub} onSub={goSub} />}
-      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("deliverables")} sub={sub} onSub={goSub} canWrite={can("workspace", "write")} />}
+      {tab === "engineering" && <Engineering client={client} code={code} onOpenDeliverables={() => go("plan", { sub: "deliverables" })} sub={sub} onSub={goSub} canWrite={can("workspace", "write")} />}
       {tab === "coordination" && <Coordination client={client} code={code} discipline="" canWrite={can("workspace", "write")} standalone />}
       {tab === "catalogs" && <Catalogs client={client} code={code} />}
-      {tab === "deliverables" && <Deliverables base={base} />}
       {tab === "observations" && <Observations base={base} can={can} />}
       {tab === "inputs" && <Inputs canWrite={canWrite} base={base} rev={rev} onSent={() => setRev((n) => n + 1)} initialKind={sp.get("kind") || "voice_of_customer"} engineer={engineer} client={client} code={code} />}
       {tab === "requirements" && <Requirements canWrite={canWrite} base={base} rev={rev} onChange={() => setRev((n) => n + 1)} />}

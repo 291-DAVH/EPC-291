@@ -120,6 +120,7 @@ export interface Portfolio {
 export interface DeliverableItem {
   id: string; code: string; name: string; discipline: string; format: string; revision: string; status: string;
   due?: string; delivered_on?: string; downloadable: boolean; overdue: boolean; formats: string[];
+  doc_type: string; subject: string; order: number;       // the kind of document, what it is about and its place in the sequence of development
 }
 export interface PackageGroup { id: string; emission: string; transmittal: string; rev: string; count: number }
 export interface PackagesView { count: number; rev: string; groups: PackageGroup[] }
