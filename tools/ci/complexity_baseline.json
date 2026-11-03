@@ -1985,6 +1985,7 @@
 "engine/arch/src/epc_arch/svgout.py::_unit": 2,
 "engine/arch/src/epc_arch/svgout.py::_wall": 3,
 "engine/arch/src/epc_arch/svgout.py::_window": 2,
+"engine/arch/src/epc_arch/svgout.py::hairline": 3,
 "engine/arch/src/epc_arch/svgout.py::pens": 1,
 "engine/arch/src/epc_arch/svgout.py::render": 10,
 "engine/documents/src/epc_documents/canvas_exporter.py::_actualizar_seal": 4,

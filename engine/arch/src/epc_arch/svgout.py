@@ -8,6 +8,7 @@ import math
 from typing import List, Tuple
 from xml.sax.saxutils import escape
 
+from epc_arch.config import PARAMS
 from epc_arch.geometry import arc_point, arc_span, axis_of, segment_distance
 from epc_arch.model import Architecture, Opening, Primitives, Wall
 
@@ -19,10 +20,18 @@ Pt = Tuple[float, float]
 FONT = "Helvetica, Arial, sans-serif"
 
 
-def pens(T: float) -> dict:
-    """Line weights for a plan whose walls are T thick, from the table of weights at 1:100 (walls 0.4-0.5 mm, windows 0.15, doors and furniture 0.10, glass 0.05) with a wall of about 0.15 m:
-    each weight in plan units is a share of T."""
-    return {"cut": T * 0.04, "window": T * 0.10, "door": T * 0.07, "glass": T * 0.035, "aux": T * 0.05}
+def hairline(arch: Architecture) -> float:
+    """The width of every line of the drawing, in plan units: `line_mm` of paper (0.05 mm) at the scale the sheet says it is drawn at (1:100 when it does not say, the usual one for a plan). With no units
+    to turn paper into plan units it is a small share of the plan."""
+    cfg = PARAMS["render"]
+    if arch.units_per_metre:
+        return cfg["line_mm"] / 1000.0 * (arch.drawing_scale or cfg["default_scale"]) * arch.units_per_metre
+    return max(arch.size) * 0.0002
+
+
+def pens(hair: float) -> dict:
+    """Every line is the same fine line: the weight of an element is its size (a wall is a filled rectangle of its real thickness), not the width of its outline."""
+    return {"cut": hair, "window": hair, "door": hair, "glass": hair, "aux": hair}
 
 
 def _f(v: float) -> str:
@@ -66,10 +75,10 @@ def _quad(w: Wall, ext_a: float = 0.0, ext_b: float = 0.0) -> str:
     return _pts([(a[0] + ox, a[1] + oy), (b[0] + ox, b[1] + oy), (b[0] - ox, b[1] - oy), (a[0] - ox, a[1] - oy)])
 
 
-def _wall(w: Wall, others: List[Wall]) -> str:
+def _wall(w: Wall, others: List[Wall], hair: float) -> str:
     ja, jb = _joined(w, others, 0.75 * w.thickness)
     pts = _quad(w, w.thickness / 2 if ja else 0.0, w.thickness / 2 if jb else 0.0)
-    return f'<polygon id="{w.id}" data-confidence="{w.confidence:.2f}" data-thickness="{_f(w.thickness)}" points="{pts}" fill="{INK}" stroke="{INK}" stroke-width="{_f(w.thickness * 0.04)}" stroke-linejoin="miter"/>'
+    return f'<polygon id="{w.id}" data-confidence="{w.confidence:.2f}" data-thickness="{_f(w.thickness)}" points="{pts}" fill="{PARAMS["render"]["wall_fill"]}" stroke="{INK}" stroke-width="{_f(hair)}" stroke-linejoin="miter"/>'
 
 
 def _cut(o: Opening, T: float) -> str:
@@ -82,9 +91,9 @@ def _cut(o: Opening, T: float) -> str:
     return f'<polygon points="{_pts(pts)}" fill="{PAPER}"/>'
 
 
-def _door(o: Opening, T: float) -> str:
+def _door(o: Opening, T: float, hair: float) -> str:
     """Drawn open: the leaf square to the wall from its hinge, and the dashed arc it sweeps from its closed position."""
-    pen = pens(T)
+    pen = pens(hair)
     out = f'<g id="{o.id}" data-confidence="{o.confidence:.2f}" data-width="{_f(o.width)}">'
     ax = axis_of(o.angle)
     if o.hinge and o.swing:
@@ -106,9 +115,9 @@ def _door(o: Opening, T: float) -> str:
     return out + "</g>"
 
 
-def _window(o: Opening, T: float) -> str:
+def _window(o: Opening, T: float, hair: float) -> str:
     """Drawn shut: the frame on both faces of the wall and at its ends in a medium line, the glass between in the finest."""
-    pen = pens(T)
+    pen = pens(hair)
     ax = axis_of(o.angle)
     hw = o.width / 2
     corner = lambda t, n: (o.at[0] + ax.ux * t + ax.nx * n, o.at[1] + ax.uy * t + ax.ny * n)          # noqa: E731
@@ -120,12 +129,12 @@ def _window(o: Opening, T: float) -> str:
     return out + "</g>"
 
 
-def _hole(o: Opening, T: float) -> str:
+def _hole(o: Opening, T: float, hair: float) -> str:
     ax = axis_of(o.angle)
     hw = o.width / 2
     a, b = (o.at[0] - ax.ux * hw, o.at[1] - ax.uy * hw), (o.at[0] + ax.ux * hw, o.at[1] + ax.uy * hw)
     out = f'<g id="{o.id}" data-confidence="{o.confidence:.2f}" data-width="{_f(o.width)}">'
-    pen = pens(T)
+    pen = pens(hair)
     for n in (T / 2, -T / 2):                                                         # the lintel above, seen from below: dashed projection lines along both faces
         out += f'<line x1="{_f(a[0] + ax.nx * n)}" y1="{_f(a[1] + ax.ny * n)}" x2="{_f(b[0] + ax.nx * n)}" y2="{_f(b[1] + ax.ny * n)}" stroke="{INK}" stroke-width="{_f(pen["aux"])}" stroke-dasharray="{_f(T * 0.35)} {_f(T * 0.22)}"/>'
     for p in (a, b):
@@ -133,8 +142,8 @@ def _hole(o: Opening, T: float) -> str:
     return out + "</g>"
 
 
-def _background(prims: Primitives, limit: int) -> List[str]:
-    out = [f'<line x1="{_f(l.a[0])}" y1="{_f(l.a[1])}" x2="{_f(l.b[0])}" y2="{_f(l.b[1])}" stroke-width="{_f(max(l.width, 0.5))}"/>' for l in prims.lines[:limit]]
+def _background(prims: Primitives, limit: int, hair: float) -> List[str]:
+    out = [f'<line x1="{_f(l.a[0])}" y1="{_f(l.a[1])}" x2="{_f(l.b[0])}" y2="{_f(l.b[1])}" stroke-width="{_f(hair)}"/>' for l in prims.lines[:limit]]
     for a in prims.arcs[:limit]:
         p, q = arc_point(a.c, a.r, a.start), arc_point(a.c, a.r, a.end)
         large = 1 if arc_span(a.start, a.end) > 180 else 0
@@ -150,7 +159,7 @@ def _notes(arch: Architecture) -> List[str]:
         marks = arch.annotations.get(kind)
         if marks is None or not marks.count():
             continue
-        out.append(f'<g id="{gid}" data-layer="{role}" fill="none" stroke="{colour}" stroke-width="{_f(side * 0.0007)}">')
+        out.append(f'<g id="{gid}" data-layer="{role}" fill="none" stroke="{colour}" stroke-width="{_f(hairline(arch))}">')
         out += [f'<line x1="{_f(l.a[0])}" y1="{_f(l.a[1])}" x2="{_f(l.b[0])}" y2="{_f(l.b[1])}"/>' for l in marks.lines]
         for a in marks.arcs:
             p, q = arc_point(a.c, a.r, a.start), arc_point(a.c, a.r, a.end)
@@ -186,7 +195,8 @@ def _layer_items(arch: Architecture) -> List[List[str]]:
     T = arch.wall_thickness or 1.0
     walls = _clean_walls(arch)
     of = lambda kind: [o for o in arch.openings if o.kind == kind]                      # noqa: E731
-    return [[_wall(w, walls) for w in walls], [_door(o, T) for o in of("door")], [_window(o, T) for o in of("window")], [_hole(o, T) for o in of("opening")]]
+    hair = hairline(arch)
+    return [[_wall(w, walls, hair) for w in walls], [_door(o, T, hair) for o in of("door")], [_window(o, T, hair) for o in of("window")], [_hole(o, T, hair) for o in of("opening")]]
 
 
 def _rooms(arch: Architecture, T: float) -> List[str]:
@@ -251,7 +261,7 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{_f(vw)}" height="{_f(vh)}" viewBox="{_f(vx)} {_f(vy)} {_f(vw)} {_f(vh)}" data-source="{escape(arch.source)}">',
            f'<rect x="{_f(vx)}" y="{_f(vy)}" width="{_f(vw)}" height="{_f(vh)}" fill="{PAPER}"/>']
     if background:
-        out += ['<g id="ARQ-FONDO" data-layer="arq.background" fill="none" stroke="#9aa3b5" stroke-opacity="0.18">', *_background(prims, limit), "</g>"]
+        out += ['<g id="ARQ-FONDO" data-layer="arq.background" fill="none" stroke="#9aa3b5" stroke-opacity="0.18">', *_background(prims, limit, hairline(arch)), "</g>"]
     walls_svg, doors, windows, holes = _layer_items(arch)
     if arch.rooms:
         out += ['<g id="ARQ-AMBIENTES" data-layer="arq.room" shape-rendering="crispEdges">', *_rooms(arch, T), "</g>"]
@@ -262,7 +272,7 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
     out += _notes(arch)
     fs = side * 0.022
     ty = y1 + margin + foot * 0.55
-    out.append(f'<line x1="{_f(x0)}" y1="{_f(y1 + margin * 0.6)}" x2="{_f(x1)}" y2="{_f(y1 + margin * 0.6)}" stroke="{HOLE}" stroke-width="{_f(side * 0.0012)}"/>')
+    out.append(f'<line x1="{_f(x0)}" y1="{_f(y1 + margin * 0.6)}" x2="{_f(x1)}" y2="{_f(y1 + margin * 0.6)}" stroke="{HOLE}" stroke-width="{_f(hairline(arch))}"/>')
     title = escape(arch.level.name.upper()) if arch.level else "PLANTA ARQUITECTÓNICA"
     scale = f"Escala 1:{arch.drawing_scale}" if arch.drawing_scale else ("Escala gráfica" if arch.units_per_metre else "Sin escala")
     out.append(f'<g id="ARQ-ROTULO" data-layer="arq.title"><text x="{_f(x0)}" y="{_f(ty)}" font-family="{FONT}" font-size="{_f(fs * 1.25)}" font-weight="700" letter-spacing="{_f(fs * 0.08)}" fill="{INK}">{title}</text>'
@@ -273,7 +283,7 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
         length = metres * arch.units_per_metre
         bx, by, bh = x1 - length, ty - fs * 0.9, fs * 0.3
         out.append(f'<g id="ARQ-ESCALA" data-layer="arq.scale"><rect x="{_f(bx)}" y="{_f(by)}" width="{_f(length / 2)}" height="{_f(bh)}" fill="{INK}"/>'
-                   f'<rect x="{_f(bx + length / 2)}" y="{_f(by)}" width="{_f(length / 2)}" height="{_f(bh)}" fill="{PAPER}" stroke="{INK}" stroke-width="{_f(fs * 0.05)}"/>'
+                   f'<rect x="{_f(bx + length / 2)}" y="{_f(by)}" width="{_f(length / 2)}" height="{_f(bh)}" fill="{PAPER}" stroke="{INK}" stroke-width="{_f(hairline(arch))}"/>'
                    f'<text x="{_f(bx)}" y="{_f(by - fs * 0.25)}" font-family="{FONT}" font-size="{_f(fs * 0.6)}" fill="{INK}">0</text>'
                    f'<text x="{_f(x1)}" y="{_f(by - fs * 0.25)}" text-anchor="end" font-family="{FONT}" font-size="{_f(fs * 0.6)}" fill="{INK}">{metres} m</text></g>')
     return chr(10).join(out + ["</svg>", ""])
