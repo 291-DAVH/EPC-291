@@ -122,12 +122,22 @@ def _chains(s: Sketch) -> List[List[int]]:
     return out
 
 
+def _caps(s: Sketch, dashes: List[int]) -> List[int]:
+    """The tiny strokes that close the ends of a dash drawn as a thin rectangle."""
+    out = []
+    for i in dashes:
+        for end in (s.prims.lines[i].a, s.prims.lines[i].b):
+            out += [j for j in s.grid.at(end, 1.5 * s.eps) if j != i and s.free(j) and s.length(j) <= 0.5 * s.eps]
+    return out
+
+
 def axes(s: Sketch) -> None:
     """Dashes strung along one line, with no wall face beside them."""
     for chain in _chains(s):
         dashes = [i for i in chain if not s.has_partner(i)]
         if len(dashes) >= PARAMS["annotations"]["dash_min"]:
             s.take("axes", lines=dashes)
+            s.take("axes", lines=_caps(s, dashes))
 
 
 def _circles(arcs: List[Arc], eps: float) -> List[List[int]]:
@@ -281,10 +291,11 @@ class _Groups:
         return list(out.values())
 
 
-def _short(s: Sketch) -> List[Node]:
-    """The strokes a tag can be made of: short lines with no wall face beside them, and arcs."""
+def _short(s: Sketch, walls_too: bool = False) -> List[Node]:
+    """The strokes a tag can be made of: short lines (with no wall face beside them, unless `walls_too`) and arcs."""
     limit = PARAMS["annotations"]["leader_max"] * s.side
-    return [("l", i) for i in range(len(s.prims.lines)) if s.free(i) and s.length(i) <= limit and not s.has_partner(i)] + [("a", k) for k in range(len(s.prims.arcs)) if k not in s.arcs]
+    return ([("l", i) for i in range(len(s.prims.lines)) if s.free(i) and s.length(i) <= limit and (walls_too or not s.has_partner(i))]
+            + [("a", k) for k in range(len(s.prims.arcs)) if k not in s.arcs])
 
 
 def _spots(s: Sketch, nodes: List[Node], cell: float):
@@ -317,13 +328,19 @@ def _join_sides(s: Sketch, nodes: List[Node], groups: _Groups) -> None:
                         groups.join(("l", i), ("l", j))
 
 
-def _shapes(s: Sketch) -> List[List[Node]]:
+def _shapes(s: Sketch, walls_too: bool = False) -> List[List[Node]]:
     """Groups of short strokes (lines and arcs) that touch one another: the box, the hexagon or the circle of a tag with its leader, a mark, a symbol."""
-    nodes = _short(s)
+    nodes = _short(s, walls_too)
     groups = _Groups(nodes)
     _join_ends(s, nodes, groups)
     _join_sides(s, nodes, groups)
     return groups.groups()
+
+
+def _closed(s: Sketch, shape: List[Node]) -> bool:
+    """A loop: every stroke ends on another stroke of the group at both ends (the box round a text, never a stretch of wall)."""
+    ends = {n: _ends(s, n) for n in shape}
+    return all(any(m != n and any(_near(p, q, 1.5 * s.eps) for q in ends[m]) for m in shape) for n in shape for p in ends[n])
 
 
 def _bbox(s: Sketch, shape: List[Node]) -> Tuple[float, float, float, float]:
@@ -344,13 +361,30 @@ def _held(s: Sketch, shape: List[Node], anchors: List[Tuple[int, Pt]]) -> List[i
     return [k for k, (px, py) in anchors if x0 - s.eps <= px <= x1 + s.eps and y0 - s.eps <= py <= y1 + s.eps]
 
 
+def _held(s: Sketch, shape: List[Node], anchors: List[Tuple[int, Pt]]) -> List[int]:
+    """The texts that sit inside the box of a group of strokes, when the group can be a label (small, and not a door)."""
+    x0, y0, x1, y1 = _bbox(s, shape)
+    if max(x1 - x0, y1 - y0) > PARAMS["annotations"]["tag_max"] * s.side or _is_door(s, shape):
+        return []
+    return [k for k, (px, py) in anchors if x0 - s.eps <= px <= x1 + s.eps and y0 - s.eps <= py <= y1 + s.eps]
+
+
+def _take_shape(s: Sketch, shape: List[Node], held: List[int]) -> None:
+    s.take("labels", lines=[i for kind, i in shape if kind == "l"], arcs=[i for kind, i in shape if kind == "a"], texts=held)
+
+
 def labels(s: Sketch) -> None:
-    """Every text that is not a figure or a bubble is a label, and so is the small group of strokes that holds it: the box, the hexagon or the circle of the tag and the leader to the element."""
+    """Every text that is not a figure or a bubble is a label, and so is the small group of strokes that holds it: the box, the hexagon or the circle of the tag and the leader to the element.
+    A box drawn against a wall has a wall face beside its sides: it is taken too, but only when it is a closed loop."""
     anchors = [(k, (t.at[0] + len(t.value) * t.height * 0.3, t.at[1] - t.height / 2)) for k, t in enumerate(s.prims.texts) if k not in s.texts]
     for shape in _shapes(s):
         held = _held(s, shape, anchors)
         if held:
-            s.take("labels", lines=[i for kind, i in shape if kind == "l"], arcs=[i for kind, i in shape if kind == "a"], texts=held)
+            _take_shape(s, shape, held)
+    for shape in _shapes(s, walls_too=True):
+        held = _held(s, shape, anchors) if _closed(s, shape) else []
+        if held:
+            _take_shape(s, shape, held)
     s.take("labels", texts=[k for k, _ in anchors])
 
 
