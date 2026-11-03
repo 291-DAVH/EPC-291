@@ -112,6 +112,17 @@ def _opening_dict(o: "Opening") -> Dict[str, Any]:
     return out
 
 
+@dataclass
+class Marks:
+    """What one kind of annotation of a plan is made of (axes, dimensions, labels): strokes, arcs and texts. Not part of the building: they are kept apart, in layers of their own."""
+    lines: List[Line] = field(default_factory=list)
+    arcs: List[Arc] = field(default_factory=list)
+    texts: List[Text] = field(default_factory=list)
+
+    def count(self) -> int:
+        return len(self.lines) + len(self.arcs) + len(self.texts)
+
+
 @dataclass(frozen=True)
 class Level:
     """The floor a plan of a sheet is: `index` 0 is the ground floor, 1 the first floor above it, -1 the first below; None when the name does not say.
@@ -138,6 +149,7 @@ class Architecture:
     rooms: List[Room] = field(default_factory=list)
     drawing_scale: Optional[int] = None
     level: Optional[Level] = None
+    annotations: Dict[str, Marks] = field(default_factory=dict)       # axes, dimensions and labels, apart from the walls
     reference: Optional[Pt] = None        # where the common reference point of the plans of one sheet lies in this plan's frame
 
     def counts(self) -> Dict[str, int]:
@@ -147,7 +159,7 @@ class Architecture:
     def as_dict(self) -> Dict[str, Any]:
         return {"schema_version": "1.0", "source": self.source, "size": [round(self.size[0], 3), round(self.size[1], 3)], "units_per_metre": self.units_per_metre, "drawing_scale": self.drawing_scale, "scale_hint": self.scale_hint,
                 "wall_thickness": None if self.wall_thickness is None else round(self.wall_thickness, 3), "walls": [_wall_dict(w) for w in self.walls],
-                "openings": [_opening_dict(o) for o in self.openings], "rooms": [_room_dict(r) for r in self.rooms], "counts": self.counts(), "warnings": self.warnings,
+                "openings": [_opening_dict(o) for o in self.openings], "rooms": [_room_dict(r) for r in self.rooms], "counts": self.counts(), "warnings": self.warnings, "annotation_counts": {k: m.count() for k, m in self.annotations.items()},
                 "level": None if self.level is None else {"name": self.level.name, "index": self.level.index, "source": self.level.source},
                 "reference": None if self.reference is None else _r3(self.reference)}
 

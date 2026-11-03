@@ -10,6 +10,7 @@ from epc_arch import sources, svgout
 from epc_arch.config import PARAMS, Hints, scale_for
 from epc_arch.model import Architecture, Line, Options, Primitives
 from epc_arch.recognizers import Context
+from epc_arch.recognizers import annotations
 from epc_arch.recognizers import align as sheet_align
 from epc_arch.recognizers import levels as sheet_levels
 from epc_arch.recognizers import sheet as sheet_views
@@ -66,6 +67,7 @@ def _architecture(prims: Primitives, size, options: Options) -> Tuple[Architectu
     """The architecture of one drawing (a plan, or one view of a sheet) and the primitives of the reading that found it."""
     units = options.units_per_metre or prims.units_per_metre
     ctx = Context(size=size, scale=scale_for(size, units), hints=Hints())
+    prims, marks = annotations.split(prims, size)
     walls, T, openings, rooms = _read(prims, size, units, ctx)
     if prims.ink is not None:
         prims, (walls, T, openings, rooms) = _best_reading(prims, (walls, T, openings, rooms), size, units, ctx)
@@ -74,6 +76,7 @@ def _architecture(prims: Primitives, size, options: Options) -> Tuple[Architectu
         walls, openings, rooms, left_out = keep_the_plan(walls, openings, rooms, T, ctx)
     arch = Architecture(source=prims.source, size=size, units_per_metre=units, scale_hint=None, wall_thickness=T, walls=walls, openings=openings, warnings=list(prims.warnings))
     arch.rooms = rooms
+    arch.annotations = marks
     if left_out:
         arch.warnings.append(f"the sheet has several views: {left_out} without rooms or doors (sections, elevations, details) were left out and the plan kept")
     arch.drawing_scale = prims.scale

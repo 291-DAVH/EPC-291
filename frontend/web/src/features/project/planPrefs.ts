@@ -44,6 +44,10 @@ export function usePlanPrefs(): [PlanPrefs, (patch: Partial<PlanPrefs>) => void]
 }
 
 /** The key of an action: the person's own or the default. */
+/** The annotations of the architectural plan (axes, dimensions, labels) are kept apart from the building: architecture sees them (unless the person hid them), every other discipline sees only walls, doors and windows. */
+export const NOTE_LAYERS = ["ARQ-EJES", "ARQ-COTAS", "ARQ-ETIQUETAS"];
+export const notesHidden = (discipline: string, hiddenLayers: string[]): string[] => (discipline === "arquitectura" ? NOTE_LAYERS.filter((l) => hiddenLayers.includes(l)) : NOTE_LAYERS);
+
 export const keyOf = (prefs: PlanPrefs, action: string): string => prefs.keys[action] ?? DEFAULT_KEYS[action] ?? "";
 
 // ---------------------------------------------------------------- unsent drafts

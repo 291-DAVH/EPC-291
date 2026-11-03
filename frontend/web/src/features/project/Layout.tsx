@@ -20,7 +20,7 @@ import { Changes, ChangesPanel, ChecksPanel, HistoryPanel, WarningsPanel } from 
 import PlanEditor, { Derived, Profile } from "./PlanEditor";
 import { BoardCircuit, Properties } from "./PlanPanels";
 import { blank, Drawing, levelNumber, metresPerUnit, nextLevel, Pt, Ref } from "./planEditing";
-import { clearDraft, loadDraft, saveDraft, usePlanPrefs } from "./planPrefs";
+import { clearDraft, loadDraft, notesHidden, saveDraft, usePlanPrefs } from "./planPrefs";
 import { applyProposal, applyRuns, Architecture, BoardRef, allowedKinds, newSheetKey, RunsProposal, Clip, convertClip, Limits, Proposal, fromMetres, generationChecks, linkProblems, LinkTarget, Problem, stampClip, toMetres, warningTargets } from "./planTools";
 import type { Ghost } from "./planTypes";
 import { BoardAnswer, ElectricalSetupDialog, PlenumAnswer, PlenumDialog } from "./BoardPlenumDialogs";
@@ -28,7 +28,7 @@ import { BoardPlace, ELECTRICAL, levelsToMake, otherShafts, plenumNear, plenumNe
 
 interface Sheet { level: string; base: string; discipline: string; plan: string; plan_name: string; subdiscipline: string; nodes: number; lines: number; underlay: boolean; has_files: boolean }
 interface Overview { levels: Sheet[]; plenums: PlenumDef[]; profiles: Profile[]; circuits: BoardCircuit[]; boards: (BoardRef & BoardPlace)[]; dxf_versions: string[]; default_dxf_version: string }
-interface ArchSummary { source: string; counts: Architecture["counts"]; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
+interface ArchSummary { source: string; counts: Architecture["counts"]; annotation_counts?: Record<string, number>; wall_thickness: number | null; units_per_metre: number | null; scale_hint: Architecture["scale_hint"]; warnings: string[] }
 interface LevelView { architecture?: ArchSummary | null; level: string; saved: boolean; drawing: Drawing; result: Derived | null; underlay: { kind: string; version: number } | null; files: { dxf?: string; pdf?: string; dxf_version?: string } | null; generated_at?: string }
 interface Template { name: string; discipline: string; nodes: Clip["nodes"]; lines: Clip["lines"] }
 type Panel = "props" | "plans" | "design" | "lighting" | "receptacles" | "warnings" | "coord" | "layers" | "history";
@@ -399,6 +399,9 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
   [...drawing.nodes, ...drawing.lines].forEach((e) => { const l = layerOfKind(e.kind); if (l) layerCounts[l] = (layerCounts[l] ?? 0) + 1; });
   const found = lv?.architecture?.counts;                                      // what was recognized on the plan, by its layer
   if (lv?.underlay) layerCounts["ARQ-FONDO"] = 1;
+  const notes = lv?.architecture?.annotation_counts;                          // axes, dimensions and labels: kept apart from the building
+  if (notes) Object.assign(layerCounts, { "ARQ-EJES": notes.axes ?? 0, "ARQ-COTAS": notes.dimensions ?? 0, "ARQ-ETIQUETAS": notes.labels ?? 0 });
+  const hiddenNotes = notesHidden(discipline, prefs.hiddenLayers);
   if (found) Object.assign(layerCounts, { "ARQ-MUROS": found.walls, "ARQ-PUERTAS": found.doors, "ARQ-VENTANAS": found.windows, "ARQ-HUECOS": found.openings ?? 0 });
   const tplHere = (templates.data ?? []).filter((x) => x.discipline === discipline);
 
@@ -468,7 +471,7 @@ export default function Layout({ client, code, canWrite }: { client: string; cod
       {!level ? <div className="state wb-empty">{tl("layout.empty")}</div> : (
         <div className="wb-body">
           <PlanEditor drawing={drawing} onChange={change} derived={dp} profile={profile} lang={lang} readOnly={!write}
-            underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}` : null} underlayKind={lv?.underlay?.kind} t={tl}
+            underlayUrl={lv?.underlay ? `/api${root}/${level}/underlay?v=${lv.underlay.version}-${stamp}${hiddenNotes.length ? `&hide=${hiddenNotes.join(",")}` : ""}` : null} underlayKind={lv?.underlay?.kind} t={tl}
             selection={selection} onSelect={setSelection} highlight={focus ? d?.circuits?.[focus]?.lines ?? [] : []} focusCircuit={focus}
             allowedKinds={allowedKinds(subs, drawing.subdiscipline)} sheetKey={level} sheetTitle={`${project}_${level}`} architecture={arch} prefs={[prefs, setPrefs]} proposal={runs} lightMarks={[...marksOf(lighting), ...emergencyMarksOf(lighting), ...receptacleMarks(rec.proposal)]} lightMaps={mapsOf(lighting)} boards={ov.data.boards} roomRequest={roomRequest} ghosts={ghosts} pins={pins} onPin={onPin} problems={problems}
             freeCircuits={ov.data.circuits.map((c) => c.tag).filter((tag) => !drawing.circuits.some((c) => c.tag === tag))} circuitTags={ov.data.circuits.map((c) => c.tag)} focusRequest={focusReq}

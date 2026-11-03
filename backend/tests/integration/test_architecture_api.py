@@ -125,3 +125,21 @@ class TestArchitecture(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestHideLayers(unittest.TestCase):
+    """The underlay of a plan is served without the layers that a discipline does not show (axes, dimensions and labels belong to architecture)."""
+    SVG = '<svg><g id="ARQ-FONDO"><line/></g><g id="ARQ-MUROS"><polygon/></g><g id="ARQ-EJES" fill="none"><line/><line/></g><g id="ARQ-COTAS"><text>4,00</text></g><g id="ARQ-ETIQUETAS"><text>V-01</text></g></svg>'
+
+    def test_the_named_layers_are_left_out_and_the_rest_stays(self):
+        from epc.modules.layout import service
+        out = service.hide_layers(self.SVG, "ARQ-EJES,ARQ-COTAS,ARQ-ETIQUETAS")
+        self.assertNotIn("4,00", out)
+        self.assertNotIn("V-01", out)
+        self.assertNotIn("ARQ-EJES", out)
+        self.assertIn('<g id="ARQ-MUROS">', out)
+        self.assertIn('<g id="ARQ-FONDO">', out)
+
+    def test_only_architecture_layers_can_be_named(self):
+        from epc.modules.layout import service
+        self.assertEqual(service.hide_layers(self.SVG, ".*,ELEC,ARQ-"), self.SVG)
