@@ -108,6 +108,25 @@ def _path_geometry(path, prims: Primitives, skipped: List[int]) -> None:
             walk.close()
 
 
+def weld_arcs(arcs: List[Arc], gap: float = 6.0) -> List[Arc]:
+    """A swing or a circle that a program wrote as many short arcs (some write them dashed) is one arc: pieces of the same circle that follow one another, up to `gap` degrees apart, are joined."""
+    groups: dict = {}
+    for a in arcs:
+        groups.setdefault((round(a.c[0] / 0.5), round(a.c[1] / 0.5), round(a.r / 0.3)), []).append(a)
+    out: List[Arc] = []
+    for pieces in groups.values():
+        pieces.sort(key=lambda a: a.start)
+        cur = pieces[0]
+        for a in pieces[1:]:
+            if (a.start - cur.end) % 360.0 <= gap and a.start >= cur.start:
+                cur = Arc(cur.c, cur.r, cur.start, a.end, cur.layer)
+            else:
+                out.append(cur)
+                cur = a
+        out.append(cur)
+    return out
+
+
 def _is_frame(line: Line, page: Tuple[float, float]) -> bool:
     """The border of the sheet: a long stroke along the edge of the page, which is not part of the plan."""
     w, h = page
@@ -205,6 +224,7 @@ def read_vector(data: bytes, options: Options) -> Primitives:
         if len(prims.lines) + len(prims.arcs) > PARAMS["plan"]["hard_max_primitives"]:
             raise ArchError("the PDF has too many strokes to read: export the plan with fewer layers or without hatching")
     prims.texts = page_texts(page)
+    prims.arcs = weld_arcs(prims.arcs)
     size = page.get_size()
     prims.lines = [l for l in prims.lines if not _is_frame(l, size)]
     _thin(prims, PARAMS["plan"]["max_primitives"])

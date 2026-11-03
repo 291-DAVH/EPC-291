@@ -193,6 +193,13 @@ def _cut(items, cell: float, size: Tuple[float, float], cfg) -> List[list]:
     return [items]
 
 
+def _give_texts(views: List[View], prims: Primitives, size: Tuple[float, float], cfg) -> None:
+    """Each view gets the texts around it (in the frame of the sheet, to find its title) and the texts inside it (in its own frame, for the annotations)."""
+    for v in views:
+        v.texts = [t for t in prims.texts if _near(t, v.box, cfg["label_reach"], size)]
+        v.prims.texts = [Text(t.value, _shift(t.at, v.box[0], v.box[1]), t.height) for t in prims.texts if _inside(t.at, v.box)]
+
+
 def split(prims: Primitives, size: Tuple[float, float]) -> List[View]:
     """The views of a sheet, left to right and top to bottom, without its frame and title block. Empty when the file is one drawing (nothing to take apart)."""
     cfg = PARAMS["sheet"]
@@ -213,8 +220,7 @@ def split(prims: Primitives, size: Tuple[float, float]) -> List[View]:
         out.append(View(box, _view_prims(prims, {(k, i) for k, i, _ in piece}, box), len(piece)))
     row = lambda v: round((v.box[1] + v.box[3]) / 2 / (cfg["row_share"] * max(size)))      # noqa: E731
     out.sort(key=lambda v: (row(v), v.box[0]))
-    for v in out:
-        v.texts = [t for t in prims.texts if _near(t, v.box, cfg["label_reach"], size)]
+    _give_texts(out, prims, size, cfg)
     titled = sum(1 for v in out if named(v.texts, v.box))
     return out if framed or titled >= 2 else []                      # strokes that merely do not touch (a flat cut by the gaps of its door and window) are not views: a sheet has a frame or titles its plans
 

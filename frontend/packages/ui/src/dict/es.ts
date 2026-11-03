@@ -1182,6 +1182,7 @@ export const es = {
     "layout.circuits.loads": "Cargas",
     "nav.layers": "Capas de dibujo",
     "layers.title": "Capas de dibujo (DXF)",
+    "layers.notesOnlyArch": "Los ejes, las cotas y las etiquetas se ven solo en la disciplina de arquitectura.",
     "layers.archShared": "El plano de arquitectura es uno solo por nivel: se ve en todas las disciplinas dibujadas sobre él.",
     "layers.others": "Otras disciplinas en este nivel",
     "layers.help": "Cómo se llaman y cómo se ven las capas con las que se entregan todos los planos (unifilar, multifilar y plano de planta). Este es el catálogo global: el cambio llega al próximo DXF que se genere, salvo en las empresas y proyectos que tengan el suyo.",

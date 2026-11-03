@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 
 from epc.modules.layout import service, templates
 from epc.modules.layout.models import ArchIn, DesignIn, DrawingIn, NewCircuits, PlenumIn, SizingIn, TemplateIn
@@ -63,8 +63,11 @@ async def post_underlay(client: str, code: str, level: str, file: UploadFile):
 
 
 @router.get("/{level}/underlay")
-def get_underlay(client: str, code: str, level: str):
+def get_underlay(client: str, code: str, level: str, hide: str = ""):
+    """The plan underlay; `hide` names architecture layers (axes, dimensions, labels...) that an SVG underlay is served without: every discipline but architecture sees only walls, doors and windows."""
     path, media = service.underlay_file(projects.get_project_dir(client, code), level)
+    if hide and path.suffix == ".svg":
+        return Response(service.hide_layers(path.read_text(encoding="utf-8"), hide), media_type=media, headers=SAFE_HEADERS)
     return FileResponse(path, media_type=media, headers=SAFE_HEADERS)
 
 

@@ -1,5 +1,5 @@
 import { Key, State, useApi, useI18n } from "@epc/ui";
-import type { PlanPrefs } from "./planPrefs";
+import { NOTE_LAYERS, type PlanPrefs } from "./planPrefs";
 import { colorOfDiscipline } from "./planTypes";
 
 /** The drawing layers in force for the project that matter to this sheet: the architecture (one plan, seen in every discipline of the level) and the layers of the discipline being drawn. What each layer is
@@ -22,7 +22,8 @@ export default function LayersPanel({ client, code, rev, current, prefs, setPref
   const arq = groups.find((g) => g.prefix === "ARQ-");
   const mine = groups.find((g) => g.profile === current);
   const hidden = prefs.hiddenLayers;
-  const shown = (name: string) => !hidden.includes(name);
+  const onlyArch = (name: string) => NOTE_LAYERS.includes(name) && current !== "arquitectura";          // annotations are seen in architecture only
+  const shown = (name: string) => !hidden.includes(name) && !onlyArch(name);
   const setMany = (names: string[], on: boolean) => setPrefs({ hiddenLayers: on ? hidden.filter((n) => !names.includes(n)) : [...new Set([...hidden, ...names])] });
   const table = (g: DisciplineLayers, own: boolean) => (
     <section key={g.id} aria-label={g.name[lang] ?? g.name.es}>
@@ -38,7 +39,7 @@ export default function LayersPanel({ client, code, rev, current, prefs, setPref
           <tbody>
             {g.layers.map((l) => (
               <tr key={l.role} className={shown(l.name) ? "" : "off"}>
-                <td><input type="checkbox" aria-label={`${tl("layers.show")} ${l.name}`} checked={shown(l.name)} onChange={(e) => setMany([l.name], e.target.checked)} /></td>
+                <td><input type="checkbox" aria-label={`${tl("layers.show")} ${l.name}`} checked={shown(l.name)} disabled={onlyArch(l.name)} title={onlyArch(l.name) ? tl("layers.notesOnlyArch") : undefined} onChange={(e) => setMany([l.name], e.target.checked)} /></td>
                 <td title={l.description[lang] ?? l.description.es}><i className="layer-swatch" style={{ background: l.hex }} /><b className="mono">{l.name}</b><div className="muted small">{l.description[lang] ?? l.description.es}</div>
                   <div className="muted small mono">{l.linetype}{l.lineweight !== null ? ` · ${l.lineweight} mm` : ""}{l.on ? "" : ` · ${tl("layers.off")}`}</div></td>
                 <td className="small">{l.kinds.length ? l.kinds.map((k) => <span key={k.profile + k.id} className="kind-chip" title={k.name[lang] ?? k.name.es}>{k.id}</span>) : <span className="muted">–</span>}</td>

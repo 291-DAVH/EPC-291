@@ -8,7 +8,7 @@ from typing import List, Optional, Tuple
 import numpy as np
 
 from epc_arch.config import PARAMS
-from epc_arch.model import Architecture, Line, Primitives, Pt, Wall
+from epc_arch.model import Architecture, Line, Marks, Primitives, Pt, Text, Wall
 
 Shift = Tuple[float, float]
 
@@ -81,7 +81,9 @@ def move(arch: Architecture, dx: float, dy: float, size: Tuple[float, float], re
     walls = [replace(w, a=_pt(w.a, dx, dy), b=_pt(w.b, dx, dy)) for w in arch.walls]
     openings = [replace(o, at=_pt(o.at, dx, dy), hinge=_pt(o.hinge, dx, dy), swing=_pt(o.swing, dx, dy)) for o in arch.openings]
     rooms = [replace(r, at=_pt(r.at, dx, dy), rects=[(x0 + dx, y0 + dy, x1 + dx, y1 + dy) for x0, y0, x1, y1 in r.rects]) for r in arch.rooms]
-    return replace(arch, walls=walls, openings=openings, rooms=rooms, size=size, reference=reference)
+    marks = {k: Marks([Line(_pt(l.a, dx, dy), _pt(l.b, dx, dy), l.width, l.layer) for l in m.lines], [replace(a, c=_pt(a.c, dx, dy)) for a in m.arcs],
+                     [Text(t.value, _pt(t.at, dx, dy), t.height) for t in m.texts]) for k, m in arch.annotations.items()}
+    return replace(arch, walls=walls, openings=openings, rooms=rooms, size=size, reference=reference, annotations=marks)
 
 
 def move_prims(prims: Primitives, dx: float, dy: float) -> Primitives:

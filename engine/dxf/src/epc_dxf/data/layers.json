@@ -365,6 +365,48 @@
         "en": "Recognized openings"
       }
     },
+    "plan.ARQ-EJES": {
+      "name": "ARQ-EJES",
+      "color": 8,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Ejes de la grilla con sus burbujas",
+        "en": "Grid axes with their bubbles"
+      }
+    },
+    "plan.ARQ-COTAS": {
+      "name": "ARQ-COTAS",
+      "color": 1,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Cotas: líneas, marcas y cifras",
+        "en": "Dimensions: lines, ticks and figures"
+      }
+    },
+    "plan.ARQ-ETIQUETAS": {
+      "name": "ARQ-ETIQUETAS",
+      "color": 5,
+      "lineweight": null,
+      "linetype": "CONTINUOUS",
+      "on": true,
+      "frozen": false,
+      "locked": false,
+      "plot": true,
+      "description": {
+        "es": "Etiquetas de locales, puertas, ventanas y muros",
+        "en": "Labels of rooms, doors, windows and walls"
+      }
+    },
     "plan.HVAC-DUCTO": {
       "name": "HVAC-DUCTO",
       "color": 140,

@@ -348,6 +348,14 @@ def upload_underlay(d: Path, level: str, name: str, data: bytes) -> dict:
     return view(d, level)
 
 
+def hide_layers(svg: str, hide: str) -> str:
+    """The SVG of a plan without the groups of the layers named in `hide` (comma separated, only architecture layers, whose groups hold no other group)."""
+    for name in (n.strip() for n in hide.split(",")):
+        if re.fullmatch(r"ARQ-[A-Z]+", name):
+            svg = re.sub(rf'<g id="{name}"[^>]*>.*?</g>', "", svg, flags=re.S)
+    return svg
+
+
 def underlay_file(d: Path, level: str) -> Tuple[Path, str]:
     level = _level(level)
     up = repository.underlay_file(d, level)
@@ -480,7 +488,7 @@ def changes_since_files(d: Path, level: str) -> dict:
 # ---------------------------------------------------------------- architecture of the plan (walls, doors, windows)
 def _architecture_summary(d: Path, level: str) -> Optional[dict]:
     a = repository.load_architecture(d, level)
-    return None if a is None else {k: a[k] for k in ("source", "counts", "wall_thickness", "units_per_metre", "scale_hint", "warnings")}
+    return None if a is None else {k: a[k] for k in ("source", "counts", "wall_thickness", "units_per_metre", "scale_hint", "warnings")} | {"annotation_counts": a.get("annotation_counts") or {}}
 
 
 def _recognize_file(src: Path, units_per_metre: Optional[float]) -> Tuple[dict, str]:

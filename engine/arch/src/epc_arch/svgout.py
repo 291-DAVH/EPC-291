@@ -13,6 +13,7 @@ from epc_arch.model import Architecture, Opening, Primitives, Wall
 
 ROOM_TINTS = ("#f4f0e8", "#edf1ec", "#ecf0f4", "#f3edee", "#f1efe4")              # soft floor tints, one per room in turn
 LAYERS = (("ARQ-MUROS", "arq.wall"), ("ARQ-PUERTAS", "arq.door"), ("ARQ-VENTANAS", "arq.window"), ("ARQ-HUECOS", "arq.opening"))
+NOTE_LAYERS = (("axes", "ARQ-EJES", "arq.axes", "#8a94a6"), ("dimensions", "ARQ-COTAS", "arq.dimension", "#c0392b"), ("labels", "ARQ-ETIQUETAS", "arq.label", "#3b6ea5"))     # annotations: apart from the building, in layers that the disciplines other than architecture hide
 INK, PAPER, GLASS, DOOR, HOLE, SWEEP = "#1f2933", "#ffffff", "#3b82c4", "#6b7280", "#9aa5b1", "#f1efe9"
 Pt = Tuple[float, float]
 FONT = "Helvetica, Arial, sans-serif"
@@ -141,6 +142,24 @@ def _background(prims: Primitives, limit: int) -> List[str]:
     return out
 
 
+def _notes(arch: Architecture) -> List[str]:
+    """The annotations of the plan (axes with their bubbles, dimensions, labels) each in a group of its own: thin strokes and the texts as they were written."""
+    side = max(arch.size) or 1.0
+    out: List[str] = []
+    for kind, gid, role, colour in NOTE_LAYERS:
+        marks = arch.annotations.get(kind)
+        if marks is None or not marks.count():
+            continue
+        out.append(f'<g id="{gid}" data-layer="{role}" fill="none" stroke="{colour}" stroke-width="{_f(side * 0.0007)}">')
+        out += [f'<line x1="{_f(l.a[0])}" y1="{_f(l.a[1])}" x2="{_f(l.b[0])}" y2="{_f(l.b[1])}"/>' for l in marks.lines]
+        for a in marks.arcs:
+            p, q = arc_point(a.c, a.r, a.start), arc_point(a.c, a.r, a.end)
+            out.append(f'<path d="M{_f(p[0])} {_f(p[1])} A{_f(a.r)} {_f(a.r)} 0 {1 if arc_span(a.start, a.end) > 180 else 0} 1 {_f(q[0])} {_f(q[1])}"/>')
+        out += [f'<text x="{_f(t.at[0])}" y="{_f(t.at[1])}" font-family="{FONT}" font-size="{_f(max(t.height, side * 0.006))}" fill="{colour}" stroke="none">{escape(t.value)}</text>' for t in marks.texts]
+        out.append("</g>")
+    return out
+
+
 def _clean_walls(arch: Architecture) -> List[Wall]:
     """The walls as they are drawn: a stub shorter than three thicknesses that meets no wall is a stroke of furniture or lettering, and a thickness within a fifth of the plan's is the plan's."""
     T = arch.wall_thickness or 1.0
@@ -182,6 +201,20 @@ def _rooms(arch: Architecture, T: float) -> List[str]:
     return out
 
 
+def _note_points(arch: Architecture) -> Tuple[List[float], List[float]]:
+    """The reach of the annotations, so that the drawing is framed with them."""
+    xs: List[float] = []
+    ys: List[float] = []
+    for m in arch.annotations.values():
+        for l in m.lines:
+            xs += [l.a[0], l.b[0]]
+            ys += [l.a[1], l.b[1]]
+        for a in m.arcs:
+            xs += [a.c[0] - a.r, a.c[0] + a.r]
+            ys += [a.c[1] - a.r, a.c[1] + a.r]
+    return xs, ys
+
+
 def _extent(arch: Architecture, walls: List[Wall]) -> Tuple[float, float, float, float]:
     """The box the building takes, door swings included: the drawing is framed on it, not on the sheet it came from. The floors of one sheet all share the frame they were laid in, so that their pictures overlay."""
     if arch.reference is not None:
@@ -199,6 +232,8 @@ def _extent(arch: Architecture, walls: List[Wall]) -> Tuple[float, float, float,
         for a, b, c, e in r.rects:
             xs += [a, c]
             ys += [b, e]
+    nx, ny = _note_points(arch)
+    xs, ys = xs + nx, ys + ny
     if not xs:
         return 0.0, 0.0, arch.size[0], arch.size[1]
     return min(xs), min(ys), max(xs), max(ys)
@@ -224,6 +259,7 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
     out += ['<g id="ARQ-CORTES" data-layer="arq.cut">', *[_cut(o, T) for o in arch.openings], "</g>"]
     for (gid, role), items in zip(LAYERS[1:], (doors, windows, holes)):
         out += [f'<g id="{gid}" data-layer="{role}">', *items, "</g>"]
+    out += _notes(arch)
     fs = side * 0.022
     ty = y1 + margin + foot * 0.55
     out.append(f'<line x1="{_f(x0)}" y1="{_f(y1 + margin * 0.6)}" x2="{_f(x1)}" y2="{_f(y1 + margin * 0.6)}" stroke="{HOLE}" stroke-width="{_f(side * 0.0012)}"/>')
