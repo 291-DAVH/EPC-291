@@ -109,15 +109,16 @@ def _bin(thickness: float, lo: float, k: float, bins: int) -> int:
     return min(bins - 1, max(0, int(math.log(max(thickness, lo) / lo) * k)))
 
 
-def _peak(cands: List[Candidate], lo: float, k: float, bins: int) -> int:
-    """The bin where the candidates put most ink (their length times their thickness, counting a little of the neighbours). Dimension lines, ticks, trees and lettering are strokes too, but thin:
-    weighing by thickness as well as by length lets a wall outweigh them even when there is less of it."""
+def _peak(cands: List[Candidate], lo: float, k: float, bins: int) -> Tuple[int, float]:
+    """The bin where the candidates put most ink (their length times their thickness, counting a little of the neighbours), and how much. Dimension lines, ticks, trees and lettering are strokes too,
+    but thin: weighing by thickness as well as by length lets a wall outweigh them even when there is less of it."""
     weight = [0.0] * bins
     for c in cands:
         weight[_bin(c.thickness, lo, k, bins)] += c.weight
     smooth = [weight[i] + 0.5 * (weight[i - 1] if i else 0.0) + 0.5 * (weight[i + 1] if i + 1 < bins else 0.0) for i in range(bins)]
     area = [smooth[i] * lo * math.exp((i + 0.5) / k) for i in range(bins)]                 # length times thickness: the ink a thickness puts on the page, which favours walls over fine lines
-    return max(range(bins), key=lambda i: area[i])
+    best = max(range(bins), key=lambda i: area[i])
+    return best, area[best]
 
 
 def calibrate(cands: List[Candidate], ctx: Context) -> Optional[float]:
@@ -127,7 +128,7 @@ def calibrate(cands: List[Candidate], ctx: Context) -> Optional[float]:
     if not cands or hi <= lo:
         return None
     k = bins / math.log(hi / lo)
-    peak = _peak(cands, lo, k, bins)
+    peak, _ = _peak(cands, lo, k, bins)
     near = [c for c in cands if abs(_bin(c.thickness, lo, k, bins) - peak) <= 1]
     if len(near) < ctx.params["walls"]["min_votes"]:
         return None
@@ -241,14 +242,26 @@ def usable_lines(prims: Primitives, ctx: Context) -> Tuple[List[Line], bool]:
     return [l for l in prims.lines if ctx.hints.of(l.layer) not in ("door", "window")], False
 
 
+def _ink(found: List[Candidate], ctx: Context) -> float:
+    """How strongly the candidates agree on one thickness: the ink of their best thickness (see `_peak`)."""
+    lo, hi = ctx.scale.wall_thickness
+    if not found or hi <= lo:
+        return 0.0
+    k = ctx.params["walls"]["bins"] / math.log(hi / lo)
+    return _peak(found, lo, k, ctx.params["walls"]["bins"])[1]
+
+
 def strongest(lines: List[Line], ctx: Context) -> List[Candidate]:
-    """The candidates of the first strategy that has enough of them. A wall drawn as a band is surer than two strokes that happen to be a wall's thickness apart (the panes of a window are), so
-    the pairs are looked for only when there are not enough bands."""
-    for strategy in STRATEGIES:
-        found = strategy.candidates(lines, ctx)
-        if len(found) >= ctx.params["walls"]["min_votes"]:
-            return found
-    return []
+    """The candidates of the strategy whose thickness stands out most. A wall drawn as a band is surer than two strokes that happen to be a wall's thickness apart (the panes of a window are),
+    so a band wins unless the pairs put clearly more ink on one thickness: a plan whose walls are filled shapes has thick outlines that are no bands, and its pairs are the walls."""
+    votes, sure = ctx.params["walls"]["min_votes"], ctx.params["walls"]["pairs_win"]
+    found = [(s, s.candidates(lines, ctx)) for s in STRATEGIES]
+    found = [(s, c) for s, c in found if len(c) >= votes]
+    if not found:
+        return []
+    first = found[0]
+    best = max(found, key=lambda x: _ink(x[1], ctx))
+    return best[1] if best is not first and _ink(best[1], ctx) >= sure * _ink(first[1], ctx) else first[1]
 
 
 def _covered(c: Candidate, same: List[Candidate]) -> float:
