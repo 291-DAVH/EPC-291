@@ -35,6 +35,13 @@ class Block:
     layer: str = ""
 
 
+@dataclass(frozen=True)
+class Text:
+    value: str
+    at: Pt                                # where the text starts (its lower left corner)
+    height: float = 0.0
+
+
 @dataclass
 class Primitives:
     """What a reader found: the geometry of the plan and where it came from. `y_up` and `fit` say how to bring it to the plan space (see `normalize`)."""
@@ -42,6 +49,7 @@ class Primitives:
     lines: List[Line] = field(default_factory=list)
     arcs: List[Arc] = field(default_factory=list)
     blocks: List[Block] = field(default_factory=list)
+    texts: List[Text] = field(default_factory=list)       # what a sheet says (the name of a view, a scale): read only to name things, never to find them
     y_up: bool = False
     fit: bool = False                     # a vector source is scaled to a standard size; an image keeps its pixels
     units_per_metre: Optional[float] = None
@@ -104,6 +112,15 @@ def _opening_dict(o: "Opening") -> Dict[str, Any]:
     return out
 
 
+@dataclass(frozen=True)
+class Level:
+    """The floor a plan of a sheet is: `index` 0 is the ground floor, 1 the first floor above it, -1 the first below; None when the name does not say.
+    `source` is "text" when the sheet names it and "order" when the plans were taken in reading order (a guess)."""
+    name: str
+    index: Optional[int]
+    source: str
+
+
 def _room_dict(r: "Room") -> Dict[str, Any]:
     return {"id": r.id, "area": round(r.area, 1), "area_m2": None if r.area_m2 is None else round(r.area_m2, 2), "at": _r3(r.at)}
 
@@ -120,6 +137,8 @@ class Architecture:
     warnings: List[str] = field(default_factory=list)
     rooms: List[Room] = field(default_factory=list)
     drawing_scale: Optional[int] = None
+    level: Optional[Level] = None
+    reference: Optional[Pt] = None        # where the common reference point of the plans of one sheet lies in this plan's frame
 
     def counts(self) -> Dict[str, int]:
         return {"walls": len(self.walls), "doors": sum(1 for o in self.openings if o.kind == "door"), "windows": sum(1 for o in self.openings if o.kind == "window"),
@@ -128,7 +147,9 @@ class Architecture:
     def as_dict(self) -> Dict[str, Any]:
         return {"schema_version": "1.0", "source": self.source, "size": [round(self.size[0], 3), round(self.size[1], 3)], "units_per_metre": self.units_per_metre, "drawing_scale": self.drawing_scale, "scale_hint": self.scale_hint,
                 "wall_thickness": None if self.wall_thickness is None else round(self.wall_thickness, 3), "walls": [_wall_dict(w) for w in self.walls],
-                "openings": [_opening_dict(o) for o in self.openings], "rooms": [_room_dict(r) for r in self.rooms], "counts": self.counts(), "warnings": self.warnings}
+                "openings": [_opening_dict(o) for o in self.openings], "rooms": [_room_dict(r) for r in self.rooms], "counts": self.counts(), "warnings": self.warnings,
+                "level": None if self.level is None else {"name": self.level.name, "index": self.level.index, "source": self.level.source},
+                "reference": None if self.reference is None else _r3(self.reference)}
 
 
 @dataclass(frozen=True)

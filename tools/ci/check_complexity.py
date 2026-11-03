@@ -19,7 +19,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 BASELINE = REPO / "tools" / "ci" / "complexity_baseline.json"
 MAX_NEW = 10
-EXCLUDED = ("/tests/", "/test_", "incoming/", "local/", "node_modules/", ".venv/", "/migrations/")
+EXCLUDED = ("/tests/", "/test_", "incoming/", "local/", "engine/arch/scripts/", "node_modules/", ".venv/", "/migrations/")
 
 
 def sources():

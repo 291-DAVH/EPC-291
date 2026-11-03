@@ -183,7 +183,9 @@ def _rooms(arch: Architecture, T: float) -> List[str]:
 
 
 def _extent(arch: Architecture, walls: List[Wall]) -> Tuple[float, float, float, float]:
-    """The box the building takes, door swings included: the drawing is framed on it, not on the sheet it came from."""
+    """The box the building takes, door swings included: the drawing is framed on it, not on the sheet it came from. The floors of one sheet all share the frame they were laid in, so that their pictures overlay."""
+    if arch.reference is not None:
+        return 0.0, 0.0, arch.size[0], arch.size[1]
     xs, ys = [], []
     for w in walls:
         xs += [w.a[0], w.b[0]]
@@ -225,7 +227,7 @@ def render(arch: Architecture, prims: Primitives, background: bool = True, limit
     fs = side * 0.022
     ty = y1 + margin + foot * 0.55
     out.append(f'<line x1="{_f(x0)}" y1="{_f(y1 + margin * 0.6)}" x2="{_f(x1)}" y2="{_f(y1 + margin * 0.6)}" stroke="{HOLE}" stroke-width="{_f(side * 0.0012)}"/>')
-    title = "PLANTA ARQUITECTÓNICA"
+    title = escape(arch.level.name.upper()) if arch.level else "PLANTA ARQUITECTÓNICA"
     scale = f"Escala 1:{arch.drawing_scale}" if arch.drawing_scale else ("Escala gráfica" if arch.units_per_metre else "Sin escala")
     out.append(f'<g id="ARQ-ROTULO" data-layer="arq.title"><text x="{_f(x0)}" y="{_f(ty)}" font-family="{FONT}" font-size="{_f(fs * 1.25)}" font-weight="700" letter-spacing="{_f(fs * 0.08)}" fill="{INK}">{title}</text>'
                f'<text x="{_f(x0)}" y="{_f(ty + fs * 1.3)}" font-family="{FONT}" font-size="{_f(fs * 0.8)}" fill="{HOLE}">{scale}</text></g>')

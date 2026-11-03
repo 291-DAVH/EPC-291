@@ -13,7 +13,7 @@ from PIL import Image
 
 from epc_arch.config import PARAMS
 from epc_arch.geometry import circle_through
-from epc_arch.model import Arc, ArchError, Line, Options, Primitives
+from epc_arch.model import Arc, ArchError, Line, Options, Primitives, Text
 from epc_arch.sources import register
 from epc_arch.sources.raster import read_image
 from epc_arch.sources.render import render_or_fail
@@ -139,6 +139,54 @@ def written_scale(page) -> Optional[int]:
     return found.most_common(1)[0][0] if found else None
 
 
+def _phrase(chars: list) -> Optional[Text]:
+    """One phrase from its characters (text, left, bottom, right, top), or None when it is only blanks."""
+    text = "".join(c[0] for c in chars).strip()
+    if not text:
+        return None
+    letters = [c for c in chars if not c[0].isspace()]
+    left, bottom = letters[0][1], min(c[2] for c in letters)
+    return Text(text, (left, bottom), max(c[4] for c in letters) - bottom)
+
+
+def _breaks(prev: tuple, box: tuple) -> bool:
+    """A character starts a new phrase when it is on another line or far from the one before."""
+    h = max(box[3] - box[1], 1e-6)
+    return abs(box[1] - prev[2]) > 0.5 * h or box[0] - prev[3] > 3.0 * h
+
+
+def _characters(page) -> Tuple[str, list]:
+    """The characters of the page's text layer and the box (left, bottom, right, top) of each; nothing for a page with no text layer."""
+    try:
+        tp = page.get_textpage()
+        full = tp.get_text_range()
+        return full, [tp.get_charbox(i) for i in range(min(tp.count_chars(), len(full)))]
+    except Exception:                                         # noqa: BLE001 - a page with no text layer
+        return "", []
+
+
+def _grouped(full: str, boxes: list) -> List[list]:
+    """The characters grouped along a baseline until a wide gap or the end of a line."""
+    phrases: List[list] = [[]]
+    last: Optional[tuple] = None                              # the last character that is not a blank, to measure the gap from
+    for ch, box in zip(full, boxes):
+        newline = ch in "\r\n"
+        if newline or (last is not None and not ch.isspace() and _breaks(last, box)):
+            phrases.append([])
+        if newline:
+            last = None
+            continue
+        phrases[-1].append((ch, *box))
+        last = last if ch.isspace() else (ch, *box)
+    return phrases
+
+
+def page_texts(page) -> List[Text]:
+    """The phrases written on the page with their position (to name the views of a sheet)."""
+    full, boxes = _characters(page)
+    return [t for t in (_phrase(c) for c in _grouped(full, boxes)) if t]
+
+
 def read_vector(data: bytes, options: Options) -> Primitives:
     try:
         page = pdfium.PdfDocument(data)[options.page]
@@ -156,6 +204,7 @@ def read_vector(data: bytes, options: Options) -> Primitives:
         _path_geometry(obj.raw, prims, skipped)
         if len(prims.lines) + len(prims.arcs) > PARAMS["plan"]["hard_max_primitives"]:
             raise ArchError("the PDF has too many strokes to read: export the plan with fewer layers or without hatching")
+    prims.texts = page_texts(page)
     size = page.get_size()
     prims.lines = [l for l in prims.lines if not _is_frame(l, size)]
     _thin(prims, PARAMS["plan"]["max_primitives"])

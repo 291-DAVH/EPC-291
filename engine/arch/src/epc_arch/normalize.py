@@ -2,7 +2,7 @@
 from typing import Optional, Tuple
 
 from epc_arch.config import PARAMS
-from epc_arch.model import Arc, ArchError, Block, Line, Primitives
+from epc_arch.model import Arc, ArchError, Block, Line, Primitives, Text
 
 Size = Tuple[float, float]
 
@@ -37,6 +37,7 @@ def _map(prims: Primitives, fn, scale: float, flip: bool, units: Optional[float]
     out.lines = [Line(fn(l.a), fn(l.b), l.width * scale, l.layer) for l in prims.lines]
     arcs = [_flip_arc(a) if flip else a for a in prims.arcs]
     out.arcs = [Arc(fn(a.c), a.r * scale, a.start, a.end, a.layer) for a in arcs]
+    out.texts = [Text(t.value, fn(t.at), t.height * scale) for t in prims.texts]
     out.blocks = [Block(b.name, fn(b.at), b.width * scale, -b.rotation if flip else b.rotation, b.layer) for b in prims.blocks]
     return out
 
