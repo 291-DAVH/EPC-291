@@ -10,6 +10,7 @@
   "rooms": {"max_cells": 900, "close_gap_in_walls": 2.5, "min_area_m2": 1.0, "min_side_in_walls": 6.0},
   "views": {"door_weight": 2, "keep_share": 0.4},
   "sheet": {"cells": 300, "link_cells": 1, "cut_cross": 3, "cut_cross_share": 0.0005, "cut_valley": 0.1, "cut_min_items": 100, "min_view_side": 0.12, "min_view_items": 8, "frame_cover": 0.9, "row_share": 0.25, "label_reach": [0.03, 0.12], "align_min_overlap": 0.2, "align_cell_in_walls": 0.34},
+  "render": {"line_mm": 0.05, "default_scale": 100, "wall_fill": "#5b6f86"},
   "annotations": {"touch": 0.004, "dash_max": 0.06, "dash_gap": 0.05, "dash_min": 3, "bubble_max": 0.05, "tick_max": 0.03, "extension_max": 0.25, "leader_max": 0.12, "tag_max": 0.25},
   "levels": [
     {"re": "(?:subsuelo|s[oó]tano|basement)\\s*(\\d+)?", "index": -1},

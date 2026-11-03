@@ -17,7 +17,7 @@ How a plan is read:
 - Doors by their shape: a leaf square to the wall from a jamb and the quarter circle it sweeps, looked for at every wall end and every door width; the arc reaches both ends, the space it sweeps is empty, the doorway is not wall, and the doors of one plan are of similar widths. Windows: thin lines across a gap in an outside wall.
 - Rooms: what the walls, with their doors and windows shut, close. Sheets with several views keep the view with rooms and doors (the plan). A PDF's written scale ("ESCALA 1:50") gives metres.
 
-The SVG follows architectural drawing conventions: cut walls solid with closed corners, windows shut (frame and glass), doors open with a dashed swing, plain openings dashed, rooms tinted with their area, and a footer with title, scale, graphic scale and counts. Layers: `ARQ-AMBIENTES`, `ARQ-MUROS`, `ARQ-CORTES`, `ARQ-PUERTAS`, `ARQ-VENTANAS`, `ARQ-HUECOS`, `ARQ-ROTULO`.
+Every line of the SVG is a hairline of 0.05 mm of paper (at the written scale, 1:100 when none is written) and a wall is a coloured rectangle of its real thickness: `render` in `params.json`. The SVG follows architectural drawing conventions: cut walls solid with closed corners, windows shut (frame and glass), doors open with a dashed swing, plain openings dashed, rooms tinted with their area, and a footer with title, scale, graphic scale and counts. Layers: `ARQ-AMBIENTES`, `ARQ-MUROS`, `ARQ-CORTES`, `ARQ-PUERTAS`, `ARQ-VENTANAS`, `ARQ-HUECOS`, `ARQ-ROTULO`.
 
 Limits: renders and photos are refused; a raster image reads horizontal, vertical and 45-degree walls only; text, dimension lines and hatching are ignored, not read; sizes are in plan units unless the source gives its units or scale.
 
