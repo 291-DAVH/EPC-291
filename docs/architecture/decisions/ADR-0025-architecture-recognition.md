@@ -16,6 +16,9 @@ Cables and pipes are drawn over an architectural plan that arrives as a DXF, a P
 8. **One place renders a page of a PDF** (`epc_arch.pdf_to_png`): the picture the person sees as a plan and the one the raster reader reads have the same pixels. The backend's own copy was removed.
 9. **In the editor** the recognized walls are something to snap to (their faces and corners) and a line drawn near a wall runs parallel to it.
 
+## Addendum: drawing sheets
+A sheet carries several views, a frame and a title block, and read as one plan the section's slabs set the wall thickness and the plans are lost. The sheet is now taken apart first (`recognizers/sheet.py`): the group of strokes that spans the sheet and holds the others (frame and title block) is dropped, the strokes that touch form views and views drawn close together are separated where fewest strokes cross; each view is recognized with its own thickness and the plans (rooms and doors) are kept. The floor comes from the title near each plan (patterns as data in `params.json`), the floors share one frame (laid over the lowest by their walls, `recognizers/align.py`) and `recognize_sheet` gives one result per floor. A file with neither a frame nor titled plans is read as one plan, as before. Not solved: grid axes, dimension lines and tags inside a plan still disturb the wall thickness; an image has no text, so its floors are numbered in reading order.
+
 ## Limits (known, accepted)
 - Tested on synthetic plans (a room with a door and a window in each source, in several units and angles), not yet on real plans: thresholds are in `params.json` and will need tuning.
 - An image gives horizontal and vertical walls only and no door arcs (its doors are plain openings); diagonal walls in an image are not read.

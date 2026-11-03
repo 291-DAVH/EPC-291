@@ -9,10 +9,10 @@ import ezdxf
 from ezdxf import units as dxf_units
 from ezdxf.math import bulge_to_arc
 
-from epc_arch.model import Arc, ArchError, Block, Line, Options, Primitives
+from epc_arch.model import Arc, ArchError, Block, Line, Options, Primitives, Text
 from epc_arch.sources import register
 
-SKIPPED = ("TEXT", "MTEXT", "DIMENSION", "SPLINE", "ELLIPSE", "IMAGE", "LEADER", "POINT", "CIRCLE", "SOLID", "TRACE")
+SKIPPED = ("DIMENSION", "SPLINE", "ELLIPSE", "IMAGE", "LEADER", "POINT", "CIRCLE", "SOLID", "TRACE")
 MAX_DEPTH = 3
 
 
@@ -74,6 +74,16 @@ def _insert_width(virtual) -> float:
     return float(max(xs) - min(xs)) if xs else 0.0
 
 
+def _text(e) -> Optional[Text]:
+    """What a TEXT or MTEXT says and where (only to name the views of a sheet)."""
+    kind = e.dxftype()
+    value = (e.plain_text() if kind == "MTEXT" else e.dxf.get("text", "")) or ""
+    value = " ".join(value.split())
+    if not value:
+        return None
+    return Text(value, _xy(e.dxf.insert), float(e.dxf.get("char_height" if kind == "MTEXT" else "height", 0.0) or 0.0))
+
+
 def _walk(entities: Iterable, prims: Primitives, skipped: Counter, depth: int, visible) -> None:
     for e in entities:
         if not visible(e.dxf.layer):
@@ -82,6 +92,11 @@ def _walk(entities: Iterable, prims: Primitives, skipped: Counter, depth: int, v
             virtual = list(e.virtual_entities())
             prims.blocks.append(Block(e.dxf.name, _xy(e.dxf.insert), _insert_width(virtual), float(e.dxf.get("rotation", 0.0)), e.dxf.layer))
             _walk(virtual, prims, skipped, depth + 1, visible)
+            continue
+        if e.dxftype() in ("TEXT", "MTEXT"):
+            text = _text(e)
+            if text:
+                prims.texts.append(text)
             continue
         got = _entity(e)
         if got is None:

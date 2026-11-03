@@ -5,6 +5,7 @@ All notable changes. Format: Keep a Changelog; versions follow `docs/BRANCHING.m
 ## [Unreleased]
 
 ### Changed
+- Architecture engine, drawing sheets: a sheet with several plans is taken apart (its frame and title block are ignored, each plan is read on its own), each plan is a floor named by its title (`PLANTA BAJA`, `PLANTA ALTA`...), and all the floors share one frame so a point has the same coordinates on every floor. New `recognize_sheet`, `level` and `reference` in the result, and one pair of files per floor in the CLI. The text of DXF and PDF is read (to name the floors). The development scripts of `engine/arch/scripts` are out of the complexity ratchet.
 - Architecture engine (`epc_arch`) updated with the version optimized outside the repository: walls keep their own thickness and are tidied into a network, doors are found by the shape of the leaf and its swing, rooms are recognized (area and position, new `rooms` and `drawing_scale` in the result), sheets with several views keep the plan, a picture is read several ways and the best one is kept, a written scale ("ESCALA 1:50") gives metres, and the SVG follows drawing conventions (new layers `ARQ-AMBIENTES`, `ARQ-CORTES`, `ARQ-ESCALA`, `ARQ-LEYENDA`, `ARQ-ROTULO`; `--background` draws the original faintly). Training scripts and the furniture-symbol library live in `engine/arch/scripts` and `engine/arch/biblioteca`; the samples (third-party plans and books) stay out of git. The complexity baseline was refreshed for the new engine code.
 
 ### Fixed
